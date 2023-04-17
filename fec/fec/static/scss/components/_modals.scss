@@ -34,7 +34,7 @@
   @include media($lg) {
     margin-left: u(-40rem);
     width: u(80rem);
-    max-height:650px;
+    max-height: 650px;
   }
 }
 
@@ -51,12 +51,13 @@
 .modal__tips {
   @include span-columns(5);
   @include shift(1);
+
   padding-top: u(1rem);
 }
 
 .keyword-modal {
   .simple-table{
-    border-width: 0 0;
+    border-width: 0;
   }
 
 }

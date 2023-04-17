@@ -45,6 +45,7 @@
 
 .reaction-box__heading {
   @include u-icon-bg($question-circle, $primary);
+
   display: block;
   font-size: u(1.6rem);
   font-weight: bold;

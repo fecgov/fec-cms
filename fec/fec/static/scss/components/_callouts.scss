@@ -26,22 +26,23 @@
 //
 
 .callout {
-  @include clearfix();
+  @include clearfix;
+
   padding: u(1rem 1.5rem);
   margin-bottom: u(2rem);
   border-radius: 4px;
 }
 
 .callout--primary {
-  @include u-bg--primary();
+  @include u-bg--primary;
 }
 
 .callout--secondary {
-  @include u-bg--secondary();
+  @include u-bg--secondary;
 }
 
 .callout--neutral {
-  @include u-bg--neutral();
+  @include u-bg--neutral;
 }
 
 .callout__title {
@@ -71,6 +72,7 @@
 
   .callout__action {
     @include span-columns(2 of 6);
+
     border-left: 1px solid;
     padding-left: u(1rem);
     padding-top: 0;

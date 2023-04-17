@@ -22,15 +22,15 @@
   }
 
   .block-paragraph + .block-table {
-     margin-top: u(-4rem);
-    }
+    margin-top: u(-4rem);
+  }
 
 }
-  .block-table {
-    table {
-      @extend .simple-table-cms;
-    }
+.block-table {
+  table {
+    @extend .simple-table-cms;
   }
+}
 
 
 
@@ -80,6 +80,7 @@
 
 .icon--email--author {
   @extend .icon--inline--right;
+
   margin-left: u(.5rem);
   max-width: 20px;
 
@@ -109,6 +110,7 @@
 
   .read_next__image__container {
     @include span-columns(3);
+
     display: block;
   }
 }

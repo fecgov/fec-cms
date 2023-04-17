@@ -1,6 +1,6 @@
 $colorElementBordersOnLight: #aeb0b5;
 $colorText: #212121;
-$colorBorder: #333333;
+$colorBorder: #333;
 $colorTableTdBorder: #f1f1f1;
 $fontFamilyMonospace: 'fec_currency_mono', 'karla', sans-serif;
 $fontFamilySansSerif: 'karla', sans-serif;
@@ -28,35 +28,35 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
 // animation for u-button
 @import "../vendor/bourbon/css3/animation";
 // u-button:
-@import "../mixins/_utilities.scss";
+@import "../mixins/utilities";
 // triangle for tooltips:
 @import "../vendor/bourbon/addons/triangle";
 // overlay for loading states
 @import "../components/overlay";
 
 @font-face {
-  font-family: 'gandhi';
+  font-family: gandhi;
   font-style: normal;
   font-weight: normal;
   src: url('/static/fonts/gandhiserif-regular.woff2') format('woff2'),
     url('/static/fonts/gandhiserif-regular.woff') format('woff');
 }
 @font-face {
-  font-family: 'karla';
+  font-family: karla;
   font-style: normal;
   font-weight: normal;
   src: url('/static/fonts/karla-regular.woff2') format('woff2'),
     url('/static/fonts/karla-regular.woff') format('woff');
 }
 @font-face {
-  font-family: 'karla';
+  font-family: karla;
   src: url('/static/fonts/karla-bold.woff2') format('woff2'),
     url('/static/fonts/karla-bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
 @font-face {
-  font-family: fec_currency_mono;
+  font-family: "fec_currency_mono";
   font-style: normal;
   font-weight: normal;
   src: url('/static/fonts/fec-currencymono-regular.woff2') format('woff2'),
@@ -147,7 +147,7 @@ aside.contribs-by-state {
       font-weight: normal;
       line-height: $fontSizeBase * 1.4;
       min-height: $fontSizeBase * 1.2;
-      padding: 0px 2px 1px;
+      padding: 0 2px 1px;
       white-space: pre;
       -webkit-rtl-ordering: logical;
     }
@@ -158,18 +158,19 @@ aside.contribs-by-state {
         background-position: 50%;
         padding: 0;
       }
-    
+
       &[data-allow-text] {
         .tt-suggestion__missing {
           display: none;
         }
-    
+
         button.is-loading {
           background-image: url('../../img/loading-ellipsis-gray.gif');
         }
-    
+
         button.is-successful {
           @include u-icon-button($check);
+
           background-size: 2.8rem;
           background-position: 50%;
         }
@@ -212,9 +213,9 @@ aside.contribs-by-state {
     border-style: solid;
     border-width: 0 0 0 3px;
     display: block !important;
-    max-height: 0px;
+    max-height: 0;
     overflow: hidden;
-    padding: 0 0 0 0;
+    padding: 0;
     transition: all 0.5s;
     width: 100%;
 
@@ -315,7 +316,7 @@ aside.contribs-by-state {
       flex-shrink: 1;
       line-height: 1.25em;
       padding: #{$fontSizeBase * .5};
-      
+
       &:first-child {
         flex-grow: 0;
         flex-shrink: 0;
@@ -332,7 +333,7 @@ aside.contribs-by-state {
     }
     th {
       font-weight: $fontWeightSemibold;
-      
+
       &:last-child {
         flex-grow: 1;
         flex-shrink: 1;
@@ -370,7 +371,7 @@ aside.contribs-by-state {
         font-size: $fontSizeBase * 2;
         font-weight: $fontWeightRegular;
         line-height: 1.25em;
-        margin: 0 0 .25em 0;
+        margin: 0 0 .25em;
 
         a {
           line-height: 1.25em;
@@ -381,7 +382,7 @@ aside.contribs-by-state {
         font-size: $fontSizeBase * 1.4;
         font-weight: $fontWeightRegular;
         line-height: 1.25em;
-        margin: 0 0 .25em 0;
+        margin: 0 0 .25em;
       }
     }
     .legend-container {
@@ -405,7 +406,7 @@ aside.contribs-by-state {
   }
   .overlay__container {
     display: none;
-    left: 0px;
+    left: 0;
     position: absolute;
     width: 100%;
     z-index: #{$z1 - 1}; // The typeahead menu is at 100 and we want it to be visible above this
@@ -415,7 +416,7 @@ aside.contribs-by-state {
     }
     .overlay {
       display: none;
-      
+
       &.is-loading {
         background-image: url('../../img/loading.gif');
         display: block;
@@ -431,6 +432,7 @@ aside.contribs-by-state {
   // Medium sizes
   &.w-m {
     @extend .w-s !optional;
+
     display: flex;
     flex-wrap: wrap;
 
@@ -482,14 +484,14 @@ aside.contribs-by-state {
       fieldset {
         display: inline-block;
         float: left;
-        
+
         &:first-child {
           margin-right: 7.5pt;
         }
       }
 
       label {
-        display: inline-block;// 
+        display: inline-block;
       }
     }
     .state-list-wrapper {
@@ -519,7 +521,7 @@ aside.contribs-by-state {
       margin-left: 1rem;
       width: calc(66.66% - 1rem);
 
-      .election-map {  
+      .election-map {
         svg {
           min-width: 445px;
           min-height: 285px;
@@ -527,7 +529,7 @@ aside.contribs-by-state {
       }
     }
     .map-details {
-      .more-info-wrapper {    
+      .more-info-wrapper {
         a, button {
           margin: 0 0 1rem 1rem;
         }
@@ -542,7 +544,7 @@ aside.contribs-by-state {
   // Some overrides for table.table-display *, which was added because IE doesn't like Flex
   table.table-display {
     display: table;
-    
+
     thead {
       display: table-header-group;
     }
@@ -569,13 +571,13 @@ aside.contribs-by-state {
   position: absolute;
   text-align: center;
   z-index: #{$z1 - 2};
-  
+
   .tooltip__title {
     border-bottom: 1px solid #112e51;
     text-transform: uppercase;
     font-weight: 700;
   }
-  
+
   &.tooltip--above {
     min-width: 12rem;
     left: -4rem;
@@ -583,6 +585,7 @@ aside.contribs-by-state {
   }
   &::before {
     @include triangle(2rem, $primary, down);
+
     bottom: -1rem;
     content: '';
     display: block;
@@ -592,6 +595,7 @@ aside.contribs-by-state {
 
   &::after {
     @include triangle(1.6rem, $inverse, down);
+
     bottom: -.7rem;
     content: '';
     display: block;

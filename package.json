@@ -14,13 +14,15 @@
     "build-js": "cd fec && webpack",
     "build-production": "cd fec && webpack -p && gulp build-sass && gulp build-widgets-sass && gulp purgecss",
     "format": "eslint --fix ./fec/fec/static/js/**/*.js",
+    "format-sass": "stylelint ./fec/fec/static/scss/**/*.scss",
+    "format-sass-fix": "stylelint --fix ./fec/fec/static/scss/**/*.scss",
     "lint": "eslint --quiet ./fec/fec/static/js/**/*.js",
     "format-lint": "npm run format && npm run lint",
     "test": "karma start",
     "test-single": "npm run lint && karma start --single-run --browsers ChromeHeadless",
-    "watch-js": "npm-watch build-js",
+    "watch": "concurrently \"npm run watch-js\" \"npm run watch-css\"",
     "watch-css": "npm-watch build-sass",
-    "watch": "concurrently \"npm run watch-js\" \"npm run watch-css\""
+    "watch-js": "npm-watch build-js"
   },
   "dependencies": {
     "a11y-dialog": "4.0.0",
@@ -130,6 +132,10 @@
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
     "stringify": "^5.2.0",
+    "stylelint": "^15.3.0",
+    "stylelint-config-css-modules": "^4.2.0",
+    "stylelint-config-standard-scss": "^7.0.1",
+    "stylelint-scss": "^4.6.0",
     "underscore": "^1.13.1",
     "urijs": "^1.19.1",
     "vinyl-buffer": "^1.0.1",

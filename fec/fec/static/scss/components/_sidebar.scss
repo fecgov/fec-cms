@@ -22,7 +22,8 @@
 //
 
 .sidebar-container {
-  @include clearfix();
+  @include clearfix;
+
   position: relative;
   min-height: 1px;
 
@@ -62,6 +63,7 @@
 
 .sidebar__title--large {
   @include heading(h2);
+
   line-height: u(4rem);
   margin-bottom: 0;
   padding: u(2rem);
@@ -69,7 +71,8 @@
 }
 
 .sidebar__content {
-  @include clearfix();
+  @include clearfix;
+
   background-color: $neutral;
   padding: u(2rem);
 
@@ -87,7 +90,7 @@
 
 .sidebar--primary {
   .sidebar__title {
-    @include u-bg--primary();
+    @include u-bg--primary;
   }
 
   .sidebar__section {
@@ -97,7 +100,7 @@
 
 .sidebar--secondary {
   .sidebar__title {
-    @include u-bg--secondary();
+    @include u-bg--secondary;
   }
 
   .sidebar__section {
@@ -106,13 +109,15 @@
 
   .card {
     @include u-font-color($inverse);
+
     background-color: #dd3700;
   }
 }
 
 .sidebar--neutral {
-  @include u-bg--neutral();
+  @include u-bg--neutral;
   @include u-font-color($base);
+
   border-top: 4px solid $primary;
 }
 
@@ -137,6 +142,7 @@
 .sidebar__record-title {
   &::before {
     @include u-icon-circle($updates, $secondary, $inverse, 3rem);
+
     background-size: u(1.5rem);
   }
 }

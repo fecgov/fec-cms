@@ -5,7 +5,7 @@
     line {
       fill: none;
       stroke: $base;
-      shape-rendering: crispEdges;
+      shape-rendering: crispedges;
     }
   }
 
@@ -38,7 +38,7 @@
 
   .tick line {
     stroke: $gray-light;
-    stroke-style: dashed;
+    stroke-style: dashed; // stylelint-disable-line property-no-unknown -- TODO: fix this
   }
 }
 
@@ -163,7 +163,8 @@
 }
 
 .snapshot__controls {
-  @include clearfix();
+  @include clearfix;
+
   border-width: 2px 0;
   border-style: solid;
   border-color: $primary;
@@ -191,13 +192,14 @@
 }
 
 .snapshot__line-controls {
-  @include clearfix();
+  @include clearfix;
+
   border-width: 2px 0;
   border-style: solid;
   border-color: $primary;
   padding: 2px 0;
   text-align: center;
-  margin: 1rem 0rem 1rem 0rem;
+  margin: 1rem 0;
 
   h5 {
     display: inline-block;

@@ -296,6 +296,7 @@ $search-button-width: u(5.6rem);
 .typeahead-filter {
   .button--search {
     @include u-icon-button($magnifying-glass-arrow);
+
     background-size: u(2.8rem);
     background-position: 50%;
     padding: 0;
@@ -308,6 +309,7 @@ $search-button-width: u(5.6rem);
 
     .button--search {
       @include u-icon-button($magnifying-glass);
+
       background-size: u(2.2rem);
       background-position: 50%;
       padding: 0;
@@ -319,6 +321,7 @@ $search-button-width: u(5.6rem);
 
     button.is-successful {
       @include u-icon-button($check);
+
       background-size: u(2.8rem);
       background-position: 50%;
     }

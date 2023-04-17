@@ -27,12 +27,14 @@
 
 // Controls
 .fc-toolbar {
-  @include clearfix();
+  @include clearfix;
+
   padding: u(1rem);
 }
 
 .calendar__head {
-  @include clearfix();
+  @include clearfix;
+
   border-bottom: 1px solid $neutral;
   padding: u(1rem);
 
@@ -49,7 +51,8 @@
 }
 
 .fc-view-controls {
-  @include clearfix();
+  @include clearfix;
+
   padding: u(2rem);
   width: 100%;
 }
@@ -184,6 +187,7 @@
 
   &::after {
     @include linear-gradient(90deg, rgba($gray-lightest, 0), $gray-lightest);
+
     content: '';
     display: block;
     position: absolute;
@@ -255,6 +259,7 @@
 
   &::before {
     @include triangle(2rem, $primary, up);
+
     background-image: none;
     left: 20%;
     top: u(-2rem) !important;
@@ -432,7 +437,8 @@
 }
 
 .cal-list__event {
-  @include clearfix();
+  @include clearfix;
+
   border-bottom: 1px solid $neutral;
   padding: u(2rem 0);
 
@@ -444,6 +450,7 @@
 
 .cal-list__details {
   @include span-columns(8);
+
   margin-bottom: u(1rem);
 }
 
@@ -459,21 +466,23 @@
   display: block;
   font-weight: bold;
   line-height: 1.2;
-  margin: 0 0 .5rem 0;
+  margin: 0 0 .5rem;
 }
 
 .cal-list__date {
   @include span-columns(4 of 8);
+
   font-weight: bold;
 }
 
 .cal-list__time {
   @include span-columns(4 of 8);
-  @include omega();
+  @include omega;
 }
 
 .cal-list__info {
   @include span-columns(8 of 8);
+
   padding-top: u(2rem);
 
   p {
@@ -486,7 +495,8 @@
 }
 
 .cal-list__category-title {
-  @include clearfix();
+  @include clearfix;
+
   display: table;
   border: 1px solid;
   border-color: $primary;
@@ -529,7 +539,8 @@
   width: u(22rem);
 
   .fc-header {
-    @include clearfix();
+    @include clearfix;
+
     background: $neutral;
     padding: u(3px .5rem);
 
@@ -543,6 +554,7 @@
 
   .fc-close {
     @include u-icon($x, $primary, 2rem, 2rem, 100%);
+
     cursor: pointer;
     float: right;
   }
@@ -625,22 +637,26 @@
   }
 
   .cal-list__event {
-    @include clearfix();
+    @include clearfix;
+
     padding: u(2rem);
   }
 
   .cal-list__details {
     @include span-columns(10);
+
     margin-bottom: 0;
   }
 
   .cal-list__add {
     @include span-columns(2);
+
     font-size: u(1.4rem);
   }
 
   .cal-list__date {
     @include span-columns(2 of 10);
+
     font-weight: bold;
   }
 
@@ -650,6 +666,7 @@
 
   .cal-list__info {
     @include span-columns(6 of 10);
+
     padding-top: 0;
   }
 

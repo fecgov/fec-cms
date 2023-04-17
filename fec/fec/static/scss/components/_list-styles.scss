@@ -104,7 +104,8 @@
 }
 
 .list--flat {
-  @include clearfix();
+  @include clearfix;
+
   padding: 0;
 
   li {
@@ -119,6 +120,7 @@
 
 .list--flat-bordered {
   @extend .list--flat;
+
   padding-bottom: u(.5rem);
 
   li {
@@ -223,6 +225,7 @@
 .list--checks {
   li {
     @include u-icon-bg($check, $primary);
+
     background-size: u(2rem);
     background-position: u(0 1.4rem);
     padding: u(1rem 0 1rem 2.5rem);
@@ -249,7 +252,8 @@
 //
 
 .list--buttons {
-  @include clearfix();
+  @include clearfix;
+
   padding: 0;
 
   li {

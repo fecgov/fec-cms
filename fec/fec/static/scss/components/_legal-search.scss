@@ -57,6 +57,7 @@
 
     .legal-mur__archive-icon {
       @include u-icon($file-box, $base, 1.5rem, 1.5rem, 100%);
+
       display: inline-block;
       margin-right: u(0.7rem);
       vertical-align: top;
@@ -87,6 +88,7 @@
 
   &::before {
     @include u-icon-bg($arrow-up-circle, $gray);
+
     content: '';
     display: inline-block;
     height: 2rem;
@@ -102,6 +104,7 @@
 
 .pending-ao__title {
   @include u-icon-bg($timer, $base);
+
   display: inline-block;
   padding-right: u(2.5rem);
   background-position: 100% 50%;

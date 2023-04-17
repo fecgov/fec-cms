@@ -25,6 +25,7 @@
 .paginate_button {
   @extend .button--standard;
   @extend .button--sm;
+
   display: inline-block;
   height: auto;
   margin-left: u(.5rem);
@@ -42,6 +43,7 @@
 
   &.next {
     @extend .button--next;
+
     text-indent: -99999px;
   }
 

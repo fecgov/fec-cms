@@ -18,28 +18,28 @@ $fontWeightRegular: 500;
 $fontWeightBold: 700;
 
 @font-face {
-  font-family: 'gandhi';
+  font-family: gandhi;
   font-style: normal;
   font-weight: normal;
   src: url('/static/fonts/gandhiserif-regular.woff2') format('woff2'),
     url('/static/fonts/gandhiserif-regular.woff') format('woff');
 }
 @font-face {
-  font-family: 'karla';
+  font-family: karla;
   font-style: normal;
   font-weight: normal;
   src: url('/static/fonts/karla-regular.woff2') format('woff2'),
     url('/static/fonts/karla-regular.woff') format('woff');
 }
 @font-face {
-  font-family: 'karla';
+  font-family: karla;
   src: url('/static/fonts/karla-bold.woff2') format('woff2'),
     url('/static/fonts/karla-bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
 @font-face {
-  font-family: fec_currency_mono;
+  font-family: 'fec_currency_mono';
   font-style: normal;
   font-weight: normal;
   src: url('/static/fonts/fec-currencymono-regular.woff2') format('woff2'),
@@ -63,7 +63,7 @@ aside.aggr-totals[id^='gov_fec_at_'] {
   border-radius: 4px;
   box-shadow: 0 0 0 2px $colorTextOnLight inset;
   color: $colorTextOnLight;
-  font-family: fontFamilySerif; // TODO - complete it
+  font-family: $fontFamilySerif; // TODO - complete it
   font-feature-settings: 'kern', 'liga', 'pnum';
   font-size: $fontSizeBase;
   margin: 0 0 ($fontSizeBase * 2);
@@ -127,12 +127,12 @@ aside.aggr-totals[id^='gov_fec_at_'] {
       font-weight: normal;
       line-height: $fontSizeBase * 1.4;
       min-height: $fontSizeBase * 1.2;
-      padding: 0px 2px 1px;
+      padding: 0 2px 1px;
       white-space: pre;
       -webkit-rtl-ordering: logical;
     }
     .election-radios {
-      border: solid thin black;
+      border: solid thin #000;
       font-size: $fontSizeBase * 1.4;
       font-weight: $fontWeightBold;
       padding: 1em;
@@ -149,14 +149,13 @@ aside.aggr-totals[id^='gov_fec_at_'] {
         border-bottom-right-radius: 5px;
       }
       &:disabled {
-        background-color: grey;
-        color: black;
+        background-color: #808080; // "gray"
+        color: #000;
       }
     }
   }
   .total-wrapper {
     border-bottom: solid thin $colorElementBordersOnLight;
-    display: -ms-flexbox;
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
@@ -275,7 +274,7 @@ aside.aggr-totals[id^='gov_fec_at_'] {
   footer {
     -ms-flex-align: baseline;
     align-items: baseline;
-    display: -ms-flexbox;
+    display: flexbox;
     display: flex;
     -ms-flex-pack: justify;
     justify-content: space-between;
@@ -323,9 +322,10 @@ aside.aggr-totals[id^='gov_fec_at_'] {
   // Medium sizes for the light theme, which is the default
   &.w-m {
     @extend .w-s;
+
     -ms-flex-align: center;
     align-items: center;
-    display: -ms-flexbox;
+    display: flexbox;
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
@@ -391,7 +391,7 @@ aside.aggr-totals[id^='gov_fec_at_'] {
   &.w-l {
     @extend .w-m;
     .controls-wrapper {
-      display: -ms-flexbox;
+      display: flexbox;
       display: flex;
       -ms-flex-pack: justify;
       justify-content: space-between;
@@ -463,7 +463,7 @@ aside.aggr-totals[id^='gov_fec_at_'] {
     // Medium sizes of the dark theme
     &.w-m {
       .main-content-wrapper {
-        display: -ms-flexbox;
+        display: flexbox;
         display: flex;
         -ms-flex-pack: justify;
         justify-content: space-between;
@@ -505,7 +505,7 @@ aside.aggr-totals[id^='gov_fec_at_'] {
 
   // Universals
   .t-mono-stacked-currency {
-    font-family: fec_currency_mono;
+    font-family: "fec_currency_mono";
     text-align: right;
   }
 

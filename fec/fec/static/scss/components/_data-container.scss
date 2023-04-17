@@ -5,7 +5,8 @@
 //
 
 .data-container {
-  @include clearfix();
+  @include clearfix;
+
   position: relative;
   width: 100%;
 }
@@ -15,13 +16,15 @@
 }
 
 .data-container__widgets {
-  @include clearfix();
+  @include clearfix;
+
   border-bottom: 2px solid $primary;
   font-family: $sans-serif;
 }
 
 .data-container__action {
-  @include clearfix();
+  @include clearfix;
+
   float: right;
 }
 
@@ -43,7 +46,8 @@
 }
 
 .data-container__head {
-  @include clearfix();
+  @include clearfix;
+
   border-bottom: 1px solid $gray;
   padding: u(1rem);
 }
@@ -61,7 +65,8 @@
 }
 
 .data-container__tags {
-  @include clearfix();
+  @include clearfix;
+
   padding: u(1rem);
 }
 
@@ -74,7 +79,8 @@
 }
 
 .panel__controls {
-  @include clearfix();
+  @include clearfix;
+
   clear: both;
   padding-top: u(.5rem);
 }
@@ -118,12 +124,14 @@
 
   .data-container__action {
     @include span-columns(5);
+
     float: right;
     text-align: right;
   }
 
   .data-container__share {
     @include u-icon-button($share, right);
+
     padding-left: u(2rem);
     text-indent: 0;
     width: auto;
@@ -167,10 +175,10 @@
 @media screen and (max-width: 940px) {
   .data-container__wrapper .main__content--right-full {
     display: block
-   }
+  }
 
   .data-container__wrapper .side-nav-alt {
     display: block;
-    width:auto;
+    width: auto;
   }
 }
