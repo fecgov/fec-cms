@@ -441,6 +441,7 @@ h3 + .simple-table {
       border-bottom: 0;
 
       &:after {
+      &::after {
         content: '';
         display: block;
         height: 1rem;
@@ -506,7 +507,7 @@ h3 + .simple-table {
 
       .simple-table__row {
 
-        &:after {
+        &::after {
           display: none;
         }
         .simple-table__cell {
@@ -737,12 +738,12 @@ table[data-summary]  {
   }
 
   thead td {
-    border-width: 0 0;
+    border-width: 0;
     border-color: transparent !important;
     line-height: 1.3
   }
 
-  td.brdr:after {
+  td.brdr::after {
     content: '|';
     position: absolute;
     right: -2px;

@@ -183,12 +183,12 @@
     border: 2px solid $inverse;
     color: $inverse;
 
-    &:hover:not(.is-disabled):not([disabled]) {
+    &:hover:not(.is-disabled, [disabled]) {
       border-color: $gray-medium;
       background-color: transparent;
     }
 
-    &:active:not(.is-disabled):not([disabled]),
+    &:active:not(.is-disabled, [disabled]),
     &:focus,
     &.is-active {
       background-color: rgba($inverse, .3);

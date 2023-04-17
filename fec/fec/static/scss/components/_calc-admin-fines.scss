@@ -137,7 +137,7 @@ body.scroll-locked-for-modal {
         opacity: 1;
         transition: opacity 1s, color .5s;
       }
-      &:after {
+      &::after {
         content: " › ";
         color: purple;
         display: inline;
@@ -164,12 +164,12 @@ body.scroll-locked-for-modal {
       &.hidden {
         display: none !important;
       }
-      &.hide-after:after {
+      &.hide-after::after {
         content: "";
         padding: 0
       }
     }
-  } // end .topnav 
+  } // end .topnav
 
   .frames {
     background-color: $inverse;
@@ -410,7 +410,7 @@ body.scroll-locked-for-modal {
     margin-bottom: 0;
     padding-left: 3.5rem;
 
-    &:before {
+    &::before {
       margin-right: 1rem;
     }
   }
@@ -458,7 +458,7 @@ body.scroll-locked-for-modal {
       transition: right .5s;
       width: calc(33% + 20px);
 
-      &:before {
+      &::before {
         content: "";
         display: block;
         border-left: 1px solid $federal-blue;
@@ -506,7 +506,7 @@ body.scroll-locked-for-modal {
       position: absolute;
       right: 0;
       top: 0;
-      &:before {
+      &::before {
         display: none;
       }
 

@@ -157,6 +157,7 @@
   }
 
   .mega {
+    @include clearfix;
     @include transition(all .4s ease-out);
     @include transform(translateY(-100%));
 
@@ -232,7 +233,7 @@
 
     &::before {
       margin-top: u(-.5rem);
-      margin-bottom: u(0rem);
+      margin-bottom: u(0);
     }
   }
 }

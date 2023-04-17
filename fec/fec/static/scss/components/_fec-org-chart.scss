@@ -31,7 +31,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
     & + li { // all li after another li
       padding-top: $orgChart_gutterSize;
     }
-    &:before {
+    &::before {
       // top half of left-side line, including the horizontal line in the middle
       border-left: $orgChart_lineSolidDark;
       border-bottom: $orgChart_lineSolidDark;
@@ -43,7 +43,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
       width: 10px;
 
     }
-    &:after {
+    &::after {
       // bottom half of left-side line
       border-left: $orgChart_lineSolidDark;
       content: "";
@@ -54,7 +54,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
       width: 10px;
     }
     &:last-child {
-      &:after {
+      &::after {
         display: none;
       }
     }
@@ -105,7 +105,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
       padding-left: $orgChart_gutterSize;
       padding-bottom: $orgChart_gutterSize * 2;
 
-      &:before {
+      &::before {
         content: "";
         border-bottom: none;
         border-left: $orgChart_lineSolidDark;
@@ -119,16 +119,16 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
       }
 
       &:last-child {
-        &:before {
+        &::before {
           display: none;
         }
-        &:after {
+        &::after {
           display: none;
         }
       }
     }
     // for links that are direct descendants of the li.team, these are the team leads
-    &.team > a:before {
+    &.team > a::before {
       content: "";
       position: absolute;
       left: calc(-#{$orgChart_gutterSize} - 1px);
@@ -147,7 +147,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
       position: relative;
       width: 100%;
 
-      &:before {
+      &::before {
         border-left: $orgChart_lineSolidDark;
         content: "";
         display: block;
@@ -159,10 +159,10 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         border-bottom: $orgChart_lineSolidDark;
       }
       &:last-child {
-        &:before {
+        &::before {
           display: none;
         }
-        &:after {
+        &::after {
           display: none;
         }
       }
@@ -171,7 +171,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
     &.team-comms {
       padding: 0 $orgChart_gutterSize #{$orgChart_gutterSize * 2};
 
-      &:before {
+      &::before {
         content: "";
         border-bottom: none;
         border-left: $orgChart_lineSolidDark;
@@ -183,7 +183,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         top: calc(50% - #{$orgChart_gutterSize});
         width: 10px;
       }
-      &:after {
+      &::after {
         border-bottom: none;
         border-left: none;
         border-right: $orgChart_lineDashed;
@@ -197,10 +197,10 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         top: calc(50% - #{$orgChart_gutterSize});
         width: $orgChart_gutterSize;
       }
-      & a:before {
+      & a::before {
         display: none;
       }
-      & a:after {
+      & a::after {
         display: none;
       }
     }
@@ -208,7 +208,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
       float: right;
       padding: $orgChart_gutterSize $orgChart_gutterSize #{$orgChart_gutterSize * 2} #{$orgChart_gutterSize * 2};
 
-      &:before {
+      &::before {
         border-bottom: none;
         border-top: none;
         bottom: auto;
@@ -216,7 +216,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         top: 0;
       }
 
-      & > a:before {
+      & > a::before {
         border-bottom: $orgChart_lineDashed;
         border-left: none;
         border-right: $orgChart_lineDashed;
@@ -230,7 +230,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         top: auto;
         width: $orgChart_gutterSize;
       }
-      & > a:after {
+      & > a::after {
         display: none;
       }
 
@@ -240,7 +240,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         li {
           padding: $orgChart_gutterSize $orgChart_gutterSize 0 0;
 
-          &:before {
+          &::before {
             border-left: none;
             border-right: $orgChart_lineDashed;
             border-bottom: $orgChart_lineDashed;
@@ -285,12 +285,12 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         border: $orgChart_lineSolid;
       }
 
-      &:before {
+      &::before {
         border-bottom: $orgChart_lineSolid;
         border-left: $orgChart_lineSolid;
         left: -#{$orgChart_gutterSize - 1};
       }
-      &:after {
+      &::after {
         border-left: $orgChart_lineSolid;
         left: -#{$orgChart_gutterSize - 1};
       }
@@ -299,7 +299,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         width: 100%;
 
         & > a {
-          &:before {
+          &::before {
             border-bottom: none;
             border-left: $orgChart_lineSolid;
             border-top: $orgChart_lineSolid;
@@ -311,7 +311,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
           // }
         }
 
-        &:before {
+        &::before {
           content: "";
           border-bottom: none;
           border-right: $orgChart_lineSolid;
@@ -323,7 +323,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
           top: -#{$orgChart_gutterSize};
           width: 50%;
         }
-        &:after {
+        &::after {
           border-left: none;
           border-top: $orgChart_lineSolid;
           content: "";
@@ -339,7 +339,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
           max-width: 40%;
           padding-bottom: $orgChart_gutterSize * 2;
 
-          &:before {
+          &::before {
             // From comms to the teams
             content: "";
             border-bottom: none;
@@ -353,7 +353,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
             top: calc(100% - #{$orgChart_gutterSize * 2});
             width: 50%;
           }
-          &:after {
+          &::after {
             // From comms to IG
             border-bottom: none;
             border-left: none;
@@ -376,12 +376,12 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
           grid-area: ig;
           padding-top: $orgChart_gutterSize * 5;
 
-          &:before {
+          &::before {
             border-right: $orgChart_lineDashed;
             border-top: $orgChart_lineDashed;
             top: $orgChart_gutterSize * 4;
           }
-          &:after {
+          &::after {
             display: none;
           }
           ul {
@@ -390,7 +390,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
             li {
               padding-right: 0;
 
-              &:before {
+              &::before {
                 border-bottom: none;
                 border-right: $orgChart_lineSolid;
                 border-top: none;
@@ -401,7 +401,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
               }
             }
           }
-          a:before {
+          a::before {
             display: none;
           }
         }
@@ -409,16 +409,16 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
     }
     li.team.team-ig + li.team {
       // The first .team after a .team-ig
-      &:before {
+      &::before {
         display: none;
       }
-      &:after {
+      &::after {
         border-left: $orgChart_lineSolid;
       }
     }
     li.team:last-child {
       // The last .team
-      &:before {
+      &::before {
         display: block;
       }
     }

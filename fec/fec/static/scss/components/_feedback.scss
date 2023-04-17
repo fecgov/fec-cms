@@ -132,7 +132,7 @@
 /* Hides the recaptcha containing div so we can move the badge to bottom */
 .feedback textarea:last-of-type + div {
   display: block;
-  height: 0px;
+  height: 0;
   width: 1px;
   zoom: 1;
 }

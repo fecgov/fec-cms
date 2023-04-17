@@ -521,13 +521,14 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       width: 50%;
       // margin-left: 1rem;
       order: 35;
+    }
     #downloads-wrapper {
       width: calc(50% - .5rem);
       margin-right: .5rem;
       order: 30;
     }
     .map-details {
-      .more-info-wrapper {    
+      .more-info-wrapper {
         a, button {
           margin: 0 0 1rem 1rem;
         }

@@ -82,6 +82,7 @@
 @include media($med) {
   .overview__chart {
     @include span-columns(8);
+    @include omega;
   }
 
   .overview__chart-line {
@@ -144,7 +145,7 @@
 
 // Rules specifically for the top-raisers chart on the data landing page
 #top-raisers .chart-table .simple-table__row {
-  &:after {
+  &::after {
     content: '';
     display: block;
     height: 1rem;
@@ -155,7 +156,7 @@
     text-align: left;
   }
   @include media($med) {
-    &:after {
+    &::after {
       display: none;
     }
     .simple-table__cell {

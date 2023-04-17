@@ -365,7 +365,7 @@
 
       margin-left: u(3rem);
       position: relative;
-      top: u(0rem);
+      top: u(0);
     }
 
     .search-controls__cycle {
@@ -388,8 +388,8 @@
       }
       .search-controls__submit {
         @include span-columns(1.5 of 5.5);
-        margin-top: u(0rem);
 
+        margin-top: u(0);
       }
     }
 
