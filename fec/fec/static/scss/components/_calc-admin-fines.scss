@@ -284,34 +284,34 @@ body.scroll-locked-for-modal {
     clear: both;
   }
 
-  [type=radio]+label {
+  [type="radio"]+label {
     background-color: transparent;
     border-color: $inverse;
     float: left;
     transition: border-color .5s;
   }
-  [type=radio]+label:hover {
+  [type="radio"]+label:hover {
     background-color: transparent;
     border-color: #aeb0b5;
     transition: border-color .5s;
   }
-  [type=radio]:checked+label {
+  [type="radio"]:checked+label {
     background-color: transparent;
     border: 1px solid #aeb0b5;
     transition: border-color .5s;
   }
-  [type=number] {
+  [type="number"] {
     display: inline-block;
     float: left;
     margin: 0 0 .5rem .25rem;
     width: 15rem;
   }
-  [type=number]+label {
-    display:inline-block;
+  [type="number"]+label {
+    display: inline-block;
     padding: .4rem .8rem .4rem 1rem;
     position: relative;
   }
-  [type=number].indented {
+  [type="number"].indented {
     margin-left: 3.5rem;
 
     &.search__example {

@@ -34,7 +34,7 @@ label {
 }
 
 input,
-select[multiple=multiple],
+select[multiple="multiple"],
 textarea,
 select {
   background-color: $inverse;

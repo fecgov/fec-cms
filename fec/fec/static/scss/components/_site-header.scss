@@ -136,7 +136,7 @@
   border: none !important;
   padding: u(.75rem 1rem);
 
-   &[aria-expanded=true] {
+   &[aria-expanded="true"] {
     background-image: none;
    }
   }
@@ -180,11 +180,11 @@
   }
 }
 
-.usa-banner-header[aria-expanded=false] {
+.usa-banner-header[aria-expanded="false"] {
 
     .usa-banner-button::after {
-    background-image: url(../img/angle-arrow-down-primary.png);
-    background-image: url(../img/angle-arrow-down-primary.svg);
+    background-image: url("../img/angle-arrow-down-primary.png");
+    background-image: url("../img/angle-arrow-down-primary.svg");
     background-size: 100%;
     content: '';
     display: inline-block;
@@ -197,11 +197,11 @@
 
 }
 
-    .usa-banner-header[aria-expanded=true] {
+    .usa-banner-header[aria-expanded="true"] {
 
     .usa-banner-button::after {
-    background-image: url(../img/angle-arrow-up-primary.png);
-    background-image: url(../img/angle-arrow-up-primary.svg);
+    background-image: url("../img/angle-arrow-up-primary.png");
+    background-image: url("../img/angle-arrow-up-primary.svg");
     background-size: 100%;
     content: '';
     display: inline-block;
@@ -299,7 +299,7 @@
   left: u(-999em);
 }
 
-.usa-accordion-content[aria-hidden=true] {
+.usa-accordion-content[aria-hidden="true"] {
   display: none;
 }
 

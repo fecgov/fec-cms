@@ -25,7 +25,7 @@
 
 .video-frame {
   width: 85%;
-  background: url(/static/img/TV-Gray-Wall-Only-850.png) no-repeat;
+  background: url("/static/img/TV-Gray-Wall-Only-850.png") no-repeat;
   background-size: cover;
   margin-bottom: u(2rem);
 
@@ -72,7 +72,7 @@
 
   iframe {
     box-sizing: border-box;
-    background: url(/static/img/new-tv-bkgd-wide.png) center center no-repeat;
+    background: url("/static/img/new-tv-bkgd-wide.png") center center no-repeat;
     background-size: contain;
     padding: 10.05% 16.5% 21.2% 16%;
     position: absolute;

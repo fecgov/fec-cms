@@ -39,10 +39,10 @@ main {
   }
 }
 
-[aria-hidden=true] {
+[aria-hidden="true"] {
   display: none !important;
 }
-.wagtail-userbar-icon[aria-hidden=true] { // for the edit-page bug for editors
+.wagtail-userbar-icon[aria-hidden="true"] { // for the edit-page bug for editors
   display: initial !important;
 }
 

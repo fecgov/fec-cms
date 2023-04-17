@@ -136,7 +136,7 @@ $filter-button-width: u(4.6rem);
   overflow: visible;
   left: -800px;
 
-  &[aria-hidden=true] {
+  &[aria-hidden="true"] {
     display: block !important;
   }
 }

@@ -89,7 +89,7 @@
       background-color: $gray-lightest;
     }
 
-    &[aria-selected=true] {
+    &[aria-selected="true"] {
       font-weight: bold;
       background-color: initial;
       border-left: 4px solid $base;
@@ -97,7 +97,7 @@
     }
   }
 
-  .side-nav__link[aria-selected=true] + ul {
+  .side-nav__link[aria-selected="true"] + ul {
     margin: u(1rem 0 2rem 0);
     display: block;
 
