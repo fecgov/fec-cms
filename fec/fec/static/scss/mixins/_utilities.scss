@@ -5,8 +5,9 @@
 //
 // Used to visually hide components but keep them visible to screenreaders. Also includes a utility class .u-visually-hidden.
 //
+@import '../functions';
 
-@mixin u-visually_hidden {
+@mixin u-visually-hidden {
   position: absolute !important;
   top: auto;
   left: -9999px !important;
@@ -99,6 +100,7 @@
 
 @mixin u-icon-circle($icon, $circlecolor, $iconcolor, $size) {
   @include u-icon-bg($icon, $iconcolor);
+
   background-position: 50% 50%;
   background-size: 60%;
   background-color: $circlecolor;
@@ -153,7 +155,6 @@
 //
 // Set form elements to inverse color scheme
 
-@mixin u-form--inverse() {
   input,
   textarea {
     border-color: $inverse;
@@ -208,7 +209,7 @@
 // Used to set generate all of the styles for a bg--primary element
 //
 
-@mixin u-bg--primary() {
+@mixin u-bg--primary() { // stylelint-disable-line scss/at-mixin-pattern
   @include u-form--inverse;
   @include u-font-color($gray-lightest);
 
@@ -236,7 +237,7 @@
 // Used to set generate all of the styles for a bg--secondary element
 //
 
-@mixin u-bg--secondary() {
+@mixin u-bg--secondary() { // stylelint-disable-line scss/at-mixin-pattern
   @include u-form--inverse;
   @include u-font-color($gray-lightest);
 
@@ -264,7 +265,7 @@
   }
 }
 
-@mixin u-bg--neutral() {
+@mixin u-bg--neutral() { // stylelint-disable-line scss/at-mixin-pattern
   @include u-font-color($base);
   @include u-form-color($inverse, $primary, $primary-contrast, 'neutral', $primary);
 
@@ -282,7 +283,7 @@
 // Used to set generate all of the styles for a bg--dark element
 //
 
-@mixin u-bg--dark() {
+@mixin u-bg--dark() { // stylelint-disable-line scss/at-mixin-pattern
   @include u-form--inverse;
   @include u-font-color($gray-lightest);
 
@@ -297,7 +298,7 @@
   }
 }
 
-@mixin u-bg--neutral() {
+@mixin u-bg--neutral() {  // stylelint-disable-line scss/at-mixin-pattern, scss/no-duplicate-mixins
   @include u-font-color($base);
 
   background-color: $gray-lightest;

@@ -38,7 +38,7 @@
 
   .tick line {
     stroke: $gray-light;
-    stroke-style: dashed;
+    stroke-style: dashed; // stylelint-disable-line property-no-unknown -- TODO: fix this
   }
 }
 

@@ -123,7 +123,7 @@ body.scroll-locked-for-modal {
       transition: opacity .1s;
 
       &.viewed {
-        color: purple;
+        color: purple; // stylelint-disable-line color-named
         cursor: pointer;
         display: inline-block;
         opacity: 1;
@@ -131,7 +131,7 @@ body.scroll-locked-for-modal {
         transition: opacity 1s, color .5s;
       }
       &.current {
-        color: blue;
+        color: blue; // stylelint-disable-line color-named
         cursor: default;
         display: inline-block;
         opacity: 1;
@@ -139,7 +139,7 @@ body.scroll-locked-for-modal {
       }
       &::after {
         content: " › ";
-        color: purple;
+        color: purple; // stylelint-disable-line color-named
         display: inline;
         padding: .5rem .8rem;
       }

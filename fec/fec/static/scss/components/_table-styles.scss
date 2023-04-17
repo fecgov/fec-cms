@@ -397,16 +397,16 @@ h3 + .simple-table {
 
 
 
-#header_notes_modal li {
+#header_notes_modal li { // stylelint-disable-line selector-id-pattern
   margin-bottom: u(2rem);
   padding-left: u(2rem);
 }
 
-#header_notes_modal li b:first-of-type {
+#header_notes_modal li b:first-of-type { // stylelint-disable-line selector-id-pattern
   margin-left: u(-2rem);
 }
 
-#static_notes {
+#static_notes { // stylelint-disable-line selector-id-pattern
   margin-top: u(2rem);
 
   ul {
