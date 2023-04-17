@@ -280,19 +280,8 @@
 }
 
 .utility-nav__search {
-  /* width: u(30rem); */
   padding: 0 u(1rem);
-
-/*  display: block; */
  }
-
-/*
-@include media($lg) {
-  .mobile-search.utility-nav__search {
-    display: none;
-  }
-} */
-
 
 // Grid overhaul, using _grid.scss breakpoints but Bootstrap naming as inspiration,
 // making it pretty specific to avoid unintended side effects elsewhere

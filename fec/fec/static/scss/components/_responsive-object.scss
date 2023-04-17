@@ -1,17 +1,17 @@
 //Responsive video embeds for RTE with intrinsic sizing technnique
 
-.responsive-object {
-	position: relative;
-	width: 100% !important;
-	height: auto !important;
+.responsive-object { 
+  position: relative;
+  width: 100% !important;
+  height: auto !important;
 
-	iframe, object, embed {
+  iframe, object, embed { 
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-	}
+  } 
 }
 
 //TV Ad example 1:
