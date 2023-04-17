@@ -440,7 +440,7 @@ h3 + .simple-table {
     .simple-table__row {
       border-bottom: 0;
 
-      &:after {
+      &::after {
         content: '';
         display: block;
         height: 1rem;
