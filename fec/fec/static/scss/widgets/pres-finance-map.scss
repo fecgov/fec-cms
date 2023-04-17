@@ -100,7 +100,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
     border-style: solid;
     border-width: 0 0 0 3px;
     display: block !important;
-    max-height: 0px;
+    max-height: 0;
     overflow: hidden;
     padding: 0 0 0 0;
     transition: all 0.5s;
@@ -365,8 +365,8 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
       }
       &[aria-expanded=false] + .accordion__content {
         display: block !important; // Check to see if this interferes with A11Y
-        max-height: 0px;
-        padding-bottom: 0px;
+        max-height: 0;
+        padding-bottom: 0;
         transition: all .5s;
       }
     }
@@ -414,7 +414,7 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
   }
   .overlay__container {
     display: none;
-    left: 0px;
+    left: 0;
     position: absolute;
     width: 100%;
     z-index: #{$z1 - 1}; // The typeahead menu is at 100 and we want it to be visible above this

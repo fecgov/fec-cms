@@ -322,7 +322,7 @@ body.scroll-locked-for-modal {
   span.clear {
     clear: both;
     display: block;
-    height: 0px;
+    height: 0;
     margin-bottom: 1rem;
     width: 100%;
   }
@@ -537,7 +537,7 @@ body.scroll-locked-for-modal {
 
     .pointer {
       position: absolute;
-      left: 0px;
+      left: 0;
       top: 100px;
       transition: top .33s;
     }
