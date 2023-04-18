@@ -3,11 +3,11 @@
 /* global $ */
 
 /**
- * TODO - @fileoverview
- * @copyright 2020 Federal Election Commission
+ * The financial map for presidential elections. e.g. https://www.fec.gov/data/candidates/president/presidential-map/
+ * @copyright 2023 Federal Election Commission
  * @license CC0-1.0
  * @owner  fec.gov
- * @version 1.0
+ * @version 1.1
  */
 
 // Editable vars
@@ -16,7 +16,7 @@ const breakpointToSmall = 430;
 const breakpointToMedium = 675;
 const breakpointToLarge = 900;
 const breakpointToXL = 1200;
-const availElectionYears = [2020, 2016]; // defaults to [0]
+const availElectionYears = [2024, 2020, 2016]; // defaults to [0]
 const specialCandidateIDs = ['P00000001', 'P00000002', 'P00000003'];
 
 const pathFormat_download_contribs =
@@ -46,8 +46,6 @@ const COVERAGE_DATES_LOADED = EVENT_APP_ID + '_coverage_dates_loaded';
 // TODO: Update so we're using IDs everywhere?
 const selector_mainElement = '#gov-fec-pres-finance';
 const selector_yearControl = '#filter-year';
-const selector_map_form = '#filter-map-type';
-const selector_mapTypeControl = '.js-map-switcher';
 const selector_resetApp = '.js-reset-app';
 const selector_map = '.map-wrapper .election-map';
 const selector_candidateDetails = '.candidate-details';
@@ -171,7 +169,7 @@ function PresidentialFundsMap() {
   this.element = document.querySelector(selector_mainElement); // The visual element associated with this, this.instance
   this.candidateDetailsHolder; // Element to hold candidate name, party, office, and ID
   this.yearControl = this.element.querySelector(selector_yearControl);
-  this.current_electionYear = availElectionYears[0];
+  this.current_electionYear = this.defaultElectionYear();
   this.current_electionState = 'US';
   this.current_electionStateName = 'United States';
   this.current_candidateID = specialCandidateIDs[0];
@@ -198,28 +196,22 @@ function PresidentialFundsMap() {
  */
 PresidentialFundsMap.prototype.init = function() {
   // Init the election year selector (The element ID is set in data/templates/partials/widgets/pres-finance-map.jinja)
-  let theFieldset = this.yearControl.querySelector('fieldset');
+  const theFieldset = this.yearControl.querySelector('fieldset');
+  // Create the cycle selector <select>
+  const theSelect = document.createElement('select');
+  // Add an <option> for every available year, selecting the current one
+  availElectionYears.forEach(el => {
+    // new Option(text, value, default selected, current selected)
+    const newOpt = new Option(el, el, el == this.current_electionYear);
+    theSelect.add(newOpt);
+  });
+  // And the <select> to the fieldset/dom/page
+  theFieldset.appendChild(theSelect);
 
-  for (let i = 0; i < availElectionYears.length; i++) {
-    let thisYear = availElectionYears[i];
-    let newElem = document.createElement('label');
-    // TODO try to find the form field's value; restore it if possible (checked and this.current_electionYear)?
-    let switched = i == 0 ? ' checked' : '';
-    newElem.setAttribute('class', `toggle`);
-    newElem.setAttribute('for', `switcher-${thisYear}`);
-    newElem.innerHTML = `<input type="radio" class="toggle" value="${thisYear}" id="switcher-${thisYear}" name="year_selector" aria-controls="${thisYear}-message" tabindex="0"${switched}><span class="button--alt">${thisYear}</span>`;
-    theFieldset.appendChild(newElem);
-  }
+  // Add the 'change' event listener to the fieldset (rather than the <select>)
   this.yearControl.addEventListener(
     'change',
     this.handleElectionYearChange.bind(this)
-  );
-
-  // Init the map type listener
-  this.mapTypeControl = this.element.querySelector(selector_mapTypeControl);
-  this.mapTypeControl.addEventListener(
-    'change',
-    this.handleMapTypeChange.bind(this)
   );
 
   this.element.addEventListener(
@@ -358,6 +350,28 @@ PresidentialFundsMap.prototype.init = function() {
   this.loadCandidatesList();
 
   window.addEventListener('pageshow', this.handlePageShow.bind(this));
+};
+
+/**
+ * Returns either a valid presidential election year from url?election_year,
+ * or availableElectionYears[0]
+ * @returns {Number}
+ */
+PresidentialFundsMap.prototype.defaultElectionYear = function() {
+  let toReturn = availElectionYears[0];
+
+  // To get the first election year to show,
+  // grab the url parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  // if there's an election_year
+  if (urlParams.has('election_year')) {
+    const urlYear = parseInt(urlParams.get('election_year'));
+    // If the year is a number, 2016-2024 & evenly divisible by 4
+    if (!isNaN(urlYear) && urlYear >= 2016 && urlYear <= 2024 && urlYear % 4 === 0)
+      // Start with the url year
+      toReturn = urlYear;
+  }
+  return toReturn;
 };
 
 /**
@@ -1348,7 +1362,6 @@ PresidentialFundsMap.prototype.handlePageShow = function() {
   // For when a user navigates back to this page and has a cached form value,
   // reset the toggles
   this.yearControl.reset();
-  this.element.querySelector(selector_map_form).reset();
 };
 
 /**
@@ -1360,9 +1373,6 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
   // Show for only national view:
   this.element.querySelector(
     selector_summariesHolder
-  ).style.display = nationalDisplay;
-  this.element.querySelector(
-    selector_mapTypeControl
   ).style.display = nationalDisplay;
   // For the candidate list disclaimer, we want to hold open the vertical space so we'll toggle its opacity
   if (nationalDisplay == 'block')

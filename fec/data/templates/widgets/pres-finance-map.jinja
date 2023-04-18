@@ -1,21 +1,10 @@
 {% import "macros/widgets.jinja" as widgets %}
 
- <div id="gov-fec-pres-finance" class="pres-finance-map is-loading w-s" data-election_year="{{ election_year }}">
+ <div id="gov-fec-pres-finance" class="pres-finance-map is-loading w-s" data-class="cq-container" data-election_year="{{ election_year }}">
     <form id="filter-year" class="filters is-open">
       <fieldset class="filter toggles js-filter js-table-switcher" style="border: none;">
         <legend class="label">Candidates running in:</legend>
         <!-- The radio buttons are added here by the code -->
-      </fieldset>
-    </form>
-    <form id="filter-map-type" class="filters is-open">
-      <fieldset class="filter toggles js-filter js-map-switcher" style="border: none;">
-        <legend class="label">View as:</legend>
-        <label class="toggle" for="switcher-map-type-gradient">
-          <input type="radio" class="toggle" value="gradient" id="switcher-map-type-gradient" name="map-type-selector" aria-controls="gradient-message" tabindex="0" checked><span class="button--alt">Gradient</span>
-        </label>
-        <label class="toggle" for="switcher-map-type-bubbles">
-          <input type="radio" class="toggle" value="bubble" id="switcher-map-type-bubbles" name="map-type-selector" aria-controls="bubbles-message" tabindex="0"><span class="button--alt">Bubbles</span>
-        </label>
       </fieldset>
     </form>
     <div class="export-methodology-buttons-holder">
