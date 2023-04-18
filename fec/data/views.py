@@ -114,7 +114,6 @@ def search(request):
 def browse_data(request):
     monthly_coverage_date = utils.get_presidential_coverage_date("M")
     quarterly_coverage_date = utils.get_presidential_coverage_date("Q")
-    default_presidential_year = constants.DEFAULT_PRESIDENTIAL_YEAR
     return render(
         request,
         "browse-data.jinja",
@@ -124,7 +123,6 @@ def browse_data(request):
             "social_image_identifier": "data",
             "monthly_coverage_date": monthly_coverage_date,
             "quarterly_coverage_date": quarterly_coverage_date,
-            "default_presidential_year": default_presidential_year,
         },
     )
 
