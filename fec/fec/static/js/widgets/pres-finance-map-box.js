@@ -358,7 +358,7 @@ PresidentialFundsMap.prototype.init = function() {
  * @returns {Number}
  */
 PresidentialFundsMap.prototype.defaultElectionYear = function() {
-  let toReturn = this.availElectionYears[0];
+  let toReturn = availElectionYears[0];
 
   // To get the first election year to show,
   // grab the url parameters
