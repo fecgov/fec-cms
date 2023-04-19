@@ -339,7 +339,7 @@ ContributionsByState.prototype.loadInitialData = function() {
   let instance = this;
 
   let highestRaisingQuery = Object.assign({}, this.baseStatesQuery, {
-    sort: '-receipts',
+    sort: '-individual_itemized_contributions',
     per_page: 1,
     sort_hide_null: true
   });
