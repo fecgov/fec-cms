@@ -45,7 +45,7 @@ function AggregateTotalsBox() {
     aggregate_by: '', // 'office' for the grand totals, 'office-party' for the individual parties' totals
     election_full: true,
     election_year: window.DEFAULT_ELECTION_YEAR,
-    office: 'P',
+    office: window.DEFAULT_ELECTION_YEAR % 4 === 0 ? 'P' : 'S', // Fallback in case it isn't part of dataset from the template
     is_active_candidate: true,
     page: 1,
     per_page: 20,
