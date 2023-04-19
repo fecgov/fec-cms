@@ -39,18 +39,19 @@ function AggregateTotalsBox() {
   this.scriptElement; // The <script>
   this.valueField; // The HTML element that holds the value
   this.yearControl; // The HTML element to change the year
-  // Where to find the big number:
-  this.basePath_grandTotal = ['candidates', 'totals', 'by_office'];
-  // Where to find the party numbers:
-  this.basePath_partyTotals = ['candidates', 'totals', 'by_office', 'by_party'];
+  // Where to find the data:
+  this.basePath = ['candidates', 'totals', 'aggregates'];
   this.baseQuery = {
+    aggregate_by: '', // 'office' for the grand totals, 'office-party' for the individual parties' totals
+    election_full: true,
     election_year: window.DEFAULT_ELECTION_YEAR,
     office: 'P',
     is_active_candidate: true,
     page: 1,
     per_page: 20,
-    sort_null_only: false,
+    sort: '-election_year',
     sort_hide_null: false,
+    sort_null_only: false,
     sort_nulls_last: false
   }; // Vars for data load
   this.animVars = {
@@ -298,7 +299,7 @@ AggregateTotalsBox.prototype.loadData = function(query) {
   let instance = this;
 
   window
-    .fetch(buildUrl(this.basePath_grandTotal, query), {
+    .fetch(buildUrl(this.basePath, Object.assign(query, { aggregate_by: 'office' })), {
       cache: 'no-cache',
       mode: 'cors'
     })
@@ -315,7 +316,7 @@ AggregateTotalsBox.prototype.loadData = function(query) {
     });
 
   window
-    .fetch(buildUrl(this.basePath_partyTotals, query), {
+    .fetch(buildUrl(this.basePath, Object.assign(query, { aggregate_by: 'office-party' })), {
       cache: 'no-cache',
       mode: 'cors'
     })
