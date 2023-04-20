@@ -13,7 +13,7 @@ const states_dropdown_template = `
     <option value="CO">Colorado</option>
     <option value="CT">Connecticut</option>
     <option value="DE">Delaware</option>
-    <option value="DC">District Of Columbia</option>
+    <option value="DC">District of Columbia</option>
     <option value="FL">Florida</option>
     <option value="GA">Georgia</option>
     <option value="GU">Guam</option>
@@ -72,10 +72,10 @@ const header_notes_modal_partial = `<div tabindex="-1" class="modal__overlay" da
   </div>
 </div>`;
 
+/* eslint-disable no-console */
+
 function ReportingDates() {
 
-  //Declare globals (scoped to this function) to get past linter error/tests. For header_notes and footnotes objects declared in CMS field, CSS.escape, Set()
-  /* global header_notes, footnotes */
   this.dates_table = document.getElementsByClassName('election-dates-table')[0];
 
   /*
@@ -88,23 +88,41 @@ function ReportingDates() {
   or in blocks.py. I think the former makes sense.
   */
 
-  //only run this logic if the page has an `.election-dates-table` onn it
-  if (this.dates_table) {
-  //get all acnhor links in TDs)
-    this.anchors = this.dates_table.querySelectorAll('td a[href^=\'#\']');
+    this.buildStaticElements();
 
-    //disable default jump behavior for anchor links(#) but keep links for accessibility
-    for (const anchor of this.anchors) {
-      anchor.addEventListener('click', e => {
+    this.convertFootnotes(); //converts number or symbol following "+" to footnote html, in-place
+
+    this.addStateClass();
+
+    this.addFootnotes(); //adds hidden Footnote rows
+
+    this.stripeByState();
+
+    ///TODO REMEMER THAT PUTTING THIS BELOW `this.addFootnotes()` DISABLES THE `e.preventDefault();` ON FOOTNNOTES sups ALREADY ON PAGE ON THIS TEST VERSION
+
+    //it only runs this logic if the page has an `.election-dates-table` on it, TODO:  might not e necessary for this trmplate
+    if (this.dates_table) {
+    //get all acnhor links in TDs)
+      this.anchors = this.dates_table.querySelectorAll('td a[href^=\'#\']');
+
+      //disable default jump behavior for anchor links(#) but keep links for accessibility
+      for (const anchor of this.anchors) {
+        anchor.addEventListener('click', e => {
+          e.preventDefault();
+        });
+      }
+
+    const header_sups = document.querySelectorAll(
+      'tr:first-child th a[href^="#"]'
+    );
+
+    //add data attribute to the header sups to open AY11 dialog and disable default jump behavior for anchor links(#) but keep links for accessibility
+    for (const header_sup of header_sups) {
+      header_sup.setAttribute('data-a11y-dialog-show', 'header_notes_modal');
+      header_sup.addEventListener('click', e => {
         e.preventDefault();
       });
     }
-
-    this.buildStaticElements();
-
-    this.addFootnotes();
-
-    this.stripeByState();
 
     //Define media query
     const mql = window.matchMedia('screen and (max-width: 650px)');
@@ -167,31 +185,32 @@ ReportingDates.prototype.buildStaticElements = function() {
   table_parent.insertBefore(dropdown_wrapper, this.dates_table);
 
   //Create static footnote/header note list
-
-  let hdr_str = '';
-  //build static list from header notes object if it exists
-  if (typeof header_notes == 'object') {
+ let hdr_str = '';
+   const header_notes_json = JSON.parse(document.getElementById('header_notes').textContent);
+// WORKS--  //build static list from footnotes object (`const footnotes`, which is added in teemplate riht now) --if it exists
+  if (typeof header_notes_json == 'object') {
     hdr_str = `<h4>Header notes</h4><ul>`;
-    for (const key in header_notes) {
+    for (const note of header_notes_json.footnote) {
       hdr_str += `<li>
-                  <a name="hdr${key}" id="hdr${key}"></a>
-                  <b>${key}</b>&nbsp;&nbsp;${header_notes[key]}
+                  <a name="hdr${note.value.footnote_number}" id="hdr${note.value.footnote_number}"></a>
+                  <b>${note.value.footnote_number}</b>&nbsp;&nbsp;${note.value.footnote_text}}
                 </l1>`;
+     }
+     hdr_str += `</ul>`;
     }
 
-    hdr_str += `</ul>`;
-  }
-
-  let ftnt_str = '';
-  //build static list from footnotes object if it exists
-  if (typeof footnotes == 'object') {
+ // build static list from <script id="footnotes">  which is added in teemplate with  json_script technique ) --if it exist
+ const footnotes_json = JSON.parse(document.getElementById('footnotes').textContent);
+ let ftnt_str = '';
+  if (typeof footnotes_json == 'object') {
     ftnt_str = `<h4>Footnotes</h4><ul>`;
-    for (const key in footnotes) {
-      const dot = /^\d+$/.test(key) ? '.' : '';
+    for (const note of footnotes_json.footnote) {
+      console.log('Note:', note);
+      const dot = /^\d+$/.test(note.value.footnote_number) ? '.' : '';
       ftnt_str += `<li>
-                   <a name="footnote_${key}" id="footnote_${key}"></a>
-                   <b>${key}</b>${dot}&nbsp;${footnotes[key]}
-                 </l1>`;
+                   <a name="footnote_${note.value.footnote_number}" id="footnote_${note.value.footnote_number}"></a>
+                   <b>${note.value.footnote_number}</b>${dot}&nbsp;${note.value.footnote_text}
+                   </l1>`;
     }
     ftnt_str += `</ul>`;
   }
@@ -208,7 +227,7 @@ ReportingDates.prototype.buildStaticElements = function() {
     table_parent.insertBefore(static_notes, this.dates_table.nextSibling);
   }
 
-  if (typeof header_notes == 'object') {
+  if (typeof header_notes_json == 'object') {
     //Create A11Y modal dialog for header_notes popup and add innerHTML
     const dialog = document.createElement('div');
     //Must add these three classes separately for IE :-(
@@ -223,24 +242,34 @@ ReportingDates.prototype.buildStaticElements = function() {
     const dialog_p = document.querySelector('.modal p');
     dialog_p.innerHTML = `${hdr_str}`;
 
-    const header_sups = document.querySelectorAll(
-      'tr:first-child th a[href^="#"]'
-    );
-
-    //add data attribute to the header sups to open AY11 dialog
-    for (const header_sup of header_sups) {
-      header_sup.setAttribute('data-a11y-dialog-show', 'header_notes_modal');
-      header_sup.addEventListener('click', e => {
-        e.preventDefault();
-      });
-    }
   }
 };
 
-//Show chosen state rows, hide others
+// Adds row state name classes
+ReportingDates.prototype.addStateClass = function() {
+   const all_tr = document.querySelectorAll('tr');
+      Array.from(all_tr).forEach(row => {
+        let state_name = row.cells[0].textContent;
+        //state_name = state_name.split(' ')[0];//.toLowerCase()
+        console.log('STATE:', state_name);
+        const states_select = document.getElementById('states');
+        // console.log('SS',states_select);
+        Array.from(states_select.options).forEach(opt => {
+          //if (opt.textContent.includes(state_name)){
+          if (state_name.match(opt.textContent)) {
+
+             row.classList.add(opt.value.toLowerCase());
+           }
+        });
+
+      });
+};
+
+// Show chosen state rows, hide others
 ReportingDates.prototype.handleStateChange = function() {
   const state = this.states.value.toLowerCase();
 
+ //TODO: Should this be `this.dates_table.querySelectorAll` ?
   const tr = document.querySelectorAll('tr');
   const ftnt = document.querySelectorAll('tr.footnote_row');
 
@@ -274,21 +303,36 @@ ReportingDates.prototype.handleStateChange = function() {
   }
 };
 
-// Add footnote rows based on existence of superscript number on page load
+// Add footnote rows based on existence of superscript number created by convertFootnotes()
 ReportingDates.prototype.addFootnotes = function() {
+  const footnotes_json = JSON.parse(document.getElementById('footnotes').textContent);
+  const footnotes_array = footnotes_json.footnote;
+  console.log('footnotes_array', footnotes_array);
+
+  //TODO: Should this be `this.dates_table.querySelectorAll` ?
   const date_sups = document.querySelectorAll('td sup');
 
   Array.from(date_sups)
     .reverse()
     .forEach(node => {
       const indx = node.innerText; //should this be textContent?
+      console.log('indx', indx);
       const state_class = node.closest('tr').className;
       const ftnt_colspan = node.closest('tr').cells.length - 1;
+      let current_text;
+
+      for (let note of footnotes_array){
+        if(note.value.footnote_number == indx){
+
+          current_text = note.value.footnote_text;
+
+        }
+      }
 
       const ftnt_row = `<tr class='${state_class} footnote_row footnote_${indx}'>
                           <td></td>
                           <td colspan=${ftnt_colspan}>
-                            <b>${indx}.</b>&nbsp;${footnotes[indx]}</td>
+                            <b>${indx}.</b>&nbsp;${current_text}</td>
                         </tr>`;
       node.closest('tr').insertAdjacentHTML('afterend', ftnt_row);
     });
@@ -494,5 +538,63 @@ ReportingDates.prototype.stripeByState = function() {
     }
   }
 };
+
+ReportingDates.prototype.convertFootnotes = function() {
+
+const all_hdr = this.dates_table.getElementsByTagName('th');
+   Array.from(all_hdr).forEach(cell => {
+  //#WORKKS LEAVES A COMMA AFTER TEXT, BEFORE FOOTNOTE
+   const txt = cell.textContent;
+
+   if (/~/.test(txt)) {
+        cell.style.color='red';
+        let txt_array = txt.split('~');
+        let hdr_txt = txt_array.shift();
+        let appended_hdr_notes = txt_array;
+
+        let hdr_note_html_array = [];
+        for (let note of appended_hdr_notes) {
+          let hdr_note_html = `<a href="#hdr_${note}"><sup>${note}</sup></a>`;
+          hdr_note_html_array.push(hdr_note_html);
+
+         }
+
+      cell.innerHTML = hdr_txt+hdr_note_html_array;
+
+    }
+
+  });
+
+   //get all non-footnote/non-header row cells
+  const all_td = this.dates_table.querySelectorAll('tr:not(.footnote_row) td');
+
+    Array.from(all_td).forEach(cell => {
+
+     const txt = cell.textContent;
+     //  console.log(txt);
+
+     if (/~/.test(txt)) {
+      cell.style.color='red';
+      //Create an array from the string split the tilda(s)
+      let txt_array = txt.split('~');
+      ///The first item is the date text, return that as a var. Now txt_array only includes footnotes.
+      let date_txt = txt_array.shift();
+      //Creeate a new varialble or clarity
+      let appended_footnotes = txt_array;
+
+      let footnote_html_array = [];
+      for (let note of appended_footnotes) {
+        let footnote_html = `<a href="#footnote_${note}"><sup>${note}</sup></a>`;
+
+        footnote_html_array.push(footnote_html);
+      }
+
+      cell.innerHTML = date_txt+footnote_html_array;
+
+     }
+
+   });
+
+}; // end conveertfootnotes()
 
 new ReportingDates();

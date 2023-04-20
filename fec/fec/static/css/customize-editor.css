@@ -80,3 +80,36 @@ li.sequence-member .sequence-member-inner .sequence-type-list .sequence-containe
 .richtext ol ol ol li {
   list-style-type: lower-roman;
 }
+
+
+
+div[data-contentpath="reporting_dates_table"] div.widget-checkbox_input {
+  display: none !important;
+}
+
+
+div[data-contentpath="reporting_dates_table"] label[for*="-handsontable-col-caption"] {
+  display: none;
+}
+
+div[data-contentpath="reporting_dates_table"] label[for*="-handsontable-col-caption"] + div.field-content{
+  display: none;
+}
+
+
+div[data-contentpath="reporting_dates_table"] div[id*="-value-table-handsontable-container"] {
+  height:auto  !important;
+}
+
+div[data-contentpath="reporting_dates_table"] div.wtHolder {
+  height:auto  !important;
+}
+
+div[data-contentpath="reporting_dates_table"] .fieldname-table .help table td {
+  background: #357b7d;
+  color:#fff;
+  font-weight: bold;
+  border-width: 2px;
+
+}
+

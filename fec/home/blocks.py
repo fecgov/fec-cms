@@ -186,6 +186,29 @@ class CustomTableBlock(blocks.StructBlock):
         template = 'blocks/custom_table.html'
         icon = 'table'
 
+        
+class ReportingTableBlock(blocks.StructBlock):
+    """A custom table
+    """
+    reporting_table_options = {
+        'startRows': 1,
+        'startCols': 6,
+        'colHeaders': False,
+        'rowHeaders': False,
+        'height': 108,
+        'language': 'en',
+        'renderer': 'html'
+    }
+
+    table = TableBlock(table_options=reporting_table_options,
+                       help_text='<table class="htcore handsontable" style="table-layout:fixed;width: calc(100% - 294px);position: fixed;top: 20%;"> \
+                       <tr><td>State</td><td>Election date</td><td>Close of books+</td><td>Mailing deadline++</td> \
+                       <td>Filing deadline++</td><td>48-Hour Notices**</td></tr</table>')
+
+    class Meta:
+        template = 'blocks/reporting-dates-table-block.html'
+        icon = 'table'
+
 
 class ExampleImage(blocks.StructBlock):
     """Creates an example module with an image and a caption, side-by-side
