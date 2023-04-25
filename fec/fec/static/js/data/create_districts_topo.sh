@@ -1,6 +1,7 @@
-SOURCE_FILE=src/cd_update.shp #unzipped http://www2.census.gov/geo/tiger/TIGER2016/CD/tl_2016_us_cd115.zip to ./src/
-#updated Pennsylvania disticts for 2018 redsitricting,
-OUT_FILE=districts_test.json
+SOURCE_FILE=src/Current_Congressional_Districts.shp #change this name path to the source file when you are ready to run this script
+#unzipped http://www2.census.gov/geo/tiger/TIGER2016/CD/tl_2016_us_cd115.zip to ./src/
+#updated Pennsylvania districts for 2018 redistricting,
+OUT_FILE=districts.json
 SIMP_PARAM=0.015 # lower value = more simplification, ref: https://github.com/topojson/topojson-simplify/blob/master/README.md#toposimplify_spherical_quantile
 QUANTIZE_PARAM=1e5
 PATH=$(npm bin):$PATH
