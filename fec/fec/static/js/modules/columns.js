@@ -318,6 +318,60 @@ var disbursements = [
   modalTriggerColumn
 ];
 
+
+var allocatedFederalNonfederalDisbursements = [
+  {
+    data: 'committee',
+    orderable: false,
+    className: 'all',
+    render: function(data) {
+      console.log(data);
+      if (data) {
+        return columnHelpers.buildEntityLink(
+          data.name,
+          helpers.buildAppUrl(['committee', data.committee_id])
+        );
+      } else {
+        return data.name;
+      }
+    }
+  },
+  {
+    data: 'payee_name',
+    orderable: false,
+    className: 'all',
+    render: function(data, type, row) {
+      var committee = row.recipient_committee;
+      if (committee) {
+        return columnHelpers.buildEntityLink(
+          committee.name,
+          helpers.buildAppUrl(['committee', committee.committee_id]),
+          'committee'
+        );
+      } else {
+        return data;
+      }
+    }
+  },
+  {
+    data: 'disbursement_purpose',
+    className: 'min-desktop hide-panel',
+    orderable: false
+  },
+  currencyColumn({
+    data: 'disbursement_amount',
+    className: 'min-tablet hide-panel column--number t-mono',
+    orderable: true
+  }),
+  dateColumn({
+    data: 'event_purpose_date',
+    className: 'min-tablet hide-panel column--small',
+    orderable: true
+  }),
+  modalTriggerColumn
+];
+
+
 var electioneeringCommunications = [
   {
     data: 'committee_name',
@@ -931,6 +985,7 @@ module.exports = {
   committees: committees,
   communicationCosts: communicationCosts,
   disbursements: disbursements,
+  allocatedFederalNonfederalDisbursements: allocatedFederalNonfederalDisbursements,
   electioneeringCommunications: electioneeringCommunications,
   independentExpenditures: independentExpenditures,
   individualContributions: individualContributions,

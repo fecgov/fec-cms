@@ -94,6 +94,19 @@ def disbursements(request):
     })
 
 
+# handle null disbursement dates in a future implementation
+def allocated_federal_nonfederal_disbursements(request):
+    return render(request, 'datatable.jinja', {
+        'parent': 'data',
+        'slug': 'allocated-federal-nonfederal-disbursements',
+        'title': 'Allocated federal nonfederal disbursements',
+        'dates': utils.date_ranges(),
+        'columns': constants.table_columns['allocated-federal-nonfederal-disbursements'],
+        'has_data_type_toggle': True,
+        'social_image_identifier': 'data',
+    })
+
+
 def filings(request):
     return render(request, 'datatable.jinja', {
         'parent': 'data',
