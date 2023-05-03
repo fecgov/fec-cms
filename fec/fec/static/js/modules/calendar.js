@@ -225,7 +225,7 @@ Calendar.prototype.updateLinks = function(params) {
       encodeURIComponent(
         subscribeURL
           .clone()
-          .protocol('http')
+          .protocol('https')
           .toString()
       ),
     calendarSubscribe: subscribeURL.protocol('webcal').toString()
