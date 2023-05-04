@@ -12,6 +12,35 @@
 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{{ asset_for_css('legal-common.css') }}" />
+
+<style>
+/* JUST FOR NOW... */
+.dataTables_wrapper {
+    padding-bottom: 2rem;
+    border-bottom: 2px solid #000;
+}
+
+ .dataTables_length {
+    width: 20%;
+    display: inline-block;
+    float: left;
+    padding: 1rem 1rem 2rem 0 !important;
+
+}
+.dataTables_filter {
+    width: 80%;
+    float: left;
+    display: inline-block;
+    padding: 1rem 0rem 4.5rem 0 !important;
+
+}
+
+.dataTables_length label,
+.dataTables_filter label {
+  font-weight: bold;
+  text-transform: uppercase;
+} 
+</style>
 {% endblock %}
 
 <div class="main">
@@ -46,7 +75,7 @@
               <a class="button button--cta button--document button--lg" href="{{ final_opinion.url }}">Final opinion</a> <span class="t-sans u-padding--left">{{ final_opinion.date | date(fmt='%B %d, %Y') }}</span>
             </div>
           {% endif %}
-          <table class="data-table simple-table" style="table-layout: auto;">
+          <table class="data-table simple-table" style="table-layout: auto;" id="ao-final-opinion">
             <thead>
               <tr>
                 <th scope="col">Date</th>
@@ -67,7 +96,7 @@
         </section>
         <section id="entities" class="content__section">
           <h2>Entities</h2>
-          <table class="data-table simple-table" style="table-layout: auto;">
+          <table class="data-table simple-table" style="table-layout: auto;" id="ao-entities">
             <thead>
               <tr>
                 <th scope="col">Role</th>
@@ -158,4 +187,7 @@
   </div>
 </div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ asset_for_js('legal-to-datatable.js') }}"></script>
 {% endblock %}

@@ -187,6 +187,49 @@ class CustomTableBlock(blocks.StructBlock):
         icon = 'table'
 
 
+class DataTableBlock(blocks.StructBlock):
+    """A Datatable built with Wagtail TableBlock
+    """
+    datatable_options = {
+        'startRows': 7,
+        'startCols': 4,
+        'colHeaders': True,
+        'rowHeaders': False,
+        'height': 108,
+        'language': 'en',
+        'renderer': 'html'
+    }
+
+    # TODO: MAKE SORT FIELDS REQUIRED, OR FIND WAY TO MAKE SURE AN EMPTY SORT FIELDS BLOCK DOES NOT BREAK AS IT DOES NOW
+    data_table = blocks.StreamBlock([
+        ('title', blocks.CharBlock(required=False, icon='title')),
+        ('table', TableBlock(table_options=datatable_options)),
+        ('sort_fields', blocks.ListBlock(blocks.StructBlock([
+            ('column', blocks.CharBlock(required=True, help_text="Put text exactly as it appears in the column head")),
+            ('sort_format', blocks.ChoiceBlock(choices=[
+                ('date', 'Date (mm/dd/yyyy)'),
+                ('numeric', 'Numeric'),
+                ('currency', 'Currency($1,2345.67, no spaces between commas)'),
+                ('alphabetical', 'Alphabetical'),
+            ], required=True, help_text='Set custom sorting for a pecific column. If no sort fields are specified, \
+                   table defaults to ordering by first column/alphabetically.')),
+            ('order', blocks.ChoiceBlock(choices=[
+                ('asc', 'Ascending'),
+                ('desc', 'Descending')], required=True, help_text='Ascending is largest to smallest. \
+                    Descending is smallest to largest')),
+        ]), required=True, help_text='<ul><li>Sort fields is not reqired, but please remove this block if not using it</li> \
+              <li>The table will be ordered initially by the first column you specify as a sort field below.</li> \
+              <li>If no sort fields are specified, table defaults to order by first column/alphabetically.</li></ul>'))
+    ], block_counts={
+        'table': {'max_num': 1},
+        'sort_fields': {'max_num': 1}}
+    )
+
+    class Meta:
+        template = 'blocks/data-table-block.html'
+        icon = 'table'
+
+
 class ExampleImage(blocks.StructBlock):
     """Creates an example module with an image and a caption, side-by-side
     Typically used for showing reporting Examples
@@ -257,6 +300,7 @@ class ResourceBlock(blocks.StructBlock):
         ('image', ImageChooserBlock()),
         ('example_image', ExampleImage()),
         ('example_paragraph', ExampleParagraph()),
+        ('datatable_block', DataTableBlock()),
     ])
 
     aside = blocks.StreamBlock([
