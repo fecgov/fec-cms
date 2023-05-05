@@ -14,13 +14,11 @@ from wagtail.models import Orderable, Page, Revision
 from wagtail.fields import RichTextField, StreamField
 from wagtail import blocks
 from wagtail.admin.panels import (
-    FieldPanel,
     InlinePanel,
     MultiFieldPanel,
     PageChooserPanel,
     FieldPanel)
 from wagtail.images.blocks import ImageChooserBlock
-from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
@@ -113,7 +111,7 @@ class ContentPage(Page):
     ]
 
     promote_panels = Page.promote_panels + [
-        ImageChooserPanel('feed_image'),
+        FieldPanel('feed_image'),
     ]
 
     search_fields = Page.search_fields + [
@@ -227,7 +225,7 @@ class Author(models.Model):
         FieldPanel('name'),
         FieldPanel('title'),
         FieldPanel('email'),
-        ImageChooserPanel('photo'),
+        FieldPanel('photo'),
         FieldPanel('phone'),
         FieldPanel('bio'),
         MultiFieldPanel([
@@ -824,7 +822,7 @@ class CommissionerPage(Page):
         FieldPanel('first_name'),
         FieldPanel('middle_initial'),
         FieldPanel('last_name'),
-        ImageChooserPanel('picture'),
+        FieldPanel('picture'),
         FieldPanel('sworn_in'),
         FieldPanel('term_expiration'),
         FieldPanel('reappointed_dates'),
@@ -1189,7 +1187,7 @@ class ExamplePage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('pre_title'),
-        ImageChooserPanel('featured_image'),
+        FieldPanel('featured_image'),
         FieldPanel('body'),
         FieldPanel('related_media_title'),
         FieldPanel('related_media')
