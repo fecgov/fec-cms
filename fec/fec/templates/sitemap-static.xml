@@ -3,144 +3,144 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 <!-- data urls-->
   <url>
-    <loc>https://www.fec.gov/data/</loc>
+    <loc>https://dev.fec.gov/data/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/browse-data/</loc>
+    <loc>https://dev.fec.gov/data/browse-data/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/candidates/</loc>
+    <loc>https://dev.fec.gov/data/candidates/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/committees/</loc>
+    <loc>https://dev.fec.gov/data/committees/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/elections/</loc>
+    <loc>https://dev.fec.gov/data/elections/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/elections/senate</loc>
+    <loc>https://dev.fec.gov/data/elections/senate</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/elections/house</loc>
+    <loc>https://dev.fec.gov/data/elections/house</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/elections/president</loc>
+    <loc>https://dev.fec.gov/data/elections/president</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/raising/</loc>
+    <loc>https://dev.fec.gov/data/raising/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/spending/</loc>
+    <loc>https://dev.fec.gov/data/spending/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/communication-costs/</loc>
+    <loc>https://dev.fec.gov/data/communication-costs/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/disbursements</loc>
+    <loc>https://dev.fec.gov/data/disbursements</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/electioneering-communications/</loc>
+    <loc>https://dev.fec.gov/data/electioneering-communications/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/filings/</loc>
+    <loc>https://dev.fec.gov/data/filings/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/independent-expenditures/</loc>
+    <loc>https://dev.fec.gov/data/independent-expenditures/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/individual-contributions</loc>
+    <loc>https://dev.fec.gov/data/individual-contributions</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/loans/</loc>
+    <loc>https://dev.fec.gov/data/loans/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/party-coordinated-expenditures/</loc>
+    <loc>https://dev.fec.gov/data/party-coordinated-expenditures/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/receipts/individual-contributions/</loc>
+    <loc>https://dev.fec.gov/data/receipts/individual-contributions/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/receipts/</loc>
+    <loc>https://dev.fec.gov/data/receipts/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/reports/</loc>
+    <loc>https://dev.fec.gov/data/reports/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/legal-resources/enforcement/audit-search/</loc>
+    <loc>https://dev.fec.gov/legal-resources/enforcement/audit-search/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/candidates/president/presidential-map/</loc>
+    <loc>https://dev.fec.gov/data/candidates/president/presidential-map/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/candidates/senate/</loc>
+    <loc>https://dev.fec.gov/data/candidates/senate/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/candidates/house/</loc>
+    <loc>https://dev.fec.gov/data/candidates/house/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/reports/presidential/</loc>
+    <loc>https://dev.fec.gov/data/reports/presidential/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/reports/house-senate/</loc>
+    <loc>https://dev.fec.gov/data/reports/house-senate/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/data/reports/pac-party/</loc>
+    <loc>https://dev.fec.gov/data/reports/pac-party/</loc>
     <lastmod></lastmod>
   </url>
 <!-- fec urls-->
   <url>
-    <loc>https://www.fec.gov/calendar/</loc>
+    <loc>https://dev.fec.gov/calendar/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/about/leadership-and-structure/commissioners/</loc>
+    <loc>https://dev.fec.gov/about/leadership-and-structure/commissioners/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/help-candidates-and-committees/question-rad/</loc>
+    <loc>https://dev.fec.gov/help-candidates-and-committees/question-rad/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/help-candidates-and-committees/guides/</loc>
+    <loc>https://dev.fec.gov/help-candidates-and-committees/guides/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/meetings/</loc>
+    <loc>https://dev.fec.gov/meetings/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/legal-resources/policy-and-other-guidance/guidance-documents/</loc>
+    <loc>https://dev.fec.gov/legal-resources/policy-and-other-guidance/guidance-documents/</loc>
     <lastmod></lastmod>
   </url>
   <url>
-    <loc>https://www.fec.gov/updates/</loc>
+    <loc>https://dev.fec.gov/updates/</loc>
     <lastmod></lastmod>
   </url>
 </urlset>
