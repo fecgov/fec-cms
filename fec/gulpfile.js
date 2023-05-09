@@ -9,7 +9,7 @@ const svgmin = require('gulp-svgmin');
 const urlencode = require('gulp-css-urlencode-inline-svgs');
 const sass = require('gulp-sass')(require('sass'));
 // minifies css
-const cleanCSS = require('gulp-clean-css');
+const csso = require('gulp-csso');
 // Clears contents of directory
 const clean = require('gulp-clean');
 const rev = require('gulp-rev');
@@ -32,7 +32,7 @@ gulp.task(
         // compiles sass
         .pipe(sass().on('error', sass.logError))
         // minifies css
-        .pipe(cleanCSS())
+        .pipe(csso())
         // sourcemaps for local to back-trace source of scss
         //.pipe(gulpif(!production, sourcemaps.init()))*/
         //makes manifest sass (static asset revision) and puts in destination
@@ -79,7 +79,7 @@ gulp.task(
         // compiles sass
         .pipe(sass().on('error', sass.logError))
         // minifies css
-        .pipe(cleanCSS())
+        .pipe(csso())
         // sourcemaps for local to back-trace source of scss
         //.pipe(gulpif(!production, sourcemaps.init()))*/
         //makes manifest sass (static asset revision) and puts in destination
