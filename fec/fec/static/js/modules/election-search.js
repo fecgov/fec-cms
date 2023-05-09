@@ -41,7 +41,7 @@ function ElectionSearch(selector) {
   this.$form = this.$elm.find('form');
   this.$zip = this.$form.find('[name="zip"]');
   this.$state = this.$form.find('[name="state"]');
-  this.$district = this.$form.find('[name="district"]').prop('disabled', true);
+  this.$district = this.$form.find('[name="district"]').prop('disabled', true).val('');
   this.$cycle = this.$form.find('[name="cycle"]');
 
   this.$resultsHeading = this.$elm.find('.js-results-heading');
@@ -57,13 +57,13 @@ function ElectionSearch(selector) {
 
   this.$zip.on('change', this.handleZipChange.bind(this));
   this.$state.on('change', this.performStateChange.bind(this));
+  this.$cycle.on('change', this.handleCycleChange.bind(this));
   this.$form.on('change', 'input,select', this.performSearch.bind(this));
   this.$form.on('submit', this.performSearch.bind(this));
   $(window).on('popstate', this.handlePopState.bind(this));
 
   this.getUpcomingPresidentialElection();
   this.getUpcomingElections();
-  this.performStateChange();
   this.handlePopState();
 }
 
@@ -92,9 +92,36 @@ ElectionSearch.prototype.performSearch = function() {
   this.search();
   this.updateRedistrictingMessage();
 };
+
 ElectionSearch.prototype.performStateChange = function() {
   this.handleStateChange();
   this.updateRedistrictingMessage();
+};
+
+/**
+ * Calls getDistricts() to get list of districts for the selected state.
+ * Populates the district dropdown with the correct values.
+ * The district param can be passed in optionally to preserve
+ * the selected district
+ * Arguments for perform search can be passed in optionally.
+ * Calls performSearch at the end.
+ * @param {district} - number that represents the selected district
+ * @param {args} - Object that holds arguments to be passed to performSearch()
+ */
+ElectionSearch.prototype.updateDistrictsSearch = function(district, args) {
+  district = district === undefined ? '' : district;
+  var self = this;
+
+  self.getDistricts(function (result) {
+  self.districts = result;
+  self.updateDistrictDropdowns(district);
+
+  if (args) {
+    self.performSearch(args.first, args.second);
+  } else {
+    self.performSearch();
+  }
+  });
 };
 /**
  * Call the API to get a list of upcoming election dates
@@ -125,19 +152,25 @@ ElectionSearch.prototype.handleZipChange = function() {
 };
 
 /**
+ * Handle a change event on the cycle field
+ */
+ElectionSearch.prototype.handleCycleChange = function() {
+  this.updateDistrictsSearch(this.$district.val(), null);
+
+};
+
+/**
  * Handle a click on the map
- * Update the options in the distict <select> and call a search
+ * Call updateDistrictsSearch to update the options in the district
+ * <select> and call performSearch
  * @param {string} state - two-letter abbreviation of a state
- * @param {int} district - disctrict Number
+ * @param {int} district - district Number
  */
 ElectionSearch.prototype.handleSelectMap = function(state, district) {
   this.$zip.val('');
   this.$state.val(state);
-  this.updateDistricts(state);
-  if (district && this.hasOption(this.$district, district)) {
-    this.$district.val(district);
-  }
-  this.performSearch();
+  this.updateDistrictsSearch(district, null);
+
 };
 
 /**
@@ -179,8 +212,10 @@ ElectionSearch.prototype.search = function(e, opts) {
           serialized.cycle
         );
         // Note: Update district color map before rendering results
+        if ( self.$cycle.val() === undefined || Number(self.$cycle.val()) >= window.DISTRICT_MAP_CUTOFF){
         var encodedDistricts = self.encodeDistricts(self.results);
         self.map.drawDistricts(encodedDistricts);
+        }
         self.draw(self.results);
       });
       self.serialized = serialized;
@@ -201,8 +236,10 @@ ElectionSearch.prototype.search = function(e, opts) {
       // ensures that clicking on a state or district will highlight it when
       // the search options don't match the state of the map, e.g. after the
       // user has run a search, then zoomed out and triggered a map redraw.
+      if ( self.$cycle.val() === undefined || Number(self.$cycle.val()) >= window.DISTRICT_MAP_CUTOFF){
       var encodedDistricts = self.encodeDistricts(self.results);
       self.map.drawDistricts(encodedDistricts);
+      }
     }
   }
 };
@@ -212,12 +249,17 @@ ElectionSearch.prototype.search = function(e, opts) {
  */
 ElectionSearch.prototype.handlePopState = function() {
   var params = URI.parseQuery(window.location.search);
+  var args = { first: null, second: { pushState: false } };
+
   this.$zip.val(params.zip);
   this.$state.val(params.state);
-  this.handleStateChange();
-  this.$district.val(params.district);
   this.$cycle.val(params.cycle || this.$cycle.val());
-  this.performSearch(null, { pushState: false });
+
+ if (params.state && this.$zip) {
+    this.$zip.val('');
+  }
+
+  this.updateDistrictsSearch(params.district, args);
 };
 
 //search presidential elections only if no other parameters (zip, state, district) are present

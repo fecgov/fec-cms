@@ -4,7 +4,6 @@ var $ = require('jquery');
 var _ = require('underscore');
 var helpers = require('./helpers');
 var utils = require('./election-utils');
-var districts = require('../data/stateDistricts.json');
 var districtTemplate = require('../templates/districts.hbs');
 
 /**
@@ -15,9 +14,11 @@ var districtTemplate = require('../templates/districts.hbs');
  * It handles all logic around showing districts for the district select
  */
 function ElectionForm(elm) {
+  this.districts = 0;
+  this.$cycle;
   this.$elm = $(elm);
   this.$state = this.$elm.find('[name="state"]');
-  this.$district = this.$elm.find('[name="district"]').prop('disabled', true);
+  this.$district = this.$elm.find('[name="district"]').prop('disabled', true).val('');
   this.$submit = this.$elm.find('[type="submit"]');
   this.showSenateOption = true;
   this.$state.on('change', this.handleStateChange.bind(this));
@@ -40,52 +41,31 @@ ElectionForm.prototype.hasOption = function($select, value) {
  */
 ElectionForm.prototype.handleStateChange = function() {
   var state = this.$state.val();
-  this.updateDistricts(state);
+
   if (state && this.$zip) {
     this.$zip.val('');
   }
-  if (this.$state.val().length == 0) {
-    this.$district.val('');
-  }
 
-  this.search();
+ this.updateDistricts();
 };
 
 /**
- * Takes a state value and populates the district dropdown with the correct values
- * @param {string} state - two-letter abbreviation of a state
+ * Calls getDistricts() to get list of districts for the selected state.
+ * Populates the district dropdown with the correct values.
+ * The district param can be passed in optionally to preserve
+ * the selected district
+ * performs a search at the end
+ * @param {district} - number that represents the selected district
  */
-ElectionForm.prototype.updateDistricts = function(state) {
-  state = state || this.$state.val();
-  this.districts = districts[state] ? districts[state].districts : 0;
-  if (this.districts) {
-    this.$district
-      .html(
-        districtTemplate({
-          districts: _.range(1, this.districts + 1),
-          senate: this.showSenateOption
-        })
-      )
-      .val('')
-      .prop('disabled', false);
-  } else if (this.showSenateOption) {
-    // When a state only has one house district, like Alaska, districts will be empty
-    // This is a problem for the ElectionLookup where you need to have an option to
-    // navigate to the house page.
-    // If showSenateOption is true, we also want to show an at-large house district
-    this.$district
-      .html(
-        districtTemplate({
-          districts: null,
-          atLargeHouse: true,
-          senate: this.showSenateOption
-        })
-      )
-      .val('')
-      .prop('disabled', false);
-  } else {
-    this.$district.prop('disabled', true);
-  }
+ElectionForm.prototype.updateDistricts = function(district) {
+  district = district === undefined ? '' : district;
+  var self = this;
+
+  self.getDistricts(function (result) {
+  self.districts = result;
+  self.updateDistrictDropdowns(district);
+  self.search();
+  });
 };
 
 /**
@@ -130,6 +110,95 @@ ElectionForm.prototype.encodeDistricts = function(results) {
     encoded.push(utils.encodeDistrict(state, district));
   }
   return _.unique(encoded);
+};
+
+/**
+ * Gets the value of the state dropdown.
+ * If cycle is undefined it calculates the current cycle.
+ * If the state is defined it will make an API call to get districts
+ * and return that value.
+ * If state is undefined, it returns zero.
+ */
+ElectionForm.prototype.getDistricts = function(callback) {
+  var state = this.$state.val();
+  var year;
+
+  if (this.$cycle === undefined || this.$cycle.val() === undefined) {
+     var now = new Date();
+     var currentYear = now.getFullYear();
+       year = currentYear + 4 - (currentYear % 4);
+  } else {
+     year = this.$cycle.val();
+  }
+
+  if (state) {
+  var query = {
+    cycle: year,
+    state: state,
+    sort: '-district',
+    office: 'house'
+    };
+
+  var url = this.getUrl(query);
+
+  $.getJSON(url).done(function(response) {
+    var result = response.results[0] === undefined ? 0 : response.results[0].district;
+    callback(parseInt(result));
+  });
+
+ } else {
+ callback(0);
+ }
+};
+
+/**
+ * Populates the district dropdown with the correct values.
+ * The district param can be passed in optionally to preserve
+ * the selected district
+ * @param {district} - number that represents the selected district
+ */
+ElectionForm.prototype.updateDistrictDropdowns = function(district) {
+    // for when a state loses a congressional district and the user changes
+    // the cycle
+    if(district > this.districts) {
+        this.$district
+      .html(
+        districtTemplate({
+          districts: _.range(1, this.districts + 1),
+          senate: this.showSenateOption
+        })
+      )
+      .val('')
+      .prop('disabled', false)
+      .change();
+   } else if (this.districts) {
+    this.$district
+      .html(
+        districtTemplate({
+          districts: _.range(1, this.districts + 1),
+          senate: this.showSenateOption
+        })
+      )
+      .val(district)
+      .prop('disabled', false);
+  } else if (this.showSenateOption) {
+    // When a state only has one house district, like Alaska, districts will be empty
+    // This is a problem for the ElectionLookup where you need to have an option to
+    // navigate to the house page.
+    // If showSenateOption is true, we also want to show an at-large house district
+    this.$district
+      .html(
+        districtTemplate({
+          districts: null,
+          atLargeHouse: true,
+          senate: this.showSenateOption
+        })
+      )
+      .val('')
+      .prop('disabled', false);
+  } else {
+    this.$district.prop('disabled', true).val('');
+  }
 };
 
 module.exports = {

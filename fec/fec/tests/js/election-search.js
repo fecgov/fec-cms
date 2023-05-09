@@ -69,19 +69,25 @@ describe('election search', function() {
       .true;
   });
 
+  it('should disable the district select when state is set and the state does not have districts', function() {
+      this.el.$state.val('AS');
+      this.el.districts = 0; //assume that API returns a correct value
+      this.el.updateDistrictDropdowns();
+      expect(this.el.$district.prop('disabled')).to.be.true;
+
+  });
+
   it('should disable the district select when state is not set', function() {
     this.el.$state.val('').change();
     expect(this.el.$district.prop('disabled')).to.be.true;
   });
 
-  it('should disable the district select when state is set and the state does not have districts', function() {
-    this.el.$state.val('AS').change();
-    expect(this.el.$district.prop('disabled')).to.be.true;
-  });
+    it('should enable the district select when state is set and the state has districts', function() {
+      this.el.$state.val('AS');
+      this.el.districts = 11; //assume that API returns a correct value
+      this.el.updateDistrictDropdowns();
+      expect(this.el.$district.prop('disabled')).to.be.false;
 
-  it('should enable the district select when state is set and the state has districts', function() {
-    this.el.$state.val('VA').change();
-    expect(this.el.$district.prop('disabled')).to.be.false;
   });
 
   it('should clear the state select and disable the district select when the zip select is set', function() {
@@ -96,8 +102,9 @@ describe('election search', function() {
   });
 
   it('should serialize state and district inputs', function() {
-    this.el.$state.val('VA').change();
-    this.el.$district.val('01');
+    this.el.$state.val('VA');
+    this.el.districts = 11; //assume that API returns a correct value
+    this.el.updateDistrictDropdowns('01');
     expect(this.el.serialize()).to.deep.equal({
       cycle: '2016',
       state: 'VA',
@@ -205,6 +212,29 @@ describe('election search', function() {
       this.el.search();
       expect($.ajax).not.to.have.been.called;
       expect(this.el.draw).not.to.have.been.called;
+     });
+
+    it('should fetch districts', function() {
+      this.el.$state.val('NJ');
+      this.el.performStateChange();
+      expect($.ajax).to.have.been.called;
+      var call = $.ajax.getCall(0);
+      var uri = URI(call.args[0].url);
+      expect(uri.path()).to.equal('/v1/elections/search/');
+      expect(URI.parseQuery(uri.search())).to.deep.equal({
+        api_key: '12345',
+        per_page: '100',
+        cycle: '2016',
+        state: 'NJ',
+        sort: '-district',
+        office: 'house'
+      });
+    });
+
+    it('should not fetch districts when state is empty', function() {
+      this.el.$state.val('');
+      this.el.performStateChange();
+      expect($.ajax).not.to.have.been.called;
     });
   });
 
@@ -213,4 +243,27 @@ describe('election search', function() {
     var results = this.el.removeWrongPresidentialElections(raw, '2018');
     expect(results).to.deep.equal([{ cycle: 2018, office: 'S' }]);
   });
+
+   describe('performStateChange', function() {
+        beforeEach(function() {
+          this.stateChangeSpy = sinon.spy(this.el, 'handleStateChange');
+          this.updateRedistrictingSpy = sinon.spy(this.el, 'updateRedistrictingMessage');
+          this.updateDistrictsSpy = sinon.spy(this.el, 'updateDistricts');
+        });
+
+        afterEach(function() {
+          this.stateChangeSpy.restore();
+          this.updateRedistrictingSpy.restore();
+          this.updateDistrictsSpy.restore();
+
+        });
+
+        it('should call handleStateChange(), updateDistricts(), and updateRedistrictingMessage() on state dropdown change', function() {
+          this.el.performStateChange();
+          expect(this.stateChangeSpy).to.have.been.calledOnce;
+          expect(this.updateRedistrictingSpy).to.have.been.calledOnce;
+          expect(this.updateDistrictsSpy).to.have.been.calledOnce;
+        });
+   });
+
 });

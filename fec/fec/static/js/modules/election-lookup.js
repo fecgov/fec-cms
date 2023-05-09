@@ -12,13 +12,13 @@ var ElectionMap = require('./election-map').ElectionMap;
  * This component has a map and the state and district selects
  * Inherits from the ElectionForm class
  */
-
 function ElectionLookup(selector) {
   this.$elm = $(selector);
   this.$form = this.$elm.find('form');
-  this.$state = this.$form.find('[name="state"]');
-  this.$district = this.$form.find('[name="district"]').prop('disabled', true);
+  this.$state = this.$form.find('[name="state"]').val('');
+  this.$district = this.$form.find('[name="district"]').prop('disabled', true).val('');
   this.$submit = this.$form.find('[type="submit"]');
+  this.$cycle;
 
   this.districts = 0;
   if (helpers.isInViewport(this.$elm)) {
@@ -38,7 +38,7 @@ ElectionLookup.prototype.init = function() {
   this.$state.on('change', this.handleStateChange.bind(this));
   this.$district.on('change', this.handleDistrictChange.bind(this));
 
-  // Show an option for the senate page in the district seelct
+  // Show an option for the senate page in the district select
   this.showSenateOption = true;
 
   this.$map = $('.election-map');
@@ -51,17 +51,14 @@ ElectionLookup.prototype.init = function() {
 
 /**
  * Handles a click event on the map
- * Updates the values in the district <select> and executes a search
+ * Updates the values in the district by calling updateDistricts()
  * @param {string} state - two-letter state abbreviation
- * @param {integer} distrit - district number
+ * @param {integer} district - district number
  */
 ElectionLookup.prototype.handleSelectMap = function(state, district) {
   this.$state.val(state);
-  this.updateDistricts(state);
-  if (district && this.hasOption(this.$district, district)) {
-    this.$district.val(district);
-  }
-  this.search();
+  this.updateDistricts(district);
+
 };
 
 /**
