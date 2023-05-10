@@ -14,6 +14,7 @@ module.exports = function() {
     API_VERSION: '/v1',
     API_KEY_PUBLIC: '12345',
     API_KEY_PUBLIC_CALENDAR: '67890',
-    DEFAULT_TIME_PERIOD: '2016'
+    DEFAULT_TIME_PERIOD: '2016',
+    FEC_CAL_DOWNLOAD_API_KEY: '12345'
   });
 };

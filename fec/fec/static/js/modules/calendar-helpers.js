@@ -31,8 +31,8 @@ function getGoogleUrl(event) {
 function getUrl(path, params, type) {
   //if 'type' arg is present and set to 'sub', use API_KEY_PUBLIC_CALENDAR as api_key, otherwise use API_KEY_PUBLIC;
   var apiKey =
-  // type == 'sub' ? window.API_KEY_PUBLIC_CALENDAR : window.API_KEY_PUBLIC;
-    type == 'sub' ? window.API_KEY_PUBLIC_CALENDAR : window.FEC_CAL_DOWNLOAD_API_KEY;
+  type == 'sub' ? window.API_KEY_PUBLIC_CALENDAR : window.API_KEY_PUBLIC;
+    // type == 'sub' ? window.API_KEY_PUBLIC_CALENDAR : window.FEC_CAL_DOWNLOAD_API_KEY;
   var url = URI(window.API_LOCATION)
     .path(Array.prototype.concat(window.API_VERSION, path || [], '').join('/'))
     .addQuery({
