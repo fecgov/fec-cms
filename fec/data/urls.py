@@ -11,10 +11,10 @@ urlpatterns = [
     re_path(r'^data/candidate/(?P<candidate_id>\w+)/$', views.candidate),
     re_path(r'^data/committee/(?P<committee_id>\w+)/$',
             views.committee, name='committee-by-id'),
-    re_path(r'^data/elections/(?P<office>\w+)/(?P<state>\w+)/(?P<district>\w+)/(?P<cycle>[0-9]+)/$',  # noqa
+    re_path(r'^data/elections/(?P<office>\w+)/(?P<state>\w+)/(?P<district>\w+)/(?P<cycle>[0-9]+)/$',
             views.elections,
             name='elections-house'),
-    re_path(r'^data/elections/(?P<office>\w+)/(?P<state>\w+)/(?P<cycle>[0-9]+)/$',  # noqa
+    re_path(r'^data/elections/(?P<office>\w+)/(?P<state>\w+)/(?P<cycle>[0-9]+)/$',
             views.elections,
             name='elections-senate'),
     re_path(r'^data/elections/president/(?P<cycle>[0-9]+)/$',
