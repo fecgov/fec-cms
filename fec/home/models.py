@@ -10,17 +10,15 @@ from django.contrib.auth.models import User
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
-from wagtail.models import Orderable, Page, PageRevision
+from wagtail.models import Orderable, Page, Revision
 from wagtail.fields import RichTextField, StreamField
 from wagtail import blocks
 from wagtail.admin.panels import (
-    FieldPanel,
     InlinePanel,
     MultiFieldPanel,
     PageChooserPanel,
-    StreamFieldPanel)
+    FieldPanel)
 from wagtail.images.blocks import ImageChooserBlock
-from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
@@ -103,17 +101,17 @@ class ContentPage(Page):
     class Meta:
         abstract = True
 
-    body = stream_factory(null=True, blank=True)
+    body = stream_factory(null=True, blank=True, use_json_field=True)
 
     feed_image = models.ForeignKey('wagtailimages.Image', blank=True, null=True,
                                    on_delete=models.SET_NULL, related_name='+')
 
     content_panels = Page.content_panels + [
-        StreamFieldPanel('body'),
+        FieldPanel('body'),
     ]
 
     promote_panels = Page.promote_panels + [
-        ImageChooserPanel('feed_image'),
+        FieldPanel('feed_image'),
     ]
 
     search_fields = Page.search_fields + [
@@ -158,7 +156,7 @@ def log_user_save(sender, **kwargs):
     print(kwargs.get('instance').groups, '9')
     # print(kwargs.get('instance').get_all_permissions())
     print(kwargs.get('instance').groups, '10')
-    print(kwargs.get('instance').pagerevision_set, '11')
+    print(kwargs.get('instance').revision_set, '11')
     print(kwargs.get('instance').user_permissions, '12')
     print(kwargs.get('instance').logentry_set, '12.5')
     print(sender.logentry_set, '13')
@@ -173,8 +171,8 @@ def log_user_save(sender, **kwargs):
                                                                        kwargs.get('instance')))
 
 
-@receiver(pre_delete, sender=PageRevision)
-@receiver(post_save, sender=PageRevision)
+@receiver(pre_delete, sender=Revision)
+@receiver(post_save, sender=Revision)
 def log_revisions(sender, **kwargs):
     username = '(user not found)'
     user = kwargs.get('instance').user
@@ -227,7 +225,7 @@ class Author(models.Model):
         FieldPanel('name'),
         FieldPanel('title'),
         FieldPanel('email'),
-        ImageChooserPanel('photo'),
+        FieldPanel('photo'),
         FieldPanel('phone'),
         FieldPanel('bio'),
         MultiFieldPanel([
@@ -620,22 +618,24 @@ class CustomPage(Page):
             FeedDocumentBlock(),
             template='blocks/simple-document-list.html',
             icon='doc-empty')),
-    ], null=True)
-    sidebar = stream_factory(null=True, blank=True)
+    ], null=True, use_json_field=True)
+    sidebar = stream_factory(null=True, blank=True, use_json_field=True)
     related_topics = StreamField([
         ('related_topics', blocks.ListBlock(
             blocks.PageChooserBlock(label="Related topic")
         ))
-    ], null=True, blank=True)
-    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
+    citations = StreamField([
+        ('citations', blocks.ListBlock(CitationsBlock()))],
+        null=True, blank=True, use_json_field=True)
     record_articles = StreamField([
         ('record_articles', blocks.ListBlock(
             blocks.PageChooserBlock(target_model=RecordPage)
         ))
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
     continue_learning = StreamField([
         ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty')),
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
     show_contact_link = models.BooleanField(
         max_length=255, default=True, null=False, blank=False,
         choices=[
@@ -646,13 +646,13 @@ class CustomPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel('author'),
         FieldPanel('date'),
-        StreamFieldPanel('body'),
-        StreamFieldPanel('related_topics'),
-        StreamFieldPanel('citations'),
-        StreamFieldPanel('continue_learning'),
+        FieldPanel('body'),
+        FieldPanel('related_topics'),
+        FieldPanel('citations'),
+        FieldPanel('continue_learning'),
         MultiFieldPanel([
-            StreamFieldPanel('sidebar'),
-            StreamFieldPanel('record_articles'),
+            FieldPanel('sidebar'),
+            FieldPanel('record_articles'),
             FieldPanel('show_contact_link'),
         ],
             heading="Sidebar",
@@ -678,22 +678,22 @@ class CustomPage(Page):
 
 
 class PressLandingPage(Page):
-    hero = stream_factory(null=True, blank=True)
-    release_intro = stream_factory(null=True, blank=True)
-    digest_intro = stream_factory(null=True, blank=True)
+    hero = stream_factory(null=True, blank=True, use_json_field=True)
+    release_intro = stream_factory(null=True, blank=True, use_json_field=True)
+    digest_intro = stream_factory(null=True, blank=True, use_json_field=True)
 
     option_blocks = StreamField([
         ('option_blocks', OptionBlock())
-    ])
+    ], use_json_field=True)
 
-    contact_intro = stream_factory(null=True, blank=True)
+    contact_intro = stream_factory(null=True, blank=True, use_json_field=True)
 
     content_panels = Page.content_panels + [
-        StreamFieldPanel('hero'),
-        StreamFieldPanel('release_intro'),
-        StreamFieldPanel('digest_intro'),
-        StreamFieldPanel('option_blocks'),
-        StreamFieldPanel('contact_intro'),
+        FieldPanel('hero'),
+        FieldPanel('release_intro'),
+        FieldPanel('digest_intro'),
+        FieldPanel('option_blocks'),
+        FieldPanel('contact_intro'),
     ]
 
 
@@ -710,7 +710,7 @@ class DocumentPage(ContentPage):
         FieldPanel('file_url'),
         FieldPanel('size'),
         FieldPanel('category'),
-        StreamFieldPanel('body')
+        FieldPanel('body')
     ]
 
     @property
@@ -731,11 +731,11 @@ class DocumentFeedPage(ContentPage):
     subpage_types = ['DocumentPage', 'ResourcePage']
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
-    ], null=True)
+    ], null=True, use_json_field=True)
     category = models.CharField(max_length=255,
                                 choices=constants.report_parent_categories.items(), null=True)
     content_panels = Page.content_panels + [
-        StreamFieldPanel('intro'),
+        FieldPanel('intro'),
         FieldPanel('category')
     ]
 
@@ -752,15 +752,15 @@ class ReportsLandingPage(ContentPage, UniqueModel):
     subpage_types = ['DocumentFeedPage']
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
-    ], null=True)
+    ], null=True, use_json_field=True)
 
     document_feeds = StreamField([
         ('document_feed_blurb', DocumentFeedBlurb())
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
 
     content_panels = Page.content_panels + [
-        StreamFieldPanel('intro'),
-        StreamFieldPanel('document_feeds')
+        FieldPanel('intro'),
+        FieldPanel('document_feeds')
     ]
 
     @property
@@ -769,16 +769,16 @@ class ReportsLandingPage(ContentPage, UniqueModel):
 
 
 class AboutLandingPage(Page):
-    hero = stream_factory(null=True, blank=True)
+    hero = stream_factory(null=True, blank=True, use_json_field=True)
     sections = StreamField([
         ('sections', OptionBlock())
-    ], null=True)
+    ], null=True, use_json_field=True)
 
     subpage_types = ['ResourcePage', 'DocumentFeedPage', 'ReportsLandingPage', 'OfficePage']
 
     content_panels = Page.content_panels + [
-        StreamFieldPanel('hero'),
-        StreamFieldPanel('sections')
+        FieldPanel('hero'),
+        FieldPanel('sections')
     ]
 
     @property
@@ -812,7 +812,7 @@ class CommissionerPage(Page):
 
     commissioner_bio = StreamField([
         ('paragraph', blocks.RichTextBlock())
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
 
     commissioner_email = models.CharField(max_length=255, blank=True)
     commissioner_phone = models.CharField(max_length=255, null=True, blank=True)
@@ -822,13 +822,13 @@ class CommissionerPage(Page):
         FieldPanel('first_name'),
         FieldPanel('middle_initial'),
         FieldPanel('last_name'),
-        ImageChooserPanel('picture'),
+        FieldPanel('picture'),
         FieldPanel('sworn_in'),
         FieldPanel('term_expiration'),
         FieldPanel('reappointed_dates'),
         FieldPanel('party_affiliation'),
         FieldPanel('commissioner_title'),
-        StreamFieldPanel('commissioner_bio'),
+        FieldPanel('commissioner_bio'),
         FieldPanel('commissioner_email'),
         FieldPanel('commissioner_phone'),
         FieldPanel('commissioner_twitter'),
@@ -857,19 +857,19 @@ class CommissionerPage(Page):
 
 
 class CollectionPage(Page):
-    body = stream_factory(null=True, blank=True)
+    body = stream_factory(null=True, blank=True, use_json_field=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
 
     related_pages = StreamField([
         ('related_pages', blocks.ListBlock(blocks.PageChooserBlock()))
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
     sections = StreamField([
         ('section', CollectionBlock())
-    ])
+    ], use_json_field=True)
 
     reporting_examples = StreamField([
         ('reporting_examples', blocks.ListBlock(CitationsBlock()))
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
 
     show_search = models.BooleanField(
         max_length=255, default=False, null=False, blank=False,
@@ -884,13 +884,13 @@ class CollectionPage(Page):
             (False, 'Do not show contact card')
         ])
     content_panels = Page.content_panels + [
-        StreamFieldPanel('body'),
+        FieldPanel('body'),
         FieldPanel('sidebar_title'),
         FieldPanel('show_search'),
         FieldPanel('show_contact_card'),
-        StreamFieldPanel('related_pages'),
-        StreamFieldPanel('sections'),
-        StreamFieldPanel('reporting_examples')
+        FieldPanel('related_pages'),
+        FieldPanel('sections'),
+        FieldPanel('reporting_examples')
     ]
 
     # Adds a settings field for making a custom title that displays in the Wagtail page explorer
@@ -915,23 +915,23 @@ class ResourcePage(Page):
         help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
     related_pages = StreamField([
         ('related_pages', blocks.ListBlock(blocks.PageChooserBlock())),
         ('external_page', blocks.RichTextBlock()),
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
     sections = StreamField([
         ('sections', ResourceBlock())
     ], null=True, blank=True)
     citations = StreamField([
         ('citations', blocks.ListBlock(CitationsBlock()))
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
     related_topics = StreamField([
         ('related_topics', blocks.ListBlock(
             blocks.PageChooserBlock(label="Related topic")
         ))
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
     category = models.CharField(
         max_length=255, choices=constants.report_child_categories.items(),
         help_text='If this is a report, add a category', blank=True, null=True)
@@ -947,12 +947,12 @@ class ResourcePage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('formatted_title'),
-        StreamFieldPanel('intro'),
+        FieldPanel('intro'),
         FieldPanel('sidebar_title'),
-        StreamFieldPanel('related_pages'),
-        StreamFieldPanel('sections'),
-        StreamFieldPanel('citations'),
-        StreamFieldPanel('related_topics'),
+        FieldPanel('related_pages'),
+        FieldPanel('sections'),
+        FieldPanel('citations'),
+        FieldPanel('related_topics'),
         FieldPanel('show_contact_card')
     ]
 
@@ -996,15 +996,15 @@ class ServicesLandingPage(ContentPage, UniqueModel):
     subpage_types = ['CollectionPage', 'ResourcePage', 'CustomPage']
     template = 'home/candidate-and-committee-services/services_landing_page.html'
 
-    hero = stream_factory(null=True, blank=True)
+    hero = stream_factory(null=True, blank=True, use_json_field=True)
 
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
-    ], null=True)
+    ], null=True, use_json_field=True)
 
     content_panels = Page.content_panels + [
-        StreamFieldPanel('hero'),
-        StreamFieldPanel('intro'),
+        FieldPanel('hero'),
+        FieldPanel('intro'),
     ]
 
     @property
@@ -1041,7 +1041,7 @@ class MeetingPage(Page):
         ('informational_message', SnippetChooserBlock(
             'home.EmbedSnippet',
             required=False, template='blocks/embed-info-message.html', icon='warning')),
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
     draft_minutes_links = models.TextField(
         blank=True, help_text='URLs separated by a newline')
     approved_minutes_date = models.DateField(null=True, blank=True)
@@ -1054,13 +1054,15 @@ class MeetingPage(Page):
     imported_html = StreamField(
         [('html_block', blocks.RawHTMLBlock())],
         null=True,
-        blank=True
+        blank=True,
+        use_json_field=True
     )
 
     sunshine_act_doc_upld = StreamField(
         [('sunshine_act_upld', DocumentChooserBlock(required=False))],
         null=True,
         blank=True,
+        use_json_field=True
     )
 
     full_video_url = models.URLField(blank=True)
@@ -1078,12 +1080,12 @@ class MeetingPage(Page):
                 time in a video for this agenda item')),
 
         ]))
-    ], blank=True, null=True)
+    ], blank=True, null=True, use_json_field=True)
 
     content_panels = Page.content_panels + [
-        StreamFieldPanel('info_message', heading='Informational message'),
+        FieldPanel('info_message', heading='Informational message'),
         FieldPanel('additional_information'),
-        StreamFieldPanel('agenda'),
+        FieldPanel('agenda'),
         MultiFieldPanel(
             [
                 FieldPanel('date'),
@@ -1097,7 +1099,7 @@ class MeetingPage(Page):
         MultiFieldPanel(
             [
                 # FieldPanel('sunshine_act_links'),
-                StreamFieldPanel('sunshine_act_doc_upld'),
+                FieldPanel('sunshine_act_doc_upld'),
             ],
             heading='Sunshine notices',
             classname='collapsible collapsed'
@@ -1123,7 +1125,7 @@ class MeetingPage(Page):
         ),
         MultiFieldPanel(
             [
-                StreamFieldPanel('imported_html'),
+                FieldPanel('imported_html'),
             ],
             heading='Imported meeting content',
             classname='collapsible collapsed'
@@ -1175,20 +1177,20 @@ class ExamplePage(Page):
         ('external_button', ExternalButtonBlock()),
         ('image', ImageChooserBlock()),
         ('html', blocks.RawHTMLBlock()),
-    ], null=True)
+    ], null=True, use_json_field=True)
 
     related_media_title = models.CharField(blank=True, null=True, max_length=255)
     related_media = StreamField([
         ('continue_learning', blocks.ListBlock(ThumbnailBlock(),
          icon='doc-empty', template='blocks/related-media.html')),
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('pre_title'),
-        ImageChooserPanel('featured_image'),
-        StreamFieldPanel('body'),
+        FieldPanel('featured_image'),
+        FieldPanel('body'),
         FieldPanel('related_media_title'),
-        StreamFieldPanel('related_media')
+        FieldPanel('related_media')
     ]
 
     @property
@@ -1218,22 +1220,22 @@ class EmbedSnippet(models.Model):
 class ContactPage(Page):
     contact_items = StreamField([
         ('contact_items', ContactInfoBlock())
-    ])
+    ], use_json_field=True)
     info_message = StreamField([
         ('informational_message', SnippetChooserBlock(
             'home.EmbedSnippet',
             required=False, template='blocks/embed-info-message.html', icon='warning')),
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
     services_title = models.TextField()
     services = StreamField([
         ('services', blocks.RichTextBlock())
-    ])
+    ], use_json_field=True)
 
     content_panels = Page.content_panels + [
-        StreamFieldPanel('contact_items'),
-        StreamFieldPanel('info_message', heading='Informational message'),
+        FieldPanel('contact_items'),
+        FieldPanel('info_message', heading='Informational message'),
         FieldPanel('services_title'),
-        StreamFieldPanel('services'),
+        FieldPanel('services'),
     ]
 
     @property
@@ -1245,11 +1247,12 @@ class FullWidthPage(ContentPage):
     formatted_title = models.CharField(
         max_length=255, null=True, blank=True, default='',
         help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
-    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))], null=True, blank=True)
+    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
+    null=True, blank=True, use_json_field=True)
 
     template = 'home/full_width_page.html'
     content_panels = ContentPage.content_panels + [
-        StreamFieldPanel('citations')
+        FieldPanel('citations')
     ]
 
     promote_panels = Page.promote_panels
@@ -1276,7 +1279,7 @@ class OigLandingPage(Page):
             ('table', TableBlock(table_options=core_table_options)),
             ('custom_table', CustomTableBlock()),
         ],
-        null=True, blank=True,
+        null=True, blank=True, use_json_field=True,
         help_text='If this section is empty, the logo will be shown (for screens larger than phones)'
     )
 
@@ -1285,6 +1288,7 @@ class OigLandingPage(Page):
         [('html', blocks.RawHTMLBlock(label='OIG resources'))],
         null=True,
         blank=True,
+        use_json_field=True
     )
     you_might_also_like = StreamField(
         blocks.StreamBlock([
@@ -1295,6 +1299,7 @@ class OigLandingPage(Page):
         ),
         null=True,
         blank=True,
+        use_json_field=True,
         help_text='Expects three groups/columns but will accept fewer'
     )
 
@@ -1312,9 +1317,9 @@ class OigLandingPage(Page):
             heading='Alert / informational message'
         ),
         FieldPanel('recent_reports_url'),
-        StreamFieldPanel('stats_content'),
-        StreamFieldPanel('resources', heading='OIG resources'),
-        StreamFieldPanel('you_might_also_like'),
+        FieldPanel('stats_content'),
+        FieldPanel('resources', heading='OIG resources'),
+        FieldPanel('you_might_also_like'),
     ]
 
     @property
