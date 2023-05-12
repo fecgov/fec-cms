@@ -27,7 +27,7 @@ class TestRobots(TestCase):
 
     def test_robots_txt_contains_sitemaps(self):
 
-        with self.settings(FEC_CMS_ENVIRONMENT='PRODUCTION'):
+        with self.settings(FEC_CMS_ENVIRONMENT='DEVELOPMENT'):
             reload_url_conf()
             response = self.client.get('/robots.txt')
             self.assertContains(response, "Sitemap", count=2, status_code=200,

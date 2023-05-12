@@ -72,7 +72,7 @@ if settings.FEC_CMS_ENVIRONMENT == 'DEVELOPMENT':
         ),
     ),
 
-if settings.FEC_CMS_ENVIRONMENT != 'DEVELOPMENT':
+if settings.FEC_CMS_ENVIRONMENT != 'DEVLOPMENT':
     urlpatterns += re_path(
         r'^robots\.txt$',
         TemplateView.as_view(
