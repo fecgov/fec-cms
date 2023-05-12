@@ -72,14 +72,14 @@ if settings.FEC_CMS_ENVIRONMENT == 'DEVELOPMENT':
         ),
     ),
 
-# if settings.FEC_CMS_ENVIRONMENT != 'PRODUCTION':
-#     urlpatterns += re_path(
-#         r'^robots\.txt$',
-#         TemplateView.as_view(
-#             template_name='robots.txt',
-#             content_type='text/plain'
-#         ),
-#     ),
+if settings.FEC_CMS_ENVIRONMENT != 'DEVELOPMENT':
+    urlpatterns += re_path(
+        r'^robots\.txt$',
+        TemplateView.as_view(
+            template_name='robots.txt',
+            content_type='text/plain'
+        ),
+    ),
 
 if settings.DEBUG:
     from django.conf.urls.static import static
