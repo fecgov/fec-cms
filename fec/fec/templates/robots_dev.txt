@@ -1,0 +1,28 @@
+# Temporary settings for testing on dev.fec.gov to keep other ots from indexing our dev urls
+
+User-agent: usasearch
+Crawl-delay: 2
+Allow: /
+Disallow: /search/?*
+Disallow: /data/legal/search/?*
+Disallow: /data/search/?*
+Sitemap: https://dev.fec.gov/sitemap.xml            
+Sitemap: https://dev.fec.gov/sitemap-static.xml
+
+User-agent: *
+Disallow: /
+
+
+
+# Settings for prod commented out:
+
+# User-agent: usasearch  
+# Crawl-delay: 2
+# Sitemap: https://dev.fec.gov/sitemap.xml            
+# Sitemap: https://dev.fec.gov/sitemap-static.xml
+
+# User-agent: *
+# Crawl-delay: 10
+# Disallow: /search/?*
+# Disallow: /data/legal/search/?*
+# Disallow: /data/search/?*
