@@ -668,7 +668,7 @@ RAISING_FORMATTER = OrderedDict([
     ('total_transfers',  # F3X
         {'label': 'Total transfers', 'level': '2'}),
     ('transfers_from_nonfed_account',  # F3X
-        {'label': 'Non-federal transfers', 'level': '3'}),
+        {'label': 'Nonfederal transfers', 'level': '3'}),
     ('transfers_from_nonfed_levin',  # F3X
         {'label': 'Levin funds', 'level': '3'}),
     ('fed_receipts',  # F3X
@@ -686,9 +686,9 @@ SPENDING_FORMATTER = OrderedDict([
         {'label': 'Operating expenditures', 'term': 'operating expenditures',
             'level': '2'}),
     ('shared_fed_operating_expenditures',  # F3X
-        {'label': 'Allocated operating expenditures - federal', 'level': '3'}),
+        {'label': 'Allocated operating expenditures - federal share', 'level': '3'}),
     ('shared_nonfed_operating_expenditures',  # F3X
-        {'label': 'Allocated operating expenditures - non-federal',
+        {'label': 'Allocated operating expenditures - nonfederal share',
             'level': '3'}),
     ('other_fed_operating_expenditures',  # F3X
         {'label': 'Other federal operating expenditures', 'level': '3',
