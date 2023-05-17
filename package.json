@@ -48,7 +48,7 @@
     "fullcalendar": "3.3.1",
     "glossary-panel": "1.0.0",
     "graceful-fs": "^4.2.10",
-    "jquery": "^3.5.1",
+    "jquery": "^3.6.4",
     "jquery.inputmask": "^3.3.4",
     "leaflet-providers": "1.8.0 ",
     "lodash": "^4.17.21",
