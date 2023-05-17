@@ -40,7 +40,7 @@
     "datatables.net": "^1.11.3",
     "datatables.net-responsive": "^2.2.7",
     "debug": "^4.3.4",
-    "dompurify": "^2.2.7",
+    "dompurify": "^2.4.5",
     "draftail": "^1.4.1",
     "es6-weak-map": "2.0.1",
     "eventemitter2": "0.4.14",
