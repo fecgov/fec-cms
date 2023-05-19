@@ -98,8 +98,8 @@ def search_site(query, limit=0, offset=0):
         'limit': limit,
         'offset': offset
     }
-    #r = requests.get('https://search.usa.gov/api/v2/search/i14y', params=params)
-    r = requests.get('https://search.usa.gov/search', params=params)
+
+    r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14y', params=params)
 
     if r.status_code == 200:
         return process_site_results(r.json(), limit=limit, offset=offset)
@@ -154,8 +154,7 @@ def policy_guidance_search_site(query, limit=0, offset=0):
         'offset': offset
     }
 
-    # r = requests.get('https://search.usa.gov/api/v2/search/i14y', params=params)
-    r = requests.get('https://search.usa.gov/search', params=params)
+    r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14y', params=params)
 
     if r.status_code == 200:
         return process_site_results(r.json(), limit=limit, offset=offset)
