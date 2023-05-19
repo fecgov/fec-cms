@@ -30,6 +30,6 @@ class TestRobots(TestCase):
         with self.settings(FEC_CMS_ENVIRONMENT='DEVELOPMENT'):
             reload_url_conf()
             response = self.client.get('/robots.txt')
-            self.assertContains(response, "Sitemap", count=2, status_code=200,
+            self.assertContains(response, "Sitemap", count=4, status_code=200,
                 msg_prefix='\"Sitemap\" not found in response', html=False)
             self.assertEqual(response.status_code, 200)

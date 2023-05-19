@@ -18,7 +18,7 @@ from search.views import (
 committee_url = re.compile('/committees')
 candidate_url = re.compile('/candidates/search')
 base_url = re.compile(settings.FEC_API_URL)
-search_url = re.compile('https://search.usa.gov/api/v2/search/i14y')
+search_url = re.compile('https://api.gsa.gov/technology/searchgov/v2/results/i14y')
 
 
 @requests_mock.Mocker()
