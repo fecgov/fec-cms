@@ -119,19 +119,10 @@ var otherDocumentsColumns = [
     orderable: false,
     render: function(data, type, row) {
       var version = helpers.amendmentVersion(data);
-      if (version === 'Version unknown') {
-        return (
-          '<i class="icon-blank"></i>Version unknown<br>' +
-          '<i class="icon-blank"></i>' +
-          row.fec_file_id
-        );
-      } else {
-        if (row.fec_file_id !== null) {
-          version =
-            version + '<br><i class="icon-blank"></i>' + row.fec_file_id;
-        }
-        return version;
+      if (row.fec_file_id !== null) {
+          version = version + '<br><i class="icon-blank"></i>' + row.fec_file_id;
       }
+      return version;
     }
   },
   columns.dateColumn({
@@ -252,9 +243,7 @@ var statementsOfCandidacyColumns = [
       var version = helpers.amendmentVersion(data);
       if (version === 'Version unknown') {
         return (
-          '<i class="icon-blank"></i>Version unknown<br>' +
-          '<i class="icon-blank"></i>' +
-          row.fec_file_id
+          '<i class="icon-blank"></i>Version unknown<br>'
         );
       } else {
         if (row.fec_file_id !== null) {
