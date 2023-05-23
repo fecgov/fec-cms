@@ -921,7 +921,7 @@ def house_senate_overview(request, office, cycle=None):
 
 
 def raising(request):
-    office = request.GET.get("office", "S")
+    office = request.GET.get("office", "P")
 
     election_year = int(
         request.GET.get("election_year", constants.DEFAULT_ELECTION_YEAR)
