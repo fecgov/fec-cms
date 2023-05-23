@@ -271,6 +271,19 @@ Handlebars.registerHelper('format_range', function(year) {
 });
 
 /**
+ * To convert a nine-digit number to ZIP Code format
+ * @param {string|number} value - The string or number to be formatted as a ZIP Code
+ * @returns {string} The provided value unless it's exactly nine numbers long, then returns a 9-letter ZIP Code format with the dash
+ */
+Handlebars.registerHelper('zipCode', function(value) {
+  var parsedVal = parseInt(value);
+  if (!isNaN(parsedVal) && value.length === 9) {
+    return value.substr(0,5) + '-' + value.substr(5);
+  }
+  return value;
+});
+
+/**
   Formats a cycle range based on a year and a duration.
   If no year is provided, return null;
 **/
