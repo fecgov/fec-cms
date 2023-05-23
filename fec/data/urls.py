@@ -35,8 +35,6 @@ urlpatterns = [
     re_path(r'^data/communication-costs/$',
             views_datatables.communication_costs),
     re_path(r'^data/disbursements/$', views_datatables.disbursements),
-    re_path(r'^data/allocated-federal-nonfederal-disbursements/$',
-            views_datatables.allocated_federal_nonfederal_disbursements),
     re_path(r'^data/electioneering-communications/$',
             views_datatables.electioneering_communications),
     re_path(r'^data/filings/$', views_datatables.filings),
@@ -91,4 +89,11 @@ if settings.FEATURES.get('house_senate_overview'):
     urlpatterns.append(
         re_path(r'^data/elections/(?P<office>\w+)/$',
                 views.house_senate_overview)
+    )
+
+if settings.FEATURES.get('h4_allocated_disbursements'):
+    # Feature flag for the H4 tables and data
+    urlpatterns.append(
+        re_path(r'^data/allocated-federal-nonfederal-disbursements/$',
+                views_datatables.allocated_federal_nonfederal_disbursements)
     )
