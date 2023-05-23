@@ -50,6 +50,11 @@ ENVIRONMENTS = {
 }
 FEC_CMS_ENVIRONMENT = ENVIRONMENTS.get(env.get_credential('FEC_CMS_ENVIRONMENT'), ENVIRONMENTS['local'])
 
+#temporary keys for testing siteemaps
+if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['dev']:
+    SEARCHGOV_POLICY_GUIDANCE_KEY = env.get_credential('SEARCHGOV_POLICY_GUIDANCE_KEY_TEST')
+    SEARCHGOV_API_ACCESS_KEY = env.get_credential('SEARCHGOV_API_ACCESS_KEY_TEST')
+
 WAGTAILSEARCH_BACKENDS = {
     'default': {
         'BACKEND': 'wagtail.search.backends.database',
