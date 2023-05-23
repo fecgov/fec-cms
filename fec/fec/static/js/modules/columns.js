@@ -318,14 +318,12 @@ var disbursements = [
   modalTriggerColumn
 ];
 
-
 var allocatedFederalNonfederalDisbursements = [
   {
     data: 'committee',
     orderable: false,
     className: 'all',
     render: function(data) {
-      console.log(data);
       if (data) {
         return columnHelpers.buildEntityLink(
           data.name,
@@ -370,7 +368,6 @@ var allocatedFederalNonfederalDisbursements = [
   }),
   modalTriggerColumn
 ];
-
 
 var electioneeringCommunications = [
   {
