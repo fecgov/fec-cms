@@ -5,7 +5,7 @@ Allow: /
 Disallow: /search/?*
 Disallow: /data/legal/search/?*
 Disallow: /data/search/?*
-Sitemap: https://dev.fec.gov/sitemap.xml            
+Sitemap: https://dev.fec.gov/sitemap-wagtail.xml            
 Sitemap: https://dev.fec.gov/sitemap-static.xml
 Sitemap: https://dev.fec.gov/resources/cms-content/documents/sitemap_pdf.xml
 Sitemap: https://dev.fec.gov/resources/cms-content/documents/sitemap_html.xml
@@ -15,4 +15,3 @@ Disallow: /
 
 User-agent: bingbot
 Disallow: /
-
