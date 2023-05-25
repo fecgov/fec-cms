@@ -271,16 +271,10 @@ Handlebars.registerHelper('format_range', function(year) {
 });
 
 /**
- * To convert a nine-digit number to ZIP Code format
- * @param {string|number} value - The string or number to be formatted as a ZIP Code
- * @returns {string} The provided value unless it's exactly nine numbers long, then returns a 9-letter ZIP Code format with the dash
+ * @see {@link formatZipCode}
  */
 Handlebars.registerHelper('zipCode', function(value) {
-  var parsedVal = parseInt(value);
-  if (!isNaN(parsedVal) && value.length === 9) {
-    return value.substr(0,5) + '-' + value.substr(5);
-  }
-  return value;
+  return formatZipCode(value);
 });
 
 /**
@@ -614,6 +608,20 @@ function passiveListenerIfSupported() {
   return supported ? { passive: true } : false;
 }
 
+/**
+ * To convert a nine-digit number to ZIP Code format
+ * @param {string|number} value - The string or number to be formatted as a ZIP Code
+ * @returns {string} The provided value unless it's exactly nine numbers long, then returns a 9-letter ZIP Code format with the dash
+ */
+function formatZipCode(value) {
+  var value_string = String(value);
+  var value_int = parseInt(value);
+  if (isNaN(value_int) || value_int < 100000000 || value_int > 999999999 || value_string.substring(0,1) === '0')
+    return value;
+  else
+    return `${value_string.substring(0,5)}-${value_string.substring(5)}`;
+}
+
 module.exports = {
   anchorify: anchorify,
   scrollAnchor: scrollAnchor,
@@ -629,6 +637,7 @@ module.exports = {
   filterNull: filterNull,
   formatNumber: numberFormatter,
   formatCycleRange: formatCycleRange,
+  formatZipCode: formatZipCode,
   getTimePeriod: getTimePeriod,
   globals: globals,
   isLargeScreen: isLargeScreen,

@@ -194,3 +194,22 @@ describe('helpers', function() {
     });
   });
 });
+
+describe('formatZipCode', function() {
+  it('should add dashes to nine-digit numbers and strings of numbers', function() {
+    expect(helpers.formatZipCode(123456789)).to.equal('12345-6789');
+    expect(helpers.formatZipCode('123456789')).to.equal('12345-6789');
+  });
+
+  it('should return what it\'s given', function() {
+    expect(helpers.formatZipCode(12345)).to.equal(12345);
+    expect(helpers.formatZipCode('12345')).to.equal('12345');
+    expect(helpers.formatZipCode(123456)).to.equal(123456);
+    expect(helpers.formatZipCode('1234567')).to.equal('1234567');
+    expect(helpers.formatZipCode('1234567.1')).to.equal('1234567.1');
+    expect(helpers.formatZipCode('12345678.6')).to.equal('12345678.6');
+    expect(helpers.formatZipCode('1234567890.6')).to.equal('1234567890.6');
+    expect(helpers.formatZipCode('I2E4S6TB9')).to.equal('I2E4S6TB9');
+    expect(helpers.formatZipCode('012345678')).to.equal('012345678');
+  });
+});
