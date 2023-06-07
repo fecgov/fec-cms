@@ -357,6 +357,16 @@ var allocatedFederalNonfederalDisbursements = [
     orderable: false
   },
   currencyColumn({
+    data: 'federal_share',
+    className: 'min-tablet hide-panel column--number t-mono',
+    orderable: true
+  }),
+  currencyColumn({
+    data: 'nonfederal_share',
+    className: 'min-tablet hide-panel column--number t-mono',
+    orderable: true
+  }),
+  currencyColumn({
     data: 'disbursement_amount',
     className: 'min-tablet hide-panel column--number t-mono',
     orderable: true

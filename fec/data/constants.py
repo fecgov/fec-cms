@@ -444,7 +444,8 @@ audit_sub_categories_options = [
 
 
 table_columns = OrderedDict([
-    ('allocated-federal-nonfederal-disbursements', ['Spender', 'Recipient', 'Description', 'Total amount', 'Date']),
+    ('allocated-federal-nonfederal-disbursements',
+        ['Spender', 'Recipient', 'Description', 'Federal share', 'Nonfederal share', 'Total amount', 'Date']),
     ('candidates', ['Name', 'Office', 'Election years', 'Party', 'State', 'District', 'First filing date']),
     ('candidates-office-president', ['Name', 'Party', 'Receipts', 'Disbursements']),
     ('candidates-office-senate', ['Name', 'Party', 'State', 'Receipts', 'Disbursements']),

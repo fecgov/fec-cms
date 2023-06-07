@@ -18,7 +18,7 @@ $(document).ready(function() {
     columns: columns.allocatedFederalNonfederalDisbursements,
     query: { sort_nulls_last: true },
     paginator: tables.SeekPaginator,
-    order: [[4, 'desc']],
+    order: [[6, 'desc']],
     useFilters: true,
     useExport: true,
     rowCallback: tables.modalRenderRow,
