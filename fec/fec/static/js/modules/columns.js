@@ -35,10 +35,18 @@ var versionColumn = {
       return '<i class="icon-blank"></i>Not applicable';
     }
     var version = helpers.amendmentVersion(data);
-    if (row.fec_file_id !== null) {
+    if (version === 'Version unknown') {
+      return (
+        '<i class="icon-blank"></i>Version unknown<br>' +
+        '<i class="icon-blank"></i>' +
+        row.fec_file_id
+      );
+    } else {
+      if (row.fec_file_id !== null) {
         version = version + '<br><i class="icon-blank"></i>' + row.fec_file_id;
+      }
+      return version;
     }
-    return version;
   }
 };
 
