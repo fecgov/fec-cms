@@ -20,13 +20,13 @@ import { electionYearsOptions, officeDefs } from './widget-vars';
 
 /**
  * Handles the functionality for the aggregate totals box(es).
- * Loads, creates an <aside> with {@see init()}, then makes itself visible (with {@see displayUpdatedData_grandTotal}) after it has some data to show.
+ * Loads, creates an <aside> with { @see init() }, then makes itself visible (with { @see displayUpdatedData_grandTotal() } after it has some data to show.
  * @param {String} office - Can be set through data-office for the <script> or collected from the target specified with data-office-control.
  * @param {String} election_year - Can be set through data-election-year for the <script> or collected from the target specied with data-year-control.
  * @param {String} officeControl - Set with data-office-control on <script> but not required if data-office is set.
  * @param {String} yearControl - Set with data-year-control on <script> but not required if data-election-year is set.
  * @param {String} action - Can be 'raised' or 'spending'
- * @param {Boolean} doInitialNumberBuild - Should we animate the first value or just display it and be done? {@default false}.
+ * @param {Boolean} doInitialNumberBuild - Should we animate the first value or just display it and be done? { @default false }.
  * TODO - ^ update these ^
  */
 function AggregateTotalsBox() {
@@ -39,18 +39,19 @@ function AggregateTotalsBox() {
   this.scriptElement; // The <script>
   this.valueField; // The HTML element that holds the value
   this.yearControl; // The HTML element to change the year
-  // Where to find the big number:
-  this.basePath_grandTotal = ['candidates', 'totals', 'by_office'];
-  // Where to find the party numbers:
-  this.basePath_partyTotals = ['candidates', 'totals', 'by_office', 'by_party'];
+  // Where to find the data:
+  this.basePath = ['candidates', 'totals', 'aggregates'];
   this.baseQuery = {
+    aggregate_by: '', // 'office' for the grand totals, 'office-party' for the individual parties' totals
+    election_full: true,
     election_year: window.DEFAULT_ELECTION_YEAR,
-    office: 'P',
+    office: window.DEFAULT_ELECTION_YEAR % 4 === 0 ? 'P' : 'S', // Fallback in case it isn't part of dataset from the template
     is_active_candidate: true,
     page: 1,
     per_page: 20,
-    sort_null_only: false,
+    sort: '-election_year',
     sort_hide_null: false,
+    sort_null_only: false,
     sort_nulls_last: false
   }; // Vars for data load
   this.animVars = {
@@ -63,7 +64,7 @@ function AggregateTotalsBox() {
   this.init();
 }
 /**
- * Called by {@see loadData} to parse and display the data
+ * Called by { @see loadData } to parse and display the data
  * @param {Response} queryResponse - The successful API reply
  */
 AggregateTotalsBox.prototype.displayUpdatedData_grandTotal = function(
@@ -149,7 +150,7 @@ AggregateTotalsBox.prototype.displayUpdatedData_parties = function(
 };
 
 /**
- * Called from the constructor, sets up its vars and starts {@see loadData}
+ * Called from the constructor, sets up its vars and starts { @see loadData() }
  */
 AggregateTotalsBox.prototype.init = function() {
   // Save self
@@ -291,14 +292,14 @@ AggregateTotalsBox.prototype.init = function() {
 };
 
 /**
- * Starts the data load, called by {@see init}
- * @param {Object} query - The data object for the query, {@see baseQuery}
+ * Starts the data load, called by { @see init() }
+ * @param {Object} query - The data object for the query, { @see baseQuery }
  */
 AggregateTotalsBox.prototype.loadData = function(query) {
   let instance = this;
 
   window
-    .fetch(buildUrl(this.basePath_grandTotal, query), {
+    .fetch(buildUrl(this.basePath, Object.assign(query, { aggregate_by: 'office' })), {
       cache: 'no-cache',
       mode: 'cors'
     })
@@ -315,7 +316,7 @@ AggregateTotalsBox.prototype.loadData = function(query) {
     });
 
   window
-    .fetch(buildUrl(this.basePath_partyTotals, query), {
+    .fetch(buildUrl(this.basePath, Object.assign(query, { aggregate_by: 'office-party' })), {
       cache: 'no-cache',
       mode: 'cors'
     })
@@ -379,7 +380,7 @@ AggregateTotalsBox.prototype.handleRadiosClick = function(e) {
 
 /**
  * Handles when the window changes size, but only looks at the relevant element's size.
- * Toggles classes for the element based on {@see breakpointToSmall, @see breakpointToMedium, @see breakpointToLarge, @see breakpointToXL}
+ * Toggles classes for the element based on { @see breakpointToSmall, @see breakpointToMedium, @see breakpointToLarge, @see breakpointToXL }
  */
 AggregateTotalsBox.prototype.handleResize = function(e = null) {
   if (e) e.preventDefault();
@@ -420,7 +421,7 @@ AggregateTotalsBox.prototype.handleResize = function(e = null) {
 };
 
 /**
- * Called from {@see handleOfficeChange} when it's been changed
+ * Called from { @see handleOfficeChange() } when it's been changed
  * Updates baseQuery.election_year in case there's a discrepancy
  * Causes the yearControl to fire a change event
  */
@@ -454,7 +455,7 @@ AggregateTotalsBox.prototype.refreshYearsSelect = function() {
 
 /**
  * Starts the timers to update the displayed value from one to the next (not part of the initial display)
- * Called by {@see displayUpdatedData_grandTotal} when the displayed value should changed.
+ * Called by { @see displayUpdatedData_grandTotal() } when the displayed value should changed.
  */
 AggregateTotalsBox.prototype.startAnimation = function() {
   let instance = this;
@@ -548,17 +549,9 @@ function getNextValue(currentValue, goalValue) {
 }
 
 /**
- * Returns the next valid election cycle, particularly for presidential races
- * @param {String, Number} year - The year to scrub / correct
- * @param {String} office - The office of that cycle
- * @returns {Number} - Either `office` or the next valid election year
- * TODO - Could probably combine this with widget-vars/getNextPresidentialElectionYear() for something like getNextElectionYear('P')
- */
-
-/**
  * Creates the <aside> and its elements.
  * Inserts the element into the page, according to domAnchor (or scriptElement)
- * Adds a <link> to the <head>, pointing to {@see stylesheetPath}
+ * Adds a <link> to the <head>, pointing to { @see stylesheetPath }
  * @param {AggregateTotalsBox} callingInstance - Where to find the this values like baseQuery
  * @param {HTMLScriptElement} scriptElement - The <script> where this file lives
  * @returns {HTMLElement} - The new <aside>, in the page
@@ -618,9 +611,7 @@ function buildElement(callingInstance, scriptElement) {
           }>${officeDefs[def]} candidates</option>`;
         }
         theInnerHTML += `<fieldset class="select">
-            <label for="top-category" class="breakdown__title label t-inline-block">How much has been ${
-              callingInstance.action == 'raised' ? 'raised' : 'spent'
-            } by:</label>
+            <label for="top-category" class="breakdown__title label t-inline-block">How much has been ${ callingInstance.action } by:</label>
             <select id="top-category" name="top_category" class="js-select-office form-element--inline" aria-controls="top-table">
               ${theOptionsString}
             </select>

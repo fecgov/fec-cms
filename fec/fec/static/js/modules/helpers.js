@@ -426,7 +426,7 @@ function amendmentVersion(most_recent) {
   } else if (most_recent === false) {
     return '<i class="icon-circle--clock-reverse--inline--left"></i>Past version';
   } else {
-    return 'Version unknown';
+    return '<i class="icon-blank"></i>Version unknown';
   }
 }
 
