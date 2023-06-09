@@ -94,10 +94,9 @@ def disbursements(request):
     })
 
 
-# handle null disbursement dates in a future implementation
 def allocated_federal_nonfederal_disbursements(request):
     if len(request.GET) == 0:
-        return redirect('/data/allocated-federal-nonfederal-disbursements/?two_year_transaction_period='
+        return redirect('/data/allocated-federal-nonfederal-disbursements/?cycle='
                         + str(constants.DEFAULT_ELECTION_YEAR)
                         + '&min_date=' + '01/01/' + str(constants.DEFAULT_ELECTION_YEAR - 1)
                         + '&max_date=' + '12/31/' + str(constants.DEFAULT_ELECTION_YEAR))
