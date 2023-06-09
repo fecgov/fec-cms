@@ -686,11 +686,18 @@ SPENDING_FORMATTER = OrderedDict([
     ('total_operating_expenditures',  # F3X - renamed app-side
         {'label': 'Operating expenditures', 'term': 'operating expenditures',
             'level': '2'}),
-    ('shared_fed_operating_expenditures',  # F3X
-        {'label': 'Allocated operating expenditures - federal share', 'level': '3'}),
-    ('shared_nonfed_operating_expenditures',  # F3X
-        {'label': 'Allocated operating expenditures - nonfederal share',
-            'level': '3'}),
+    ('shared_fed_operating_expenditures',  # F3X, H4
+        {
+            'label': 'Allocated operating expenditures - federal share',
+            'level': '3',
+            'type': {'link': 'allocated-federal-nonfederal-disbursements'},
+         }),
+    ('shared_nonfed_operating_expenditures',  # F3X, H4
+        {
+            'label': 'Allocated operating expenditures - nonfederal share',
+            'level': '3',
+            'type': {'link': 'allocated-federal-nonfederal-disbursements'},
+        }),
     ('other_fed_operating_expenditures',  # F3X
         {'label': 'Other federal operating expenditures', 'level': '3',
             'type': {'link': 'disbursements', 'O': 'F3X-21B'}}),
