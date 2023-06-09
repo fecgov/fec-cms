@@ -27,7 +27,7 @@ Filter allocated federal nonfederal disbursements
 <div class="filters__inner">
   {{ typeahead.field('committee_id', 'Spender name or ID') }}
   {{ typeahead.field('q_payee_name', 'Recipient name', allow_text=True) }}
-  {{ years.cycles('report_year', 'Report time period', show_tooltip=True)  }}
+  {{ years.cycles('cycle', 'Report time period', show_tooltip=True)  }}
   {{ date.field('date', 'Disbursement date range' ) }}
 </div>
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
