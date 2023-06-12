@@ -20,7 +20,7 @@
         {%- endif -%}
       </td>
       <td class="simple-table__cell t-mono">
-        {%- if item[1] and item[1]['type'] and item[1]['type']['link'] == "debts" and FEATURES['debts'] -%}
+        {%- if item[1] and item[1]['type'] and item[1]['type']['link'] and item[1]['type']['link'] == "debts" and FEATURES['debts'] -%}
         {#- For debts values / links #}
         <a href="/data/debts/?
         {%- if committee_id -%}
