@@ -1,6 +1,6 @@
 // Simple table
 //
-// <table class="simple-table simple-table--display">
+// <table class="$">
 //   <thead class="simple-table__header">
 //     <tr>
 //       <th class="simple-table__header-cell">Dates covered</th>
@@ -403,6 +403,11 @@ h3 + .simple-table {
   margin-left: u(-2rem);
 }
 
+#header_notes_modal p  {
+  margin-left: u(2rem);
+  display: inline;  
+}
+
 #static_notes {
   margin-top: u(2rem);
 
@@ -417,6 +422,13 @@ h3 + .simple-table {
   list-style-type: none;
   }
 }
+
+#static_notes p,
+.footnote_row p {
+  display: inline
+}
+
+
 
 // Chart Table
 // Table style used on breakdown charts

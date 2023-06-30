@@ -31,7 +31,7 @@ from home.blocks import (
     DocumentFeedBlurb, ExampleForms, ExampleImage, ExampleParagraph,
     ExternalButtonBlock, InternalButtonBlock, LinkBlock, OptionBlock,
     ReportingExampleCards, ResourceBlock, SnippetChooserBlock,
-    ThumbnailBlock, FeedDocumentBlock, EmployeeTitle
+    ThumbnailBlock, FeedDocumentBlock, EmployeeTitle, ReportingTableBlock
 )
 
 logger = logging.getLogger(__name__)
@@ -1248,7 +1248,7 @@ class FullWidthPage(ContentPage):
         max_length=255, null=True, blank=True, default='',
         help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
     citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
-    null=True, blank=True, use_json_field=True)
+                            null=True, blank=True, use_json_field=True)
 
     template = 'home/full_width_page.html'
     content_panels = ContentPage.content_panels + [
@@ -1364,3 +1364,27 @@ class OfficePage(Page):
     @property
     def content_section(self):
         return 'about'
+
+
+class ReportingDatesTable(Page):
+    reporting_dates_table = StreamField([
+        ('dates_table', ReportingTableBlock(blank=True, form_classname='title'))
+    ], blank=True, null=True, use_json_field=True, collapsed=False)
+
+    footnotes = StreamField([
+        ('footnote_section', blocks.StructBlock([
+            ('title', blocks.CharBlock(blank='true', icon='title',
+                                       help_text='either &quot;Footnotes&quot; or &quot;Header notes&quot;')),
+            ('footnote', blocks.ListBlock(blocks.StructBlock([
+                ('footnote_number', blocks.CharBlock(blank='true', icon='tag', form_classname='title')),
+                ('footnote_text', blocks.RichTextBlock(blank='true', icon='pilcrow', help_text='')),
+            ])))
+        ], blank=True))
+    ], blank=True, use_json_field=True)
+    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))], null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('reporting_dates_table'),
+        FieldPanel('footnotes'),
+        FieldPanel('citations')
+    ]

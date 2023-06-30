@@ -187,6 +187,26 @@ class CustomTableBlock(blocks.StructBlock):
         icon = 'table'
 
 
+class ReportingTableBlock(blocks.StructBlock):
+    """A custom table
+    """
+    reporting_table_options = {
+        'startRows': 1,
+        'startCols': 6,
+        'colHeaders': False,
+        'rowHeaders': False,
+        'height': 108,
+        'language': 'en',
+        'renderer': 'html'
+    }
+
+    table = TableBlock(table_options=reporting_table_options)
+
+    class Meta:
+        template = 'blocks/reporting-dates-table-block.html'
+        icon = 'table'
+
+
 class ExampleImage(blocks.StructBlock):
     """Creates an example module with an image and a caption, side-by-side
     Typically used for showing reporting Examples
