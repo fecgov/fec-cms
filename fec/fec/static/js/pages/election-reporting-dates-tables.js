@@ -170,7 +170,7 @@ function ReportingDates() {
 
 }
 
-//create and insert states-dropdown, static footnote/header-notes-list , and dialog
+//create and insert states-dropdown, static header-notes-list , and dialog
 ReportingDates.prototype.buildStaticElements = function() {
   //Add states dropdown template to page
   const dropdown_wrapper = document.createElement('div');
@@ -180,7 +180,7 @@ ReportingDates.prototype.buildStaticElements = function() {
 
   table_parent.insertBefore(dropdown_wrapper, this.dates_table);
 
-  //Create static footnote/header note list
+  //Create header note list for modal dialogue
  let hdr_str = '';
    const header_notes_json = JSON.parse(document.getElementById('header_notes').textContent);
 // WORKS--  //build static list from footnotes object (`const footnotes`, which is added in teemplate riht now) --if it exists
@@ -195,32 +195,32 @@ ReportingDates.prototype.buildStaticElements = function() {
      hdr_str += `</ul>`;
     }
 
- // build static list from <script id="footnotes">  which is added in teemplate with  json_script technique ) --if it exist
- const footnotes_json = JSON.parse(document.getElementById('footnotes').textContent);
- let ftnt_str = '';
-  if (typeof footnotes_json == 'object') {
-    ftnt_str = `<h4>Footnotes</h4><ul>`;
-    for (const note of footnotes_json.footnote) {
-      const dot = /^\d+$/.test(note.value.footnote_number) ? '.' : '';
-      ftnt_str += `<li>
-                   <a name="footnote_${note.value.footnote_number}" id="footnote_${note.value.footnote_number}"></a>
-                   <b>${note.value.footnote_number}</b>${dot}&nbsp;${note.value.footnote_text}
-                   </l1>`;
-    }
-    ftnt_str += `</ul>`;
-  }
+ // // build static list from <script id="footnotes">  which is added in teemplate with  json_script technique ) --if it exist
+ // const footnotes_json = JSON.parse(document.getElementById('footnotes').textContent);
+ // let ftnt_str = '';
+ //  if (typeof footnotes_json == 'object') {
+ //    ftnt_str = `<h4>Footnotes</h4><ul>`;
+ //    for (const note of footnotes_json.footnote) {
+ //      const dot = /^\d+$/.test(note.value.footnote_number) ? '.' : '';
+ //      ftnt_str += `<li>
+ //                   <a name="footnote_${note.value.footnote_number}" id="footnote_${note.value.footnote_number}"></a>
+ //                   <b>${note.value.footnote_number}</b>${dot}&nbsp;${note.value.footnote_text}
+ //                   </l1>`;
+ //    }
+ //    ftnt_str += `</ul>`;
+ //  }
 
-  //create div for all notes if either foot or header notes exist
-  if (hdr_str || ftnt_str) {
-    const static_notes = document.createElement('div');
-    static_notes.id = 'static_notes';
+ //  //create div for all notes if either foot or header notes exist
+ //  if (hdr_str || ftnt_str) {
+ //    const static_notes = document.createElement('div');
+ //    static_notes.id = 'static_notes';
 
-    //add combibed header_notes, footnotes list to collapsible div
-    static_notes.innerHTML = `${hdr_str}${ftnt_str}`;
+ //    //add combibed header_notes, footnotes list to collapsible div
+ //    static_notes.innerHTML = `${hdr_str}${ftnt_str}`;
 
-    //insert it after table
-    table_parent.insertBefore(static_notes, this.dates_table.nextSibling);
-  }
+ //    //insert it after table
+ //    table_parent.insertBefore(static_notes, this.dates_table.nextSibling);
+ //  }
 
   if (typeof header_notes_json == 'object') {
     //Create A11Y modal dialog for header_notes popup and add innerHTML
@@ -308,6 +308,8 @@ ReportingDates.prototype.addFootnotes = function() {
     .reverse()
     .forEach(node => {
       const indx = node.innerText; //should this be textContent?
+      //Only put period after numeric footnotes
+      const dot = /^\d+$/.test(indx) ? '.' : '';
       const state_class = node.closest('tr').className;
       const ftnt_colspan = node.closest('tr').cells.length - 1;
       let current_text;
@@ -323,7 +325,7 @@ ReportingDates.prototype.addFootnotes = function() {
       const ftnt_row = `<tr class='${state_class} footnote_row footnote_${indx}'>
                           <td></td>
                           <td colspan=${ftnt_colspan}>
-                            <b>${indx}.</b>&nbsp;${current_text}</td>
+                            <b>${indx}${dot}&nbsp;</b>${current_text}</td>
                         </tr>`;
       node.closest('tr').insertAdjacentHTML('afterend', ftnt_row);
     });
@@ -538,7 +540,6 @@ const all_hdr = this.dates_table.getElementsByTagName('th');
    const txt = cell.textContent;
 
    if (/~/.test(txt)) {
-        cell.style.color='red';
         let txt_array = txt.split('~');
         let hdr_txt = txt_array.shift();
         let appended_hdr_notes = txt_array;
@@ -556,15 +557,27 @@ const all_hdr = this.dates_table.getElementsByTagName('th');
 
   });
 
+   const redflag = document.querySelector('.redflag'); //? true : false
+   //const redflag = document.querySelector('.redcell') ? cell.classList.add('redcell') : cell.classList.remove('redcell')
+
+   //console.log('redflag', redflag)
    //get all non-footnote/non-header row cells
   const all_td = this.dates_table.querySelectorAll('tr:not(.footnote_row) td');
 
     Array.from(all_td).forEach(cell => {
-
      const txt = cell.textContent;
 
      if (/~/.test(txt)) {
-      cell.style.color='red';
+
+      // if (redflag == true) {
+      //   cell.classList.toggle('redcell')
+      // }
+      // else {
+      //   cell.classList.remove('redcell')
+      // }
+      //cell.style.color='red';
+      //cell.classList.toggle(redflag ? 'redcell' : 'redcell', true )
+      redflag && cell.classList.toggle('redcell');
       //Create an array from the string split the tilda(s)
       let txt_array = txt.split('~');
       ///The first item is the date text, return that as a var. Now txt_array only includes footnotes.

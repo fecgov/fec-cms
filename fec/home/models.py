@@ -1368,7 +1368,10 @@ class OfficePage(Page):
 
 class ReportingDatesTable(Page):
     reporting_dates_table = StreamField([
-        ('dates_table', ReportingTableBlock(blank=True, form_classname='title'))
+        ('dates_table', ReportingTableBlock(blank=True, form_classname='title')),
+        ('red_footnotes', blocks.BooleanBlock(blank=True, required=False, null=True,
+                                              help_text='Temporarily sets footnote cells to red for preview/drafts, \
+                                              Always uncheck when ready to publish page.'))
     ], blank=True, null=True, use_json_field=True, collapsed=False)
 
     footnotes = StreamField([
