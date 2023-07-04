@@ -10,8 +10,9 @@
   {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style=self.breadcrumb_style %}
 {% endblock %}
 
+{% comment %} TODO: MOVE STYLES TO SCSS IF KEEPING {% endcomment %}
 <style>
-.redcell {
+.red_footnote_preview td.footnote_cell {
   color: red !important;
 }
 
@@ -20,20 +21,12 @@
 <article class="main container">
 
   <h1 class="heading--main">{{ self.title }}</h1>
-
-  <table class="simple-table simple-table--display simple-table-cms election-dates-table">
+  
+  <table class="simple-table simple-table--display simple-table-cms election-dates-table{% if self.reporting_dates_table.0.value == True %} red_footnote_preview{% endif %}">
 
      {% for block in self.reporting_dates_table %}
-
-
-        {% if block.block_type == "red_footnotes" %}
-          {% if block.value == True %}
-            <span class="redflag"></span>
-         {% endif %}
-        {% endif %}
-    
-
-
+        
+        
 
        {% if block.block_type == "dates_table" %}
     

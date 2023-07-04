@@ -557,27 +557,17 @@ const all_hdr = this.dates_table.getElementsByTagName('th');
 
   });
 
-   const redflag = document.querySelector('.redflag'); //? true : false
-   //const redflag = document.querySelector('.redcell') ? cell.classList.add('redcell') : cell.classList.remove('redcell')
-
-   //console.log('redflag', redflag)
    //get all non-footnote/non-header row cells
-  const all_td = this.dates_table.querySelectorAll('tr:not(.footnote_row) td');
+   const all_td = this.dates_table.querySelectorAll('tr:not(.footnote_row) td');
 
     Array.from(all_td).forEach(cell => {
      const txt = cell.textContent;
 
      if (/~/.test(txt)) {
 
-      // if (redflag == true) {
-      //   cell.classList.toggle('redcell')
-      // }
-      // else {
-      //   cell.classList.remove('redcell')
-      // }
-      //cell.style.color='red';
-      //cell.classList.toggle(redflag ? 'redcell' : 'redcell', true )
-      redflag && cell.classList.toggle('redcell');
+      // Add class to cells that contain footnotes to target in css
+      cell.classList.add('footnote_cell');
+
       //Create an array from the string split the tilda(s)
       let txt_array = txt.split('~');
       ///The first item is the date text, return that as a var. Now txt_array only includes footnotes.
