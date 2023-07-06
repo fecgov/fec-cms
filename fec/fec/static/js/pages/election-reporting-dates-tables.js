@@ -172,8 +172,8 @@ ReportingDates.prototype.buildStaticElements = function() {
 
   //Create header note list for modal dialogue
  let hdr_str = '';
- 
- //Get the Header notes script object created in the template with json_script 
+
+ //Get the Header notes script object created in the template with json_script
  const header_notes_json = JSON.parse(document.getElementById('header_notes').textContent);
 
   if (typeof header_notes_json == 'object') {
