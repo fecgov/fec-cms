@@ -10,23 +10,15 @@
   {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style=self.breadcrumb_style %}
 {% endblock %}
 
-{% comment %} TODO: MOVE STYLES TO SCSS IF KEEPING {% endcomment %}
-<style>
-.red_footnote_preview td.footnote_cell {
-  color: red !important;
-}
-
 </style>
 
 <article class="main container">
 
   <h1 class="heading--main">{{ self.title }}</h1>
   
-  <table class="simple-table simple-table--display simple-table-cms election-dates-table{% if self.reporting_dates_table.0.value == True %} red_footnote_preview{% endif %}">
+  <table class="simple-table simple-table--display simple-table-cms election-dates-table">
 
      {% for block in self.reporting_dates_table %}
-        
-        
 
        {% if block.block_type == "dates_table" %}
     
@@ -83,10 +75,6 @@
     {{ raw.value|json_script:"header_notes" }}
   {% endif %} 
 {% endfor %}
-
-<h1>SELF.FOOTNOTES</h1>
-
- {{ self.footnotes.raw_data }} 
 
 {% include 'partials/disclaimer.html' %}
 

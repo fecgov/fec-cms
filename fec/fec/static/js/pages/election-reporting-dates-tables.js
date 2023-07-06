@@ -76,16 +76,6 @@ function ReportingDates() {
 
   this.dates_table = document.getElementsByClassName('election-dates-table')[0];
 
-  /*
-  Currenly a referencce to this script is hardcoded onto FullWidth template. If an editor chooses to uae that template
-  for a page witout an  `.election-dates-table` on it, we don't want to run this logic to avoid undefined errors, hence the
-  conditional statement below `if (this.dates_table)`.
-
-  TODO: Make this script be included via a wagtail field ala CustomPage's `conditional_js`  field. And make that
-  fieldd a reusable block instead of specific to the CustomPage. Could define it at top of models.py (like streamfactory)
-  or in blocks.py. I think the former makes sense.
-  */
-
     this.buildStaticElements();
 
     this.convertFootnotes(); //converts number or symbol following "~" to footnote html, in-place
@@ -182,8 +172,10 @@ ReportingDates.prototype.buildStaticElements = function() {
 
   //Create header note list for modal dialogue
  let hdr_str = '';
-   const header_notes_json = JSON.parse(document.getElementById('header_notes').textContent);
-// WORKS--  //build static list from footnotes object (`const footnotes`, which is added in teemplate riht now) --if it exists
+ 
+ //Get the Header notes script object created in the template with json_script 
+ const header_notes_json = JSON.parse(document.getElementById('header_notes').textContent);
+
   if (typeof header_notes_json == 'object') {
     hdr_str = `<h4>Header notes</h4><ul>`;
     for (const note of header_notes_json.footnote) {
@@ -564,9 +556,6 @@ const all_hdr = this.dates_table.getElementsByTagName('th');
      const txt = cell.textContent;
 
      if (/~/.test(txt)) {
-
-      // Add class to cells that contain footnotes to target in css
-      cell.classList.add('footnote_cell');
 
       //Create an array from the string split the tilda(s)
       let txt_array = txt.split('~');
