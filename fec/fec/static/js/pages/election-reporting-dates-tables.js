@@ -76,15 +76,15 @@ function ReportingDates() {
 
   this.dates_table = document.getElementsByClassName('election-dates-table')[0];
 
-    this.buildStaticElements();
+    this.buildStaticElements(); // build header_notes dialog and states dropdown
 
     this.convertFootnotes(); //converts number or symbol following "~" to footnote html, in-place
 
-    this.addStateClass();
+    this.addStateClass(); // adds state abbr classes to rows
 
-    this.addFootnotes(); //adds hidden Footnote rows
+    this.addFootnotes(); //adds hidden footnote rows
 
-    this.stripeByState();
+    this.stripeByState(); //zebra strip by state
 
     //it only runs this logic if the page has an `.election-dates-table` on it, TODO:  might not e necessary for this trmplate
     if (this.dates_table) {
@@ -124,7 +124,7 @@ function ReportingDates() {
       anchor.addEventListener('click', this.showFootnotes.bind(this));
     }
 
-    //handle changes on states dropdown
+    //handle changes on states dropdown to filter by state
     this.states = document.getElementById('states');
     this.states.addEventListener('change', this.handleStateChange.bind(this));
 
@@ -236,12 +236,16 @@ ReportingDates.prototype.buildStaticElements = function() {
 ReportingDates.prototype.addStateClass = function() {
    const all_tr = document.querySelectorAll('tr');
       Array.from(all_tr).forEach(row => {
-        let state_name = row.cells[0].textContent;
-        //state_name = state_name.split(' ')[0];//.toLowerCase()
+        let state_election_name = row.cells[0].textContent;
+
         const states_select = document.getElementById('states');
+
+        // Match election name with states select option to get the abbreviation
         Array.from(states_select.options).forEach(opt => {
-          //if (opt.textContent.includes(state_name)){
-          if (state_name.match(opt.textContent)) {
+          // Use '^' to match the full state-name at beginning of string
+          let regex = `^${opt.textContent}.*$`;
+          // Match full state-name in state_election_string
+          if (state_election_name.match(regex)) {
 
              row.classList.add(opt.value.toLowerCase());
            }
@@ -293,7 +297,6 @@ ReportingDates.prototype.addFootnotes = function() {
   const footnotes_json = JSON.parse(document.getElementById('footnotes').textContent);
   const footnotes_array = footnotes_json.footnote;
 
-  //TODO: Should this be `this.dates_table.querySelectorAll` ?
   const date_sups = document.querySelectorAll('td sup');
 
   Array.from(date_sups)
