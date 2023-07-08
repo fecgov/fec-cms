@@ -556,7 +556,8 @@ const all_hdr = this.dates_table.getElementsByTagName('th');
    const all_td = this.dates_table.querySelectorAll('tr:not(.footnote_row) td');
 
     Array.from(all_td).forEach(cell => {
-     const txt = cell.textContent;
+     //const txt = cell.textContent;
+     const txt = cell.innerHTML;
 
      if (/~/.test(txt)) {
 
@@ -564,7 +565,7 @@ const all_hdr = this.dates_table.getElementsByTagName('th');
       let txt_array = txt.split('~');
       ///The first item is the date text, return that as a var. Now txt_array only includes footnotes.
       let date_txt = txt_array.shift();
-      //Creeate a new varialble or clarity
+      //Creeate a new varialble for clarity
       let appended_footnotes = txt_array;
 
       let footnote_html_array = [];
@@ -574,7 +575,7 @@ const all_hdr = this.dates_table.getElementsByTagName('th');
         footnote_html_array.push(footnote_html);
       }
 
-      cell.innerHTML = date_txt+footnote_html_array;
+      cell.innerHTML = `${date_txt}${footnote_html_array}`;
 
      }
 
