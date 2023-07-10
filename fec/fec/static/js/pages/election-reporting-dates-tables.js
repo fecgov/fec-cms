@@ -113,10 +113,10 @@ function ReportingDates() {
     //Define media query
     const mql = window.matchMedia('screen and (max-width: 650px)');
 
-    // call listener function explicitly at run time
+    //call listener function explicitly at run time
     this.mediaQueryResponse(mql);
 
-    // attach listener function to listen in on state changes
+    //attach listener function to listen in on state changes
     mql.addListener(this.mediaQueryResponse);
 
     //show footnotes on click of a link that wraps the superscripts in cells
@@ -160,7 +160,7 @@ function ReportingDates() {
 
 }
 
-//create and insert states-dropdown, static header-notes-list , and dialog
+//create and insert states-dropdown, static header-notes-list, and dialog
 ReportingDates.prototype.buildStaticElements = function() {
   //Add states dropdown template to page
   const dropdown_wrapper = document.createElement('div');
@@ -186,33 +186,6 @@ ReportingDates.prototype.buildStaticElements = function() {
      }
      hdr_str += `</ul>`;
     }
-
- // // build static list from <script id="footnotes">  which is added in teemplate with  json_script technique ) --if it exist
- // const footnotes_json = JSON.parse(document.getElementById('footnotes').textContent);
- // let ftnt_str = '';
- //  if (typeof footnotes_json == 'object') {
- //    ftnt_str = `<h4>Footnotes</h4><ul>`;
- //    for (const note of footnotes_json.footnote) {
- //      const dot = /^\d+$/.test(note.value.footnote_number) ? '.' : '';
- //      ftnt_str += `<li>
- //                   <a name="footnote_${note.value.footnote_number}" id="footnote_${note.value.footnote_number}"></a>
- //                   <b>${note.value.footnote_number}</b>${dot}&nbsp;${note.value.footnote_text}
- //                   </l1>`;
- //    }
- //    ftnt_str += `</ul>`;
- //  }
-
- //  //create div for all notes if either foot or header notes exist
- //  if (hdr_str || ftnt_str) {
- //    const static_notes = document.createElement('div');
- //    static_notes.id = 'static_notes';
-
- //    //add combibed header_notes, footnotes list to collapsible div
- //    static_notes.innerHTML = `${hdr_str}${ftnt_str}`;
-
- //    //insert it after table
- //    table_parent.insertBefore(static_notes, this.dates_table.nextSibling);
- //  }
 
   if (typeof header_notes_json == 'object') {
     //Create A11Y modal dialog for header_notes popup and add innerHTML
@@ -533,7 +506,6 @@ ReportingDates.prototype.convertFootnotes = function() {
 
 const all_hdr = this.dates_table.getElementsByTagName('th');
    Array.from(all_hdr).forEach(cell => {
-  //#WORKKS LEAVES A COMMA AFTER TEXT, BEFORE FOOTNOTE
    const txt = cell.textContent;
 
    if (/~/.test(txt)) {
@@ -548,7 +520,7 @@ const all_hdr = this.dates_table.getElementsByTagName('th');
 
          }
 
-      cell.innerHTML = hdr_txt+hdr_note_html_array;
+      cell.innerHTML = `${hdr_txt}${hdr_note_html_array}`;
 
     }
 
@@ -558,12 +530,11 @@ const all_hdr = this.dates_table.getElementsByTagName('th');
    const all_td = this.dates_table.querySelectorAll('tr:not(.footnote_row) td');
 
     Array.from(all_td).forEach(cell => {
-     //const txt = cell.textContent;
+
      const txt = cell.innerHTML;
 
      if (/~/.test(txt)) {
-
-      //Create an array from the string split the tilda(s)
+      //Create an array from the string split on the tilda(s)
       let txt_array = txt.split('~');
       ///The first item is the date text, return that as a var. Now txt_array only includes footnotes.
       let date_txt = txt_array.shift();
@@ -583,6 +554,6 @@ const all_hdr = this.dates_table.getElementsByTagName('th');
 
    });
 
-}; // end conveertfootnotes()
+};
 
 new ReportingDates();
