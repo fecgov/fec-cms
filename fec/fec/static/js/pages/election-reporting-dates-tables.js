@@ -232,19 +232,21 @@ ReportingDates.prototype.buildStaticElements = function() {
   }
 };
 
-// Adds row state name classes
+// Adds state classes to rows
 ReportingDates.prototype.addStateClass = function() {
    const all_tr = document.querySelectorAll('tr');
+   const states_select = document.getElementById('states');
       Array.from(all_tr).forEach(row => {
-        let state_election_name = row.cells[0].textContent;
 
-        const states_select = document.getElementById('states');
+        let state_election_name_str = row.cells[0].textContent;
+         // Remove extra spaces, set to lowercase to normalize human input errors
+        let state_election_name = state_election_name_str.replace(/\s+/g,' ').trim().toLowerCase();
 
-        // Match election name with states select option to get the abbreviation
+        // Match state name in the full election name with states select option to get the state abbreviation
         Array.from(states_select.options).forEach(opt => {
-          // Use '^' to match the full state-name at beginning of string
-          let regex = `^${opt.textContent}.*$`;
-          // Match full state-name in state_election_string
+          // Use '^' to match the full state-name at beginning of string, to lowercase
+          let regex = `^${opt.textContent.toLowerCase()}.*$`;
+          // Match state-name in full state_election_string
           if (state_election_name.match(regex)) {
 
              row.classList.add(opt.value.toLowerCase());
