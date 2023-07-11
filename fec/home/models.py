@@ -1373,8 +1373,10 @@ class ReportingDatesTable(Page):
 
     footnotes = StreamField([
         ('footnote_section', blocks.StructBlock([
-            ('title', blocks.CharBlock(blank='true', icon='title',
-                                       help_text='either &quot;Footnotes&quot; or &quot;Header notes&quot;')),
+            ('title', blocks.ChoiceBlock(choices=[
+                ('Footnotes', 'Footnotes'),
+                ('Header notes', 'Header notes'),
+            ], required=True, help_text='Choose either Footnotes or Header notes', blank=True, Null=True)),
             ('footnote', blocks.ListBlock(blocks.StructBlock([
                 ('footnote_number', blocks.CharBlock(blank='true', icon='tag', form_classname='title')),
                 ('footnote_text', blocks.RichTextBlock(blank='true', icon='pilcrow', help_text='')),
