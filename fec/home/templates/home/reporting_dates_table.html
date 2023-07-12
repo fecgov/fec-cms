@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% load filters %}
+{% load static %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+
+{% block breadcrumbs %}
+  {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style=self.breadcrumb_style %}
+{% endblock %}
+
+<article class="main container">
+
+  <h1 class="heading--main">{{ self.title }}</h1>
+  
+  <table class="simple-table simple-table--display simple-table-cms election-dates-table">
+
+     {% for block in self.reporting_dates_table %}
+
+       {% if block.block_type == "dates_table" %}
+    
+          {% include_block block.value %}
+    
+        {% endif %}
+   
+    {% endfor %}
+   
+  </table>
+  <div id="static_notes">
+  {%  for block in self.footnotes %}
+    
+    <h4>{{ block.value.title }}</h4>
+    <ul>
+      {% for note in block.value.footnote %}
+        <li>
+           <a name="footnote_{% include_block note.footnote_number %}" id="footnote_{% include_block note.footnote_number %}"></a>
+           <b>{{ note.footnote_number }}{{ note.footnote_number | dot_or_not }}</b>&nbsp;&nbsp;{{ note.footnote_text }}
+        </l1>
+     {% endfor %}
+     </ul>
+
+  {% endfor %}
+  </div>
+
+
+  {% if self.citations %}
+    <div id="legal-citations" class="sidebar--secondary t-sans">
+      <h4 class="sidebar__title">Legal citations</h4>
+      <div class="sidebar__content">
+        <div class="grid grid--2-wide">
+        {% for citation in self.citations %}
+          {% for block in citation.value %}
+            <div class="grid__item">
+              <p class="t-bold">{{ block.label }}</p>
+              <div class="rich-text">{{ block.content }}</div>
+            </div>
+          {% endfor %}
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+</article>
+
+{% comment %} USe "json_script" filter to create two JSON-ecasped script objects to iterate in JS. {% endcomment %}
+
+{% for raw in self.footnotes.raw_data %}
+  {% if raw.value.title == 'Footnotes' %}
+    {{ raw.value|json_script:"footnotes" }}
+  {% elif raw.value.title == 'Header notes' %}
+    {{ raw.value|json_script:"header_notes" }}
+  {% endif %} 
+{% endfor %}
+
+{% include 'partials/disclaimer.html' %}
+
+{% endblock %}
+
+{% block extra_js %}
+
+ <script> window.BASE_PATH = '/data' </script>
+ <script type="text/javascript" src="{% asset_for_js 'data-init.js' %}"></script>
+ <script type="text/javascript" src="{% asset_for_js 'election-reporting-dates-tables.js' %}"></script>
+
+{% endblock %}

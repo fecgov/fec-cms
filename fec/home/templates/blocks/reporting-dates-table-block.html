@@ -1,0 +1,18 @@
+{% load table_block_tags %}
+{% load wagtailcore_tags %}
+
+{% for row in self.table.data %}
+ {% if forloop.first %}
+    <tr>
+    {% for cell in row %}
+    <th>{{ cell | safe }}</th>
+      {% endfor %}
+    </tr>
+ {% else %}
+    <tr>
+    {% for cell in row %}
+    <td>{{ cell | safe }}</td>
+      {% endfor %}
+    </tr>
+ {% endif %}
+{% endfor %}
