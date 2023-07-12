@@ -5,14 +5,14 @@
  {% if forloop.first %}
     <tr>
     {% for cell in row %}
-    <th>{{ cell | safe}}</th>
+    <th>{{ cell | safe }}</th>
       {% endfor %}
     </tr>
- {% else%}
+ {% else %}
     <tr>
     {% for cell in row %}
-    <td>{{ cell | safe}}</td>
+    <td>{{ cell | safe }}</td>
       {% endfor %}
     </tr>
- {% endif%}
+ {% endif %}
 {% endfor %}

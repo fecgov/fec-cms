@@ -333,7 +333,7 @@ h3 + .simple-table {
 
     tr {
       border: 1px solid $gray;
-       padding-top:2px;
+       padding-top: 2px;
 
       &.row_display {
       display: block !important;
@@ -415,7 +415,8 @@ h3 + .simple-table {
   list-style: none;
   padding-left: u(2rem);
   max-width: u(80rem);
-  width:100%;
+  width: 100%;
+  margin-bottom: u(2rem);
   }
   li {
   text-indent: u(-2rem);

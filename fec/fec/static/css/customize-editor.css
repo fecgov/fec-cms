@@ -91,9 +91,9 @@ div[data-contentpath="reporting_dates_table"] div[id*="-value-table-handsontable
 }
 
 div[id*="-value-table-handsontable-container"] .ht_master.handsontable {
-  height:auto  !important;
+  height: auto  !important;
 }
 
 div.ht_master.handsontable div.wtHolder {
-  height:auto  !important;
+  height: auto  !important;
 }
