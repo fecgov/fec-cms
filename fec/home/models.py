@@ -1368,7 +1368,11 @@ class OfficePage(Page):
 
 class ReportingDatesTable(Page):
     reporting_dates_table = StreamField([
-        ('dates_table', ReportingTableBlock(blank=True, form_classname='title')),
+        ('paragraph', blocks.RichTextBlock(blank=True)),
+        ('html', blocks.RawHTMLBlock()),
+        ('internal_button', InternalButtonBlock()),
+        ('external_button', ExternalButtonBlock()),
+        ('dates_table', ReportingTableBlock(blank=True, required=False,form_classname='title')),
     ], blank=True, null=True, use_json_field=True, collapsed=False)
 
     footnotes = StreamField([
