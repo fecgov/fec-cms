@@ -20,11 +20,16 @@
     
           {% include_block block.value %}
     
-        {% endif %}
+        {% else %}
 
-      {% if block.block_type == "text" %}
-    
-          {{ block }}
+      <div class="block-{{ block.block_type }}">
+      {% if block.block_type == 'paragraph' %}
+      <div class="rich-text">{{ block }}</div>
+      {% else %}
+      {{ block }}
+      {% endif %}
+    </div>
+
     
         {% endif %}
     {% endfor %}
