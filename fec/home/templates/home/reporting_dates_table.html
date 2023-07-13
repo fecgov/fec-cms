@@ -14,8 +14,6 @@
 
   <h1 class="heading--main">{{ self.title }}</h1>
   
-  <table class="simple-table simple-table--display simple-table-cms election-dates-table">
-
      {% for block in self.reporting_dates_table %}
 
        {% if block.block_type == "dates_table" %}
@@ -23,10 +21,14 @@
           {% include_block block.value %}
     
         {% endif %}
-   
+
+      {% if block.block_type == "text" %}
+    
+          {{ block }}
+    
+        {% endif %}
     {% endfor %}
    
-  </table>
   <div id="static_notes">
   {%  for block in self.footnotes %}
     
