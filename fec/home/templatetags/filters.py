@@ -143,6 +143,19 @@ def remove_word(str, words):
     return str.replace(words, '')
 
 
+@register.filter(name='dot_or_not')
+def dot_or_not(str):
+    """
+    Puts dot-after, only if string represemts a number
+    Specifically for footnote lists on ReportingDatesTables
+    """
+    try:
+        int(str)
+        return '.'
+    except ValueError:
+        return ''
+
+
 @register.filter(name='get_social_image_path')
 def get_social_image_path(identifier):
     # """
