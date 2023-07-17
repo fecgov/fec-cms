@@ -15,14 +15,13 @@ function AcrossTime() {
   this.basePath_officeTotal = ['candidates', 'totals', 'aggregates'];
   this.baseQuery = {
     office: context.office_code,
-    min_election_cycle: window.DEFAULT_ELECTION_YEAR - 4 ,
-    max_election_cycle: window.DEFAULT_ELECTION_YEAR,
     is_active_candidate: true,
     per_page: 20,
     sort_null_only: false,
     sort_hide_null: false,
     sort_nulls_last: false,
     page: 1
+    // election_year: // Multiple values will be added in handleYearChange
   };
 
   this.init();
@@ -204,7 +203,7 @@ AcrossTime.prototype.init = function() {
   this.minYearControl.addEventListener('change', this.handleYearChange.bind(this));
   this.maxYearControl.addEventListener('change', this.handleYearChange.bind(this));
 
-  this.loadData(this.baseQuery);
+  this.loadData(this.baseQuery, [window.DEFAULT_ELECTION_YEAR, window.DEFAULT_ELECTION_YEAR - 4]);
 
   this.buildSelects();
 
@@ -221,17 +220,11 @@ AcrossTime.prototype.handleYearChange = function(e) {
      let beginning = action == 'min' ? e.target.value : this.minYearControl.value;
      let ending = action == 'max' ? e.target.value : this.maxYearControl.value;
 
-     // Trsanspose min/max in call to data if value of min select is  > value of max select
-     // API will not return data is `min_election_cycle is > than max_election_cycle
-     this.baseQuery.min_election_cycle = Math.min(beginning, ending);
-     this.baseQuery.max_election_cycle = Math.max(beginning, ending);
+  // Get the  office from the URL passed from view
+  this.baseQuery.office = context.office_code;
 
-     // Get the  officce from the URL passed from view
-     this.baseQuery.office = context.office_code;
-
-     // Load data based on baseQuery
-     this.loadData(this.baseQuery);
-
+  // Load data based on baseQuery and the two years
+  this.loadData(this.baseQuery, [beginning, ending]);
 };
 
 ////Build  both selects (min/max) going back 9 two-year-periods from DEFAULT_ELECTION_YEAR
@@ -265,12 +258,29 @@ AcrossTime.prototype.buildSelects = function() {
 /**
  * Starts the data load, called by {@see init}
  * @param {Object} query - The data object for the query, {@see baseQuery}
+ * @param {Array} yearsRangeArray - An array of two values: the min and max years (or max and min)
  */
-AcrossTime.prototype.loadData = function(query) {
+AcrossTime.prototype.loadData = function(query, yearsRangeArray) {
   let instance = this;
 
+  // yearsRangeArray is two values but could be any order, so let's just look at the smallest and largest
+  const minYear = Math.min(...yearsRangeArray);
+  const maxYear = Math.max(...yearsRangeArray);
+  // We need a query to include multiple election_year values, which isn't possible as keys or object properties
+  // i.e. {election_year: 2000, election_year: 2002} isn't possible
+  // so we're going to build the string of all the required election_year, then glue that to the end of the query
+  let yearString = '';
+  for (let i = minYear; i <= maxYear; i += 2) {
+    yearString += `&election_year=${i}`;
+  }
+
+  // Build the fetch url as always
+  let fetchUrl = buildUrl(this.basePath_officeTotal, query);
+  // The stick our '&election_year=2000&election_year=2002&election_year=2004'… to the end of it
+  fetchUrl += yearString;
+
   window
-    .fetch(buildUrl(this.basePath_officeTotal, query), {
+    .fetch(fetchUrl, {
       cache: 'no-cache',
       mode: 'cors'
     })
