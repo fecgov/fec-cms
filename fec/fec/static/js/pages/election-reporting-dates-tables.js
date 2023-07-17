@@ -173,7 +173,9 @@ ReportingDates.prototype.buildStaticElements = function() {
   //Create header note list for modal dialogue
  let hdr_str = '';
 
- //Get the Header notes script object created in the template with json_script
+ //Get the '#header_notes' script tag created in the template with json_script
+ const header_notes = document.getElementById('header_notes');
+ if (header_notes) {
  const header_notes_json = JSON.parse(document.getElementById('header_notes').textContent);
 
   if (typeof header_notes_json == 'object') {
@@ -203,6 +205,7 @@ ReportingDates.prototype.buildStaticElements = function() {
     dialog_p.innerHTML = `${hdr_str}`;
 
   }
+ }
 };
 
 // Adds state classes to rows
@@ -269,11 +272,15 @@ ReportingDates.prototype.handleStateChange = function() {
 
 // Add footnote rows based on existence of superscript number created by convertFootnotes()
 ReportingDates.prototype.addFootnotes = function() {
+  //Get the '#footnotes' script tag created in the template with json_script
+  const footnotes = document.getElementById('footnotes');
+  if (footnotes) {
   const footnotes_json = JSON.parse(document.getElementById('footnotes').textContent);
   const footnotes_array = footnotes_json.footnote;
 
   const date_sups = document.querySelectorAll('td sup');
 
+  if (typeof footnotes_array == 'object') {
   Array.from(date_sups)
     .reverse()
     .forEach(node => {
@@ -299,14 +306,14 @@ ReportingDates.prototype.addFootnotes = function() {
                         </tr>`;
       node.closest('tr').insertAdjacentHTML('afterend', ftnt_row);
     });
-
+  }
   //hide footnotes rows initially
   const footnote_rows = document.querySelectorAll('.footnote_row');
   for (const footnote_row of footnote_rows) {
     footnote_row.style.display = 'none';
   }
+ }
 };
-
 //Prepend header to cells in mobile ONLY, also add/remove them on resize between mobile/desktop
 ReportingDates.prototype.mediaQueryResponse = function(mql) {
   //get all non-footnote row cells for mobile
