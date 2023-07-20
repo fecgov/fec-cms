@@ -94,6 +94,24 @@ def disbursements(request):
     })
 
 
+def allocated_federal_nonfederal_disbursements(request):
+    if len(request.GET) == 0:
+        return redirect('/data/allocated-federal-nonfederal-disbursements/?cycle='
+                        + str(constants.DEFAULT_ELECTION_YEAR)
+                        + '&min_date=' + '01/01/' + str(constants.DEFAULT_ELECTION_YEAR - 1)
+                        + '&max_date=' + '12/31/' + str(constants.DEFAULT_ELECTION_YEAR))
+
+    return render(request, 'datatable.jinja', {
+        'parent': 'data',
+        'slug': 'allocated-federal-nonfederal-disbursements',
+        'title': 'Allocated federal nonfederal disbursements',
+        'dates': utils.date_ranges(),
+        'columns': constants.table_columns['allocated-federal-nonfederal-disbursements'],
+        'has_data_type_toggle': True,
+        'social_image_identifier': 'data',
+    })
+
+
 def filings(request):
     return render(request, 'datatable.jinja', {
         'parent': 'data',
