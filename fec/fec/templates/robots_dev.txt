@@ -1,5 +1,6 @@
 # Temporary settings for testing on dev.fec.gov to keep other bots from indexing our dev urls
 
+User-agent: usasearch
 Crawl-delay: 2
 Allow: /
 Disallow: /search/?*
