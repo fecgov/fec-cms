@@ -47,6 +47,9 @@ This shows fields available on the Schedule D form.
     {{#panelRow "Date"}}
       {{{datetime coverage_start_date format="pretty"}}}
     {{/panelRow}}
+    {{#panelRow "Line number"}}
+      {{line_number}}
+    {{/panelRow}}
     {{#panelRow "Balance at beginning of period"}}
         {{{currency outstanding_balance_beginning_of_period}}}
     {{/panelRow}}
