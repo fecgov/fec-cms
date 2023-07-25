@@ -9,7 +9,7 @@
     <label class="label--help u-margin--top">{{ helper_text }}</label>
   {% endif %}
   <div class="combo combo--filter--mini">
-    <input id="{{ name }}{{ id_suffix }}" type="text" name="{{ name }}" class="combo__input"
+    <input id="{{ name }}{{ id_suffix }}" type="{{ attrs.type|default('text') }}" name="{{ name }}" class="combo__input"
       {% for attr, value in attrs.items() %}
         {{ attr }}="{{ value }}"
       {% endfor %}

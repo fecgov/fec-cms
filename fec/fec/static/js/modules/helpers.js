@@ -271,6 +271,13 @@ Handlebars.registerHelper('format_range', function(year) {
 });
 
 /**
+ * @see {@link formatZipCode}
+ */
+Handlebars.registerHelper('zipCode', function(value) {
+  return formatZipCode(value);
+});
+
+/**
   Formats a cycle range based on a year and a duration.
   If no year is provided, return null;
 **/
@@ -601,37 +608,52 @@ function passiveListenerIfSupported() {
   return supported ? { passive: true } : false;
 }
 
+/**
+ * To convert a nine-digit number to ZIP Code format
+ * @param {string|number} value - The string or number to be formatted as a ZIP Code
+ * @returns {string} The provided value unless it's exactly nine numbers long, then returns a 9-letter ZIP Code format with the dash
+ */
+function formatZipCode(value) {
+  var value_string = String(value);
+  var value_int = parseInt(value);
+  if (isNaN(value_int) || value_int < 100000000 || value_int > 999999999 || value_string.substring(0,1) === '0')
+    return value;
+  else
+    return `${value_string.substring(0,5)}-${value_string.substring(5)}`;
+}
+
 module.exports = {
+  amendmentVersion: amendmentVersion,
+  amendmentVersionDescription: amendmentVersionDescription,
   anchorify: anchorify,
-  scrollAnchor: scrollAnchor,
   buildAppUrl: buildAppUrl,
-  buildUrl: buildUrl,
   buildTableQuery: buildTableQuery,
+  buildUrl: buildUrl,
   currency: currency,
   cycleDates: cycleDates,
-  multiCycles: multiCycles,
   datetime: datetime,
   dollar: dollar,
   ensureArray: ensureArray,
   filterNull: filterNull,
-  formatNumber: numberFormatter,
   formatCycleRange: formatCycleRange,
+  formatNumber: numberFormatter,
+  formatZipCode: formatZipCode,
+  getCookie: getCookie,
   getTimePeriod: getTimePeriod,
+  getWindowWidth: getWindowWidth,
   globals: globals,
+  isInViewport: isInViewport,
   isLargeScreen: isLargeScreen,
   isMediumScreen: isMediumScreen,
-  isInViewport: isInViewport,
-  LOADING_DELAY: LOADING_DELAY,
-  SUCCESS_DELAY: SUCCESS_DELAY,
-  zeroPad: zeroPad,
-  amendmentVersion: amendmentVersion,
-  amendmentVersionDescription: amendmentVersionDescription,
-  utcDate: utcDate,
   missingDataReason: missingDataReason,
-  BREAKPOINTS: BREAKPOINTS,
-  getWindowWidth: getWindowWidth,
-  sanitizeValue: sanitizeValue,
+  multiCycles: multiCycles,
+  passiveListener: passiveListenerIfSupported,
   sanitizeQueryParams: sanitizeQueryParams,
-  getCookie: getCookie,
-  passiveListener: passiveListenerIfSupported
+  sanitizeValue: sanitizeValue,
+  scrollAnchor: scrollAnchor,
+  utcDate: utcDate,
+  zeroPad: zeroPad,
+  BREAKPOINTS: BREAKPOINTS,
+  LOADING_DELAY: LOADING_DELAY,
+  SUCCESS_DELAY: SUCCESS_DELAY
 };
