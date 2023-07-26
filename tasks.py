@@ -4,7 +4,7 @@ import git
 import sys
 import cfenv
 
-from invoke import run
+from invoke import run  # noqa F401
 from invoke import task
 from slacker import Slacker
 
@@ -63,7 +63,7 @@ def _detect_space(repo, branch=None, yes=False):
         return None
     print('Detected space {space}'.format(**locals()))
     if not yes:
-        run = input(
+        run = input(  # noqa F811
             'Deploy to space {space} (enter "yes" to deploy)? > '.format(**locals())
         )
         if run.lower() not in ['y', 'yes']:
@@ -123,7 +123,8 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
     existing_deploy = ctx.run('cf app cms', echo=True, warn=True)
     print("\n")
     cmd = 'push --strategy rolling' if existing_deploy.ok else 'push'
-    new_deploy = ctx.run('cf {0} cms -f manifest_{1}.yml'.format(cmd, space),
+    new_deploy = ctx.run(
+        'cf {0} cms -f manifest_{1}.yml'.format(cmd, space),
         echo=True,
         warn=True
     )
@@ -133,7 +134,11 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
         # Check if there are active deployments
         app_guid = ctx.run('cf app cms --guid', hide=True, warn=True)
         app_guid_formatted = app_guid.stdout.strip()
-        status = ctx.run('cf curl "/v3/deployments?app_guids={}&status_values=ACTIVE"'.format(app_guid_formatted), hide=True, warn=True)
+        status = ctx.run(
+            'cf curl "/v3/deployments?app_guids={}&status_values=ACTIVE"'.format(app_guid_formatted),
+            hide=True,
+            warn=True
+        )
         active_deployments = json.loads(status.stdout).get("pagination").get("total_results")
         # Try to roll back
         if active_deployments > 0:
@@ -150,7 +155,8 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
         return sys.exit(1)
 
     # Allow proxy to connect to CMS via internal route
-    add_network_policy = ctx.run('cf add-network-policy proxy cms'.format(cmd, space),
+    add_network_policy = ctx.run(
+        'cf add-network-policy proxy cms'.format(cmd, space),  # noqa F523
         echo=True,
         warn=True
     )
@@ -168,6 +174,7 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
 
     # Needed by CircleCI
     return sys.exit(0)
+
 
 @task
 def notify(ctx):
