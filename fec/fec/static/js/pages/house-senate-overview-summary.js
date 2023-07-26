@@ -52,7 +52,6 @@ HSOverviewSummary.prototype.init = function() {
 
     const url_params = {
       aggregate_by: 'office-party',
-      api_key: '',
       election_full: true,
       election_year: 2020,
       is_active_candidate: true,
