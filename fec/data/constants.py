@@ -444,6 +444,8 @@ audit_sub_categories_options = [
 
 
 table_columns = OrderedDict([
+    ('allocated-federal-nonfederal-disbursements',
+        ['Spender', 'Recipient', 'Description', 'Federal share', 'Nonfederal share', 'Total amount', 'Date']),
     ('candidates', ['Name', 'Office', 'Election years', 'Party', 'State', 'District', 'First filing date']),
     ('candidates-office-president', ['Name', 'Party', 'Receipts', 'Disbursements']),
     ('candidates-office-senate', ['Name', 'Party', 'State', 'Receipts', 'Disbursements']),
@@ -667,7 +669,7 @@ RAISING_FORMATTER = OrderedDict([
     ('total_transfers',  # F3X
         {'label': 'Total transfers', 'level': '2'}),
     ('transfers_from_nonfed_account',  # F3X
-        {'label': 'Non-federal transfers', 'level': '3'}),
+        {'label': 'Nonfederal transfers', 'level': '3'}),
     ('transfers_from_nonfed_levin',  # F3X
         {'label': 'Levin funds', 'level': '3'}),
     ('fed_receipts',  # F3X
@@ -684,11 +686,18 @@ SPENDING_FORMATTER = OrderedDict([
     ('total_operating_expenditures',  # F3X - renamed app-side
         {'label': 'Operating expenditures', 'term': 'operating expenditures',
             'level': '2'}),
-    ('shared_fed_operating_expenditures',  # F3X
-        {'label': 'Allocated operating expenditures - federal', 'level': '3'}),
-    ('shared_nonfed_operating_expenditures',  # F3X
-        {'label': 'Allocated operating expenditures - non-federal',
-            'level': '3'}),
+    ('shared_fed_operating_expenditures',  # F3X, H4
+        {
+            'label': 'Allocated operating expenditures - federal share',
+            'level': '3',
+            'type': {'link': 'allocated-federal-nonfederal-disbursements'},
+         }),
+    ('shared_nonfed_operating_expenditures',  # F3X, H4
+        {
+            'label': 'Allocated operating expenditures - nonfederal share',
+            'level': '3',
+            'type': {'link': 'allocated-federal-nonfederal-disbursements'},
+        }),
     ('other_fed_operating_expenditures',  # F3X
         {'label': 'Other federal operating expenditures', 'level': '3',
             'type': {'link': 'disbursements', 'O': 'F3X-21B'}}),
