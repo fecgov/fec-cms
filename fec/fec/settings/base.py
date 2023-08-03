@@ -99,12 +99,6 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['house_senate_overview_summary'] = True
     FEATURES['house_senate_overview_totals'] = True
 
-# Set feature flags to True for Feature
-if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['feature']:
-    FEATURES['house_senate_overview_methodology'] = True
-    FEATURES['house_senate_overview_summary'] = True
-    FEATURES['house_senate_overview_totals'] = True
-
 # Application definition
 INSTALLED_APPS = (
     'django.contrib.admin',
