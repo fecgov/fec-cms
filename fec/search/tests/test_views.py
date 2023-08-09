@@ -147,3 +147,11 @@ class TestViews(TestCase):
         request = self.factory.get('/search?query=abe&type=candidates')
         search(request)
         search_site.assert_not_called()
+        
+    @mock.patch.object(views, 'policy_guidance_search_site')
+    def test_site_policy_guidance_search_site(self, m, policy_guidance_search_site):
+        policy_guidance_search_site.return_value = []
+        request = self.factory.get('/search?query=help&type=site')
+        response = policy_guidance_search(request)
+        policy_guidance_search_site.assert_called_with('help', limit=10, offset=0)
+        self.assertEqual(response.status_code, 200)
