@@ -105,6 +105,14 @@
   }
 }
 
+.contact-item--map-pin {
+  &.contact-item::before {
+    @include u-icon-circle($map-pin, $primary, $inverse, 3.4rem);
+    background-position: 50%;
+    background-size: 60%;
+  }
+}
+
 .address span {
   display: block;
   margin-bottom: u(.8rem);

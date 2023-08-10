@@ -48,6 +48,7 @@ class ContactItemBlock(blocks.StructBlock):
         ('hand', 'Hand delivery'),
         ('phone', 'Phone'),
         ('mail', 'Mail'),
+        ('map-pin', 'Map pin'),
         ('github', 'Github'),
         ('question-bubble', 'Question')
     ], required=True)
@@ -231,8 +232,14 @@ class ExampleParagraph(blocks.StructBlock):
 
 class EmployeeTitle(blocks.StructBlock):
     title = blocks.StreamBlock([
-        ('html_title', blocks.RawHTMLBlock(
-            blank=True, required=False, help_text='For footnote on title, use html block with &lt;sup&gt;1&lt;/sup&gt;')),
+        (
+            'html_title',
+            blocks.RawHTMLBlock(
+                blank=True,
+                required=False,
+                help_text='For footnote on title, use html block with &lt;sup&gt;1&lt;/sup&gt;'
+            )
+        ),
         ('text_title', blocks.CharBlock(blank=True, required=False)),
         ], blank=True, required=False)
 
