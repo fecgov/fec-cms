@@ -81,6 +81,13 @@ FEATURES = {
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
 }
 
+# Set feature flags to True for Feature
+if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['feature']:
+    FEATURES['house_senate_overview'] = True
+    FEATURES['house_senate_overview_methodology'] = True
+    FEATURES['house_senate_overview_summary'] = True
+    FEATURES['house_senate_overview_totals'] = True
+
 # Set feature flags to True for local
 if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['adrs'] = True
