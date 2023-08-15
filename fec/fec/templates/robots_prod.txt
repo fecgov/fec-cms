@@ -1,4 +1,15 @@
+User-agent: usasearch
+Crawl-delay: 2
+Allow: /
+Disallow: /search/?*
+Disallow: /data/legal/search/?*
+Disallow: /data/search/?*
+Sitemap: https://dev.fec.gov/sitemap-wagtail.xml
+Sitemap: https://dev.fec.gov/resources/cms-content/documents/sitemap_pdf.xml
+Sitemap: https://dev.fec.gov/resources/cms-content/documents/sitemap_html.xml
+
 User-agent: *
+Crawl-delay: 10
 Disallow: /search/?*
 Disallow: /data/legal/search/?*
 Disallow: /data/search/?*

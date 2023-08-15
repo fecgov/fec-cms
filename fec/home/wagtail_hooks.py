@@ -1,23 +1,6 @@
 from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
-from wagtail import hooks
 
 from .models import Author, PressReleasePage, DigestPage, TipsForTreasurersPage, RecordPage
-from search.utils.search_indexing import handle_page_edit_or_create, handle_page_delete
-
-
-@hooks.register('after_create_page')
-def search_add(request, page):
-    handle_page_edit_or_create(page, 'add')
-
-
-@hooks.register('after_edit_page')
-def search_update(request, page):
-    handle_page_edit_or_create(page, 'update')
-
-
-@hooks.register('after_delete_page')
-def remove_page(request, page):
-    handle_page_delete(page.id)
 
 
 class AuthorAdmin(ModelAdmin):
