@@ -214,7 +214,7 @@ AcrossTime.prototype.handleYearChange = function(e) {
   this.loadData(this.baseQuery, [beginning, ending]);
 };
 
-//Build both selects (min/max) going back 9 two-year-periods from DEFAULT_ELECTION_YEAR
+// Build both selects (min/max) going back 9 two-year-periods from DEFAULT_ELECTION_YEAR
 AcrossTime.prototype.buildSelects = function() {
   var theSelects = this.element.querySelectorAll( 'select[data-period]' );
 
@@ -224,7 +224,6 @@ AcrossTime.prototype.buildSelects = function() {
     for (let i = 0; i < 18; i+=2) {
 
       let year = window.DEFAULT_ELECTION_YEAR - i;
-      let startYear = year - 1;
 
       // Start with 6 years back selected (i = 4 because the +=2 iteration is 0, 2, 4…)
       let selected;
@@ -233,7 +232,7 @@ AcrossTime.prototype.buildSelects = function() {
       }
 
       // Populate the select options
-      let option = `<option value="${year}"${selected}>${startYear} - ${year}</option>`;
+      let option = `<option value="${year}"${selected}>${year}</option>`;
       theSelect.innerHTML += option;
     }
   });
@@ -260,7 +259,7 @@ AcrossTime.prototype.loadData = function(query, yearsRangeArray) {
 
   // Build the fetch url as always
   let fetchUrl = buildUrl(this.basePath_officeTotal, query);
-  // The stick our '&election_year=2000&election_year=2002&election_year=2004'… to the end of it
+  // Then stick our '&election_year=2000&election_year=2002&election_year=2004'… to the end of it
   fetchUrl += yearString;
 
   window
