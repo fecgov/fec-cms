@@ -9,6 +9,8 @@ from wagtail import urls as wagtail_urls
 from uaa_client import urls as uaa_urls
 from uaa_client import views as uaa_views
 
+from wagtail.contrib.sitemaps.views import sitemap
+
 from home import views as home_views
 from search import views as search_views
 
@@ -21,6 +23,7 @@ urlpatterns = [
     ),
     re_path(r'^auth/', include(uaa_urls)),
     re_path(r'^admin/', include(wagtailadmin_urls)),
+    re_path(r'^sitemap-wagtail\.xml/$', sitemap),
     re_path(r'^calendar/$', home_views.calendar),
     re_path(r'^about/leadership-and-structure/commissioners/$',
             home_views.commissioners),

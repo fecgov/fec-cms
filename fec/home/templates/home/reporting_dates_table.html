@@ -14,19 +14,26 @@
 
   <h1 class="heading--main">{{ self.title }}</h1>
   
-  <table class="simple-table simple-table--display simple-table-cms election-dates-table">
-
      {% for block in self.reporting_dates_table %}
 
        {% if block.block_type == "dates_table" %}
     
           {% include_block block.value %}
     
+        {% else %}
+
+      <div class="block-{{ block.block_type }}">
+      {% if block.block_type == 'paragraph' %}
+      <div class="rich-text">{{ block }}</div>
+      {% else %}
+      {{ block }}
+      {% endif %}
+    </div>
+
+    
         {% endif %}
-   
     {% endfor %}
    
-  </table>
   <div id="static_notes">
   {%  for block in self.footnotes %}
     

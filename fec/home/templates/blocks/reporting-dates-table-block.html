@@ -1,6 +1,7 @@
 {% load table_block_tags %}
 {% load wagtailcore_tags %}
 
+<table class="simple-table simple-table--display simple-table-cms election-dates-table">
 {% for row in self.table.data %}
  {% if forloop.first %}
     <tr>
@@ -16,3 +17,4 @@
     </tr>
  {% endif %}
 {% endfor %}
+</table>

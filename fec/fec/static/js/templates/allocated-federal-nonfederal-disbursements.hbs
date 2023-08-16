@@ -1,0 +1,60 @@
+<div class="panel__row">
+<h4 class="panel__title u-padding--bottom"><a href="{{basePath}}/committee/{{committee.committee_id}}">{{committee.name}}</a></h4>
+  <h4 class="panel__title">Recipient information</h4>
+  <table>
+    {{#panelRow "Recipient name"}}
+      {{payee_name}}
+    {{/panelRow}}
+    {{#panelRow "Recipient city and state"}}
+      {{payee_city}}, {{payee_state}}  {{zipCode payee_zip}}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Transaction information</h4>
+  <table>
+    {{#panelRow "Activity or event identifier"}}
+      {{{activity_or_event}}}
+    {{/panelRow}}
+    {{#panelRow "Description"}}
+      {{disbursement_purpose}}
+    {{/panelRow}}
+    {{#panelRow "Report year"}}
+      {{{report_year}}}
+    {{/panelRow}}
+    {{#panelRow "Disbursement date"}}
+      {{{datetime event_purpose_date format="pretty"}}}
+    {{/panelRow}}
+    {{#panelRow "Federal allocated share"}}
+      {{{currency federal_share}}}
+    {{/panelRow}}
+    {{#panelRow "Nonfederal allocated share"}}
+      {{{currency nonfederal_share}}}
+    {{/panelRow}}
+    {{#panelRow "Combined federal and nonfederal share total amount"}}
+      {{{currency disbursement_amount}}}
+    {{/panelRow}}
+    {{#panelRow "Allocated activity or event year-to-date"}}
+      {{{currency event_amount_year_to_date}}}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Committee information</h4>
+  <table>
+    {{#panelRow "Name"}}
+      <a href="{{basePath}}/committee/{{committee.committee_id}}">{{committee.name}}</a>
+    {{/panelRow}}
+    {{#panelRow "Designation"}}
+      {{committee.designation_full}}
+    {{/panelRow}}
+    {{#panelRow "Most recent treasuruer"}}
+      {{committee.treasurer_name}}
+    {{/panelRow}}
+    {{#panelRow "Committee city and state"}}
+      {{committee.city}}, {{committee.state}}  {{zipCode committee.zip}}
+    {{/panelRow}}
+  </table>
+</div>

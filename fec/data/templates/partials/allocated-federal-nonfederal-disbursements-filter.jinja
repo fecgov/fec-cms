@@ -1,0 +1,57 @@
+{% extends 'partials/filters.jinja' %}
+
+{% import 'macros/filters/text.jinja' as text %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% import 'macros/filters/states.jinja' as states %}
+{% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/years.jinja' as years %}
+{% import 'macros/filters/range.jinja' as range %}
+{% import 'macros/filters/checkbox.jinja' as checkbox %}
+
+{% block heading %}
+Filter allocated federal nonfederal disbursements
+{% endblock %}
+
+{% block data_type_toggle %}
+  {% include 'partials/filters/efiling.jinja' %}
+{% endblock %}
+
+{% block efiling_filters %}
+<div class="filters__inner">
+  {{ typeahead.field('committee_id', 'Spender name or ID', id_suffix='_raw') }}
+  {{ text.field('disbursement_description', 'Description', id_suffix='_raw') }}
+</div>
+{% endblock %}
+
+{% block filters %}
+<div class="filters__inner">
+  {{ typeahead.field('committee_id', 'Spender name or ID') }}
+  {{ typeahead.field('q_payee_name', 'Recipient name', allow_text=True) }}
+  {{ years.cycles('cycle', 'Report time period', show_tooltip=True)  }}
+  {{ date.field('date', 'Disbursement date range' ) }}
+</div>
+<div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
+  <button type="button" class="js-accordion-trigger accordion__button">Recipient details</button>
+  <div class="accordion__content">
+    {{ text.field('payee_city', 'City') }}
+    {{ states.field('payee_state')}}
+    {{ text.field(name = 'payee_zip', title = 'ZIP code', attrs = {'minlength':5, 'maxlength':5, 'type':'number', 'pattern': '[0-9]{5}'}) }}
+  </div>
+
+  <button type="button" class="js-accordion-trigger accordion__button">Disbursement details</button>
+  <div class="accordion__content">
+    {{ text.field('q_disbursement_purpose', 'Description') }}
+    {{ range.amount('disbursement_amount', 'Total amount range') }}
+    {{ text.field('activity_or_event', 'Allocated activity or event') }}
+    {{ text.field('image_number', 'Image number') }}
+    <div class="message message--info message--small">
+      <span class="t-block">Disbursements are reported periodically, according to the filer's reporting schedule. Disbursements are updated as they’re processed— that time can vary.</span>
+    </div>
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Spender committee type</button>
+  <div class="accordion__content">
+    {% import 'macros/filters/committee-types.jinja' as committee_type %}
+    {{ committee_type.field(committee_type='spender_committee_type', organization_type='spender_committee_org_type', designation='spender_committee_designation', display_authorized_committee_filter=False, display_default_other_committees_filter=False, display_parties_only_filter=True) }}
+  </div>
+</div>
+{% endblock %}
