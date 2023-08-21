@@ -98,9 +98,9 @@
 {% endmacro %}
 
 
-{% macro two_year_select(cycles, cycle=none, id='') %}
+{% macro two_year_select(cycles, cycle=none, id='', includeWrapper=true) %}
 {% set cycle = cycle | int %}
-  <div class="content__section">
+  {%- if includeWrapper is true -%}<div class="content__section">{%- endif -%}
     <div class="cycle-select">
       <label for="{{id}}-cycle" class="label cycle-select__label">Two-year period</label>
       <select id="{{id}}-cycle" class="js-period-select" name="cycle" data-cycle-location="query" data-election-full="False">
@@ -112,5 +112,5 @@
         {% endfor %}
       </select>
     </div>
-  </div>
+  {%- if includeWrapper is true -%}</div>{%- endif -%}
 {% endmacro %}

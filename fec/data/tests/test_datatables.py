@@ -40,6 +40,14 @@ class TestDatatablesRender(TestCase):
         response = client.get('/data/communication-costs/', follow=True)
         assert response.status_code == 200
 
+    # H4 allocated federal/nonfederal disbursements
+
+    # TODO: remove the conditional with the flag
+    if settings.FEATURES.get('h4_allocated_disbursements'):
+        def test_debts(self):
+            response = client.get('/data/allocated-federal-nonfederal-disbursements/', follow=True)
+            assert response.status_code == 200
+
     # Loans
 
     def test_loans(self):

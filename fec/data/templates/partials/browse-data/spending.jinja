@@ -48,6 +48,15 @@
           <p>Search <span class="term" data-term="coordinated party expenditure" title="Click to define" tabindex="0">party coordinated expenditures</span> by specific national or state party committee, candidate and payee.</p>
         </div>
       </li>
+      {% if FEATURES.h4_allocated_disbursements %}
+      <li>
+        <i class="icon i-magnifying-glass icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <h4><a href="/data/allocated-federal-nonfederal-disbursements/">Allocated federal/nonfederal disbursements</a></h4>
+          <p>Search allocated federal and <span class="term" data-term="nonfederal funds" title="Click to define" tabindex="0">nonfederal</span> disbursements across committee types. Search by spender and recipient name, date and amount spent.</p>
+        </div>
+      </li>
+      {% endif %}
       <li>
         <i class="icon i-magnifying-glass icon--absolute--left"></i>
         <div class="content__section--indent-left">

@@ -9,16 +9,18 @@ from search.views import (
     search_candidates,
     search_committees,
     search_site,
+    policy_guidance_search_site,
     process_site_results,
     prev_offset,
     parse_icon,
-    search
+    search,
+    policy_guidance_search
 )
 
 committee_url = re.compile('/committees')
 candidate_url = re.compile('/candidates/search')
 base_url = re.compile(settings.FEC_API_URL)
-search_url = re.compile('https://search.usa.gov/api/v2/search/i14y')
+search_url = re.compile('https://api.gsa.gov/technology/searchgov/v2/results/i14y')
 
 
 @requests_mock.Mocker()
@@ -145,3 +147,11 @@ class TestViews(TestCase):
         request = self.factory.get('/search?query=abe&type=candidates')
         search(request)
         search_site.assert_not_called()
+        
+    @mock.patch.object(views, 'policy_guidance_search_site')
+    def test_site_policy_guidance_search_site(self, m, policy_guidance_search_site):
+        policy_guidance_search_site.return_value = []
+        request = self.factory.get('/search?query=help&type=site')
+        response = policy_guidance_search(request)
+        policy_guidance_search_site.assert_called_with('help', limit=10, offset=0)
+        self.assertEqual(response.status_code, 200)
