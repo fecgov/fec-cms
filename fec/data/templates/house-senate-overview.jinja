@@ -35,7 +35,7 @@
               </li>
               {% if FEATURES.house_senate_overview_totals %}  
               <li class="side-nav__item">
-                <a class="side-nav__link" href="#totals">Totals for all {{ office | title }} elections</a></li>
+                <a class="side-nav__link" href="#election-totals">Totals for all {{ office | title }} elections</a></li>
               </li>
               {% endif %}
             </ul>
@@ -63,5 +63,10 @@ var context = {{ context_vars | to_json | safe }};
 </script>
 <script src="{{ asset_for_js('dataviz-common.js') }}"></script>
 <script src="{{ asset_for_js('house-senate-overview-across-time.js') }}"></script>
+{%- if FEATURES.house_senate_overview_summary -%}
 <script src="{{ asset_for_js('house-senate-overview-summary.js') }}"></script>
+{%- endif -%}
+{%- if FEATURES.house_senate_overview_totals -%}
+<script src="{{ asset_for_js('house-senate-overview-totals.js') }}"></script>
+{%- endif -%}
 {% endblock %}
