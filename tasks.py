@@ -127,7 +127,7 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
     new_deploy = ctx.run(
         'cf {0} cms -f manifest_{1}.yml'.format(cmd, space),
         echo=True,
-        warn=True,
+        warn=True
     )
 
     if not new_deploy.ok:
@@ -138,7 +138,7 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
         status = ctx.run(
             'cf curl "/v3/deployments?app_guids={}&status_values=ACTIVE"'.format(app_guid_formatted),
             hide=True,
-            warn=True,
+            warn=True
         )
         active_deployments = json.loads(status.stdout).get("pagination").get("total_results")
         # Try to roll back
@@ -159,7 +159,7 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
     add_network_policy = ctx.run(
         'cf add-network-policy proxy cms'.format(cmd, space),  # noqa F523
         echo=True,
-        warn=True,
+        warn=True
     )
     if not add_network_policy.ok:
         print(
