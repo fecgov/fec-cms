@@ -49,7 +49,7 @@
     "moment": "2.29.4",
     "numeral": "^1.5.3",
     "perfect-scrollbar": "0.6.2",
-    "prop-types": "^15.7.2",
+    "prop-types": "^15.8.1",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-input-mask": "^2.0.3",
