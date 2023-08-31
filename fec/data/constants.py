@@ -557,7 +557,21 @@ line_numbers = {
             ('F3X-29', 'Other disbursements (Line 29)'),
             ('F3X-30B', 'Party - Types 3 & 4 Federal Election Activity (FEA) (Line 30b)'),
         ])
-    }
+    },
+    'debts': {
+        'house_senate': OrderedDict([
+            ('F3-9', 'Debts and obligations owed to the committee (Line 9)'),
+            ('F3-10', 'Debts and obligations owed by the committee (Line 10)'),
+        ]),
+        'presidential': OrderedDict([
+            ('F3P-11', 'Debts and obligations owed to the committee (Line 11)'),
+            ('F3P-12', 'Debts and obligations owed by the committee (Line 12)'),
+        ]),
+        'pac_party': OrderedDict([
+            ('F3X-9', 'Debts and obligations owed to the committee (Line 9)'),
+            ('F3X-10', 'Debts and obligations owed by the committee (Line 10)'),
+        ]),
+    },
 }
 
 
