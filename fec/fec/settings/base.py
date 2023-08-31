@@ -69,7 +69,7 @@ FEATURES = {
     'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
-    'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),  # TODO: debts dates
+    'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),
     'h4_allocated_disbursements': bool(env.get_credential('FEC_FEATURE_H4_ALLOCATED_DISBURSEMENTS', True)),
     'house_senate_overview': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW', '')),
     'house_senate_overview_methodology': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_METHODOLOGY', '')),
