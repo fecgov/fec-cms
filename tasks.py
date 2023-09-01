@@ -77,6 +77,7 @@ DEPLOY_RULES = (
     ('dev', lambda _, branch: branch == 'develop'),
     # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
     # ('feature', lambda _, branch: branch == '[BRANCH NAME]'),
+    ('feature', lambda _, branch: branch == 'feature/5816 debts-line_number-filter'),
 )
 
 
