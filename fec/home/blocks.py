@@ -339,8 +339,8 @@ class ExampleForms(blocks.StructBlock):
 
 class LinkBlock(blocks.StructBlock):
     """For links, with text and url"""
-    text = blocks.CharBlock(required=False)
-    url = blocks.URLBlock(required=False)
+    text = blocks.CharBlock()
+    url = blocks.URLBlock()
 
     class Meta:
         icon = 'link'
