@@ -189,3 +189,11 @@ def get_file_type(value):
     file_type = "EXCEL" if xl else file_extension
 
     return file_type
+
+
+@register.filter(name='get_last_path')
+def get_last_path(value):
+    """
+    Returns path after last slash in a URL
+    """
+    return value.split("/")[-1]

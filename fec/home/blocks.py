@@ -97,10 +97,12 @@ class InternalButtonBlock(blocks.StructBlock):
 class FeedDocumentBlock(blocks.StructBlock):
     """A block that is used to construct a feed list of PDFs"""
     title = blocks.CharBlock()
-    document = DocumentChooserBlock()
+    document = DocumentChooserBlock(required=False)
+    external_document = blocks.URLBlock(required=False, help_text='Full url to the document')
 
     class Meta:
         icon = 'doc-empty'
+        help_text = 'Either choose a document or enter an external document URL'
 
 
 class CurrentCommissionersBlock(blocks.StaticBlock):
@@ -337,8 +339,8 @@ class ExampleForms(blocks.StructBlock):
 
 class LinkBlock(blocks.StructBlock):
     """For links, with text and url"""
-    text = blocks.CharBlock()
-    url = blocks.URLBlock()
+    text = blocks.CharBlock(required=False)
+    url = blocks.URLBlock(required=False)
 
     class Meta:
         icon = 'link'
