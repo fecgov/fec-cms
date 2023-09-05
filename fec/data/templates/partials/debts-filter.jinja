@@ -10,8 +10,7 @@
   <div class="filters__inner">
     {{ typeahead.field('committee_id', 'Committee name or ID') }}
     {{ text.field('creditor_debtor_name', 'Creditor/Debtor name') }}
-    {# removing date filter for now, waiting for determination of its usefulness #}
-    {# {{ date.field('date', 'Date') }} #}
+    {{ date.field('coverage_end_date', 'Coverage date range') }}
     {{ range.amount('amount_outstanding_beginning', 'Beginning balance') }}
     {{ range.amount('amount_outstanding_close', 'Ending balance') }}
     <legend class="label  u-margin--top">Debt type</legend>
