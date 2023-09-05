@@ -20,22 +20,51 @@
         {%- endif -%}
       </td>
       <td class="simple-table__cell t-mono">
-{#
-Case 1: committee profile page H4 numbers
-'type' object with a link parameter set to 'allocated-federal-nonfederal-disbursements'
-#}
-      {% if (item[1]['type'] and item[1]['type']['link'] and item[1]['type']['link'] == "allocated-federal-nonfederal-disbursements") %}
-        <a href="/data/{{ item[1]['type']['link'] }}/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}&cycle={{ cycle }}">
-          {{ item[0]|currency }}
+        
+        {#- For debts values / links #}
+        {%- if item[1] and item[1]['type'] and item[1]['type']['link'] and 'debts' in item[1]['type']['link'] and FEATURES['debts'] -%}
+        <a href="/data/debts/?
+        {%- if committee_id -%}
+          committee_id={{ committee_id }}
+        {%- endif -%}
+
+        {#- Add the form numbers -#}
+        {%- if office_or_committee == 'P' -%}
+          &line_number=F3P
+        {%- elif office_or_committee in ['H', 'S'] -%}
+          &line_number=F3
+        {%- else -%}
+          &line_number=F3X
+        {%- endif -%}
+
+        {#- Add the form line numbers -#}
+        {%- if office_or_committee == 'P' and '_to' in item[1]['type']['link'] -%}
+          -11
+        {%- elif office_or_committee == 'P' -%}
+          -12
+        {%- elif '_to' in item[1]['type']['link'] -%}
+          -9
+        {%- else -%}
+          -10
+        {%- endif -%}
+
+        {#- Add the cycle if it exists -#}
+        {%- if cycle -%}
+            &two_year_transaction_period={{ cycle }}&cycle={{ cycle }}
+        {%- endif -%}
+          ">{{- item[0]|currency -}}
         </a>
-{#
-case 2: this page comes from data/candidate/<candidate_id>/ :
-The committee_id is a tuple list(the count < 9). see example below:
-  a)one candidate has only one committee, committee_id=['C00580100'], count=1
-  b)one candidate has more then one committees, ex: committee_id = ['C00496075','C00462069','C00462069']
-    count = 3 (<9)
-#}
-      {% elif item[1]['type'] and committee_id|count < 9 %}
+        {#- End debts values / links #}
+
+
+        {#-
+          this comes from data/candidate/<candidate_id>/ :
+          The committee_id is a tuple list (the count < 9). see example below:
+            a)one candidate has only one committee, committee_id=['C00580100'], count=1
+            b)one candidate has more than one committee, ex: committee_id = ['C00496075','C00462069','C00462069']
+              count = 3 (<9)
+        #}
+        {%- elif item[1]['type'] and committee_id|count < 9 -%}
         <a href="/data/{{ item[1]['type']['link'] }}/?
         {%- for id in committee_id -%}
           committee_id={{ id }}&
@@ -46,35 +75,42 @@ The committee_id is a tuple list(the count < 9). see example below:
         line_number={{ item[1]['type'][office_or_committee] }}">
         {{- item[0]|currency -}}
         </a>
-{#
-Case 3: this page comes from data/committee/<committee_id>/:
-The committee_id is a string, the count=9.
-#}
-      {% elif item[1]['type'] and committee_id|count == 9 %}
+
+
+        {#-
+          this comes from data/committee/<committee_id>/:
+          The committee_id is a string, the count=9.
+        #}
+        {%- elif item[1]['type'] and committee_id|count == 9 -%}
         <a href="/data/{{ item[1]['type']['link'] }}/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}&cycle={{ cycle }}&line_number={{ item[1]['type'][office_or_committee] }}">
           {{- item[0]|currency -}}
         </a>
-{#
-Case 4: for committee profile page.
-not 'type' object, so use 'link' to check for 'independent-expenditures' with q_spender in query string
-#}
-      {% elif (item[1]['link']=="independent-expenditures") and committee_id|count == 9 %}
+
+
+        {#-
+          for committe profile page.
+          not 'type' object, so use 'link' to check for 'independent-expenditures' with q_spender in query string
+        #}
+        {%- elif (item[1]['link']=="independent-expenditures") and committee_id|count == 9 -%}
         <a href="/data/{{ item[1]['link'] }}/?q_spender={{ committee_id }}&two_year_transaction_period={{ cycle }}&cycle={{ cycle }}&is_notice=false&data_type=processed">
           {{- item[0]|currency -}}
         </a>
-{#
-Case 5: for committee profile page.
+
+
+        {#-
+          for committe profile page.
 not 'type' object, so use 'link' to check for 'party-coordinated-expenditure' with committee_id in query string
-#}
-      {% elif (item[1]['link'] == "party-coordinated-expenditures") and committee_id|count == 9 %}
+        #}
+        {%- elif (item[1]['link'] == "party-coordinated-expenditures") and committee_id|count == 9 -%}
         <a href="/data/{{ item[1]['link'] }}/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}&cycle={{ cycle }}">
           {{- item[0]|currency -}}
         </a>
-{#
-Otherwise, don't make it a link
-#}
+
+
         {%- else %}
         {{- item[0]|currency -}}
+
+
         {%- endif %}
       </td>
     </tr>
