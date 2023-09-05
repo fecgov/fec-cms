@@ -33,6 +33,7 @@ class AddSecureHeaders(MiddlewareMixin):
                 "data:",
                 "https://*.ssl.fastly.net",
                 "https://www.google-analytics.com",
+                "https://tiles.stadiamaps.com/tiles/",
             ],
             "script-src": [
                 "'self'",
