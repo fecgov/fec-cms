@@ -251,7 +251,10 @@ StatisticalSummary.prototype.showTable = function() {
 
     case 'pac':
       switch (true) {
-        case this.chosenYear >= 2012:
+        case this.chosenYear >= 2024:
+          liveTable = document.getElementById('type_3');
+          break;
+        case this.chosenYear <= 2022 && this.chosenYear >= 2012:
           liveTable = document.getElementById('type_1');
           break;
         case this.chosenYear <= 2010:
