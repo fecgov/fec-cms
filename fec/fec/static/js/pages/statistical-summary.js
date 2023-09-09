@@ -8,6 +8,14 @@ function StatisticalSummary() {
   this.latest_segment_alert = document.getElementById(
     'js-latest-segment-alert'
   );
+    this.end_periods = {
+    '24': '12-31-',
+    '21': '9-30-',
+    '18': '6-30-',
+    '15': '3-31-',
+    '12': '12-31-',
+    '6': '6-30-'
+  };
 
   //Bind showTable() to change event on any select
   Array.from(this.selects).forEach(select => {
@@ -114,7 +122,10 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
         );
         latestAvailableOption.selected = 'selected';
         this.chosenSegment = latestAvailable;
-        this.displaySegment = latestAvailableOption.text;
+        this.endPeriod = this.end_periods[this.chosenSegment];
+         //actual year is determined by wether the chosen times-period is in the first or second year of the two-year period
+         this.actualYear =
+           this.chosenSegment > 12 ? this.chosenYear : this.chosenYear - 1;
         history.pushState(
           '',
           '',
@@ -126,14 +137,6 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
 
 //Main function that runs on page load and upon any interaction with selects
 StatisticalSummary.prototype.showTable = function() {
-  const end_periods = {
-    '24': '12-31-',
-    '21': '9-30-',
-    '18': '6-30-',
-    '15': '3-31-',
-    '12': '12-31-',
-    '6': '6-30-'
-  };
 
   this.chooseYear = document.getElementById('year');
   this.chosenYear = this.chooseYear.value;
@@ -143,11 +146,8 @@ StatisticalSummary.prototype.showTable = function() {
 
   this.chooseSegment = document.getElementById('segment');
   this.chosenSegment = this.chooseSegment.value;
-  this.displaySegment = this.chooseSegment.options[
-    this.chooseSegment.selectedIndex
-  ].text;
 
-  this.endPeriod = end_periods[this.chosenSegment];
+  this.endPeriod = this.end_periods[this.chosenSegment];
 
   //actual year is determined by wether the chosen times-period is in the first or second year of the two-year period
   this.actualYear =
