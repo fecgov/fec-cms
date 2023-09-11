@@ -112,7 +112,7 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
         this.latest_segment_alert.textContent =
           latestAvailableOption.text +
           ' is the latest available option for ' +
-          this.chosenYear;
+          this.displayYear;
         this.latest_segment_alert.classList.add(
           'message--mini',
           'message',
@@ -162,12 +162,12 @@ StatisticalSummary.prototype.showTable = function() {
     'message--alert'
   );
 
-  const thisYear = this.chooseYear.options[0].value;
+  const latestYear = this.chooseYear.options[0].value;
 
-  //Fire handleLatestAvailableOption() if user selects this year's select option or a URL has this year in querysting year parameter
+  //Fire handleLatestAvailableOption() if user selects the latestYear's select option or pastes a URL has the latestYear in querysting year parameter
 
-  //apply latestAvailableOption to both the first and second year of the latest two-year period
-  if (this.chosenYear == thisYear || this.chosenYear - 1 == thisYear) {
+  //apply latestAvailableOption to the latest two-year period
+  if (this.chosenYear == latestYear) {
     this.handleLatestAvailableOption();
   } else {
     for (var i = 0; i < this.chooseSegment.options.length; i++) {
