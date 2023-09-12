@@ -8,6 +8,14 @@ function StatisticalSummary() {
   this.latest_segment_alert = document.getElementById(
     'js-latest-segment-alert'
   );
+    this.end_periods = {
+    '24': '12-31-',
+    '21': '9-30-',
+    '18': '6-30-',
+    '15': '3-31-',
+    '12': '12-31-',
+    '6': '6-30-'
+  };
 
   //Bind showTable() to change event on any select
   Array.from(this.selects).forEach(select => {
@@ -104,7 +112,7 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
         this.latest_segment_alert.textContent =
           latestAvailableOption.text +
           ' is the latest available option for ' +
-          this.chosenYear;
+          this.displayYear;
         this.latest_segment_alert.classList.add(
           'message--mini',
           'message',
@@ -114,7 +122,10 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
         );
         latestAvailableOption.selected = 'selected';
         this.chosenSegment = latestAvailable;
-        this.displaySegment = latestAvailableOption.text;
+        this.endPeriod = this.end_periods[this.chosenSegment];
+         //actual year is determined by wether the chosen times-period is in the first or second year of the two-year period
+         this.actualYear =
+           this.chosenSegment > 12 ? this.chosenYear : this.chosenYear - 1;
         history.pushState(
           '',
           '',
@@ -126,14 +137,6 @@ StatisticalSummary.prototype.handleLatestAvailableOption = function() {
 
 //Main function that runs on page load and upon any interaction with selects
 StatisticalSummary.prototype.showTable = function() {
-  const end_periods = {
-    '24': '12-31-',
-    '21': '9-30-',
-    '18': '6-30-',
-    '15': '3-31-',
-    '12': '12-31-',
-    '6': '6-30-'
-  };
 
   this.chooseYear = document.getElementById('year');
   this.chosenYear = this.chooseYear.value;
@@ -143,11 +146,8 @@ StatisticalSummary.prototype.showTable = function() {
 
   this.chooseSegment = document.getElementById('segment');
   this.chosenSegment = this.chooseSegment.value;
-  this.displaySegment = this.chooseSegment.options[
-    this.chooseSegment.selectedIndex
-  ].text;
 
-  this.endPeriod = end_periods[this.chosenSegment];
+  this.endPeriod = this.end_periods[this.chosenSegment];
 
   //actual year is determined by wether the chosen times-period is in the first or second year of the two-year period
   this.actualYear =
@@ -162,12 +162,12 @@ StatisticalSummary.prototype.showTable = function() {
     'message--alert'
   );
 
-  const thisYear = this.chooseYear.options[0].value;
+  const latestYear = this.chooseYear.options[0].value;
 
-  //Fire handleLatestAvailableOption() if user selects this year's select option or a URL has this year in querysting year parameter
+  //Fire handleLatestAvailableOption() if user selects the latestYear's select option or pastes a URL has the latestYear in querysting year parameter
 
-  //apply latestAvailableOption to both the first and second year of the latest two-year period
-  if (this.chosenYear == thisYear || this.chosenYear - 1 == thisYear) {
+  //apply latestAvailableOption to the latest two-year period
+  if (this.chosenYear == latestYear) {
     this.handleLatestAvailableOption();
   } else {
     for (var i = 0; i < this.chooseSegment.options.length; i++) {
@@ -251,7 +251,10 @@ StatisticalSummary.prototype.showTable = function() {
 
     case 'pac':
       switch (true) {
-        case this.chosenYear >= 2012:
+        case this.chosenYear >= 2024:
+          liveTable = document.getElementById('type_3');
+          break;
+        case this.chosenYear <= 2022 && this.chosenYear >= 2012:
           liveTable = document.getElementById('type_1');
           break;
         case this.chosenYear <= 2010:
