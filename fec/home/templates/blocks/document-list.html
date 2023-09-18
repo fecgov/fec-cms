@@ -5,7 +5,11 @@
 {% for block in self %}
   <div class="post">
     <h3>{{ block.title }}</h3>
-    <p class="t-sans post__doc"><a href="{{ block.document.url }}">{{ block.document.title }}</a> | {{ block.document.url | get_file_type }}</p>
+    {% if block.document %}
+    <p class="t-sans post__doc"><a href="{{ block.document.url }}">{{ block.document.title}}</a> | {{ block.document.url | get_file_type }}</p>
+    {% elif block.external_document %}
+      <p class="t-sans post__doc"><a href="{{ block.external_document }}">{{ block.title }} </a> | {{ block.external_document | get_file_type }} </p>
+    {% endif %}
   </div>
 {% endfor %}
 </div>
