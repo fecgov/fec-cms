@@ -13,7 +13,7 @@
     <header class="heading--main heading--with-date">
       <ul class="tags">
         <li class="tag tag--secondary t-upper">
-          {{ self.category }}
+     <a href="{{self.get_parent.url}}?category={{ self.category | cms_query_syntax }}&year={{ self.date | date:'Y' }}">{{ self.category }}</a>
         </li>
       </ul>
       <div class="row">

@@ -189,3 +189,10 @@ def get_file_type(value):
     file_type = "EXCEL" if xl else file_extension
 
     return file_type
+
+
+@register.filter(name='cms_query_syntax')
+def cms_query_syntax(string):
+    query = string.replace(' ', '+').lower()
+
+    return query
