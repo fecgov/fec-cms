@@ -18,9 +18,11 @@
       </ul>
       <div class="row">
         {% spaceless %}{# for inline blocks #}
-        <h1 class="heading__left">{% formatted_title self %}</h1>
+      <h1 class="heading__left"><a href="{{ self.file_url }}">{% formatted_title self %}</a></h1>
         <div class="heading__right">
-          <span class="t-sans">{{ self.display_date }}</span>
+          <span class="t-sans">{{ self.display_date }} |
+         <a href="{{ self.file_url }}">{{ self.extension }}</a>{% if self.size %} | ({{ self.size }}){% endif %}</span>
+
         </div>
         {% endspaceless %}
       </div>
