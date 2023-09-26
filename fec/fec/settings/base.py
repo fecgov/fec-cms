@@ -81,10 +81,6 @@ FEATURES = {
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
 }
 
-# Set Debts to true if not Production
-if FEC_CMS_ENVIRONMENT != ENVIRONMENTS['prod']:
-    FEATURES['debts'] = True
-
 # Set feature flags to True for local
 if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['adrs'] = True
