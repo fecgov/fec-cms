@@ -135,6 +135,14 @@
     position: relative;
   }
 
+  .cycle-select + .data-container__export {
+    margin-top: 30px;
+
+    .button--export {
+      height: 3.6rem;
+    }
+  }
+
   .data-container__message {
     display: inline-block;
     margin: 0 u(1rem) 0 0;
