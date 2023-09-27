@@ -23,7 +23,7 @@ new Calendar({
   download: '#calendar-download',
   subscribe: '#calendar-subscribe',
   url: calendarHelpers.getUrl(['calendar-dates']),
-  exportUrl: calendarHelpers.getUrl(['calendar-dates', 'export']),
+  exportUrl: calendarHelpers.calendarDownload(['calendar-dates', 'export']),
   subscribeUrl: calendarHelpers.getUrl(['calendar-dates', 'export'], '', [
     'sub'
   ]),
