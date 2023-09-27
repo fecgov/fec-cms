@@ -34,8 +34,6 @@ FEC_SERVICE_NOW_USERNAME = env.get_credential('FEC_SERVICE_NOW_USERNAME')
 FEC_SERVICE_NOW_PASSWORD = env.get_credential('FEC_SERVICE_NOW_PASSWORD')
 # Search.gov website keys
 SEARCHGOV_BASE_API_URL = env.get_credential('SEARCHGOV_BASE_API_URL', '')
-SEARCHGOV_DRAWER_HANDLE = env.get_credential('SEARCHGOV_DRAWER_HANDLE', '')
-SEARCHGOV_DRAWER_KEY_MAIN = env.get_credential('SEARCHGOV_DRAWER_KEY_MAIN', '')
 SEARCHGOV_API_ACCESS_KEY = env.get_credential('SEARCHGOV_API_ACCESS_KEY')
 SEARCHGOV_POLICY_GUIDANCE_KEY = env.get_credential('SEARCHGOV_POLICY_GUIDANCE_KEY')
 
@@ -70,14 +68,15 @@ FEATURES = {
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
     'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),  # TODO: debts dates
-    'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
-    'pac_party': bool(env.get_credential('FEC_FEATURE_PAC_PARTY', '')),
-    'pac_snapshot': bool(env.get_credential('FEC_FEATURE_PAC_SNAPSHOT', '')),
-    'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
+    'h4_allocated_disbursements': bool(env.get_credential('FEC_FEATURE_H4_ALLOCATED_DISBURSEMENTS', True)),
     'house_senate_overview': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW', '')),
     'house_senate_overview_methodology': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_METHODOLOGY', '')),
     'house_senate_overview_summary': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_SUMMARY', '')),
     'house_senate_overview_totals': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_TOTALS', '')),
+    'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
+    'pac_party': bool(env.get_credential('FEC_FEATURE_PAC_PARTY', '')),
+    'pac_snapshot': bool(env.get_credential('FEC_FEATURE_PAC_SNAPSHOT', '')),
+    'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
 }
 
 # Set feature flags to True for local
@@ -92,6 +91,7 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['pac_party'] = True
     FEATURES['pac_snapshot'] = True
     FEATURES['presidential_map'] = True
+    FEATURES['h4_allocated_disbursements'] = True
     FEATURES['house_senate_overview'] = True
     FEATURES['house_senate_overview_methodology'] = True
     FEATURES['house_senate_overview_summary'] = True
@@ -105,6 +105,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
 
     'django_jinja',
 

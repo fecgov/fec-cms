@@ -48,6 +48,7 @@ class ContactItemBlock(blocks.StructBlock):
         ('hand', 'Hand delivery'),
         ('phone', 'Phone'),
         ('mail', 'Mail'),
+        ('map-pin', 'Map pin'),
         ('github', 'Github'),
         ('question-bubble', 'Question')
     ], required=True)
@@ -96,10 +97,12 @@ class InternalButtonBlock(blocks.StructBlock):
 class FeedDocumentBlock(blocks.StructBlock):
     """A block that is used to construct a feed list of PDFs"""
     title = blocks.CharBlock()
-    document = DocumentChooserBlock()
+    document = DocumentChooserBlock(required=False)
+    external_document = blocks.URLBlock(required=False, help_text='Full url to the document')
 
     class Meta:
         icon = 'doc-empty'
+        help_text = 'Either choose a document or enter an external document URL'
 
 
 class CurrentCommissionersBlock(blocks.StaticBlock):
@@ -187,6 +190,26 @@ class CustomTableBlock(blocks.StructBlock):
         icon = 'table'
 
 
+class ReportingTableBlock(blocks.StructBlock):
+    """A custom table
+    """
+    reporting_table_options = {
+        'startRows': 1,
+        'startCols': 6,
+        'colHeaders': False,
+        'rowHeaders': False,
+        'height': 108,
+        'language': 'en',
+        'renderer': 'html'
+    }
+
+    table = TableBlock(table_options=reporting_table_options)
+
+    class Meta:
+        template = 'blocks/reporting-dates-table-block.html'
+        icon = 'table'
+
+
 class ExampleImage(blocks.StructBlock):
     """Creates an example module with an image and a caption, side-by-side
     Typically used for showing reporting Examples
@@ -211,8 +234,14 @@ class ExampleParagraph(blocks.StructBlock):
 
 class EmployeeTitle(blocks.StructBlock):
     title = blocks.StreamBlock([
-        ('html_title', blocks.RawHTMLBlock(
-            blank=True, required=False, help_text='For footnote on title, use html block with &lt;sup&gt;1&lt;/sup&gt;')),
+        (
+            'html_title',
+            blocks.RawHTMLBlock(
+                blank=True,
+                required=False,
+                help_text='For footnote on title, use html block with &lt;sup&gt;1&lt;/sup&gt;'
+            )
+        ),
         ('text_title', blocks.CharBlock(blank=True, required=False)),
         ], blank=True, required=False)
 

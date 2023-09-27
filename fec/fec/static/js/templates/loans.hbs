@@ -11,7 +11,7 @@ This shows all the fields available on the Schedule C form.
       <a href="{{basePath}}/committee/{{committee_id}}">{{committee.name}}</a>
     {{/panelRow}}
     {{#panelRow "Committee city and state"}}
-      {{committee.city}}, {{committee.state}}, {{committee.zip}}
+      {{committee.city}}, {{committee.state}}  {{zipCode committee.zip}}
     {{/panelRow}}
   </table>
 </div>

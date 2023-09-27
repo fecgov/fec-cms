@@ -138,7 +138,7 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
         status = ctx.run(
             'cf curl "/v3/deployments?app_guids={}&status_values=ACTIVE"'.format(app_guid_formatted),
             hide=True,
-            warn=True,
+            warn=True
         )
         active_deployments = json.loads(status.stdout).get("pagination").get("total_results")
         # Try to roll back

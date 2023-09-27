@@ -14,8 +14,8 @@ describe('helpers', function() {
     it('should create a query object from context and per page length', function() {
       var context = {};
       var perPage = 99;
-      var results = helpers.buildTableQuery(context, {per_page: perPage});
-      var expected = {per_page: perPage, sort_hide_null: true};
+      var results = helpers.buildTableQuery(context, { per_page: perPage });
+      var expected = { per_page: perPage, sort_hide_null: true };
 
       expect(results).to.be.a('object');
       expect(results).to.deep.equal(expected);
@@ -26,7 +26,7 @@ describe('helpers', function() {
     it('should create a query object from context use default page length', function() {
       var context = {};
       var results = helpers.buildTableQuery(context);
-      var expected = {per_page: 100, sort_hide_null: true};
+      var expected = { per_page: 100, sort_hide_null: true };
 
       expect(results).to.be.a('object');
       expect(results).to.deep.equal(expected);
@@ -71,7 +71,7 @@ describe('helpers', function() {
 
         expect(link).to.be.a('string');
         expect(link).contains('#');
-        expect(link).to.equal(anchorLink)
+        expect(link).to.equal(anchorLink);
       });
     });
 
@@ -162,7 +162,7 @@ describe('helpers', function() {
     });
 
     it('formats a pretty date if specified', function() {
-      var date = helpers.datetime('2017-12-25', {hash: {format: 'pretty'}});
+      var date = helpers.datetime('2017-12-25', { hash: { format: 'pretty' } });
       expect(date).to.equal('December 25, 2017');
     });
   });
@@ -192,5 +192,24 @@ describe('helpers', function() {
       window.innerWidth = 400;
       expect(helpers.isMediumScreen()).to.be.false;
     });
+  });
+});
+
+describe('formatZipCode', function() {
+  it('should add dashes to nine-digit numbers and strings of numbers', function() {
+    expect(helpers.formatZipCode(123456789)).to.equal('12345-6789');
+    expect(helpers.formatZipCode('123456789')).to.equal('12345-6789');
+  });
+
+  it('should return what it\'s given', function() {
+    expect(helpers.formatZipCode(12345)).to.equal(12345);
+    expect(helpers.formatZipCode('12345')).to.equal('12345');
+    expect(helpers.formatZipCode(123456)).to.equal(123456);
+    expect(helpers.formatZipCode('1234567')).to.equal('1234567');
+    expect(helpers.formatZipCode('1234567.1')).to.equal('1234567.1');
+    expect(helpers.formatZipCode('12345678.6')).to.equal('12345678.6');
+    expect(helpers.formatZipCode('1234567890.6')).to.equal('1234567890.6');
+    expect(helpers.formatZipCode('I2E4S6TB9')).to.equal('I2E4S6TB9');
+    expect(helpers.formatZipCode('012345678')).to.equal('012345678');
   });
 });

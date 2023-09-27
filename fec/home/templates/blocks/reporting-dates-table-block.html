@@ -1,0 +1,20 @@
+{% load table_block_tags %}
+{% load wagtailcore_tags %}
+
+<table class="simple-table simple-table--display simple-table-cms election-dates-table">
+{% for row in self.table.data %}
+ {% if forloop.first %}
+    <tr>
+    {% for cell in row %}
+    <th>{{ cell | safe }}</th>
+      {% endfor %}
+    </tr>
+ {% else %}
+    <tr>
+    {% for cell in row %}
+    <td>{{ cell | safe }}</td>
+      {% endfor %}
+    </tr>
+ {% endif %}
+{% endfor %}
+</table>

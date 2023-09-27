@@ -19,6 +19,13 @@ function hydrate() {
   });
 }
 
+/**
+ * Called to start a new download and will add the "Your downloads" window if needed
+ * @param {string} url
+ * @param {Boolean[]} init
+ * @param {Boolean[]} focus
+ * @returns {DownloadItem}
+ */
 function download(url, init, focus) {
   var container = DownloadContainer.getInstance(document.body);
   var item = new DownloadItem(url, container);
