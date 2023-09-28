@@ -4,7 +4,16 @@
 {% load static %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
+
+
 {% block content %}
+
+<!--{% if "reports-about-fec" in request.path and page.content_type.model == "documentpage" and self.file_url %}
+    <meta http-equiv="refresh" content="0; url={% include_block self.file_url %}">
+{% endif %} -->
+
+
+
 
 {% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
 
@@ -13,15 +22,22 @@
     <header class="heading--main heading--with-date">
       <ul class="tags">
         <li class="tag tag--secondary t-upper">
-     <a href="{{self.get_parent.url}}?category={{ self.category | cms_query_syntax }}&year={{ self.date | date:'Y' }}">{{ self.category }}</a>
+     <a href="{{self.get_parent.url}}?category={{ self.category | cms_query_syntax }}">{{ self.category }}</a>
         </li>
       </ul>
       <div class="row">
         {% spaceless %}{# for inline blocks #}
-      <h1 class="heading__left"><a href="{{ self.file_url }}">{% formatted_title self %}</a></h1>
+      <h1 class="heading__left">{% if self.file_url %}<a href="{{ self.file_url }}">{% formatted_title self %}</a>
+      {% else %}
+       {% formatted_title self %}
+      {% endif %}</h1>
         <div class="heading__right">
           <span class="t-sans">{{ self.display_date }} |
-         <a href="{{ self.file_url }}">{{ self.extension }}</a>{% if self.size %} | ({{ self.size }}){% endif %}</span>
+        {% if self.file_url %} <a href="{{ self.file_url }}">{{ self.extension }}</a>
+        {% else %}
+          {{ self.extension }}
+        {% endif %}
+        {% if self.size %} | ({{ self.size }}){% endif %}</span>
 
         </div>
         {% endspaceless %}
@@ -33,5 +49,15 @@
 </article>
 
 {% include 'partials/disclaimer.html' %}
+<script>
+// document.getElementsByClassName('main')[0].insertAdjacentHTML("beforebegin", "<p>You will be directed</p>")
+// setTimeout(() => {
+// var meta = document.createElement('meta');
+// meta.httpEquiv = "refresh" ;
+// meta.content = "3; url={% include_block self.file_url %}";
+// document.getElementsByTagName('head')[0].appendChild(meta);
+// }, "0");
+
+</script>
 
 {% endblock %}
