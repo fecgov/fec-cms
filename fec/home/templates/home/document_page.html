@@ -22,9 +22,14 @@
         <div class="heading__right">
           <span class="t-sans">{{ self.display_date }}</span>
         </div>
-        {% endspaceless %}
-      </div>
+       {% endspaceless %}
+      </div>       
     </header>
+    <p class="t-sans t-normal">
+      <i class="icon icon--inline--right icon--inline--left i-document"></i>{% if self.file_url %}<a href="{{ self.file_url }}">{{ self.title}}</a>{% endif %}
+      {% if self.extension %} | ({{ self.extension }}){% endif %}
+      {% if self.size %} | ({{ self.size }}){% endif %}
+    </p>
     <div class="main__content">
       {% include 'partials/body-blocks.html' with blocks=self.body %}
     </div>
