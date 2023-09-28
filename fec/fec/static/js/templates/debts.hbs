@@ -3,7 +3,6 @@ Template for Debts datatable details panel
 ---------------------
 This shows fields available on the Schedule D form.
 --}}
-
 <div class="panel__row">
   <h4 class="panel__title">Committee information</h4>
   <table>
@@ -43,7 +42,7 @@ This shows fields available on the Schedule D form.
   <h4 class="panel__title">Debt information</h4>
   <table>
     {{#panelRow "Nature of debt"}}
-      {{{nature_of_debt}}}
+      {{nature_of_debt}}
     {{/panelRow}}
     {{#panelRow "Date"}}
       {{{datetime coverage_start_date format="pretty"}}}
