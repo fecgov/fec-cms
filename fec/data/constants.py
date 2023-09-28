@@ -883,8 +883,9 @@ CASH_FORMATTER = OrderedDict([
     ('last_cash_on_hand_end_period',
         {'label': 'Ending cash on hand', 'term': 'ending cash on hand', 'level': '2'}),  # F3, F3P, #F3X
     ('last_debts_owed_to_committee',
-        {'label': 'Debts/loans owed to committee', 'level': '2'}),  # F3, F3P, F3X
-    ('last_debts_owed_by_committee', {'label': 'Debts/loans owed by committee', 'level': '2'}),  # F3, F3P, F3X
+        {'label': 'Debts/loans owed to committee', 'level': '2', 'type': {'link': 'debts_to'}}),  # F3, F3P, F3X
+    ('last_debts_owed_by_committee',
+        {'label': 'Debts/loans owed by committee', 'level': '2', 'type': {'link': 'debts_by'}}),  # F3, F3P, F3X
     # Commenting out net numbers because the underlying logic is incorrect
     # ('net_contributions', {'label': 'Net contributions', 'level': '2'}), #F3, F3X
     # ('contributions', {'label': 'Total contributions', 'level': '3'}), #F3, #F3P, F3X
