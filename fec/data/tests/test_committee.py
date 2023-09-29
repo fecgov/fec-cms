@@ -452,7 +452,7 @@ class TestCommittee(TestCase):
                 },
             ),
             (1000, {"label": "Debts/loans owed to committee", "level": "2"}),
-            (5000, {"label": "Debts/loans owed by committee", "level": "2"}),
+            (5000, {"label": "Debts/loans owed by committee", "level": "2", "type": {"link": "debts"}}),
         ]
 
     def test_host_f3x_summary_returns_standard_values(

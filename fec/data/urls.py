@@ -62,7 +62,6 @@ if settings.FEATURES.get('pac_party'):
     )
 
 if settings.FEATURES.get('debts'):
-    # Debts section TODO: debts dates
     urlpatterns.append(
         re_path(r'^data/debts/$', views_datatables.debts)
     )

@@ -1,5 +1,6 @@
 <section class="row" id="loans-debts" aria-hidden="true" role="tabpanel">
-  <h2>Loans</h2>
+  <h2>Loans{% if FEATURES.debts %} and debts{% endif %}
+  </h2>
   <h3>Search or browse data</h3>
   <div class="content__section--ruled-responsive t-sans">
     <ul>
@@ -10,6 +11,15 @@
           <p>Search loans owed by or to committees. Search by committee, loaner’s name, date the loan was incurred, original loan amount and payments made.</p>
         </div>
       </li>
+      {% if FEATURES.debts %}
+      <li>
+        <i class="icon i-magnifying-glass icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <h4><a href="/data/debts/">Debts</a></h4>
+          <p>Search debts owed by committees. Search by committee, creditor/debtor’s name, coverage date, beginning balance and ending balance.</p>
+        </div>
+      </li>
+      {% endif %}
     </ul>
   </div>
 </section>

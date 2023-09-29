@@ -462,7 +462,7 @@ table_columns = OrderedDict([
         ['Spender', 'Support/Oppose', 'Candidate', 'Description', 'Payee', 'Expenditure date', 'Amount']),
     ('individual-contributions', ['Contributor name', 'Recipient', 'State', 'Employer', 'Receipt date', 'Amount']),
     ('loans', ['Committee Name', 'Loaner name', 'Incurred date', 'Payment to date', 'Original loan amount']),
-    ('debts', ['Committee Name', 'Creditor/Debtor Name', 'Beginning Balance', 'Ending Balance']),
+    ('debts', ['Committee Name', 'Creditor/Debtor Name', 'Beginning Balance', 'Ending Balance', 'Coverage end date']),
     ('party-coordinated-expenditures', ['Spender', 'Candidate', 'Payee name', 'Expenditure date', 'Amount']),
     ('receipts', ['Source name', 'Recipient', 'Election', 'State', 'Receipt date', 'Amount']),
     ('reports-presidential',
@@ -870,7 +870,8 @@ CASH_FORMATTER = OrderedDict([
         {'label': 'Ending cash on hand', 'term': 'ending cash on hand', 'level': '2'}),  # F3, F3P, #F3X
     ('last_debts_owed_to_committee',
         {'label': 'Debts/loans owed to committee', 'level': '2'}),  # F3, F3P, F3X
-    ('last_debts_owed_by_committee', {'label': 'Debts/loans owed by committee', 'level': '2'}),  # F3, F3P, F3X
+    ('last_debts_owed_by_committee',
+        {'label': 'Debts/loans owed by committee', 'level': '2', 'type': {'link': 'debts'}}),  # F3, F3P, F3X
     # Commenting out net numbers because the underlying logic is incorrect
     # ('net_contributions', {'label': 'Net contributions', 'level': '2'}), #F3, F3X
     # ('contributions', {'label': 'Total contributions', 'level': '3'}), #F3, #F3P, F3X
