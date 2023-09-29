@@ -77,6 +77,7 @@ DEPLOY_RULES = (
     ('dev', lambda _, branch: branch == 'develop'),
     # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
     # ('feature', lambda _, branch: branch == '[BRANCH NAME]'),
+    ('feature', lambda _, branch: branch == 'feature/4413-debts-datatable'),
 )
 
 
@@ -126,7 +127,7 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
     new_deploy = ctx.run(
         'cf {0} cms -f manifest_{1}.yml'.format(cmd, space),
         echo=True,
-        warn=True
+        warn=True,
     )
 
     if not new_deploy.ok:
@@ -158,7 +159,7 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
     add_network_policy = ctx.run(
         'cf add-network-policy proxy cms'.format(cmd, space),  # noqa F523
         echo=True,
-        warn=True
+        warn=True,
     )
     if not add_network_policy.ok:
         print(
