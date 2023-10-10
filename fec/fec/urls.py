@@ -14,6 +14,12 @@ from wagtail.contrib.sitemaps.views import sitemap
 from home import views as home_views
 from search import views as search_views
 
+# ############# NEW ############
+import re
+from django.contrib.sitemaps import Sitemap
+from wagtail.documents.models import Document
+from home.models import DocumentPage
+# ############# /END NEW ############
 
 urlpatterns = [
     re_path(
@@ -53,6 +59,78 @@ urlpatterns = [
         ),
     ),
 ]
+
+
+# ########### NEW ################
+
+class FormsSitemap(Sitemap):
+    changefreq = "never"
+    priority = 0.5
+    protocol = 'https'
+
+    def items(self):
+        return Document.objects.filter(file__icontains="fecfrm")
+
+    def location(self, obj):
+        # THIS ONE WORKS LOCALLY RESOLVING TO `MEDIA`, TEST ON DEV TO SEE IF IT RESOLVES TO `DEFAULT_FILE_STORAGE`
+        return obj.file.url
+        # WORKS
+        # return '/resources/cms_content/'+str(obj.file)
+        # return str(obj.file).replace('documents/', '/resources/cms_content/documents/')
+
+    def lastmod(self, obj):
+        return obj.created_at
+
+
+urlpatterns += [
+
+    re_path(
+        r'^sitemap-forms\.xml/$',
+        sitemap,
+        {"sitemaps": {'forms': FormsSitemap()}},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
+]
+
+# #################
+
+
+class ReportsSitemap(Sitemap):
+    changefreq = "never"
+    priority = 0.5
+    protocol = 'https'
+
+    def items(self):
+        return DocumentPage.objects.live()
+
+    def location(self, obj):
+        # loc = obj.file_url.replace('https://www.fec.gov', '') if obj.file_url else obj.url_path.replace('/home', '')
+        loc = re.sub(r'https:\/\/(www|beta)\.fec\.gov', '', obj.file_url) \
+            if obj.file_url \
+            else obj.url_path.replace('/home', '')
+
+        # 'http://127.0.0.1:8000https://www.fec.gov/resources/cms-content/documents/2012WorkPlan.pdf'
+        return loc
+
+    def lastmod(self, obj):
+        return obj.date
+
+    # Not a thing
+    def description(self, obj):
+        return obj.page_title
+
+
+urlpatterns += [
+
+    re_path(
+        r'^sitemap-reports\.xml/$',
+        sitemap,
+        {"sitemaps": {'reports': ReportsSitemap()}},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
+]
+
+# ################# /END NEW ################
 
 
 if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
