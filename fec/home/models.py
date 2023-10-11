@@ -661,7 +661,12 @@ class CustomPage(Page):
     ]
 
 # Adds a settings choice-field for conditionally adding a JS script to a CustomPage
-    conditional_js = models.CharField(max_length=255, choices=constants.conditional_js.items(), blank=True, null=True, help_text='Choose a JS script to add only to this page')
+    conditional_js = models.CharField(max_length=255,
+                                      choices=constants.conditional_js.items(),
+                                      blank=True,
+                                      null=True,
+                                      help_text='Choose a JS script to add \
+                                        only to this page')
     # Adds a settings field for making a custom title that displays in the Wagtail page explorer
     menu_title = models.CharField(max_length=255, blank=True)
     settings_panels = Page.settings_panels + [
@@ -923,7 +928,7 @@ class ResourcePage(Page):
     ], null=True, blank=True, use_json_field=True)
     sections = StreamField([
         ('sections', ResourceBlock())
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
     citations = StreamField([
         ('citations', blocks.ListBlock(CitationsBlock()))
     ], null=True, blank=True, use_json_field=True)
@@ -1342,13 +1347,23 @@ class OfficePage(Page):
             ('employee', blocks.StructBlock([
                 ('employee_name', blocks.CharBlock(blank=True, required=False)),
                 ('employee_title', EmployeeTitle(blank=True,  required=False,
-                                                 help_text='<b style="color:green">For footnote on title, use html block with &lt;sup&gt;1&lt;/sup&gt;</b>')),
-                ('employee_image', ImageChooserBlock(blank=True, required=False)),
-                ('employee_bio', blocks.RichTextBlock(blank=True, required=False)),
+                                                 help_text='<b style=\
+                                                 "color:green">For footnote \
+                                                 on title, use html block \
+                                                 with &lt;sup&gt;1&lt;/sup&gt;\
+                                                 </b>')),
+                ('employee_image', ImageChooserBlock(blank=True,
+                                                     required=False)),
+                ('employee_bio', blocks.RichTextBlock(blank=True,
+                                                      required=False)),
             ], blank=True, required=False, null=True, default=[])),
             ('contact_info', ContactInfoBlock(blank=True)),
             ('extra_info', blocks.StreamBlock([
-                ('html', blocks.RawHTMLBlock(blank=True, required=False, help_text='<b style="color:green">For footnote, use &lt;sup&gt;1&lt;/sup&gt;</b>')),
+                ('html', blocks.RawHTMLBlock(blank=True, required=False,
+                                             help_text='<b style=\
+                                             "color:green">For footnote,\
+                                             use &lt;sup&gt;1&lt;/sup&gt;\
+                                             </b>')),
                 ('text', blocks.RichTextBlock(blank=True, required=False)),
              ], blank=True, required=False, null=True,
                     help_text='Use for sub-offices, staff-lists, footnotes or \
@@ -1372,7 +1387,8 @@ class ReportingDatesTable(Page):
         ('html', blocks.RawHTMLBlock()),
         ('internal_button', InternalButtonBlock()),
         ('external_button', ExternalButtonBlock()),
-        ('dates_table', ReportingTableBlock(blank=True, required=False,form_classname='title')),
+        ('dates_table', ReportingTableBlock(blank=True, required=False,
+                                            form_classname='title')),
     ], blank=True, null=True, use_json_field=True, collapsed=False)
 
     footnotes = StreamField([
@@ -1387,7 +1403,9 @@ class ReportingDatesTable(Page):
             ])))
         ], blank=True))
     ], blank=True, use_json_field=True)
-    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))], null=True, blank=True)
+    citations = StreamField([('citations',
+                              blocks.ListBlock(CitationsBlock()))],
+                            null=True, blank=True, use_json_field=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('reporting_dates_table'),
