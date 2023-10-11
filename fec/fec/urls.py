@@ -73,10 +73,17 @@ class FormsSitemap(Sitemap):
 
     def location(self, obj):
         # THIS ONE WORKS LOCALLY RESOLVING TO `MEDIA`, TEST ON DEV TO SEE IF IT RESOLVES TO `DEFAULT_FILE_STORAGE`
-        return obj.file.url
+        # UPDATE^^: RETURNS THIS ON DEV: \
+        # `https://dev.fec.govhttps://fec-dev-proxy.app.cloud.gov/resources/cms-content/documents/fecfrm2sf.pdf`
+        # return obj.file.url
+
         # WORKS
         # return '/resources/cms_content/'+str(obj.file)
         # return str(obj.file).replace('documents/', '/resources/cms_content/documents/')
+
+        # THIS ONE SHOULD REMOVE THE `https://fec-dev-proxy.app.cloud.gov` ABOVE, ON DEV...NEED TO PUSH TO TEST
+        loc = re.sub(r'^[^:]+:\/\/[^/?#]+', '', obj.file.url)
+        return loc
 
     def lastmod(self, obj):
         return obj.created_at
