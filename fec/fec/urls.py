@@ -72,16 +72,16 @@ class FormsSitemap(Sitemap):
         return Document.objects.filter(file__icontains="fecfrm")
 
     def location(self, obj):
-        # THIS ONE WORKS LOCALLY RESOLVING TO `MEDIA`, TEST ON DEV TO SEE IF IT RESOLVES TO `DEFAULT_FILE_STORAGE`
+        # WORKS BUT: WORKS LOCALLY RESOLVING TO `MEDIA`, TEST ON DEV TO SEE IF IT RESOLVES TO `DEFAULT_FILE_STORAGE`
         # UPDATE^^: RETURNS THIS ON DEV: \
         # `https://dev.fec.govhttps://fec-dev-proxy.app.cloud.gov/resources/cms-content/documents/fecfrm2sf.pdf`
         # return obj.file.url
 
-        # WORKS
+        # WORKS: RETURNS JUST THE FILE THEN CONCATENATES THE PATH TO IT
         # return '/resources/cms_content/'+str(obj.file)
         # return str(obj.file).replace('documents/', '/resources/cms_content/documents/')
 
-        # THIS ONE SHOULD REMOVE THE `https://fec-dev-proxy.app.cloud.gov` ABOVE, ON DEV...NEED TO PUSH TO TEST
+        # WORKS: THIS ONE REMOVES THE `https://fec-dev-proxy.app.cloud.gov` , TESTED ON DEV
         loc = re.sub(r'^[^:]+:\/\/[^/?#]+', '', obj.file.url)
         return loc
 
