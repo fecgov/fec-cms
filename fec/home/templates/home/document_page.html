@@ -27,7 +27,7 @@
     </header>
     <p class="t-sans t-normal">
       {% if self.file_url %}<i class="icon icon--inline--right icon--inline--left i-document"></i><a href="{{ self.file_url }}">{{ self.title}}</a>{% endif %}
-      {% if self.extension %} | ({{ self.extension }}){% endif %}
+      {% if self.extension is not '' %} | ({{ self.extension }}){% endif %}
       {% if self.size %} | ({{ self.size }}){% endif %}
     </p>
     <div class="main__content">
