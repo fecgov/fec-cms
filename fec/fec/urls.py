@@ -16,9 +16,12 @@ from search import views as search_views
 
 # ############# NEW ############
 import re
+from itertools import chain
 from django.contrib.sitemaps import Sitemap
 from wagtail.documents.models import Document
-from home.models import DocumentPage
+from wagtail.models import Page
+from home.models import DocumentPage, DocumentFeedPage, ResourcePage
+
 # ############# /END NEW ############
 
 urlpatterns = [
@@ -108,19 +111,37 @@ class ReportsSitemap(Sitemap):
     protocol = 'https'
 
     def items(self):
-        return DocumentPage.objects.live()
+        #return DocumentPage.objects.live()
+        #return DocumentFeedPage.objects.get_children()
+
+        docfeeds = DocumentFeedPage.objects.live()
+
+        reports = []
+        for pg in docfeeds:
+            rpts =  DocumentPage.objects.live().descendant_of(pg, inclusive=False) ##or child_of()
+            #pgs = ResourcePage.objects.descendant_of(pg, inclusive=False) ##or child_of()
+            reports.extend(list(rpts))
+
+        return reports
 
     def location(self, obj):
         # loc = obj.file_url.replace('https://www.fec.gov', '') if obj.file_url else obj.url_path.replace('/home', '')
-        loc = re.sub(r'https:\/\/(www|beta)\.fec\.gov', '', obj.file_url) \
-            if obj.file_url \
-            else obj.url_path.replace('/home', '')
+        # loc = re.sub(r'https:\/\/(www|beta)\.fec\.gov', '', obj.file_url) \
+        #     if obj.file_url \
+        #     else obj.url_path.replace('/home', '')
 
         # 'http://127.0.0.1:8000https://www.fec.gov/resources/cms-content/documents/2012WorkPlan.pdf'
+        
+        #if hasattr(obj, 'file_url'):
+        if obj.file_url:
+            loc = re.sub(r'https:\/\/(www|beta)\.fec\.gov', '', obj.file_url) 
+        else: 
+            loc = obj.url_path.replace('/home', '')
+
         return loc
 
     def lastmod(self, obj):
-        return obj.date
+        return obj.latest_revision_created_at
 
     # Not a thing
     def description(self, obj):
