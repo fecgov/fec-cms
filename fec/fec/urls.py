@@ -14,15 +14,13 @@ from wagtail.contrib.sitemaps.views import sitemap
 from home import views as home_views
 from search import views as search_views
 
-# ############# NEW ############
+# ############# NEW SITEMAP IMPORTS ############
 import re
-from itertools import chain
 from django.contrib.sitemaps import Sitemap
 from wagtail.documents.models import Document
-from wagtail.models import Page
-from home.models import DocumentPage, DocumentFeedPage, ResourcePage
+from home.models import DocumentPage, DocumentFeedPage
 
-# ############# /END NEW ############
+# ############# /END NEW SITEMAP IMPORTS ############
 
 urlpatterns = [
     re_path(
@@ -64,7 +62,10 @@ urlpatterns = [
 ]
 
 
-# ########### NEW ################
+# ########### NEW SITEMAPS ################
+# SHOULD MOVE THESE CLASSES TO A views.py FILE OR ITS OWN FILE AND IMPORT IT HERE
+
+# ######## FORMS SITEMAP #########
 
 class FormsSitemap(Sitemap):
     changefreq = "never"
@@ -75,14 +76,15 @@ class FormsSitemap(Sitemap):
         return Document.objects.filter(file__icontains="fecfrm")
 
     def location(self, obj):
-        # WORKS BUT: WORKS LOCALLY RESOLVING TO `MEDIA`, TEST ON DEV TO SEE IF IT RESOLVES TO `DEFAULT_FILE_STORAGE`
-        # UPDATE^^: RETURNS THIS ON DEV: \
-        # `https://dev.fec.govhttps://fec-dev-proxy.app.cloud.gov/resources/cms-content/documents/fecfrm2sf.pdf`
-        # return obj.file.url
 
         # WORKS: RETURNS JUST THE FILE THEN CONCATENATES THE PATH TO IT
         # return '/resources/cms_content/'+str(obj.file)
         # return str(obj.file).replace('documents/', '/resources/cms_content/documents/')
+
+        # `obj.file.url` RETURNS THIS ON LOCAL:
+        #  https://127.0.0.1:8000/media/documents/fecfrm13.pdf (make sure to change to http to test)
+        # `obj.file.url` RETURNS THIS ON DEV:
+        # `https://dev.fec.govhttps://fec-dev-proxy.app.cloud.gov/resources/cms-content/documents/fecfrm2sf.pdf`
 
         # WORKS: THIS ONE REMOVES THE `https://fec-dev-proxy.app.cloud.gov` , TESTED ON DEV
         loc = re.sub(r'^[^:]+:\/\/[^/?#]+', '', obj.file.url)
@@ -102,7 +104,7 @@ urlpatterns += [
     ),
 ]
 
-# #################
+# ######## REPORT SITEMAP #########
 
 
 class ReportsSitemap(Sitemap):
@@ -111,31 +113,23 @@ class ReportsSitemap(Sitemap):
     protocol = 'https'
 
     def items(self):
-        #return DocumentPage.objects.live()
-        #return DocumentFeedPage.objects.get_children()
+        # could just return all DocumentPages, but instead return all DocumentPages \
+        # that are descendants of DocumentFeedPages
+        # return DocumentPage.objects.live()
 
         docfeeds = DocumentFeedPage.objects.live()
 
         reports = []
         for pg in docfeeds:
-            rpts =  DocumentPage.objects.live().descendant_of(pg, inclusive=False) ##or child_of()
-            #pgs = ResourcePage.objects.descendant_of(pg, inclusive=False) ##or child_of()
+            rpts = DocumentPage.objects.live().descendant_of(pg, inclusive=False)  # or child_of()
             reports.extend(list(rpts))
 
         return reports
 
     def location(self, obj):
-        # loc = obj.file_url.replace('https://www.fec.gov', '') if obj.file_url else obj.url_path.replace('/home', '')
-        # loc = re.sub(r'https:\/\/(www|beta)\.fec\.gov', '', obj.file_url) \
-        #     if obj.file_url \
-        #     else obj.url_path.replace('/home', '')
-
-        # 'http://127.0.0.1:8000https://www.fec.gov/resources/cms-content/documents/2012WorkPlan.pdf'
-        
-        #if hasattr(obj, 'file_url'):
         if obj.file_url:
-            loc = re.sub(r'https:\/\/(www|beta)\.fec\.gov', '', obj.file_url) 
-        else: 
+            loc = re.sub(r'https:\/\/(www|beta)\.fec\.gov', '', obj.file_url)
+        else:
             loc = obj.url_path.replace('/home', '')
 
         return loc
@@ -158,7 +152,7 @@ urlpatterns += [
     ),
 ]
 
-# ################# /END NEW ################
+# ################# /END NEW SITEMAPS ################
 
 
 if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
