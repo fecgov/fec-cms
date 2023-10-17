@@ -63,10 +63,21 @@ This shows fields available on the Schedule D form.
       {{{currency outstanding_balance_close_of_period}}}
     {{/panelRow}}
     {{#panelRow "Report year"}}
-      {{report_year}}
+      {{{report_year}}}
     {{/panelRow}}
     {{#panelRow "Report type"}}
-      {{report_type}}
+      {{{report_type}}}
+    {{/panelRow}}
+    {{#panelRow "Line number"}}
+      {{#if (eq line_number "9")}}
+        Debts and obligations owed to the committee (Line 9)
+      {{else if (eq line_number "10")}}
+        Debts and obligations owed by the committee (Line 10)
+      {{else if (eq line_number "11")}}
+        Debts and obligations owed to the committee (Line 11)
+      {{else if (eq line_number "12")}}
+        Debts and obligations owed by the committee (Line 12)
+      {{/if}}
     {{/panelRow}}
   </table>
 </div>

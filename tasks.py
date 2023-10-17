@@ -77,7 +77,7 @@ DEPLOY_RULES = (
     ('dev', lambda _, branch: branch == 'develop'),
     # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
     # ('feature', lambda _, branch: branch == '[BRANCH NAME]'),
-    ('feature', lambda _, branch: branch == 'feature/4413-debts-datatable'),
+    ('feature', lambda _, branch: branch == 'feature/5816-debts-line_number-filter'),
 )
 
 
@@ -101,7 +101,7 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
     ctx.run('npm run build-production', echo=True)
     ctx.run(
         'cd fec && DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0',
-        echo=True
+        echo=True,
     )
 
     if login == 'True':
@@ -138,7 +138,7 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
         status = ctx.run(
             'cf curl "/v3/deployments?app_guids={}&status_values=ACTIVE"'.format(app_guid_formatted),
             hide=True,
-            warn=True
+            warn=True,
         )
         active_deployments = json.loads(status.stdout).get("pagination").get("total_results")
         # Try to roll back

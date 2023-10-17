@@ -67,7 +67,7 @@ FEATURES = {
     'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
-    'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),  # TODO: debts dates
+    'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),
     'h4_allocated_disbursements': bool(env.get_credential('FEC_FEATURE_H4_ALLOCATED_DISBURSEMENTS', True)),
     'house_senate_overview': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW', '')),
     'house_senate_overview_methodology': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_METHODOLOGY', '')),
@@ -78,6 +78,10 @@ FEATURES = {
     'pac_snapshot': bool(env.get_credential('FEC_FEATURE_PAC_SNAPSHOT', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
 }
+
+# Set feature flags to True for Feature
+if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['feature']:
+    FEATURES['debts'] = True
 
 # Set feature flags to True for local
 if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
