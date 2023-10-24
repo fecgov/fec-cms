@@ -28,6 +28,20 @@ function getGoogleUrl(event) {
     .toString();
 }
 
+function calendarDownload(path, params) {
+  var url = URI(window.API_LOCATION)
+    .path(Array.prototype.concat(window.API_VERSION, path || [], '').join('/'))
+    .addQuery({
+      api_key: window.CALENDAR_DOWNLOAD_PUBLIC_API_KEY,
+      per_page: 500
+    })
+    .addQuery(params || {})
+    .toString();
+
+  // Decode in order to preserve + signs
+  return URI.decode(url);
+}
+
 function getUrl(path, params, type) {
   //if 'type' arg is present and set to 'sub', use API_KEY_PUBLIC_CALENDAR as api_key, otherwise use API_KEY_PUBLIC;
   var apiKey =
@@ -88,6 +102,7 @@ module.exports = {
   getGoogleUrl: getGoogleUrl,
   checkStartTime: checkStartTime,
   getUrl: getUrl,
+  calendarDownload: calendarDownload,
   className: className,
   mapCategoryDescription: mapCategoryDescription
 };
