@@ -79,7 +79,7 @@ ElectionMap.prototype.init = function() {
     touchZoom: false
   });
   this.map.on('viewreset', this.handleReset.bind(this));
-  this.tileLayer = L.tileLayer.provider('Stamen.TonerLite');
+  this.tileLayer = L.tileLayer.provider('Stadia.StamenTonerLite');
   this.tileLayer.on('tileload', this.handleTileLoad.bind(this));
   this.tileLayer.addTo(this.map);
   if (this.opts.drawStates) {

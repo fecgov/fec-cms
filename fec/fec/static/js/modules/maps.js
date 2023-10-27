@@ -229,7 +229,7 @@ DistrictMap.prototype.load = function(election) {
 DistrictMap.prototype.render = function(data) {
   this.elm.setAttribute('aria-hidden', 'false');
   this.map = L.map(this.elm);
-  L.tileLayer.provider('Stamen.TonerLite').addTo(this.map);
+  L.tileLayer.provider('Stadia.StamenTonerLite').addTo(this.map);
   this.overlay = L.geoJson(data, { style: this.style }).addTo(this.map);
   this.map.fitBounds(this.overlay.getBounds());
 };
