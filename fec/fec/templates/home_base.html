@@ -4,6 +4,7 @@
 <html lang="en">
   <head>
     {% include 'partials/meta-tags.html' %}
+    <link rel="preload" as="image" href="/static/img/Homepage-hero-image-flag.jpg">
     {% include 'partials/meta-tags-preloads.html' %}
     <link rel="preload" as="style" href="{% asset_for_css 'home.css' %}">
     {% if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION' %}
@@ -152,8 +153,8 @@
     </script>
 
     {# Global javascript #}
-    <script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
-    <script type="text/javascript" src="{% asset_for_js 'init.js' %}"></script>
+    <script defer type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
+    <script defer type="text/javascript" src="{% asset_for_js 'init.js' %}"></script>
 
 
     {% block extra_js %}

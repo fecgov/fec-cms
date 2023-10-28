@@ -18,7 +18,7 @@
   {% home_page_banner_announcement %}
   
   <section class="slab">
-    {% comment %} 
+    {% comment %}
     Below is for featured icon+links in Wagtail html block only...for now. 
     {% endcomment %}
     {% for block in self.body %}
@@ -105,31 +105,42 @@
   if (!canSkipPolyfills) {
     var pfScriptElem = document.createElement('script');
     pfScriptElem.async = false;
+    pfScriptElem.defer = false;
     pfScriptElem.src = "{% asset_for_js 'polyfills.js' %}";
     document.head.appendChild(pfScriptElem);
   }
 </script>
-<script src="{% asset_for_js 'home.js' %}"></script>
-<script src="{% asset_for_js 'bythenumbers.js' %}"></script>
-<script src="{% asset_for_js 'dataviz-common.js' %}"></script>
-<script src="{% asset_for_js 'election-lookup.js' %}"></script>
+<script defer src="{% asset_for_js 'home.js' %}"></script>
+<script defer src="{% asset_for_js 'bythenumbers.js' %}"></script>
+<script defer src="{% asset_for_js 'election-lookup.js' %}"></script>
 <script>
-  //remove competing/confusing querystrings on homepage
-  $(function(){
-    cleanURI()
-    function cleanURI(){
-      const uri = window.location.toString();
-      if (uri.indexOf('?') > 0) {
-        window.history.replaceState({}, document.title, location.href.split('?')[0]);
-      }
-    }
-    $('#main').on('change ', 'input, select', function(){
-      cleanURI();
-    })
-    //handle Chrome insconsistency with History API
-    $('.js-office').val('S');
-    $('.js-election-year').val('2022')
-    $('.js-chart-toggle').filter('[value=receipts]').prop('checked', true)
+function removeQueryParams() {
+  let uri = window.location.toString();
+  if (uri.indexOf('?') > 0) {
+    window.history.replaceState({}, document.title, location.href.split('?')[0]);
+  }
+}
+
+window.addEventListener('pageshow', () => {
+  removeQueryParams()
+  // Handle Chrome insconsistency with History API
+  document.querySelectorAll('#main input, #main select').forEach(element => {
+    element.addEventListener('change', e => {
+      removeQueryParams();
+    });
   });
+  
+  document.querySelectorAll('.js-office').forEach(element => {
+    element.value = 'S';
+  });
+  
+  document.querySelectorAll('.js-election-year').forEach(element => {
+    element.value = '2022';
+  });
+
+  document.querySelectorAll('.js-chart-toggle[value="receipts"]').forEach(element => {
+    element.checked = true;
+  });
+});
 </script>
 {% endblock %}

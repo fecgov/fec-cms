@@ -155,8 +155,8 @@
     </script>
 
     {# Global javascript #}
-    <script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
-    <script type="text/javascript" src="{% asset_for_js 'init.js' %}"></script>
+    <script defer type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
+    <script defer type="text/javascript" src="{% asset_for_js 'init.js' %}"></script>
     <script>
       var canSkipPolyfills = ('fetch' in window && 'assign' in Object);
       if (!canSkipPolyfills) {
