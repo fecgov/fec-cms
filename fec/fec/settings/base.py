@@ -159,6 +159,8 @@ MIDDLEWARE = (
     # :up: SiteMiddleware :up: was removed for Wagtail 2.11. Safe to lose it altogether?
 )
 
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
 CSRF_TRUSTED_ORIGINS = ["fec.gov", "app.cloud.gov"]
 if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     CSRF_TRUSTED_ORIGINS.extend(["127.0.0.1:5000"])

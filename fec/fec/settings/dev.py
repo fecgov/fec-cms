@@ -10,8 +10,6 @@ for t in TEMPLATES: # noqa F405
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
-
 try:
     from .local import *   # noqa F401, F403
 except ImportError:
