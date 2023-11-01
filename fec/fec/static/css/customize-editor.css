@@ -82,18 +82,17 @@ li.sequence-member .sequence-member-inner .sequence-type-list .sequence-containe
 }
 
 
+/* Overrides to table blocks' CSS to fix bug that hides table rows in Wagtail editor. */
 
-/* Overrides to ReportingDatesTable template to allow full table to show in editor immeditaely. */
-
-div[data-contentpath="reporting_dates_table"] div[id*="-value-table-handsontable-container"] {
-  height:auto  !important;
+div[id*="-handsontable-container"] {
+  height: auto !important;
   margin-top: 30px;
 }
 
-div[id*="-value-table-handsontable-container"] .ht_master.handsontable {
-  height: auto  !important;
+div[id*="-handsontable-container"] .ht_master.handsontable {
+  height: auto !important;
 }
 
-div.ht_master.handsontable div.wtHolder {
-  height: auto  !important;
+div.ht_master.handsontable .wtHolder {
+  height: auto !important;
 }
