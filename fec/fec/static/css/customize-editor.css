@@ -80,19 +80,3 @@ li.sequence-member .sequence-member-inner .sequence-type-list .sequence-containe
 .richtext ol ol ol li {
   list-style-type: lower-roman;
 }
-
-
-/* Overrides to table blocks' CSS to fix bug that hides table rows in Wagtail editor. */
-
-div[id*="-handsontable-container"] {
-  height: auto !important;
-  margin-top: 30px;
-}
-
-div[id*="-handsontable-container"] .ht_master.handsontable {
-  height: auto !important;
-}
-
-div.ht_master.handsontable .wtHolder {
-  height: auto !important;
-}
