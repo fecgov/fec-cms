@@ -6,7 +6,6 @@ gunicorn==19.10.0
 gevent==23.9.1
 psycopg2==2.8.6
 requests==2.31.0
-urllib3==1.26.7
 slacker==0.8.6
 whitenoise==5.2.0
 wagtail==4.2.3
