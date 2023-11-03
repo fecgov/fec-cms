@@ -1,4 +1,4 @@
-Django==3.2.21
+Django==3.2.23
 cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
@@ -44,3 +44,4 @@ Faker==0.8.6
 pytest-django==3.10.0
 pytest-cov==2.11.1
 pre-commit==2.21.0 #client-side hook triggered by operations like git commit
+pillow>=10.0.0 # not directly required, pinned by Snyk to avoid a vulnerability
