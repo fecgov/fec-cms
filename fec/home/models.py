@@ -724,7 +724,8 @@ class DocumentPage(ContentPage):
     @property
     def extension(self):
         # Return the file extension of file_url
-        return self.file_url.rsplit('.', 1)[1].upper()
+        if self.file_url:
+            return self.file_url.rsplit('.', 1)[1].upper()
 
 
 class DocumentFeedPage(ContentPage):
@@ -1372,7 +1373,7 @@ class ReportingDatesTable(Page):
         ('html', blocks.RawHTMLBlock()),
         ('internal_button', InternalButtonBlock()),
         ('external_button', ExternalButtonBlock()),
-        ('dates_table', ReportingTableBlock(blank=True, required=False,form_classname='title')),
+        ('dates_table', ReportingTableBlock(blank=True, required=False, form_classname='title')),
     ], blank=True, null=True, use_json_field=True, collapsed=False)
 
     footnotes = StreamField([
