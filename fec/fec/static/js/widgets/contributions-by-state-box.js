@@ -258,7 +258,7 @@ ContributionsByState.prototype.init = function() {
     election_full: true,
     // office: 'P',
     page: 1,
-    per_page: 200,
+    per_page: 100,
     sort_hide_null: false,
     sort_null_only: false,
     sort_nulls_last: false
