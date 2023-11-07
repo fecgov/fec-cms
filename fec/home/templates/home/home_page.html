@@ -114,7 +114,7 @@
 <script src="{% asset_for_js 'dataviz-common.js' %}"></script>
 <script src="{% asset_for_js 'election-lookup.js' %}"></script>
 <script>
-  //remove competing/confusing querystrings on homepage
+  // Remove competing/confusing querystrings on homepage
   $(function(){
     cleanURI()
     function cleanURI(){
@@ -126,9 +126,11 @@
     $('#main').on('change ', 'input, select', function(){
       cleanURI();
     })
-    //handle Chrome insconsistency with History API
-    $('.js-office').val('S');
-    $('.js-election-year').val('2022')
+    {# Handle Chrome inconsistency with History API #}
+    $('.js-office').val('P');
+    {# This should be changed with /fec/home/templates_tags/top_entites.py #}
+    {# TODO: make this more elegant #}
+    $('.js-election-year').val('2024')
     $('.js-chart-toggle').filter('[value=receipts]').prop('checked', true)
   });
 </script>
