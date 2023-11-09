@@ -15,9 +15,9 @@
     {{ range.amount('amount_outstanding_close', 'Ending balance') }}
     <legend class="label  u-margin--top">Debt type</legend>
     <fieldset class="js-filter js-line-number-filters" data-filter="checkbox">
-      {{ checkbox.checkbox_dropdown_multiple('line_number', 'House or Senate committees', options=constants.line_numbers.debts.house_senate, legend=False, prefix='House or Senate committees:') }}
-      {{ checkbox.checkbox_dropdown_multiple('line_number', 'Presidential committees', options=constants.line_numbers.debts.presidential, legend=False, prefix='Presidential committees:') }}
-      {{ checkbox.checkbox_dropdown_multiple('line_number', 'PACs or party committees', options=constants.line_numbers.debts.pac_party, legend=False, prefix='PACs or party committees:') }}
+      {{ checkbox.checkbox_dropdown_multiple('form_line_number', 'House or Senate committees', options=constants.line_numbers.debts.house_senate, legend=False, prefix='House or Senate committees:') }}
+      {{ checkbox.checkbox_dropdown_multiple('form_line_number', 'Presidential committees', options=constants.line_numbers.debts.presidential, legend=False, prefix='Presidential committees:') }}
+      {{ checkbox.checkbox_dropdown_multiple('form_line_number', 'PACs or party committees', options=constants.line_numbers.debts.pac_party, legend=False, prefix='PACs or party committees:') }}
     </fieldset>
  </div>
 {% endblock %}
