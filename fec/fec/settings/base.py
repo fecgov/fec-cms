@@ -126,8 +126,6 @@ INSTALLED_APPS = (
     'wagtail.contrib.redirects',
     'wagtail.contrib.forms',
     'wagtail.locales',
-
-    'wagtail.contrib.modeladmin',
     'wagtail.contrib.search_promotions',
     'wagtail.contrib.table_block',
     'wagtail.contrib.styleguide',

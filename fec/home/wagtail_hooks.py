@@ -1,9 +1,9 @@
-from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
-
+from wagtail.snippets.models import register_snippet
+from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
 from .models import Author, PressReleasePage, DigestPage, TipsForTreasurersPage, RecordPage
 
 
-class AuthorAdmin(ModelAdmin):
+class AuthorAdmin(SnippetViewSet):
     model = Author
     menu_icon = 'user'
     menu_order = 300  # will put in 3rd place (000 being 1st, 100 2nd)
@@ -11,42 +11,43 @@ class AuthorAdmin(ModelAdmin):
     list_display = ('name', 'title', 'email')
     list_filter = ()
     search_fields = ('name', 'title', 'email')
+    add_to_admin_menu = True # When set to false, with wagtail5 this shows under snippet menu
 
 
-class PressReleaseModelAdmin(ModelAdmin):
+class PressReleaseModelAdmin(SnippetViewSet):
     menu_label = 'Press releases'
     model = PressReleasePage
     ordering = ['-date']
     list_display = ('title', 'date', 'category')
 
 
-class DigestPageModelAdmin(ModelAdmin):
+class DigestPageModelAdmin(SnippetViewSet):
     menu_label = 'Weekly digests'
     model = DigestPage
     ordering = ['-date']
     list_display = ('title', 'date')
 
 
-class TipsForTreasurersPageModelAdmin(ModelAdmin):
+class TipsForTreasurersPageModelAdmin(SnippetViewSet):
     menu_label = 'Tips for Treasurers'
     model = TipsForTreasurersPage
     ordering = ['-date']
     list_display = ('title', 'date')
 
 
-class RecordPageModelAdmin(ModelAdmin):
+class RecordPageModelAdmin(SnippetViewSet):
     menu_label = 'FEC Record'
     model = RecordPage
     ordering = ['-date']
     list_display = ('title', 'date', 'category')
 
 
-class NewsAndUpdatesAdmin(ModelAdminGroup):
+class NewsAndUpdatesAdmin(SnippetViewSetGroup):
     menu_label = 'News and updates'
     menu_icon = 'folder-open-inverse'
     menu_order = 200
     items = (PressReleaseModelAdmin, DigestPageModelAdmin, TipsForTreasurersPageModelAdmin, RecordPageModelAdmin)
 
 
-modeladmin_register(AuthorAdmin)
-modeladmin_register(NewsAndUpdatesAdmin)
+register_snippet(AuthorAdmin)
+register_snippet(NewsAndUpdatesAdmin)
