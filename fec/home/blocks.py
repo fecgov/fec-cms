@@ -6,7 +6,8 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 
 """options for wagtail default table_block """
 core_table_options = {
-    'renderer': 'html'
+    'renderer': 'html',
+    'renderAllRows': True,
 }
 
 
@@ -175,7 +176,8 @@ class CustomTableBlock(blocks.StructBlock):
         'rowHeaders': True,
         'height': 108,
         'language': 'en',
-        'renderer': 'html'
+        'renderer': 'html',
+        'renderAllRows': True,
     }
 
     custom_table = blocks.StreamBlock([
@@ -200,7 +202,8 @@ class ReportingTableBlock(blocks.StructBlock):
         'rowHeaders': False,
         'height': 108,
         'language': 'en',
-        'renderer': 'html'
+        'renderer': 'html',
+        'renderAllRows': True,
     }
 
     table = TableBlock(table_options=reporting_table_options)
