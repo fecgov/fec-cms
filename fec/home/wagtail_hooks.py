@@ -1,9 +1,10 @@
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
-from .models import Author, PressReleasePage, DigestPage, TipsForTreasurersPage, RecordPage
+from .models import (Author, PressReleasePage, DigestPage,
+                     TipsForTreasurersPage, RecordPage)
 
 
-class AuthorAdmin(SnippetViewSet):
+class AuthorSnippetView(SnippetViewSet):
     model = Author
     menu_icon = 'user'
     menu_order = 300  # will put in 3rd place (000 being 1st, 100 2nd)
@@ -11,43 +12,44 @@ class AuthorAdmin(SnippetViewSet):
     list_display = ('name', 'title', 'email')
     list_filter = ()
     search_fields = ('name', 'title', 'email')
-    add_to_admin_menu = True # When set to false, with wagtail5 this shows under snippet menu
+    add_to_admin_menu = True  # When set to false, with wagtail5 this shows under snippet menu
 
 
-class PressReleaseModelAdmin(SnippetViewSet):
+class PressReleaseSnippetView(SnippetViewSet):
     menu_label = 'Press releases'
     model = PressReleasePage
     ordering = ['-date']
     list_display = ('title', 'date', 'category')
 
 
-class DigestPageModelAdmin(SnippetViewSet):
+class DigestPageSnippetView(SnippetViewSet):
     menu_label = 'Weekly digests'
     model = DigestPage
     ordering = ['-date']
     list_display = ('title', 'date')
 
 
-class TipsForTreasurersPageModelAdmin(SnippetViewSet):
+class TipsForTreasurersPageSnippetView(SnippetViewSet):
     menu_label = 'Tips for Treasurers'
     model = TipsForTreasurersPage
     ordering = ['-date']
     list_display = ('title', 'date')
 
 
-class RecordPageModelAdmin(SnippetViewSet):
+class RecordPageSnippetView(SnippetViewSet):
     menu_label = 'FEC Record'
     model = RecordPage
     ordering = ['-date']
     list_display = ('title', 'date', 'category')
 
 
-class NewsAndUpdatesAdmin(SnippetViewSetGroup):
+class NewsAndUpdatesSnippetView(SnippetViewSetGroup):
     menu_label = 'News and updates'
     menu_icon = 'folder-open-inverse'
     menu_order = 200
-    items = (PressReleaseModelAdmin, DigestPageModelAdmin, TipsForTreasurersPageModelAdmin, RecordPageModelAdmin)
+    items = (PressReleaseSnippetView, DigestPageSnippetView,
+             TipsForTreasurersPageSnippetView, RecordPageSnippetView)
 
 
-register_snippet(AuthorAdmin)
-register_snippet(NewsAndUpdatesAdmin)
+register_snippet(AuthorSnippetView)
+register_snippet(NewsAndUpdatesSnippetView)
