@@ -129,7 +129,7 @@ ElectionMap.prototype.drawDistricts = function(districts) {
 
 /**
  * Update the boundaries of the map
- * @param {array} districts - array of unique district identifiers
+ * @param {Array} districts - Array of unique district identifiers
  */
 ElectionMap.prototype.updateBounds = function(districts) {
   var self = this;
