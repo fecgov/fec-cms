@@ -50,10 +50,6 @@ function ElectionSearch(selector) {
   this.$upcomingPresidential = this.$elm.find('.js-upcoming-presidential');
 
   this.$map = $('.election-map');
-  this.map = new ElectionMap(this.$map.get(0), {
-    drawStates: _.isEmpty(this.serialized),
-    handleSelect: this.handleSelectMap.bind(this)
-  });
 
   this.$zip.on('change', this.handleZipChange.bind(this));
   this.$state.on('change', this.performStateChange.bind(this));
@@ -61,14 +57,59 @@ function ElectionSearch(selector) {
   this.$form.on('submit', this.performSearch.bind(this));
   $(window).on('popstate', this.handlePopState.bind(this));
 
-  this.getUpcomingPresidentialElection();
-  this.getUpcomingElections();
-  this.performStateChange();
-  this.handlePopState();
+  this.mapPlaceholder = document.querySelector('.election-map.dormant');
+
+  if (this.mapPlaceholder) {
+    this.mapPlaceholder.addEventListener('click', this.wakeTheMap.bind(this));
+    document.addEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap.bind(this));
+  } else {
+    this.initInteractiveMap();
+  }
 }
 
 ElectionSearch.prototype = Object.create(ElectionForm.prototype);
 ElectionSearch.constructor = ElectionSearch;
+
+/**
+ * Makes the dormant map interactive,
+ * removes the event listeners and calls initInteractiveMap()
+ * Called when a user clicks the placeholder map image or when they interact with an
+ * element of the election search form
+ */
+ElectionSearch.prototype.wakeTheMap = function(e) {
+  console.log('ElectionSearch.wakeTheMap(e): ', e);
+  if (!this.initialized) {
+    this.mapPlaceholder.removeEventListener('click', this.wakeTheMap);
+    document.removeEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap);
+    this.initInteractiveMap();
+  }
+};
+
+/**
+ * Removes the `dormant` class and title attribute from the map,
+ * then initializes the interactive map
+ */
+ElectionSearch.prototype.initInteractiveMap =function() {
+  if (!this.initialized) {
+    if (this.mapPlaceholder) {
+      this.mapPlaceholder.classList.remove('dormant');
+      this.mapPlaceholder.removeAttribute('title');
+      this.mapPlaceholder = null; // Let garbage collection sweep it
+    }
+
+    this.map = new ElectionMap(this.$map.get(0), {
+      drawStates: _.isEmpty(this.serialized),
+      handleSelect: this.handleSelectMap.bind(this)
+    });
+
+    this.getUpcomingPresidentialElection();
+    this.getUpcomingElections();
+    this.performStateChange();
+    this.handlePopState();
+
+    this.initialized = true;
+  }
+};
 
 ElectionSearch.prototype.updateRedistrictingMessage = function() {
   if (this.$cycle.val() == 2018 && this.$state.val() == 'PA') {

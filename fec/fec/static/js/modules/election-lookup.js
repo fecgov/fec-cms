@@ -42,11 +42,50 @@ ElectionLookup.prototype.init = function() {
   this.showSenateOption = true;
 
   this.$map = $('.election-map');
-  this.map = new ElectionMap(this.$map.get(0), {
-    drawStates: true,
-    handleSelect: this.handleSelectMap.bind(this)
-  });
-  this.initialized = true;
+
+  this.mapPlaceholder = document.querySelector('.election-map.dormant');
+
+  if (this.mapPlaceholder) {
+    this.mapPlaceholder.addEventListener('click', this.wakeTheMap.bind(this));
+    document.addEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap.bind(this));
+  } else {
+    this.initInteractiveMap();
+  }
+};
+
+/**
+ * Makes the dormant map interactive,
+ * removes the event listeners and calls initInteractiveMap()
+ * Called when a user clicks the placeholder map image or when they interact with an
+ * element of the election search form
+ */
+ElectionLookup.prototype.wakeTheMap = function() {
+  if (!this.initialized) {
+    this.mapPlaceholder.removeEventListener('click', this.wakeTheMap);
+    document.removeEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap);
+    this.initInteractiveMap();
+  }
+};
+
+/**
+ * Removes the `dormant` class and title attribute from the placeholder map,
+ * then initializes the interactive map
+ */
+ElectionLookup.prototype.initInteractiveMap = function() {
+  if (!this.initialized) {
+    if (this.initialized) {
+      this.mapPlaceholder.classList.remove('dormant');
+      this.mapPlaceholder.removeAttribute('title');
+      this.mapPlaceholder = null; // Let garbage collection sweep it
+    }
+
+    this.map = new ElectionMap(this.$map.get(0), {
+      drawStates: true,
+      handleSelect: this.handleSelectMap.bind(this)
+    });
+
+    this.initialized = true;
+  }
 };
 
 /**
