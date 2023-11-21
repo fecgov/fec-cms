@@ -94,6 +94,7 @@ ElectionForm.prototype.updateDistricts = function(state) {
  */
 ElectionForm.prototype.getUrl = function(query) {
   var params = _.extend({}, { per_page: 100 }, query);
+  document.dispatchEvent(new Event('FEC-ElectionSearchInteraction'));
   return helpers.buildUrl(['elections', 'search'], params);
 };
 
