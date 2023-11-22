@@ -447,7 +447,8 @@ class PressReleasePage(ContentPage):
 
     search_fields = ContentPage.search_fields + [
         index.FilterField('category'),
-        index.FilterField('date')
+        index.FilterField('date'),
+        index.FilterField('url_path')
     ]
 
     @property
