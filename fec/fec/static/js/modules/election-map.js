@@ -58,7 +58,7 @@ function getDistrictPalette(scale) {
  * @param {object} opts - Configuration options
  */
 function ElectionMap(elm, opts) {
-  console.log('ElectionMap(elm, opts): ', elm, opts);
+  // console.log('ElectionMap(elm, opts): ', elm, opts);
   this.elm = elm;
   this.opts = _.extend({}, defaultOpts, opts);
   this.statePalette = getStatePalette(this.opts.colorScale);
@@ -73,8 +73,8 @@ function ElectionMap(elm, opts) {
  * Initialize the map
  */
 ElectionMap.prototype.init = function() {
-  console.log('ElectionMap.init()');
-  console.log('  this.initialized: ', this.initialized);
+  // console.log('ElectionMap.init()');
+  // console.log('  this.initialized: ', this.initialized);
   if (this.initialized === false) {
     this.overlay = null;
     this.districts = null;
@@ -139,7 +139,7 @@ ElectionMap.prototype.drawDistricts = function(districts) {
  * @param {Array} districts - Array of unique district identifiers
  */
 ElectionMap.prototype.updateBounds = function(districts) {
-  console.log('ElectionMap.updateBounds()');
+  // console.log('ElectionMap.updateBounds()');
   var self = this;
   var rule =
     districts &&
@@ -150,12 +150,12 @@ ElectionMap.prototype.updateBounds = function(districts) {
   if (rule) {
     this.map.setView(rule.coords, rule.zoom);
   } else if (districts && self.overlay.getBounds()) {
-    console.log('  self: ', self);
-    console.log('  self.map: ', self.map);
-    console.log('  self.overlay: ', self.overlay);
-    console.log('  self.overlay.getBounds(): ', self.overlay.getBounds());
-    console.log('  self.overlay.getBounds().getNorth(): ', self.overlay.getBounds().getNorth());
-    
+    // console.log('  self: ', self);
+    // console.log('  self.map: ', self.map);
+    // console.log('  self.overlay: ', self.overlay);
+    // console.log('  self.overlay.getBounds(): ', self.overlay.getBounds());
+    // console.log('  self.overlay.getBounds().getNorth(): ', self.overlay.getBounds().getNorth());
+
     self.map.flyToBounds(self.overlay.getBounds(), { duration: 0.25 });
   }
 };

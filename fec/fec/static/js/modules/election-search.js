@@ -84,7 +84,7 @@ ElectionSearch.constructor = ElectionSearch;
  * Called when a user clicks the placeholder map image or when they interact with an
  * element of the election search form
  */
-ElectionSearch.prototype.wakeTheMap = function(e) {
+ElectionSearch.prototype.wakeTheMap = function() {
   // console.log('ElectionSearch.wakeTheMap(e): ', e);
   if (!this.initialized) {
     document.removeEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap);
@@ -118,7 +118,7 @@ ElectionSearch.prototype.initInteractiveMap =function() {
     });
 
     this.initialized = true;
-    
+
     // console.log('  calling the block');
     this.getUpcomingPresidentialElection();
     this.getUpcomingElections();
@@ -126,7 +126,6 @@ ElectionSearch.prototype.initInteractiveMap =function() {
     this.handlePopState();
     // console.log('  called the block');
 
-    
   } else {
     // console.log('  else');
   }
