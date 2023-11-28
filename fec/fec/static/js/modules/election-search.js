@@ -62,11 +62,14 @@ function ElectionSearch(selector) {
   this.$form.on('submit', this.performSearch.bind(this));
   $(window).on('popstate', this.handlePopState.bind(this));
 
-  this.mapPlaceholder = document.querySelector('.election-map.dormant');
+  this.initialized = false;
+  this.dormantMap = document.querySelector('.election-map.dormant');
+  this.zipSearchField = document.querySelector('#zip');
 
-  if (this.mapPlaceholder) {
-    this.mapPlaceholder.addEventListener('click', this.wakeTheMap.bind(this));
+  if (this.dormantMap) {
     document.addEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap.bind(this));
+    this.dormantMap.addEventListener('click', this.wakeTheMap.bind(this));
+    if (this.zipSearchField) this.zipSearchField.addEventListener('input', this.wakeTheMap.bind(this));
   } else {
     this.initInteractiveMap();
   }
@@ -82,10 +85,11 @@ ElectionSearch.constructor = ElectionSearch;
  * element of the election search form
  */
 ElectionSearch.prototype.wakeTheMap = function(e) {
-  console.log('ElectionSearch.wakeTheMap(e): ', e);
+  // console.log('ElectionSearch.wakeTheMap(e): ', e);
   if (!this.initialized) {
-    this.mapPlaceholder.removeEventListener('click', this.wakeTheMap);
     document.removeEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap);
+    if (this.dormantMap) this.dormantMap.removeEventListener('click', this.wakeTheMap);
+    if (this.zipSearchField) this.zipSearchField.removeEventListener('input', this.wakeTheMap);
     this.initInteractiveMap();
   }
 };
@@ -95,24 +99,36 @@ ElectionSearch.prototype.wakeTheMap = function(e) {
  * then initializes the interactive map
  */
 ElectionSearch.prototype.initInteractiveMap =function() {
+  // console.log('ElectionSearch.initInteractiveMap()');
+  // console.log('  this: ', this);
+  // console.log('  this.initialized: ', this.initialized);
   if (!this.initialized) {
-    if (this.mapPlaceholder) {
-      this.mapPlaceholder.classList.remove('dormant');
-      this.mapPlaceholder.removeAttribute('title');
-      this.mapPlaceholder = null; // Let garbage collection sweep it
+    // console.log('  if');
+    if (this.dormantMap) {
+      // console.log('    if');
+      this.dormantMap.classList.remove('dormant');
+      this.dormantMap.removeAttribute('title');
+      delete this.dormantMap;
     }
 
+    // console.log('this.map: ', this.map);
     this.map = new ElectionMap(this.$map.get(0), {
       drawStates: _.isEmpty(this.serialized),
       handleSelect: this.handleSelectMap.bind(this)
     });
 
+    this.initialized = true;
+    
+    // console.log('  calling the block');
     this.getUpcomingPresidentialElection();
     this.getUpcomingElections();
     this.performStateChange();
     this.handlePopState();
+    // console.log('  called the block');
 
-    this.initialized = true;
+    
+  } else {
+    // console.log('  else');
   }
 };
 
@@ -124,6 +140,7 @@ ElectionSearch.prototype.updateRedistrictingMessage = function() {
   }
 };
 ElectionSearch.prototype.performSearch = function() {
+  document.dispatchEvent(new Event('FEC-ElectionSearchInteraction'));
   var inputs = this.$form.find(':input').not(this.$cycle);
   //only search presidential elections if no other parameters (zip, state, district) are present
   if (
@@ -213,6 +230,9 @@ ElectionSearch.prototype.removeWrongPresidentialElections = function(
  * @param {Boolean} [opts.pushState] - Assigned `true` if it doesn't exist
  */
 ElectionSearch.prototype.search = function(e, opts) {
+  // console.log('ElectionSearch.search()');
+  // console.log('  this: ', this);
+  // console.log('  this.map: ', this.map);
   e && e.preventDefault();
   opts = _.extend({ pushState: true }, opts || {});
   var self = this;

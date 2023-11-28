@@ -19,6 +19,7 @@ var ElectionMap = require('./election-map').ElectionMap;
  */
 
 function ElectionLookup(selector) {
+  // console.log('ElectionLookup()');
   this.$elm = $(selector);
   this.$form = this.$elm.find('form');
   this.$state = this.$form.find('[name="state"]');
@@ -48,10 +49,11 @@ ElectionLookup.prototype.init = function() {
 
   this.$map = $('.election-map');
 
-  this.mapPlaceholder = document.querySelector('.election-map.dormant');
+  this.initialized = false;
+  this.dormantMap = document.querySelector('.election-map.dormant');
 
-  if (this.mapPlaceholder) {
-    this.mapPlaceholder.addEventListener('click', this.wakeTheMap.bind(this));
+  if (this.dormantMap) {
+    this.dormantMap.addEventListener('click', this.wakeTheMap.bind(this));
     document.addEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap.bind(this));
   } else {
     this.initInteractiveMap();
@@ -65,8 +67,9 @@ ElectionLookup.prototype.init = function() {
  * element of the election search form
  */
 ElectionLookup.prototype.wakeTheMap = function() {
-  if (!this.initialized) {
-    this.mapPlaceholder.removeEventListener('click', this.wakeTheMap);
+  // console.log('wakeTheMap()');
+  if (this.initialized === false) {
+    this.dormantMap.removeEventListener('click', this.wakeTheMap);
     document.removeEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap);
     this.initInteractiveMap();
   }
@@ -78,10 +81,10 @@ ElectionLookup.prototype.wakeTheMap = function() {
  */
 ElectionLookup.prototype.initInteractiveMap = function() {
   if (!this.initialized) {
-    if (this.initialized) {
-      this.mapPlaceholder.classList.remove('dormant');
-      this.mapPlaceholder.removeAttribute('title');
-      this.mapPlaceholder = null; // Let garbage collection sweep it
+    if (this.dormantMap) {
+      this.dormantMap.classList.remove('dormant');
+      this.dormantMap.removeAttribute('title');
+      this.dormantMap = null; // Let garbage collection sweep it
     }
 
     this.map = new ElectionMap(this.$map.get(0), {
