@@ -58,12 +58,14 @@ function getDistrictPalette(scale) {
  * @param {object} opts - Configuration options
  */
 function ElectionMap(elm, opts) {
+  // console.log('ElectionMap(elm, opts): ', elm, opts);
   this.elm = elm;
   this.opts = _.extend({}, defaultOpts, opts);
   this.statePalette = getStatePalette(this.opts.colorScale);
   this.districtPalette = getDistrictPalette(this.opts.colorScale);
   this.mapMessage = document.querySelector('.js-map-message');
   this.mapApproxMessage = document.querySelector('.js-map-approx-message');
+  this.initialized = false;
   this.init();
 }
 
@@ -71,19 +73,24 @@ function ElectionMap(elm, opts) {
  * Initialize the map
  */
 ElectionMap.prototype.init = function() {
-  this.overlay = null;
-  this.districts = null;
-  this.map = L.map(this.elm, {
-    scrollWheelZoom: false,
-    draggable: false,
-    touchZoom: false
-  });
-  this.map.on('viewreset', this.handleReset.bind(this));
-  this.tileLayer = L.tileLayer.provider('Stadia.StamenTonerLite');
-  this.tileLayer.on('tileload', this.handleTileLoad.bind(this));
-  this.tileLayer.addTo(this.map);
-  if (this.opts.drawStates) {
-    this.map.setView([37.8, -96], 3);
+  // console.log('ElectionMap.init()');
+  // console.log('  this.initialized: ', this.initialized);
+  if (this.initialized === false) {
+    this.overlay = null;
+    this.districts = null;
+    this.map = L.map(this.elm, {
+      scrollWheelZoom: false,
+      draggable: false,
+      touchZoom: false
+    });
+    this.map.on('viewreset', this.handleReset.bind(this));
+    this.tileLayer = L.tileLayer.provider('Stadia.StamenTonerLite');
+    this.tileLayer.on('tileload', this.handleTileLoad.bind(this));
+    this.tileLayer.addTo(this.map);
+    if (this.opts.drawStates) {
+      this.map.setView([37.8, -96], 3);
+    }
+    this.initialized = true;
   }
 };
 
@@ -129,9 +136,10 @@ ElectionMap.prototype.drawDistricts = function(districts) {
 
 /**
  * Update the boundaries of the map
- * @param {array} districts - array of unique district identifiers
+ * @param {Array} districts - Array of unique district identifiers
  */
 ElectionMap.prototype.updateBounds = function(districts) {
+  // console.log('ElectionMap.updateBounds()');
   var self = this;
   var rule =
     districts &&
@@ -141,7 +149,13 @@ ElectionMap.prototype.updateBounds = function(districts) {
   this._viewReset = !!(rule || districts);
   if (rule) {
     this.map.setView(rule.coords, rule.zoom);
-  } else if (districts) {
+  } else if (districts && self.overlay.getBounds()) {
+    // console.log('  self: ', self);
+    // console.log('  self.map: ', self.map);
+    // console.log('  self.overlay: ', self.overlay);
+    // console.log('  self.overlay.getBounds(): ', self.overlay.getBounds());
+    // console.log('  self.overlay.getBounds().getNorth(): ', self.overlay.getBounds().getNorth());
+
     self.map.flyToBounds(self.overlay.getBounds(), { duration: 0.25 });
   }
 };
@@ -242,9 +256,9 @@ ElectionMap.prototype.hide = function() {
  * Show the map
  */
 ElectionMap.prototype.show = function() {
-  this.elm.setAttribute('aria-hidden', 'false');
-  this.mapMessage.setAttribute('aria-hidden', 'true');
-  this.mapApproxMessage.setAttribute('aria-hidden', 'false');
+  if (this.elm) this.elm.setAttribute('aria-hidden', 'false');
+  if (this.mapMessage) this.mapMessage.setAttribute('aria-hidden', 'true');
+  if (this.mapApproxMessage) this.mapApproxMessage.setAttribute('aria-hidden', 'false');
 };
 
 module.exports = {

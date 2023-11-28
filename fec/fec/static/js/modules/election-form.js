@@ -25,9 +25,9 @@ function ElectionForm(elm) {
 
 /**
  * Identify if a select has an option matching a particular value
- * @param {jquery} $select - jQuery selector of a <select>
+ * @param {jQuery.object} $select - jQuery.object selector of a <select>
  * @param {string} value - The value to check for
- * @return {bool} whether or not the select has the value
+ * @return {Boolean} Whether or not the select has the value
  */
 ElectionForm.prototype.hasOption = function($select, value) {
   return $select.find('option[value="' + value + '"]').length > 0;
@@ -90,15 +90,20 @@ ElectionForm.prototype.updateDistricts = function(state) {
 
 /**
  * Convenience method for building an API URL to call for a query
- * @param {object} query - the query to pass to the URL
+ * @param {object} query - The query to pass to the URL
+ * @param {string} query.state - Two-letter state abbreviation
+ * @param {string} query.district - District number as a string
+ * @returns {string} API URL `/elections/search/?state=${query.state}&district=${query.district}`
  */
 ElectionForm.prototype.getUrl = function(query) {
   var params = _.extend({}, { per_page: 100 }, query);
+  document.dispatchEvent(new Event('FEC-ElectionSearchInteraction'));
   return helpers.buildUrl(['elections', 'search'], params);
 };
 
 /**
  * Creates a serialized array from the form values
+ * @returns {Object} In the format of `{state: 'TX'}`
  */
 ElectionForm.prototype.serialize = function() {
   var params = _.chain(this.$form.serializeArray())
@@ -112,8 +117,9 @@ ElectionForm.prototype.serialize = function() {
 
 /**
  * Finds all unique district IDs based on the state and district number
- * @param {array} results - array of results returned from the API
- * @returns {array} an array of the unique district identifiers
+ * @param {Array} results - Array of results returned from the API, similar to
+ * `[{cycle: 2024, district: '00', office: 'P', state: 'US'}…]`
+ * @returns {Array} An array of the unique district identifiers, e.g. `[4801, 4802, 4800]`
  */
 ElectionForm.prototype.encodeDistricts = function(results) {
   var encoded = _.chain(results)

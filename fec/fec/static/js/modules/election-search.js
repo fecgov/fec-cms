@@ -1,3 +1,8 @@
+/**
+ * URLs: / and /data/elections/
+ * Templates: /fec/data/templates/election-lookup.jinja
+ * Not to be confused with election-lookup.js, which is used on /data/elections/
+ */
 'use strict';
 
 var $ = require('jquery');
@@ -50,10 +55,6 @@ function ElectionSearch(selector) {
   this.$upcomingPresidential = this.$elm.find('.js-upcoming-presidential');
 
   this.$map = $('.election-map');
-  this.map = new ElectionMap(this.$map.get(0), {
-    drawStates: _.isEmpty(this.serialized),
-    handleSelect: this.handleSelectMap.bind(this)
-  });
 
   this.$zip.on('change', this.handleZipChange.bind(this));
   this.$state.on('change', this.performStateChange.bind(this));
@@ -61,14 +62,74 @@ function ElectionSearch(selector) {
   this.$form.on('submit', this.performSearch.bind(this));
   $(window).on('popstate', this.handlePopState.bind(this));
 
-  this.getUpcomingPresidentialElection();
-  this.getUpcomingElections();
-  this.performStateChange();
-  this.handlePopState();
+  this.initialized = false;
+  this.dormantMap = document.querySelector('.election-map.dormant');
+  this.zipSearchField = document.querySelector('#zip');
+
+  if (this.dormantMap) {
+    document.addEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap.bind(this));
+    this.dormantMap.addEventListener('click', this.wakeTheMap.bind(this));
+    if (this.zipSearchField) this.zipSearchField.addEventListener('input', this.wakeTheMap.bind(this));
+  } else {
+    this.initInteractiveMap();
+  }
 }
 
 ElectionSearch.prototype = Object.create(ElectionForm.prototype);
 ElectionSearch.constructor = ElectionSearch;
+
+/**
+ * Makes the dormant map interactive,
+ * removes the event listeners and calls initInteractiveMap()
+ * Called when a user clicks the placeholder map image or when they interact with an
+ * element of the election search form
+ */
+ElectionSearch.prototype.wakeTheMap = function() {
+  // console.log('ElectionSearch.wakeTheMap(e): ', e);
+  if (!this.initialized) {
+    document.removeEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap);
+    if (this.dormantMap) this.dormantMap.removeEventListener('click', this.wakeTheMap);
+    if (this.zipSearchField) this.zipSearchField.removeEventListener('input', this.wakeTheMap);
+    this.initInteractiveMap();
+  }
+};
+
+/**
+ * Removes the `dormant` class and title attribute from the map,
+ * then initializes the interactive map
+ */
+ElectionSearch.prototype.initInteractiveMap =function() {
+  // console.log('ElectionSearch.initInteractiveMap()');
+  // console.log('  this: ', this);
+  // console.log('  this.initialized: ', this.initialized);
+  if (!this.initialized) {
+    // console.log('  if');
+    if (this.dormantMap) {
+      // console.log('    if');
+      this.dormantMap.classList.remove('dormant');
+      this.dormantMap.removeAttribute('title');
+      delete this.dormantMap;
+    }
+
+    // console.log('this.map: ', this.map);
+    this.map = new ElectionMap(this.$map.get(0), {
+      drawStates: _.isEmpty(this.serialized),
+      handleSelect: this.handleSelectMap.bind(this)
+    });
+
+    this.initialized = true;
+
+    // console.log('  calling the block');
+    this.getUpcomingPresidentialElection();
+    this.getUpcomingElections();
+    this.performStateChange();
+    this.handlePopState();
+    // console.log('  called the block');
+
+  } else {
+    // console.log('  else');
+  }
+};
 
 ElectionSearch.prototype.updateRedistrictingMessage = function() {
   if (this.$cycle.val() == 2018 && this.$state.val() == 'PA') {
@@ -78,6 +139,7 @@ ElectionSearch.prototype.updateRedistrictingMessage = function() {
   }
 };
 ElectionSearch.prototype.performSearch = function() {
+  document.dispatchEvent(new Event('FEC-ElectionSearchInteraction'));
   var inputs = this.$form.find(':input').not(this.$cycle);
   //only search presidential elections if no other parameters (zip, state, district) are present
   if (
@@ -96,6 +158,7 @@ ElectionSearch.prototype.performStateChange = function() {
   this.handleStateChange();
   this.updateRedistrictingMessage();
 };
+
 /**
  * Call the API to get a list of upcoming election dates
  */
@@ -127,8 +190,8 @@ ElectionSearch.prototype.handleZipChange = function() {
 /**
  * Handle a click on the map
  * Update the options in the distict <select> and call a search
- * @param {string} state - two-letter abbreviation of a state
- * @param {int} district - disctrict Number
+ * @param {string} state - Two-letter abbreviation of a state
+ * @param {int} district - District number
  */
 ElectionSearch.prototype.handleSelectMap = function(state, district) {
   this.$zip.val('');
@@ -143,7 +206,7 @@ ElectionSearch.prototype.handleSelectMap = function(state, district) {
 /**
  * Hack to remove the presidential result in non-presidential years
  * Eventually this will be handled by the API
- * @param {array} results - Array of API results
+ * @param {Array} results - Array of API results
  * @param {int} cycle - The even-year value of a cycle
  */
 ElectionSearch.prototype.removeWrongPresidentialElections = function(
@@ -161,10 +224,14 @@ ElectionSearch.prototype.removeWrongPresidentialElections = function(
 
 /**
  * Call the API with the values of the form and get a list of upcoming ElectionSearch
- * @param {event} e - event object
- * @param {object} opts - configuration options
+ * @param {jQuery.Event=} e - If it exists, it gets preventDefault()
+ * @param {Object=} opts - Default: `{pushState:true}`
+ * @param {Boolean} [opts.pushState] - Assigned `true` if it doesn't exist
  */
 ElectionSearch.prototype.search = function(e, opts) {
+  // console.log('ElectionSearch.search()');
+  // console.log('  this: ', this);
+  // console.log('  this.map: ', this.map);
   e && e.preventDefault();
   opts = _.extend({ pushState: true }, opts || {});
   var self = this;
@@ -220,7 +287,7 @@ ElectionSearch.prototype.handlePopState = function() {
   this.performSearch(null, { pushState: false });
 };
 
-//search presidential elections only if no other parameters (zip, state, district) are present
+// Search presidential elections only if no other parameters (zip, state, district) are present
 ElectionSearch.prototype.getPresidentialElections = function() {
   var resultsItems = this.$resultsItems;
   var cycle = this.$cycle.val();
@@ -269,7 +336,7 @@ ElectionSearch.prototype.getPresidentialElections = function() {
   );
 };
 
-//Show next upcoming presidential election on page load
+// Show next upcoming presidential election on page load
 ElectionSearch.prototype.getUpcomingPresidentialElection = function() {
   var now = new Date();
   var currentYear = now.getFullYear();
@@ -302,7 +369,7 @@ ElectionSearch.prototype.shouldSearch = function(serialized) {
  * Empties the contents of the search results list and then draws
  * the new results (not the map districts).
  * If we're on a past election, it will hide the map
- * @param {array} results - array of API election results
+ * @param {Array} results - Array of API election results
  */
 ElectionSearch.prototype.draw = function(results) {
   var self = this;
@@ -393,7 +460,7 @@ ElectionSearch.prototype.updateLocations = function() {
 
 /**
  * Append highlighted location images to relevant districts
- * @param {jQuery} $svg - SVG element
+ * @param {jQuery.Object} $svg - SVG element
  */
 ElectionSearch.prototype.drawLocations = function($svg) {
   this.$resultsItems.find('[data-color]').each(function(_, elm) {
@@ -464,6 +531,8 @@ ElectionSearch.prototype.formatName = function(result) {
 /**
  * Get the date of the general election for a two-year period
  * @param {object} result
+ * @returns {string} - In the `MMMM Do, YYYY` format
+ * (i.e. Full month name + ordinal date + four-digit year e.g. August 8th 2008)
  */
 ElectionSearch.prototype.formatGenericElectionDate = function(result) {
   var date = moment()
@@ -479,6 +548,8 @@ ElectionSearch.prototype.formatGenericElectionDate = function(result) {
 /**
  * If the result has an incumber, this formats the name of the person
  * @param {object} result
+ * @returns {Object|null} If a valid result, returns object in the format of
+ * `{name: 'Incumbent Name, url: '/candidate/P12345678/'}` else returns `null`
  */
 ElectionSearch.prototype.formatIncumbent = function(result) {
   if (result.incumbent_id) {
@@ -494,6 +565,11 @@ ElectionSearch.prototype.formatIncumbent = function(result) {
 /**
  * Format the URL to the election page
  * @param {object} result
+ * @param {string} result.cycle
+ * @param {'P' | 'H' | 'S'} result.office
+ * @param {string} [result.district]
+ * @param {string} [result.state]
+ * @returns {string} URL like `/data/elections/president/2024/`
  */
 ElectionSearch.prototype.formatUrl = function(result) {
   var path = ['elections', officeMap[result.office].toLowerCase()];
