@@ -107,14 +107,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
-
     'django_jinja',
-
     'taggit',
     'compressor',
     'modelcluster',
     'storages',
-
     'wagtail',
     'wagtail.admin',
     'wagtail.search',
@@ -127,12 +124,9 @@ INSTALLED_APPS = (
     'wagtail.contrib.redirects',
     'wagtail.contrib.forms',
     'wagtail.locales',
-
-    'wagtail.contrib.modeladmin',
     'wagtail.contrib.search_promotions',
     'wagtail.contrib.table_block',
     'wagtail.contrib.styleguide',
-
     'fec',
     'search',
     'home',
