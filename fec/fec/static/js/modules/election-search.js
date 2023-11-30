@@ -69,7 +69,7 @@ function ElectionSearch(selector) {
   if (this.dormantMap) {
     document.addEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap.bind(this));
     this.dormantMap.addEventListener('click', this.wakeTheMap.bind(this));
-    if (this.zipSearchField) this.zipSearchField.addEventListener('input', this.wakeTheMap.bind(this));
+    if (this.zipSearchField) this.zipSearchField.addEventListener('change', this.wakeTheMap.bind(this));
   } else {
     this.initInteractiveMap();
   }
