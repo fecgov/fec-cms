@@ -229,9 +229,6 @@ ElectionSearch.prototype.removeWrongPresidentialElections = function(
  * @param {Boolean} [opts.pushState] - Assigned `true` if it doesn't exist
  */
 ElectionSearch.prototype.search = function(e, opts) {
-  // console.log('ElectionSearch.search()');
-  // console.log('  this: ', this);
-  // console.log('  this.map: ', this.map);
   e && e.preventDefault();
   opts = _.extend({ pushState: true }, opts || {});
   var self = this;
