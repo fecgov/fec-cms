@@ -145,12 +145,8 @@ ElectionMap.prototype.updateBounds = function(districts) {
       return districts.indexOf(parseInt(district)) !== -1;
     });
   this._viewReset = !!(rule || districts);
-  if (rule) {
-    this.map.setView(rule.coords, rule.zoom);
-  } else if (districts && self.overlay.getBounds()) {
-
-    self.map.flyToBounds(self.overlay.getBounds(), { duration: 0.25 });
-  }
+  if (rule) this.map.setView(rule.coords, rule.zoom);
+  else if (districts.length >= 1) self.map.flyToBounds(self.overlay.getBounds(), { duration: 0.25 });
 };
 
 ElectionMap.prototype.drawBackgroundDistricts = function(districts) {

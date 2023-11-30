@@ -266,7 +266,7 @@ ElectionSearch.prototype.search = function(e, opts) {
       // the search options don't match the state of the map, e.g. after the
       // user has run a search, then zoomed out and triggered a map redraw.
       var encodedDistricts = self.encodeDistricts(self.results);
-      self.map.drawDistricts(encodedDistricts);
+      if (encodedDistricts) self.map.drawDistricts(encodedDistricts);
     }
   }
 };
