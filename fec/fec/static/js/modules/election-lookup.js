@@ -19,7 +19,6 @@ var ElectionMap = require('./election-map').ElectionMap;
  */
 
 function ElectionLookup(selector) {
-  // console.log('ElectionLookup()');
   this.$elm = $(selector);
   this.$form = this.$elm.find('form');
   this.$state = this.$form.find('[name="state"]');

@@ -58,7 +58,6 @@ function getDistrictPalette(scale) {
  * @param {object} opts - Configuration options
  */
 function ElectionMap(elm, opts) {
-  // console.log('ElectionMap(elm, opts): ', elm, opts);
   this.elm = elm;
   this.opts = _.extend({}, defaultOpts, opts);
   this.statePalette = getStatePalette(this.opts.colorScale);
@@ -139,7 +138,6 @@ ElectionMap.prototype.drawDistricts = function(districts) {
  * @param {Array} districts - Array of unique district identifiers
  */
 ElectionMap.prototype.updateBounds = function(districts) {
-  // console.log('ElectionMap.updateBounds()');
   var self = this;
   var rule =
     districts &&
@@ -147,17 +145,8 @@ ElectionMap.prototype.updateBounds = function(districts) {
       return districts.indexOf(parseInt(district)) !== -1;
     });
   this._viewReset = !!(rule || districts);
-  if (rule) {
-    this.map.setView(rule.coords, rule.zoom);
-  } else if (districts && self.overlay.getBounds()) {
-    // console.log('  self: ', self);
-    // console.log('  self.map: ', self.map);
-    // console.log('  self.overlay: ', self.overlay);
-    // console.log('  self.overlay.getBounds(): ', self.overlay.getBounds());
-    // console.log('  self.overlay.getBounds().getNorth(): ', self.overlay.getBounds().getNorth());
-
-    self.map.flyToBounds(self.overlay.getBounds(), { duration: 0.25 });
-  }
+  if (rule) this.map.setView(rule.coords, rule.zoom);
+  else if (districts.length >= 1) self.map.flyToBounds(self.overlay.getBounds(), { duration: 0.25 });
 };
 
 ElectionMap.prototype.drawBackgroundDistricts = function(districts) {

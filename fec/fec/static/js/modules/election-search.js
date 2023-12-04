@@ -69,7 +69,7 @@ function ElectionSearch(selector) {
   if (this.dormantMap) {
     document.addEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap.bind(this));
     this.dormantMap.addEventListener('click', this.wakeTheMap.bind(this));
-    if (this.zipSearchField) this.zipSearchField.addEventListener('input', this.wakeTheMap.bind(this));
+    if (this.zipSearchField) this.zipSearchField.addEventListener('change', this.wakeTheMap.bind(this));
   } else {
     this.initInteractiveMap();
   }
@@ -229,9 +229,6 @@ ElectionSearch.prototype.removeWrongPresidentialElections = function(
  * @param {Boolean} [opts.pushState] - Assigned `true` if it doesn't exist
  */
 ElectionSearch.prototype.search = function(e, opts) {
-  // console.log('ElectionSearch.search()');
-  // console.log('  this: ', this);
-  // console.log('  this.map: ', this.map);
   e && e.preventDefault();
   opts = _.extend({ pushState: true }, opts || {});
   var self = this;
@@ -269,7 +266,7 @@ ElectionSearch.prototype.search = function(e, opts) {
       // the search options don't match the state of the map, e.g. after the
       // user has run a search, then zoomed out and triggered a map redraw.
       var encodedDistricts = self.encodeDistricts(self.results);
-      self.map.drawDistricts(encodedDistricts);
+      if (encodedDistricts) self.map.drawDistricts(encodedDistricts);
     }
   }
 };
