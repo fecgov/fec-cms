@@ -5,7 +5,7 @@
 <h2 class="heading--section u-padding--top">Compare candidates in an election</h2>
 <div class="grid grid--2-wide grid--flex u-padding--top" id="election-lookup">
   <div class="grid__item u-margin--bottom">
-    <div class="election-map election-map--home">
+    <div class="election-map dormant election-map--home" title="click to activate the map">
       <!--map renders here -->
     </div>
   </div>
@@ -62,7 +62,6 @@
   </div>
 </div>
 
-
 <script>
 var context = {
   election: {
@@ -70,9 +69,6 @@ var context = {
     state: '{{ state|default_if_none:"" }}'
   }
 };
-
-
 </script>
-
 
 {% endif %}

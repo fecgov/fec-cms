@@ -1,3 +1,8 @@
+/**
+ * URLs: /data/
+ * Templates: /fec/fec/data/templates/landing.jinja
+ * Not to be confused with election-search.js, which is used on the homepage and /data/elections/
+ */
 'use strict';
 
 var $ = require('jquery');
@@ -6,7 +11,7 @@ var ElectionForm = require('./election-form').ElectionForm;
 var ElectionMap = require('./election-map').ElectionMap;
 
 /**
- * ElectionLookupPreview
+ * ElectionLookup
  * @class
  * The simpler form of the full ElectionSearch tool, used on the data landing page
  * This component has a map and the state and district selects
@@ -42,18 +47,59 @@ ElectionLookup.prototype.init = function() {
   this.showSenateOption = true;
 
   this.$map = $('.election-map');
-  this.map = new ElectionMap(this.$map.get(0), {
-    drawStates: true,
-    handleSelect: this.handleSelectMap.bind(this)
-  });
-  this.initialized = true;
+
+  this.initialized = false;
+  this.dormantMap = document.querySelector('.election-map.dormant');
+
+  if (this.dormantMap) {
+    this.dormantMap.addEventListener('click', this.wakeTheMap.bind(this));
+    document.addEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap.bind(this));
+  } else {
+    this.initInteractiveMap();
+  }
+};
+
+/**
+ * Makes the dormant map interactive,
+ * removes the event listeners and calls initInteractiveMap()
+ * Called when a user clicks the placeholder map image or when they interact with an
+ * element of the election search form
+ */
+ElectionLookup.prototype.wakeTheMap = function() {
+  // console.log('wakeTheMap()');
+  if (this.initialized === false) {
+    this.dormantMap.removeEventListener('click', this.wakeTheMap);
+    document.removeEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap);
+    this.initInteractiveMap();
+  }
+};
+
+/**
+ * Removes the `dormant` class and title attribute from the placeholder map,
+ * then initializes the interactive map
+ */
+ElectionLookup.prototype.initInteractiveMap = function() {
+  if (!this.initialized) {
+    if (this.dormantMap) {
+      this.dormantMap.classList.remove('dormant');
+      this.dormantMap.removeAttribute('title');
+      this.dormantMap = null; // Let garbage collection sweep it
+    }
+
+    this.map = new ElectionMap(this.$map.get(0), {
+      drawStates: true,
+      handleSelect: this.handleSelectMap.bind(this)
+    });
+
+    this.initialized = true;
+  }
 };
 
 /**
  * Handles a click event on the map
  * Updates the values in the district <select> and executes a search
- * @param {string} state - two-letter state abbreviation
- * @param {integer} distrit - district number
+ * @param {string} state - Two-letter state abbreviation
+ * @param {integer} district - District number
  */
 ElectionLookup.prototype.handleSelectMap = function(state, district) {
   this.$state.val(state);
@@ -69,7 +115,7 @@ ElectionLookup.prototype.handleSelectMap = function(state, district) {
  * Calls the search method
  * If there's a value, change the text of the button to signify that it takes you to a page
  * If there's no value, revert to "search"
- * @param {event} - event object
+ * @param {jQuery.Event} e - Passed to this.search()
  */
 ElectionLookup.prototype.handleDistrictChange = function(e) {
   this.search(e);
@@ -85,7 +131,7 @@ ElectionLookup.prototype.handleDistrictChange = function(e) {
 /**
  * Calls the API with the value of the form fields
  * Passes the values of the districts returned by the API call to the map
- * @param {event} e event object
+ * @param {jQuery.Event=} e - If it's included, it gets preventDefault()
  */
 ElectionLookup.prototype.search = function(e) {
   e && e.preventDefault();
