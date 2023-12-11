@@ -66,13 +66,26 @@ def web_app_url(path):
     return "{}{}".format(settings.FEC_APP_URL, path)
 
 
+@register.filter(name='remove_title_pre_suf_fix')
+def remove_title_pre_suf_fix(str):
+    """
+    Removes 'FEC | ' prefix and ' - FEC.gov' suffix' from search.gov search result title
+    """
+    str = re.sub(r'(^FEC \| | - FEC\.gov$)', '', str)
+    return str
+
+
 @register.filter()
 def highlight_matches(text):
     """
     Replaces the highlight markers with span tags for Search.gov website search results.
     Because format_html uses str.format, remove { and } because they are special characters.
     """
+    
+    #text = remove_result_pre_suf_fix(text)
     cleaned_text = text.replace("{", "").replace("}", "")
+    
+
     highlighted_text = cleaned_text.replace(
         "\ue000", '<span class="t-highlight">'
     ).replace("\ue001", "</span>")
@@ -189,3 +202,5 @@ def get_file_type(value):
     file_type = "EXCEL" if xl else file_extension
 
     return file_type
+
+
