@@ -81,11 +81,7 @@ def highlight_matches(text):
     Replaces the highlight markers with span tags for Search.gov website search results.
     Because format_html uses str.format, remove { and } because they are special characters.
     """
-    
-    #text = remove_result_pre_suf_fix(text)
     cleaned_text = text.replace("{", "").replace("}", "")
-    
-
     highlighted_text = cleaned_text.replace(
         "\ue000", '<span class="t-highlight">'
     ).replace("\ue001", "</span>")
