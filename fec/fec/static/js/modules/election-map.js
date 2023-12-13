@@ -237,8 +237,8 @@ ElectionMap.prototype.handleReset = function(e) {
  */
 ElectionMap.prototype.hide = function() {
   this.elm.setAttribute('aria-hidden', 'true');
-  this.mapMessage.setAttribute('aria-hidden', 'false');
-  this.mapApproxMessage.setAttribute('aria-hidden', 'true');
+  if (this.mapMessage) this.mapMessage.setAttribute('aria-hidden', 'false');
+  if (this.mapApproxMessage) this.mapApproxMessage.setAttribute('aria-hidden', 'true');
 };
 
 /**
