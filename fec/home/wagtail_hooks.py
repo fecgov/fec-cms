@@ -3,7 +3,7 @@ from wagtail.snippets.views.snippets import (SnippetViewSet, SnippetViewSetGroup
                                              IndexView)
 from wagtail.admin.panels import TabbedInterface, ObjectList
 
-from .models import (Author, PressReleasePage, DigestPage,
+from home.models import (Author, PressReleasePage, DigestPage,
                      TipsForTreasurersPage, RecordPage, CustomPage)
 
 
