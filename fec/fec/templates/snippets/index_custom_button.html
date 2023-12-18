@@ -1,0 +1,14 @@
+{% extends "wagtailsnippets/snippets/index.html" %}
+
+
+{% block extra_js %}
+    <script type="text/javascript">
+        window.onload = function() {
+            const model = '{{ instance }}'
+            const updates_id = '{{ updates_id }}'
+            const path = `/admin/pages/add/home/${model}/${updates_id}`
+            document.querySelector('.actionbutton a').setAttribute('href', path.toLowerCase())
+            document.querySelector('.actionbutton a').insertAdjacentHTML('beforeend', ` ( as child of /updates )`)
+        };
+    </script>
+{% endblock %}
