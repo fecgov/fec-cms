@@ -2,6 +2,7 @@
 
 
 {% block extra_js %}
+{{ block.super }}
     <script type="text/javascript">
         window.onload = function() {
             const model = '{{ instance }}'
