@@ -3,6 +3,8 @@ from wagtail.snippets.views.snippets import (SnippetViewSet, SnippetViewSetGroup
                                              IndexView)
 from wagtail.admin.panels import TabbedInterface, ObjectList
 
+from wagtail import hooks
+
 from home.models import (Author, PressReleasePage, DigestPage,
                      TipsForTreasurersPage, RecordPage, CustomPage)
 
@@ -17,17 +19,18 @@ class AuthorSnippetView(SnippetViewSet):
     search_fields = ('name', 'title', 'email')
     add_to_admin_menu = True  # When set to false, with wagtail5 this shows under snippet menu
 
+@hooks.register('get_updates_id(')
+def get_updates_id():
+    #page = CustomPage.objects.live().get(slug__exact="updates")
+    page = CustomPage.objects.live().filter(slug__exact="updates").first().id
+    pg_id = page
+    return pg_id
+   
 
 class MyAdminSnippetView(IndexView):
-    def get_updates_id():
-        page = CustomPage.objects.live().get(slug__exact="updates")
-        pg_id = page.id
-        return pg_id
-    updates_id = get_updates_id()
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["updates_id"] = self.updates_id
+        context["updates_id"] = get_updates_id()
         context["instance"] = IndexView.get_base_queryset(self).model.__name__
         return context
 
