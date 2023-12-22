@@ -21,13 +21,20 @@ class AuthorSnippetView(SnippetViewSet):
 
 @hooks.register('get_updates_id(')
 def get_updates_id():
-    #page = CustomPage.objects.live().get(slug__exact="updates")
+    page = CustomPage.objects.live().get(slug__exact="updates")
     page = CustomPage.objects.live().filter(slug__exact="updates").first().id
     pg_id = page
     return pg_id
+
+@hooks.register('page_edit_handler')
+def page_edit_handler(model):
+    return TabbedInterface([
+        ObjectList(model.content_panels, heading='Content'),
+        ObjectList(model.promote_panels, heading='Promote'),
+    ])
    
 
-class MyAdminSnippetView(IndexView):
+class UpdatesSnippetView(IndexView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["updates_id"] = get_updates_id()
@@ -40,12 +47,9 @@ class PressReleaseSnippetView(SnippetViewSet):
     model = PressReleasePage
     ordering = ['-date']
     list_display = ('title', 'date', 'category')
-    index_view_class = MyAdminSnippetView
+    index_view_class = UpdatesSnippetView
     index_template_name = 'snippets/index_custom_button.html'
-    edit_handler = TabbedInterface([
-        ObjectList(model.content_panels, heading='Content'),
-        ObjectList(model.promote_panels, heading='Promote'),
-    ])
+    edit_handler = page_edit_handler(model)
 
 
 class DigestPageSnippetView(SnippetViewSet):
@@ -53,12 +57,9 @@ class DigestPageSnippetView(SnippetViewSet):
     model = DigestPage
     ordering = ['-date']
     list_display = ('title', 'date')
-    index_view_class = MyAdminSnippetView
+    index_view_class = UpdatesSnippetView
     index_template_name = 'snippets/index_custom_button.html'
-    edit_handler = TabbedInterface([
-        ObjectList(model.content_panels, heading='Content'),
-        ObjectList(model.promote_panels, heading='Promote'),
-    ])
+    edit_handler = page_edit_handler(model)
 
 
 class TipsForTreasurersPageSnippetView(SnippetViewSet):
@@ -66,12 +67,9 @@ class TipsForTreasurersPageSnippetView(SnippetViewSet):
     model = TipsForTreasurersPage
     ordering = ['-date']
     list_display = ('title', 'date')
-    index_view_class = MyAdminSnippetView
+    index_view_class = UpdatesSnippetView
     index_template_name = 'snippets/index_custom_button.html'
-    edit_handler = TabbedInterface([
-        ObjectList(model.content_panels, heading='Content'),
-        ObjectList(model.promote_panels, heading='Promote'),
-    ])
+    edit_handler = page_edit_handler(model)
 
 
 class RecordPageSnippetView(SnippetViewSet):
@@ -79,12 +77,9 @@ class RecordPageSnippetView(SnippetViewSet):
     model = RecordPage
     ordering = ['-date']
     list_display = ('title', 'date', 'category')
-    index_view_class = MyAdminSnippetView
+    index_view_class = UpdatesSnippetView
     index_template_name = 'snippets/index_custom_button.html'
-    edit_handler = TabbedInterface([
-        ObjectList(model.content_panels, heading='Content'),
-        ObjectList(model.promote_panels, heading='Promote'),
-    ])
+    edit_handler = page_edit_handler(model)
 
 
 class NewsAndUpdatesSnippetView(SnippetViewSetGroup):
