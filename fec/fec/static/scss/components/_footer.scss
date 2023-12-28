@@ -71,8 +71,8 @@
   .social-media {
     margin-bottom: u(2rem);
 
-    .icon--twitter {
-      @include u-icon($twitter-circle, $inverse, 3rem, 3rem, contain);
+    .icon--x-twitter {
+      @include u-icon($x-twitter-circle, $inverse, 3rem, 3rem, contain);
     }
 
     .icon--youtube {
