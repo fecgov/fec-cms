@@ -23,13 +23,13 @@ const availableDates = [
   {
     value: '2023',
     label: 'December 29, 2022 to January 4, 2024',
-    summary: 'Assessed on or after December 28, 2022 to January 4, 2024'
+    summary: 'Assessed December 28, 2022 to January 4, 2024'
   },
   {
     value: '2022',
     label: 'December 28, 2021 to December 28, 2022',
-    summary: 'Assessed on or after December 28, 2021 to December 28, 2022'
-  }
+    summary: 'Assessed December 28, 2021 to December 28, 2022'
+  },
 ];
 
 /**
