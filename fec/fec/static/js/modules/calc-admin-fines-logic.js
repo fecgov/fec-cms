@@ -29,7 +29,7 @@ const availableDates = [
     value: '2022',
     label: 'December 28, 2021 to December 28, 2022',
     summary: 'Assessed December 28, 2021 to December 28, 2022'
-  },
+  }
 ];
 
 /**
