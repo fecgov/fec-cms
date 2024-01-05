@@ -17,13 +17,13 @@ const availableDates = [
   },
   {
     value: '2024',
-    label: 'On or after Mmmm dd, 2023/4',
-    summary: 'Assessed on or after Mmmm dd, 2023/4'
+    label: 'On or after January 5, 2024',
+    summary: 'Assessed on or after January 5, 2024'
   },
   {
     value: '2023',
-    label: 'December 29, 2022 to Mmmm dd, 2023/4',
-    summary: 'Assessed on or after December 28, 2022 to Mmmm dd, 2023/4'
+    label: 'December 29, 2022 to January 4, 2024',
+    summary: 'Assessed on or after December 28, 2022 to January 4, 2024'
   },
   {
     value: '2022',
