@@ -6,7 +6,8 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 
 """options for wagtail default table_block """
 core_table_options = {
-    'renderer': 'html'
+    'renderer': 'html',
+    'renderAllRows': True,
 }
 
 
@@ -97,10 +98,12 @@ class InternalButtonBlock(blocks.StructBlock):
 class FeedDocumentBlock(blocks.StructBlock):
     """A block that is used to construct a feed list of PDFs"""
     title = blocks.CharBlock()
-    document = DocumentChooserBlock()
+    document = DocumentChooserBlock(required=False)
+    external_document = blocks.URLBlock(required=False, help_text='Full url to the document')
 
     class Meta:
         icon = 'doc-empty'
+        help_text = 'Either choose a document or enter an external document URL'
 
 
 class CurrentCommissionersBlock(blocks.StaticBlock):
@@ -173,7 +176,8 @@ class CustomTableBlock(blocks.StructBlock):
         'rowHeaders': True,
         'height': 108,
         'language': 'en',
-        'renderer': 'html'
+        'renderer': 'html',
+        'renderAllRows': True,
     }
 
     custom_table = blocks.StreamBlock([
@@ -198,7 +202,8 @@ class ReportingTableBlock(blocks.StructBlock):
         'rowHeaders': False,
         'height': 108,
         'language': 'en',
-        'renderer': 'html'
+        'renderer': 'html',
+        'renderAllRows': True,
     }
 
     table = TableBlock(table_options=reporting_table_options)

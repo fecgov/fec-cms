@@ -3,15 +3,23 @@ Template for Debts datatable details panel
 ---------------------
 This shows fields available on the Schedule D form.
 --}}
-
 <div class="panel__row">
   <h4 class="panel__title">Committee information</h4>
   <table>
     {{#panelRow "Name"}}
       <a href="{{basePath}}/committee/{{committee_id}}">{{committee.name}}</a>
     {{/panelRow}}
-    {{#panelRow "Committee city and state"}}
-      {{committee.city}}, {{committee.state}}  {{zipCode committee.zip}}
+    {{#panelRow "Type"}}
+      {{committee.committee_type_full}}
+    {{/panelRow}}
+    {{#panelRow "Designation"}}
+      {{committee.designation_full}}
+    {{/panelRow}}
+    {{#panelRow "Most recent treasurer"}}
+      {{committee.treasurer_name}}
+    {{/panelRow}}
+    {{#panelRow "City and state"}}
+      {{committee.city}}, {{committee.state}}  {{committee.zip}}
     {{/panelRow}}
   </table>
 </div>
@@ -25,7 +33,7 @@ This shows fields available on the Schedule D form.
       {{/if}}
     {{/panelRow}}
     {{#panelRow "City and state"}}
-      {{creditor_debtor_city}}, {{creditor_debtor_state}}
+      {{creditor_debtor_city}}, {{creditor_debtor_state}}  {{creditor_debtor_zip}}
     {{/panelRow}}
   </table>
 </div>
@@ -33,23 +41,43 @@ This shows fields available on the Schedule D form.
 <div class="panel__row">
   <h4 class="panel__title">Debt information</h4>
   <table>
-    {{#panelRow "Nature of Debt"}}
-      {{{nature_of_debt}}}
+    {{#panelRow "Nature of debt"}}
+      {{nature_of_debt}}
     {{/panelRow}}
     {{#panelRow "Date"}}
-      {{{datetime load_date format="pretty"}}}
+      {{{datetime coverage_start_date format="pretty"}}}
     {{/panelRow}}
-    {{#panelRow "Balance at Beginning of Period"}}
+    {{#panelRow "Line number"}}
+      {{line_number}}
+    {{/panelRow}}
+    {{#panelRow "Balance at beginning of period"}}
         {{{currency outstanding_balance_beginning_of_period}}}
     {{/panelRow}}
-    {{#panelRow "Incurred This Period"}}
+    {{#panelRow "Amount incurred this period"}}
       {{{currency amount_incurred_period}}}
     {{/panelRow}}
-    {{#panelRow "Payments This Period"}}
+    {{#panelRow "Amount paid this period"}}
       {{{currency payment_period}}}
     {{/panelRow}}
-    {{#panelRow "Balance at Close of Period"}}
+    {{#panelRow "Balance at close of period"}}
       {{{currency outstanding_balance_close_of_period}}}
+    {{/panelRow}}
+    {{#panelRow "Report year"}}
+      {{{report_year}}}
+    {{/panelRow}}
+    {{#panelRow "Report type"}}
+      {{{report_type}}}
+    {{/panelRow}}
+    {{#panelRow "Line number"}}
+      {{#if (eq line_number "9")}}
+        Debts and obligations owed to the committee (Line 9)
+      {{else if (eq line_number "10")}}
+        Debts and obligations owed by the committee (Line 10)
+      {{else if (eq line_number "11")}}
+        Debts and obligations owed to the committee (Line 11)
+      {{else if (eq line_number "12")}}
+        Debts and obligations owed by the committee (Line 12)
+      {{/if}}
     {{/panelRow}}
   </table>
 </div>

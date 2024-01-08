@@ -68,7 +68,8 @@ def get_digests(year=None, search=None):
 
 
 def get_press_releases(category_list=None, year=None, search=None):
-    press_releases = PressReleasePage.objects.live()
+    # Exclude duplicate(aliased) pages in /guidance-search/ path
+    press_releases = PressReleasePage.objects.live().exclude(url_path__contains='guidance-search')
 
     if category_list:
         for category in category_list:

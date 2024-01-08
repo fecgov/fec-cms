@@ -64,6 +64,7 @@ function ElectionMap(elm, opts) {
   this.districtPalette = getDistrictPalette(this.opts.colorScale);
   this.mapMessage = document.querySelector('.js-map-message');
   this.mapApproxMessage = document.querySelector('.js-map-approx-message');
+  this.initialized = false;
   this.init();
 }
 
@@ -71,19 +72,24 @@ function ElectionMap(elm, opts) {
  * Initialize the map
  */
 ElectionMap.prototype.init = function() {
-  this.overlay = null;
-  this.districts = null;
-  this.map = L.map(this.elm, {
-    scrollWheelZoom: false,
-    draggable: false,
-    touchZoom: false
-  });
-  this.map.on('viewreset', this.handleReset.bind(this));
-  this.tileLayer = L.tileLayer.provider('Stamen.TonerLite');
-  this.tileLayer.on('tileload', this.handleTileLoad.bind(this));
-  this.tileLayer.addTo(this.map);
-  if (this.opts.drawStates) {
-    this.map.setView([37.8, -96], 3);
+  // console.log('ElectionMap.init()');
+  // console.log('  this.initialized: ', this.initialized);
+  if (this.initialized === false) {
+    this.overlay = null;
+    this.districts = null;
+    this.map = L.map(this.elm, {
+      scrollWheelZoom: false,
+      draggable: false,
+      touchZoom: false
+    });
+    this.map.on('viewreset', this.handleReset.bind(this));
+    this.tileLayer = L.tileLayer.provider('Stadia.StamenTonerLite');
+    this.tileLayer.on('tileload', this.handleTileLoad.bind(this));
+    this.tileLayer.addTo(this.map);
+    if (this.opts.drawStates) {
+      this.map.setView([37.8, -96], 3);
+    }
+    this.initialized = true;
   }
 };
 
@@ -129,7 +135,7 @@ ElectionMap.prototype.drawDistricts = function(districts) {
 
 /**
  * Update the boundaries of the map
- * @param {array} districts - array of unique district identifiers
+ * @param {Array} districts - Array of unique district identifiers
  */
 ElectionMap.prototype.updateBounds = function(districts) {
   var self = this;
@@ -139,11 +145,8 @@ ElectionMap.prototype.updateBounds = function(districts) {
       return districts.indexOf(parseInt(district)) !== -1;
     });
   this._viewReset = !!(rule || districts);
-  if (rule) {
-    this.map.setView(rule.coords, rule.zoom);
-  } else if (districts) {
-    self.map.flyToBounds(self.overlay.getBounds(), { duration: 0.25 });
-  }
+  if (rule) this.map.setView(rule.coords, rule.zoom);
+  else if (districts.length >= 1) self.map.flyToBounds(self.overlay.getBounds(), { duration: 0.25 });
 };
 
 ElectionMap.prototype.drawBackgroundDistricts = function(districts) {
@@ -242,9 +245,9 @@ ElectionMap.prototype.hide = function() {
  * Show the map
  */
 ElectionMap.prototype.show = function() {
-  this.elm.setAttribute('aria-hidden', 'false');
-  this.mapMessage.setAttribute('aria-hidden', 'true');
-  this.mapApproxMessage.setAttribute('aria-hidden', 'false');
+  if (this.elm) this.elm.setAttribute('aria-hidden', 'false');
+  if (this.mapMessage) this.mapMessage.setAttribute('aria-hidden', 'true');
+  if (this.mapApproxMessage) this.mapApproxMessage.setAttribute('aria-hidden', 'false');
 };
 
 module.exports = {

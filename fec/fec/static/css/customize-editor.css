@@ -80,20 +80,3 @@ li.sequence-member .sequence-member-inner .sequence-type-list .sequence-containe
 .richtext ol ol ol li {
   list-style-type: lower-roman;
 }
-
-
-
-/* Overrides to ReportingDatesTable template to allow full table to show in editor immeditaely. */
-
-div[data-contentpath="reporting_dates_table"] div[id*="-value-table-handsontable-container"] {
-  height:auto  !important;
-  margin-top: 30px;
-}
-
-div[id*="-value-table-handsontable-container"] .ht_master.handsontable {
-  height: auto  !important;
-}
-
-div.ht_master.handsontable div.wtHolder {
-  height: auto  !important;
-}

@@ -887,6 +887,10 @@ var debts = [
     data: 'outstanding_balance_close_of_period',
     className: 'min-desktop hide-panel column--number t-mono'
   }),
+  dateColumn({
+    data: 'coverage_end_date',
+    className: 'min-tablet hide-panel column--small'
+  }),
   modalTriggerColumn
 ];
 

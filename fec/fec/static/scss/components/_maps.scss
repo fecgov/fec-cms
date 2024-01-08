@@ -142,3 +142,14 @@ path.shape {
 .leaflet-bottom {
   display: none;
 }
+// The new version of Leaflet wants to hide the zoom in/out button text content
+.leaflet-control-zoom-in span, .leaflet-control-zoom-out span {
+  display: block !important;
+}
+
+.election-map.dormant, .election-map--home.dormant {
+  background-image: url("/static/img/map-election-search-default.png");
+  background-position: center;
+  background-size: 1200px auto;
+  background-repeat: no-repeat;
+}

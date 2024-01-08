@@ -462,7 +462,7 @@ table_columns = OrderedDict([
         ['Spender', 'Support/Oppose', 'Candidate', 'Description', 'Payee', 'Expenditure date', 'Amount']),
     ('individual-contributions', ['Contributor name', 'Recipient', 'State', 'Employer', 'Receipt date', 'Amount']),
     ('loans', ['Committee Name', 'Loaner name', 'Incurred date', 'Payment to date', 'Original loan amount']),
-    ('debts', ['Committee Name', 'Creditor/Debtor Name', 'Beginning Balance', 'Ending Balance']),
+    ('debts', ['Committee name', 'Creditor/Debtor name', 'Beginning balance', 'Ending balance', 'Coverage end date']),
     ('party-coordinated-expenditures', ['Spender', 'Candidate', 'Payee name', 'Expenditure date', 'Amount']),
     ('receipts', ['Source name', 'Recipient', 'Election', 'State', 'Receipt date', 'Amount']),
     ('reports-presidential',
@@ -557,7 +557,21 @@ line_numbers = {
             ('F3X-29', 'Other disbursements (Line 29)'),
             ('F3X-30B', 'Party - Types 3 & 4 Federal Election Activity (FEA) (Line 30b)'),
         ])
-    }
+    },
+    'debts': {
+        'house_senate': OrderedDict([
+            ('F3-9', 'Debts and obligations owed to the committee (Line 9)'),
+            ('F3-10', 'Debts and obligations owed by the committee (Line 10)'),
+        ]),
+        'presidential': OrderedDict([
+            ('F3P-11', 'Debts and obligations owed to the committee (Line 11)'),
+            ('F3P-12', 'Debts and obligations owed by the committee (Line 12)'),
+        ]),
+        'pac_party': OrderedDict([
+            ('F3X-9', 'Debts and obligations owed to the committee (Line 9)'),
+            ('F3X-10', 'Debts and obligations owed by the committee (Line 10)'),
+        ]),
+    },
 }
 
 
@@ -869,8 +883,9 @@ CASH_FORMATTER = OrderedDict([
     ('last_cash_on_hand_end_period',
         {'label': 'Ending cash on hand', 'term': 'ending cash on hand', 'level': '2'}),  # F3, F3P, #F3X
     ('last_debts_owed_to_committee',
-        {'label': 'Debts/loans owed to committee', 'level': '2'}),  # F3, F3P, F3X
-    ('last_debts_owed_by_committee', {'label': 'Debts/loans owed by committee', 'level': '2'}),  # F3, F3P, F3X
+        {'label': 'Debts/loans owed to committee', 'level': '2', 'type': {'link': 'debts_to'}}),  # F3, F3P, F3X
+    ('last_debts_owed_by_committee',
+        {'label': 'Debts/loans owed by committee', 'level': '2', 'type': {'link': 'debts_by'}}),  # F3, F3P, F3X
     # Commenting out net numbers because the underlying logic is incorrect
     # ('net_contributions', {'label': 'Net contributions', 'level': '2'}), #F3, F3X
     # ('contributions', {'label': 'Total contributions', 'level': '3'}), #F3, #F3P, F3X

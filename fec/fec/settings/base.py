@@ -23,6 +23,7 @@ FEC_API_KEY_PRIVATE = env.get_credential('FEC_WEB_API_KEY_PRIVATE')
 FEC_API_VERSION = env.get_credential('FEC_API_VERSION', 'v1')
 FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
 FEC_API_KEY_PUBLIC_CALENDAR = env.get_credential('FEC_WEB_API_KEY_PUBLIC_CALENDAR', FEC_API_KEY_PUBLIC)
+FEC_CAL_DOWNLOAD_API_KEY = env.get_credential('FEC_CAL_DOWNLOAD_API_KEY')
 FEC_DOWNLOAD_API_KEY = env.get_credential('FEC_DOWNLOAD_API_KEY', '')
 
 FEC_RECAPTCHA_SECRET_KEY = env.get_credential('FEC_RECAPTCHA_SECRET_KEY')
@@ -34,8 +35,6 @@ FEC_SERVICE_NOW_USERNAME = env.get_credential('FEC_SERVICE_NOW_USERNAME')
 FEC_SERVICE_NOW_PASSWORD = env.get_credential('FEC_SERVICE_NOW_PASSWORD')
 # Search.gov website keys
 SEARCHGOV_BASE_API_URL = env.get_credential('SEARCHGOV_BASE_API_URL', '')
-SEARCHGOV_DRAWER_HANDLE = env.get_credential('SEARCHGOV_DRAWER_HANDLE', '')
-SEARCHGOV_DRAWER_KEY_MAIN = env.get_credential('SEARCHGOV_DRAWER_KEY_MAIN', '')
 SEARCHGOV_API_ACCESS_KEY = env.get_credential('SEARCHGOV_API_ACCESS_KEY')
 SEARCHGOV_POLICY_GUIDANCE_KEY = env.get_credential('SEARCHGOV_POLICY_GUIDANCE_KEY')
 
@@ -69,7 +68,7 @@ FEATURES = {
     'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
-    'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),  # TODO: debts dates
+    'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),
     'h4_allocated_disbursements': bool(env.get_credential('FEC_FEATURE_H4_ALLOCATED_DISBURSEMENTS', True)),
     'house_senate_overview': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW', '')),
     'house_senate_overview_methodology': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_METHODOLOGY', '')),
@@ -166,6 +165,8 @@ MIDDLEWARE = (
     # 'wagtail.contrib.legacy.sitemiddleware.SiteMiddleware',
     # :up: SiteMiddleware :up: was removed for Wagtail 2.11. Safe to lose it altogether?
 )
+
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
 CSRF_TRUSTED_ORIGINS = ["fec.gov", "app.cloud.gov"]
 if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:

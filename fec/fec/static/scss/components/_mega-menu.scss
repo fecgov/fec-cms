@@ -90,15 +90,19 @@
 }
 
 .mega__item {
-  margin-bottom: u(1.5rem);
-  line-height:1.2;
   break-inside: avoid;
+  float: left;
+  line-height: 1.2;
+  margin-bottom: u(1.5rem);
+  position: relative;
+  width: 100%;
 
   a:after {
     // Adding the double right-angle quote (») here since it's only decorative and not actually a closing quote
     // (for accessibility and SEO)
-    content: " »";
+    content: "\00A0 »"; // \00A0 is a non-breaking space to prevent wraps
     line-height: 1em;
+    position: absolute;
   }
 }
 
