@@ -1,5 +1,3 @@
-'use strict';
-
 // Implementing a polyfill for js native WeakMap
 // in order to patch functionality in an included library
 require('es6-weak-map/implement');

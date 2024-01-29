@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 var helpers = require('./helpers');
 const accessibility = require('./accessibility');
 

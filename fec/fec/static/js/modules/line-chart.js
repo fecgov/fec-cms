@@ -1,7 +1,4 @@
-'use strict';
-
 /* global DEFAULT_TIME_PERIOD */
-var $ = require('jquery');
 var _ = require('underscore');
 var d3 = require('d3');
 var numeral = require('numeral');

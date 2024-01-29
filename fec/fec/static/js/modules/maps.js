@@ -1,7 +1,4 @@
-'use strict';
-
 var d3 = require('d3');
-var $ = require('jquery');
 var _ = require('underscore');
 var chroma = require('chroma-js');
 var topojson = require('topojson-client');

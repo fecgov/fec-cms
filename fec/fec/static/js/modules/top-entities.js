@@ -1,6 +1,4 @@
-'use strict';
 
-var $ = require('jquery');
 var URI = require('urijs');
 var helpers = require('../modules/helpers');
 

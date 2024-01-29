@@ -1,5 +1,3 @@
-'use strict';
-
 // TODO - add a loading animation of some kind? Something to tell users that it's official but still loading?
 // TODO - When adding the small implementations (i.e., with no controls), reference #2803 for designs
 

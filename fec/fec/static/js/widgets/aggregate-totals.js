@@ -1,5 +1,3 @@
-'use strict';
-
 // TODO - Polish the resize functionality
 /**
  * The code that runs the in-page iframe, though the same vars will apply to aggregate-totals-box.

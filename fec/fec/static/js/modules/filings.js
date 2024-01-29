@@ -1,6 +1,5 @@
-'use strict';
+import { extend as _extend } from 'underscore';
 
-var $ = require('jquery');
 var _ = require('underscore');
 
 var tables = require('./tables');

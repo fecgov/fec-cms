@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * How many election years should we include? In places like lists.
  */

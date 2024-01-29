@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * @fileoverview Interactive map based on fec/fec/static/js/modules/maps.js. Displays color-coded states based on the dataset provided
  * @copyright 2019 Federal Election Commission

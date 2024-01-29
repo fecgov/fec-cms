@@ -1,11 +1,8 @@
-'use strict';
-
 var chai = require('chai');
 var sinonChai = require('sinon-chai');
 var expect = chai.expect;
 chai.use(sinonChai);
 
-var $ = require('jquery');
 
 var SkipNav = require('../../static/js/modules/skip-nav').Skipnav;
 

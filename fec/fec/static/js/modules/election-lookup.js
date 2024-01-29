@@ -3,8 +3,6 @@
  * Templates: /fec/fec/data/templates/landing.jinja
  * Not to be confused with election-search.js, which is used on the homepage and /data/elections/
  */
-'use strict';
-
 var $ = require('jquery');
 var helpers = require('./helpers');
 var ElectionForm = require('./election-form').ElectionForm;

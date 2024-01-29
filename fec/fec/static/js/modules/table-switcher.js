@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 
 /* TableSwitcher
  * For switching between efile and processed results

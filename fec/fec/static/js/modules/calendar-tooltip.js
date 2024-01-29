@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 
 var dropdown = require('./dropdowns');
 var listeners = require('./listeners');

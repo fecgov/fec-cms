@@ -1,5 +1,3 @@
-'use strict';
-
 // TODO: Do we still need this test if we aren't calling sortQuery from anywhere else in the repo?
 
 var chai = require('chai');

@@ -1,4 +1,3 @@
-'use strict';
 
 var eventemitter = require('eventemitter2');
 var EventEmitter2 = eventemitter.EventEmitter2 || eventemitter;

@@ -1,12 +1,9 @@
-'use strict';
-
 /* global describe, before, beforeEach, it */
 
 var chai = require('chai');
 var expect = chai.expect;
 var sinon = require('sinon');
 
-var $ = require('jquery');
 
 var SiteNav = require('../../static/js/modules/site-nav').SiteNav;
 var helpers = require('../../static/js/modules/helpers');

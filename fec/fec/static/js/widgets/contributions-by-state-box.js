@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * @fileoverview Controls all functionality inside the Where Contributions Come From widget
  * in cooperation with data-map

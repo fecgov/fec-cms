@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 
 const template_body = value => `
 <div>

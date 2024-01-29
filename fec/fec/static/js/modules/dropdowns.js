@@ -1,6 +1,4 @@
-'use strict';
 
-var $ = require('jquery');
 require('perfect-scrollbar/jquery')($);
 const accessibility = require('./accessibility');
 

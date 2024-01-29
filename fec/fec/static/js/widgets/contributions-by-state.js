@@ -1,5 +1,3 @@
-'use strict';
-
 // TODO - Polish the resize functionality
 /**
  * @fileoverview This file runs the show for the embedded Where Contributions Come From widget

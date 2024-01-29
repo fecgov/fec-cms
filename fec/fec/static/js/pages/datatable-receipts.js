@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 
 var tables = require('../modules/tables');
 var TableSwitcher = require('../modules/table-switcher').TableSwitcher;

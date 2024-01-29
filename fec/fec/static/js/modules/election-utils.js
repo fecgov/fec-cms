@@ -1,6 +1,4 @@
-'use strict';
 
-var $ = require('jquery');
 var _ = require('underscore');
 var fips = require('./fips');
 var helpers = require('./helpers');

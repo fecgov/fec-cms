@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 var moment = require('moment');
 
 var Filter = require('./filter-base');

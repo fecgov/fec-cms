@@ -1,7 +1,4 @@
-'use strict';
-
 import { buildUrl, buildAppUrl, dollar } from '../modules/helpers';
-var $ = require('jquery');
 var tables = require('../modules/tables');
 var columns = require('../modules/columns');
 var decoders = require('../modules/decoders');

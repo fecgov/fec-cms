@@ -5,7 +5,6 @@ var sinonChai = require('sinon-chai');
 var expect = chai.expect;
 chai.use(sinonChai);
 
-var $ = require('jquery');
 
 require('./setup')();
  

@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 var A11yDialog = require('a11y-dialog');
 
 /**

@@ -1,6 +1,4 @@
-'use strict';
 
-var $ = require('jquery');
 var calendarHelpers = require('./calendar-helpers');
 var moment = require('moment');
 

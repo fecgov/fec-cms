@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 
 var filings = require('../modules/filings');
 var columnHelpers = require('../modules/column-helpers');

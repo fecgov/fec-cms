@@ -1,5 +1,3 @@
-'use strict';
-
 const states_dropdown_template = `
 <div class="filter">
 <select id="states" name="states">

@@ -1,11 +1,8 @@
-'use strict';
-
 var sinon = require('sinon');
 var sinonChai = require('sinon-chai');
 var expect = chai.expect;
 chai.use(sinonChai);
 
-var $ = require('jquery');
 
 var electionUtils = require('../../static/js/modules/election-utils');
 var electionOffices = require('../fixtures/election-offices');

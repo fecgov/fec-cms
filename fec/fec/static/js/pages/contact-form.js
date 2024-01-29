@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 var Typeahead = require('../modules/typeahead').Typeahead;
 var URI = require('urijs');
 

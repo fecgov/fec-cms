@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 var _ = require('underscore');
 var helpers = require('./helpers');
 var utils = require('./election-utils');

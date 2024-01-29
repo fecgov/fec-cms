@@ -1,5 +1,3 @@
-'use strict';
-
 function StatisticalSummaryArchive() {
   this.chooseYear = document.getElementById('year');
 

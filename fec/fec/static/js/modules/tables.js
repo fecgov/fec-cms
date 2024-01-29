@@ -1,10 +1,6 @@
-'use strict';
-
 /**
  * pagingType documentation: https://datatables.net/reference/option/pagingType
  */
-
-var $ = require('jquery');
 var _ = require('underscore');
 
 require('datatables.net');

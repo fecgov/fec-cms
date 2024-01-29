@@ -1,4 +1,3 @@
-const $ = require('jquery');
 const _ = require('underscore');
 const React = require('react');
 const URI = require('urijs');

@@ -1,11 +1,8 @@
-'use strict';
-
 /**
  * This calls `reactionFeedback(request)` in `/data/views.py `to post as a Github issue.
  * Previously implemented here (ported to this Django project):
  * https://github.com/18F/openFEC-web-app/blob/develop/openfecwebapp/views.py#L302
  */
-var $ = require('jquery');
 var helpers = require('../modules/helpers');
 var analytics = require('../modules/analytics');
 

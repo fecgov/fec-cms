@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 
 var helpers = require('../modules/helpers');
 var tables = require('../modules/tables');

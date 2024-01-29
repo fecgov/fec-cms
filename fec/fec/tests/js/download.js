@@ -1,5 +1,3 @@
-'use strict';
-
 var chai = require('chai');
 var sinon = require('sinon');
 var sinonChai = require('sinon-chai');
@@ -7,7 +5,6 @@ var MockDate = require('mockdate');
 var expect = chai.expect;
 chai.use(sinonChai);
 
-var $ = require('jquery');
 var moment = require('moment');
 
 require('./setup')();

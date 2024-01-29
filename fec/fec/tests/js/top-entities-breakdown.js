@@ -1,5 +1,3 @@
-'use strict';
-
 var chai = require('chai');
 var sinon = require('sinon');
 var sinonChai = require('sinon-chai');
@@ -8,7 +6,6 @@ var moment = require('moment');
 
 chai.use(sinonChai);
 
-var $ = require('jquery');
 
 require('./setup')();
 

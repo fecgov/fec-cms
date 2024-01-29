@@ -1,8 +1,5 @@
-'use strict';
-
 /* global window, describe, before, beforeEach, afterEach, it */
 
-var $ = require('jquery');
 var _ = require('underscore');
 
 window.$ = window.jQuery = $;

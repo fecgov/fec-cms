@@ -1,10 +1,7 @@
-'use strict';
-
 /**
  * PAC and party committee datatable page
  **/
 
-var $ = require('jquery');
 
 var tables = require('../modules/tables');
 var columns = require('../modules/columns');

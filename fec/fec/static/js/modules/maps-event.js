@@ -1,6 +1,4 @@
-'use strict';
 
-var $ = require('jquery');
 
 var maps = require('../modules/maps');
 var events = require('./events');

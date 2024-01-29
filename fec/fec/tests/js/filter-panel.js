@@ -1,11 +1,7 @@
-'use strict';
-
 const { expect } = require('chai');
 const sinon = require('sinon');
 
 require('./setup')();
-
-const $ = require('jquery');
 
 const FilterPanel = require('../../static/js/modules/filters/filter-panel')
   .FilterPanel;

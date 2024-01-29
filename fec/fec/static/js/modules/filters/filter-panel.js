@@ -1,6 +1,3 @@
-'use strict';
-
-const $ = require('jquery');
 
 const FilterSet = require('./filter-set').FilterSet;
 const accessibility = require('../accessibility');

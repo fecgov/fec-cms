@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 var lookup = require('../modules/election-search');
 
 $(document).ready(function() {

@@ -1,8 +1,5 @@
-'use strict';
-
 /* global API_LOCATION, API_VERSION, API_KEY_PUBLIC */
 
-var $ = require('jquery');
 var URI = require('urijs');
 var _ = require('underscore');
 var typeahead = require('../typeahead');

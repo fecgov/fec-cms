@@ -1,4 +1,3 @@
-'use strict';
 
 var _ = require('underscore');
 var URI = require('urijs');

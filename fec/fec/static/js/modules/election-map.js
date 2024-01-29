@@ -1,5 +1,3 @@
-'use strict';
-
 var _ = require('underscore');
 var topojson = require('topojson-client');
 var colorbrewer = require('colorbrewer');

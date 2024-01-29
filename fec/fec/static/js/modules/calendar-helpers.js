@@ -1,4 +1,3 @@
-'use strict';
 
 var URI = require('urijs');
 var moment = require('moment');

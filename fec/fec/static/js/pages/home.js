@@ -1,5 +1,3 @@
-'use strict';
-
 var homepageEvents = require('../modules/home-events');
 
 // accessible tabs for alt sidebar

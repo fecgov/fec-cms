@@ -1,10 +1,7 @@
-'use strict';
-
 /**
  * @fileoverview Creates the Typeahead element, extending node_modules/typeahead.js/dist/typeahead.jquery.js
  */
 
-var $ = require('jquery');
 var URI = require('urijs');
 var _ = require('underscore');
 var Handlebars = require('handlebars');

@@ -1,6 +1,4 @@
-'use strict';
 
-var $ = require('jquery');
 
 function FilterControl($selector) {
   this.$element = $selector;

@@ -3,9 +3,6 @@
  * Templates: /fec/data/templates/election-lookup.jinja
  * Not to be confused with election-lookup.js, which is used on /data/elections/
  */
-'use strict';
-
-var $ = require('jquery');
 var URI = require('urijs');
 var _ = require('underscore');
 var moment = require('moment');

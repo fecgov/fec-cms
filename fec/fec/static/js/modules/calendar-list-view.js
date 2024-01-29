@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 var _ = require('underscore');
 var moment = require('moment');
 require('fullcalendar');

@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 var scrollMonitor = require('scrollmonitor');
 var _ = require('underscore');
 

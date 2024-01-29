@@ -1,4 +1,3 @@
-'use strict';
 
 var forms = {
   F1: 'Statements Of Organization',

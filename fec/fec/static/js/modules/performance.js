@@ -1,5 +1,3 @@
-'use strict';
-
 /* global perfBar */
 
 var _ = require('underscore');

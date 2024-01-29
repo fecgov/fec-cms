@@ -1,5 +1,3 @@
-'use strict';
-
 // TODO
 // TODO
 // TODO: go through the site and update all references to this file so it works with GTM?

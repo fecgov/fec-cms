@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 var _ = require('underscore');
 var helpers = require('../modules/helpers');
 var URI = require('urijs');

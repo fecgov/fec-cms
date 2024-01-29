@@ -1,12 +1,9 @@
-'use strict';
-
 /**
  * two dropdowns:#primary_category_id and #sub_category_id
  * when select one option from #primary_category_id dropdown, trigger change function
  * to make a ajax call (api: audit-category) ,get sub_category_list(JSON type)back
  * dynamically update the #sub_category_id dropdown list value.
  */
-var $ = require('jquery');
 var helpers = require('./helpers');
 
 function auditCategorySubcategory() {

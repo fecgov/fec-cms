@@ -1,6 +1,4 @@
-'use strict';
 
-var $ = require('jquery');
 
 var Filter = require('./filter-base.js').Filter;
 

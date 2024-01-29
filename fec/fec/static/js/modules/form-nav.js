@@ -1,5 +1,3 @@
-'use strict';
-
 /* FormNav
  * Submits the form on select change and clears out unnecessary params
  */

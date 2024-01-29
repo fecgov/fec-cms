@@ -1,5 +1,3 @@
-'use strict';
-
 /* global document, describe, before, beforeEach, after, afterEach, it */
 
 var chai = require('chai');
@@ -8,7 +6,6 @@ var sinonChai = require('sinon-chai');
 var expect = chai.expect;
 chai.use(sinonChai);
 
-var $ = require('jquery');
 
 var Dropdown = require('../../static/js/modules/dropdowns').Dropdown;
 

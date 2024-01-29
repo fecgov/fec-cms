@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 
 var LineChartCommittees = require('../modules/line-chart-committees')
   .LineChartCommittees;

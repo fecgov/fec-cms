@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 var $auditCategoryTags = require('../templates/audit_tags.hbs');
 
 function auditTags() {
