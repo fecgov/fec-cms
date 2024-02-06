@@ -924,7 +924,7 @@ class ResourcePage(Page):
     ], null=True, blank=True, use_json_field=True)
     sections = StreamField([
         ('sections', ResourceBlock())
-    ], null=True, blank=True)
+    ], null=True, blank=True, use_json_field=True)
     citations = StreamField([
         ('citations', blocks.ListBlock(CitationsBlock()))
     ], null=True, blank=True, use_json_field=True)
@@ -1388,7 +1388,7 @@ class ReportingDatesTable(Page):
             ])))
         ], blank=True))
     ], blank=True, use_json_field=True)
-    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))], null=True, blank=True)
+    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))], null=True, blank=True, use_json_field=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('reporting_dates_table'),
