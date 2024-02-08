@@ -85,7 +85,6 @@ ElectionSearch.constructor = ElectionSearch;
  * element of the election search form
  */
 ElectionSearch.prototype.wakeTheMap = function() {
-  // console.log('ElectionSearch.wakeTheMap(e): ', e);
   if (!this.initialized) {
     document.removeEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap);
     if (this.dormantMap) this.dormantMap.removeEventListener('click', this.wakeTheMap);
@@ -99,19 +98,13 @@ ElectionSearch.prototype.wakeTheMap = function() {
  * then initializes the interactive map
  */
 ElectionSearch.prototype.initInteractiveMap =function() {
-  // console.log('ElectionSearch.initInteractiveMap()');
-  // console.log('  this: ', this);
-  // console.log('  this.initialized: ', this.initialized);
   if (!this.initialized) {
-    // console.log('  if');
     if (this.dormantMap) {
-      // console.log('    if');
       this.dormantMap.classList.remove('dormant');
       this.dormantMap.removeAttribute('title');
       delete this.dormantMap;
     }
 
-    // console.log('this.map: ', this.map);
     this.map = new ElectionMap(this.$map.get(0), {
       drawStates: _.isEmpty(this.serialized),
       handleSelect: this.handleSelectMap.bind(this)
@@ -119,15 +112,10 @@ ElectionSearch.prototype.initInteractiveMap =function() {
 
     this.initialized = true;
 
-    // console.log('  calling the block');
     this.getUpcomingPresidentialElection();
     this.getUpcomingElections();
     this.performStateChange();
     this.handlePopState();
-    // console.log('  called the block');
-
-  } else {
-    // console.log('  else');
   }
 };
 
