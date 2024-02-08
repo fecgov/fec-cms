@@ -146,23 +146,26 @@ ElectionSearch.prototype.toggleComponents = function() {
   const shouldShowRedistrictingMsgForPA = this.$cycle.val() == 2018 && this.$state.val() == 'PA';
 
   // The map and its alternate message
-  theMap.setAttribute('aria-hidden', !shouldShowMap);
-  theMapDisclaimer.setAttribute('aria-hidden', !shouldShowMap);
-  theMapAltMessage.setAttribute('aria-hidden', shouldShowMap);
+  if (theMap) theMap.setAttribute('aria-hidden', !shouldShowMap);
+  if (theMapDisclaimer) theMapDisclaimer.setAttribute('aria-hidden', !shouldShowMap);
+  if (theMapAltMessage) theMapAltMessage.setAttribute('aria-hidden', shouldShowMap);
 
   // ZIP Code search
-  theZipSearchParts.forEach(el => {
-    if (shouldShowZip) {
-      el.classList.remove('is-disabled');
-      el.removeAttribute('disabled');
-    } else {
-      el.classList.add('is-disabled');
-      el.setAttribute('disabled', true);
-    }
-  });
+  if (theZipSearchParts) {
+    theZipSearchParts.forEach(el => {
+      if (shouldShowZip) {
+        el.classList.remove('is-disabled');
+        el.removeAttribute('disabled');
+      } else {
+        el.classList.add('is-disabled');
+        el.setAttribute('disabled', true);
+      }
+    });
+  }
 
   // Redistricting message
-  redistrictingMsgAccordion.setAttribute('aria-hidden', !shouldShowRedistrictingMsg);
+  if (redistrictingMsgAccordion)
+    redistrictingMsgAccordion.setAttribute('aria-hidden', !shouldShowRedistrictingMsg);
 
   // Pennsylvania redistricting message
   if (shouldShowRedistrictingMsgForPA) $('.pa-message').show();
