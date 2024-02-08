@@ -119,13 +119,56 @@ ElectionSearch.prototype.initInteractiveMap =function() {
   }
 };
 
-ElectionSearch.prototype.updateRedistrictingMessage = function() {
-  if (this.$cycle.val() == 2018 && this.$state.val() == 'PA') {
-    $('.pa-message').show();
-  } else {
-    $('.pa-message').hide();
-  }
+/**
+ * Toggles various components' states based on election year and state
+ */
+ElectionSearch.prototype.toggleComponents = function() {
+  // The important years
+  const firstYearToOfferMap = parseInt(window.DISTRICT_MAP_CUTOFF);
+  const firstYearToOfferZip = parseInt(window.DISTRICT_MAP_CUTOFF);
+  const firstYearToShowRedistrictingMsg = 2020;
+
+  // The map elements
+  const theMap = document.querySelector('.election-map');
+  const theMapDisclaimer = document.querySelector('.js-map-approx-message');
+  const theMapAltMessage = document.querySelector('.js-map-message');
+  const theZipSearchParts = document.querySelectorAll(
+    '.search-controls__zip, \
+    .search-controls__zip input, \
+    .search-controls__zip button'
+  );
+  const redistrictingMsgAccordion = document.querySelector('.js-accordion[data-content-prefix="2022-redistricting"]');
+
+  // Should we show the map, zip, redistricting?
+  const shouldShowMap = this.$cycle.val() >= firstYearToOfferMap;
+  const shouldShowZip = this.$cycle.val() >= firstYearToOfferZip;
+  const shouldShowRedistrictingMsg = this.$cycle.val() >= firstYearToShowRedistrictingMsg;
+  const shouldShowRedistrictingMsgForPA = this.$cycle.val() == 2018 && this.$state.val() == 'PA';
+
+  // The map and its alternate message
+  theMap.setAttribute('aria-hidden', !shouldShowMap);
+  theMapDisclaimer.setAttribute('aria-hidden', !shouldShowMap);
+  theMapAltMessage.setAttribute('aria-hidden', shouldShowMap);
+
+  // ZIP Code search
+  theZipSearchParts.forEach(el => {
+    if (shouldShowZip) {
+      el.classList.remove('is-disabled');
+      el.removeAttribute('disabled');
+    } else {
+      el.classList.add('is-disabled');
+      el.setAttribute('disabled', true);
+    }
+  });
+
+  // Redistricting message
+  redistrictingMsgAccordion.setAttribute('aria-hidden', !shouldShowRedistrictingMsg);
+
+  // Pennsylvania redistricting message
+  if (shouldShowRedistrictingMsgForPA) $('.pa-message').show();
+  else $('.pa-message').hide();
 };
+
 ElectionSearch.prototype.performSearch = function() {
   document.dispatchEvent(new Event('FEC-ElectionSearchInteraction'));
   var inputs = this.$form.find(':input').not(this.$cycle);
@@ -140,11 +183,11 @@ ElectionSearch.prototype.performSearch = function() {
   }
 
   this.search();
-  this.updateRedistrictingMessage();
+  this.toggleComponents();
 };
 ElectionSearch.prototype.performStateChange = function() {
   this.handleStateChange();
-  this.updateRedistrictingMessage();
+  this.toggleComponents();
 };
 
 /**
@@ -304,7 +347,6 @@ ElectionSearch.prototype.getPresidentialElections = function() {
       }
     );
   } else {
-    this.$resultsHeading.hide();
     resultsItems.empty();
   }
   var obj = {
