@@ -186,47 +186,6 @@ DataMap.prototype.init = function() {
       .attr('d', this.pathProjection);
   }
 
-  if (this.opts.mapStyle.indexOf('bubbles') !== -1) {
-    this.pathDataEnter
-      .append('circle')
-      .attr('cx', function(d) {
-        let stateBounds = d3
-          .select(d.statePath)
-          .node()
-          .getBBox();
-
-        d.cx = stateBounds.x + stateBounds.width / 2;
-        d.cy = stateBounds.y + stateBounds.height / 2;
-
-        return d.cx;
-      })
-      .attr('cy', function(d) {
-        return d.cy;
-      })
-      .attr('r', function(d) {
-        d.value = instance.getStateValue(d.id); // TODO - COPY THIS TO applyNewData()?
-        return calculateCircleSize(
-          d.value, // TODO - COPY THIS TO applyNewData()?
-          [minValue, maxValue],
-          instance.opts.circleSizeScale,
-          quantiles,
-          instance.opts.addLegend
-        );
-      })
-      .attr('data-state', function(d) {
-        return fips.fipsByCode[d.id].STATE_NAME;
-      })
-      .attr('data-stateID', function(d) {
-        return fips.fipsByCode[d.id].STUSAB;
-      })
-      .attr('class', d => {
-        return this.chooseStateClasses(d, 'circle');
-      })
-      .attr('d', this.pathProjection);
-
-    this.sortCircles();
-  }
-
   // If we're supposed to add a legend, let's do it
   if (this.opts.addLegend || typeof this.opts.addLegend === 'undefined') {
     this.legendSVG = d3.select('.legend-container svg');
