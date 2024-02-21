@@ -155,7 +155,7 @@ MIDDLEWARE = (
 
 SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
-CSRF_TRUSTED_ORIGINS = ["https://fec.gov", "https://app.cloud.gov"]
+CSRF_TRUSTED_ORIGINS = ["https://*.fec.gov", "https://*.app.cloud.gov"]
 if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     CSRF_TRUSTED_ORIGINS.extend(["http://127.0.0.1:5000"])
 
@@ -306,7 +306,7 @@ if FEC_CMS_ENVIRONMENT != ENVIRONMENTS['local']:
     AWS_LOCATION = 'cms-content'
     STORAGES = {
         "default": {
-            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            "BACKEND": "storages.backends.s3.S3Storage",
                     },
     }
 UAA_CLIENT_ID = env.get_credential('CMS_LOGIN_CLIENT_ID', 'my-client-id')
