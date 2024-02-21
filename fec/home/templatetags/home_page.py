@@ -1,9 +1,9 @@
 import datetime
+import zoneinfo
 
 from django import template
 from itertools import chain, islice
 from datetime import date
-from pytz import timezone
 from home.models import (HomePageBannerAnnouncement, AlertForEmergencyUseOnly, DigestPage, RecordPage,
                          PressReleasePage, TipsForTreasurersPage)
 
@@ -12,8 +12,8 @@ register = template.Library()
 
 @register.inclusion_tag('partials/home-page-banner-announcement.html')
 def home_page_banner_announcement():
-    eastern = timezone('America/New_York')
-    datetime_now = eastern.localize(datetime.datetime.today())
+    eastern = zoneinfo.ZoneInfo('America/New_York')
+    datetime_now = datetime.datetime.today().replace(tzinfo=eastern)
     banners = HomePageBannerAnnouncement.objects.live().filter(
         active=True, date_active__lte=datetime_now,
         date_inactive__gt=datetime_now).order_by('-date_active')[:2]
