@@ -155,9 +155,9 @@ MIDDLEWARE = (
 
 SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
-CSRF_TRUSTED_ORIGINS = ["fec.gov", "app.cloud.gov"]
+CSRF_TRUSTED_ORIGINS = ["https://fec.gov", "https://app.cloud.gov"]
 if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
-    CSRF_TRUSTED_ORIGINS.extend(["127.0.0.1:5000"])
+    CSRF_TRUSTED_ORIGINS.extend(["http://127.0.0.1:5000"])
 
 ROOT_URLCONF = 'fec.urls'
 
@@ -252,7 +252,7 @@ STATICFILES_DIRS = (
 DIST_DIR = os.path.join(BASE_DIR, 'dist')
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -303,9 +303,12 @@ if FEC_CMS_ENVIRONMENT != ENVIRONMENTS['local']:
     AWS_S3_CUSTOM_DOMAIN = env.get_credential('CMS_AWS_CUSTOM_DOMAIN')
     AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL = None
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_LOCATION = 'cms-content'
-
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+                    },
+    }
 UAA_CLIENT_ID = env.get_credential('CMS_LOGIN_CLIENT_ID', 'my-client-id')
 UAA_CLIENT_SECRET = env.get_credential('CMS_LOGIN_CLIENT_SECRET', 'my-client-secret')
 # fake uaa server deploys locally on port 8080.  Will be needed to login for local use
