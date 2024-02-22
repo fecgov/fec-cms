@@ -91,6 +91,10 @@
     "term": "Communications filers",
     "definition": "Form 5, Form 7 and Form 9 filers, whose activity includes: <ul><li>Contributions reported by persons other than political committees</li><li>Independent expenditures reported by persons other than political committees</li><li>Communication costs reported by corporations and membership organizations</li><li>Electioneering communications</li></ul>"
   },
+ {
+    "term": "Compensation",
+    "definition": "Direct payments to the candidate unless the payments are otherwise permitted by law, such as candidate expense reimbursements and candidate loan repayments under 11 CFR Part <a href=\"https://www.fec.gov/regulations/116\">116</a>."
+  },
   {
     "term": "Conduit or intermediary",
     "definition": "Any person who receives and forwards an earmarked contribution to a candidate or a candidate’s authorized committee. 11 CFR <a href=\"https://www.fec.gov/regulations/110-6/CURRENT#110-6-b-2\">110.6(b)(2)</a>."
