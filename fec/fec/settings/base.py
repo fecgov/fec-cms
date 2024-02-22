@@ -308,6 +308,9 @@ if FEC_CMS_ENVIRONMENT != ENVIRONMENTS['local']:
         "default": {
             "BACKEND": "storages.backends.s3.S3Storage",
                     },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+                        },
     }
 UAA_CLIENT_ID = env.get_credential('CMS_LOGIN_CLIENT_ID', 'my-client-id')
 UAA_CLIENT_SECRET = env.get_credential('CMS_LOGIN_CLIENT_SECRET', 'my-client-secret')
