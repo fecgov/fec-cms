@@ -34,7 +34,7 @@ python-dateutil==2.8.2
 # Content import
 beautifulsoup4==4.8.2
 django-storages==1.14.2
-boto3==1.7.21
+boto3==1.34.46
 
 cg-django-uaa==2.1.5
 
