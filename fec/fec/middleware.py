@@ -19,6 +19,7 @@ class AddSecureHeaders(MiddlewareMixin):
                 "*.fec.gov",
                 "*.app.cloud.gov",
                 "https://www.google-analytics.com",
+                "https://www.cdc.gov/coronavirus/2019-ncov/json/cdt-ccl-data.json",
             ],
             "font-src": ["'self'"],
             "frame-src": [
