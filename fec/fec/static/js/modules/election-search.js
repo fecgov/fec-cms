@@ -372,8 +372,8 @@ ElectionSearch.prototype.getUpcomingPresidentialElection = function() {
   var currentYear = now.getFullYear();
   var queryP = {
     state: 'US',
-    // Get upcoming presidential election year
-    cycle: currentYear + 4 - (currentYear % 4)
+    // Get upcoming presidential election year (unless the current year is an election year)
+    cycle: currentYear % 4 === 0 ? currentYear : currentYear + 4 - (currentYear % 4)
   };
   var presidentialUrl = helpers.buildUrl(['elections', 'search'], queryP);
   var self = this;
