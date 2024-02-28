@@ -16,8 +16,13 @@ var FEATURE_TYPES = {
 var STATE_ZOOM_THRESHOLD = 4;
 
 var defaultOpts = {
-  colorScale: colorbrewer.Set1
+  colorScale_states: colorbrewer.Set1,
+  colorScale_districts: colorbrewer.Set1
 };
+// Doing the district color adjustment here in case Object.assign isn't supported
+defaultOpts.colorScale_districts = Object.assign({}, colorbrewer.Set1);
+// Delete the last color for dists because the grey gets lost over our current map tiles
+delete defaultOpts.colorScale_districts['9'];
 
 var boundsOverrides = {
   200: { coords: [64.06, -152.23], zoom: 3 } // eslint-disable-line quote-props
@@ -60,8 +65,8 @@ function getDistrictPalette(scale) {
 function ElectionMap(elm, opts) {
   this.elm = elm;
   this.opts = _.extend({}, defaultOpts, opts);
-  this.statePalette = getStatePalette(this.opts.colorScale);
-  this.districtPalette = getDistrictPalette(this.opts.colorScale);
+  this.statePalette = getStatePalette(this.opts.colorScale_states);
+  this.districtPalette = getDistrictPalette(this.opts.colorScale_districts);
   this.mapMessage = document.querySelector('.js-map-message');
   this.mapApproxMessage = document.querySelector('.js-map-approx-message');
   this.initialized = false;
@@ -237,8 +242,8 @@ ElectionMap.prototype.handleReset = function(e) {
  */
 ElectionMap.prototype.hide = function() {
   this.elm.setAttribute('aria-hidden', 'true');
-  this.mapMessage.setAttribute('aria-hidden', 'false');
-  this.mapApproxMessage.setAttribute('aria-hidden', 'true');
+  if (this.mapMessage) this.mapMessage.setAttribute('aria-hidden', 'false');
+  if (this.mapApproxMessage) this.mapApproxMessage.setAttribute('aria-hidden', 'true');
 };
 
 /**

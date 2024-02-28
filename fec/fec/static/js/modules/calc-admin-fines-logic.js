@@ -16,19 +16,19 @@ const availableDates = [
     summary: 'I haven’t been assessed: using latest fine amounts'
   },
   {
+    value: '2024',
+    label: 'On or after January 5, 2024',
+    summary: 'Assessed on or after January 5, 2024'
+  },
+  {
     value: '2023',
-    label: 'On or after December 29, 2022',
-    summary: 'Assessed on or after December 29, 2022'
+    label: 'December 29, 2022 to January 4, 2024',
+    summary: 'Assessed December 28, 2022 to January 4, 2024'
   },
   {
     value: '2022',
     label: 'December 28, 2021 to December 28, 2022',
-    summary: 'Assessed on or after December 28, 2021 to December 28, 2022'
-  },
-  {
-    value: '2021',
-    label: 'January 11, 2021 to December 27, 2021',
-    summary: 'Assessed on or after January 11, 2021 to December 27, 2021'
+    summary: 'Assessed December 28, 2021 to December 28, 2022'
   }
 ];
 
@@ -148,6 +148,25 @@ CalcAdminFineLogic.prototype.getTotalAdminFine = function(d) {
  * The yearnumber values here should reflect those in {@see availableDates }
  */
 CalcAdminFineLogic.values = {
+  '2024': [
+    { maxRD: 5000, late_val: 42, late_multi: 6, lateSens_val: 83, lateSens_multi: 15, nonfiler_val: 415, nonfilerSens_val: 832 },
+    { maxRD: 10000, late_val: 83, late_multi: 6, lateSens_val: 167, lateSens_multi: 15, nonfiler_val: 499, nonfilerSens_val: 997 },
+    { maxRD: 25000, late_val: 178, late_multi: 6, lateSens_val: 249, lateSens_multi: 15, nonfiler_val: 832, nonfilerSens_val: 1497 },
+    { maxRD: 50000, late_val: 353, late_multi: 33, lateSens_val: 532, lateSens_multi: 42, nonfiler_val: 1497, nonfilerSens_val: 2328 },
+    { maxRD: 75000, late_val: 532, late_multi: 133, lateSens_val: 796, lateSens_multi: 133, nonfiler_val: 4774, nonfilerSens_val: 5303 },
+    { maxRD: 100000, late_val: 706, late_multi: 178, lateSens_val: 1059, lateSens_multi: 178, nonfiler_val: 6188, nonfilerSens_val: 7072 },
+    { maxRD: 150000, late_val: 1059, late_multi: 221, lateSens_val: 1592, lateSens_multi: 221, nonfiler_val: 7958, nonfilerSens_val: 8842 },
+    { maxRD: 200000, late_val: 1417, late_multi: 264, lateSens_val: 2123, lateSens_multi: 264, nonfiler_val: 9725, nonfilerSens_val: 10609 },
+    { maxRD: 250000, late_val: 1767, late_multi: 308, lateSens_val: 2653, lateSens_multi: 308, nonfiler_val: 11493, nonfilerSens_val: 13261 },
+    { maxRD: 350000, late_val: 2653, late_multi: 353, lateSens_val: 3978, lateSens_multi: 353, nonfiler_val: 14146, nonfilerSens_val: 15914 },
+    { maxRD: 450000, late_val: 3537, late_multi: 353, lateSens_val: 5303, lateSens_multi: 353, nonfiler_val: 15914, nonfilerSens_val: 17683 },
+    { maxRD: 550000, late_val: 4421, late_multi: 353, lateSens_val: 6631, lateSens_multi: 353, nonfiler_val: 16798, nonfilerSens_val: 19450 },
+    { maxRD: 650000, late_val: 5303, late_multi: 353, lateSens_val: 7958, lateSens_multi: 353, nonfiler_val: 17683, nonfilerSens_val: 21218 },
+    { maxRD: 750000, late_val: 6188, late_multi: 353, lateSens_val: 9283, lateSens_multi: 353, nonfiler_val: 18567, nonfilerSens_val: 22988 },
+    { maxRD: 850000, late_val: 7072, late_multi: 353, lateSens_val: 10609, lateSens_multi: 353, nonfiler_val: 19450, nonfilerSens_val: 24756 },
+    { maxRD: 950000, late_val: 7958, late_multi: 353, lateSens_val: 11935, lateSens_multi: 353, nonfiler_val: 20334, nonfilerSens_val: 26523 },
+    { maxRD: Number.MAX_SAFE_INTEGER, late_val: 8842, late_multi: 353, lateSens_val: 13261, lateSens_multi: 353, nonfiler_val: 21218, nonfilerSens_val: 28292 }
+  ],
   '2023': [
     { maxRD: 5000, late_val: 41, late_multi: 6, lateSens_val: 80, lateSens_multi: 15, nonfiler_val: 402, nonfilerSens_val: 806 },
     { maxRD: 10000, late_val: 80, late_multi: 6, lateSens_val: 162, lateSens_multi: 15, nonfiler_val: 483, nonfilerSens_val: 966 },

@@ -13,9 +13,5 @@ cd fec
 ./manage.py makemigrations
 ./manage.py migrate --noinput
 
-# Temporary addition for Wagtail search backend update.
-# Only need to run this once for the Wagtail 3 upgrade.
-./manage.py update_index
-
 # Run application
 gunicorn -k gevent -w 2 fec.wsgi:application
