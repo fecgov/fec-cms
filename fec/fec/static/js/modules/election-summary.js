@@ -1,4 +1,4 @@
-var URI = require('urijs');
+import { default as URI } from 'urijs';
 
 var helpers = require('./helpers');
 

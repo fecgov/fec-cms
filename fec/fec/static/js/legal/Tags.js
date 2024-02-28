@@ -1,6 +1,6 @@
 const React = require('react');
 const PropTypes = require('prop-types');
-const _ = require('underscore');
+import { extend as _extend } from 'underscore';
 const requestorOptions = require('./requestorOptions');
 const documentTypes = require('./documentTypes');
 
@@ -17,7 +17,7 @@ function Tags(props) {
     function handleRemove() {
       var newEvent;
       if (Array.isArray(props.query[name])) {
-        let currentValues = _.extend(props.query[name]);
+        let currentValues = _extend(props.query[name]);
         currentValues.splice(currentValues.indexOf(value), 1);
         if (currentValues.length === 0) {
           newEvent = { target: { name, value: false } };
@@ -109,7 +109,7 @@ function Tags(props) {
   }
 
   function getTagCategories() {
-    let query = _.extend({}, props.query);
+    let query = _extend({}, props.query);
     const excludedFields = [
       'from_hit',
       'search',

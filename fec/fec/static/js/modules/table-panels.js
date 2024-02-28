@@ -1,6 +1,6 @@
-var _ = require('underscore');
+import { extend as _extend } from 'underscore';
 var helpers = require('../modules/helpers');
-var URI = require('urijs');
+import { default as URI } from 'urijs';
 var tables = require('./tables');
 
 var candidatesTemplate = require('../templates/candidates.hbs');
@@ -71,7 +71,7 @@ var renderCandidatePanel = function(showFinancialTotals) {
           time_period: timePeriod,
           showFinancialTotals: showFinancialTotals
         };
-        return _.extend({}, row, newData);
+        return _extend({}, row, newData);
       });
     } else {
       return $.when(getCandidateFilings(row)).then(function(data) {
@@ -80,7 +80,7 @@ var renderCandidatePanel = function(showFinancialTotals) {
           last_form_2: data.last,
           showFinancialTotals: showFinancialTotals
         };
-        return _.extend({}, row, newData);
+        return _extend({}, row, newData);
       });
     }
   });

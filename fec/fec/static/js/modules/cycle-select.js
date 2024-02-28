@@ -1,10 +1,10 @@
-var _ = require('underscore');
-var URI = require('urijs');
+import { filter as _filter, map as _map, range as _range, toArray as _toArray } from 'underscore';
+import { default as URI } from 'urijs';
 
-var cycleTemplate = require('../templates/electionCycle.hbs');
-var cyclesTemplate = require('../templates/electionCycles.hbs');
+import { default as cycleTemplate } from '../templates/electionCycle.hbs';
+import { default as cyclesTemplate } from '../templates/electionCycles.hbs';
 
-function CycleSelect(elm) {
+export default function CycleSelect(elm) {
   this.$elm = $(elm);
   this.duration = this.$elm.data('duration');
   this.cycleId = this.$elm.attr('id');
@@ -27,12 +27,12 @@ CycleSelect.prototype.initCycles = function() {
 };
 
 CycleSelect.prototype.initCyclesMulti = function(selected) {
-  var cycles = _.range(selected - this.duration + 2, selected + 2, 2);
+  var cycles = _range(selected - this.duration + 2, selected + 2, 2);
   var params = this.getParams();
   var selectedCycle;
   var cycleId = this.cycleId;
 
-  var bins = _.map(cycles, function(cycle) {
+  var bins = _map(cycles, function(cycle) {
     return {
       min: cycle - 1,
       max: cycle,
@@ -58,7 +58,7 @@ CycleSelect.prototype.initCyclesMulti = function(selected) {
   this.$cycles.html(cyclesTemplate(bins));
   this.$cycles.on('change', this.handleChange.bind(this));
 
-  selectedCycle = _.filter(bins, function(bin) {
+  selectedCycle = _filter(bins, function(bin) {
     return bin.checked === true;
   });
 
@@ -108,7 +108,7 @@ CycleSelect.prototype.setUrl = function(url) {
 };
 
 function QueryCycleSelect() {
-  CycleSelect.apply(this, _.toArray(arguments));
+  CycleSelect.apply(this, _toArray(arguments));
 }
 
 QueryCycleSelect.prototype = Object.create(CycleSelect.prototype);
@@ -133,7 +133,7 @@ QueryCycleSelect.prototype.nextUrl = function(cycle, electionFull) {
 };
 
 function PathCycleSelect() {
-  CycleSelect.apply(this, _.toArray(arguments));
+  CycleSelect.apply(this, _toArray(arguments));
 }
 
 PathCycleSelect.prototype = Object.create(CycleSelect.prototype);
@@ -165,5 +165,3 @@ PathCycleSelect.prototype.nextUrl = function(cycle, electionFull) {
     .search({ election_full: electionFull })
     .toString();
 };
-
-module.exports = { CycleSelect: CycleSelect };

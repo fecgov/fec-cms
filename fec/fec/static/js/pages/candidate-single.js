@@ -4,28 +4,34 @@
  * pagingType documentation: https://datatables.net/reference/option/pagingType
  */
 
-var URI = require('urijs');
+import { default as URI } from 'urijs';
 
-var maps = require('../modules/maps');
-var mapsEvent = require('../modules/maps-event');
-var tables = require('../modules/tables');
-var helpers = require('../modules/helpers');
-var columnHelpers = require('../modules/column-helpers');
-var columns = require('../modules/columns');
-var events = require('../modules/events');
-var OtherSpendingTotals = require('../modules/other-spending-totals');
-var filings = require('../modules/filings');
+import { stateMap } from '../modules/maps.js';
+import { init as initMapsEvent } from '../modules/maps-event.js';
+import { barsAfterRender, DataTable, SeekPaginator, simpleDOM } from '../modules/tables.js';
 
-var dropdown = require('../modules/dropdowns');
-var reportType = require('../templates/reports/reportType.hbs');
+import {
+  amendmentVersion, buildAppUrl, buildUrl, formatCycleRange, missingDataReason
+} from '../modules/helpers.js';
+import {
+  buildEntityLink, buildTotalLink, getColumns, getSizeParams, sizeInfo, urlColumn
+} from '../modules/column-helpers.js';
+import { committeeColumn, currencyColumn, dateColumn, filings, supportOpposeColumn } from '../modules/columns.js';
+import initEvents from '../modules/events.js';
+const events = initEvents();
+import { default as OtherSpendingTotals } from '../modules/other-spending-totals.js';
+import { renderModal } from '../modules/filings.js';
+
+import { default as Dropdown } from '../modules/dropdowns.js';
+import { default as reportType } from '../templates/reports/reportType.hbs';
 
 var aggregateCallbacks = {
-  afterRender: tables.barsAfterRender.bind(undefined, undefined)
+  afterRender: barsAfterRender.bind(undefined, undefined)
 };
 
 // DOM element and URL for building the state map
 var $map = $('.state-map');
-var mapUrl = helpers.buildUrl(
+var mapUrl = buildUrl(
   ['schedules', 'schedule_a', 'by_state', 'by_candidate'],
   {
     candidate_id: $map.data('candidate-id'),
@@ -41,7 +47,7 @@ var expenditureColumns = [
     className: 'all',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['independent-expenditures'], function(
+    render: buildTotalLink(['independent-expenditures'], function(
       data,
       type,
       row
@@ -52,11 +58,11 @@ var expenditureColumns = [
       };
     })
   },
-  columns.committeeColumn({
+  committeeColumn({
     data: 'committee_name',
     className: 'all'
   }),
-  columns.supportOpposeColumn
+  supportOpposeColumn
 ];
 
 var communicationCostColumns = [
@@ -65,7 +71,7 @@ var communicationCostColumns = [
     className: 'all',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['communication-costs'], function(
+    render: buildTotalLink(['communication-costs'], function(
       data,
       type,
       row
@@ -76,11 +82,11 @@ var communicationCostColumns = [
       };
     })
   },
-  columns.committeeColumn({
+  committeeColumn({
     data: 'committee_name',
     className: 'all'
   }),
-  columns.supportOpposeColumn
+  supportOpposeColumn
 ];
 
 var electioneeringColumns = [
@@ -89,7 +95,7 @@ var electioneeringColumns = [
     className: 'all',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(
+    render: buildTotalLink(
       ['electioneering-communications'],
       function(data, type, row) {
         return {
@@ -98,14 +104,14 @@ var electioneeringColumns = [
       }
     )
   },
-  columns.committeeColumn({
+  committeeColumn({
     data: 'committee_name',
     className: 'all'
   })
 ];
 
 var otherDocumentsColumns = [
-  columnHelpers.urlColumn('pdf_url', {
+  urlColumn('pdf_url', {
     data: 'document_description',
     className: 'all column--medium',
     orderable: false
@@ -115,20 +121,20 @@ var otherDocumentsColumns = [
     className: 'all',
     orderable: false,
     render: function(data, type, row) {
-      var version = helpers.amendmentVersion(data);
+      var version = amendmentVersion(data);
       if (row.fec_file_id !== null) {
           version = version + '<br><i class="icon-blank"></i>' + row.fec_file_id;
       }
       return version;
     }
   },
-  columns.dateColumn({
+  dateColumn({
     data: 'receipt_date',
     className: 'min-tablet'
   })
 ];
 
-var rawFilingsColumns = columnHelpers.getColumns(columns.filings, [
+var rawFilingsColumns = getColumns(filings, [
   'document_type',
   'receipt_date',
   'beginning_image_number'
@@ -140,9 +146,9 @@ var itemizedDisbursementColumns = [
     className: 'all',
     orderable: false,
     render: function(data, type, row) {
-      return columnHelpers.buildEntityLink(
+      return buildEntityLink(
         row.committee.name,
-        helpers.buildAppUrl(['committee', row.committee_id]),
+        buildAppUrl(['committee', row.committee_id]),
         'committee'
       );
     }
@@ -163,11 +169,11 @@ var itemizedDisbursementColumns = [
     orderable: false,
     defaultContent: 'NOT REPORTED'
   },
-  columns.dateColumn({
+  dateColumn({
     data: 'disbursement_date',
     className: 'min-tablet'
   }),
-  columns.currencyColumn({
+  currencyColumn({
     data: 'disbursement_amount',
     className: 'column--number t-mono'
   })
@@ -183,20 +189,20 @@ var individualContributionsColumns = [
     data: 'committee',
     className: 'all',
     orderable: false,
-    paginator: tables.SeekPaginator,
+    paginator: SeekPaginator,
     render: function(data, type, row) {
-      return columnHelpers.buildEntityLink(
+      return buildEntityLink(
         row.committee.name,
-        helpers.buildAppUrl(['committee', row.committee_id]),
+        buildAppUrl(['committee', row.committee_id]),
         'committee'
       );
     }
   },
-  columns.dateColumn({
+  dateColumn({
     data: 'contribution_receipt_date',
     className: 'min-tablet'
   }),
-  columns.currencyColumn({
+  currencyColumn({
     data: 'contribution_receipt_amount',
     className: 'column--number t-mono'
   })
@@ -211,7 +217,7 @@ var statementsOfCandidacyColumns = [
       var doc_description = row.document_description
         ? row.document_description
         : row.form_type;
-      var amendment_version = helpers.amendmentVersionDescription(row);
+      var amendment_version = amendmentVersionDescription(row);
       var pdf_url = row.pdf_url ? row.pdf_url : null;
       var csv_url = row.csv_url ? row.csv_url : null;
       var fec_url = row.fec_url ? row.fec_url : null;
@@ -237,7 +243,7 @@ var statementsOfCandidacyColumns = [
     className: 'all',
     orderable: false,
     render: function(data, type, row) {
-      var version = helpers.amendmentVersion(data);
+      var version = amendmentVersion(data);
       if (version === 'Version unknown') {
         return (
           '<i class="icon-blank"></i>Version unknown<br>'
@@ -251,7 +257,7 @@ var statementsOfCandidacyColumns = [
       }
     }
   },
-  columns.dateColumn({
+  dateColumn({
     data: 'receipt_date',
     className: 'min-tablet'
   }),
@@ -309,7 +315,7 @@ function initOtherDocumentsTable() {
   var $table = $('table[data-type="other-documents"]');
   var candidateId = $table.data('candidate');
   var path = ['filings'];
-  tables.DataTable.defer($table, {
+  DataTable.defer($table, {
     path: path,
     query: {
       candidate_id: candidateId,
@@ -327,7 +333,7 @@ function initOtherDocumentsTable() {
     },
     columns: otherDocumentsColumns,
     order: [[2, 'desc']],
-    dom: tables.simpleDOM,
+    dom: simpleDOM,
     pagingType: 'simple',
     lengthMenu: [10, 30, 50],
     hideEmpty: false
@@ -362,7 +368,7 @@ function initSpendingTables() {
       cycle: $table.data('cycle'),
       election_full: $table.data('election-full')
     };
-    var displayCycle = helpers.formatCycleRange(
+    var displayCycle = formatCycleRange(
       $table.data('cycle'),
       $table.data('duration')
     );
@@ -370,12 +376,12 @@ function initSpendingTables() {
       displayCycle = 'unspecified cycle';
     }
     if (opts) {
-      tables.DataTable.defer($table, {
+      DataTable.defer($table, {
         path: opts.path,
         query: query,
         columns: opts.columns,
         order: [[0, 'desc']],
-        dom: tables.simpleDOM,
+        dom: simpleDOM,
         pagingType: 'simple',
         lengthChange: true,
         pageLength: 10,
@@ -383,10 +389,10 @@ function initSpendingTables() {
         hideEmpty: true,
         hideEmptyOpts: {
           dataType: opts.title,
-          email: WEBMANAGER_EMAIL,
+          email: window.WEBMANAGER_EMAIL,
           name: context.name,
           timePeriod: displayCycle,
-          reason: helpers.missingDataReason(dataType)
+          reason: missingDataReason(dataType)
         }
       });
     }
@@ -408,14 +414,14 @@ function initDisbursementsTable() {
     name: $table.data('name'),
     cycle: $table.data('cycle')
   };
-  var displayCycle = helpers.formatCycleRange(
+  var displayCycle = formatCycleRange(
     $table.data('cycle'),
     $table.data('duration')
   );
   if (displayCycle == null) {
     displayCycle = 'unspecified cycle';
   }
-  tables.DataTable.defer($table, {
+  DataTable.defer($table, {
     path: path,
     query: {
       committee_id: opts.committee_id,
@@ -423,28 +429,29 @@ function initDisbursementsTable() {
     },
     columns: itemizedDisbursementColumns,
     order: [[4, 'desc']],
-    dom: tables.simpleDOM,
-    paginator: tables.SeekPaginator,
+    dom: simpleDOM,
+    paginator: SeekPaginator,
     lengthMenu: [10, 50, 100],
     useFilters: true,
     useExport: true,
     singleEntityItemizedExport: true,
     hideEmpty: true,
     hideEmptyOpts: {
-      email: WEBMANAGER_EMAIL,
+      email: window.WEBMANAGER_EMAIL,
       dataType: opts.title,
       name: opts.name,
       timePeriod: displayCycle,
-      reason: helpers.missingDataReason('disbursements')
+      reason: missingDataReason('disbursements')
     }
   });
 }
 
 function initContributionsTables() {
+  console.log('candidate-single.initContributionsTables()');
   var $allTransactions = $('table[data-type="individual-contributions"]');
   var $contributionSize = $('table[data-type="contribution-size"]');
   var $contributorState = $('table[data-type="contributor-state"]');
-  var displayCycle = helpers.formatCycleRange(
+  var displayCycle = formatCycleRange(
     $allTransactions.data('cycle'),
     2
   );
@@ -464,9 +471,9 @@ function initContributionsTables() {
     cycle: $allTransactions.data('cycle')
   };
 
-  var reason = helpers.missingDataReason('contributions');
+  var reason = missingDataReason('contributions');
 
-  tables.DataTable.defer($allTransactions, {
+  DataTable.defer($allTransactions, {
     path: ['schedules', 'schedule_a'],
     query: {
       committee_id: opts.committee_id,
@@ -475,22 +482,22 @@ function initContributionsTables() {
     },
     columns: individualContributionsColumns,
     order: [[2, 'desc']],
-    dom: tables.simpleDOM,
-    paginator: tables.SeekPaginator,
+    dom: simpleDOM,
+    paginator: SeekPaginator,
     useFilters: true,
     useExport: true,
     singleEntityItemizedExport: true,
     hideEmpty: true,
     hideEmptyOpts: {
       dataType: 'individual contributions',
-      email: WEBMANAGER_EMAIL,
+      email: window.WEBMANAGER_EMAIL,
       name: candidateName,
       timePeriod: displayCycle,
       reason: reason
     }
   });
 
-  tables.DataTable.defer($contributorState, {
+  DataTable.defer($contributorState, {
     path: ['schedules', 'schedule_a', 'by_state', 'by_candidate'],
     query: {
       candidate_id: opts.candidate_id,
@@ -517,7 +524,7 @@ function initContributionsTables() {
         width: '50%',
         className: 'all',
         orderSequence: ['desc', 'asc'],
-        render: columnHelpers.buildTotalLink(
+        render: buildTotalLink(
           ['receipts', 'individual-contributions'],
           function(data, type, row) {
             return {
@@ -536,7 +543,7 @@ function initContributionsTables() {
     scrollCollapse: true
   });
 
-  tables.DataTable.defer($contributionSize, {
+  DataTable.defer($contributionSize, {
     path: ['schedules', 'schedule_a', 'by_size', 'by_candidate'],
     query: {
       candidate_id: opts.candidate_id,
@@ -551,7 +558,7 @@ function initContributionsTables() {
         className: 'all',
         orderable: false,
         render: function(data) {
-          return columnHelpers.sizeInfo[data].label;
+          return sizeInfo[data].label;
         }
       },
       {
@@ -560,10 +567,10 @@ function initContributionsTables() {
         className: 'all',
         orderSequence: ['desc', 'asc'],
         orderable: false,
-        render: columnHelpers.buildTotalLink(
+        render: buildTotalLink(
           ['receipts', 'individual-contributions'],
           function(data, type, row) {
-            var params = columnHelpers.getSizeParams(row.size);
+            var params = getSizeParams(row.size);
             params.committee_id = opts.committee_id;
             return params;
           }
@@ -579,14 +586,14 @@ function initContributionsTables() {
     hideEmpty: true,
     hideEmptyOpts: {
       dataType: 'individual contributions',
-      email: WEBMANAGER_EMAIL,
+      email: window.WEBMANAGER_EMAIL,
       name: candidateName,
       timePeriod: displayCycle,
       reason: reason
     }
   });
   // Set up state map
-  mapsEvent.init($map, $contributorState);
+  initMapsEvent($map, $contributorState);
 }
 function initStatementsOfCandidacyTable() {
   var $table = $('table[data-type="statements-of-candidacy"]');
@@ -595,7 +602,7 @@ function initStatementsOfCandidacyTable() {
   var opts = {
     cycle: $table.data('cycle')
   };
-  tables.DataTable.defer($table, {
+  DataTable.defer($table, {
     path: path,
     query: {
       candidate_id: candidateId,
@@ -606,17 +613,17 @@ function initStatementsOfCandidacyTable() {
     },
     columns: statementsOfCandidacyColumns,
     order: [[2, 'desc']],
-    dom: tables.simpleDOM,
+    dom: simpleDOM,
     pagingType: 'simple',
     lengthMenu: [10, 30, 50],
     hideEmpty: false,
     useExport: true,
     callbacks: {
-      afterRender: filings.renderModal
+      afterRender: renderModal
     },
     drawCallback: function() {
       this.dropdowns = $table.find('.dropdown').map(function(idx, elm) {
-        return new dropdown.Dropdown($(elm), { checkboxes: false });
+        return new Dropdown($(elm), { checkboxes: false });
       });
     }
   });
@@ -627,7 +634,7 @@ function initRawFilingsTable() {
   var candidateId = $table.attr('data-committee');
   var min_date = $table.attr('data-min-date');
   var path = ['efile', 'filings'];
-  tables.DataTable.defer($table, {
+  DataTable.defer($table, {
     path: path,
     query: {
       committee_id: candidateId,
@@ -636,17 +643,17 @@ function initRawFilingsTable() {
     },
     columns: rawFilingsColumns,
     order: [[2, 'desc']],
-    dom: tables.simpleDOM,
+    dom: simpleDOM,
     pagingType: 'simple',
     lengthMenu: [10, 30, 50],
     hideEmpty: false,
     useExport: true,
     callbacks: {
-      afterRender: filings.renderModal
+      afterRender: renderModal
     },
     drawCallback: function() {
       this.dropdowns = $table.find('.dropdown').map(function(idx, elm) {
-        return new dropdown.Dropdown($(elm), { checkboxes: false });
+        return new Dropdown($(elm), { checkboxes: false });
       });
     }
   });
@@ -679,14 +686,14 @@ $(document).ready(function() {
   // If we're on the raising tab, load the state map
   if (query.tab === 'raising') {
     $.getJSON(mapUrl).done(function(data) {
-      maps.stateMap($map, data, 400, 300, null, null, true, true);
+      stateMap($map, data, 400, 300, null, null, true, true);
     });
   } else {
     // Add an event listener that only fires once on showing the raising tab
     // in order to not make this API call unless its necessary
     events.once('tabs.show.raising', function() {
       $.getJSON(mapUrl).done(function(data) {
-        maps.stateMap($map, data, 400, 300, null, null, true, true);
+        stateMap($map, data, 400, 300, null, null, true, true);
       });
     });
   }

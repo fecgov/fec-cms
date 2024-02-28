@@ -4,8 +4,8 @@ var sinonChai = require('sinon-chai');
 var expect = chai.expect;
 chai.use(sinonChai);
 
-var URI = require('urijs');
-var _ = require('underscore');
+import { default as URI } from 'urijs';
+import { extend as _extend } from 'underscore';
 
 require('./setup')();
 require('datatables.net')();
@@ -133,7 +133,7 @@ describe('data table', function() {
     });
 
     it('builds URLs', function() {
-      _.extend(this.table.opts, {
+      _extend(this.table.opts, {
         path: ['path', 'to', 'endpoint'],
         query: { extra: 'true' }
       });

@@ -1,9 +1,10 @@
 
-var events = require('./events.js');
+import initEvents from './events.js';
+const events = initEvents();
 
-var KEYCODE_SLASH = 191;
+const KEYCODE_SLASH = 191;
 
-var defaultOpts = {
+const defaultOpts = {
   placeHolderOptions: {
     candidates: 'Search candidates',
     committees: 'Search committees'
@@ -14,7 +15,7 @@ function onSelectChange($input, updatedText) {
   $input.attr('placeholder', updatedText).attr('aria-label', updatedText);
 }
 
-var Search = function($el, opts) {
+export default function Search($el, opts) {
   var $select = $el.find('.js-search-type'),
     $input = $el.find('input[type="text"]'),
     settings = $.extend({}, defaultOpts, opts);
@@ -35,5 +36,3 @@ var Search = function($el, opts) {
     }
   });
 };
-
-module.exports = Search;

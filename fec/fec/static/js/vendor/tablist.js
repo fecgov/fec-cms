@@ -3,16 +3,15 @@
 -----------------------------------------------------------------------------------------
 */
 
-var URI = require('urijs');
-var _ = require('underscore');
-
-var events = require('../modules/events');
-
-var analytics = require('../modules/analytics');
+import { extend as _extend, object as _object } from 'underscore';
+import URI from 'urijs';
+import initEvents from '../modules/events.js';
+const events = initEvents();
+import { pageView } from '../modules/analytics.js';
 
 // The class for the container div
 
-var $container = '.tab-interface';
+const $container = '.tab-interface';
 
 function show($target, push) {
   // Toggle tabs
@@ -32,15 +31,15 @@ function show($target, push) {
   var value = $target.attr('data-name');
 
   if (push) {
-    var query = _.extend(
+    var query = _extend(
       URI.parseQuery(window.location.search),
-      _.object([[name, value]])
+      _object([[name, value]])
     );
     var search = URI('')
       .query(query)
       .toString();
     window.history.pushState(query, search, search || window.location.pathname);
-    analytics.pageView();
+    pageView();
   }
 
   events.emit('tabs.show.' + value, { $tab: $target, $panel: $panel });
@@ -62,7 +61,7 @@ function refreshTabs() {
   });
 }
 
-function onShow($elm, callback) {
+export function onShow($elm, callback) {
   var $panel = $elm.closest('[role="tabpanel"]');
   if ($panel.is(':visible')) {
     callback();
@@ -73,7 +72,7 @@ function onShow($elm, callback) {
   }
 }
 
-function init() {
+export function init() {
   // Handle click on tab to show + focus tabpanel
   $('[role="tab"]').on('click', function(e) {
     e.preventDefault();
@@ -83,8 +82,3 @@ function init() {
   $(window).on('popstate', refreshTabs);
   refreshTabs();
 }
-
-module.exports = {
-  onShow: onShow,
-  init: init
-};

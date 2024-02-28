@@ -1,18 +1,25 @@
-var _ = require('underscore');
-var URI = require('urijs');
 
-var helpers = require('../helpers');
-var TextFilter = require('./text-filter').TextFilter;
-var CheckboxFilter = require('./checkbox-filter').CheckboxFilter;
-var MultiFilter = require('./multi-filter').MultiFilter;
-var TypeaheadFilter = require('./typeahead-filter').TypeaheadFilter;
-var SelectFilter = require('./select-filter').SelectFilter;
-var DateFilter = require('./date-filter').DateFilter;
-var ElectionFilter = require('./election-filter').ElectionFilter;
-var ToggleFilter = require('./toggle-filter').ToggleFilter;
-var RangeFilter = require('./range-filter').RangeFilter;
+import {
+  chain as _chain,
+  each as _each,
+  extend as _extend,
+  isEmpty as _isEmpty,
+  reduce as _reduce
+} from 'underscore';
+import { default as URI } from 'urijs';
 
-function FilterSet(elm) {
+import { sanitizeQueryParams } from '../helpers.js';
+import { default as TextFilter } from './text-filter.js';
+import { default as CheckboxFilter } from './checkbox-filter.js';
+import { default as MultiFilter } from './multi-filter.js';
+import { default as TypeaheadFilter } from './typeahead-filter.js';
+import { default as SelectFilter } from './select-filter.js';
+import { default as DateFilter } from './date-filter.js';
+import { default as ElectionFilter } from './election-filter.js';
+import { default as ToggleFilter } from './toggle-filter.js';
+import { default as RangeFilter } from './range-filter.js';
+
+export default function FilterSet(elm) {
   this.$body = $(elm);
   $(document.body).on('tag:removed', this.handleTagRemoved.bind(this));
 
@@ -27,7 +34,7 @@ function FilterSet(elm) {
   this.processedFilters = {};
 }
 
-var filterMap = {
+const filterMap = {
   text: TextFilter,
   checkbox: CheckboxFilter,
   date: DateFilter,
@@ -40,30 +47,30 @@ var filterMap = {
 };
 
 FilterSet.prototype.buildFilter = function($elm) {
-  var filterType = $elm.attr('data-filter');
-  var F = filterMap[filterType].constructor;
+  const filterType = $elm.attr('data-filter');
+  const F = filterMap[filterType].constructor;
   return new F($elm);
 };
 
 FilterSet.prototype.activate = function($selector) {
-  var self = this;
-  var query = helpers.sanitizeQueryParams(
+  const self = this;
+  const query = sanitizeQueryParams(
     URI.parseQuery(window.location.search)
   );
-  var filters = _.chain($selector)
+  const filters = _chain($selector)
     .map(function(elm) {
       var filter = self.buildFilter($(elm)); // .fromQuery(query);
       return [filter.name, filter];
     })
     .object()
     .value();
-  var fields = _.chain(filters)
+    const fields = _chain(filters)
     .pluck('fields')
     .flatten()
     .value();
 
   // Activate each filter
-  _.each(filters, function(filter) {
+  _each(filters, function(filter) {
     filter.fromQuery(query);
   });
 
@@ -73,8 +80,8 @@ FilterSet.prototype.activate = function($selector) {
 };
 
 FilterSet.prototype.activateProcessed = function() {
-  if (_.isEmpty(this.processedFilters)) {
-    var $filters = this.$body.find('.js-processed-filters .js-filter');
+  if (_isEmpty(this.processedFilters)) {
+    const $filters = this.$body.find('.js-processed-filters .js-filter');
     this.processedFilters = this.activate($filters);
     // Store the processed filters in this.filters for later reference
     this.filters = this.processedFilters;
@@ -82,8 +89,8 @@ FilterSet.prototype.activateProcessed = function() {
 };
 
 FilterSet.prototype.activateEfiling = function() {
-  if (_.isEmpty(this.efilingFilters)) {
-    var $filters = this.$body.find('.js-efiling-filters .js-filter');
+  if (_isEmpty(this.efilingFilters)) {
+    const $filters = this.$body.find('.js-efiling-filters .js-filter');
     this.efilingFilters = this.activate($filters);
     // Store the efiling filters in this.filters for later reference
     this.filters = this.efilingFilters;
@@ -91,7 +98,7 @@ FilterSet.prototype.activateEfiling = function() {
 };
 
 FilterSet.prototype.activateDataType = function() {
-  var $filter = this.$body.find('#data-type-toggle .js-filter');
+  const $filter = this.$body.find('#data-type-toggle .js-filter');
   this.activate($filter);
 };
 
@@ -107,7 +114,7 @@ FilterSet.prototype.activateAll = function() {
 };
 
 FilterSet.prototype.serialize = function() {
-  return _.reduce(
+  return _reduce(
     this.$body.find('input,select').serializeArray(),
     function(memo, val) {
       if (val.value && val.name.slice(0, 1) !== '_') {
@@ -124,15 +131,15 @@ FilterSet.prototype.serialize = function() {
 };
 
 FilterSet.prototype.clear = function() {
-  _.each(this.filters, function(filter) {
+  _each(this.filters, function(filter) {
     filter.setValue();
   });
 };
 
 FilterSet.prototype.handleTagRemoved = function(e, opts) {
-  var $input = $(document.getElementById(opts.key));
+  const $input = $(document.getElementById(opts.key));
   if ($input.length > 0) {
-    var type = $input.get(0).type;
+    const type = $input.get(0).type;
 
     if (type === 'checkbox' || type === 'radio') {
       $input.click();
@@ -148,8 +155,8 @@ FilterSet.prototype.handleValidation = function(e, opts) {
 
 FilterSet.prototype.switchFilters = function(dataType) {
   // Identify which filter group to show and which to hide
-  var currentFilters = '.js-' + dataType + '-filters';
-  var otherFilters =
+  const currentFilters = '.js-' + dataType + '-filters';
+  const otherFilters =
     dataType == 'efiling' ? '.js-processed-filters' : '.js-efiling-filters';
 
   // Toggle visibility of filters
@@ -157,9 +164,9 @@ FilterSet.prototype.switchFilters = function(dataType) {
   this.$body.find(currentFilters).attr('aria-hidden', false);
 
   // If necessary activate the filters
-  if (dataType === 'efiling' && _.isEmpty(this.efilingFilters)) {
+  if (dataType === 'efiling' && _isEmpty(this.efilingFilters)) {
     this.activateEfiling();
-  } else if (dataType === 'processed' && _.isEmpty(this.processedFilters)) {
+  } else if (dataType === 'processed' && _isEmpty(this.processedFilters)) {
     this.activateProcessed();
   }
 
@@ -168,7 +175,7 @@ FilterSet.prototype.switchFilters = function(dataType) {
 
 FilterSet.prototype.activateSwitchedFilters = function(dataType) {
   // Save the current query for later
-  var query = helpers.sanitizeQueryParams(
+  let query = sanitizeQueryParams(
     URI.parseQuery(window.location.search)
   );
 
@@ -179,26 +186,24 @@ FilterSet.prototype.activateSwitchedFilters = function(dataType) {
   });
   // Go through the current panel and set loaded-once on each input
   // So that they don't show loading indicators
-  _.each(this.filters, function(filter) {
+  _each(this.filters, function(filter) {
     filter.loadedOnce = false;
     filter.$elm.find('input').data('loaded-once', false);
   });
 
   // If there was a previous query, combine the two
   if (this.previousQuery) {
-    query = _.extend({}, this.previousQuery, query);
+    query = _extend({}, this.previousQuery, query);
   }
 
   // Identify which set of filters to activate and store as this.filters
   this.filters =
     dataType === 'efiling' ? this.efilingFilters : this.processedFilters;
 
-  _.each(this.filters, function(filter) {
+  _each(this.filters, function(filter) {
     filter.fromQuery(query);
   });
 
   this.previousQuery = query;
   this.firstLoad = false;
 };
-
-module.exports = { FilterSet: FilterSet };

@@ -1,4 +1,4 @@
-var URI = require('urijs');
+import { default as URI } from 'urijs';
 var A11yDialog = require('a11y-dialog');
 var analytics = require('./analytics');
 

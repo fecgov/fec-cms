@@ -4,15 +4,10 @@
  * display:none, while still removing from the tab order
  */
 
-function removeTabindex($elm) {
+export function removeTabindex($elm) {
   $elm.find('a, button, :input, [tabindex]').attr('tabindex', '-1');
 }
 
-function restoreTabindex($elm) {
+export function restoreTabindex($elm) {
   $elm.find('a, button, :input, [tabindex]').attr('tabindex', '0');
 }
-
-module.exports = {
-  removeTabindex: removeTabindex,
-  restoreTabindex: restoreTabindex
-};

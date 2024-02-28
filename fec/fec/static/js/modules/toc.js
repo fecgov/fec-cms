@@ -1,5 +1,6 @@
-var scrollMonitor = require('scrollmonitor');
-var _ = require('underscore');
+
+import { default as scrollMonitor } from 'scrollmonitor';
+import { each as _each } from 'underscore';
 
 /**
  * Table of Contents widget
@@ -12,7 +13,7 @@ var _ = require('underscore');
  * @param {string} selector - Selector for the navigation menu for the TOC
  */
 
-function TOC(selector) {
+export default function TOC(selector) {
   this.$menu = $(selector);
   this.sections = this.getSections();
   this.offset = -1 * window.innerHeight;
@@ -76,10 +77,8 @@ TOC.prototype.scrollTo = function(e) {
 
 TOC.prototype.updateWatchers = function() {
   var newOffset = -1 * window.innerHeight;
-  _.each(this.watchers, function(watcher) {
+  _each(this.watchers, function(watcher) {
     watcher.offsets.top = newOffset;
     watcher.recalculateLocation();
   });
 };
-
-module.exports = { TOC: TOC };

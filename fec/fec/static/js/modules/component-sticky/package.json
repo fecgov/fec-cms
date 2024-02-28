@@ -1,0 +1,35 @@
+{
+  "name": "component-sticky",
+  "version": "1.1.0",
+  "description": "Position:sticky comopnent with extended API",
+  "homepage": "https://github.com/kudago/sticky",
+  "author": {
+    "name": "Dmitry Yv",
+    "email": "df.creative@gmail.com",
+    "url": "http://dfcreative.github.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kudago/sticky.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kudago/sticky/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/kudago/sticky/blob/master/LICENSE"
+    }
+  ],
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel serve --no-hmr test/1.html"
+  },
+  "devDependencies": {
+    "watchify": "^3.2.1"
+  },
+  "keywords": [],
+  "dependencies": {
+    "emmy": "^7.0.0"
+  }
+}

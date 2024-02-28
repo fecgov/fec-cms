@@ -1,42 +1,46 @@
-var _ = require('underscore');
-var topojson = require('topojson-client');
-var colorbrewer = require('colorbrewer');
-var utils = require('./election-utils');
-var states = require('../data/us-states-10m.json');
-var stateFeatures = topojson.feature(states, states.objects.states).features;
-var L = require('leaflet');
-require('leaflet-providers');
+import { chain as _chain, extend as _extend, filter as _filter, find as _find, map as _map, max as _max } from 'underscore';
+import { feature } from 'topojson-client/dist/topojson-client.js';
+import { Set1 } from 'colorbrewer';
+// var colorbrewer = require('colorbrewer');
+import { decodeDistrict, decodeState, districtFeatures, findDistricts } from './election-utils.js';
+// var utils = require('./election-utils');
+import { default as states } from '../data/us-states-10m.json' assert { type: 'json' };
 
-var FEATURE_TYPES = {
+const stateFeatures = feature(states, states.objects.states).features;
+import { default as L } from 'leaflet';
+import 'leaflet-providers'
+// require('leaflet-providers');
+
+const FEATURE_TYPES = {
   STATES: 1,
   DISTRICTS: 2
 };
-var STATE_ZOOM_THRESHOLD = 4;
+const STATE_ZOOM_THRESHOLD = 4;
 
-var defaultOpts = {
-  colorScale: colorbrewer.Set1
+const defaultOpts = {
+  colorScale: Set1
 };
 
-var boundsOverrides = {
+const boundsOverrides = {
   200: { coords: [64.06, -152.23], zoom: 3 } // eslint-disable-line quote-props
 };
 
 function getStatePalette(scale) {
-  var colorOptions = _.map(Object.keys(scale), function(key) {
+  var colorOptions = _map(Object.keys(scale), function(key) {
     return parseInt(key);
   });
-  return scale[_.max(colorOptions)];
+  return scale[_max(colorOptions)];
 }
 
 function getDistrictPalette(scale) {
-  var colorOptions = _.map(Object.keys(scale), function(key) {
+  var colorOptions = _map(Object.keys(scale), function(key) {
     return parseInt(key);
   });
   var minColors = Math.min.apply(null, colorOptions);
   var maxColors = Math.max.apply(null, colorOptions);
-  return _.chain(utils.districtFeatures.features)
+  return _chain(districtFeatures.features)
     .groupBy(function(feature) {
-      var district = utils.decodeDistrict(feature.id);
+      var district = decodeDistrict(feature.id);
       return district.state;
     })
     .map(function(features, state) {
@@ -55,9 +59,9 @@ function getDistrictPalette(scale) {
  * @param {string} elm - selector for the div to put the map in
  * @param {object} opts - Configuration options
  */
-function ElectionMap(elm, opts) {
+export default function ElectionMap(elm, opts) {
   this.elm = elm;
-  this.opts = _.extend({}, defaultOpts, opts);
+  this.opts = _extend({}, defaultOpts, opts);
   this.statePalette = getStatePalette(this.opts.colorScale);
   this.districtPalette = getDistrictPalette(this.opts.colorScale);
   this.mapMessage = document.querySelector('.js-map-message');
@@ -119,7 +123,7 @@ ElectionMap.prototype.drawDistricts = function(districts) {
   this.featureType = FEATURE_TYPES.DISTRICTS;
   var features = districts
     ? this.filterDistricts(districts)
-    : utils.districtFeatures;
+    : districtFeatures;
   if (this.overlay) {
     this.map.removeLayer(this.overlay);
   }
@@ -139,7 +143,7 @@ ElectionMap.prototype.updateBounds = function(districts) {
   var self = this;
   var rule =
     districts &&
-    _.find(boundsOverrides, function(rule, district) {
+    _find(boundsOverrides, function(rule, district) {
       return districts.indexOf(parseInt(district)) !== -1;
     });
   this._viewReset = !!(rule || districts);
@@ -151,13 +155,13 @@ ElectionMap.prototype.drawBackgroundDistricts = function(districts) {
   if (!districts) {
     return;
   }
-  var states = _.chain(districts)
+  var states = _chain(districts)
     .map(function(district) {
       return Math.floor(district / 100);
     })
     .unique()
     .value();
-  var stateDistricts = _.filter(utils.districtFeatures.features, function(
+  var stateDistricts = _filter(districtFeatures.features, function(
     feature
   ) {
     return (
@@ -172,14 +176,14 @@ ElectionMap.prototype.drawBackgroundDistricts = function(districts) {
 
 ElectionMap.prototype.filterDistricts = function(districts) {
   return {
-    type: utils.districtFeatures.type,
-    features: utils.findDistricts(districts)
+    type: districtFeatures.type,
+    features: findDistricts(districts)
   };
 };
 
 ElectionMap.prototype.handleStateClick = function(e) {
   if (this.opts.handleSelect) {
-    var state = utils.decodeState(e.target.feature.id);
+    var state = decodeState(e.target.feature.id);
     this.opts.handleSelect(state);
   }
 };
@@ -196,7 +200,7 @@ ElectionMap.prototype.onEachState = function(feature, layer) {
 
 ElectionMap.prototype.onEachDistrict = function(feature, layer, opts) {
   opts = opts || {};
-  var decoded = utils.decodeDistrict(feature.id);
+  var decoded = decodeDistrict(feature.id);
   var palette = this.districtPalette[decoded.state];
   var color = palette[decoded.district % palette.length];
   layer.setStyle({ color: opts.color || color });
@@ -212,7 +216,7 @@ ElectionMap.prototype.handleDistrictClick = function(e) {
   this.map.removeLayer(this.overlay);
   this.drawDistricts([e.target.feature.id]);
   if (this.opts.handleSelect) {
-    var district = utils.decodeDistrict(e.target.feature.id);
+    var district = decodeDistrict(e.target.feature.id);
     this.opts.handleSelect(district.state, district.district);
   }
 };
@@ -246,8 +250,4 @@ ElectionMap.prototype.show = function() {
   if (this.elm) this.elm.setAttribute('aria-hidden', 'false');
   if (this.mapMessage) this.mapMessage.setAttribute('aria-hidden', 'true');
   if (this.mapApproxMessage) this.mapApproxMessage.setAttribute('aria-hidden', 'false');
-};
-
-module.exports = {
-  ElectionMap: ElectionMap
 };

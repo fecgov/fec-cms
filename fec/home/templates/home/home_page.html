@@ -110,28 +110,37 @@
   }
 </script>
 <script src="{% asset_for_js 'home.js' %}"></script>
-<script src="{% asset_for_js 'bythenumbers.js' %}"></script>
-<script src="{% asset_for_js 'dataviz-common.js' %}"></script>
-<script src="{% asset_for_js 'election-lookup.js' %}"></script>
+<!-- <script src="{% asset_for_js 'bythenumbers.js' %}"></script> -->
+<!-- <script src="{% asset_for_js 'dataviz-common.js' %}"></script>
+<script src="{% asset_for_js 'election-lookup.js' %}"></script> -->
 <script>
-  // Remove competing/confusing querystrings on homepage
-  $(function(){
-    cleanURI()
-    function cleanURI(){
+  // Remove competing/confusing query strings on homepage
+  document.addEventListener('DOMContentLoaded', () => {
+    const cleanURI = function() {
       const uri = window.location.toString();
       if (uri.indexOf('?') > 0) {
         window.history.replaceState({}, document.title, location.href.split('?')[0]);
       }
     }
-    $('#main').on('change ', 'input, select', function(){
-      cleanURI();
-    })
+    //
+    cleanURI();
+    //
+    let mainInteractiveElements = document.querySelectorAll('#main input, #main select');
+    mainInteractiveElements.forEach(el => {
+      el.addEventListener('change', cleanURI);
+    });
     {# Handle Chrome inconsistency with History API #}
-    $('.js-office').val('P');
+    const officeSelector = document.querySelector('.js-office');
+    if (officeSelector) officeSelector.value = 'P';
+    // $('.js-office').val('P');
     {# This should be changed with /fec/home/templates_tags/top_entites.py #}
     {# TODO: make this more elegant #}
-    $('.js-election-year').val('2024')
-    $('.js-chart-toggle').filter('[value=receipts]').prop('checked', true)
+    const yearSelector = document.querySelector('.js-election-year');
+    if (yearSelector) yearSelector.value = '2024';
+    // $('.js-election-year').val('2024');
+    const chartToggleReceipts = document.querySelector('.js-chart-toggle [value=receipts]');
+    if (chartToggleReceipts) chartToggleReceipts.setAttribute('checked', true);
+    // $('.js-chart-toggle').filter('[value=receipts]').prop('checked', true);
   });
 </script>
 {% endblock %}

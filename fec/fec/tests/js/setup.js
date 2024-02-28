@@ -1,11 +1,11 @@
-var _ = require('underscore');
+import { extend as _extend } from 'underscore';
 
 module.exports = function() {
   // Append jQuery to `window` for use by legacy libraries
   window.$ = window.jQuery = $;
 
   // Add global variables
-  _.extend(window, {
+  _extend(window, {
     BASE_PATH: '/',
     API_LOCATION: '',
     API_VERSION: '/v1',

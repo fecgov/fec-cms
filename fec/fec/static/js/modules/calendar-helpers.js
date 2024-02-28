@@ -1,8 +1,9 @@
+import { default as URI } from 'urijs';
 
-var URI = require('urijs');
-var moment = require('moment');
+// var moment = require('moment');
+import 'moment';
 
-function getGoogleUrl(event) {
+export function getGoogleUrl(event) {
   var fmt, dates;
   if (event.end) {
     fmt = 'YYYYMMDD[T]HHmmss';
@@ -27,7 +28,7 @@ function getGoogleUrl(event) {
     .toString();
 }
 
-function calendarDownload(path, params) {
+export function calendarDownload(path, params) {
   var url = URI(window.API_LOCATION)
     .path(Array.prototype.concat(window.API_VERSION, path || [], '').join('/'))
     .addQuery({
@@ -41,7 +42,7 @@ function calendarDownload(path, params) {
   return URI.decode(url);
 }
 
-function getUrl(path, params, type) {
+export function getUrl(path, params, type) {
   //if 'type' arg is present and set to 'sub', use API_KEY_PUBLIC_CALENDAR as api_key, otherwise use API_KEY_PUBLIC;
   var apiKey =
     type == 'sub' ? window.API_KEY_PUBLIC_CALENDAR : window.API_KEY_PUBLIC;
@@ -55,7 +56,7 @@ function getUrl(path, params, type) {
     .toString();
   return URI.decode(url);
 }
-function className(event) {
+export function className(event) {
   var start = event.start_date ? moment(event.start_date).format('M D') : null;
   var end = event.end_date ? moment(event.end_date).format('M D') : null;
   if (end && start !== end) {
@@ -65,7 +66,7 @@ function className(event) {
   }
 }
 
-function checkStartTime(event) {
+export function checkStartTime(event) {
   if (event.start_date) {
     return moment(event.start_date).hour() ? true : false;
   } else {
@@ -73,7 +74,7 @@ function checkStartTime(event) {
   }
 }
 
-function mapCategoryDescription(category) {
+export function mapCategoryDescription(category) {
   // matches the category parameter from calendar date API
   var tooltipContent = {
     'Reporting Deadlines':
@@ -96,12 +97,3 @@ function mapCategoryDescription(category) {
 
   return tooltipContent[category];
 }
-
-module.exports = {
-  getGoogleUrl: getGoogleUrl,
-  checkStartTime: checkStartTime,
-  getUrl: getUrl,
-  calendarDownload: calendarDownload,
-  className: className,
-  mapCategoryDescription: mapCategoryDescription
-};

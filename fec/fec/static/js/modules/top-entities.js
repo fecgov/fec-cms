@@ -1,10 +1,9 @@
+import { default as URI } from 'urijs';
+import { buildAppUrl, buildUrl, currency } from '../modules/helpers.js';
 
-var URI = require('urijs');
-var helpers = require('../modules/helpers');
+import { default as TOP_ROW } from '../templates/top-entity-row.hbs';
 
-var TOP_ROW = require('../templates/top-entity-row.hbs');
-
-function TopEntities(elm, type) {
+export function TopEntities(elm, type) {
   this.$elm = $(elm);
   this.type = type;
   this.office = this.$elm.data('office');
@@ -36,7 +35,7 @@ TopEntities.prototype.init = function() {
 
   this.basePath = ['candidates', 'totals'];
 
-  var baseQuery = {
+  const baseQuery = {
     sort: '-' + this.type,
     per_page: this.per_page || 10,
     sort_hide_null: true,
@@ -94,14 +93,14 @@ TopEntities.prototype.handleOfficeChange = function(e) {
 };
 
 TopEntities.prototype.updateElectionYearOptions = function(office) {
-  var now = new Date();
-  var currentYear = now.getFullYear();
-  var minFutureYear = currentYear;
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  let minFutureYear = currentYear;
 
   if (office == 'P') {
     // only show presential options
     $('#election-year option').each(function() {
-      var optValue = parseInt($(this).val());
+      const optValue = parseInt($(this).val());
       // hide all of the non-presidential election years/disable for Safari
       if (optValue % 4 !== 0) {
         $(this)
@@ -114,7 +113,7 @@ TopEntities.prototype.updateElectionYearOptions = function(office) {
         }
       }
     });
-    var currentOption = $(
+    const currentOption = $(
       '#election-year option[value="' + this.election_year + '"]'
     );
     if (currentOption.css('display') == 'none') {
@@ -134,31 +133,28 @@ TopEntities.prototype.handlePagination = function(direction, e) {
   if ($(e.target).hasClass('is-disabled')) {
     return;
   }
-  var currentPage = this.currentQuery.page || 1;
-  if (direction === 'next') {
-    this.currentQuery.page = currentPage + 1;
-  } else if (direction === 'previous') {
-    this.currentQuery.page = currentPage - 1;
-  }
+  const currentPage = this.currentQuery.page || 1;
+  if (direction === 'next') this.currentQuery.page = currentPage + 1;
+  else if (direction === 'previous') this.currentQuery.page = currentPage - 1;
 
   this.loadData(this.currentQuery);
 };
 
 TopEntities.prototype.loadData = function(query) {
-  var self = this;
-  $.getJSON(helpers.buildUrl(this.basePath, query)).done(function(response) {
+  const self = this;
+  $.getJSON(buildUrl(this.basePath, query)).done(function(response) {
     self.populateTable(response);
   });
 };
 
 TopEntities.prototype.populateTable = function(response) {
-  var self = this;
+  const self = this;
   self.$table.find('.js-top-row').remove();
-  var index = 1;
-  var rankBase = (response.pagination.page - 1) * 10; // So that page 2 starts at 11
+  let index = 1;
+  const rankBase = (response.pagination.page - 1) * 10; // So that page 2 starts at 11
   response.results.forEach(function(result) {
-    var rank = self.per_page == 3 ? '' : rankBase + index + '.';
-    var data = self.formatData(result, rank);
+    const rank = self.per_page == 3 ? '' : rankBase + index + '.';
+    const data = self.formatData(result, rank);
     self.$table.append(TOP_ROW(data));
     index++;
   });
@@ -178,15 +174,15 @@ TopEntities.prototype.populateTable = function(response) {
 };
 
 TopEntities.prototype.formatData = function(result, rank) {
-  var data = {
+  const data = {
     name: result.name,
-    amount: helpers.currency(result[this.type]),
+    amount: currency(result[this.type]),
     value: result[this.type],
     rank: rank,
     party: result.party,
     party_code:
       result.party === null ? '' : '[' + result.party.toUpperCase() + ']',
-    url: helpers.buildAppUrl(['candidate', result.candidate_id], {
+    url: buildAppUrl(['candidate', result.candidate_id], {
       cycle: this.election_year,
       election_full: true
     })
@@ -196,16 +192,16 @@ TopEntities.prototype.formatData = function(result, rank) {
 };
 
 TopEntities.prototype.drawBars = function() {
-  var maxValue = this.maxValue;
+  const maxValue = this.maxValue;
   this.$table.find('.value-bar').each(function() {
-    var width = Number(this.getAttribute('data-value')) / maxValue || 0;
+    const width = Number(this.getAttribute('data-value')) / maxValue || 0;
     this.style.width = String(width * 100) + '%';
   });
 };
 
 TopEntities.prototype.updateCoverageDateRange = function() {
-  var coverage_start_date = null;
-  var coverage_end_date = '12/31/' + this.election_year;
+  let coverage_start_date = null;
+  const coverage_end_date = '12/31/' + this.election_year;
   if (this.office === 'P') {
     //For Presidential coverage start dates
     coverage_start_date = '01/01/' + String(this.election_year - 3);
@@ -221,12 +217,12 @@ TopEntities.prototype.updateCoverageDateRange = function() {
 };
 
 TopEntities.prototype.updatePagination = function(pagination) {
-  var page = pagination.page;
-  var per_page = pagination.per_page;
-  var count = pagination.count.toLocaleString();
-  var range_start = String(per_page * (page - 1) + 1);
-  var range_end = String((page - 1) * 10 + per_page);
-  var info = range_start + '-' + range_end + ' of ' + count;
+  const page = pagination.page;
+  const per_page = pagination.per_page;
+  const count = pagination.count.toLocaleString();
+  const range_start = String(per_page * (page - 1) + 1);
+  const range_end = String((page - 1) * 10 + per_page);
+  const info = range_start + '-' + range_end + ' of ' + count;
 
   if (page === pagination.pages) {
     this.$next.addClass('is-disabled');
@@ -244,11 +240,11 @@ TopEntities.prototype.updatePagination = function(pagination) {
 };
 
 TopEntities.prototype.pushStateToURL = function(keyValPairsObj) {
-  var query = Object.assign(
+  const query = Object.assign(
     URI.parseQuery(window.location.search),
     keyValPairsObj
   );
-  var search = URI('')
+  const search = URI('')
     .query(query)
     .toString();
   window.history.pushState(query, search, search || window.location.pathname);
@@ -261,7 +257,7 @@ TopEntities.prototype.handleTypeChange = function(e) {
   this.prefix = $(e.target).data('prefix');
   this.action = this.type == 'receipts' ? 'raised' : 'spent';
 
-  var baseQuery = {
+  const baseQuery = {
     sort: '-' + this.type,
     per_page: this.per_page,
     sort_hide_null: true,
@@ -284,5 +280,3 @@ TopEntities.prototype.handleTypeChange = function(e) {
 
   $('.js-type-label span').html(this.action);
 };
-
-module.exports = { TopEntities: TopEntities };

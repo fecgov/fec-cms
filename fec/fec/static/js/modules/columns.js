@@ -1,30 +1,29 @@
+import { contains as _contains, extend as _extend, first as _first, last as _last } from 'underscore';
 
-var _ = require('underscore');
+import { barColumn, buildEntityLink, formattedColumn, urlColumn } from './column-helpers.js';
+import { getCycle, MODAL_TRIGGER_HTML, yearRange } from './tables.js';
+import { amendmentVersion, buildAppUrl, currency, datetime, globals } from './helpers.js';
+import { supportOppose } from './decoders.js';
+import { default as moment } from 'moment';
 
-var columnHelpers = require('./column-helpers');
-var tables = require('./tables');
-var helpers = require('./helpers');
-var decoders = require('./decoders');
-var moment = require('moment');
+import { default as reportType } from '../templates/reports/reportType.hbs';
 
-var reportType = require('../templates/reports/reportType.hbs');
-
-var dateColumn = columnHelpers.formattedColumn(helpers.datetime, {
+export const dateColumn = formattedColumn(datetime, {
   orderSequence: ['desc', 'asc']
 });
-var currencyColumn = columnHelpers.formattedColumn(helpers.currency, {
+export const currencyColumn = formattedColumn(currency, {
   orderSequence: ['desc', 'asc']
 });
-var barCurrencyColumn = columnHelpers.barColumn(helpers.currency);
+export const barCurrencyColumn = barColumn(currency);
 
-var supportOpposeColumn = {
+export const supportOpposeColumn = {
   data: 'support_oppose_indicator',
   render: function(data) {
-    return decoders.supportOppose[data] || 'Unknown';
+    return supportOppose[data] || 'Unknown';
   }
 };
 
-var versionColumn = {
+const versionColumn = {
   data: 'most_recent',
   className: 'hide-panel hide-efiling column--med min-desktop',
   orderable: false,
@@ -33,7 +32,7 @@ var versionColumn = {
     if (['RFAI', 'FRQ'].indexOf(row.form_type) >= 0) {
       return '<i class="icon-blank"></i>Not applicable';
     }
-    var version = helpers.amendmentVersion(data);
+    let version = amendmentVersion(data);
     if (version === 'Version unknown') {
       return (
         '<i class="icon-blank"></i>Version unknown<br>' +
@@ -49,20 +48,20 @@ var versionColumn = {
   }
 };
 
-var modalTriggerColumn = {
+const modalTriggerColumn = {
   className: 'all column--trigger',
   orderable: false,
   render: function() {
-    return tables.MODAL_TRIGGER_HTML;
+    return MODAL_TRIGGER_HTML;
   }
 };
 
-var receiptDateColumn = {
+const receiptDateColumn = {
   data: 'receipt_date',
   className: 'min-tablet hide-panel column--small',
   orderable: true,
   render: function(data, type, row, meta) {
-    var parsed;
+    let parsed;
     if (meta.settings.oInit.path.indexOf('efile') >= 0) {
       parsed = moment(row.receipt_date, 'YYYY-MM-DDTHH:mm:ss');
       return parsed.isValid()
@@ -75,7 +74,7 @@ var receiptDateColumn = {
   }
 };
 
-var pagesColumn = {
+const pagesColumn = {
   data: 'beginning_image_number',
   orderable: false,
   className: 'min-tablet hide-panel column--xs column--number',
@@ -85,14 +84,14 @@ var pagesColumn = {
     // This results in inaccurate subtraction
     // so instead we slice it after the first 8 digits
     // Earlier image numbers are only 11 digits, so we just leave those as-is
-    var shorten = function(number) {
+    const shorten = function(number) {
       if (number.toString().length === 18) {
         return Number(number.toString().slice(8));
       } else {
         return number;
       }
     };
-    var pages =
+    const pages =
       shorten(row.ending_image_number) -
       shorten(row.beginning_image_number) +
       1;
@@ -100,11 +99,11 @@ var pagesColumn = {
   }
 };
 
-var candidateColumn = columnHelpers.formattedColumn(function(data, type, row) {
+export const candidateColumn = formattedColumn(function(data, type, row) {
   if (row) {
-    return columnHelpers.buildEntityLink(
+    return buildEntityLink(
       row.candidate_name,
-      helpers.buildAppUrl(['candidate', row.candidate_id]),
+      buildAppUrl(['candidate', row.candidate_id]),
       'candidate'
     );
   } else {
@@ -112,11 +111,11 @@ var candidateColumn = columnHelpers.formattedColumn(function(data, type, row) {
   }
 });
 
-var committeeColumn = columnHelpers.formattedColumn(function(data, type, row) {
+export const committeeColumn = formattedColumn(function(data, type, row) {
   if (row) {
-    return columnHelpers.buildEntityLink(
+    return buildEntityLink(
       row.committee_name,
-      helpers.buildAppUrl(['committee', row.committee_id]),
+      buildAppUrl(['committee', row.committee_id]),
       'committee'
     );
   } else {
@@ -124,11 +123,11 @@ var committeeColumn = columnHelpers.formattedColumn(function(data, type, row) {
   }
 });
 
-var renderCandidateColumn = function(data, type, row) {
+const renderCandidateColumn = function(data, type, row) {
   if (data) {
-    return columnHelpers.buildEntityLink(
+    return buildEntityLink(
       data,
-      helpers.buildAppUrl(['candidate', row.candidate_id]),
+      buildAppUrl(['candidate', row.candidate_id]),
       'candidate'
     );
   } else {
@@ -136,12 +135,12 @@ var renderCandidateColumn = function(data, type, row) {
   }
 };
 
-var renderCandidateCycleColumn = function(data, type, row) {
+const renderCandidateCycleColumn = function(data, type, row) {
   if (data) {
-    var latest_year = row.election_years[row.election_years.length - 1];
-    return columnHelpers.buildEntityLink(
+    const latest_year = row.election_years[row.election_years.length - 1];
+    return buildEntityLink(
       data,
-      helpers.buildAppUrl(['candidate', row.candidate_id], {
+      buildAppUrl(['candidate', row.candidate_id], {
         cycle: latest_year % 2 === 0 ? latest_year : latest_year + 1,
         election_full: true
       }),
@@ -152,11 +151,11 @@ var renderCandidateCycleColumn = function(data, type, row) {
   }
 };
 
-var renderCommitteeColumn = function(data, type, row) {
+const renderCommitteeColumn = function(data, type, row) {
   if (data) {
-    return columnHelpers.buildEntityLink(
+    return buildEntityLink(
       data,
-      helpers.buildAppUrl(['committee', row.committee_id]),
+      buildAppUrl(['committee', row.committee_id]),
       'committee'
     );
   } else {
@@ -164,14 +163,14 @@ var renderCommitteeColumn = function(data, type, row) {
   }
 };
 
-var candidates = [
+export const candidates = [
   { data: 'name', className: 'all', render: renderCandidateCycleColumn },
   { data: 'office_full', className: 'min-tablet hide-panel-tablet' },
   {
     data: 'election_years',
     className: 'min-tablet hide-panel',
     render: function(data) {
-      return tables.yearRange(_.first(data), _.last(data));
+      return yearRange(_first(data), _last(data));
     }
   },
   { data: 'party_full', className: 'min-tablet hide-panel' },
@@ -185,7 +184,7 @@ var candidates = [
   modalTriggerColumn
 ];
 
-var candidateOffice = {
+export const candidateOffice = {
   name: { data: 'name', className: 'all', render: renderCandidateColumn },
   party: { data: 'party_full', className: 'min-desktop' },
   state: { data: 'state', className: 'min-tablet column--state hide-panel' },
@@ -204,17 +203,17 @@ var candidateOffice = {
   trigger: modalTriggerColumn
 };
 
-var committees = [
+export const committees = [
   {
     data: 'name',
     className: 'all',
     render: function(data, type, row, meta) {
       if (data) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           data,
-          helpers.buildAppUrl(
+          buildAppUrl(
             ['committee', row.committee_id],
-            tables.getCycle(row.cycles, meta)
+            getCycle(row.cycles, meta)
           ),
           'committee'
         );
@@ -235,14 +234,14 @@ var committees = [
   modalTriggerColumn
 ];
 
-var communicationCosts = [
+export const communicationCosts = [
   {
     data: 'committee_name',
     orderable: false,
     className: 'all',
     render: renderCommitteeColumn
   },
-  _.extend({}, supportOpposeColumn, {
+  _extend({}, supportOpposeColumn, {
     className: 'min-tablet hide-panel-tablet'
   }),
   {
@@ -262,16 +261,16 @@ var communicationCosts = [
   modalTriggerColumn
 ];
 
-var disbursements = [
+export const disbursements = [
   {
     data: 'committee',
     orderable: false,
     className: 'all',
     render: function(data) {
       if (data) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           data.name,
-          helpers.buildAppUrl(['committee', data.committee_id]),
+          buildAppUrl(['committee', data.committee_id]),
           'committee'
         );
       } else {
@@ -284,11 +283,11 @@ var disbursements = [
     orderable: false,
     className: 'all',
     render: function(data, type, row) {
-      var committee = row.recipient_committee;
+      const committee = row.recipient_committee;
       if (committee) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           committee.name,
-          helpers.buildAppUrl(['committee', committee.committee_id]),
+          buildAppUrl(['committee', committee.committee_id]),
           'committee'
         );
       } else {
@@ -317,16 +316,16 @@ var disbursements = [
   modalTriggerColumn
 ];
 
-var allocatedFederalNonfederalDisbursements = [
+export const allocatedFederalNonfederalDisbursements = [
   {
     data: 'committee',
     orderable: false,
     className: 'all',
     render: function(data) {
       if (data) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           data.name,
-          helpers.buildAppUrl(['committee', data.committee_id])
+          buildAppUrl(['committee', data.committee_id])
         );
       } else {
         return data.name;
@@ -338,11 +337,11 @@ var allocatedFederalNonfederalDisbursements = [
     orderable: false,
     className: 'all',
     render: function(data, type, row) {
-      var committee = row.recipient_committee;
+      const committee = row.recipient_committee;
       if (committee) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           committee.name,
-          helpers.buildAppUrl(['committee', committee.committee_id]),
+          buildAppUrl(['committee', committee.committee_id]),
           'committee'
         );
       } else {
@@ -378,7 +377,7 @@ var allocatedFederalNonfederalDisbursements = [
   modalTriggerColumn
 ];
 
-var electioneeringCommunications = [
+export const electioneeringCommunications = [
   {
     data: 'committee_name',
     orderable: false,
@@ -410,30 +409,30 @@ var electioneeringCommunications = [
   modalTriggerColumn
 ];
 
-var filings = {
+export const filings = {
   filer_name: {
     data: 'committee_id',
     className: 'all',
     orderable: false,
     render: function(data, type, row, meta) {
-      var cycle = tables.getCycle([row.cycle], meta);
+      const cycle = getCycle([row.cycle], meta);
       if (row.candidate_name) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           row.candidate_name,
-          helpers.buildAppUrl(['candidate', row.candidate_id], cycle),
+          buildAppUrl(['candidate', row.candidate_id], cycle),
           'candidate'
         );
         // If committee ID is actually a candidate ID, use 'candidate' in URI
       } else if (row.committee_id.match(/^[H, S, P]+\w+$/)) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           row.committee_name,
-          helpers.buildAppUrl(['candidate', row.committee_id], cycle),
+          buildAppUrl(['candidate', row.committee_id], cycle),
           'committee'
         );
       } else if (row.committee_name) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           row.committee_name,
-          helpers.buildAppUrl(['committee', row.committee_id], cycle),
+          buildAppUrl(['committee', row.committee_id], cycle),
           'committee'
         );
       } else {
@@ -441,7 +440,7 @@ var filings = {
       }
     }
   },
-  pdf_url: columnHelpers.urlColumn('pdf_url', {
+  pdf_url: urlColumn('pdf_url', {
     // This is just used by the committee pages because those tables
     // are too narrow to support the combo button
     data: 'document_description',
@@ -453,14 +452,14 @@ var filings = {
     className: 'all column--doc-download',
     orderable: false,
     render: function(data, type, row) {
-      var doc_description = row.document_description
+      let doc_description = row.document_description
         ? row.document_description
         : row.form_type;
-      var amendment_version = helpers.amendmentVersionDescription(row);
-      var pdf_url = row.pdf_url ? row.pdf_url : null;
-      var csv_url = row.csv_url ? row.csv_url : null;
-      var fec_url = row.fec_url ? row.fec_url : null;
-      var html_url = row.html_url ? row.html_url : null;
+      const amendment_version = amendmentVersionDescription(row);
+      const pdf_url = row.pdf_url ? row.pdf_url : null;
+      const csv_url = row.csv_url ? row.csv_url : null;
+      const fec_url = row.fec_url ? row.fec_url : null;
+      const html_url = row.html_url ? row.html_url : null;
 
       // If it's a Form 3L we should append that to the doc title
       if (row.form_type == 'F3L') {
@@ -485,7 +484,7 @@ var filings = {
     className: 'min-tablet hide-panel column--small',
     orderable: false,
     render: function(data, type, row) {
-      var parsed = moment(row.receipt_date, 'YYYY-MM-DDTHH:mm:ss');
+      const parsed = moment(row.receipt_date, 'YYYY-MM-DDTHH:mm:ss');
       return parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
     }
   },
@@ -520,7 +519,7 @@ var filings = {
     orderable: false,
     render: function(data, type, row) {
       if (row.form_type && row.form_type.match(/^F[35][XP]?$/)) {
-        return tables.MODAL_TRIGGER_HTML;
+        return MODAL_TRIGGER_HTML;
       } else {
         return '';
       }
@@ -528,16 +527,16 @@ var filings = {
   }
 };
 
-var independentExpenditures = [
+export const independentExpenditures = [
   {
     data: 'committee',
     orderable: false,
     className: 'all',
     render: function(data) {
       if (data) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           data.name,
-          helpers.buildAppUrl(['committee', data.committee_id]),
+          buildAppUrl(['committee', data.committee_id]),
           'committee'
         );
       } else {
@@ -545,7 +544,7 @@ var independentExpenditures = [
       }
     }
   },
-  _.extend({}, supportOpposeColumn, {
+  _extend({}, supportOpposeColumn, {
     className: 'min-tablet hide-panel-tablet'
   }),
   {
@@ -554,11 +553,11 @@ var independentExpenditures = [
     className: 'min-tablet hide-panel-table',
     render: function(data, type, row, meta) {
       if (row.candidate_id) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           data,
-          helpers.buildAppUrl(
+          buildAppUrl(
             ['candidate', row.candidate_id],
-            tables.getCycle(row, meta)
+            getCycle(row, meta)
           ),
           'candidate'
         );
@@ -567,7 +566,7 @@ var independentExpenditures = [
       }
     }
   },
-  columnHelpers.urlColumn('pdf_url', {
+  urlColumn('pdf_url', {
     data: 'expenditure_description',
     className: 'min-desktop hide-panel',
     orderable: false
@@ -588,7 +587,7 @@ var independentExpenditures = [
   modalTriggerColumn
 ];
 
-var individualContributions = [
+export const individualContributions = [
   {
     data: 'contributor',
     orderable: false,
@@ -596,11 +595,11 @@ var individualContributions = [
     render: function(data, type, row) {
       if (
         data &&
-        !_.contains(helpers.globals.EARMARKED_CODES, row.receipt_type)
+        !_contains(globals.EARMARKED_CODES, row.receipt_type)
       ) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           data.name,
-          helpers.buildAppUrl(['committee', data.committee_id]),
+          buildAppUrl(['committee', data.committee_id]),
           'committee'
         );
       } else {
@@ -614,9 +613,9 @@ var individualContributions = [
     className: 'all',
     render: function(data) {
       if (data) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           data.name,
-          helpers.buildAppUrl(['committee', data.committee_id]),
+          buildAppUrl(['committee', data.committee_id]),
           'committee'
         );
       } else {
@@ -645,16 +644,16 @@ var individualContributions = [
   modalTriggerColumn
 ];
 
-var partyCoordinatedExpenditures = [
+export const partyCoordinatedExpenditures = [
   {
     data: 'committee',
     orderable: false,
     className: 'all',
     render: function(data) {
       if (data) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           data.name,
-          helpers.buildAppUrl(['committee', data.committee_id]),
+          buildAppUrl(['committee', data.committee_id]),
           'committee'
         );
       } else {
@@ -668,9 +667,9 @@ var partyCoordinatedExpenditures = [
     className: 'min-tablet hide-panel-tablet',
     render: function(data, type, row) {
       if (row.candidate_id) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           data,
-          helpers.buildAppUrl(['candidate', row.candidate_id]),
+          buildAppUrl(['candidate', row.candidate_id]),
           'candidate'
         );
       } else {
@@ -694,7 +693,7 @@ var partyCoordinatedExpenditures = [
   modalTriggerColumn
 ];
 
-var receipts = [
+export const receipts = [
   {
     data: 'contributor',
     orderable: false,
@@ -702,11 +701,11 @@ var receipts = [
     render: function(data, type, row) {
       if (
         data &&
-        !_.contains(helpers.globals.EARMARKED_CODES, row.receipt_type)
+        !_contains(globals.EARMARKED_CODES, row.receipt_type)
       ) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           data.name,
-          helpers.buildAppUrl(['committee', data.committee_id]),
+          buildAppUrl(['committee', data.committee_id]),
           'committee'
         );
       } else {
@@ -720,9 +719,9 @@ var receipts = [
     className: 'all',
     render: function(data) {
       if (data) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           data.name,
-          helpers.buildAppUrl(['committee', data.committee_id]),
+          buildAppUrl(['committee', data.committee_id]),
           'committee'
         );
       } else {
@@ -751,7 +750,7 @@ var receipts = [
   modalTriggerColumn
 ];
 
-var reports = {
+export const reports = {
   committee: {
     data: 'committee_name',
     orderable: false,
@@ -763,14 +762,14 @@ var reports = {
     className: 'all column--doc-download',
     orderable: false,
     render: function(data, type, row) {
-      var doc_description = row.document_description
+      const doc_description = row.document_description
         ? row.document_description
         : row.form_type;
-      var amendment_version = helpers.amendmentVersionDescription(row);
-      var pdf_url = row.pdf_url ? row.pdf_url : null;
-      var csv_url = row.csv_url ? row.csv_url : null;
-      var fec_url = row.fec_url ? row.fec_url : null;
-      var html_url = row.html_url ? row.html_url : null;
+      const amendment_version = amendmentVersionDescription(row);
+      const pdf_url = row.pdf_url ? row.pdf_url : null;
+      const csv_url = row.csv_url ? row.csv_url : null;
+      const fec_url = row.fec_url ? row.fec_url : null;
+      const html_url = row.html_url ? row.html_url : null;
 
       return reportType({
         doc_description: doc_description,
@@ -814,21 +813,21 @@ var reports = {
     className: 'all column--trigger',
     orderable: false,
     render: function() {
-      return tables.MODAL_TRIGGER_HTML;
+      return MODAL_TRIGGER_HTML;
     }
   }
 };
 
-var loans = [
+export const loans = [
   {
     data: 'committee',
     orderable: false,
     className: 'all',
     render: function(data) {
       if (data) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           data.name,
-          helpers.buildAppUrl(['committee', data.committee_id]),
+          buildAppUrl(['committee', data.committee_id]),
           'committee'
         );
       } else {
@@ -857,16 +856,16 @@ var loans = [
   modalTriggerColumn
 ];
 
-var debts = [
+export const debts = [
   {
     data: 'committee',
     orderable: false,
     className: 'all',
     render: function(data) {
       if (data) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           data.name,
-          helpers.buildAppUrl(['committee', data.committee_id]),
+          buildAppUrl(['committee', data.committee_id]),
           'committee'
         );
       } else {
@@ -893,16 +892,16 @@ var debts = [
   modalTriggerColumn
 ];
 
-var pac_party = [
+export const pac_party = [
   {
     data: 'committee_name',
     orderable: true,
     className: 'all',
     render: function(data, type, row) {
       if (data) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           data,
-          helpers.buildAppUrl(['committee', row.committee_id])
+          buildAppUrl(['committee', row.committee_id])
         );
       } else {
         return '';
@@ -928,8 +927,8 @@ var pac_party = [
   modalTriggerColumn
 ];
 
-var audit = [
-  columnHelpers.urlColumn('link_to_report', {
+export const audit = [
+  urlColumn('link_to_report', {
     data: 'committee_name',
     className: 'all align-top',
     orderable: true
@@ -946,7 +945,7 @@ var audit = [
     className: 'min-tablet hide-panel column--small align-top',
     orderable: true,
     render: function(data, type, row) {
-      var parsed;
+      let parsed;
       parsed = moment(row.far_release_date, 'YYYY-MM-DD');
       return parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
     }
@@ -958,10 +957,10 @@ var audit = [
     orderable: false,
     render: function(data) {
       if (data) {
-        var html = '<ol class="list--numbered">';
-        for (var i in data) {
+        let html = '<ol class="list--numbered">';
+        for (let i in data) {
           html += '<li>' + data[i]['primary_category_name'] + '<ol>';
-          for (var j in data[i]['sub_category_list']) {
+          for (let j in data[i]['sub_category_list']) {
             html +=
               '<li>' +
               data[i]['sub_category_list'][j]['sub_category_name'] +
@@ -982,29 +981,3 @@ var audit = [
     orderable: true
   }
 ];
-
-module.exports = {
-  candidateColumn: candidateColumn,
-  committeeColumn: committeeColumn,
-  dateColumn: dateColumn,
-  currencyColumn: currencyColumn,
-  barCurrencyColumn: barCurrencyColumn,
-  supportOpposeColumn: supportOpposeColumn,
-  candidates: candidates,
-  candidateOffice: candidateOffice,
-  committees: committees,
-  communicationCosts: communicationCosts,
-  disbursements: disbursements,
-  allocatedFederalNonfederalDisbursements: allocatedFederalNonfederalDisbursements,
-  electioneeringCommunications: electioneeringCommunications,
-  independentExpenditures: independentExpenditures,
-  individualContributions: individualContributions,
-  partyCoordinatedExpenditures: partyCoordinatedExpenditures,
-  filings: filings,
-  receipts: receipts,
-  reports: reports,
-  loans: loans,
-  debts: debts,
-  pac_party: pac_party,
-  audit: audit
-};

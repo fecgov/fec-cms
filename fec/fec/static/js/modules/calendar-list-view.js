@@ -1,4 +1,4 @@
-var _ = require('underscore');
+import { chain as _chain, each as _each, pairs as _pairs, reduce as _reduce } from 'underscore';
 var moment = require('moment');
 require('fullcalendar');
 
@@ -24,12 +24,12 @@ var categories = {
   Other: ['other']
 };
 
-var categoriesInverse = _.reduce(
-  _.pairs(categories),
+var categoriesInverse = _reduce(
+  _pairs(categories),
   function(memo, pair) {
     var key = pair[0];
     var values = pair[1];
-    _.each(values, function(value) {
+    _each(values, function(value) {
       memo[value] = key;
     });
     return memo;
@@ -38,7 +38,7 @@ var categoriesInverse = _.reduce(
 );
 
 var categoryGroups = function(events, start, end) {
-  return _.chain(events)
+  return _chain(events)
     .filter(function(event) {
       return start <= event.start && event.start < end;
     })
@@ -62,7 +62,7 @@ var categoryGroups = function(events, start, end) {
 };
 
 var chronologicalGroups = function(events, start, end) {
-  events = _.chain(events)
+  events = _chain(events)
     .filter(function(event) {
       return start <= event.start && event.start < end;
     })

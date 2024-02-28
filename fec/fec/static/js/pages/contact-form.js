@@ -1,5 +1,5 @@
 var Typeahead = require('../modules/typeahead').Typeahead;
-var URI = require('urijs');
+import { default as URI } from 'urijs';
 
 const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
 

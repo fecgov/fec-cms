@@ -1,7 +1,6 @@
+import { debounce as _debounce } from 'underscore';
 
-var _ = require('underscore');
-
-var URI = require('urijs');
+import { default as URI } from 'urijs';
 
 function lineNumberFilters() {
   lineNumberFiltersCheck();
@@ -9,7 +8,7 @@ function lineNumberFilters() {
   $('#filters').on(
     'change',
     'input,select',
-    _.debounce(lineNumberFiltersCheck, 250)
+    _debounce(lineNumberFiltersCheck, 250)
   );
 }
 

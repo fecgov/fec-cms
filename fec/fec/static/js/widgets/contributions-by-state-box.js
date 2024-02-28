@@ -18,12 +18,12 @@ const breakpointToXL = 860;
 const rootPathToIndividualContributions =
   '/data/receipts/individual-contributions/';
 
-import { buildUrl, passiveListener } from '../modules/helpers';
-import typeahead from '../modules/typeahead';
-import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
-import analytics from '../modules/analytics';
+import { buildUrl, passiveListenerIfSupported } from '../modules/helpers.js';
+import { default as Typeahead } from '../modules/typeahead.js';
+import 'abortcontroller-polyfill';
+import { customEvent } from '../modules/analytics.js';
 
-const DataMap = require('../modules/data-map').DataMap;
+import DataMap from '../modules/data-map.js';
 const AbortController = window.AbortController;
 
 /**
@@ -195,7 +195,7 @@ function ContributionsByState() {
  */
 ContributionsByState.prototype.init = function() {
   // Add the stylesheet to the document <head>
-  let head = document.head;
+  let head = document.querySelector('head');
   let linkElement = document.createElement('link');
   linkElement.type = 'text/css';
   linkElement.rel = 'stylesheet';
@@ -203,7 +203,7 @@ ContributionsByState.prototype.init = function() {
   head.appendChild(linkElement);
 
   // Init the typeahead
-  this.typeahead = new typeahead.Typeahead(
+  this.typeahead = new Typeahead(
     '#contribs-by-state-cand',
     'candidates'
   );
@@ -227,12 +227,12 @@ ContributionsByState.prototype.init = function() {
   theTypeaheadElement.addEventListener(
     'mousedown',
     this.handleTypeaheadFocus.bind(this),
-    passiveListener()
+    passiveListenerIfSupported()
   );
   theTypeaheadElement.addEventListener(
     'touchstart',
     this.handleTypeaheadFocus.bind(this),
-    passiveListener()
+    passiveListenerIfSupported()
   );
 
   // Listen for any field updates, looking for errors
@@ -681,9 +681,9 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
  * TODO: This will eventually be replaced by the datatables functionality
  */
 ContributionsByState.prototype.displayUpdatedData_states = function() {
-  let theData = this.data_states;
-  let theResults = theData.results;
-  let theTableBody = this.table.querySelector('tbody');
+  const theData = this.data_states;
+  const theResults = theData.results;
+  const theTableBody = this.table.querySelector('tbody');
   let theTbodyString = '';
 
   if (theResults.length === 0) {
@@ -693,7 +693,7 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
     // If there ARE results to show
 
     // We're going to need the committee IDs for the totals link
-    let theCommitteeIDs = [];
+    const theCommitteeIDs = [];
     for (let i = 0; i < this.data_candidateCommittees.results.length; i++) {
       theCommitteeIDs.push(
         this.data_candidateCommittees.results[i].committee_id
@@ -701,7 +701,7 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
     }
 
     for (let i = 0; i < theResults.length; i++) {
-      let theStateTotalUrl = buildIndividualContributionsUrl(
+      const theStateTotalUrl = buildIndividualContributionsUrl(
         this.baseStatesQuery.cycle,
         this.baseStatesQuery.office,
         theCommitteeIDs,
@@ -756,7 +756,7 @@ ContributionsByState.prototype.displayUpdatedData_total = function(data) {
         ))
       : '';
 
-  let statesHolder = this.element.querySelector('.states-total');
+  const statesHolder = this.element.querySelector('.states-total');
   if (data.results.length > 0) statesHolder.setAttribute('style', '');
   else statesHolder.setAttribute('style', 'opacity: 0;');
 };
@@ -798,7 +798,7 @@ ContributionsByState.prototype.handleTypeaheadRender = function(
  * @param {Boolean} isError - Whether or not to display the message
  */
 ContributionsByState.prototype.showTypeaheadError = function(isError) {
-  let theElement = document.querySelector('#contribs-by-state-cand-field');
+  const theElement = document.querySelector('#contribs-by-state-cand-field');
   if (isError) theElement.classList.add('is-error');
   else theElement.classList.remove('is-error');
 };
@@ -808,7 +808,7 @@ ContributionsByState.prototype.showTypeaheadError = function(isError) {
  */
 ContributionsByState.prototype.handleTypeaheadBlur = function() {
   // If the user has left the field without making a choice (i.e., typeahead_revertValue hasn't been nullified),
-  let theTypeahead = document.querySelector('#contribs-by-state-cand');
+  const theTypeahead = document.querySelector('#contribs-by-state-cand');
   if (this.typeahead_revertValue != '') {
     // revert the value and reset the var
     theTypeahead.value = this.typeahead_revertValue;
@@ -885,13 +885,13 @@ ContributionsByState.prototype.handleErrorState = function(errorCode) {
 ContributionsByState.prototype.updateBrowseIndivContribsButton = function() {
   // We need to go through the committee results and build an array of the committee IDs
   // to send to {@see buildIndividualContributionsUrl() }
-  let theCommittees = this.data_candidateCommittees.results;
-  let theCommitteeIDs = [];
+  const theCommittees = this.data_candidateCommittees.results;
+  const theCommitteeIDs = [];
   for (let i = 0; i < theCommittees.length; i++) {
     theCommitteeIDs.push(theCommittees[i].committee_id);
   }
 
-  let theButton = this.element.querySelector(
+  const theButton = this.element.querySelector(
     '.js-browse-indiv-contribs-by-state'
   );
   theButton.setAttribute(
@@ -1000,7 +1000,7 @@ ContributionsByState.prototype.setLoadingState = function(newState) {
  * @param {*} electionYear - String or Number, the user-selected election year
  */
 function logUsage(candID, electionYear) {
-  analytics.customEvent({
+  customEvent({
     event: 'Widget Interaction',
     eventName: `widgetInteraction`,
     eventCategory: 'Widget-ContribsByState',

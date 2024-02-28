@@ -1,9 +1,9 @@
 /* global window, describe, before, beforeEach, afterEach, it */
 
-var _ = require('underscore');
+import { extend as _extend } from 'underscore';
 
 window.$ = window.jQuery = $;
-_.extend(window, {
+_extend(window, {
   API_LOCATION: '',
   API_VERSION: '/v1',
 });

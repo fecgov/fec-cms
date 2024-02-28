@@ -1,15 +1,13 @@
+import { chain as _chain, reduce as _reduce } from 'underscore';
+import { buildUrl, currency } from '../modules/helpers.js';
 
-var _ = require('underscore');
-
-var helpers = require('../modules/helpers');
-
-var pathMap = {
+const pathMap = {
   independentExpenditures: ['schedules', 'schedule_e', 'by_candidate'],
   communicationCosts: ['communication_costs', 'by_candidate'],
   electioneering: ['electioneering', 'by_candidate']
 };
 
-function OtherSpendingTotals(type) {
+export default function OtherSpendingTotals(type) {
   this.$elm = $('.js-other-spending-totals[data-spending-type=' + type + ']');
   this.type = type;
   this.data = [];
@@ -21,7 +19,7 @@ OtherSpendingTotals.prototype.fetchData = function(page) {
   // Page is required because if there's more than 100 results we need
   // to loop through all the pages
   var self = this;
-  var url = helpers.buildUrl(pathMap[this.type], {
+  var url = buildUrl(pathMap[this.type], {
     candidate_id: context.candidateID,
     cycle: context.cycle,
     election_full: context.electionFull,
@@ -57,18 +55,18 @@ OtherSpendingTotals.prototype.showTotals = function(results) {
   if (this.type === 'electioneering') {
     // Electioneering comms aren't marked as support or oppose, so just add
     // them all together
-    var total = _.reduce(
+    var total = _reduce(
       results,
       function(memo, datum) {
         return memo + datum.total;
       },
       0
     );
-    this.$elm.find('.js-total-electioneering').html(helpers.currency(total));
+    this.$elm.find('.js-total-electioneering').html(currency(total));
   } else {
     // Get support and oppose totals by filtering results by the correct indicator
     // and then running _.reduce to add all the values
-    var supportTotal = _.chain(results)
+    var supportTotal = _chain(results)
       .filter(function(value) {
         return value.support_oppose_indicator === 'S';
       })
@@ -77,7 +75,7 @@ OtherSpendingTotals.prototype.showTotals = function(results) {
       }, 0)
       .value();
 
-    var opposeTotal = _.chain(results)
+    var opposeTotal = _chain(results)
       .filter(function(value) {
         return value.support_oppose_indicator === 'O';
       })
@@ -87,9 +85,7 @@ OtherSpendingTotals.prototype.showTotals = function(results) {
       .value();
 
     // Update the DOM with the values
-    this.$elm.find('.js-support').html(helpers.currency(supportTotal));
-    this.$elm.find('.js-oppose').html(helpers.currency(opposeTotal));
+    this.$elm.find('.js-support').html(currency(supportTotal));
+    this.$elm.find('.js-oppose').html(currency(opposeTotal));
   }
 };
-
-module.exports = OtherSpendingTotals;

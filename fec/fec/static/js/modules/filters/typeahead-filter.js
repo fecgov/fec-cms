@@ -1,11 +1,10 @@
+import { escape as _escape } from 'underscore';
 
-var _ = require('underscore');
+import { default as Filter } from './filter-base.js';
+import { default as typeahead } from '../typeahead.js';
+import { default as FilterTypeahead } from './filter-typeahead.js';
 
-var Filter = require('./filter-base.js');
-var typeahead = require('../typeahead');
-var FilterTypeahead = require('./filter-typeahead').FilterTypeahead;
-
-function TypeaheadFilter(elm) {
+export default function TypeaheadFilter(elm) {
   Filter.Filter.call(this, elm);
 
   var key = this.$elm.data('dataset');
@@ -19,7 +18,7 @@ function TypeaheadFilter(elm) {
   );
 }
 
-TypeaheadFilter.prototype = Object.create(Filter.Filter.prototype);
+TypeaheadFilter.prototype = Object.create(Filter.prototype);
 TypeaheadFilter.constructor = TypeaheadFilter;
 
 TypeaheadFilter.prototype.fromQuery = function(query) {
@@ -42,7 +41,7 @@ TypeaheadFilter.prototype.handleNestedChange = function(e) {
   $input.trigger(eventName, [
     {
       key: id,
-      value: _.escape($label.text()),
+      value: _escape($label.text()),
       name: $input.attr('name'),
       loadedOnce: true
     }
@@ -72,5 +71,3 @@ TypeaheadFilter.prototype.enable = function() {
     });
   });
 };
-
-module.exports = { TypeaheadFilter: TypeaheadFilter };

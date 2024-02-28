@@ -67,9 +67,9 @@ const selector_candidateListDisclaimer = '.js-cand-list-note';
 
 // Imports, etc
 // const $ = jquery;
-import { buildUrl, passiveListener } from '../modules/helpers';
-import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
-import analytics from '../modules/analytics';
+import { buildUrl, passiveListenerIfSupported } from '../modules/helpers.js';
+import 'abortcontroller-polyfill';
+import { customEvent } from '../modules/analytics.js';
 
 const DataMap = require('../modules/data-map').DataMap;
 const AbortController = window.AbortController;
@@ -281,7 +281,7 @@ PresidentialFundsMap.prototype.init = function() {
     data: '',
     addLegend: true,
     addTooltips: true,
-    mapStyle: 'gradients-bubbles',
+    mapStyle: 'gradients',
     clickableFeatures: true,
     eventAppID: EVENT_APP_ID
   });
@@ -1275,7 +1275,7 @@ PresidentialFundsMap.prototype.handleExportRaisingClick = function(e) {
   document.addEventListener(
     'scroll',
     this.handleDocScrolling.bind(this),
-    passiveListener()
+    passiveListenerIfSupported()
   );
 };
 
@@ -1447,7 +1447,7 @@ PresidentialFundsMap.prototype.setLoadingState = function(newState) {
  * @param {*} electionYear - String or Number, the user-selected election year
  */
 function logUsage(eventType, detail) {
-  analytics.customEvent({
+  customEvent({
     event: 'Widget Interaction',
     eventName: 'widgetInteraction',
     eventCategory: 'Widget-PresFinMap',

@@ -1,11 +1,11 @@
-var _ = require('underscore');
+import { chain as _chain, each as _each } from 'underscore';
 
-var accessibility = require('./accessibility');
-var feedback = require('../templates/feedback.hbs');
+const accessibility = require('./accessibility');
+const feedback = require('../templates/feedback.hbs');
 
 const loadRecaptcha = require('./load-recaptcha').loadRecaptcha;
 
-var statusClasses = {
+const statusClasses = {
   success: 'message--success',
   error: 'message--error'
 };
@@ -16,7 +16,7 @@ var statusClasses = {
  * @param {String} url - AJAX URL
  * @param {String} parent - Optional parent selector; defaults to 'body'
  */
-function Feedback(url, parent) {
+export default function Feedback(url, parent) {
   this.url = url;
   this.isOpen = false;
   this.$feedback = $(feedback());
@@ -78,7 +78,7 @@ Feedback.prototype.submit = function(token) {
     }
   });
 
-  var data = _.chain(this.$box.find('textarea'))
+  var data = _chain(this.$box.find('textarea'))
     .map(function(elm) {
       var $elm = $(elm);
       return [$elm.attr('name'), $elm.val()];
@@ -137,7 +137,7 @@ Feedback.prototype.message = function(text, buttonText, style) {
   this.$form.attr('aria-hidden', true);
   this.$status.attr('aria-hidden', false);
   this.$reset.text(buttonText);
-  _.each(statusClasses, function(value) {
+  _each(statusClasses, function(value) {
     self.$message.removeClass(value);
   });
   this.$message.html(text).addClass(statusClasses[style]);
@@ -147,5 +147,3 @@ Feedback.prototype.reset = function() {
   this.$form.attr('aria-hidden', false);
   this.$status.attr('aria-hidden', true);
 };
-
-module.exports = { Feedback: Feedback };

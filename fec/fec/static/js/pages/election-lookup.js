@@ -1,5 +1,6 @@
-var lookup = require('../modules/election-search');
+// var lookup = require('../modules/election-search');
+import { default as ElectionSearch } from '../modules/election-search.js';
 
 $(document).ready(function() {
-  new lookup.ElectionSearch('#election-lookup', true);
+  new ElectionSearch('#election-lookup', true);
 });

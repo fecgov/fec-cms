@@ -1,17 +1,19 @@
+import { default as URI } from 'urijs';
+import { extend as _extend, isEmpty as _isEmpty } from 'underscore';
+import { default as moment } from 'moment';
 
-var URI = require('urijs');
-var _ = require('underscore');
-var moment = require('moment');
+import { default as hbs_item } from '../templates/download/item.hbs';
+import { default as hbs_container } from '../templates/download/container.hbs';
 
-var templates = {
-  item: require('../templates/download/item.hbs'),
-  container: require('../templates/download/container.hbs')
+const templates = {
+  item: hbs_item,
+  container: hbs_container
 };
 
-var PREFIX = 'download-';
-var DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
+const PREFIX = 'download-';
+const DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
 
-function hydrate() {
+export function hydrate() {
   return storedDownloads().map(function(key) {
     return download(key.slice(PREFIX.length), true);
   });
@@ -24,7 +26,7 @@ function hydrate() {
  * @param {Boolean[]} focus
  * @returns {DownloadItem}
  */
-function download(url, init, focus) {
+export function download(url, init, focus) {
   var container = DownloadContainer.getInstance(document.body);
   var item = new DownloadItem(url, container);
 
@@ -39,7 +41,7 @@ function download(url, init, focus) {
   return item;
 }
 
-function isPending(url) {
+export function isPending(url) {
   return !!window.localStorage.getItem(PREFIX + url);
 }
 
@@ -49,7 +51,7 @@ function storedDownloads() {
   });
 }
 
-function pendingCount() {
+export function pendingCount() {
   return storedDownloads().length;
 }
 
@@ -68,10 +70,10 @@ var defaultOpts = {
   timeout: 5000
 };
 
-function DownloadItem(url, container, opts) {
+export function DownloadItem(url, container, opts) {
   this.url = url;
   this.container = container;
-  this.opts = _.extend({}, defaultOpts, opts);
+  this.opts = _extend({}, defaultOpts, opts);
 
   this.$body = null;
   this.$parent = this.container.$list;
@@ -88,7 +90,7 @@ function DownloadItem(url, container, opts) {
   var payload = JSON.parse(window.localStorage.getItem(this.key)) || {};
   this.timestamp = payload.timestamp || moment().format(DATE_FORMAT);
   this.downloadUrl = payload.downloadUrl;
-  this.isPending = !_.isEmpty(payload);
+  this.isPending = !_isEmpty(payload);
   this.filename = this.resource + '-' + this.timestamp + '.csv';
 }
 
@@ -226,7 +228,7 @@ DownloadItem.prototype.handleCloseErrorClick = function() {
   this.container.destroy();
 };
 
-function DownloadContainer(parent) {
+export function DownloadContainer(parent) {
   this.$parent = $(parent);
   this.$body = $(templates.container());
   this.$list = this.$body.find('.js-downloads-list');
@@ -261,13 +263,4 @@ DownloadContainer.getInstance = function(parent) {
   DownloadContainer.instance =
     DownloadContainer.instance || new DownloadContainer(parent);
   return DownloadContainer.instance;
-};
-
-module.exports = {
-  hydrate: hydrate,
-  download: download,
-  isPending: isPending,
-  pendingCount: pendingCount,
-  DownloadItem: DownloadItem,
-  DownloadContainer: DownloadContainer
 };

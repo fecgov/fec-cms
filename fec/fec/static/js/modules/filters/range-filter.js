@@ -1,8 +1,7 @@
+import { default as Filter } from './filter-base.js';
 
-var Filter = require('./filter-base');
-
-function RangeFilter(elm) {
-  Filter.Filter.call(this, elm);
+export default function RangeFilter(elm) {
+  Filter.call(this, elm);
   this.id = this.$input.attr('id');
   this.$submit = this.$elm.parent().find('button');
 
@@ -14,7 +13,7 @@ function RangeFilter(elm) {
   }
 }
 
-RangeFilter.prototype = Object.create(Filter.Filter.prototype);
+RangeFilter.prototype = Object.create(Filter.prototype);
 RangeFilter.constructor = RangeFilter;
 
 RangeFilter.prototype.handleChange = function(e) {
@@ -74,5 +73,3 @@ RangeFilter.prototype.handleChange = function(e) {
 RangeFilter.prototype.handleKeyup = function() {
   this.$submit.removeClass('is-disabled');
 };
-
-module.exports = { RangeFilter: RangeFilter };

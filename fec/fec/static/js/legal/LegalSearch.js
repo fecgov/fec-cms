@@ -1,6 +1,6 @@
-const _ = require('underscore');
+import { extend as _extend } from 'underscore';
 const React = require('react');
-const URI = require('urijs');
+import { default as URI } from 'urijs';
 const Filters = require('./Filters');
 const SearchResults = require('./SearchResults');
 const Pagination = require('./Pagination');
@@ -80,7 +80,7 @@ class LegalSearch extends React.Component {
   }
 
   getUserSearchCriteria(state) {
-    const queryState = _.extend({}, state);
+    const queryState = _extend({}, state);
     queryState.search = queryState.q;
     Object.keys(queryState).forEach(function(queryParam) {
       if (

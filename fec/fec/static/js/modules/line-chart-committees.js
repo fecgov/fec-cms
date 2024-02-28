@@ -1,5 +1,5 @@
 /* global DEFAULT_TIME_PERIOD */
-var _ = require('underscore');
+import { chain as _chain, each as _each, max as _max, sortBy as _sortBy } from 'underscore';
 var d3 = require('d3');
 var numeral = require('numeral');
 var helpers = require('./helpers');
@@ -86,7 +86,7 @@ LineChartCommittees.prototype.groupDataByType = function(results) {
   var formattedData = [];
   var dataType = this.dataType;
   var today = new Date();
-  _.each(results, function(item) {
+  _each(results, function(item) {
     var datum;
     var date = helpers.utcDate(item.end_date);
     // If the data is in the future, it's probably wrong, so ignore it
@@ -112,7 +112,7 @@ LineChartCommittees.prototype.groupDataByType = function(results) {
     formattedData.push(datum);
   });
 
-  this.chartData = _.sortBy(formattedData, 'date');
+  this.chartData = _sortBy(formattedData, 'date');
 };
 
 LineChartCommittees.prototype.groupEntityTotals = function() {
@@ -135,8 +135,8 @@ LineChartCommittees.prototype.groupEntityTotals = function() {
 LineChartCommittees.prototype.getMaxAmount = function(entityTotals) {
   var max = 0;
 
-  _.each(entityTotals, function(element) {
-    var entityMax = _.max(element, function(item) {
+  _each(entityTotals, function(element) {
+    var entityMax = _max(element, function(item) {
       return item.amount;
     });
     max = max >= entityMax.amount ? max : entityMax.amount;
@@ -372,7 +372,7 @@ LineChartCommittees.prototype.snapshotSubtotals = function(datum) {
 
 LineChartCommittees.prototype.snapshotTotal = function(datum) {
   // Total all the categories and show it as the total total
-  var total = _.chain(datum)
+  var total = _chain(datum)
     .omit('date')
     .values()
     .reduce(function(a, b) {

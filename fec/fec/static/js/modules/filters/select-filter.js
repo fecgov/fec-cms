@@ -1,8 +1,6 @@
+import { default as Filter }  from './filter-base.js';
 
-
-var Filter = require('./filter-base.js').Filter;
-
-function SelectFilter(elm) {
+export default function SelectFilter(elm) {
   Filter.call(this, elm);
   this.$input = this.$elm.find('select');
   this.name = this.$input.attr('name');
@@ -62,5 +60,3 @@ SelectFilter.prototype.handleChange = function(e) {
     ]);
   }
 };
-
-module.exports = { SelectFilter: SelectFilter };

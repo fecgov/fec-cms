@@ -5,11 +5,11 @@
 /**
  * The dates that will be available inside the admin fines calculator
  * 'latest' should be the first ([0]) item. The 'latest' set of values will be copied from the [1] value of this list
- * @param {String} value The ID used in admin fines calculator (pulled from here), but also used by {@see CalcAdminFineLogic.values }
+ * @param {String} value The ID used in admin fines calculator (pulled from here), but also used by {@see adminFinesLogicValues }
  * @param {String} label The option shown as the list option in the calculator
  * @param {String} summary To summarize the selected item (like in the calculator's breadcrumb nav)
  */
-const availableDates = [
+export const availableDates = [
   {
     value: 'latest',
     label: 'I haven’t been assessed a fine',
@@ -35,9 +35,9 @@ const availableDates = [
 /**
  *
  */
-function CalcAdminFineLogic() {
-  // empty
-}
+// export function CalcAdminFineLogic() {
+//   // empty
+// }
 
 /**
  * Calculates the fines based on the values its given.
@@ -51,20 +51,20 @@ function CalcAdminFineLogic() {
  * @param {Number} d.totalReceiptsAndDisbursements
  * @returns {Number, String}
  */
-CalcAdminFineLogic.prototype.getTotalAdminFine = function(d) {
+export function getTotalAdminFine(d) {
   // If the total receipts and disbursements is $0, we're done
   if (d.totalReceiptsAndDisbursements === 0) return 0;
 
   // If we need a 'latest' and it doesn't exist, create it from the second values item
-  if (d.penaltyAssessedDate == 'latest' && !CalcAdminFineLogic.values['latest'])
-    CalcAdminFineLogic.values['latest'] = [
-      ...CalcAdminFineLogic.values[availableDates[1].value]
+  if (d.penaltyAssessedDate == 'latest' && !adminFinesLogicValues['latest'])
+    adminFinesLogicValues['latest'] = [
+      ...adminFinesLogicValues[availableDates[1].value]
     ];
 
   let toReturn = '—';
 
   // Which set of values will we use? (which year)
-  let steps = CalcAdminFineLogic.values[d.penaltyAssessedDate];
+  let steps = adminFinesLogicValues[d.penaltyAssessedDate];
 
   // If we can't find the right set of values, abort
   if (!steps) return 'ERROR';
@@ -147,7 +147,7 @@ CalcAdminFineLogic.prototype.getTotalAdminFine = function(d) {
  * maxRD is really the min value for the next step. calc should be `< maxRD`, not `<=`
  * The yearnumber values here should reflect those in {@see availableDates }
  */
-CalcAdminFineLogic.values = {
+const adminFinesLogicValues = {
   '2024': [
     { maxRD: 5000, late_val: 42, late_multi: 6, lateSens_val: 83, lateSens_multi: 15, nonfiler_val: 415, nonfilerSens_val: 832 },
     { maxRD: 10000, late_val: 83, late_multi: 6, lateSens_val: 167, lateSens_multi: 15, nonfiler_val: 499, nonfilerSens_val: 997 },
@@ -1120,7 +1120,8 @@ CalcAdminFineLogic.values = {
   ]
 };
 
-module.exports = {
-  getTotalAdminFine: CalcAdminFineLogic.prototype.getTotalAdminFine,
-  availableDates: availableDates
-};
+// module.exports = {
+//   getTotalAdminFine: CalcAdminFineLogic.prototype.getTotalAdminFine
+// };
+
+// export CalcAdminFineLogic.prototype.getTotalAdminFine as getTotalAdminFine;

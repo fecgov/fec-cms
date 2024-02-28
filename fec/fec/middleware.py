@@ -39,6 +39,7 @@ class AddSecureHeaders(MiddlewareMixin):
                 "'self'",
                 "'unsafe-inline'",
                 "'unsafe-eval'",
+                "https://code.jquery.com",
                 "https://dap.digitalgov.gov",
                 "https://polyfill.io/",
                 "https://www.google.com/recaptcha/",

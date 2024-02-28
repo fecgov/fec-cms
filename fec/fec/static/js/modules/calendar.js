@@ -1,5 +1,5 @@
-var URI = require('urijs');
-var _ = require('underscore');
+import { default as URI } from 'urijs';
+import { extend as _extend, isEqual as _isEqual } from 'underscore';
 var moment = require('moment');
 require('fullcalendar');
 
@@ -141,7 +141,7 @@ Calendar.prototype.defaultOpts = function() {
 
 Calendar.prototype.filter = function() {
   var params = this.filterSet.serialize();
-  if (_.isEqual(params, this.params)) {
+  if (_isEqual(params, this.params)) {
     return;
   }
   var url = this.url
@@ -185,7 +185,7 @@ Calendar.prototype.success = function(response) {
       allDay: event.all_day,
       detailUrl: event.url
     };
-    _.extend(processed, {
+    _extend(processed, {
       google: calendarHelpers.getGoogleUrl(processed),
       download: self.subscribeUrl
         .clone()
@@ -316,7 +316,7 @@ Calendar.prototype.handleEventClick = function(calEvent, jsEvent) {
   if (!$target.closest('.tooltip').length) {
     var $eventContainer = $target.closest('.fc-event');
     var tooltip = new calendarTooltip.CalendarTooltip(
-      templates.details(_.extend({}, calEvent, { detailsId: this.detailsId })),
+      templates.details(_extend({}, calEvent, { detailsId: this.detailsId })),
 
       $eventContainer
     );

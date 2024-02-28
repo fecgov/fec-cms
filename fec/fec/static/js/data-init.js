@@ -1,41 +1,29 @@
 // Implementing a polyfill for js native WeakMap
 // in order to patch functionality in an included library
-require('es6-weak-map/implement');
+// require('es6-weak-map/implement');
 
-var $ = require('jquery');
-var Sticky = require('component-sticky');
-var Accordion = require('aria-accordion').Accordion;
-var Glossary = require('glossary-panel');
-var A11yDialog = require('a11y-dialog');
+import Sticky from './modules/component-sticky/index.js';
+import Accordion from 'aria-accordion';
+import A11yDialog from 'a11y-dialog';
 
 // Hack: Append jQuery to `window` for use by legacy libraries
-window.$ = window.jQuery = $;
+// window.$ = window.jQuery = $;
 
-var terms = require('./data/terms');
-var dropdown = require('./modules/dropdowns');
-var siteNav = require('./modules/site-nav');
-var skipNav = require('./modules/skip-nav');
-var feedback = require('./modules/feedback');
-var typeahead = require('./modules/typeahead');
-var toc = require('./modules/toc');
-var Search = require('./modules/search');
+import Dropdown from './modules/dropdowns.js';
+import { default as Search } from './modules/search.js';
 
 // Include vendor scripts
-require('./vendor/tablist').init();
+import { init as tablistInit } from './vendor/tablist.js';
+tablistInit();
 
-var toggle = require('./modules/toggle');
-var helpers = require('./modules/helpers');
-var download = require('./modules/download');
-var CycleSelect = require('./modules/cycle-select').CycleSelect;
+import { init as toggleInit } from './modules/toggle.js';
+import { hydrate as downloadHydrate } from './modules/download.js';
+import { default as CycleSelect } from './modules/cycle-select.js';
 
 $(document).ready(function() {
   $('.js-dropdown').each(function() {
-    new dropdown.Dropdown(this);
+    new Dropdown(this);
   });
-
-  new siteNav.SiteNav('.js-site-nav');
-
-  new skipNav.Skipnav('.skip-nav', 'main');
 
   // Initialize stick side elements
   $('.js-sticky-side').each(function() {
@@ -46,16 +34,6 @@ $(document).ready(function() {
     new Sticky(this, opts);
   });
 
-  // Initialize glossary
-  new Glossary(
-    terms,
-    {},
-    {
-      termClass: 'glossary__term accordion__button',
-      definitionClass: 'glossary__definition accordion__content'
-    }
-  );
-
   // Until we can re-configure the modal windows used with the filters panel,
   // let's re-parent #version-methodology-modal_processed and
   // #version-methodology-modal_raw to <body> so their positioning
@@ -64,21 +42,6 @@ $(document).ready(function() {
     .detach()
     .appendTo('body');
 
-  // initialize a feedbackWidget which will be set after document is loaded.
-  var feedbackWidget = null;
-  // expose a global function for Recaptcha to invoke after the challenge is complete.
-  window.submitFeedback = function(token) {
-    feedbackWidget.submit(token);
-  };
-
-  // Initialize main search typeahead
-  new typeahead.Typeahead('.js-search-input', 'allData', '/data/');
-
-  // Initialize header typeahead
-  new typeahead.Typeahead($('.js-site-search'), 'all', '/data/');
-
-  // Initialize feedback
-  feedbackWidget = new feedback.Feedback(helpers.buildAppUrl(['issue']));
 
   // Initialize new accordions
   $('.js-accordion').each(function() {
@@ -107,11 +70,6 @@ $(document).ready(function() {
     new Search($(this));
   });
 
-  // Initialize table of contents
-  $('.js-toc').each(function() {
-    new toc.TOC(this);
-  });
-
   $('.js-modal').each(function() {
     new A11yDialog(this);
     this.addEventListener('dialog:show', function(e) {
@@ -133,6 +91,6 @@ $(document).ready(function() {
     CycleSelect.build($(elm));
   });
 
-  toggle.init();
-  download.hydrate();
+  toggleInit();
+  downloadHydrate();
 });

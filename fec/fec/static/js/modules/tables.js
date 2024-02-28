@@ -1,29 +1,50 @@
 /**
  * pagingType documentation: https://datatables.net/reference/option/pagingType
  */
-var _ = require('underscore');
+import {
+  chain as _chain,
+  clone as _clone,
+  debounce as _debounce,
+  each as _each,
+  extend as _extend,
+  intersection as _intersection,
+  isEmpty as _isEmpty,
+  isEqual as _isEqual,
+  map as _map,
+  max as _max,
+  object as _object,
+  pairs as _pairs,
+  pluck as _pluck
+} from 'underscore';
 
-require('datatables.net');
-require('datatables.net-responsive');
+import 'datatables.net';
+import 'datatables.net-responsive';
 
-var accessibility = require('./accessibility');
-var columnHelpers = require('./column-helpers');
-var download = require('./download');
-var dropdown = require('./dropdowns');
-var helpers = require('./helpers');
-var tabs = require('../vendor/tablist');
-var urls = require('./urls');
+import { removeTabindex, restoreTabindex } from './accessibility.js';
+import { sizeColumns, stateColumns } from './column-helpers.js';
+import { download, isPending, pendingCount } from './download.js';
+import { default as Dropdown } from './dropdowns.js';
+import {
+  buildUrl,
+  filterNull,
+  numberFormatter as formatNumber,
+  isLargeScreen,
+  LOADING_DELAY,
+  SUCCESS_DELAY,
+} from './helpers.js';
+import { onShow as tabsOnShow } from '../vendor/tablist.js';
+import { updateQuery } from './urls.js';
 
 // Widgets
-var filterTags = require('../modules/filters/filter-tags');
-var FilterPanel = require('../modules/filters/filter-panel').FilterPanel;
+import { default as TagList } from '../modules/filters/filter-tags.js';
+import { default as FilterPanel } from '../modules/filters/filter-panel.js';
 
-var comparisonTemplate = require('../templates/comparison.hbs');
-var exportWidgetTemplate = require('../templates/tables/exportWidget.hbs');
-var missingTemplate = require('../templates/tables/noData.hbs');
+import { default as comparisonTemplate } from '../templates/comparison.hbs';
+import { default as exportWidgetTemplate } from '../templates/tables/exportWidget.hbs';
+import { default as missingTemplate } from '../templates/tables/noData.hbs';
 
-var simpleDOM = 't<"results-info"lpi>';
-var browseDOM = '<"panel__main"t>' + '<"results-info"lpi>';
+export const simpleDOM = 't<"results-info"lpi>';
+export const browseDOM = '<"panel__main"t>' + '<"results-info"lpi>';
 // Source documentation for these two ^ :
 // https://datatables.net/reference/option/dom
 
@@ -31,10 +52,10 @@ var browseDOM = '<"panel__main"t>' + '<"results-info"lpi>';
 // $.fn.DataTable.ext.pager.numbers_length = 5;
 // Must be an odd number
 
-var DOWNLOAD_CAP = 500000;
-var downloadCapFormatted = helpers.formatNumber(DOWNLOAD_CAP);
-var MAX_DOWNLOADS = 5;
-var DOWNLOAD_MESSAGES = {
+export const  DOWNLOAD_CAP = 500000;
+export const  downloadCapFormatted = formatNumber(DOWNLOAD_CAP);
+export const  MAX_DOWNLOADS = 5;
+export const  DOWNLOAD_MESSAGES = {
   recordCap:
     'Use <a href="' +
     window.BASE_PATH +
@@ -51,7 +72,7 @@ var DOWNLOAD_MESSAGES = {
   pending: 'You\'re already exporting this data set.'
 };
 
-var DATA_WIDGETS = '.js-data-widgets';
+export const  DATA_WIDGETS = '.js-data-widgets';
 
 // id for the last changed element on form for status update
 var updateChangedEl;
@@ -63,7 +84,7 @@ $(document.body).on('draw.dt', function() {
   $('.dataTable tbody td:first-child').attr('scope', 'row');
 });
 
-function yearRange(first, last) {
+export function yearRange(first, last) {
   if (first === last) {
     return first;
   } else {
@@ -71,25 +92,25 @@ function yearRange(first, last) {
   }
 }
 
-function getCycle(value, meta) {
-  var dataTable = DataTable.registry[meta.settings.sTableId];
-  var filters = dataTable && dataTable.filters;
+export function getCycle(value, meta) {
+  const dataTable = DataTable.registry[meta.settings.sTableId];
+  const filters = dataTable && dataTable.filters;
 
   if (filters && filters.cycle) {
-    var cycles = _.intersection(
-      _.map(filters.cycle, function(cycle) {
+    var cycles = _intersection(
+      _map(filters.cycle, function(cycle) {
         return parseInt(cycle);
       }),
       value
     );
-    return cycles.length ? { cycle: _.max(cycles) } : {};
+    return cycles.length ? { cycle: _max(cycles) } : {};
   } else {
     return {};
   }
 }
 
-function mapSort(order, column) {
-  return _.map(order, function(item) {
+export function mapSort(order, column) {
+  return _map(order, function(item) {
     var name = column[item.column].data;
     if (item.dir === 'desc') {
       name = '-' + name;
@@ -108,7 +129,7 @@ function getCount(response) {
   return pagination_count; // eslint-disable-line camelcase
 }
 
-function mapResponse(response) {
+export function mapResponse(response) {
   var pagination_count = getCount(response); // eslint-disable-line camelcase
 
   return {
@@ -122,17 +143,17 @@ function identity(value) {
   return value;
 }
 
-var MODAL_TRIGGER_CLASS = 'js-panel-trigger';
-var MODAL_TRIGGER_HTML =
+export const MODAL_TRIGGER_CLASS = 'js-panel-trigger';
+export const MODAL_TRIGGER_HTML =
   '<button class="js-panel-button button--panel">' +
   '<span class="u-visually-hidden">Toggle details</span>' +
   '</button>';
 
-function modalRenderRow(row) {
+export function modalRenderRow(row) {
   row.classList.add(MODAL_TRIGGER_CLASS, 'row--has-panel');
 }
 
-function modalRenderFactory(template, fetch) {
+export function modalRenderFactory(template, fetch) {
   var callback;
   fetch = fetch || identity;
 
@@ -169,7 +190,7 @@ function modalRenderFactory(template, fetch) {
             $row.siblings().toggleClass('row-active', false);
             $row.toggleClass('row-active', true);
             $('body').toggleClass('panel-active', true);
-            accessibility.restoreTabindex($modal);
+            restoreTabindex($modal);
             var hideColumns = api.columns('.hide-panel');
             hideColumns.visible(false);
 
@@ -220,10 +241,10 @@ function hidePanel(api, $modal) {
     api.columns('.hide-panel').visible(true);
   }
 
-  accessibility.removeTabindex($modal);
+  removeTabindex($modal);
 }
 
-function barsAfterRender(template, api) {
+export function barsAfterRender(template, api) {
   var $table = $(api.table().node());
   var $cols = $table.find('div[data-value]');
 
@@ -234,7 +255,7 @@ function barsAfterRender(template, api) {
     var values = $cols.map(function(idx, each) {
       return parseFloat(each.getAttribute('data-value'));
     });
-    var max = _.max(values);
+    var max = _max(values);
     $table.data('max', max);
   }
 
@@ -264,7 +285,7 @@ function updateOnChange($form, api) {
 
     updateChangedEl = e.target;
   }
-  $form.on('change', 'input,select', _.debounce(onChange, 250));
+  $form.on('change', 'input,select', _debounce(onChange, 250));
 }
 
 function filterSuccessUpdates(changeCount) {
@@ -379,11 +400,11 @@ function filterSuccessUpdates(changeCount) {
       });
       $('.is-successful').removeClass('is-successful');
       $('.date-range-grid').fadeOut();
-    }, helpers.SUCCESS_DELAY);
+    }, SUCCESS_DELAY);
   }
 }
 
-function OffsetPaginator() {} //eslint-disable-line no-empty-function
+export function OffsetPaginator() {} //eslint-disable-line no-empty-function
 
 OffsetPaginator.prototype.mapQuery = function(data) {
   return {
@@ -394,7 +415,7 @@ OffsetPaginator.prototype.mapQuery = function(data) {
 
 OffsetPaginator.prototype.handleResponse = function() {}; //eslint-disable-line no-empty-function
 
-function SeekPaginator() {
+export function SeekPaginator() {
   this.indexes = {};
   this.query = null;
 }
@@ -413,14 +434,14 @@ SeekPaginator.prototype.clearIndexes = function() {
 };
 
 SeekPaginator.prototype.mapQuery = function(data, query) {
-  if (!_.isEqual(query, this.query)) {
-    this.query = _.clone(query);
+  if (!_isEqual(query, this.query)) {
+    this.query = _clone(query);
     this.clearIndexes();
   }
   var indexes = this.getIndexes(data.length, data.start);
-  return _.extend(
+  return _extend(
     { per_page: data.length }, // eslint-disable-line camelcase
-    _.chain(Object.keys(indexes))
+    _chain(Object.keys(indexes))
       .filter(function(key) {
         return indexes[key];
       })
@@ -461,11 +482,11 @@ var defaultCallbacks = {
   afterRender: function() {} //eslint-disable-line no-empty-function
 };
 
-function DataTable(selector, opts) {
+export function DataTable(selector, opts) {
   opts = opts || {};
   this.$body = $(selector);
-  this.opts = _.extend({}, defaultOpts, { ajax: this.fetch.bind(this) }, opts);
-  this.callbacks = _.extend({}, defaultCallbacks, opts.callbacks);
+  this.opts = _extend({}, defaultOpts, { ajax: this.fetch.bind(this) }, opts);
+  this.callbacks = _extend({}, defaultCallbacks, opts.callbacks);
   this.xhr = null;
   this.fetchContext = null;
   this.hasWidgets = null;
@@ -491,9 +512,9 @@ DataTable.prototype.initTable = function() {
   this.api = this.$body.DataTable(this.opts);
   DataTable.registry[this.$body.attr('id')] = this;
 
-  if (!_.isEmpty(this.filterPanel)) {
+  if (!_isEmpty(this.filterPanel)) {
     updateOnChange(this.filterSet.$body, this.api);
-    urls.updateQuery(this.filterSet.serialize(), this.filterSet.fields);
+    updateQuery(this.filterSet.serialize(), this.filterSet.fields);
   }
 
   this.$body.css('width', '100%');
@@ -590,7 +611,7 @@ DataTable.prototype.initFilters = function() {
   // Set `this.filterSet` before instantiating the nested `DataTable` so that
   // filters are available on fetching initial data
   if (this.opts.useFilters) {
-    var tagList = new filterTags.TagList({
+    var tagList = new TagList({
       resultType: 'results',
       showResultCount: true,
       tableTitle: this.opts.title
@@ -618,7 +639,7 @@ DataTable.prototype.refreshExport = function() {
       this.disableExport({ message: DOWNLOAD_MESSAGES.empty });
     } else if (this.isPending()) {
       this.disableExport({ message: DOWNLOAD_MESSAGES.pending });
-    } else if (download.pendingCount() >= MAX_DOWNLOADS) {
+    } else if (pendingCount() >= MAX_DOWNLOADS) {
       this.disableExport({ message: DOWNLOAD_MESSAGES.downloadCap });
     } else {
       this.enableExport();
@@ -639,7 +660,7 @@ DataTable.prototype.destroy = function() {
 DataTable.prototype.handlePopState = function() {
   this.filterSet.activateAll();
   var filters = this.filterSet.serialize();
-  if (!_.isEqual(filters, this.filters)) {
+  if (!_isEqual(filters, this.filters)) {
     this.api.ajax.reload();
   }
 };
@@ -657,7 +678,7 @@ DataTable.prototype.ensureWidgets = function() {
     this.$exportButton = $('.js-export');
     this.$exportMessage = $('.js-export-message');
 
-    if (!helpers.isLargeScreen() && this.filterPanel) {
+    if (!isLargeScreen() && this.filterPanel) {
       this.$exportWidget.after(this.filterPanel.$body);
     }
   }
@@ -707,7 +728,7 @@ DataTable.prototype.fetch = function(data, callback) {
   if (self.filterSet && !self.filterSet.isValid) {
     return;
   } else if (self.filterSet && self.filterSet.isValid) {
-    urls.updateQuery(self.filterSet.serialize(), self.filterSet.fields);
+    updateQuery(self.filterSet.serialize(), self.filterSet.fields);
     self.filters = self.filterSet.serialize();
     // Only limit for processed data in specific datatables
     // Individual contributions does not contain data_type and therefore has a separate check
@@ -851,17 +872,17 @@ DataTable.prototype.fetch = function(data, callback) {
 
 DataTable.prototype.export = function() {
   var url = this.buildUrl(this.api.ajax.params(), false, true);
-  download.download(url, false, true);
+  download(url, false, true);
   this.disableExport({ message: DOWNLOAD_MESSAGES.pending });
 };
 
 DataTable.prototype.isPending = function() {
   var url = this.buildUrl(this.api.ajax.params(), false);
-  return download.isPending(url);
+  return isPending(url);
 };
 
 DataTable.prototype.buildUrl = function(data, paginate, download) {
-  var query = _.extend(
+  var query = _extend(
     { sort_hide_null: false, sort_nulls_last: true }, // eslint-disable-line camelcase
     this.filters || {}
   );
@@ -869,17 +890,17 @@ DataTable.prototype.buildUrl = function(data, paginate, download) {
   query.sort = mapSort(data.order, this.opts.columns);
 
   if (paginate) {
-    query = _.extend(query, this.paginator.mapQuery(data, query));
+    query = _extend(query, this.paginator.mapQuery(data, query));
   }
   if (download) {
-    query = _.extend(query, {
+    query = _extend(query, {
       api_key: window.DOWNLOAD_API_KEY
     });
   }
 
-  return helpers.buildUrl(
+  return buildUrl(
     this.opts.path,
-    _.extend({}, query, this.opts.query || {})
+    _extend({}, query, this.opts.query || {})
   );
 };
 
@@ -991,7 +1012,7 @@ DataTable.prototype.hideEmpty = function(response) {
 DataTable.registry = {};
 
 DataTable.defer = function($table, opts) {
-  tabs.onShow($table, function() {
+  tabsOnShow($table, function() {
     new DataTable($table, opts);
   });
 };
@@ -1014,7 +1035,7 @@ DataTable.prototype.handleSwitch = function(e, opts) {
   this.refreshExport();
 };
 
-function initSpendingTables(className, context, options) {
+export function initSpendingTables(className, context, options) {
   $(className).each(function(index, table) {
     var $table = $(table);
     var dataType = $table.attr('data-type');
@@ -1023,7 +1044,7 @@ function initSpendingTables(className, context, options) {
       DataTable.defer($table, {
         autoWidth: false,
         path: opts.path,
-        query: helpers.filterNull(context.election),
+        query: filterNull(context.election),
         columns: opts.columns,
         order: opts.order,
         dom: simpleDOM,
@@ -1071,19 +1092,19 @@ function refreshTables(e, context) {
         .find('.is-loading')
         .removeClass('is-loading')
         .addClass('is-successful');
-    }, helpers.LOADING_DELAY);
+    }, LOADING_DELAY);
 
     setTimeout(function() {
       $comparison.find('.is-successful').removeClass('is-successful');
-    }, helpers.SUCCESS_DELAY);
+    }, SUCCESS_DELAY);
   }
 }
 
-function drawComparison(results, pageContext) {
+export function drawComparison(results, pageContext) {
   var $comparison = $('#comparison');
   var context = { selected: results.slice(0, 10), options: results.slice(10) };
   $comparison.prepend(comparisonTemplate(context));
-  new dropdown.Dropdown($comparison.find('.js-dropdown'));
+  new Dropdown($comparison.find('.js-dropdown'));
   $comparison.on('change', 'input[type="checkbox"]', function(e) {
     refreshTables(e, pageContext);
   });
@@ -1092,12 +1113,12 @@ function drawComparison(results, pageContext) {
 
 function mapSize(response, primary) {
   var groups = {};
-  _.each(response.results, function(result) {
+  _each(response.results, function(result) {
     groups[result.candidate_id] = groups[result.candidate_id] || {};
     groups[result.candidate_id][result.size] = result.total;
   });
-  return _.map(_.pairs(groups), function(pair) {
-    return _.extend(pair[1], {
+  return _map(_pairs(groups), function(pair) {
+    return _extend(pair[1], {
       candidate_id: pair[0], // eslint-disable-line camelcase
       candidate_name: primary[pair[0]].candidate_name // eslint-disable-line camelcase
     });
@@ -1106,13 +1127,13 @@ function mapSize(response, primary) {
 
 function mapState(response) {
   var groups = {};
-  _.each(response.results, function(result) {
+  _each(response.results, function(result) {
     groups[result.state] = groups[result.state] || {};
     groups[result.state][result.candidate_id] = result.total;
     groups[result.state].state_full = result.state_full; // eslint-disable-line camelcase
   });
-  return _.map(_.pairs(groups), function(pair) {
-    return _.extend(pair[1], { state: pair[0] });
+  return _map(_pairs(groups), function(pair) {
+    return _extend(pair[1], { state: pair[0] });
   });
 }
 
@@ -1143,8 +1164,8 @@ var drawTableOpts = {
 // For election profile page "Individual contributions to candidates"
 function drawContributionsBySizeTable(selected, context) {
   var $table = $('table[data-type="by-size"]');
-  var primary = _.object(
-    _.map(selected, function(result) {
+  var primary = _object(
+    _map(selected, function(result) {
       return [result.candidate_id, result];
     })
   );
@@ -1152,11 +1173,11 @@ function drawContributionsBySizeTable(selected, context) {
   var perPage = 5 * selected.length;
   var query = {
     cycle: context.election.cycle,
-    candidate_id: _.pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
+    candidate_id: _pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
     per_page: perPage, // eslint-disable-line camelcase
     election_full: true // eslint-disable-line camelcase
   };
-  var url = helpers.buildUrl(
+  var url = buildUrl(
     ['schedules', 'schedule_a', 'by_size', 'by_candidate'],
     query
   );
@@ -1164,11 +1185,11 @@ function drawContributionsBySizeTable(selected, context) {
     var data = mapSize(response, primary);
     destroyTable($table);
     $table.dataTable(
-      _.extend(
+      _extend(
         {
           autoWidth: false,
           data: data,
-          columns: columnHelpers.sizeColumns(context),
+          columns: sizeColumns(context),
           order: [[1, 'desc']]
         },
         drawTableOpts
@@ -1182,8 +1203,8 @@ function drawContributionsBySizeTable(selected, context) {
 // For election profile page "Individual contributions to candidates"
 function drawContributionsByStateTable(selected, context) {
   var $table = $('table[data-type="by-state"]');
-  var primary = _.object(
-    _.map(selected, function(result) {
+  var primary = _object(
+    _map(selected, function(result) {
       return [result.candidate_id, result];
     })
   );
@@ -1191,33 +1212,33 @@ function drawContributionsByStateTable(selected, context) {
   var perPage = 61 * selected.length;
   var query = {
     cycle: context.election.cycle,
-    candidate_id: _.pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
+    candidate_id: _pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
     per_page: perPage, // eslint-disable-line camelcase
     election_full: true // eslint-disable-line camelcase
   };
-  var url = helpers.buildUrl(
+  var url = buildUrl(
     ['schedules', 'schedule_a', 'by_state', 'by_candidate'],
     query
   );
   $.getJSON(url).done(function(response) {
     var data = mapState(response, primary);
     // Populate headers with correct text
-    var headerLabels = ['State'].concat(_.pluck(selected, 'candidate_name'));
+    var headerLabels = ['State'].concat(_pluck(selected, 'candidate_name'));
     destroyTable($table);
     $table
       .find('thead tr')
       .empty()
       .append(
-        _.map(headerLabels, function(label) {
+        _map(headerLabels, function(label) {
           return $('<th>').text(label);
         })
       );
     $table.dataTable(
-      _.extend(
+      _extend(
         {
           autoWidth: false,
           data: data,
-          columns: columnHelpers.stateColumns(selected, context),
+          columns: stateColumns(selected, context),
           order: [[1, 'desc']],
           drawCallback: function() {
             barsAfterRender(null, this.api());
@@ -1228,22 +1249,3 @@ function drawContributionsByStateTable(selected, context) {
     );
   });
 }
-
-module.exports = {
-  simpleDOM: simpleDOM,
-  browseDOM: browseDOM,
-  yearRange: yearRange,
-  getCycle: getCycle,
-  barsAfterRender: barsAfterRender,
-  modalRenderRow: modalRenderRow,
-  modalRenderFactory: modalRenderFactory,
-  MODAL_TRIGGER_CLASS: MODAL_TRIGGER_CLASS,
-  MODAL_TRIGGER_HTML: MODAL_TRIGGER_HTML,
-  mapSort: mapSort,
-  mapResponse: mapResponse,
-  DataTable: DataTable,
-  OffsetPaginator: OffsetPaginator,
-  SeekPaginator: SeekPaginator,
-  drawComparison: drawComparison,
-  initSpendingTables: initSpendingTables
-};

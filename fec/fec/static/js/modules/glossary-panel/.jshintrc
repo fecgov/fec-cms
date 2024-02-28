@@ -1,0 +1,31 @@
+{
+  "asi": false,
+  "bitwise": true,
+  "browser": true,
+  "camelcase": true,
+  "curly": true,
+  "expr": true,
+  "forin": true,
+  "immed": true,
+  "latedef": "nofunc",
+  "maxlen": 100,
+  "newcap": true,
+  "noarg": true,
+  "noempty": true,
+  "nonew": true,
+  "predef": [
+    "require",
+    "module",
+    "document",
+    "describe",
+    "before",
+    "beforeEach",
+    "after",
+    "afterEach",
+    "it"
+  ],
+  "quotmark": true,
+  "trailing": true,
+  "undef": true,
+  "unused": true
+}

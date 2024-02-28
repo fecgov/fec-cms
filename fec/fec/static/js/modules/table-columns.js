@@ -1,19 +1,18 @@
+import { default as moment } from 'moment';
 
-var moment = require('moment');
-var columns = require('./columns');
-var columnHelpers = require('./column-helpers');
-var helpers = require('./helpers');
+import { barCurrencyColumn, candidateColumn, committeeColumn, currencyColumn, supportOpposeColumn } from './columns.js';
+import { buildEntityLink, buildTotalLink } from './column-helpers.js';
+import { buildAppUrl } from './helpers.js';
+import { default as coverageEndDate } from '../templates/coverageEndDate.hbs';
 
-var coverageEndDate = require('../templates/coverageEndDate.hbs');
-
-var candidateInformationColumns = [
+export const candidateInformationColumns = [
   {
     data: 'candidate_name',
     className: 'all column--large',
     render: function(data, type, row) {
-      return columnHelpers.buildEntityLink(
+      return buildEntityLink(
         data,
-        helpers.buildAppUrl(['candidate', row.candidate_id], {
+        buildAppUrl(['candidate', row.candidate_id], {
           cycle: context.election.cycle,
           election_full: true
         }),
@@ -32,14 +31,14 @@ var candidateInformationColumns = [
     render: function(data, type, row) {
       if (!data) return 'No principal campaign committee identified';
 
-      return columnHelpers.buildEntityLink(
+      return buildEntityLink(
         data,
-        helpers.buildAppUrl(['committee', row.candidate_pcc_id]),
+        buildAppUrl(['committee', row.candidate_pcc_id]),
         'candidate_pcc_id'
       );
     }
   },
-  columns.currencyColumn({
+  currencyColumn({
     data: 'total_receipts',
     className: 'column--number t-mono',
     orderSequence: ['desc', 'asc'],
@@ -47,16 +46,16 @@ var candidateInformationColumns = [
   })
 ];
 
-var communicationCostColumns = [
-  columns.committeeColumn({ data: 'committee_name', className: 'all' }),
-  columns.supportOpposeColumn,
-  columns.candidateColumn({ data: 'candidate_name', className: 'all' }),
+export const communicationCostColumns = [
+  committeeColumn({ data: 'committee_name', className: 'all' }),
+  supportOpposeColumn,
+  candidateColumn({ data: 'candidate_name', className: 'all' }),
   {
     data: 'total',
     className: 'all column--number t-mono',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['communication-costs'], function(
+    render: buildTotalLink(['communication-costs'], function(
       data,
       type,
       row
@@ -69,15 +68,15 @@ var communicationCostColumns = [
   }
 ];
 
-function createElectionColumns(context) {
+export function createElectionColumns(context) {
   return [
     {
       data: 'candidate_name',
       className: 'all column--large',
       render: function(data, type, row) {
-        return columnHelpers.buildEntityLink(
+        return buildEntityLink(
           data,
-          helpers.buildAppUrl(['candidate', row.candidate_id], {
+          buildAppUrl(['candidate', row.candidate_id], {
             cycle: context.election.cycle,
             election_full: true
           }),
@@ -90,17 +89,17 @@ function createElectionColumns(context) {
       data: 'party_full',
       className: 'min-desktop'
     },
-    columns.currencyColumn({
+    currencyColumn({
       data: 'total_receipts',
       className: 'column--number t-mono all',
       orderSequence: ['desc', 'asc']
     }),
-    columns.currencyColumn({
+    currencyColumn({
       data: 'total_disbursements',
       className: 'column--number t-mono all',
       orderSequence: ['desc', 'asc']
     }),
-    columns.barCurrencyColumn({
+    barCurrencyColumn({
       data: 'cash_on_hand_end_period',
       className: 'column--number t-mono all'
     }),
@@ -112,7 +111,7 @@ function createElectionColumns(context) {
         } else {
           urlBase = ['reports', 'house-senate'];
         }
-        var url = helpers.buildAppUrl(urlBase, {
+        var url = buildAppUrl(urlBase, {
           q_filer: row.committee_ids,
           cycle: context.election.cycle,
           is_amended: 'false'
@@ -132,15 +131,15 @@ function createElectionColumns(context) {
   ];
 }
 
-var electioneeringColumns = [
-  columns.committeeColumn({ data: 'committee_name', className: 'all' }),
-  columns.candidateColumn({ data: 'candidate_name', className: 'all' }),
+export const electioneeringColumns = [
+  committeeColumn({ data: 'committee_name', className: 'all' }),
+  candidateColumn({ data: 'candidate_name', className: 'all' }),
   {
     data: 'total',
     className: 'all column--number t-mono',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(
+    render: buildTotalLink(
       ['electioneering-communications'],
       function(data, type, row) {
         return {
@@ -151,16 +150,16 @@ var electioneeringColumns = [
   }
 ];
 
-var independentExpenditureColumns = [
-  columns.committeeColumn({ data: 'committee_name', className: 'all' }),
-  columns.supportOpposeColumn,
-  columns.candidateColumn({ data: 'candidate_name', className: 'all' }),
+export const independentExpenditureColumns = [
+  committeeColumn({ data: 'committee_name', className: 'all' }),
+  supportOpposeColumn,
+  candidateColumn({ data: 'candidate_name', className: 'all' }),
   {
     data: 'total',
     className: 'all column--number t-mono',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['independent-expenditures'], function(
+    render: buildTotalLink(['independent-expenditures'], function(
       data,
       type,
       row
@@ -174,11 +173,3 @@ var independentExpenditureColumns = [
     })
   }
 ];
-
-module.exports = {
-  candidateInformationColumns: candidateInformationColumns,
-  communicationCostColumns: communicationCostColumns,
-  createElectionColumns: createElectionColumns,
-  electioneeringColumns: electioneeringColumns,
-  independentExpenditureColumns: independentExpenditureColumns
-};

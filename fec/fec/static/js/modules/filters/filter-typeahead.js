@@ -1,11 +1,11 @@
 /* global API_LOCATION, API_VERSION, API_KEY_PUBLIC */
 
-var URI = require('urijs');
-var _ = require('underscore');
-var typeahead = require('../typeahead');
-var helpers = require('../helpers');
+import { default as URI } from 'urijs';
+import { escape as _escape } from 'underscore';
+import { default as typeahead } from '../typeahead.js';
+import { sanitizeValue } from '../helpers.js';
 
-var ID_PATTERN = /^\w{9}$/;
+const ID_PATTERN = /^\w{9}$/;
 
 function slugify(value) {
   return value
@@ -31,7 +31,7 @@ function stripQuotes(value) {
 var textDataset = {
   display: 'id',
   source: function(query, syncResults) {
-    syncResults([{ id: helpers.sanitizeValue(query) }]);
+    syncResults([{ id: sanitizeValue(query) }]);
   },
   templates: {
     suggestion: function(datum) {
@@ -56,7 +56,7 @@ const template_checkbox = value => `
   </li>
 `;
 
-var FilterTypeahead = function(selector, dataset, allowText) {
+export default function FilterTypeahead(selector, dataset, allowText) {
   this.$elm = $(selector);
   this.dataset = dataset;
   this.allowText = allowText;
@@ -91,7 +91,7 @@ var FilterTypeahead = function(selector, dataset, allowText) {
 };
 
 FilterTypeahead.prototype.typeaheadInit = function() {
-  var opts = { minLength: 3, hint: false, highlight: true };
+  const opts = { minLength: 3, hint: false, highlight: true };
   if (this.allowText && this.dataset) {
     this.$field.typeahead(opts, textDataset, this.dataset);
   } else if (this.allowText && !this.dataset) {
@@ -118,7 +118,7 @@ FilterTypeahead.prototype.setFirstItem = function() {
 };
 
 FilterTypeahead.prototype.handleSelect = function(e, datum) {
-  var id = formatId(datum.id);
+  const id = formatId(datum.id);
   this.appendCheckbox({
     name: this.fieldName,
     value: datum.id,
@@ -165,10 +165,10 @@ FilterTypeahead.prototype.handleChange = function() {
 };
 
 FilterTypeahead.prototype.handleCheckbox = function(e) {
-  var $input = $(e.target);
-  var id = $input.attr('id');
-  var $label = this.$elm.find('label[for="' + id + '"]');
-  var loadedOnce = $input.data('loaded-once') || false;
+  const $input = $(e.target);
+  const id = $input.attr('id');
+  const $label = this.$elm.find('label[for="' + id + '"]');
+  const loadedOnce = $input.data('loaded-once') || false;
 
   if (loadedOnce) {
     $label.addClass('is-loading');
@@ -178,11 +178,11 @@ FilterTypeahead.prototype.handleCheckbox = function(e) {
 };
 
 FilterTypeahead.prototype.removeCheckbox = function(e, opts) {
-  var $input = $(e.target);
+  let $input = $(e.target);
 
   // tag removal
   if (opts) {
-    var $input_id = $(document.getElementById(opts.key));
+    const $input_id = $(document.getElementById(opts.key));
     $input = this.$selected.find($input_id);
   }
 
@@ -229,7 +229,7 @@ FilterTypeahead.prototype.disableButton = function() {
 };
 
 FilterTypeahead.prototype.appendCheckbox = function(opts) {
-  var data = this.formatCheckboxData(opts);
+  const data = this.formatCheckboxData(opts);
 
   if (this.$elm.find('#' + data.id).length) {
     return;
@@ -241,12 +241,12 @@ FilterTypeahead.prototype.appendCheckbox = function(opts) {
 };
 
 FilterTypeahead.prototype.formatCheckboxData = function(input) {
-  var output = {
+  const output = {
     name: input.name,
     label: input.datum
-      ? _.escape(formatLabel(input.datum))
+      ? _escape(formatLabel(input.datum))
       : stripQuotes(input.value),
-    value: _.escape(stripQuotes(input.value)),
+    value: _escape(stripQuotes(input.value)),
     id: this.fieldName + '-' + formatId(input.value)
   };
 
@@ -254,11 +254,11 @@ FilterTypeahead.prototype.formatCheckboxData = function(input) {
 };
 
 FilterTypeahead.prototype.getFilters = function(values) {
-  var self = this;
+  const self = this;
   if (this.dataset) {
-    var dataset = this.dataset.name + 's';
-    var idKey = this.dataset.name + '_id';
-    var ids = values.filter(function(value) {
+    const dataset = this.dataset.name + 's';
+    const idKey = this.dataset.name + '_id';
+    const ids = values.filter(function(value) {
       return ID_PATTERN.test(value);
     });
     values.forEach(function(value) {
@@ -282,12 +282,12 @@ FilterTypeahead.prototype.getFilters = function(values) {
 
 // When loading a preset checkbox filter, this will change the label of the checkbox from just ID (example: C00431445) to the full title for readability (example: OBAMA FOR AMERICA (C00431445))
 FilterTypeahead.prototype.updateFilters = function(response) {
-  var self = this;
+  const self = this;
 
   if (this.dataset) {
-    var idKey = this.dataset.name + '_id';
+    const idKey = this.dataset.name + '_id';
     response.results.forEach(function(result) {
-      var label = result.name + ' (' + result[idKey] + ')';
+      const label = result.name + ' (' + result[idKey] + ')';
       self.$elm
         .find(
           'label[for="' + self.fieldName + '-' + result[idKey] + '-checkbox"]'
@@ -327,5 +327,3 @@ FilterTypeahead.prototype.changeDataset = function(e, opts) {
     }
   }
 };
-
-module.exports = { FilterTypeahead: FilterTypeahead };

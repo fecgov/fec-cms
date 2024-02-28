@@ -1,0 +1,56 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+.glossary {
+  background: #e1f3f8;
+  border-left: 1px solid #205493;
+  width: 30rem;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  padding: .5rem;
+  transition: right .2s;
+}
+
+.glossary[aria-hidden=true] {
+  right: -30rem;
+}
+
+.glossary div[aria-hidden=true] {
+  display: none !important;
+}
+
+.glossary button {
+  width: 100%;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+}
+
+button {
+  appearance: none;
+  background-color: #0071bc;
+  border: 1px solid #205493;
+  color: #fff;
+  padding: .5rem;
+  text-align: left;
+}
+
+.js-accordion button {
+  width: 100%;
+}
+
+.accordion-trigger--expanded {
+  background-color: #112e51;
+}

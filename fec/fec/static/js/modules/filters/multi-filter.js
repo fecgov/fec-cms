@@ -1,11 +1,11 @@
-var Filter = require('./filter-base.js').Filter;
-var CheckboxFilter = require('./checkbox-filter').CheckboxFilter;
+import { default as Filter } from './filter-base.js';
+import { default as CheckboxFilter } from './checkbox-filter.js';
 
 /* MultiFilters used when there are multiple filters that share the
  * same name attribute
  */
 
-function MultiFilter(elm) {
+export default function MultiFilter(elm) {
   Filter.call(this, elm);
   this.subfilters = this.activateSubfilters();
 }
@@ -33,8 +33,4 @@ MultiFilter.prototype.fromQuery = function(query) {
   this.subfilters.forEach(function(filter) {
     filter.fromQuery(query);
   });
-};
-
-module.exports = {
-  MultiFilter: MultiFilter
 };

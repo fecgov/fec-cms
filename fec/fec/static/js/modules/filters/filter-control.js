@@ -1,6 +1,5 @@
 
-
-function FilterControl($selector) {
+export default function FilterControl($selector) {
   this.$element = $selector;
   this.formType = this.getFormType();
   this.modifiesFilter = this.$element.data('modifies-filter');
@@ -18,7 +17,7 @@ FilterControl.prototype.getFormType = function() {
 };
 
 FilterControl.prototype.getValue = function() {
-  var value;
+  let value;
   if (this.formType === 'checkbox') {
     value = [];
     this.$element.find('input:checked').each(function() {
@@ -39,5 +38,3 @@ FilterControl.prototype.handleChange = function() {
     }
   ]);
 };
-
-module.exports = { FilterControl: FilterControl };

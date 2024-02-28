@@ -4,12 +4,12 @@ var sinonChai = require('sinon-chai');
 var expect = chai.expect;
 chai.use(sinonChai);
 
-var URI = require('urijs');
-var _ = require('underscore');
+import { default as URI } from 'urijs';
+import { extend as _extend } from 'underscore';
 
 require('./setup')();
 
-_.extend(window, {
+_extend(window, {
   context: {
     districts: {
       NJ: { state: 'New Jersey', districts: 12 },

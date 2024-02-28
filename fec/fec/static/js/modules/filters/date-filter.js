@@ -1,12 +1,21 @@
-var moment = require('moment');
+import 'moment';
 
-var Filter = require('./filter-base');
+import { default as Filter } from './filter-base.js';
 
-require('jquery.inputmask');
-require('jquery.inputmask/dist/inputmask/inputmask.date.extensions');
+import 'inputmask';
+import $ from 'jquery';
+import 'inputmask.date.extensions';
+// import 'jquery.inputmask/dist/inputmask/inputmask.date.extensions';
 
-function DateFilter(elm) {
-  Filter.Filter.call(this, elm);
+/**
+ * 
+ * @param {*} elm 
+ * @property 
+ */
+export default function DateFilter(elm) {
+  console.log('DateFilter(elm): ', elm);
+  console.log('  typeof: ', typeof elm);
+  Filter.call(this, elm);
   this.validateInput = this.$elm.data('validate') || false;
   this.$range = this.$elm.find('.js-date-range');
   this.$grid = this.$elm.find('.js-date-grid');
@@ -38,7 +47,7 @@ function DateFilter(elm) {
   $(document.body).on('tag:removeAll', this.handleRemoveAll.bind(this));
 }
 
-DateFilter.prototype = Object.create(Filter.Filter.prototype);
+DateFilter.prototype = Object.create(Filter.prototype);
 DateFilter.constructor = DateFilter;
 
 DateFilter.prototype.handleInputChange = function(e) {
@@ -354,5 +363,3 @@ DateFilter.prototype.hideWarning = function() {
     this.showingWarning = false;
   }
 };
-
-module.exports = { DateFilter: DateFilter };

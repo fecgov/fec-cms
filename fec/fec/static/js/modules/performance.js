@@ -1,6 +1,6 @@
 /* global perfBar */
 
-var _ = require('underscore');
+import { chain as _chain, max as _max } from 'underscore';
 
 require('perfbar/build/perfbar');
 
@@ -32,10 +32,10 @@ function bar() {
 
   perfBar.init({ budget: performanceBudgets });
 
-  _.chain(marks)
+  _chain(marks)
     .groupBy('name')
     .each(function(marks) {
-      var mark = _.max(marks, 'startTime');
+      var mark = _max(marks, 'startTime');
       perfBar.addMetric(getMetric(mark));
     });
 }

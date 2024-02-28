@@ -3,23 +3,27 @@
  * Templates: /fec/data/templates/election-lookup.jinja
  * Not to be confused with election-lookup.js, which is used on /data/elections/
  */
-var URI = require('urijs');
-var _ = require('underscore');
-var moment = require('moment');
+import { default as URI } from 'urijs';
+import { extend as _extend, filter as _filter, isEmpty as _isEmpty, isEqual as _isEqual } from 'underscore';
+import { default as moment } from 'moment';
 
-var analytics = require('./analytics');
+import { pageView } from './analytics.js';
 
-var ElectionForm = require('./election-form').ElectionForm;
-var ElectionMap = require('./election-map').ElectionMap;
-var helpers = require('./helpers');
-var decoders = require('./decoders');
+import { default as ElectionForm } from './election-form.js';
+import { default as ElectionMap } from './election-map.js';
+import { buildAppUrl, buildUrl } from './helpers.js';
+import { states } from './decoders.js';
 
-var resultTemplate = require('../templates/electionResult.hbs');
-var upcomingTemplate = require('../templates/upcomingPresidential.hbs');
-var zipWarningTemplate = require('../templates/electionZipWarning.hbs');
-var noResultsTemplate = require('../templates/electionNoResults.hbs');
+import { default as resultTemplate } from '../templates/electionResult.hbs';
+import { default as upcomingTemplate } from '../templates/upcomingPresidential.hbs';
+import { default as zipWarningTemplate } from '../templates/electionZipWarning.hbs';
+import { default as noResultsTemplate } from '../templates/electionNoResults.hbs';
+// var resultTemplate = require('../templates/electionResult.hbs');
+// var upcomingTemplate = require('../templates/upcomingPresidential.hbs');
+// var zipWarningTemplate = require('../templates/electionZipWarning.hbs');
+// var noResultsTemplate = require('../templates/electionNoResults.hbs');
 
-var officeMap = {
+const officeMap = {
   P: 'President',
   S: 'Senate',
   H: 'House'
@@ -32,7 +36,8 @@ var officeMap = {
  * Inherits from the base ElectionForm class
  * @param {string} selector - Selector string
  */
-function ElectionSearch(selector) {
+export default function ElectionSearch(selector) {
+  console.log('new ElectionSearch(selector): ', selector);
   this.$elm = $(selector);
   this.districts = 0;
   this.serialized = {};
@@ -84,9 +89,9 @@ ElectionSearch.constructor = ElectionSearch;
 ElectionSearch.prototype.wakeTheMap = function() {
   // console.log('ElectionSearch.wakeTheMap(e): ', e);
   if (!this.initialized) {
-    document.removeEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap);
-    if (this.dormantMap) this.dormantMap.removeEventListener('click', this.wakeTheMap);
-    if (this.zipSearchField) this.zipSearchField.removeEventListener('input', this.wakeTheMap);
+    document.removeEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap.bind(this));
+    if (this.dormantMap) this.dormantMap.removeEventListener('click', this.wakeTheMap.bind(this));
+    if (this.zipSearchField) this.zipSearchField.removeEventListener('input', this.wakeTheMap.bind(this));
     this.initInteractiveMap();
   }
 };
@@ -108,12 +113,13 @@ ElectionSearch.prototype.initInteractiveMap =function() {
       delete this.dormantMap;
     }
 
-    // console.log('this.map: ', this.map);
-    this.map = new ElectionMap(this.$map.get(0), {
-      drawStates: _.isEmpty(this.serialized),
-      handleSelect: this.handleSelectMap.bind(this)
-    });
-
+    console.log('this.map: ', this.map);
+    if (!this.map) {
+      this.map = new ElectionMap(this.$map.get(0), {
+        drawStates: _isEmpty(this.serialized),
+        handleSelect: this.handleSelectMap.bind(this)
+      });
+    }
     this.initialized = true;
 
     // console.log('  calling the block');
@@ -167,7 +173,7 @@ ElectionSearch.prototype.getUpcomingElections = function() {
     sort: 'election_date',
     min_election_date: today
   };
-  var url = helpers.buildUrl(['election-dates'], query);
+  var url = buildUrl(['election-dates'], query);
   var self = this;
   if (Number(this.$cycle.val()) >= now.getFullYear()) {
     $.getJSON(url).done(function(response) {
@@ -191,6 +197,7 @@ ElectionSearch.prototype.handleZipChange = function() {
  * @param {int} district - District number
  */
 ElectionSearch.prototype.handleSelectMap = function(state, district) {
+  console.log('election-search.handleSelectMap(state, district): ', state, district);
   this.$zip.val('');
   this.$state.val(state);
   this.updateDistricts(state);
@@ -211,7 +218,7 @@ ElectionSearch.prototype.removeWrongPresidentialElections = function(
   cycle
 ) {
   if (Number(cycle) % 4 > 0) {
-    return _.filter(results, function(result) {
+    return _filter(results, function(result) {
       return result.office !== 'P';
     });
   } else {
@@ -227,11 +234,11 @@ ElectionSearch.prototype.removeWrongPresidentialElections = function(
  */
 ElectionSearch.prototype.search = function(e, opts) {
   e && e.preventDefault();
-  opts = _.extend({ pushState: true }, opts || {});
+  opts = _extend({ pushState: true }, opts || {});
   var self = this;
   var serialized = self.serialize();
   if (self.shouldSearch(serialized)) {
-    if (!_.isEqual(serialized, self.serialized)) {
+    if (!_isEqual(serialized, self.serialized)) {
       // Requested search options differ from saved options; request new data.
       self.xhr && self.xhr.abort();
       self.xhr = $.getJSON(self.getUrl(serialized)).done(function(response) {
@@ -253,7 +260,7 @@ ElectionSearch.prototype.search = function(e, opts) {
             .query(serialized)
             .toString()
         );
-        analytics.pageView();
+        pageView();
         self.$resultsHeading.show();
       }
     } else if (self.results) {
@@ -297,7 +304,7 @@ ElectionSearch.prototype.getPresidentialElections = function() {
         if (data.results[0]) {
           var electionDate = self.formatGenericElectionDate(data.results[0]);
           var urlBase = ['elections/president'];
-          var url = helpers.buildAppUrl([urlBase, data.results[0].cycle]);
+          var url = buildAppUrl([urlBase, data.results[0].cycle]);
           var election = {
             office: 'Presidential',
             electionType: 'General election',
@@ -339,7 +346,7 @@ ElectionSearch.prototype.getUpcomingPresidentialElection = function() {
     // Get upcoming presidential election year
     cycle: currentYear + 4 - (currentYear % 4)
   };
-  var presidentialUrl = helpers.buildUrl(['elections', 'search'], queryP);
+  var presidentialUrl = buildUrl(['elections', 'search'], queryP);
   var self = this;
   // Display the result based on election result template
   $.getJSON(presidentialUrl).done(function(response) {
@@ -400,7 +407,7 @@ ElectionSearch.prototype.draw = function(results) {
  */
 ElectionSearch.prototype.drawResult = function(result) {
   var election = this.formatResult(result, this);
-  var upcomingElections = _.filter(this.upcomingElections, function(upcoming) {
+  var upcomingElections = _filter(this.upcomingElections, function(upcoming) {
     if (election.office === 'H') {
       return (
         upcoming.election_state === election.state &&
@@ -475,7 +482,7 @@ ElectionSearch.prototype.getTitle = function() {
   if (params.zip) {
     title += ' in ZIP code ' + params.zip;
   } else {
-    title += ' in ' + decoders.states[params.state];
+    title += ' in ' + states[params.state];
     if (params.district && params.district !== '00') {
       title += ', district ' + params.district;
     }
@@ -488,7 +495,7 @@ ElectionSearch.prototype.getTitle = function() {
  * @param {object} result
  */
 ElectionSearch.prototype.formatResult = function(result) {
-  return _.extend({}, result, {
+  return _extend({}, result, {
     officeName: officeMap[result.office],
     electionName: this.formatName(result),
     incumbent: this.formatIncumbent(result),
@@ -515,7 +522,7 @@ ElectionSearch.prototype.formatColor = function(result) {
  * @param {object} result
  */
 ElectionSearch.prototype.formatName = function(result) {
-  var parts = [decoders.states[result.state], officeMap[result.office]];
+  var parts = [states[result.state], officeMap[result.office]];
   if (result.district && result.district !== '00') {
     parts = parts.concat('District ' + result.district.toString());
   }
@@ -549,7 +556,7 @@ ElectionSearch.prototype.formatIncumbent = function(result) {
   if (result.incumbent_id) {
     return {
       name: result.incumbent_name,
-      url: helpers.buildAppUrl(['candidate', result.incumbent_id])
+      url: buildAppUrl(['candidate', result.incumbent_id])
     };
   } else {
     return null;
@@ -574,9 +581,5 @@ ElectionSearch.prototype.formatUrl = function(result) {
     path = path.concat(result.district);
   }
   path = path.concat(result.cycle);
-  return helpers.buildAppUrl(path, {});
-};
-
-module.exports = {
-  ElectionSearch: ElectionSearch
+  return buildAppUrl(path, {});
 };

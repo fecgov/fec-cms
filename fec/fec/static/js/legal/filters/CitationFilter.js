@@ -1,6 +1,6 @@
 const React = require('react');
 const PropTypes = require('prop-types');
-const URI = require('urijs');
+import { default as URI } from 'urijs';
 const Checkbox = require('./Checkbox');
 
 class CitationFilter extends React.Component {

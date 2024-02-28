@@ -2,21 +2,22 @@
  * pagingType documentation: https://datatables.net/reference/option/pagingType
  */
 
-var _ = require('underscore');
-var URI = require('urijs');
+import { extend as _extend } from 'underscore';
+import { default as URI } from 'urijs';
 
-var maps = require('../modules/maps');
-var mapsEvent = require('../modules/maps-event');
-var tables = require('../modules/tables');
-var filings = require('../modules/filings');
-var helpers = require('../modules/helpers');
-var columnHelpers = require('../modules/column-helpers');
-var columns = require('../modules/columns');
-var dropdown = require('../modules/dropdowns');
-var events = require('../modules/events');
+import { stateMap } from '../modules/maps.js';
+import { init as initMapsEvent } from '../modules/maps-event.js';
+import { barsAfterRender, DataTable, SeekPaginator, simpleDOM } from '../modules/tables.js';
+import { renderModal, renderRow } from '../modules/filings.js';
+import { buildAppUrl, buildUrl, missingDataReason } from '../modules/helpers.js';
+import { buildEntityLink, buildTotalLink, getColumns, getSizeParams, sizeInfo } from '../modules/column-helpers.js';
+import { candidateColumn, currencyColumn, dateColumn, filings, supportOpposeColumn} from '../modules/columns.js';
+import { default as Dropdown } from '../modules/dropdowns.js';
+import initEvents from '../modules/events.js';
+const events = initEvents();
 
-var tableOpts = {
-  dom: tables.simpleDOM,
+const tableOpts = {
+  dom: simpleDOM,
   pagingType: 'simple',
   lengthChange: true,
   lengthMenu: [10, 50, 100],
@@ -25,14 +26,14 @@ var tableOpts = {
   aggregateExport: true
 };
 
-var sizeColumns = [
+const sizeColumns = [
   {
     data: 'size',
     width: '50%',
     className: 'all',
     orderable: false,
     render: function(data) {
-      return columnHelpers.sizeInfo[data].label;
+      return sizeInfo[data].label;
     }
   },
   {
@@ -41,16 +42,16 @@ var sizeColumns = [
     className: 'all',
     orderSequence: ['desc', 'asc'],
     orderable: false,
-    render: columnHelpers.buildTotalLink(
+    render: buildTotalLink(
       ['receipts', 'individual-contributions'],
       function(data, type, row) {
-        return columnHelpers.getSizeParams(row.size);
+        return getSizeParams(row.size);
       }
     )
   }
 ];
 
-var stateColumns = [
+const stateColumns = [
   {
     data: 'state_full',
     width: '50%',
@@ -68,7 +69,7 @@ var stateColumns = [
     width: '50%',
     className: 'all',
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(
+    render: buildTotalLink(
       ['receipts', 'individual-contributions'],
       function(data, type, row) {
         return {
@@ -79,7 +80,7 @@ var stateColumns = [
   }
 ];
 
-var renderNullStringText = function(data, columnName) {
+const renderNullStringText = function(data, columnName) {
   if (data == 'NULL') {
     return data = '(COMMITTEE DID NOT PROVIDE ' + columnName + ')';
   } else {
@@ -87,7 +88,7 @@ var renderNullStringText = function(data, columnName) {
   }
 };
 
-var employerColumns = [
+const employerColumns = [
   {
     data: 'employer',
     className: 'all',
@@ -101,7 +102,7 @@ var employerColumns = [
     className: 'all',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(
+    render: buildTotalLink(
       ['receipts', 'individual-contributions'],
       function(data, type, row) {
         if (row.employer) {
@@ -116,7 +117,7 @@ var employerColumns = [
   }
 ];
 
-var occupationColumns = [
+const occupationColumns = [
   {
     data: 'occupation',
     className: 'all',
@@ -130,7 +131,7 @@ var occupationColumns = [
     className: 'all',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(
+    render: buildTotalLink(
       ['receipts', 'individual-contributions'],
       function(data, type, row) {
         if (row.occupation) {
@@ -145,7 +146,7 @@ var occupationColumns = [
   }
 ];
 
-var disbursementRecipientColumns = [
+const disbursementRecipientColumns = [
   {
     data: 'recipient_name',
     className: 'all',
@@ -171,7 +172,7 @@ var disbursementRecipientColumns = [
     className: 'all',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['disbursements'], function(
+    render: buildTotalLink(['disbursements'], function(
       data,
       type,
       row
@@ -183,15 +184,15 @@ var disbursementRecipientColumns = [
   }
 ];
 
-var disbursementRecipientIDColumns = [
+const disbursementRecipientIDColumns = [
   {
     data: 'recipient_name',
     className: 'all',
     orderable: false,
     render: function(data, type, row) {
-      return columnHelpers.buildEntityLink(
+      return buildEntityLink(
         data,
-        helpers.buildAppUrl(['committee', row.recipient_id]),
+        buildAppUrl(['committee', row.recipient_id]),
         'committee'
       );
     }
@@ -201,7 +202,7 @@ var disbursementRecipientIDColumns = [
     className: 'all',
     orderable: false,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['disbursements'], function(
+    render: buildTotalLink(['disbursements'], function(
       data,
       type,
       row
@@ -213,13 +214,13 @@ var disbursementRecipientIDColumns = [
   }
 ];
 
-var expendituresColumns = [
+const expendituresColumns = [
   {
     data: 'total',
     className: 'all',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['independent-expenditures'], function(
+    render: buildTotalLink(['independent-expenditures'], function(
       data,
       type,
       row
@@ -231,15 +232,15 @@ var expendituresColumns = [
       };
     })
   },
-  columns.supportOpposeColumn,
-  columns.candidateColumn({
+  supportOpposeColumn,
+  candidateColumn({
     data: 'candidate_name',
     className: 'all'
   })
 ];
 
-var electioneeringColumns = [
-  columns.candidateColumn({
+const electioneeringColumns = [
+  candidateColumn({
     data: 'candidate',
     className: 'all'
   }),
@@ -248,7 +249,7 @@ var electioneeringColumns = [
     className: 'all',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(
+    render: buildTotalLink(
       ['electioneering-communications'],
       function(data, type, row) {
         return {
@@ -260,13 +261,13 @@ var electioneeringColumns = [
   }
 ];
 
-var communicationCostColumns = [
+const communicationCostColumns = [
   {
     data: 'total',
     className: 'all',
     orderable: true,
     orderSequence: ['desc', 'asc'],
-    render: columnHelpers.buildTotalLink(['communication-costs'], function(
+    render: buildTotalLink(['communication-costs'], function(
       data,
       type,
       row
@@ -277,14 +278,14 @@ var communicationCostColumns = [
       };
     })
   },
-  columns.supportOpposeColumn,
-  columns.candidateColumn({
+  supportOpposeColumn,
+  candidateColumn({
     data: 'candidate_name',
     className: 'all'
   })
 ];
 
-var itemizedDisbursementColumns = [
+const itemizedDisbursementColumns = [
   {
     data: 'recipient_name',
     className: 'all',
@@ -301,17 +302,17 @@ var itemizedDisbursementColumns = [
     orderable: false,
     defaultContent: 'NOT REPORTED'
   },
-  columns.dateColumn({
+  dateColumn({
     data: 'disbursement_date',
     className: 'min-tablet'
   }),
-  columns.currencyColumn({
+  currencyColumn({
     data: 'disbursement_amount',
     className: 'column--number t-mono'
   })
 ];
 
-var ecItemizedDisbursementColumns = [
+const ecItemizedDisbursementColumns = [
   {
     data: 'payee_name',
     className: 'all',
@@ -328,11 +329,11 @@ var ecItemizedDisbursementColumns = [
     orderable: false,
     defaultContent: 'NOT REPORTED'
   },
-  columns.dateColumn({
+  dateColumn({
     data: 'disbursement_date',
     className: 'min-tablet'
   }),
-  columns.currencyColumn({
+  currencyColumn({
     data: 'disbursement_amount',
     className: 'column--number t-mono'
   }),
@@ -343,7 +344,7 @@ var ecItemizedDisbursementColumns = [
   }
 ];
 
-var individualContributionsColumns = [
+const individualContributionsColumns = [
   {
     data: 'contributor_name',
     className: 'all',
@@ -354,22 +355,22 @@ var individualContributionsColumns = [
     className: 'all',
     orderable: false
   },
-  columns.dateColumn({
+  dateColumn({
     data: 'contribution_receipt_date',
     className: 'min-tablet'
   }),
-  columns.currencyColumn({
+  currencyColumn({
     data: 'contribution_receipt_amount',
     className: 'column--number t-mono'
   })
 ];
 
-var aggregateCallbacks = {
-  afterRender: tables.barsAfterRender.bind(undefined, undefined)
+const aggregateCallbacks = {
+  afterRender: barsAfterRender.bind(undefined, undefined)
 };
 
 // Settings for filings tables
-var rawFilingsColumns = columnHelpers.getColumns(columns.filings, [
+const rawFilingsColumns = getColumns(filings, [
   'document_type',
   'coverage_start_date',
   'coverage_end_date',
@@ -377,7 +378,7 @@ var rawFilingsColumns = columnHelpers.getColumns(columns.filings, [
   'beginning_image_number'
 ]);
 
-var filingsColumns = columnHelpers.getColumns(columns.filings, [
+const filingsColumns = getColumns(filings, [
   'document_type',
   'version',
   'receipt_date',
@@ -385,7 +386,7 @@ var filingsColumns = columnHelpers.getColumns(columns.filings, [
   'pages'
 ]);
 
-var filingsReportsColumns = columnHelpers.getColumns(columns.filings, [
+const filingsReportsColumns = getColumns(filings, [
   'document_type',
   'version',
   'coverage_start_date',
@@ -397,6 +398,7 @@ var filingsReportsColumns = columnHelpers.getColumns(columns.filings, [
 ]);
 
 $(document).ready(function() {
+  console.log('committee-single.ready()');
   var $mapTable;
   // Reset time period to the fallback_cycle, which is the LAST_CYCLE_HAS_FINANCIAL.
   if (context.cycleOutOfRange == 'true') {
@@ -408,6 +410,7 @@ $(document).ready(function() {
 
   // Set up data tables
   $('.data-table').each(function(index, table) {
+    console.log('committee-single.data-table.each()');
     var $table = $(table);
     var committeeId = $table.attr('data-committee');
     var query = {
@@ -418,13 +421,13 @@ $(document).ready(function() {
     var cycle;
     var filingsOpts = {
       autoWidth: false,
-      rowCallback: filings.renderRow,
+      rowCallback: renderRow,
       dom: '<"panel__main"t><"results-info"frlpi>',
       pagingType: 'simple',
       lengthMenu: [100, 10],
       drawCallback: function() {
         this.dropdowns = $table.find('.dropdown').map(function(idx, elm) {
-          return new dropdown.Dropdown($(elm), {
+          return new Dropdown($(elm), {
             checkboxes: false
           });
         });
@@ -436,9 +439,9 @@ $(document).ready(function() {
         path = ['schedules', 'schedule_a', 'by_size'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        tables.DataTable.defer($table, {
+        DataTable.defer($table, {
           path: path,
-          query: _.extend(query, {
+          query: _extend(query, {
             committee_id: committeeId,
             cycle: cycle
           }),
@@ -454,7 +457,7 @@ $(document).ready(function() {
           hideEmptyOpts: {
             dataType: 'individual contributions',
             name: context.name,
-            reason: helpers.missingDataReason('contributions'),
+            reason: missingDataReason('contributions'),
             timePeriod: context.timePeriod
           }
         });
@@ -463,9 +466,9 @@ $(document).ready(function() {
         path = ['schedules', 'schedule_a', 'by_state'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        tables.DataTable.defer($table, {
+        DataTable.defer($table, {
           path: path,
-          query: _.extend(query, {
+          query: _extend(query, {
             committee_id: committeeId,
             cycle: cycle,
             per_page: 99
@@ -487,11 +490,11 @@ $(document).ready(function() {
         path = ['schedules', 'schedule_a', 'by_employer'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        tables.DataTable.defer(
+        DataTable.defer(
           $table,
-          _.extend({}, tableOpts, {
+          _extend({}, tableOpts, {
             path: path,
-            query: _.extend(query, {
+            query: _extend(query, {
               committee_id: committeeId,
               cycle: cycle
             }),
@@ -502,7 +505,7 @@ $(document).ready(function() {
               dataType: 'individual contributions',
               name: context.name,
               timePeriod: context.timePeriod,
-              reason: helpers.missingDataReason('contributions')
+              reason: missingDataReason('contributions')
             }
           })
         );
@@ -511,11 +514,11 @@ $(document).ready(function() {
         path = ['schedules', 'schedule_a', 'by_occupation'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        tables.DataTable.defer(
+        DataTable.defer(
           $table,
-          _.extend({}, tableOpts, {
+          _extend({}, tableOpts, {
             path: path,
-            query: _.extend(query, {
+            query: _extend(query, {
               committee_id: committeeId,
               cycle: cycle
             }),
@@ -526,7 +529,7 @@ $(document).ready(function() {
               dataType: 'individual contributions',
               name: context.name,
               timePeriod: context.timePeriod,
-              reason: helpers.missingDataReason('contributions')
+              reason: missingDataReason('contributions')
             }
           })
         );
@@ -535,9 +538,9 @@ $(document).ready(function() {
         path = ['schedules', 'schedule_a'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        tables.DataTable.defer(
+        DataTable.defer(
           $table,
-          _.extend({}, tableOpts, {
+          _extend({}, tableOpts, {
             path: path,
             query: {
               committee_id: committeeId,
@@ -549,12 +552,12 @@ $(document).ready(function() {
             order: [[2, 'desc']],
             useExport: true,
             singleEntityItemizedExport: true,
-            paginator: tables.SeekPaginator,
+            paginator: SeekPaginator,
             hideEmptyOpts: {
               dataType: 'individual contributions',
               name: context.name,
               timePeriod: context.timePeriod,
-              reason: helpers.missingDataReason('contributions')
+              reason: missingDataReason('contributions')
             }
           })
         );
@@ -563,11 +566,11 @@ $(document).ready(function() {
         path = ['schedules', 'schedule_b', 'by_recipient'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        tables.DataTable.defer(
+        DataTable.defer(
           $table,
-          _.extend({}, tableOpts, {
+          _extend({}, tableOpts, {
             path: path,
-            query: _.extend(query, {
+            query: _extend(query, {
               committee_id: committeeId,
               cycle: cycle
             }),
@@ -577,7 +580,7 @@ $(document).ready(function() {
             hideEmptyOpts: {
               dataType: 'disbursements',
               name: context.name,
-              reason: helpers.missingDataReason('disbursements'),
+              reason: missingDataReason('disbursements'),
               timePeriod: context.timePeriod
             }
           })
@@ -587,9 +590,9 @@ $(document).ready(function() {
         path = ['schedules', 'schedule_b'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        tables.DataTable.defer(
+        DataTable.defer(
           $table,
-          _.extend({}, tableOpts, {
+          _extend({}, tableOpts, {
             path: path,
             query: {
               committee_id: committeeId,
@@ -600,11 +603,11 @@ $(document).ready(function() {
             order: [[3, 'desc']],
             useExport: true,
             singleEntityItemizedExport: true,
-            paginator: tables.SeekPaginator,
+            paginator: SeekPaginator,
             hideEmptyOpts: {
               dataType: 'disbursements',
               name: context.name,
-              reason: helpers.missingDataReason('disbursements'),
+              reason: missingDataReason('disbursements'),
               timePeriod: context.timePeriod
             }
           })
@@ -614,9 +617,9 @@ $(document).ready(function() {
         path = ['electioneering'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        tables.DataTable.defer(
+        DataTable.defer(
           $table,
-          _.extend({}, tableOpts, {
+          _extend({}, tableOpts, {
             path: path,
             query: {
               committee_id: committeeId,
@@ -627,11 +630,11 @@ $(document).ready(function() {
             order: [[3, 'desc']],
             useExport: true,
             singleEntityItemizedExport: true,
-            paginator: tables.SeekPaginator,
+            paginator: SeekPaginator,
             hideEmptyOpts: {
               dataType: 'disbursements',
               name: context.name,
-              reason: helpers.missingDataReason('disbursements'),
+              reason: missingDataReason('disbursements'),
               timePeriod: context.timePeriod
             }
           })
@@ -641,11 +644,11 @@ $(document).ready(function() {
         path = ['schedules', 'schedule_b', 'by_recipient_id'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        tables.DataTable.defer(
+        DataTable.defer(
           $table,
-          _.extend({}, tableOpts, {
+          _extend({}, tableOpts, {
             path: path,
-            query: _.extend(query, {
+            query: _extend(query, {
               committee_id: committeeId,
               cycle: cycle
             }),
@@ -655,7 +658,7 @@ $(document).ready(function() {
             hideEmptyOpts: {
               dataType: 'disbursements',
               name: context.name,
-              reason: helpers.missingDataReason('disbursements'),
+              reason: missingDataReason('disbursements'),
               timePeriod: context.timePeriod
             }
           })
@@ -665,21 +668,21 @@ $(document).ready(function() {
         path = ['schedules', 'schedule_e', 'by_candidate'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        tables.DataTable.defer($table, {
+        DataTable.defer($table, {
           path: path,
-          query: _.extend(query, {
+          query: _extend(query, {
             committee_id: committeeId,
             cycle: cycle
           }),
           columns: expendituresColumns,
           order: [[0, 'desc']],
-          dom: tables.simpleDOM,
+          dom: simpleDOM,
           pagingType: 'simple',
           hideEmpty: true,
           hideEmptyOpts: {
             dataType: 'independent expenditures',
             name: context.name,
-            reason: helpers.missingDataReason('ie-made'),
+            reason: missingDataReason('ie-made'),
             timePeriod: context.timePeriod
           }
         });
@@ -688,15 +691,15 @@ $(document).ready(function() {
         path = ['electioneering', 'aggregates'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        tables.DataTable.defer($table, {
+        DataTable.defer($table, {
           path: path,
-          query: _.extend(query, {
+          query: _extend(query, {
             cycle: cycle,
             committee_id: committeeId
           }),
           columns: electioneeringColumns,
           order: [[1, 'desc']],
-          dom: tables.simpleDOM,
+          dom: simpleDOM,
           pagingType: 'simple',
           hideEmpty: true,
           hideEmptyOpts: {
@@ -710,15 +713,15 @@ $(document).ready(function() {
         path = ['communication_costs', 'aggregates'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        tables.DataTable.defer($table, {
+        DataTable.defer($table, {
           path: path,
-          query: _.extend(query, {
+          query: _extend(query, {
             cycle: cycle,
             committee_id: committeeId
           }),
           columns: communicationCostColumns,
           order: [[0, 'desc']],
-          dom: tables.simpleDOM,
+          dom: simpleDOM,
           pagingType: 'simple',
           hideEmpty: true,
           hideEmptyOpts: {
@@ -732,12 +735,12 @@ $(document).ready(function() {
         var min_date = $table.attr('data-min-date');
         // For raw-filings, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        opts = _.extend(
+        opts = _extend(
           {
             columns: rawFilingsColumns,
             order: [[1, 'desc']],
             path: ['efile', 'filings'],
-            query: _.extend(
+            query: _extend(
               {
                 cycle: cycle,
                 committee_id: committeeId,
@@ -747,22 +750,22 @@ $(document).ready(function() {
               query
             ),
             callbacks: {
-              afterRender: filings.renderModal
+              afterRender: renderModal
             }
           },
           filingsOpts
         );
-        tables.DataTable.defer($table, opts);
+        DataTable.defer($table, opts);
         break;
       case 'filings-reports':
         // For filings-reports, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        opts = _.extend(
+        opts = _extend(
           {
             columns: filingsReportsColumns,
             order: [],
             path: ['filings'],
-            query: _.extend(
+            query: _extend(
               {
                 cycle: cycle,
                 committee_id: committeeId,
@@ -802,22 +805,22 @@ $(document).ready(function() {
               query
             ),
             callbacks: {
-              afterRender: filings.renderModal
+              afterRender: renderModal
             }
           },
           filingsOpts
         );
-        tables.DataTable.defer($table, opts);
+        DataTable.defer($table, opts);
         break;
       case 'filings-notices':
         // For filings-notices, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        opts = _.extend(
+        opts = _extend(
           {
             columns: filingsColumns,
             order: [[2, 'desc']],
             path: ['filings'],
-            query: _.extend(
+            query: _extend(
               {
                 cycle: cycle,
                 committee_id: committeeId,
@@ -843,17 +846,17 @@ $(document).ready(function() {
           },
           filingsOpts
         );
-        tables.DataTable.defer($table, opts);
+        DataTable.defer($table, opts);
         break;
       case 'filings-statements':
         // For filings-statements, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        opts = _.extend(
+        opts = _extend(
           {
             columns: filingsColumns,
             order: [[2, 'desc']],
             path: ['filings'],
-            query: _.extend(
+            query: _extend(
               {
                 cycle: cycle,
                 committee_id: committeeId,
@@ -876,17 +879,17 @@ $(document).ready(function() {
           },
           filingsOpts
         );
-        tables.DataTable.defer($table, opts);
+        DataTable.defer($table, opts);
         break;
       case 'filings-other':
         // For filings-other, use previous cycle if provided
         cycle = context.cycle || $table.attr('data-cycle');
-        opts = _.extend(
+        opts = _extend(
           {
             columns: filingsColumns,
             order: [[2, 'desc']],
             path: ['filings'],
-            query: _.extend(
+            query: _extend(
               {
                 cycle: cycle,
                 committee_id: committeeId,
@@ -908,35 +911,35 @@ $(document).ready(function() {
           },
           filingsOpts
         );
-        tables.DataTable.defer($table, opts);
+        DataTable.defer($table, opts);
         break;
     }
   });
 
   // Set up state map
-  var $map = $('.state-map');
-  var mapUrl = helpers.buildUrl(['schedules', 'schedule_a', 'by_state'], {
+  const $map = $('.state-map');
+  const mapUrl = buildUrl(['schedules', 'schedule_a', 'by_state'], {
     committee_id: $map.data('committee-id'),
     cycle: $map.data('cycle'),
     per_page: 99
   });
 
-  var query = URI.parseQuery(window.location.search);
+  const query = URI.parseQuery(window.location.search);
 
   // If we're on the raising tab, load the state map
   if (query.tab === 'raising') {
     $.getJSON(mapUrl).done(function(data) {
-      maps.stateMap($map, data, 400, 300, null, null, true, true);
+      stateMap($map, data, 400, 300, null, null, true, true);
     });
   } else {
     // Add an event listener that only fires once on showing the raising tab
     // in order to not make this API call unless its necessary
     events.once('tabs.show.raising', function() {
       $.getJSON(mapUrl).done(function(data) {
-        maps.stateMap($map, data, 400, 300, null, null, true, true);
+        stateMap($map, data, 400, 300, null, null, true, true);
       });
     });
   }
 
-  mapsEvent.init($map, $mapTable);
+  initMapsEvent($map, $mapTable);
 });

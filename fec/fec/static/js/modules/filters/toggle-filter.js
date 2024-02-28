@@ -1,9 +1,7 @@
-window.$ = window.jQuery = $;
-
-var Filter = require('./filter-base.js').Filter;
+import { default as Filter } from './filter-base.js';
 
 /* ToggleFilter that has to fire a custom event */
-function ToggleFilter(elm) {
+export default function ToggleFilter(elm) {
   Filter.call(this, elm);
   this.removeOnSwitch = this.$elm.data('remove-on-switch') || false;
   this.ignoreCount = this.$elm.data('filter-ignore-count') || false;
@@ -47,5 +45,3 @@ ToggleFilter.prototype.setInitialValue = function() {
     this.handleChange({ target: $checked });
   }
 };
-
-module.exports = { ToggleFilter: ToggleFilter };
