@@ -40,8 +40,8 @@ cg-django-uaa==2.1.5
 
 # Testing
 coverage==7.0.3
-pytest==6.2.2
+pytest==8.0.2
 Faker==0.8.6
 pytest-django==3.10.0
-pytest-cov==2.11.1
+pytest-cov==4.1.0
 pre-commit==2.21.0 #client-side hook triggered by operations like git commit
