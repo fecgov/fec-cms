@@ -85,7 +85,6 @@ ElectionSearch.constructor = ElectionSearch;
  * element of the election search form
  */
 ElectionSearch.prototype.wakeTheMap = function() {
-  // console.log('ElectionSearch.wakeTheMap(e): ', e);
   if (!this.initialized) {
     document.removeEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap);
     if (this.dormantMap) this.dormantMap.removeEventListener('click', this.wakeTheMap);
@@ -99,19 +98,13 @@ ElectionSearch.prototype.wakeTheMap = function() {
  * then initializes the interactive map
  */
 ElectionSearch.prototype.initInteractiveMap =function() {
-  // console.log('ElectionSearch.initInteractiveMap()');
-  // console.log('  this: ', this);
-  // console.log('  this.initialized: ', this.initialized);
   if (!this.initialized) {
-    // console.log('  if');
     if (this.dormantMap) {
-      // console.log('    if');
       this.dormantMap.classList.remove('dormant');
       this.dormantMap.removeAttribute('title');
       delete this.dormantMap;
     }
 
-    // console.log('this.map: ', this.map);
     this.map = new ElectionMap(this.$map.get(0), {
       drawStates: _.isEmpty(this.serialized),
       handleSelect: this.handleSelectMap.bind(this)
@@ -119,25 +112,66 @@ ElectionSearch.prototype.initInteractiveMap =function() {
 
     this.initialized = true;
 
-    // console.log('  calling the block');
     this.getUpcomingPresidentialElection();
     this.getUpcomingElections();
     this.performStateChange();
     this.handlePopState();
-    // console.log('  called the block');
-
-  } else {
-    // console.log('  else');
   }
 };
 
-ElectionSearch.prototype.updateRedistrictingMessage = function() {
-  if (this.$cycle.val() == 2018 && this.$state.val() == 'PA') {
-    $('.pa-message').show();
-  } else {
-    $('.pa-message').hide();
+/**
+ * Toggles various components' states based on election year and state
+ */
+ElectionSearch.prototype.toggleComponents = function() {
+  // The important years
+  const firstYearToOfferMap = parseInt(window.DISTRICT_MAP_CUTOFF);
+  const firstYearToOfferZip = parseInt(window.DISTRICT_MAP_CUTOFF);
+  const firstYearToShowRedistrictingMsg = 2020;
+
+  // The map elements
+  const theMap = document.querySelector('.election-map');
+  const theMapDisclaimer = document.querySelector('.js-map-approx-message');
+  const theMapAltMessage = document.querySelector('.js-map-message');
+  const theZipSearchParts = document.querySelectorAll(
+    '.search-controls__zip, \
+    .search-controls__zip input, \
+    .search-controls__zip button'
+  );
+  const redistrictingMsgAccordion = document.querySelector('.js-accordion[data-content-prefix="2022-redistricting"]');
+
+  // Should we show the map, zip, redistricting?
+  const shouldShowMap = this.$cycle.val() >= firstYearToOfferMap;
+  const shouldShowZip = this.$cycle.val() >= firstYearToOfferZip;
+  const shouldShowRedistrictingMsg = this.$cycle.val() >= firstYearToShowRedistrictingMsg;
+  const shouldShowRedistrictingMsgForPA = this.$cycle.val() == 2018 && this.$state.val() == 'PA';
+
+  // The map and its alternate message
+  if (theMap) theMap.setAttribute('aria-hidden', !shouldShowMap);
+  if (theMapDisclaimer) theMapDisclaimer.setAttribute('aria-hidden', !shouldShowMap);
+  if (theMapAltMessage) theMapAltMessage.setAttribute('aria-hidden', shouldShowMap);
+
+  // ZIP Code search
+  if (theZipSearchParts) {
+    theZipSearchParts.forEach(el => {
+      if (shouldShowZip) {
+        el.classList.remove('is-disabled');
+        el.removeAttribute('disabled');
+      } else {
+        el.classList.add('is-disabled');
+        el.setAttribute('disabled', true);
+      }
+    });
   }
+
+  // Redistricting message
+  if (redistrictingMsgAccordion)
+    redistrictingMsgAccordion.setAttribute('aria-hidden', !shouldShowRedistrictingMsg);
+
+  // Pennsylvania redistricting message
+  if (shouldShowRedistrictingMsgForPA) $('.pa-message').show();
+  else $('.pa-message').hide();
 };
+
 ElectionSearch.prototype.performSearch = function() {
   document.dispatchEvent(new Event('FEC-ElectionSearchInteraction'));
   var inputs = this.$form.find(':input').not(this.$cycle);
@@ -152,11 +186,11 @@ ElectionSearch.prototype.performSearch = function() {
   }
 
   this.search();
-  this.updateRedistrictingMessage();
+  this.toggleComponents();
 };
 ElectionSearch.prototype.performStateChange = function() {
   this.handleStateChange();
-  this.updateRedistrictingMessage();
+  this.toggleComponents();
 };
 
 /**
@@ -316,7 +350,6 @@ ElectionSearch.prototype.getPresidentialElections = function() {
       }
     );
   } else {
-    this.$resultsHeading.hide();
     resultsItems.empty();
   }
   var obj = {
@@ -339,8 +372,8 @@ ElectionSearch.prototype.getUpcomingPresidentialElection = function() {
   var currentYear = now.getFullYear();
   var queryP = {
     state: 'US',
-    // Get upcoming presidential election year
-    cycle: currentYear + 4 - (currentYear % 4)
+    // Get upcoming presidential election year (unless the current year is an election year)
+    cycle: currentYear % 4 === 0 ? currentYear : currentYear + 4 - (currentYear % 4)
   };
   var presidentialUrl = helpers.buildUrl(['elections', 'search'], queryP);
   var self = this;
