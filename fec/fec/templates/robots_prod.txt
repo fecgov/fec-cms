@@ -12,4 +12,8 @@ User-agent: *
 Crawl-delay: 10
 Disallow: /search/?*
 Disallow: /data/legal/search/?*
+Disallow: /data/legal/search/advisory-opinions/?*
+Disallow: /data/legal/search/murs/?*
 Disallow: /data/search/?*
+Disallow: /data/receipts/?*
+Disallow: /data/disbursements/?*
