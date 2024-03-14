@@ -24,10 +24,10 @@ var MAX_RANGE = 4000000000; // Set the max y-axis to 4 billion
  *
  * Creates an SVG line chart for total raising and spending
  *
- * @param {String} selector - Selector of the parent element
- * @param {String} snapshot - Selector to use for the snapshot,
+ * @param {string} selector - Selector of the parent element
+ * @param {string} snapshot - Selector to use for the snapshot,
  *   which is the set of numbers that is updated when moving the cursor
- * @param {String} dataType - The type of data the chart is showing ('raised' or 'spent')
+ * @param {string} dataType - The type of data the chart is showing ('raised' or 'spent')
  *
  */
 

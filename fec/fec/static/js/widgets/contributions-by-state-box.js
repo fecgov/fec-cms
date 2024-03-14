@@ -28,9 +28,9 @@ const AbortController = window.AbortController;
 
 /**
  * Formats the given value and puts it into the dom element.
- * @param {Number} passedValue The number to format and plug into the element
- * @param {Boolean} roundToWhole Should we round the cents or no?
- * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
+ * @param {number} passedValue The number to format and plug into the element
+ * @param {boolean} roundToWhole Should we round the cents or no?
+ * @returns {string} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
  */
 function formatAsCurrency(passedValue, roundToWhole = true) {
   return (
@@ -43,11 +43,11 @@ function formatAsCurrency(passedValue, roundToWhole = true) {
 
 /**
  * Builds the link/url to a filtered Individual Contributions page/list
- * @param {Number} cycle The candidate's election year
- * @param {String} office 'H', 'P', or 'S'
+ * @param {number} cycle The candidate's election year
+ * @param {string} office 'H', 'P', or 'S'
  * @param {Array} committeeIDs An array of strings of the candidate's committees
- * @param {String} stateID Optional. A null value will not filter for any state but show entries for the entire country
- * @returns {String} URL or empty string depending on
+ * @param {string} stateID Optional. A null value will not filter for any state but show entries for the entire country
+ * @returns {string} URL or empty string depending on
  */
 function buildIndividualContributionsUrl(
   cycle,
@@ -795,7 +795,7 @@ ContributionsByState.prototype.handleTypeaheadRender = function(
 
 /**
  * Shows and hides the Typeahead error message
- * @param {Boolean} isError - Whether or not to display the message
+ * @param {boolean} isError - Whether or not to display the message
  */
 ContributionsByState.prototype.showTypeaheadError = function(isError) {
   const theElement = document.querySelector('#contribs-by-state-cand-field');
@@ -861,7 +861,7 @@ ContributionsByState.prototype.handleElectionYearChange = function(e) {
 
 /**
  * Called from throughout the widget
- * @param {String} errorCode
+ * @param {string} errorCode
  */
 ContributionsByState.prototype.handleErrorState = function(errorCode) {
   if (errorCode == 'NO_RESULTS_TO_DISPLAY') {
@@ -969,7 +969,7 @@ ContributionsByState.prototype.refreshOverlay = function() {
 /**
  * Controls class names and functionality of the widget.
  * Called when we both start and complete (@see loadStatesData() )
- * @param {Boolean} newState
+ * @param {boolean} newState
  */
 ContributionsByState.prototype.setLoadingState = function(newState) {
   if (newState === false) {
@@ -996,7 +996,7 @@ ContributionsByState.prototype.setLoadingState = function(newState) {
 /**
  * Handles the usage analytics for this module
  * @TODO: Decide how to gather usage insights while embedded
- * @param {String} candID - The candidate ID
+ * @param {string} candID - The candidate ID
  * @param {*} electionYear - String or Number, the user-selected election year
  */
 function logUsage(candID, electionYear) {

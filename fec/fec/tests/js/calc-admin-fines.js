@@ -7,13 +7,13 @@ var getTotalAdminFine = CalcLogic.getTotalAdminFine;
 
 /**
  * The parameters for tests are abbreviated so 'var tests = […]' is easier to read
- * @param {Number,String='latest'} y - Year the fine was assessed (penaltyAssessedDate)
- * @param {Boolean} s - Whether it's an election-sensitive report (sensitiveReport)
- * @param {Number} c - Cash / total receipts + disbursements (totalReceiptsAndDisbursements)
- * @param {String='late','non'} l - Whether the report was filed late or not filed (lateOrNonFiler)
- * @param {Number} t - Number of days late (numberOfDaysLate)
- * @param {Number} v - Number of previous violations (numberOfPrevViolations)
- * @param {Number} e - Expected fine for these values
+ * @param {number,String='latest'} y - Year the fine was assessed (penaltyAssessedDate)
+ * @param {boolean} s - Whether it's an election-sensitive report (sensitiveReport)
+ * @param {number} c - Cash / total receipts + disbursements (totalReceiptsAndDisbursements)
+ * @param {string='late','non'} l - Whether the report was filed late or not filed (lateOrNonFiler)
+ * @param {number} t - Number of days late (numberOfDaysLate)
+ * @param {number} v - Number of previous violations (numberOfPrevViolations)
+ * @param {number} e - Expected fine for these values
  */
 describe('Admin fines calc', function() {
   // Define the tests (see var reference above)

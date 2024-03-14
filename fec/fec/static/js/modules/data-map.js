@@ -62,16 +62,16 @@ const defaultOpts = {
 /**
  * @constructor
  * @param {string} elm - selector for the div to put the map in
- * @param {object} opts - configuration options
- * @param {Boolean} opts.data - placeholder for this object to save its own data
- * @param {Boolean} opts.addLegend - whether to add a legend
- * @param {Boolean} opts.addTooltips - whether to add the tooltip functionality
+ * @param {Object} opts - configuration options
+ * @param {boolean} opts.data - placeholder for this object to save its own data
+ * @param {boolean} opts.addLegend - whether to add a legend
+ * @param {boolean} opts.addTooltips - whether to add the tooltip functionality
  * @param {Array} opts.colorScale - list of hex color codes to use
- * @param {String} opts.colorZero - hex color code to use when no value is present
+ * @param {string} opts.colorZero - hex color code to use when no value is present
  * @param {Array} opts.circleSizeScale -
- * @param {String} opts.viewBox -
- * @param {String} opts.mapStyle -
- * @param {String} opts.eventAppID -
+ * @param {string} opts.viewBox -
+ * @param {string} opts.mapStyle -
+ * @param {string} opts.eventAppID -
  */
 export default function DataMap(elm, opts) {
   // Data, vars
@@ -209,8 +209,8 @@ DataMap.prototype.init = function() {
 
 /**
  * Takes an ID and finds that ID's dollar value in {@see this.mapData }
- * @param {String, Number} pathID
- * @returns {Number} the value associated with the ID passed to it
+ * @param {string, number} pathID
+ * @returns {number} the value associated with the ID passed to it
  * @returns {Object} else returns the full {@see this.mapData } when no pathID is included
  */
 DataMap.prototype.getStateValue = function(pathID) {
@@ -396,7 +396,7 @@ DataMap.prototype.sortCircles = function() {
  * @param {d3.svg} svg - the element created by select()
  * @param {Function} scale
  * @param {*} quantize
- * @param {Number} quantiles
+ * @param {number} quantiles
  */
 function drawStateLegend(svg, scale, quantize, quantiles) {
   const legendWidth = 40;
@@ -463,13 +463,13 @@ function drawStateLegend(svg, scale, quantize, quantiles) {
 
 /**
  * Used to determine the fill color based on the value, scale, and quantiles of the legend
- * @param {Number} value Value to be used to determine the color.
+ * @param {number} value Value to be used to determine the color.
  * @param {Function} legendScale_colors Determines the color scale for the current range of values.
  * @param {d3_scaleLinear} legendQuantize_colors Represents the range of data.
- * @param {Number} quantiles How many bars to include in the legend.
+ * @param {number} quantiles How many bars to include in the legend.
  * @param {*} colorZero Color code to use if the value is 0.
- * @param {Boolean} hasLegend Default: false. If a legend is being used, will "round" colors to those in the legend. If no legend is being used, colors will not be rounded.
- * @returns {String} 'fill' value based on the parameters provided.
+ * @param {boolean} hasLegend Default: false. If a legend is being used, will "round" colors to those in the legend. If no legend is being used, colors will not be rounded.
+ * @returns {string} 'fill' value based on the parameters provided.
  */
 function calculateStateFill(
   value,
@@ -511,11 +511,11 @@ function calculateStateFill(
 
 /**
  *
- * @param {Number} value
+ * @param {number} value
  * @param {Array} valueRange
  * @param {int} quantiles
  * @param {Array} circleSizeRange
- * @param {Boolean} hasLegend
+ * @param {boolean} hasLegend
  */
 function calculateCircleSize(
   value,
@@ -572,9 +572,9 @@ function calculateCircleSize(
 /**
  * Used to adjust scales so the higher values don't skew the range / blow the curve,
  * to show more variation in our map colors.
- * @param {Number} minValue The smaller number / the starting point of the return value.
- * @param {Number} maxValue The largest number on the scale.
- * @returns {Number} A new maxValue about half-way between minValue and maxValue
+ * @param {number} minValue The smaller number / the starting point of the return value.
+ * @param {number} maxValue The largest number on the scale.
+ * @returns {number} A new maxValue about half-way between minValue and maxValue
  * @example trimmedMaxValue(10, 100); // 55
  */
 function trimmedMaxValue(minValue, maxValue) {
@@ -707,7 +707,7 @@ DataMap.prototype.chooseStateClasses = function(d, shapeType) {
  * Controls the tooltip position and visibility, called on each state's mouseenter and mousemove
  * @param {HTMLElement} Selection - the D3 Selection
  * @param {MouseEvent} e
- * @param {object} d
+ * @param {Object} d
  */
 function moveTooltip(tooltip, e, d) {
   // Where's the pointer / where should the tooltip appear/move
@@ -763,8 +763,8 @@ function chooseRule(value) {
 /**
  * The html to go into the tooltips
  * @param {Object} obj
- * @param {String} obj.name - The state name to appear in the tooltip
- * @param {String} obj.total - The value for that state
+ * @param {string} obj.name - The state name to appear in the tooltip
+ * @param {string} obj.total - The value for that state
  */
 function tooltipTemplate(obj) {
   return `<div class="tooltip__title">${obj.name}</div>

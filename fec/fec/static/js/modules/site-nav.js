@@ -10,8 +10,8 @@ import 'accessible-mega-menu';
  * On mobile: Controls the visibility of the the hamburger menu and sublists
  * On desktop: Controls the visibility of dropdown sublists on hover and focus
  * @constructor
- * @param {object} selector - CSS selector for the nav component
- * @param {object} opts - Options, including base URLs
+ * @param {Object} selector - CSS selector for the nav component
+ * @param {Object} opts - Options, including base URLs
  */
 
 export default function SiteNav(selector) {
@@ -83,7 +83,7 @@ SiteNav.prototype.assignAria = function() {
 /**
  * Append searchbox to correct location upon user screen resize
  * @param {Object} mql
- * @param {Boolean} mql.matches - true if large; false if less than large
+ * @param {boolean} mql.matches - true if large; false if less than large
  */
 SiteNav.prototype.mediaQueryResponse = function(mql) {
   //If large

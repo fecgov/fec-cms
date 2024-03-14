@@ -4,17 +4,17 @@
  * These dataset values are passed from the <script> to the <iframe> and then into the <aside>.
  * Some implementation options:
  * To have the new element replace an element already on the page, give the element to replaced a class of `gov-fec-agg-tots`
- * @param {String} `data-action=` - ["raised"|"spending"] Controls whether to show money raised (default) or spent.
- * @param {String} `data-theme` - ["light"|"dark"] Default: "light"
- * @param {String} `data-office-control` - ["none"|null] Optional. Provide a query selector for an external office control.
+ * @param {string} `data-action=` - ["raised"|"spending"] Controls whether to show money raised (default) or spent.
+ * @param {string} `data-theme` - ["light"|"dark"] Default: "light"
+ * @param {string} `data-office-control` - ["none"|null] Optional. Provide a query selector for an external office control.
  * Use 'none' to prevent any office control from being built. The tool will compare exactly one office.
  * If no control is specified (or prevented), one will be created.
- * @param {String} `data-year-control` - ["none"|null] Optional. Provide a query selector for an external year control.
+ * @param {string} `data-year-control` - ["none"|null] Optional. Provide a query selector for an external year control.
  * Use 'none' to prevent any year control from being built. The tool will compare exactly one year.
  * If no control is specified (or prevented), one will be created.
- * @param {String} `data-election-year` - Must be set for single-year implementations.
+ * @param {string} `data-election-year` - Must be set for single-year implementations.
  * If provided for multi-year views, this is the starting election year displayed.
- * @param {String} `data-office` - ["H"|"P"|"S"] Optional. (House, President, Senate) Which race to show first (or only). Default: "P"
+ * @param {string} `data-office` - ["H"|"P"|"S"] Optional. (House, President, Senate) Which race to show first (or only). Default: "P"
  * If no year is provided, the internal office control will be the tabs/buttons/radios rather than the <select>
  */
 

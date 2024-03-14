@@ -19,12 +19,12 @@ import { electionYearsOptions, officeDefs } from './widget-vars.js';
 /**
  * Handles the functionality for the aggregate totals box(es).
  * Loads, creates an <aside> with { @see init() }, then makes itself visible (with { @see displayUpdatedData_grandTotal() } after it has some data to show.
- * @param {String} office - Can be set through data-office for the <script> or collected from the target specified with data-office-control.
- * @param {String} election_year - Can be set through data-election-year for the <script> or collected from the target specied with data-year-control.
- * @param {String} officeControl - Set with data-office-control on <script> but not required if data-office is set.
- * @param {String} yearControl - Set with data-year-control on <script> but not required if data-election-year is set.
- * @param {String} action - Can be 'raised' or 'spending'
- * @param {Boolean} doInitialNumberBuild - Should we animate the first value or just display it and be done? { @default false }.
+ * @param {string} office - Can be set through data-office for the <script> or collected from the target specified with data-office-control.
+ * @param {string} election_year - Can be set through data-election-year for the <script> or collected from the target specied with data-year-control.
+ * @param {string} officeControl - Set with data-office-control on <script> but not required if data-office is set.
+ * @param {string} yearControl - Set with data-year-control on <script> but not required if data-election-year is set.
+ * @param {string} action - Can be 'raised' or 'spending'
+ * @param {boolean} doInitialNumberBuild - Should we animate the first value or just display it and be done? { @default false }.
  * TODO - ^ update these ^
  */
 function AggregateTotalsBox() {
@@ -479,9 +479,9 @@ AggregateTotalsBox.prototype.startAnimation = function() {
 
 /**
  * Formats the given value and puts it into the dom element.
- * @param {Number} passedValue - The number to format and plug into the element
- * @param {Boolean} roundToWhole - Should we drop the cents or no?
- * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
+ * @param {number} passedValue - The number to format and plug into the element
+ * @param {boolean} roundToWhole - Should we drop the cents or no?
+ * @returns {string} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
  */
 function formatAsCurrency(passedValue, roundToWhole = true) {
   // Format for US dollars and cents
@@ -495,7 +495,7 @@ function formatAsCurrency(passedValue, roundToWhole = true) {
  * e.g. changes the ones position from current toward goal, then changes the tens position value from current toward goal, then hundreds, thousands, etc.
  * @param {*} currentValue
  * @param {*} goalValue
- * @returns {Number} - The next value, one step more from currentValue toward goalValue
+ * @returns {number} - The next value, one step more from currentValue toward goalValue
  */
 function getNextValue(currentValue, goalValue) {
   // Convert the values to strings to split them apart into arrays
@@ -716,7 +716,7 @@ function buildElement(callingInstance, scriptElement) {
 /**
  * Handles the usage analytics for this module
  * @todo - Decide how to gather usage insights while embedded
- * @param {String} officeAbbrev - The user-selected election office
+ * @param {string} officeAbbrev - The user-selected election office
  * @param {*} electionYear - String or Number, the user-selected election year
  */
 function logUsage(officeAbbrev, electionYear) {

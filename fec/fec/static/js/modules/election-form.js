@@ -25,7 +25,7 @@ export default function ElectionForm(elm) {
  * Identify if a select has an option matching a particular value
  * @param {jQuery.object} $select - jQuery.object selector of a <select>
  * @param {string} value - The value to check for
- * @return {Boolean} Whether or not the select has the value
+ * @return {boolean} Whether or not the select has the value
  */
 ElectionForm.prototype.hasOption = function($select, value) {
   return $select.find('option[value="' + value + '"]').length > 0;
@@ -88,7 +88,7 @@ ElectionForm.prototype.updateDistricts = function(state) {
 
 /**
  * Convenience method for building an API URL to call for a query
- * @param {object} query - The query to pass to the URL
+ * @param {Object} query - The query to pass to the URL
  * @param {string} query.state - Two-letter state abbreviation
  * @param {string} query.district - District number as a string
  * @returns {string} API URL `/elections/search/?state=${query.state}&district=${query.district}`

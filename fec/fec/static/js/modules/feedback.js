@@ -13,8 +13,8 @@ const statusClasses = {
 /**
  * Feedback widget
  * @constructor
- * @param {String} url - AJAX URL
- * @param {String} parent - Optional parent selector; defaults to 'body'
+ * @param {string} url - AJAX URL
+ * @param {string} parent - Optional parent selector; defaults to 'body'
  */
 export default function Feedback(url, parent) {
   this.url = url;

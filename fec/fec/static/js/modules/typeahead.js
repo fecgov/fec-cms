@@ -250,8 +250,8 @@ const typeaheadOpts = {
 
 /**
  * @class
- * @param {String} selector - A string to be used to find the element in the page.
- * @param {String} type - The kinda of data we'll be showing. e.g., 'candidates'.
+ * @param {string} selector - A string to be used to find the element in the page.
+ * @param {string} type - The kinda of data we'll be showing. e.g., 'candidates'.
  * @param {URL} url - Optional. Where we should find the data if not the default.
  *
  * @event typeahead:select Triggered when a user clicks an autocomplete search result

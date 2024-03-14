@@ -5,9 +5,9 @@
 /**
  * The dates that will be available inside the admin fines calculator
  * 'latest' should be the first ([0]) item. The 'latest' set of values will be copied from the [1] value of this list
- * @param {String} value The ID used in admin fines calculator (pulled from here), but also used by {@see adminFinesLogicValues }
- * @param {String} label The option shown as the list option in the calculator
- * @param {String} summary To summarize the selected item (like in the calculator's breadcrumb nav)
+ * @param {string} value The ID used in admin fines calculator (pulled from here), but also used by {@see adminFinesLogicValues }
+ * @param {string} label The option shown as the list option in the calculator
+ * @param {string} summary To summarize the selected item (like in the calculator's breadcrumb nav)
  */
 export const availableDates = [
   {
@@ -43,13 +43,13 @@ export const availableDates = [
  * Calculates the fines based on the values its given.
  * Relies on @see availableDates @see values
  * @param {Object} d Data object
- * @param {String} d.lateOrNonFiler
- * @param {Number} d.numberOfDaysLate
- * @param {Number} d.numberOfPrevViolations
- * @param {String} d.penaltyAssessedDate The id of the date/year of the fine e.g. '2022', '2021', '2020', 'latest'
- * @param {Boolean} d.sensitiveReport
- * @param {Number} d.totalReceiptsAndDisbursements
- * @returns {Number, String}
+ * @param {string} d.lateOrNonFiler
+ * @param {number} d.numberOfDaysLate
+ * @param {number} d.numberOfPrevViolations
+ * @param {string} d.penaltyAssessedDate The id of the date/year of the fine e.g. '2022', '2021', '2020', 'latest'
+ * @param {boolean} d.sensitiveReport
+ * @param {number} d.totalReceiptsAndDisbursements
+ * @returns {number, string}
  */
 export function getTotalAdminFine(d) {
   // If the total receipts and disbursements is $0, we're done

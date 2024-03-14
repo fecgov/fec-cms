@@ -178,7 +178,7 @@ AnalystLookup.prototype.handleChange = function(e) {
 
 /**
  *
- * @param {String} radformSelector - The value used to find the element with document.querySelector()
+ * @param {string} radformSelector - The value used to find the element with document.querySelector()
  */
 function RadFormValidate(radformSelector) {
   this.messages = {
@@ -364,7 +364,7 @@ RadFormValidate.prototype.clearError = function(req) {
 
 /**
  * Runs if submit is prevented due to invalid fields, otherwise recaptcha gets validated server-side
- * @returns {Boolean}
+ * @returns {boolean}
  */
 RadFormValidate.prototype.validateRecaptcha = function() {
   if (grecaptcha.getResponse() == '') {

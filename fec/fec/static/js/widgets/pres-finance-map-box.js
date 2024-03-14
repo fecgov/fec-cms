@@ -76,9 +76,9 @@ const AbortController = window.AbortController;
 
 /**
  * Formats the given value and puts it into the dom element.
- * @param {Number} passedValue The number to format and plug into the element
- * @param {Boolean} abbreviateMillions Should we abbreviate the millions? (1100000 to 1.1)
- * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if abbreviateMillions == true) decimal
+ * @param {number} passedValue The number to format and plug into the element
+ * @param {boolean} abbreviateMillions Should we abbreviate the millions? (1100000 to 1.1)
+ * @returns {string} A string of the given value formatted with a dollar sign, commas, and (if abbreviateMillions == true) decimal
  */
 function formatAsCurrency(passedValue, abbreviateMillions) {
   let toReturn = passedValue;
@@ -101,11 +101,11 @@ function formatAsCurrency(passedValue, abbreviateMillions) {
 
 /**
  * Builds the link/url the candidate's
- * @param {String} candidateID The requested candidate's ID
- * @param {String} candidateName The name that will be displayed in the link
- * @param {Number}   electionYear The currently-selected election year
- * @param {String} party Typically 'DEM' or 'REP'
- * @returns {String} An anchor tag with the correct URL and text for the input values
+ * @param {string} candidateID The requested candidate's ID
+ * @param {string} candidateName The name that will be displayed in the link
+ * @param {number}   electionYear The currently-selected election year
+ * @param {string} party Typically 'DEM' or 'REP'
+ * @returns {string} An anchor tag with the correct URL and text for the input values
  */
 function buildCandidateNameAndPartyLink(
   candidateID,
@@ -353,7 +353,7 @@ PresidentialFundsMap.prototype.init = function() {
 /**
  * Returns either a valid presidential election year from url?election_year,
  * or availableElectionYears[0]
- * @returns {Number}
+ * @returns {number}
  */
 PresidentialFundsMap.prototype.defaultElectionYear = function() {
   let toReturn = availElectionYears[0];
@@ -552,8 +552,8 @@ PresidentialFundsMap.prototype.handleCoverageDatesLoaded = function(e) {
  * Retrieves details about an individual canidate, if needed
  * If the cand_id is part of specialCandidateIDs,
  * fires a CANDIDATE_DETAILS_LOADED event right away rather than load data we already know
- * @param {String} cand_id Which candidate to load
- * @param {String} cand_name [Optional] The name of the candidate to be passed on to the breadcrumbs
+ * @param {string} cand_id Which candidate to load
+ * @param {string} cand_name [Optional] The name of the candidate to be passed on to the breadcrumbs
  */
 PresidentialFundsMap.prototype.loadCandidateDetails = function(
   cand_id,
@@ -994,9 +994,9 @@ PresidentialFundsMap.prototype.displayCoverageDates = function(data) {
 /**
  * Updates the text in the breadcrumb nav
  * @param {JSON} dataObj
- * @param {String} dataObj.currentState
- * @param {String} dataObj.candidateLastName
- * @param {String} dataObj.candidate_id
+ * @param {string} dataObj.currentState
+ * @param {string} dataObj.candidateLastName
+ * @param {string} dataObj.candidate_id
  */
 PresidentialFundsMap.prototype.updateBreadcrumbs = function(dataObj) {
   let theHolder = this.element.querySelector(selector_breadcrumbNav);
@@ -1091,8 +1091,8 @@ PresidentialFundsMap.prototype.handleCandidateListClick = function(e) {
  * starts a new loading chain, starting with loading the candidate details
  * TODO: overkill?
  * @param {CustomEvent} e
- * @param {String} e.detail.candidate_id
- * @param {String} e.detail.name
+ * @param {string} e.detail.candidate_id
+ * @param {string} e.detail.name
  */
 PresidentialFundsMap.prototype.handleCandidateChange = function(e) {
   this.loadCandidateDetails(e.detail.candidate_id, e.detail.name);
@@ -1162,7 +1162,7 @@ PresidentialFundsMap.prototype.handleStateClick = function(e) {
 /**
  * Called from throughout the widget
  * TODO: yes, we should activate this
- * @param {String} errorCode
+ * @param {string} errorCode
  */
 PresidentialFundsMap.prototype.handleErrorState = function(errorCode) {
   if (errorCode == 'NO_RESULTS_TO_DISPLAY') {
@@ -1416,7 +1416,7 @@ PresidentialFundsMap.prototype.toggleUSOrStateDisplay = function() {
  * TODO: this
  * Controls class names and functionality of the widget.
  * Called when we both start and complete (@see loadMapData() )
- * @param {Boolean} newState
+ * @param {boolean} newState
  */
 PresidentialFundsMap.prototype.setLoadingState = function(newState) {
   if (newState === false) {
@@ -1443,7 +1443,7 @@ PresidentialFundsMap.prototype.setLoadingState = function(newState) {
 /**
  * Handles the usage analytics for this module
  * @TODO: Decide how to gather usage insights while embedded
- * @param {String} candID - The candidate ID
+ * @param {string} candID - The candidate ID
  * @param {*} electionYear - String or Number, the user-selected election year
  */
 function logUsage(eventType, detail) {

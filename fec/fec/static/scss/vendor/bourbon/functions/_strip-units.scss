@@ -3,7 +3,7 @@
 
 /// Strips the unit from a number.
 ///
-/// @param {Number (With Unit)} $value
+/// @param {number (With Unit)} $value
 ///
 /// @example scss - Usage
 ///   $dimension: strip-units(10em);
@@ -11,7 +11,7 @@
 /// @example css - CSS Output
 ///   $dimension: 10;
 ///
-/// @return {Number (Unitless)}
+/// @return {number (Unitless)}
 
 @function strip-units($value) {
   @return math.div($value, ($value * 0 + 1));

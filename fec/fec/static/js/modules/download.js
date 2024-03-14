@@ -22,8 +22,8 @@ export function hydrate() {
 /**
  * Called to start a new download and will add the "Your downloads" window if needed
  * @param {string} url
- * @param {Boolean[]} init
- * @param {Boolean[]} focus
+ * @param {boolean[]} init
+ * @param {boolean[]} focus
  * @returns {DownloadItem}
  */
 export function download(url, init, focus) {

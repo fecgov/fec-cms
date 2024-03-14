@@ -57,7 +57,7 @@ function getDistrictPalette(scale) {
  * Sub-component referenced by ElectionSearch and ElectionLookup
  * @class
  * @param {string} elm - selector for the div to put the map in
- * @param {object} opts - Configuration options
+ * @param {Object} opts - Configuration options
  */
 export default function ElectionMap(elm, opts) {
   this.elm = elm;

@@ -230,7 +230,7 @@ ElectionSearch.prototype.removeWrongPresidentialElections = function(
  * Call the API with the values of the form and get a list of upcoming ElectionSearch
  * @param {jQuery.Event=} e - If it exists, it gets preventDefault()
  * @param {Object=} opts - Default: `{pushState:true}`
- * @param {Boolean} [opts.pushState] - Assigned `true` if it doesn't exist
+ * @param {boolean} [opts.pushState] - Assigned `true` if it doesn't exist
  */
 ElectionSearch.prototype.search = function(e, opts) {
   e && e.preventDefault();
@@ -403,7 +403,7 @@ ElectionSearch.prototype.draw = function(results) {
  * If there's an upcoming election for the district, it will get the actual date,
  * otherwise it will use a generic date
  * If there's multiple districts in the zip code, it will show a warning
- * @param {object} result - a single result from the API
+ * @param {Object} result - a single result from the API
  */
 ElectionSearch.prototype.drawResult = function(result) {
   var election = this.formatResult(result, this);
@@ -492,7 +492,7 @@ ElectionSearch.prototype.getTitle = function() {
 
 /**
  * Format data into a uniform hash with pretty values that can be passed to the result templates
- * @param {object} result
+ * @param {Object} result
  */
 ElectionSearch.prototype.formatResult = function(result) {
   return _extend({}, result, {
@@ -506,7 +506,7 @@ ElectionSearch.prototype.formatResult = function(result) {
 
 /**
  * Figure out the color to use for the map indicator of the search result
- * @param {object} result
+ * @param {Object} result
  */
 ElectionSearch.prototype.formatColor = function(result) {
   var palette = this.map.districtPalette[result.state] || {};
@@ -519,7 +519,7 @@ ElectionSearch.prototype.formatColor = function(result) {
 
 /**
  * Format the name of the search result
- * @param {object} result
+ * @param {Object} result
  */
 ElectionSearch.prototype.formatName = function(result) {
   var parts = [states[result.state], officeMap[result.office]];
@@ -531,7 +531,7 @@ ElectionSearch.prototype.formatName = function(result) {
 
 /**
  * Get the date of the general election for a two-year period
- * @param {object} result
+ * @param {Object} result
  * @returns {string} - In the `MMMM Do, YYYY` format
  * (i.e. Full month name + ordinal date + four-digit year e.g. August 8th 2008)
  */
@@ -548,7 +548,7 @@ ElectionSearch.prototype.formatGenericElectionDate = function(result) {
 
 /**
  * If the result has an incumber, this formats the name of the person
- * @param {object} result
+ * @param {Object} result
  * @returns {Object|null} If a valid result, returns object in the format of
  * `{name: 'Incumbent Name, url: '/candidate/P12345678/'}` else returns `null`
  */
@@ -565,7 +565,7 @@ ElectionSearch.prototype.formatIncumbent = function(result) {
 
 /**
  * Format the URL to the election page
- * @param {object} result
+ * @param {Object} result
  * @param {string} result.cycle
  * @param {'P' | 'H' | 'S'} result.office
  * @param {string} [result.district]

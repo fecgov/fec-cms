@@ -17,7 +17,7 @@ const defaultOpts = {
  * Dropdown toggles
  * @constructor
  * @param {string} selector - CSS selector for the fieldset that contains everything
- * @param {object} opts - Options
+ * @param {Object} opts - Options
  */
 export default function Dropdown(selector, opts) {
   this.opts = $.extend({}, defaultOpts, opts);

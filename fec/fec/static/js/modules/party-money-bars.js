@@ -33,10 +33,10 @@ const defaultSettings = {
  * @class
  * @param {string} putMetersHereSelector - How to find the HTMLElement that will be used for this.
  * @param {string} [putTotalHereSelector] - Where to put the total.
- * @param {object} [opts] - Options to override defaults.
+ * @param {Object} [opts] - Options to override defaults.
  * @property {HTMLElement} metersHolder - The HTMLElement parent where the meters should go.
  * @property {HTMLElement} totalElm - The HTMLElement whose innerText should be used to display the total $.
- * @property {object} settings - Combination of settings from opts overriding defaultSettings.
+ * @property {Object} settings - Combination of settings from opts overriding defaultSettings.
  * @returns {PartyMoneyBars} New instance of PartyMoneyBars.
  */
 function PartyMoneyBars(putMetersHereSelector, putTotalHereSelector, opts = {}) {
@@ -88,7 +88,7 @@ PartyMoneyBars.prototype.init = function() {
 /**
  * Triggered by the body#fec_data_refresh event (if the event id matches this instance's id).
  * Takes the new values, sorts them, and puts them in the right (ranked) <meter> elements
- * @param {object} newValObj - New value to represent. Expected structure is {total: 9.87, DEM: 7.65, REP: 5.43, Other: 3.21}
+ * @param {Object} newValObj - New value to represent. Expected structure is {total: 9.87, DEM: 7.65, REP: 5.43, Other: 3.21}
  * @param {number} [newValObj.total] - Grand total, if we're showing that // TODO: make sure it appears and disappears as needed
  * @param {number} newValObj.DEM - Value for Democrats
  * @param {number} newValObj.REP - Value for Republicans

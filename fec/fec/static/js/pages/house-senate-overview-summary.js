@@ -112,7 +112,7 @@ HSOverviewSummary.prototype.handleCycleChange = function (e) {
 /**
  * Takes the results, parses them from parties divisions to type combinations, then reactivates cycleSelect.
  * (Takes [{dem numbers}, {rep numbers}, {other numbers}] and converts to [{receipts: {total, dem numbers, rep numbers, other numbers}}])
- * @param {object} results - response.results from the api
+ * @param {Object} results - response.results from the api
  */
 HSOverviewSummary.prototype.handleDataLoaded = function(results) {
   const usefulResults = {
