@@ -68,7 +68,7 @@
 
 {% if table_context %}
 <script type="text/javascript">
-var context = {{ table_context|to_json|safe }};
+  window.context = {{ table_context|to_json|safe }};
 </script>
 {% endif %}
 

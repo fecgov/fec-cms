@@ -49,20 +49,19 @@
 {% endblock %}
 {% block scripts %}
 <script>
-var context = {
-  election: {
-    cycle: '{{ cycle }}',
-    election_full: true,
-    duration: '{{ election_duration }}',
-    office: '{{ office }}',
-    state: '{{ state or '' }}',
-    stateFull: '{{ state_full or '' }}',
-    district: '{{ district or '' }}'
-  }
-};
+  window.context = {
+    election: {
+      cycle: '{{ cycle }}',
+      election_full: true,
+      duration: '{{ election_duration }}',
+      office: '{{ office }}',
+      state: '{{ state or '' }}',
+      stateFull: '{{ state_full or '' }}',
+      district: '{{ district or '' }}'
+    }
+  };
 
 </script>
 <script src="{{ asset_for_js('dataviz-common.js') }}"></script>
 <script src="{{ asset_for_js('elections.js') }}"></script>
 {% endblock %}
-

@@ -63,12 +63,12 @@
 </div>
 
 <script>
-var context = {
-  election: {
-    cycle: '{{ cycle }}',
-    state: '{{ state|default_if_none:"" }}'
-  }
-};
+  global.context = {
+    election: {
+      cycle: '{{ cycle }}',
+      state: '{{ state|default_if_none:"" }}'
+    }
+  };
 </script>
 
 {% endif %}

@@ -76,9 +76,7 @@
 
 {% block scripts %}
   <script type="text/javascript">
-  var context = {
-    type: 'receipts'
-  }
+    window.context = Object.assign({}, { type: 'receipts' });
   </script>
   <script src="{{ asset_for_js('bythenumbers.js') }}"></script>
 {% endblock %}

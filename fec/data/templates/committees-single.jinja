@@ -222,9 +222,9 @@
 
 {% block scripts %}
 <script>
-var context = {{ context_vars | to_json | safe }};
+  window.context = {{ context_vars|to_json|safe }};
 {% if committee_type not in ['P', 'H', 'S', 'Z', 'C', 'E', 'D'] %}
-  context.showIndependentExpenditures = true;
+  window.context.showIndependentExpenditures = true;
 {% endif %}
 </script>
 <script src="{{ asset_for_js('dataviz-common.js') }}"></script>
