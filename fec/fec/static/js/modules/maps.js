@@ -330,7 +330,7 @@ function drawStateMap($container, candidateId, cached) {
   const url = buildUrl(
     ['schedules', 'schedule_a', 'by_state', 'by_candidate'],
     {
-      cycle: context.election.cycle,
+      cycle: global.context.election.cycle,
       candidate_id: candidateId,
       per_page: 99,
       election_full: true

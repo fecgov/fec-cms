@@ -11,7 +11,7 @@ function AcrossTime() {
   // Where to find the totals:
   this.basePath_officeTotal = ['candidates', 'totals', 'aggregates'];
   this.baseQuery = {
-    office: context.office_code,
+    office: global.context.office_code,
     min_election_cycle: window.DEFAULT_ELECTION_YEAR - 4 ,
     max_election_cycle: window.DEFAULT_ELECTION_YEAR,
     is_active_candidate: true,
@@ -116,7 +116,7 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
       let searchFilters = {
         data_type: 'processed',
         two_year_transaction_period: electionYear,
-        recipient_committee_type: context.office_code,
+        recipient_committee_type: global.context.office_code,
         line_number: lineNumbers[line]
       };
 
@@ -224,7 +224,7 @@ AcrossTime.prototype.handleYearChange = function(e) {
      this.baseQuery.max_election_cycle = Math.max(beginning, ending);
 
      // Get the  officce from the URL passed from view
-     this.baseQuery.office = context.office_code;
+     this.baseQuery.office = global.context.office_code;
 
      // Load data based on baseQuery
      this.loadData(this.baseQuery);
@@ -318,7 +318,7 @@ function initElectionTotalTable(election_year) {
   var column_definitions = null;
   var aggregate_by = null;
 
-  if(context.office_code ==='H') {
+  if(global.context.office_code ==='H') {
     // set house specific query attributes
     column_definitions = election_house_totals;
     aggregate_by = 'office-state-district';
@@ -334,7 +334,7 @@ function initElectionTotalTable(election_year) {
     query: {
       aggregate_by: aggregate_by,
       election_year: election_year,
-      office: context.office_code,
+      office: global.context.office_code,
       election_full: true,
       is_active_candidate: true
     },

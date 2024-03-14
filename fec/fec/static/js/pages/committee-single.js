@@ -438,7 +438,7 @@ $(document).ready(function() {
       case 'contribution-size':
         path = ['schedules', 'schedule_a', 'by_size'];
         // For raising/spending tabs, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         DataTable.defer($table, {
           path: path,
           query: _extend(query, {
@@ -456,16 +456,16 @@ $(document).ready(function() {
           hideEmpty: true,
           hideEmptyOpts: {
             dataType: 'individual contributions',
-            name: context.name,
+            name: global.context.name,
             reason: missingDataReason('contributions'),
-            timePeriod: context.timePeriod
+            timePeriod: global.context.timePeriod
           }
         });
         break;
       case 'receipts-by-state':
         path = ['schedules', 'schedule_a', 'by_state'];
         // For raising/spending tabs, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         DataTable.defer($table, {
           path: path,
           query: _extend(query, {
@@ -489,7 +489,7 @@ $(document).ready(function() {
       case 'receipts-by-employer':
         path = ['schedules', 'schedule_a', 'by_employer'];
         // For raising/spending tabs, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         DataTable.defer(
           $table,
           _extend({}, tableOpts, {
@@ -503,8 +503,8 @@ $(document).ready(function() {
             order: [[1, 'desc']],
             hideEmptyOpts: {
               dataType: 'individual contributions',
-              name: context.name,
-              timePeriod: context.timePeriod,
+              name: global.context.name,
+              timePeriod: global.context.timePeriod,
               reason: missingDataReason('contributions')
             }
           })
@@ -513,7 +513,7 @@ $(document).ready(function() {
       case 'receipts-by-occupation':
         path = ['schedules', 'schedule_a', 'by_occupation'];
         // For raising/spending tabs, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         DataTable.defer(
           $table,
           _extend({}, tableOpts, {
@@ -527,8 +527,8 @@ $(document).ready(function() {
             order: [[1, 'desc']],
             hideEmptyOpts: {
               dataType: 'individual contributions',
-              name: context.name,
-              timePeriod: context.timePeriod,
+              name: global.context.name,
+              timePeriod: global.context.timePeriod,
               reason: missingDataReason('contributions')
             }
           })
@@ -537,7 +537,7 @@ $(document).ready(function() {
       case 'itemized-receipts':
         path = ['schedules', 'schedule_a'];
         // For raising/spending tabs, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         DataTable.defer(
           $table,
           _extend({}, tableOpts, {
@@ -555,8 +555,8 @@ $(document).ready(function() {
             paginator: SeekPaginator,
             hideEmptyOpts: {
               dataType: 'individual contributions',
-              name: context.name,
-              timePeriod: context.timePeriod,
+              name: global.context.name,
+              timePeriod: global.context.timePeriod,
               reason: missingDataReason('contributions')
             }
           })
@@ -565,7 +565,7 @@ $(document).ready(function() {
       case 'disbursements-by-recipient':
         path = ['schedules', 'schedule_b', 'by_recipient'];
         // For raising/spending tabs, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         DataTable.defer(
           $table,
           _extend({}, tableOpts, {
@@ -579,9 +579,9 @@ $(document).ready(function() {
             order: [[2, 'desc']],
             hideEmptyOpts: {
               dataType: 'disbursements',
-              name: context.name,
+              name: global.context.name,
               reason: missingDataReason('disbursements'),
-              timePeriod: context.timePeriod
+              timePeriod: global.context.timePeriod
             }
           })
         );
@@ -589,7 +589,7 @@ $(document).ready(function() {
       case 'itemized-disbursements':
         path = ['schedules', 'schedule_b'];
         // For raising/spending tabs, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         DataTable.defer(
           $table,
           _extend({}, tableOpts, {
@@ -606,9 +606,9 @@ $(document).ready(function() {
             paginator: SeekPaginator,
             hideEmptyOpts: {
               dataType: 'disbursements',
-              name: context.name,
+              name: global.context.name,
               reason: missingDataReason('disbursements'),
-              timePeriod: context.timePeriod
+              timePeriod: global.context.timePeriod
             }
           })
         );
@@ -616,7 +616,7 @@ $(document).ready(function() {
       case 'ec-itemized-disbursements':
         path = ['electioneering'];
         // For raising/spending tabs, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         DataTable.defer(
           $table,
           _extend({}, tableOpts, {
@@ -633,9 +633,9 @@ $(document).ready(function() {
             paginator: SeekPaginator,
             hideEmptyOpts: {
               dataType: 'disbursements',
-              name: context.name,
+              name: global.context.name,
               reason: missingDataReason('disbursements'),
-              timePeriod: context.timePeriod
+              timePeriod: global.context.timePeriod
             }
           })
         );
@@ -643,7 +643,7 @@ $(document).ready(function() {
       case 'disbursements-by-recipient-id':
         path = ['schedules', 'schedule_b', 'by_recipient_id'];
         // For raising/spending tabs, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         DataTable.defer(
           $table,
           _extend({}, tableOpts, {
@@ -657,9 +657,9 @@ $(document).ready(function() {
             order: [[1, 'desc']],
             hideEmptyOpts: {
               dataType: 'disbursements',
-              name: context.name,
+              name: global.context.name,
               reason: missingDataReason('disbursements'),
-              timePeriod: context.timePeriod
+              timePeriod: global.context.timePeriod
             }
           })
         );
@@ -667,7 +667,7 @@ $(document).ready(function() {
       case 'independent-expenditure-committee':
         path = ['schedules', 'schedule_e', 'by_candidate'];
         // For raising/spending tabs, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         DataTable.defer($table, {
           path: path,
           query: _extend(query, {
@@ -681,16 +681,16 @@ $(document).ready(function() {
           hideEmpty: true,
           hideEmptyOpts: {
             dataType: 'independent expenditures',
-            name: context.name,
+            name: global.context.name,
             reason: missingDataReason('ie-made'),
-            timePeriod: context.timePeriod
+            timePeriod: global.context.timePeriod
           }
         });
         break;
       case 'electioneering-committee':
         path = ['electioneering', 'aggregates'];
         // For raising/spending tabs, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         DataTable.defer($table, {
           path: path,
           query: _extend(query, {
@@ -704,15 +704,15 @@ $(document).ready(function() {
           hideEmpty: true,
           hideEmptyOpts: {
             dataType: 'electioneering communications',
-            name: context.name,
-            timePeriod: context.timePeriod
+            name: global.context.name,
+            timePeriod: global.context.timePeriod
           }
         });
         break;
       case 'communication-cost-committee':
         path = ['communication_costs', 'aggregates'];
         // For raising/spending tabs, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         DataTable.defer($table, {
           path: path,
           query: _extend(query, {
@@ -726,15 +726,15 @@ $(document).ready(function() {
           hideEmpty: true,
           hideEmptyOpts: {
             dataType: 'communication costs',
-            name: context.name,
-            timePeriod: context.timePeriod
+            name: global.context.name,
+            timePeriod: global.context.timePeriod
           }
         });
         break;
       case 'raw-filings':
         var min_date = $table.attr('data-min-date');
         // For raw-filings, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         opts = _extend(
           {
             columns: rawFilingsColumns,
@@ -759,7 +759,7 @@ $(document).ready(function() {
         break;
       case 'filings-reports':
         // For filings-reports, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         opts = _extend(
           {
             columns: filingsReportsColumns,
@@ -814,7 +814,7 @@ $(document).ready(function() {
         break;
       case 'filings-notices':
         // For filings-notices, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         opts = _extend(
           {
             columns: filingsColumns,
@@ -850,7 +850,7 @@ $(document).ready(function() {
         break;
       case 'filings-statements':
         // For filings-statements, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         opts = _extend(
           {
             columns: filingsColumns,
@@ -883,7 +883,7 @@ $(document).ready(function() {
         break;
       case 'filings-other':
         // For filings-other, use previous cycle if provided
-        cycle = context.cycle || $table.attr('data-cycle');
+        cycle = global.context.cycle || $table.attr('data-cycle');
         opts = _extend(
           {
             columns: filingsColumns,

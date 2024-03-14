@@ -1044,7 +1044,7 @@ export function initSpendingTables(className, context, options) {
       DataTable.defer($table, {
         autoWidth: false,
         path: opts.path,
-        query: filterNull(context.election),
+        query: filterNull(pageContext.election),
         columns: opts.columns,
         order: opts.order,
         dom: simpleDOM,
@@ -1058,16 +1058,16 @@ export function initSpendingTables(className, context, options) {
         hideEmptyOpts: {
           dataType: opts.title,
           name: 'this election',
-          timePeriod: context.timePeriod
+          timePeriod: pageContext.timePeriod
         }
       });
     }
   });
 }
 
-function refreshTables(e, context) {
-  var $comparison = $('#comparison');
-  var selected = $comparison
+function refreshTables(e, pageContext) {
+  const $comparison = $('#comparison');
+  const selected = $comparison
     .find('input[type="checkbox"]:checked')
     .map(function(_, input) {
       var $input = $(input);
@@ -1078,8 +1078,8 @@ function refreshTables(e, context) {
     });
 
   if (selected.length > 0) {
-    drawContributionsBySizeTable(selected, context);
-    drawContributionsByStateTable(selected, context);
+    drawContributionsBySizeTable(selected, pageContext);
+    drawContributionsByStateTable(selected, pageContext);
   }
 
   if (e) {
@@ -1162,9 +1162,9 @@ var drawTableOpts = {
 };
 
 // For election profile page "Individual contributions to candidates"
-function drawContributionsBySizeTable(selected, context) {
-  var $table = $('table[data-type="by-size"]');
-  var primary = _object(
+function drawContributionsBySizeTable(selected, pageContext) {
+  const $table = $('table[data-type="by-size"]');
+  const primary = _object(
     _map(selected, function(result) {
       return [result.candidate_id, result];
     })
@@ -1172,7 +1172,7 @@ function drawContributionsBySizeTable(selected, context) {
   // There are 5 "size" categories. No per_page cap on endpoint
   var perPage = 5 * selected.length;
   var query = {
-    cycle: context.election.cycle,
+    cycle: pageContext.election.cycle,
     candidate_id: _pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
     per_page: perPage, // eslint-disable-line camelcase
     election_full: true // eslint-disable-line camelcase
@@ -1189,7 +1189,7 @@ function drawContributionsBySizeTable(selected, context) {
         {
           autoWidth: false,
           data: data,
-          columns: sizeColumns(context),
+          columns: sizeColumns(pageContext),
           order: [[1, 'desc']]
         },
         drawTableOpts
@@ -1201,9 +1201,9 @@ function drawContributionsBySizeTable(selected, context) {
 }
 
 // For election profile page "Individual contributions to candidates"
-function drawContributionsByStateTable(selected, context) {
   var $table = $('table[data-type="by-state"]');
   var primary = _object(
+function drawContributionsByStateTable(selected, pageContext) {
     _map(selected, function(result) {
       return [result.candidate_id, result];
     })
@@ -1238,7 +1238,7 @@ function drawContributionsByStateTable(selected, context) {
         {
           autoWidth: false,
           data: data,
-          columns: stateColumns(selected, context),
+          columns: stateColumns(selected, pageContext),
           order: [[1, 'desc']],
           drawCallback: function() {
             barsAfterRender(null, this.api());

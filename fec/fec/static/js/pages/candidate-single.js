@@ -390,7 +390,7 @@ function initSpendingTables() {
         hideEmptyOpts: {
           dataType: opts.title,
           email: window.WEBMANAGER_EMAIL,
-          name: context.name,
+          name: global.context.name,
           timePeriod: displayCycle,
           reason: missingDataReason(dataType)
         }

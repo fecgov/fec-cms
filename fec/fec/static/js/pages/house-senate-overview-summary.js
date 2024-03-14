@@ -65,7 +65,7 @@ HSOverviewSummary.prototype.init = function() {
     };
     let theURL = `${window.API_LOCATION}/${window.API_VERSION}/candidates/totals/aggregates/?`;
     url_params.election_year = electionYear;
-    url_params.office = window.context.office_code;
+    url_params.office = global.context.office_code;
     for (let n in url_params) {
       theURL += `${n}=${url_params[n]}&`;
     }

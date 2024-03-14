@@ -47,11 +47,11 @@ $(document).ready(function() {
   var $table = $('#results');
   new tables.DataTable($table, {
     autoWidth: false,
-    title: 'Candidates for ' + officeTitleMap[context.office],
+    title: 'Candidates for ' + officeTitleMap[global.context.office],
     path: ['candidates', 'totals'],
-    query: { office: context.office.slice(0, 1).toUpperCase() },
-    columns: columnGroups[context.office],
-    order: [[defaultSort[context.office], 'desc']],
+    query: { office: global.context.office.slice(0, 1).toUpperCase() },
+    columns: columnGroups[global.context.office],
+    order: [[defaultSort[global.context.office], 'desc']],
     useFilters: true,
     useExport: true,
     rowCallback: tables.modalRenderRow,
