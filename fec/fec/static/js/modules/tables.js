@@ -150,10 +150,18 @@ export const MODAL_TRIGGER_HTML =
   '<span class="u-visually-hidden">Toggle details</span>' +
   '</button>';
 
+/**
+ * @param {HTMLTableRowElement} row
+ */
 export function modalRenderRow(row) {
   row.classList.add(MODAL_TRIGGER_CLASS, 'row--has-panel');
 }
 
+/**
+ * @param {Function} template - Is this a function?
+ * @param {*} fetch 
+ * @returns 
+ */
 export function modalRenderFactory(template, fetch) {
   let callback;
   fetch = fetch || identity;
@@ -243,7 +251,11 @@ function hidePanel(api, $modal) {
 
   removeTabindex($modal);
 }
-
+/**
+ * 
+ * @param {?string} template
+ * @param {object} api
+ */
 export function barsAfterRender(template, api) {
   const $table = $(api.table().node());
   const $cols = $table.find('div[data-value]');
@@ -559,7 +571,7 @@ DataTable.prototype.checkFromQuery = function(){
       // Create a variable for matching checkbox
       let queryBox;
       // Handle val as array
-      if ($.isArray(val)){
+      if ($.isArray(val)){ // TODO: remove jQuery.isArray as it's been deprecated
           // iterate the val array
           val.forEach(i => {
             // Find matching checkboxes
@@ -1034,7 +1046,19 @@ DataTable.prototype.handleSwitch = function(e, opts) {
   this.refreshExport();
 };
 
-export function initSpendingTables(className, context, options) {
+/**
+ * Used for…
+ * @param {string} className - Selector text, including the leading period (ex: `.data-table` instead of `data-table`)
+ * @param {Object} pageContext - The global.context or window.context data object
+ * @param {string} pageContext.candidateID
+ * @param {number} pageContext.cycle
+ * @param {number[]} pageContext.cycles
+ * @param {boolean} pageContext.electionFull
+ * @param {string} pageContext.name - Candidate name LAST, FIRST
+ * @param {string} pageContext.timePeriod - In the format of `2023-2024`
+ * @param {Object} options - spendingTableOpts from {@link /fec/fec/static/js/pages/elections.js}
+ */
+export function initSpendingTables(className, pageContext, options) {
   $(className).each(function(index, table) {
     const $table = $(table);
     const dataType = $table.attr('data-type');

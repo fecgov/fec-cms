@@ -7,6 +7,9 @@ const pathMap = {
   electioneering: ['electioneering', 'by_candidate']
 };
 
+/**
+ * @param {string} type - Values like `independentExpenditures`, `electioneering`, `communicationCosts`
+ */
 export default function OtherSpendingTotals(type) {
   this.$elm = $('.js-other-spending-totals[data-spending-type=' + type + ']');
   this.type = type;
@@ -51,6 +54,10 @@ OtherSpendingTotals.prototype.init = function() {
   this.fetchData();
 };
 
+/**
+
+ * @param {Array} results - In the format of [{candidate_id: '', candidate_name: '', committee_id: ''…}]
+ */
 OtherSpendingTotals.prototype.showTotals = function(results) {
   if (this.type === 'electioneering') {
     // Electioneering comms aren't marked as support or oppose, so just add

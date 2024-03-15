@@ -6,7 +6,7 @@ import Inputmask from 'inputmask';
 
 /**
  * 
- * @param {*} elm 
+ * @param {jQuery.Object} elm
  * @property 
  */
 export default function DateFilter(elm) {

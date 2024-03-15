@@ -25,6 +25,15 @@ export default function TypeaheadFilter(elm) {
 TypeaheadFilter.prototype = Object.create(Filter.prototype);
 TypeaheadFilter.constructor = TypeaheadFilter;
 
+/**
+ * 
+ * @param {Object} query
+ * @param {string} query.data_type - "processed"
+ * @param {string} query.max_date - "12312024"
+ * @param {string} query.min_date - "01012023"
+ * @param {string} query.two_year_transaction_period - "2024"
+ * @returns 
+ */
 TypeaheadFilter.prototype.fromQuery = function(query) {
   const values = query[this.name] ? ensureArray(query[this.name]) : [];
   this.typeaheadFilter.getFilters(values);

@@ -13,6 +13,10 @@ import { pageView } from '../modules/analytics.js';
 
 const $container = '.tab-interface';
 
+/**
+ * @param {jQuery.object} $target
+ * @param {boolean} push
+ */
 function show($target, push) {
   // Toggle tabs
   $('[role="tab"]').attr({

@@ -372,7 +372,7 @@ ContributionsByState.prototype.loadInitialData = function() {
  * Retrieves full candidate details when the typeahead is used
  * Called from {@see handleTypeaheadSelect() }
  * Similar to {@see loadInitialData() }
- * @param {String} cand_id Comes from the typeahead
+ * @param {string} cand_id Comes from the typeahead
  */
 ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
   const instance = this;
