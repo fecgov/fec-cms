@@ -77,7 +77,7 @@ export function createElectionColumns(context) {
         return buildEntityLink(
           data,
           buildAppUrl(['candidate', row.candidate_id], {
-            cycle: context.election.cycle,
+            cycle: context.election.cycle || context.cycle,
             election_full: true
           }),
           'candidate',
@@ -113,7 +113,7 @@ export function createElectionColumns(context) {
         }
         var url = buildAppUrl(urlBase, {
           q_filer: row.committee_ids,
-          cycle: context.election.cycle,
+          cycle: context.election.cycle || context.cycle,
           is_amended: 'false'
         });
         var coverage_end_date = row.coverage_end_date

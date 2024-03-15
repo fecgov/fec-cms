@@ -1232,9 +1232,9 @@ function drawContributionsByStateTable(selected, pageContext) {
     })
   );
   // There are 61 "state" options. No per_page cap on endpoint
-    cycle: context.election.cycle,
   const perPage = 61;// * selected.length;
   const query = {
+    cycle: pageContext.election.cycle,
     candidate_id: _pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
     per_page: perPage, // eslint-disable-line camelcase
     election_full: true // eslint-disable-line camelcase

@@ -400,11 +400,11 @@ const filingsReportsColumns = getColumns(filings, [
 $(document).ready(function() {
   let $mapTable;
   // Reset time period to the fallback_cycle, which is the LAST_CYCLE_HAS_FINANCIAL.
-  if (context.cycleOutOfRange == 'true') {
-    var lastCycle = Number(context.lastCycleHasFinancial);
-    context.timePeriod = lastCycleOddYear + '–' + lastCycle;
-    context.cycle = lastCycle;
+  if (global.context.cycleOutOfRange == 'true') {
+    const lastCycle = Number(global.context.lastCycleHasFinancial);
     const lastCycleOddYear = lastCycle - 1;
+    global.context.timePeriod = lastCycleOddYear + '–' + lastCycle;
+    global.context.cycle = lastCycle;
   }
 
   // Set up data tables
