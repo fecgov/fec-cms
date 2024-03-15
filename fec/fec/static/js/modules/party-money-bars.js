@@ -39,7 +39,7 @@ const defaultSettings = {
  * @property {Object} settings - Combination of settings from opts overriding defaultSettings.
  * @returns {PartyMoneyBars} New instance of PartyMoneyBars.
  */
-function PartyMoneyBars(putMetersHereSelector, putTotalHereSelector, opts = {}) {
+export function PartyMoneyBars(putMetersHereSelector, putTotalHereSelector, opts = {}) {
   this.metersHolder = document.querySelector(putMetersHereSelector);
   this.totalElm = putTotalHereSelector.length > 1 ? document.querySelector(putTotalHereSelector) : null;
   this.settings = Object.assign({}, defaultSettings, opts);
@@ -149,5 +149,3 @@ const meterRowTemplate = `
             <meter id="" min="0" max="0" value="0" title="" data-party=""></meter>
           </div>
         </div>`;
-
-module.exports = { PartyMoneyBars };

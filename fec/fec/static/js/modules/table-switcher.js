@@ -5,7 +5,14 @@
  * And trigger an event with a set of options that is then received by DataTable
  */
 
-function TableSwitcher(control, opts) {
+/**
+ * 
+ * @param {string} control - the selector text like '.js-table-switcher'
+ * @param {Object} opts - 
+ * @param {Object} opts.efiling - {path[], dataType: 'efiling', hideColumns: '.hide-efiling', paginator()}
+ * @param {Object} opts.processed - {dataType: 'processed', hideColumns: '.hide-processed', paginator()}
+ */
+export default function TableSwitcher(control, opts) {
   this.$control = $(control);
   this.opts = opts;
   this.$control.on('change', this.handleChange.bind(this));
@@ -31,5 +38,3 @@ TableSwitcher.prototype.toggleMessage = function(table) {
     .attr('aria-hidden', true);
   this.$control.find('#' + table + '-message').attr('aria-hidden', false);
 };
-
-module.exports = { TableSwitcher: TableSwitcher };

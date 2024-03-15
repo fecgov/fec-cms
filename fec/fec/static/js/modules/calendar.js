@@ -40,7 +40,7 @@ Grid.prototype.compareEventSegs = function(seg1, seg2) {
   );
 };
 
-function Calendar(opts) {
+export default function Calendar(opts) {
   this.opts = $.extend({}, this.defaultOpts(), opts);
 
   this.$calendar = $(this.opts.selector);
@@ -346,5 +346,3 @@ Calendar.prototype.managePopoverControl = function(e) {
       $target.focus();
     });
 };
-
-module.exports = { Calendar: Calendar };

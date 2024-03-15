@@ -44,9 +44,9 @@ function getCandidateFilings(row) {
   });
 }
 
-var renderCandidatePanel = function(showFinancialTotals) {
-  return tables.modalRenderFactory(candidatesTemplate, function(row) {
     var query = URI.parseQuery(window.location.search);
+export function renderCandidatePanel(showFinancialTotals) {
+  return modalRenderFactory(candidatesTemplate, function(row) {
     // Parse all of the time-related variables
     var electionYear = query.election_year;
     var cycle = query.cycle || query.election_year || $('#cycle').val();
@@ -84,8 +84,4 @@ var renderCandidatePanel = function(showFinancialTotals) {
       });
     }
   });
-};
-
-module.exports = {
-  renderCandidatePanel: renderCandidatePanel
 };

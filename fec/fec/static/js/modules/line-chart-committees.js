@@ -31,7 +31,7 @@ var MAX_RANGE = 4000000000; // Set the max y-axis to 4 billion
  *
  */
 
-function LineChartCommittees(selector, snapshot, dataType) {
+export default function LineChartCommittees(selector, snapshot, dataType) {
   this.element = d3.select(selector);
   this.dataType = dataType;
   this.cycle = Number(DEFAULT_TIME_PERIOD);
@@ -454,8 +454,4 @@ LineChartCommittees.prototype.wrapLabel = function(text) {
       }
     }
   });
-};
-
-module.exports = {
-  LineChartCommittees: LineChartCommittees
 };

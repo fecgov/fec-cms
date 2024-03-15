@@ -11,7 +11,7 @@ require('inputmask.date.extensions');
  * Special date filter for the 6-year date range inputs that need to validate that
  * the dates entered are within a period of time
  */
-function ValidateDateFilter(elm) {
+export default function ValidateDateFilter(elm) {
   Filter.call(this, elm);
   this.duration = this.$elm.data('duration');
   this.$range = this.$elm.find('.js-date-range');
@@ -150,5 +150,3 @@ ValidateDateFilter.prototype.hideWarning = function() {
     this.showingWarning = false;
   }
 };
-
-module.exports = { ValidateDateFilter: ValidateDateFilter };

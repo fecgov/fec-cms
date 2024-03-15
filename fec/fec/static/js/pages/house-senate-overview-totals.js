@@ -9,7 +9,7 @@ import { buildUrl } from '../modules/helpers.js';
  * @class
  * @property {HTMLInputElement} exportButton - the export <button>
  */
-function HSOverviewTotalsTable() {
+export function HSOverviewTotalsTable() {
   this.exportButton = document.querySelector('#election-totals .js-export');
   this.init();
 }
@@ -52,5 +52,3 @@ HSOverviewTotalsTable.prototype.handleExportClick = function() {
 window.addEventListener('load', () => {
   new HSOverviewTotalsTable();
 });
-
-module.exports = { HSOverviewTotalsTable };

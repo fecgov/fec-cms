@@ -2,7 +2,7 @@ import { debounce as _debounce } from 'underscore';
 
 import { default as URI } from 'urijs';
 
-function lineNumberFilters() {
+export function lineNumberFilters() {
   lineNumberFiltersCheck();
 
   $('#filters').on(
@@ -23,7 +23,3 @@ function lineNumberFiltersCheck() {
     $('.js-line-number-message').hide();
   }
 }
-
-module.exports = {
-  lineNumberFilters: lineNumberFilters
-};

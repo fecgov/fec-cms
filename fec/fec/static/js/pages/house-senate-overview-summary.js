@@ -9,7 +9,7 @@ import { FECContainerQuery } from '../modules/container-queries';
  * @class
  * @property {HTMLInputElement} cycleSelector - the <input>
  */
-function HSOverviewSummary() {
+export function HSOverviewSummary() {
   this.tabPanel = document.querySelector('#election-summary');
   this.cycleSelector = document.querySelector('#election-summary .js-period-select');
 
@@ -159,5 +159,3 @@ HSOverviewSummary.prototype.handleDataLoaded = function(results) {
 window.addEventListener('load', () => {
   new HSOverviewSummary();
 });
-
-module.exports = { HSOverviewSummary };

@@ -4,8 +4,7 @@
 import { default as Dropdown } from './dropdowns.js';
 import { default as Listeners } from './listeners.js';
 
-
-function CalendarTooltip(content, $container) {
+export default function CalendarTooltip(content, $container) {
   this.$content = $(content);
   this.$container = $container;
   this.$close = this.$content.find('.js-close');
@@ -38,5 +37,3 @@ CalendarTooltip.prototype.close = function() {
   this.$container.focus();
   this.events.clear();
 };
-
-module.exports = { CalendarTooltip: CalendarTooltip };

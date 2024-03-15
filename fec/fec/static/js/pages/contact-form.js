@@ -7,7 +7,7 @@ import { customEvent } from '../modules/analytics.js';
  * ServiceNow contact form
  * @param {*} $elm
  */
-function ContactForm($elm) {
+export function ContactForm($elm) {
   this.$elm = $elm;
   this.committeeId = $elm.find('#id_u_committee');
   this.committeeName = $elm.find('#id_committee_name');
@@ -89,7 +89,7 @@ ContactForm.prototype.clearForm = function(e) {
  * Analyst lookup tool
  * @param {JQuery.$element} $elm
  */
-function AnalystLookup($elm) {
+export function AnalystLookup($elm) {
   this.$elm = $elm;
   this.$input = this.$elm.find('input');
   this.$name = this.$elm.find('.js-analyst-name');
@@ -178,7 +178,7 @@ AnalystLookup.prototype.handleChange = function(e) {
  *
  * @param {string} radformSelector - The value used to find the element with document.querySelector()
  */
-function RadFormValidate(radformSelector) {
+export function RadFormValidate(radformSelector) {
   this.messages = {
     id_u_contact_first_name: 'Please provide your first name',
     id_u_contact_last_name: 'Please provide your last name',
@@ -422,10 +422,3 @@ RadFormValidate.prototype.showError = function(req) {
 new ContactForm($('.js-contact-form'));
 new AnalystLookup($('.js-analyst-lookup'));
 new RadFormValidate('#id_contact_form');
-
-// Even though we initialize above, export so it can be tested
-module.exports = {
-  AnalystLookup: AnalystLookup,
-  ContactForm: ContactForm,
-  RadFormValidate: RadFormValidate
-};
