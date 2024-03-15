@@ -43,6 +43,7 @@ import comparisonTemplate from '../templates/comparison.hbs';
 import exportWidgetTemplate from '../templates/tables/exportWidget.hbs';
 import missingTemplate from '../templates/tables/noData.hbs';
 
+
 export const simpleDOM = 't<"results-info"lpi>';
 export const browseDOM = '<"panel__main"t>' + '<"results-info"lpi>';
 // Source documentation for these two ^ :
@@ -75,8 +76,8 @@ export const  DOWNLOAD_MESSAGES = {
 export const  DATA_WIDGETS = '.js-data-widgets';
 
 // id for the last changed element on form for status update
-var updateChangedEl;
-var messageTimer;
+let updateChangedEl;
+let messageTimer;
 
 // Only show table after draw
 $(document.body).on('draw.dt', function() {
@@ -97,7 +98,7 @@ export function getCycle(value, meta) {
   const filters = dataTable && dataTable.filters;
 
   if (filters && filters.cycle) {
-    var cycles = _intersection(
+    const cycles = _intersection(
       _map(filters.cycle, function(cycle) {
         return parseInt(cycle);
       }),
@@ -111,7 +112,7 @@ export function getCycle(value, meta) {
 
 export function mapSort(order, column) {
   return _map(order, function(item) {
-    var name = column[item.column].data;
+    let name = column[item.column].data;
     if (item.dir === 'desc') {
       name = '-' + name;
     }
@@ -120,7 +121,7 @@ export function mapSort(order, column) {
 }
 
 function getCount(response) {
-  var pagination_count = response.pagination.count; // eslint-disable-line camelcase
+  let pagination_count = response.pagination.count; // eslint-disable-line camelcase
 
   if (response.pagination.count > 500000) {
     pagination_count = Math.round(response.pagination.count / 1000) * 1000; // eslint-disable-line camelcase
@@ -130,7 +131,7 @@ function getCount(response) {
 }
 
 export function mapResponse(response) {
-  var pagination_count = getCount(response); // eslint-disable-line camelcase
+  const pagination_count = getCount(response); // eslint-disable-line camelcase
 
   return {
     recordsTotal: pagination_count, // eslint-disable-line camelcase
@@ -154,13 +155,13 @@ export function modalRenderRow(row) {
 }
 
 export function modalRenderFactory(template, fetch) {
-  var callback;
+  let callback;
   fetch = fetch || identity;
 
   return function(api, data, response) {
-    var $table = $(api.table().node());
-    var $modal = $('#datatable-modal');
-    var $main = $table.closest('.panel__main');
+    const $table = $(api.table().node());
+    const $modal = $('#datatable-modal');
+    const $main = $table.closest('.panel__main');
     // Move the modal to the results div.
     $modal.appendTo($main);
     $modal.css('display', 'block');
@@ -177,13 +178,13 @@ export function modalRenderFactory(template, fetch) {
       if (e.which === 13 || e.type === 'click') {
         // Note: Use `currentTarget` to get parent row, since the target column
         // may have been moved since the triggering event
-        var $row = $(e.currentTarget);
-        var $target = $(e.target);
+        const $row = $(e.currentTarget);
+        const $target = $(e.target);
         if ($target.is('a')) {
           return true;
         }
         if (!$target.closest('td').hasClass('dataTables_empty')) {
-          var index = api.row($row).index();
+          const index = api.row($row).index();
           $.when(fetch(response.results[index])).done(function(fetched) {
             $modal.find('.js-panel-content').html(template(fetched));
             $modal.attr('aria-hidden', 'false');
@@ -191,7 +192,7 @@ export function modalRenderFactory(template, fetch) {
             $row.toggleClass('row-active', true);
             $('body').toggleClass('panel-active', true);
             restoreTabindex($modal);
-            var hideColumns = api.columns('.hide-panel');
+            const hideColumns = api.columns('.hide-panel');
             hideColumns.visible(false);
 
             // Populate the pdf button if there is one
@@ -200,7 +201,6 @@ export function modalRenderFactory(template, fetch) {
             } else {
               $modal.find('.js-pdf_url').remove();
             }
-
             // Set focus on the close button
             $('.js-hide').focus();
 
@@ -245,24 +245,24 @@ function hidePanel(api, $modal) {
 }
 
 export function barsAfterRender(template, api) {
-  var $table = $(api.table().node());
-  var $cols = $table.find('div[data-value]');
+  const $table = $(api.table().node());
+  const $cols = $table.find('div[data-value]');
 
   // Store the initial max value on the table element just once
   // Set widths of bars relative to the global max,
   // rather than the max of each draw
   if (!$table.data('max')) {
-    var values = $cols.map(function(idx, each) {
+    const values = $cols.map(function(idx, each) {
       return parseFloat(each.getAttribute('data-value'));
     });
-    var max = _max(values);
+    const max = _max(values);
     $table.data('max', max);
   }
 
-  var tableMax = $table.data('max');
+  const tableMax = $table.data('max');
   $cols.after(function() {
-    var value = $(this).attr('data-value');
-    var width = (100 * parseFloat(value)) / tableMax;
+    const value = $(this).attr('data-value');
+    const width = (100 * parseFloat(value)) / tableMax;
     if ($(this).next('.bar-container').length > 0) {
       return;
     } else {
@@ -295,13 +295,13 @@ function filterSuccessUpdates(changeCount) {
 
   // check if there is a changed form element
   if (updateChangedEl) {
-    var $label;
-    var $elm = $(updateChangedEl);
-    var type = $elm.attr('type');
-    var message = '';
-    var filterAction = '';
-    var filterResult = '';
-    var $filterMessage = $('.filter__message');
+    let $label;
+    const $elm = $(updateChangedEl);
+    const type = $elm.attr('type');
+    let message = '';
+    let filterAction = '';
+    let filterResult = '';
+    const $filterMessage = $('.filter__message');
 
     $('.is-successful').removeClass('is-successful');
     $('.is-unsuccessful').removeClass('is-unsuccessful');
@@ -438,7 +438,7 @@ SeekPaginator.prototype.mapQuery = function(data, query) {
     this.query = _clone(query);
     this.clearIndexes();
   }
-  var indexes = this.getIndexes(data.length, data.start);
+  const indexes = this.getIndexes(data.length, data.start);
   return _extend(
     { per_page: data.length }, // eslint-disable-line camelcase
     _chain(Object.keys(indexes))
@@ -461,7 +461,7 @@ SeekPaginator.prototype.handleResponse = function(data, response) {
   );
 };
 
-var defaultOpts = {
+const defaultOpts = {
   serverSide: true,
   searching: false,
   lengthMenu: [30, 50, 100],
@@ -478,7 +478,7 @@ var defaultOpts = {
     '<button class="js-filter-feedback">let us know</button>'
 };
 
-var defaultCallbacks = {
+const defaultCallbacks = {
   afterRender: function() {} //eslint-disable-line no-empty-function
 };
 
@@ -494,7 +494,7 @@ export function DataTable(selector, opts) {
   this.$widgets = $(DATA_WIDGETS);
   this.initFilters();
 
-  var Paginator = this.opts.paginator || OffsetPaginator;
+  const Paginator = this.opts.paginator || OffsetPaginator;
   this.paginator = new Paginator();
 
   if (!this.opts.tableSwitcher) {
@@ -528,8 +528,7 @@ DataTable.prototype.initTable = function() {
 
 // Get the full querystring on-load
 DataTable.prototype.getVars = function () {
-
-  var initialParams = window.location.search;
+  const initialParams = window.location.search;
   return initialParams.toString();
 };
 
@@ -552,9 +551,9 @@ DataTable.prototype.parseParams = function(querystring){
 // Activate checkbox filter fields that filterSet.js cannot find to activate (see commitee_types.jinja)
 DataTable.prototype.checkFromQuery = function(){
     // Create a variable representing the querysring key/vals as an object
-    var queryFields = this.parseParams(this.getVars());
+    const queryFields = this.parseParams(this.getVars());
     // Create an array to hold checkbox html elements
-      var queryBoxes = [];
+    const queryBoxes = [];
     // Iterate the key/vals of queryFields
     $.each(queryFields, function(key, val){
       // Create a variable for matching checkbox
@@ -611,7 +610,7 @@ DataTable.prototype.initFilters = function() {
   // Set `this.filterSet` before instantiating the nested `DataTable` so that
   // filters are available on fetching initial data
   if (this.opts.useFilters) {
-    var tagList = new TagList({
+    const tagList = new TagList({
       resultType: 'results',
       showResultCount: true,
       tableTitle: this.opts.title
@@ -632,7 +631,7 @@ DataTable.prototype.initFilters = function() {
 
 DataTable.prototype.refreshExport = function() {
   if (this.opts.useExport && !this.opts.disableExport) {
-    var numRows = this.api.context[0].fnRecordsTotal();
+    const numRows = this.api.context[0].fnRecordsTotal();
     if (numRows > DOWNLOAD_CAP) {
       this.disableExport({ message: DOWNLOAD_MESSAGES.recordCap });
     } else if (numRows === 0) {
@@ -659,7 +658,7 @@ DataTable.prototype.destroy = function() {
 
 DataTable.prototype.handlePopState = function() {
   this.filterSet.activateAll();
-  var filters = this.filterSet.serialize();
+  const filters = this.filterSet.serialize();
   if (!_isEqual(filters, this.filters)) {
     this.api.ajax.reload();
   }
@@ -722,7 +721,7 @@ DataTable.prototype.enableExport = function() {
 };
 
 DataTable.prototype.fetch = function(data, callback) {
-  var self = this;
+  const self = this;
   self.ensureWidgets();
 
   if (self.filterSet && !self.filterSet.isValid) {
@@ -732,7 +731,7 @@ DataTable.prototype.fetch = function(data, callback) {
     self.filters = self.filterSet.serialize();
     // Only limit for processed data in specific datatables
     // Individual contributions does not contain data_type and therefore has a separate check
-    var limitOnPage =
+    const limitOnPage =
       (self.filters.data_type == 'processed' &&
         ['Receipts', 'Disbursements', 'Independent expenditures'].indexOf(
           self.opts.title
@@ -742,7 +741,7 @@ DataTable.prototype.fetch = function(data, callback) {
     // Number of allowed filters per field that is limited
     const MAX_FILTERS = 10;
     // Fields to limit
-    var limitFields = {
+    const limitFields = {
       committee_id: `You&#39;re trying to search more than ${MAX_FILTERS} committees. Narrow your search to ${MAX_FILTERS} or fewer committees.`,
       candidate_id: `You&#39;re trying to search more than ${MAX_FILTERS} candidates. Narrow your search to ${MAX_FILTERS} or fewer candidates.`,
       contributor_name: `You&#39;re trying to search more than ${MAX_FILTERS} contributors. Narrow your search to ${MAX_FILTERS} or fewer contributors.`,
@@ -754,13 +753,13 @@ DataTable.prototype.fetch = function(data, callback) {
       contributor_occupation: `You&#39;re trying to search more than ${MAX_FILTERS} occupations. Narrow your search to ${MAX_FILTERS} or fewer occupations.`
     };
     // By default, filter limit is not hit
-    var hitFilterLimit = false;
-    var limitFieldKeys = Object.keys(limitFields);
+    let hitFilterLimit = false;
+    const limitFieldKeys = Object.keys(limitFields);
     // By default, remove all errors icons on labels
     $('ul.dropdown__selected li label').removeClass('is-unsuccessful');
     limitFieldKeys.forEach(function(limitFieldKey) {
       // Assign unique id to each field's error messages
-      var error_id = 'exceeded_' + limitFieldKey + '_limit';
+      const error_id = 'exceeded_' + limitFieldKey + '_limit';
       // Ensure fields are not disabled and all errors removed
       $('#' + limitFieldKey).removeClass('is-disabled-filter');
       var errorDiv = $('#' + error_id);
@@ -820,7 +819,7 @@ DataTable.prototype.fetch = function(data, callback) {
     // Otherwise, it's a regularly scheduled report, keep the filing
     // form as F3X
     if (self.filters && self.filters.filing_form) {
-      var F3X_index = self.filters.filing_form.indexOf('F3X');
+      const F3X_index = self.filters.filing_form.indexOf('F3X');
       if (self.filters.is_notice == 'true' && F3X_index > -1) {
         self.filters.filing_form[F3X_index] = 'F24';
       }
@@ -852,7 +851,7 @@ DataTable.prototype.fetch = function(data, callback) {
     }
   }
 
-  var url = self.buildUrl(data);
+  const url = self.buildUrl(data);
   self.$processing.show();
   if (self.xhr) {
     self.xhr.abort();
@@ -871,18 +870,18 @@ DataTable.prototype.fetch = function(data, callback) {
 };
 
 DataTable.prototype.export = function() {
-  var url = this.buildUrl(this.api.ajax.params(), false, true);
+  const url = this.buildUrl(this.api.ajax.params(), false, true);
   download(url, false, true);
   this.disableExport({ message: DOWNLOAD_MESSAGES.pending });
 };
 
 DataTable.prototype.isPending = function() {
-  var url = this.buildUrl(this.api.ajax.params(), false);
+  const url = this.buildUrl(this.api.ajax.params(), false);
   return isPending(url);
 };
 
 DataTable.prototype.buildUrl = function(data, paginate, download) {
-  var query = _extend(
+  let query = _extend(
     { sort_hide_null: false, sort_nulls_last: true }, // eslint-disable-line camelcase
     this.filters || {}
   );
@@ -911,9 +910,9 @@ DataTable.prototype.fetchSuccess = function(resp) {
   this.newCount = getCount(resp);
   this.refreshExport();
 
-  var changeCount = this.newCount - this.currentCount;
+  const changeCount = this.newCount - this.currentCount;
 
-  var countHTML =
+  const countHTML =
     this.newCount > 0 && this.newCount <= 500000
       ? '<span class="tags__count">' +
         this.newCount.toLocaleString('en-US') +
@@ -940,9 +939,9 @@ DataTable.prototype.fetchSuccess = function(resp) {
 };
 
 DataTable.prototype.fetchError = function(jqXHR, textStatus) {
-  var self = this;
+  const self = this;
   // Default error message that occurs most likely due to timeout
-  var errorMessage =
+  let errorMessage =
     '<div id="two_year_filter_error" class="message filter__message message--error">' +
     self.opts.error400Message +
     '</div>';
@@ -1037,9 +1036,9 @@ DataTable.prototype.handleSwitch = function(e, opts) {
 
 export function initSpendingTables(className, context, options) {
   $(className).each(function(index, table) {
-    var $table = $(table);
-    var dataType = $table.attr('data-type');
-    var opts = options[dataType];
+    const $table = $(table);
+    const dataType = $table.attr('data-type');
+    const opts = options[dataType];
     if (opts) {
       DataTable.defer($table, {
         autoWidth: false,
@@ -1070,7 +1069,7 @@ function refreshTables(e, pageContext) {
   const selected = $comparison
     .find('input[type="checkbox"]:checked')
     .map(function(_, input) {
-      var $input = $(input);
+      const $input = $(input);
       return {
         candidate_id: $input.attr('data-id'), // eslint-disable-line camelcase
         candidate_name: $input.attr('data-name') // eslint-disable-line camelcase
@@ -1101,8 +1100,8 @@ function refreshTables(e, pageContext) {
 }
 
 export function drawComparison(results, pageContext) {
-  var $comparison = $('#comparison');
-  var context = { selected: results.slice(0, 10), options: results.slice(10) };
+  let $comparison = $('#comparison');
+  const context = { selected: results.slice(0, 10), options: results.slice(10) };
   $comparison.prepend(comparisonTemplate(context));
   new Dropdown($comparison.find('.js-dropdown'));
   $comparison.on('change', 'input[type="checkbox"]', function(e) {
@@ -1112,7 +1111,7 @@ export function drawComparison(results, pageContext) {
 }
 
 function mapSize(response, primary) {
-  var groups = {};
+  let groups = {};
   _each(response.results, function(result) {
     groups[result.candidate_id] = groups[result.candidate_id] || {};
     groups[result.candidate_id][result.size] = result.total;
@@ -1126,7 +1125,7 @@ function mapSize(response, primary) {
 }
 
 function mapState(response) {
-  var groups = {};
+  let groups = {};
   _each(response.results, function(result) {
     groups[result.state] = groups[result.state] || {};
     groups[result.state][result.candidate_id] = result.total;
@@ -1139,14 +1138,14 @@ function mapState(response) {
 
 function destroyTable($table) {
   if ($.fn.dataTable.isDataTable($table)) {
-    var api = $table.DataTable();
+    let api = $table.DataTable();
     api.clear();
     api.destroy();
     $table.data('max', null);
   }
 }
 
-var drawTableOpts = {
+const drawTableOpts = {
   autoWidth: false,
   destroy: true,
   searching: false,
@@ -1170,19 +1169,19 @@ function drawContributionsBySizeTable(selected, pageContext) {
     })
   );
   // There are 5 "size" categories. No per_page cap on endpoint
-  var perPage = 5 * selected.length;
-  var query = {
+  const perPage = 5 * selected.length;
+  const query = {
     cycle: pageContext.election.cycle,
     candidate_id: _pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
     per_page: perPage, // eslint-disable-line camelcase
     election_full: true // eslint-disable-line camelcase
   };
-  var url = buildUrl(
+  const url = buildUrl(
     ['schedules', 'schedule_a', 'by_size', 'by_candidate'],
     query
   );
   $.getJSON(url).done(function(response) {
-    var data = mapSize(response, primary);
+    const data = mapSize(response, primary);
     destroyTable($table);
     $table.dataTable(
       _extend(
@@ -1201,29 +1200,29 @@ function drawContributionsBySizeTable(selected, pageContext) {
 }
 
 // For election profile page "Individual contributions to candidates"
-  var $table = $('table[data-type="by-state"]');
-  var primary = _object(
 function drawContributionsByStateTable(selected, pageContext) {
+  const $table = $('table[data-type="by-state"]');
+  const primary = _object(
     _map(selected, function(result) {
       return [result.candidate_id, result];
     })
   );
   // There are 61 "state" options. No per_page cap on endpoint
-  var perPage = 61 * selected.length;
-  var query = {
     cycle: context.election.cycle,
+  const perPage = 61;// * selected.length;
+  const query = {
     candidate_id: _pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
     per_page: perPage, // eslint-disable-line camelcase
     election_full: true // eslint-disable-line camelcase
   };
-  var url = buildUrl(
+  const url = buildUrl(
     ['schedules', 'schedule_a', 'by_state', 'by_candidate'],
     query
   );
   $.getJSON(url).done(function(response) {
-    var data = mapState(response, primary);
+    const data = mapState(response, primary);
     // Populate headers with correct text
-    var headerLabels = ['State'].concat(_pluck(selected, 'candidate_name'));
+    const headerLabels = ['State'].concat(_pluck(selected, 'candidate_name'));
     destroyTable($table);
     $table
       .find('thead tr')

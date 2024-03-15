@@ -99,7 +99,7 @@ export default function DataMap(elm, opts) {
  * TODO: make init() and applyNewData() share more functionality
  */
 DataMap.prototype.init = function() {
-  const instance = this;
+  let instance = this;
   maxUSbounds.width = maxUSbounds.east - maxUSbounds.west;
   maxUSbounds.height = maxUSbounds.south - maxUSbounds.north;
   maxUSbounds.heightRatio = maxUSbounds.height / maxUSbounds.width; // TODO - need this?
@@ -246,7 +246,7 @@ DataMap.prototype.handleZoomReset = function() {
  * TODO: make init() and applyNewData() share more functionality
  */
 DataMap.prototype.applyNewData = function() {
-  const instance = this;
+  let instance = this;
 
   const results = instance.data['results'].reduce((acc, val) => {
     const row = fipsByState[val.state] || {};
@@ -363,8 +363,8 @@ DataMap.prototype.zoomToState = function(stateID, d) {
       viewboxHeight / featHeight
     );
 
-    const translateX = (featWest * newScale - maxUSbounds.west) * -1;
-    const translateY = (featNorth * newScale - maxUSbounds.north) * -1;
+    let translateX = (featWest * newScale - maxUSbounds.west) * -1;
+    let translateY = (featNorth * newScale - maxUSbounds.north) * -1;
 
     translateX += (viewboxWidth - featWidth * newScale) / 2;
     translateY += (viewboxHeight - featHeight * newScale) / 2;

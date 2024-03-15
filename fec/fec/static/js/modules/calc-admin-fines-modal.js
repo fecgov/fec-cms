@@ -8,8 +8,8 @@ if (elementsWithAdminFinesCalcClass.length > 0) {
   // TEMP
   // Add the modal to the page
 
-  let calcElementID = 'gov-fec-calc-af';
-  let newModal = document.createElement('div');
+  const calcElementID = 'gov-fec-calc-af';
+  const newModal = document.createElement('div');
   newModal.setAttribute('id', `modal-${calcElementID}`);
   newModal.setAttribute('class', 'js-modal modal');
   newModal.setAttribute('aria-hidden', 'true');
@@ -26,14 +26,14 @@ if (elementsWithAdminFinesCalcClass.length > 0) {
 
   // Add the admin fines script to the page
   if (calcAdminFineJsPath) {
-    let calcAFScriptElem = document.createElement('script');
+    const calcAFScriptElem = document.createElement('script');
     calcAFScriptElem.async = false;
     calcAFScriptElem.src = calcAdminFineJsPath;
     document.head.appendChild(calcAFScriptElem);
   }
 
   // Set the link(s) to open the modal
-  let theLinkElements = document.getElementsByClassName(
+  const theLinkElements = document.getElementsByClassName(
     'js-admin-fines-calc-modal'
   );
   for (let i = 0; i < theLinkElements.length; i++) {
@@ -57,7 +57,7 @@ if (elementsWithAdminFinesCalcClass.length > 0) {
   // eslint-disable-next-line no-inner-declarations
   function handleFinesCalcOpenClick(e) {
     e.preventDefault();
-    let theModal = document.getElementById(
+    const theModal = document.getElementById(
       this.getAttribute('data-a11y-dialog-show')
     );
     theModal.setAttribute('aria-hidden', false);

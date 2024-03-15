@@ -7,7 +7,7 @@ import { default as Calendar } from '../modules/calendar.js';
 import { calendarDownload, getUrl } from '../modules/calendar-helpers.js';
 
 // Initialize filters
-var filterPanel = new FilterPanel();
+const filterPanel = new FilterPanel();
 
 // Initialize filter tags
 const $tagList = new TagList({

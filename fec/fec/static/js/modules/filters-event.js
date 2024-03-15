@@ -13,7 +13,7 @@ export function lineNumberFilters() {
 }
 
 function lineNumberFiltersCheck() {
-  var params = URI.parseQuery(window.location.search);
+  const params = URI.parseQuery(window.location.search);
 
   if (Number(params.two_year_transaction_period) < 2007) {
     $('.js-line-number-filters').hide();

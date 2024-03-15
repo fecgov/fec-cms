@@ -7,7 +7,7 @@ import { default as URI } from 'urijs';
 import { default as moment } from 'moment';
 
 export function getGoogleUrl(event) {
-  var fmt, dates;
+  let fmt, dates;
   if (event.end) {
     fmt = 'YYYYMMDD[T]HHmmss';
     dates = event.start.format(fmt) + '/' + event.end.format(fmt);
@@ -32,7 +32,7 @@ export function getGoogleUrl(event) {
 }
 
 export function calendarDownload(path, params) {
-  var url = URI(window.API_LOCATION)
+  const url = URI(window.API_LOCATION)
     .path(Array.prototype.concat(window.API_VERSION, path || [], '').join('/'))
     .addQuery({
       api_key: window.CALENDAR_DOWNLOAD_PUBLIC_API_KEY,
@@ -47,9 +47,9 @@ export function calendarDownload(path, params) {
 
 export function getUrl(path, params, type) {
   //if 'type' arg is present and set to 'sub', use API_KEY_PUBLIC_CALENDAR as api_key, otherwise use API_KEY_PUBLIC;
-  var apiKey =
+  const apiKey =
     type == 'sub' ? window.API_KEY_PUBLIC_CALENDAR : window.API_KEY_PUBLIC;
-  var url = URI(window.API_LOCATION)
+  const url = URI(window.API_LOCATION)
     .path(Array.prototype.concat(window.API_VERSION, path || [], '').join('/'))
     .addQuery({
       api_key: apiKey,
@@ -60,8 +60,8 @@ export function getUrl(path, params, type) {
   return URI.decode(url);
 }
 export function className(event) {
-  var start = event.start_date ? moment(event.start_date).format('M D') : null;
-  var end = event.end_date ? moment(event.end_date).format('M D') : null;
+  const start = event.start_date ? moment(event.start_date).format('M D') : null;
+  const end = event.end_date ? moment(event.end_date).format('M D') : null;
   if (end && start !== end) {
     return 'fc-multi-day';
   } else {
@@ -79,7 +79,7 @@ export function checkStartTime(event) {
 
 export function mapCategoryDescription(category) {
   // matches the category parameter from calendar date API
-  var tooltipContent = {
+  const tooltipContent = {
     'Reporting Deadlines':
       'Throughout the year, filers submit regularly scheduled reports about their campaign finance activity. These reporting requirements are outlined in Title 11 of the Code of Federal Regulations (CFR) and vary, depending on the type of filer.',
     'Election Dates':

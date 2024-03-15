@@ -17,12 +17,12 @@ RangeFilter.prototype = Object.create(Filter.prototype);
 RangeFilter.constructor = RangeFilter;
 
 RangeFilter.prototype.handleChange = function(e) {
-  var $input = $(e.target);
-  var value = $input.val();
-  var loadedOnce = $input.data('loaded-once') || false;
-  var range = $input.data('range') || 'false';
-  var eventName;
-  var rangeNameForTag = this.name.split('_')[1]; // (initial functionality)
+  const $input = $(e.target);
+  const value = $input.val();
+  const loadedOnce = $input.data('loaded-once') || false;
+  const range = $input.data('range') || 'false';
+  let eventName;
+  let rangeNameForTag = this.name.split('_')[1]; // (initial functionality)
   // If the name has more than two underscores, use all of the name after the second _.
   // Why?
   // Because longer field names that were similar to each other were being combined
@@ -31,7 +31,7 @@ RangeFilter.prototype.handleChange = function(e) {
   //
   if ((this.name.match(/_/g) || []).length > 2) {
     // split the name on every _
-    var rangeSplit = this.name.split('_');
+    const rangeSplit = this.name.split('_');
     // use all of the name after the second _ (not just the parts between the second and third _)
     rangeNameForTag = this.name.substr(rangeSplit[0].length + 1);
   }

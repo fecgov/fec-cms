@@ -25,7 +25,7 @@ import { renderModal } from '../modules/filings.js';
 import { default as Dropdown } from '../modules/dropdowns.js';
 import { default as reportType } from '../templates/reports/reportType.hbs';
 
-var aggregateCallbacks = {
+const aggregateCallbacks = {
   afterRender: barsAfterRender.bind(undefined, undefined)
 };
 
@@ -41,7 +41,7 @@ var mapUrl = buildUrl(
   }
 );
 
-var expenditureColumns = [
+const expenditureColumns = [
   {
     data: 'total',
     className: 'all',
@@ -312,9 +312,9 @@ var statementsOfCandidacyColumns = [
 //   * tbd
 
 function initOtherDocumentsTable() {
-  var $table = $('table[data-type="other-documents"]');
-  var candidateId = $table.data('candidate');
-  var path = ['filings'];
+  const $table = $('table[data-type="other-documents"]');
+  const candidateId = $table.data('candidate');
+  const path = ['filings'];
   DataTable.defer($table, {
     path: path,
     query: {
@@ -400,7 +400,7 @@ function initSpendingTables() {
 }
 
 function initDisbursementsTable() {
-  var $table = $('table[data-type="itemized-disbursements"]');
+  const $table = $('table[data-type="itemized-disbursements"]');
   var path = ['schedules', 'schedule_b'];
   var committeeIdData = $table.data('committee-id');
   var committeeIds = '';
@@ -447,7 +447,6 @@ function initDisbursementsTable() {
 }
 
 function initContributionsTables() {
-  console.log('candidate-single.initContributionsTables()');
   var $allTransactions = $('table[data-type="individual-contributions"]');
   var $contributionSize = $('table[data-type="contribution-size"]');
   var $contributorState = $('table[data-type="contributor-state"]');
@@ -660,7 +659,7 @@ function initRawFilingsTable() {
 }
 
 $(document).ready(function() {
-  var query = URI.parseQuery(window.location.search);
+  const query = URI.parseQuery(window.location.search);
 
   initOtherDocumentsTable();
   initSpendingTables();

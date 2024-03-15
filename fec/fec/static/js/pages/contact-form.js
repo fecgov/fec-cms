@@ -34,7 +34,7 @@ export function ContactForm($elm) {
  * This will set the value of a hidden input when selecting a value from typeahead
  */
 ContactForm.prototype.initTypeahead = function() {
-  var self = this;
+  const self = this;
   this.typeahead.$element.css({ height: 'auto' });
   this.typeahead.$input.off('typeahead:select');
   this.typeahead.$input.on('typeahead:select', function(e, opts) {
@@ -122,7 +122,7 @@ AnalystLookup.prototype.initTypeahead = function() {
  * @param {Object} opts
  */
 AnalystLookup.prototype.fetchAnalyst = function(e, opts) {
-  var url = URI(window.API_LOCATION)
+  const url = URI(window.API_LOCATION)
     .path(Array.prototype.concat(window.API_VERSION, 'rad-analyst').join('/'))
     .addQuery({
       api_key: window.API_KEY_PUBLIC,
@@ -138,11 +138,11 @@ AnalystLookup.prototype.fetchAnalyst = function(e, opts) {
  * @param {JQueryCallback} response
  */
 AnalystLookup.prototype.showAnalyst = function(response) {
-  var hasResults = response.results.length > 0;
+  const hasResults = response.results.length > 0;
   if (hasResults) {
-    var name =
+    const name =
       response.results[0].first_name + ' ' + response.results[0].last_name;
-    var ext = response.results[0].telephone_ext;
+    const ext = response.results[0].telephone_ext;
     this.$name.html(name);
     this.$ext.html(ext);
   }

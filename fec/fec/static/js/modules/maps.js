@@ -191,7 +191,7 @@ function moveTooltip(tooltip) {
 
   const bottomPointerHeight = '.8rem';
 
-  const contentHeight = $('#map-tooltip .tooltip__title').innerHeight();
+  let contentHeight = $('#map-tooltip .tooltip__title').innerHeight();
   contentHeight += $('#map-tooltip .tooltip__value').innerHeight();
   contentHeight += 30; // (padding)
 

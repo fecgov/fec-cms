@@ -24,18 +24,18 @@ function show($target, push) {
 
   // Toggle panels
   $($container + ' [role="tabpanel"]').attr('aria-hidden', 'true');
-  var $panel = $('#' + $target.attr('href').substring(1));
+  const $panel = $('#' + $target.attr('href').substring(1));
   $panel.attr('aria-hidden', null);
 
-  var name = $target.closest('[role="tablist"]').attr('data-name');
-  var value = $target.attr('data-name');
+  const name = $target.closest('[role="tablist"]').attr('data-name');
+  const value = $target.attr('data-name');
 
   if (push) {
-    var query = _extend(
+    const query = _extend(
       URI.parseQuery(window.location.search),
       _object([[name, value]])
     );
-    var search = URI('')
+    const search = URI('')
       .query(query)
       .toString();
     window.history.pushState(query, search, search || window.location.pathname);
@@ -48,9 +48,9 @@ function show($target, push) {
 function refreshTabs() {
   var query = URI.parseQuery(window.location.search);
   $('ul[role="tablist"]').each(function(index, tabs) {
-    var $tabs = $(tabs);
-    var name = $tabs.attr('data-name');
-    var $target = query[name]
+    const $tabs = $(tabs);
+    const name = $tabs.attr('data-name');
+    const $target = query[name]
       ? $tabs.find('[role="tab"][data-name="' + query[name] + '"]')
       : $tabs.find('[role="tab"]').eq(0);
     if ($target.length) {
@@ -62,12 +62,12 @@ function refreshTabs() {
 }
 
 export function onShow($elm, callback) {
-  var $panel = $elm.closest('[role="tabpanel"]');
+  const $panel = $elm.closest('[role="tabpanel"]');
   if ($panel.is(':visible')) {
     callback();
   } else {
-    var $trigger = $('[href="#' + $panel.attr('id') + '"]');
-    var event = 'tabs.show.' + $trigger.attr('data-name');
+    const $trigger = $('[href="#' + $panel.attr('id') + '"]');
+    const event = 'tabs.show.' + $trigger.attr('data-name');
     events.once(event, callback);
   }
 }

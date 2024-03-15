@@ -17,17 +17,17 @@ require('./calendar-list-view');
 
 Handlebars.registerHelper(helpers.helpers);
 
-var templates = {
+const templates = {
   details: require('../templates/calendar/details.hbs'),
   download: require('../templates/calendar/download.hbs'),
   subscribe: require('../templates/calendar/subscribe.hbs'),
   listToggles: require('../templates/calendar/listToggles.hbs')
 };
 
-var LIST_VIEWS = ['monthTime', 'monthCategory'];
+const LIST_VIEWS = ['monthTime', 'monthCategory'];
 
-var FC = $.fullCalendar;
-var Grid = FC.Grid;
+const FC = $.fullCalendar;
+const Grid = FC.Grid;
 
 // Globally override event sorting to order all-day events last
 // TODO: Convince fullcalendar.io support this behavior without monkey-patching
@@ -84,7 +84,7 @@ export default function Calendar(opts) {
 }
 
 Calendar.prototype.toggleListView = function(e) {
-  var newView = $(e.target).data('trigger-view');
+  const newView = $(e.target).data('trigger-view');
   this.$calendar.fullCalendar('changeView', newView);
 };
 
@@ -143,11 +143,11 @@ Calendar.prototype.defaultOpts = function() {
 };
 
 Calendar.prototype.filter = function() {
-  var params = this.filterSet.serialize();
+  const params = this.filterSet.serialize();
   if (_isEqual(params, this.params)) {
     return;
   }
-  var url = this.url
+  const url = this.url
     .clone()
     .addQuery(params || {})
     .toString();
@@ -160,7 +160,7 @@ Calendar.prototype.filter = function() {
 };
 
 Calendar.prototype.success = function(response) {
-  var self = this;
+  const self = this;
 
   setTimeout(function() {
     $('.is-loading')
@@ -173,7 +173,7 @@ Calendar.prototype.success = function(response) {
   }, SUCCESS_DELAY);
 
   return response.results.map(function(event) {
-    var processed = {
+    let processed = {
       category: event.category,
       location: event.location,
       title: event.summary || 'Event title',
@@ -200,9 +200,9 @@ Calendar.prototype.success = function(response) {
 };
 
 Calendar.prototype.updateLinks = function(params) {
-  var url = this.exportUrl.clone().addQuery(params || {});
-  var subscribeURL = this.subscribeUrl.clone().addQuery(params || {});
-  var urls = {
+  const url = this.exportUrl.clone().addQuery(params || {});
+  const subscribeURL = this.subscribeUrl.clone().addQuery(params || {});
+  const urls = {
     ics: url.toString(),
     csv: url
       .clone()
@@ -250,7 +250,7 @@ Calendar.prototype.updateLinks = function(params) {
 };
 
 Calendar.prototype.styleButtons = function() {
-  var baseClasses = 'button';
+  const baseClasses = 'button';
   this.$calendar.find('.fc-button').addClass(baseClasses);
   this.$calendar.find('.fc-today-button').addClass('button--alt');
   this.$calendar
@@ -295,7 +295,7 @@ Calendar.prototype.manageListToggles = function(view) {
 };
 
 Calendar.prototype.handleEventRender = function(event, element) {
-  var eventLabel =
+  const eventLabel =
     event.title +
     ' ' +
     event.start.format('dddd MMMM D, YYYY') +
@@ -315,10 +315,10 @@ Calendar.prototype.handleDayRender = function(date, cell) {
 };
 
 Calendar.prototype.handleEventClick = function(calEvent, jsEvent) {
-  var $target = $(jsEvent.target);
+  const $target = $(jsEvent.target);
   if (!$target.closest('.tooltip').length) {
-    var $eventContainer = $target.closest('.fc-event');
-    var tooltip = new calendarTooltip.CalendarTooltip(
+    const $eventContainer = $target.closest('.fc-event');
+    const tooltip = new CalendarTooltip(
       templates.details(_extend({}, calEvent, { detailsId: this.detailsId })),
 
       $eventContainer
@@ -335,8 +335,8 @@ Calendar.prototype.simulateClick = function(e) {
 };
 
 Calendar.prototype.managePopoverControl = function(e) {
-  var $target = $(e.target);
-  var $popover = this.$calendar.find('.fc-popover');
+  const $target = $(e.target);
+  const $popover = this.$calendar.find('.fc-popover');
   $popover.attr('id', this.popoverId).attr('role', 'tooltip');
   $popover
     .find('.fc-close')

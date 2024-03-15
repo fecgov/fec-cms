@@ -21,7 +21,7 @@ export default function CalendarTooltip(content, $container) {
 }
 
 CalendarTooltip.prototype.handleClickAway = function(e) {
-  var $target = $(e.target);
+  const $target = $(e.target);
   if (
     !this.$content.has($target).length &&
     !this.$container.has($target).length

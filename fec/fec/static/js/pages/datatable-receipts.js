@@ -6,7 +6,7 @@ import { lineNumberFilters } from '../modules/filters-event.js';
 import { default as donationTemplate } from '../templates/receipts.hbs';
 
 $(document).ready(function() {
-  var $table = $('#results');
+  const $table = $('#results');
   new DataTable($table, {
     autoWidth: false,
     title: 'Receipts',
@@ -25,7 +25,7 @@ $(document).ready(function() {
     }
   });
 
-  var switcher = new TableSwitcher('.js-table-switcher', {
+  const switcher = new TableSwitcher('.js-table-switcher', {
     efiling: {
       path: ['schedules', 'schedule_a', 'efile'],
       dataType: 'efiling',

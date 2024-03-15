@@ -398,28 +398,26 @@ const filingsReportsColumns = getColumns(filings, [
 ]);
 
 $(document).ready(function() {
-  console.log('committee-single.ready()');
-  var $mapTable;
+  let $mapTable;
   // Reset time period to the fallback_cycle, which is the LAST_CYCLE_HAS_FINANCIAL.
   if (context.cycleOutOfRange == 'true') {
     var lastCycle = Number(context.lastCycleHasFinancial);
-    var lastCycleOddYear = lastCycle - 1;
     context.timePeriod = lastCycleOddYear + '–' + lastCycle;
     context.cycle = lastCycle;
+    const lastCycleOddYear = lastCycle - 1;
   }
 
   // Set up data tables
   $('.data-table').each(function(index, table) {
-    console.log('committee-single.data-table.each()');
-    var $table = $(table);
-    var committeeId = $table.attr('data-committee');
-    var query = {
+    const $table = $(table);
+    const committeeId = $table.attr('data-committee');
+    const query = {
       election_full: false
     };
-    var path;
-    var opts;
-    var cycle;
-    var filingsOpts = {
+    let path;
+    let opts;
+    let cycle;
+    const filingsOpts = {
       autoWidth: false,
       rowCallback: renderRow,
       dom: '<"panel__main"t><"results-info"frlpi>',
@@ -732,7 +730,7 @@ $(document).ready(function() {
         });
         break;
       case 'raw-filings':
-        var min_date = $table.attr('data-min-date');
+        const min_date = $table.attr('data-min-date');
         // For raw-filings, use previous cycle if provided
         cycle = global.context.cycle || $table.attr('data-cycle');
         opts = _extend(

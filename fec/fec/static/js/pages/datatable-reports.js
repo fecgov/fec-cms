@@ -10,7 +10,7 @@ import candidateTemplate from '../templates/reports/candidate.hbs';
 import pacPartyTemplate from '../templates/reports/pac.hbs';
 import ieOnlyTemplate from '../templates/reports/ie-only.hbs';
 
-var pageTitle,
+let pageTitle,
   pageTemplate,
   pageColumns,
   columnKeys = [
@@ -47,7 +47,7 @@ if (global.context.form_type === 'presidential') {
 pageColumns = getColumns(cols_reports, columnKeys);
 
 $(document).ready(function() {
-  var $table = $('#results');
+  const $table = $('#results');
   new DataTable($table, {
     autoWidth: false,
     tableSwitcher: true,

@@ -11,9 +11,9 @@ import { default as FilterTypeahead } from './filter-typeahead.js';
 export default function TypeaheadFilter(elm) {
   Filter.call(this, elm);
 
-  var key = this.$elm.data('dataset');
-  var allowText = this.$elm.data('allow-text') !== undefined;
-  var dataset = key ? typeahead.datasets[key] : null;
+  const key = this.$elm.data('dataset');
+  const allowText = this.$elm.data('allow-text') !== undefined;
+  const dataset = key ? datasets[key] : null;
   this.typeaheadFilter = new FilterTypeahead(this.$elm, dataset, allowText);
   this.typeaheadFilter.$elm.on(
     'change',
@@ -36,11 +36,11 @@ TypeaheadFilter.prototype.fromQuery = function(query) {
 TypeaheadFilter.prototype.handleChange = function() {};
 
 TypeaheadFilter.prototype.handleNestedChange = function(e) {
-  var $input = $(e.target);
-  var id = $input.attr('id');
-  var $label = this.$elm.find('[for="' + id + '"]');
+  const $input = $(e.target);
+  const id = $input.attr('id');
+  const $label = this.$elm.find('[for="' + id + '"]');
 
-  var eventName = $input.is(':checked') ? 'filter:added' : 'filter:removed';
+  const eventName = $input.is(':checked') ? 'filter:added' : 'filter:removed';
 
   $input.trigger(eventName, [
     {

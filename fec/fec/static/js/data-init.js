@@ -27,8 +27,8 @@ $(document).ready(function() {
 
   // Initialize stick side elements
   $('.js-sticky-side').each(function() {
-    var container = $(this).data('sticky-container');
-    var opts = {
+    const container = $(this).data('sticky-container');
+    const opts = {
       within: document.getElementById(container)
     };
     new Sticky(this, opts);
@@ -45,12 +45,12 @@ $(document).ready(function() {
 
   // Initialize new accordions
   $('.js-accordion').each(function() {
-    var contentPrefix = $(this).data('content-prefix') || 'accordion';
-    var openFirst = $(this).data('open-first');
-    var selectors = {
+    const contentPrefix = $(this).data('content-prefix') || 'accordion';
+    const openFirst = $(this).data('open-first');
+    const selectors = {
       trigger: '.js-accordion-trigger'
     };
-    var opts = {
+    const opts = {
       contentPrefix: contentPrefix,
       openFirst: openFirst,
       collapseOthers:

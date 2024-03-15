@@ -54,9 +54,9 @@ Filter.prototype.setValue = function(value) {
 };
 
 Filter.prototype.formatValue = function($input, value) {
-  const prefix = _escape($input.data('prefix'));
+  let prefix = _escape($input.data('prefix'));
   const suffix = _escape($input.data('suffix'));
-  const escapedValue = _escape(value);
+  let escapedValue = _escape(value);
   if (prefix) {
     prefix = prefix === '$' ? prefix : prefix + ' ';
     escapedValue = '<span class="prefix">' + prefix + '</span>' + escapedValue;

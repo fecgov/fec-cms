@@ -105,7 +105,7 @@ export function createElectionColumns(context) {
     }),
     {
       render: function(data, type, row) {
-        var urlBase;
+        let urlBase;
         if (context.election.office === 'president') {
           urlBase = ['reports', 'presidential'];
         } else {

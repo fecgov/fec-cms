@@ -7,7 +7,7 @@ import { lineNumberFilters } from '../modules/filters-event.js';
 import disbursementTemplate from '../templates/disbursements.hbs';
 
 $(document).ready(function() {
-  var $table = $('#results');
+  const $table = $('#results');
   new DataTable($table, {
     autoWidth: false,
     title: 'Disbursements',

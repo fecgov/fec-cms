@@ -6,16 +6,16 @@ import TableSwitcher from '../modules/table-switcher.js';
 
 import expenditureTemplate from '../templates/independent-expenditures.hbs';
 
-var fetchReportDetails = function(row) {
-  var amendment_version = Object.assign({}, row, {
+const fetchReportDetails = function(row) {
+  const amendment_version = Object.assign({}, row, {
     amendment_version: amendmentVersion(row.most_recent)
   });
   return amendment_version;
 };
 
 $(document).ready(function() {
-  var $table = $('#results');
-  new tables.DataTable($table, {
+  const $table = $('#results');
+  new DataTable($table, {
     autoWidth: false,
     title: 'Independent expenditures',
     path: ['schedules', 'schedule_e'],

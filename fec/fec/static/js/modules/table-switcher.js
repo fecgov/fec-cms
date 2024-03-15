@@ -19,14 +19,14 @@ export default function TableSwitcher(control, opts) {
 }
 
 TableSwitcher.prototype.init = function() {
-  var table = this.$control.find('input:checked').val();
-  var opts = this.opts[table];
+  const table = this.$control.find('input:checked').val();
+  const opts = this.opts[table];
   this.$control.trigger('table:switch', opts);
 };
 
 TableSwitcher.prototype.handleChange = function(e) {
-  var table = $(e.target).val();
-  var opts = this.opts[table];
+  const table = $(e.target).val();
+  const opts = this.opts[table];
   this.toggleMessage(table);
   this.$control.trigger('table:switch', opts);
 };

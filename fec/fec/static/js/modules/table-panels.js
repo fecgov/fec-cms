@@ -13,9 +13,9 @@ function getCandidateCommittees(row, cycle, electionFull) {
   );
 
   return $.getJSON(url).then(function(response) {
-    var results = response.results.length ? response.results : {};
-    var principalCommittees = [],
-      authorizedCommittees = [];
+    const results = response.results.length ? response.results : {};
+    const principalCommittees = [];
+    const authorizedCommittees = [];
 
     results.forEach(function(result) {
       if (result.designation === 'P') {
@@ -38,23 +38,23 @@ function getCandidateFilings(row) {
   });
 
   return $.getJSON(url).then(function(response) {
-    var results = response.results.length ? response.results : {};
+    const results = response.results.length ? response.results : {};
 
     return { last: results[0], first: results[results.length - 1] };
   });
 }
 
-    var query = URI.parseQuery(window.location.search);
 export function renderCandidatePanel(showFinancialTotals) {
   return modalRenderFactory(candidatesTemplate, function(row) {
+    const query = URI.parseQuery(window.location.search);
     // Parse all of the time-related variables
-    var electionYear = query.election_year;
-    var cycle = query.cycle || query.election_year || $('#cycle').val();
-    var electionFull = query.election_full === 'true' ? true : false;
+    const electionYear = query.election_year;
+    const cycle = query.cycle || query.election_year || $('#cycle').val();
+    const electionFull = query.election_full === 'true' ? true : false;
 
     // Build a string showing the range covered by the financial totals
     // Only relevant on office pages
-    var timePeriod = showFinancialTotals
+    const timePeriod = showFinancialTotals
       ? getTimePeriod(electionYear, cycle, electionFull, row.office)
       : null;
 
@@ -63,7 +63,7 @@ export function renderCandidatePanel(showFinancialTotals) {
         getCandidateCommittees(row, cycle, electionFull),
         getCandidateFilings(row)
       ).then(function(data1, data2) {
-        var newData = {
+        const newData = {
           committees: data1,
           first_form_2: data2.first,
           last_form_2: data2.last,
@@ -75,7 +75,7 @@ export function renderCandidatePanel(showFinancialTotals) {
       });
     } else {
       return $.when(getCandidateFilings(row)).then(function(data) {
-        var newData = {
+        const newData = {
           first_form_2: data.first,
           last_form_2: data.last,
           showFinancialTotals: showFinancialTotals
