@@ -2,9 +2,9 @@
 // in order to patch functionality in an included library
 // require('es6-weak-map/implement');
 
-import Sticky from './modules/component-sticky/index.js';
-import Accordion from 'aria-accordion';
-import A11yDialog from 'a11y-dialog';
+import { Sticky } from 'component-sticky';
+import { Accordion } from 'aria-accordion/src/accordion.js';
+import { default as A11yDialog } from 'a11y-dialog';
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 // window.$ = window.jQuery = $;
