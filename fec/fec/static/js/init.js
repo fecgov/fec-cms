@@ -1,13 +1,13 @@
 import { init as tablistInit } from './vendor/tablist.js';
 
-import Accordion from 'aria-accordion';
+import { Accordion } from 'aria-accordion/src/accordion.js';
 import { default as Dropdown } from './modules/dropdowns.js';
 import { isLargeScreen } from './modules/helpers.js';
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 // window.$ = window.jQuery = $;
 
-import Sticky from 'component-sticky';
+import { default as Sticky } from 'component-sticky/index.js';
 import { FormNav } from './modules/form-nav.js';
 
 tablistInit();

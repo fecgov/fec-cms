@@ -1,7 +1,7 @@
 /**
  * Scripts used on every page of the site e.g. main nav, search, feedback
  */
-import Glossary from 'glossary-panel';
+import Glossary from 'glossary-panel/src/glossary.js';
 import { default as terms } from './data/terms.json' assert { type: 'json' };
 import { default as Feedback } from './modules/feedback.js';
 import { default as Skipnav } from './modules/skip-nav.js';
