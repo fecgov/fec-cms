@@ -3,16 +3,16 @@
  */
 import { default as URI } from 'urijs';
 import { extend as _extend, isEqual as _isEqual } from 'underscore';
-var moment = require('moment');
+import moment from 'moment';
 require('fullcalendar');
 
-var urls = require('./urls');
-var dropdown = require('./dropdowns');
-var Handlebars = require('hbsfy/runtime');
-var helpers = require('./helpers');
+import { pushQuery, updateQuery } from './urls.js';
+import { default as Dropdown } from './dropdowns.js';
+import { default as Handlebars } from 'hbsfy/runtime.js';
+import { datetime, eq, isLargeScreen, LOADING_DELAY, SUCCESS_DELAY, toUpperCase } from './helpers.js';
 
-var calendarTooltip = require('./calendar-tooltip');
-var calendarHelpers = require('./calendar-helpers');
+import { default as CalendarTooltip } from './calendar-tooltip.js';
+import { checkStartTime, className, getGoogleUrl, mapCategoryDescription } from './calendar-helpers.js';
 require('./calendar-list-view');
 
 Handlebars.registerHelper(helpers.helpers);
@@ -73,12 +73,12 @@ function Calendar(opts) {
   this.filterPanel.$form.on('change', this.filter.bind(this));
   $(window).on('popstate', this.filter.bind(this));
 
-  urls.updateQuery(this.filterSet.serialize(), this.filterSet.fields);
+  updateQuery(this.filterSet.serialize(), this.filterSet.fields);
 
   this.filter();
   this.styleButtons();
 
-  if (!helpers.isLargeScreen()) {
+  if (!isLargeScreen()) {
     this.$head.after($('#filters'));
   }
 }
@@ -151,7 +151,7 @@ Calendar.prototype.filter = function() {
     .clone()
     .addQuery(params || {})
     .toString();
-  urls.pushQuery(this.filterSet.serialize(), this.filterSet.fields);
+  pushQuery(this.filterSet.serialize(), this.filterSet.fields);
   this.$calendar.fullCalendar('removeEventSource', this.sources);
   this.sources = $.extend({}, this.opts.sourceOpts, { url: url });
   this.$calendar.fullCalendar('addEventSource', this.sources);
@@ -166,11 +166,11 @@ Calendar.prototype.success = function(response) {
     $('.is-loading')
       .removeClass('is-loading')
       .addClass('is-successful');
-  }, helpers.LOADING_DELAY);
+  }, LOADING_DELAY);
 
   setTimeout(function() {
     $('.is-successful').removeClass('is-successful');
-  }, helpers.SUCCESS_DELAY);
+  }, SUCCESS_DELAY);
 
   return response.results.map(function(event) {
     var processed = {
@@ -181,15 +181,15 @@ Calendar.prototype.success = function(response) {
       description: event.description || 'Event description',
       state: event.state ? event.state.join(', ') : null,
       start: event.start_date ? moment(event.start_date) : null,
-      hasStartTime: calendarHelpers.checkStartTime(event),
+      hasStartTime: checkStartTime(event),
       end: event.end_date ? moment(event.end_date) : null,
-      className: calendarHelpers.className(event),
-      tooltipContent: calendarHelpers.mapCategoryDescription(event.category),
+      className: className(event),
+      tooltipContent: mapCategoryDescription(event.category),
       allDay: event.all_day,
       detailUrl: event.url
     };
     _extend(processed, {
-      google: calendarHelpers.getGoogleUrl(processed),
+      google: getGoogleUrl(processed),
       download: self.subscribeUrl
         .clone()
         .addQuery({ event_id: event.event_id })
@@ -241,10 +241,10 @@ Calendar.prototype.updateLinks = function(params) {
     this.subscribeButton.destroy();
   }
 
-  this.downloadButton = new dropdown.Dropdown(this.$download, {
+  this.downloadButton = new Dropdown(this.$download, {
     checkboxes: false
   });
-  this.subscribeButton = new dropdown.Dropdown(this.$subscribe, {
+  this.subscribeButton = new Dropdown(this.$subscribe, {
     checkboxes: false
   });
 };

@@ -5,8 +5,17 @@ import DOMPurify from 'dompurify';
 import { default as URI } from 'urijs';
 import { chain, extend } from 'underscore';
 import { default as moment } from 'moment';
-import './decoders.js';
-import { default as Handlebars } from 'handlebars';
+import {
+  amendments as decoders_amendments,
+  forms as decoders_forms,
+  means as decoders_means,
+  office as decoders_office,
+  parties as decoders_parties,
+  reports as decoders_reports,
+  supportOppose as decoders_supportOppose,
+  states as decoders_states
+} from './decoders.js';
+import * as Handlebars from 'handlebars/runtime';
 import { default as numeral } from 'numeral';
 
 // set parameters from the API
@@ -167,35 +176,35 @@ Handlebars.registerHelper('isEarmarked', function(receipt_type) {
 });
 
 Handlebars.registerHelper('decodeAmendment', function(value) {
-  return decoders.amendments[value];
+  return decoders_amendments[value];
 });
 
 Handlebars.registerHelper('decodeOffice', function(value) {
-  return decoders.office[value];
+  return decoders_office[value];
 });
 
 Handlebars.registerHelper('decodeSupportOppose', function(value) {
-  return decoders.supportOppose[value] || 'Unknown';
+  return decoders_supportOppose[value] || 'Unknown';
 });
 
 Handlebars.registerHelper('decodeForm', function(value) {
-  return decoders.forms[value] || value;
+  return decoders_forms[value] || value;
 });
 
 Handlebars.registerHelper('decodeReport', function(value) {
-  return decoders.reports[value] || value;
+  return decoders_reports[value] || value;
 });
 
 Handlebars.registerHelper('decodeState', function(value) {
-  return decoders.states[value] || value;
+  return decoders_states[value] || value;
 });
 
 Handlebars.registerHelper('decodeParty', function(value) {
-  return decoders.parties[value] || value;
+  return decoders_parties[value] || value;
 });
 
 Handlebars.registerHelper('decodeMeans', function(value) {
-  return decoders.means[value] || value;
+  return decoders_means[value] || value;
 });
 
 Handlebars.registerHelper('formNumber', function(value) {

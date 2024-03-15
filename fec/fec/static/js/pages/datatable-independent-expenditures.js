@@ -1,14 +1,14 @@
 
-var helpers = require('../modules/helpers');
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-var TableSwitcher = require('../modules/table-switcher').TableSwitcher;
+import { amendmentVersion } from '../modules/helpers.js';
+import { DataTable, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+import { independentExpenditures } from '../modules/columns.js';
+import TableSwitcher from '../modules/table-switcher.js';
 
-var expenditureTemplate = require('../templates/independent-expenditures.hbs');
+import expenditureTemplate from '../templates/independent-expenditures.hbs';
 
 var fetchReportDetails = function(row) {
   var amendment_version = Object.assign({}, row, {
-    amendment_version: helpers.amendmentVersion(row.most_recent)
+    amendment_version: amendmentVersion(row.most_recent)
   });
   return amendment_version;
 };
@@ -19,14 +19,14 @@ $(document).ready(function() {
     autoWidth: false,
     title: 'Independent expenditures',
     path: ['schedules', 'schedule_e'],
-    columns: columns.independentExpenditures,
-    paginator: tables.SeekPaginator,
-    rowCallback: tables.modalRenderRow,
+    columns: independentExpenditures,
+    paginator: SeekPaginator,
+    rowCallback: modalRenderRow,
     useExport: true,
     order: [[5, 'desc']],
     useFilters: true,
     callbacks: {
-      afterRender: tables.modalRenderFactory(
+      afterRender: modalRenderFactory(
         expenditureTemplate,
         fetchReportDetails
       )
@@ -38,13 +38,13 @@ $(document).ready(function() {
       path: ['schedules', 'schedule_e', 'efile'],
       dataType: 'efiling',
       hideColumns: '.hide-efiling',
-      paginator: tables.OffsetPaginator
+      paginator: OffsetPaginator
     },
     processed: {
       path: ['schedules', 'schedule_e'],
       dataType: 'processed',
       hideColumns: '.hide-processed',
-      paginator: tables.SeekPaginator
+      paginator: SeekPaginator
     }
   }).init();
 });

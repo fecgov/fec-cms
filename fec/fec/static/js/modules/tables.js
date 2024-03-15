@@ -39,9 +39,9 @@ import { updateQuery } from './urls.js';
 import { default as TagList } from '../modules/filters/filter-tags.js';
 import { default as FilterPanel } from '../modules/filters/filter-panel.js';
 
-import { default as comparisonTemplate } from '../templates/comparison.hbs';
-import { default as exportWidgetTemplate } from '../templates/tables/exportWidget.hbs';
-import { default as missingTemplate } from '../templates/tables/noData.hbs';
+import comparisonTemplate from '../templates/comparison.hbs';
+import exportWidgetTemplate from '../templates/tables/exportWidget.hbs';
+import missingTemplate from '../templates/tables/noData.hbs';
 
 export const simpleDOM = 't<"results-info"lpi>';
 export const browseDOM = '<"panel__main"t>' + '<"results-info"lpi>';

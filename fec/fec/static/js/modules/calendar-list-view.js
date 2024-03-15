@@ -2,12 +2,12 @@
  * 
  */
 import { chain as _chain, each as _each, pairs as _pairs, reduce as _reduce } from 'underscore';
-var moment = require('moment');
+import { default as moment } from 'moment';
 require('fullcalendar');
 
-var dropdown = require('./dropdowns');
+import { default as Dropdown } from './dropdowns.js';
 
-var eventTemplate = require('../templates/calendar/events.hbs');
+import { default as eventTemplate } from '../templates/calendar/events.hbs';
 
 var FC = $.fullCalendar;
 var View = FC.View;
@@ -107,7 +107,7 @@ var ListView = View.extend({
     this.dropdowns = $(this.el.html)
       .find('.dropdown')
       .map(function(idx, elm) {
-        return new dropdown.Dropdown($(elm), { checkboxes: false });
+        return new Dropdown($(elm), { checkboxes: false });
       });
   },
 

@@ -1,12 +1,12 @@
+import { renderRow, renderModal } from '../modules/filings.js';
+import { getColumns } from '../modules/column-helpers.js';
+import { filings as cols_filings } from '../modules/columns.js';
+import { DataTable } from '../modules/tables.js';
 
-var filings = require('../modules/filings');
-var columnHelpers = require('../modules/column-helpers');
-var columns = require('../modules/columns');
-var tables = require('../modules/tables');
-var TableSwitcher = require('../modules/table-switcher').TableSwitcher;
-var dropdown = require('../modules/dropdowns');
+import TableSwitcher from '../modules/table-switcher.js';
+import { default as Dropdown } from '../modules/dropdowns.js';
 
-var filingsColumns = columnHelpers.getColumns(columns.filings, [
+var filingsColumns = getColumns(cols_filings, [
   'filer_name',
   'document_type',
   'version',
@@ -17,23 +17,23 @@ var filingsColumns = columnHelpers.getColumns(columns.filings, [
 
 $(document).ready(function() {
   var $table = $('#results');
-  new tables.DataTable($table, {
+  new DataTable($table, {
     autoWidth: false,
     tableSwitcher: true,
     title: 'Filings',
     path: ['filings'],
     columns: filingsColumns,
-    rowCallback: filings.renderRow,
+    rowCallback: renderRow,
     order: [[3, 'desc']],
     hideColumns: '.hide-processed',
     useFilters: true,
     useExport: true,
     callbacks: {
-      afterRender: filings.renderModal
+      afterRender: renderModal
     },
     drawCallback: function() {
       this.dropdowns = $table.find('.dropdown').map(function(idx, elm) {
-        return new dropdown.Dropdown($(elm), { checkboxes: false });
+        return new Dropdown($(elm), { checkboxes: false });
       });
     }
   });

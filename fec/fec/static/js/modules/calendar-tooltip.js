@@ -1,20 +1,20 @@
 /**
  *
  */
+import { default as Dropdown } from './dropdowns.js';
+import { default as Listeners } from './listeners.js';
 
-var dropdown = require('./dropdowns');
-var listeners = require('./listeners');
 
 function CalendarTooltip(content, $container) {
   this.$content = $(content);
   this.$container = $container;
   this.$close = this.$content.find('.js-close');
   this.$dropdown = this.$content.find('.dropdown');
-  this.exportDropdown = new dropdown.Dropdown(this.$dropdown, {
+  this.exportDropdown = new Dropdown(this.$dropdown, {
     checkboxes: false
   });
 
-  this.events = new listeners.Listeners();
+  this.events = new Listeners();
   this.events.on(this.$close, 'click', this.close.bind(this));
   this.events.on($(document.body), 'click', this.handleClickAway.bind(this));
 

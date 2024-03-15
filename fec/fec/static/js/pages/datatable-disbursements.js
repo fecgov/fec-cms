@@ -1,26 +1,26 @@
 
-var tables = require('../modules/tables');
-var TableSwitcher = require('../modules/table-switcher').TableSwitcher;
-var columns = require('../modules/columns');
-var filtersEvent = require('../modules/filters-event');
+import { DataTable, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+import TableSwitcher from '../modules/table-switcher.js';
+import { disbursements as cols_disbursements } from '../modules/columns.js';
+import { lineNumberFilters } from '../modules/filters-event.js';
 
-var disbursementTemplate = require('../templates/disbursements.hbs');
+import disbursementTemplate from '../templates/disbursements.hbs';
 
 $(document).ready(function() {
   var $table = $('#results');
-  new tables.DataTable($table, {
+  new DataTable($table, {
     autoWidth: false,
     title: 'Disbursements',
     path: ['schedules', 'schedule_b'],
-    columns: columns.disbursements,
+    columns: cols_disbursements,
     query: { sort_nulls_last: false },
-    paginator: tables.SeekPaginator,
+    paginator: SeekPaginator,
     order: [[4, 'desc']],
     useFilters: true,
     useExport: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: tables.modalRenderFactory(disbursementTemplate)
+      afterRender: modalRenderFactory(disbursementTemplate)
     }
   });
 
@@ -29,15 +29,15 @@ $(document).ready(function() {
       path: ['schedules', 'schedule_b', 'efile'],
       dataType: 'efiling',
       hideColumns: '.hide-efiling',
-      paginator: tables.OffsetPaginator
+      paginator: OffsetPaginator
     },
     processed: {
       path: ['schedules', 'schedule_b'],
       dataType: 'processed',
       hideColumns: '.hide-processed',
-      paginator: tables.SeekPaginator
+      paginator: SeekPaginator
     }
   }).init();
 
-  filtersEvent.lineNumberFilters();
+  lineNumberFilters();
 });

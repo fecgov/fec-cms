@@ -1,11 +1,15 @@
 import { escape as _escape } from 'underscore';
 
-import { default as Filter } from './filter-base.js';
-import { default as typeahead } from '../typeahead.js';
+import { default as Filter, ensureArray } from './filter-base.js';
+import { datasets } from '../typeahead.js';
 import { default as FilterTypeahead } from './filter-typeahead.js';
 
+/**
+ * 
+ * @param {jQuery.Object} elm 
+ */
 export default function TypeaheadFilter(elm) {
-  Filter.Filter.call(this, elm);
+  Filter.call(this, elm);
 
   var key = this.$elm.data('dataset');
   var allowText = this.$elm.data('allow-text') !== undefined;
@@ -22,7 +26,7 @@ TypeaheadFilter.prototype = Object.create(Filter.prototype);
 TypeaheadFilter.constructor = TypeaheadFilter;
 
 TypeaheadFilter.prototype.fromQuery = function(query) {
-  var values = query[this.name] ? Filter.ensureArray(query[this.name]) : [];
+  const values = query[this.name] ? ensureArray(query[this.name]) : [];
   this.typeaheadFilter.getFilters(values);
   this.typeaheadFilter.$elm.find('input[type="checkbox"]').val(values);
   return this;

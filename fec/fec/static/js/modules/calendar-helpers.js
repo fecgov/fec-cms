@@ -4,7 +4,7 @@
 import { default as URI } from 'urijs';
 
 // var moment = require('moment');
-import 'moment';
+import { default as moment } from 'moment';
 
 export function getGoogleUrl(event) {
   var fmt, dates;

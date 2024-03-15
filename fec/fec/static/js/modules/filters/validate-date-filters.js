@@ -1,6 +1,6 @@
 var moment = require('moment');
 
-var Filter = require('./filter-base');
+import { default as Filter } from './filter-base.js';
 
 require('inputmask');
 require('inputmask.date.extensions');
@@ -12,7 +12,7 @@ require('inputmask.date.extensions');
  * the dates entered are within a period of time
  */
 function ValidateDateFilter(elm) {
-  Filter.Filter.call(this, elm);
+  Filter.call(this, elm);
   this.duration = this.$elm.data('duration');
   this.$range = this.$elm.find('.js-date-range');
   this.$minDate = this.$elm.find('.js-min-date');
@@ -33,7 +33,7 @@ function ValidateDateFilter(elm) {
   $(document.body).on('tag:removeAll', this.handleRemoveAll.bind(this));
 }
 
-ValidateDateFilter.prototype = Object.create(Filter.Filter.prototype);
+ValidateDateFilter.prototype = Object.create(Filter.prototype);
 ValidateDateFilter.constructor = ValidateDateFilter;
 
 ValidateDateFilter.prototype.handleInputChange = function(e) {

@@ -1,10 +1,11 @@
 import { escape as _escape } from 'underscore';
 
-import { default as Filter } from './filter-base.js';
+import { default as Filter, ensureArray } from './filter-base.js';
 import { default as CheckboxFilter } from './checkbox-filter.js';
+import Inputmask from 'inputmask';
 
 export default function TextFilter(elm) {
-  Filter.Filter.call(this, elm);
+  Filter.call(this, elm);
 
   this.id = this.$input.attr('id');
 
@@ -21,12 +22,12 @@ export default function TextFilter(elm) {
   this.checkboxIndex = 1;
 }
 
-// TextFilter.constructor = TextFilter;
-// TextFilter.prototype = Object.create(Filter.Filter.prototype);
+TextFilter.constructor = TextFilter;
+TextFilter.prototype = Object.create(Filter.prototype);
 
 TextFilter.prototype.fromQuery = function(query) {
   const self = this;
-  const values = query[this.name] ? Filter.ensureArray(query[this.name]) : [];
+  let values = query[this.name] ? ensureArray(query[this.name]) : [];
   values = values.reverse();
   values.forEach(function(value) {
     self.appendCheckbox(value);

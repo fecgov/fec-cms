@@ -13,10 +13,10 @@ import Dropdown from './modules/dropdowns.js';
 import { default as Search } from './modules/search.js';
 
 // Include vendor scripts
-import { init as tablistInit } from './vendor/tablist.js';
-tablistInit();
+import { init as initTablist } from './vendor/tablist.js';
+initTablist();
 
-import { init as toggleInit } from './modules/toggle.js';
+import { default as initToggles } from './modules/toggle.js';
 import { hydrate as downloadHydrate } from './modules/download.js';
 import { default as CycleSelect } from './modules/cycle-select.js';
 
@@ -91,6 +91,6 @@ $(document).ready(function() {
     CycleSelect.build($(elm));
   });
 
-  toggleInit();
+  initToggles();
   downloadHydrate();
 });

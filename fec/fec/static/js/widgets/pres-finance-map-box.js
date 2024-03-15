@@ -71,7 +71,7 @@ import { buildUrl, passiveListenerIfSupported } from '../modules/helpers.js';
 import 'abortcontroller-polyfill';
 import { customEvent } from '../modules/analytics.js';
 
-const DataMap = require('../modules/data-map').DataMap;
+import DataMap from '../modules/data-map.js';
 const AbortController = window.AbortController;
 
 /**

@@ -1,9 +1,7 @@
-var Typeahead = require('../modules/typeahead').Typeahead;
+import { default as Typeahead } from '../modules/typeahead.js';
 import { default as URI } from 'urijs';
-
-const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
-
-const analytics = require('../modules/analytics');
+import { loadRecaptcha } from '../modules/load-recaptcha.js';
+import { customEvent } from '../modules/analytics.js';
 
 /**
  * ServiceNow contact form
@@ -368,7 +366,7 @@ RadFormValidate.prototype.clearError = function(req) {
  */
 RadFormValidate.prototype.validateRecaptcha = function() {
   if (grecaptcha.getResponse() == '') {
-    analytics.customEvent({
+    customEvent({
       event: 'fecCustomEvent',
       eventCategory: 'Error',
       eventAction: 'RAD form validation',
@@ -413,7 +411,7 @@ RadFormValidate.prototype.showError = function(req) {
     }
     req_fieldError.textContent = '';
   }
-  analytics.customEvent({
+  customEvent({
     event: 'fecCustomEvent',
     eventCategory: 'Error',
     eventAction: 'RAD form validation',

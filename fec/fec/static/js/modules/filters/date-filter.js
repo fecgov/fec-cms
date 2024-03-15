@@ -1,11 +1,8 @@
-import 'moment';
+import { default as moment } from 'moment';
 
-import { default as Filter } from './filter-base.js';
+import { default as Filter, ensureArray } from './filter-base.js';
 
-import 'inputmask';
-import $ from 'jquery';
-import 'inputmask.date.extensions';
-// import 'jquery.inputmask/dist/inputmask/inputmask.date.extensions';
+import Inputmask from 'inputmask';
 
 /**
  * 
@@ -13,8 +10,6 @@ import 'inputmask.date.extensions';
  * @property 
  */
 export default function DateFilter(elm) {
-  console.log('DateFilter(elm): ', elm);
-  console.log('  typeof: ', typeof elm);
   Filter.call(this, elm);
   this.validateInput = this.$elm.data('validate') || false;
   this.$range = this.$elm.find('.js-date-range');
@@ -136,7 +131,7 @@ DateFilter.prototype.fromQuery = function(query) {
 };
 
 DateFilter.prototype.setValue = function(value) {
-  value = Filter.ensureArray(value);
+  value = ensureArray(value);
   this.$minDate.val(value[0]).change();
   this.$maxDate.val(value[1]).change();
 };

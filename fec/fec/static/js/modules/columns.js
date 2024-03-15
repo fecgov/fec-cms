@@ -2,7 +2,7 @@ import { contains as _contains, extend as _extend, first as _first, last as _las
 
 import { barColumn, buildEntityLink, formattedColumn, urlColumn } from './column-helpers.js';
 import { getCycle, MODAL_TRIGGER_HTML, yearRange } from './tables.js';
-import { amendmentVersion, buildAppUrl, currency, datetime, globals } from './helpers.js';
+import { amendmentVersion, amendmentVersionDescription, buildAppUrl, currency, datetime, globals } from './helpers.js';
 import { supportOppose } from './decoders.js';
 import { default as moment } from 'moment';
 

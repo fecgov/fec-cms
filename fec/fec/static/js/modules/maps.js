@@ -17,7 +17,7 @@ import { feature } from 'topojson-client/dist/topojson-client.js';
 import { default as L } from 'leaflet';
 import 'leaflet-providers';
 
-import { fipsByState } from './fips.js';
+import { fipsByCode, fipsByState } from './fips.js';
 import { buildUrl, currency } from './helpers.js';
 import { encodeDistrict, findDistrict } from './election-utils.js';
 import { default as states } from '../data/us-states-10m.json' assert { type: 'json' };
@@ -96,7 +96,7 @@ export function stateMap($elm, data, width, height, min, max, addLegend, addTool
       return results[d.id] ? scale(results[d.id]) : colorZero;
     })
     .attr('data-state', function(d) {
-      return fips.fipsByCode[d.id].STATE_NAME;
+      return fipsByCode[d.id].STATE_NAME;
     })
     .attr('class', 'shape')
     .attr('d', path)
@@ -171,7 +171,7 @@ function stateTooltips(svg, path, results) {
     .on('mouseover', function(d) {
       this.parentNode.appendChild(this);
       const html = template_tooltip({
-        name: fips.fipsByCode[d.id].STATE_NAME,
+        name: fipsByCode[d.id].STATE_NAME,
         total: currency(results[d.id] || 0)
       });
       tooltip.style('visibility', 'visible').html(html);

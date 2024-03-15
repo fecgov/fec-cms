@@ -1,13 +1,13 @@
 import { extend as _extend } from 'underscore';
-var helpers = require('../modules/helpers');
+import { buildUrl, getTimePeriod } from './helpers.js';
 import { default as URI } from 'urijs';
-var tables = require('./tables');
+import { modalRenderFactory } from './tables.js';
 
-var candidatesTemplate = require('../templates/candidates.hbs');
+import candidatesTemplate from '../templates/candidates.hbs';
 
 function getCandidateCommittees(row, cycle, electionFull) {
   // Build the URL and make a call to the history endpoint
-  var url = helpers.buildUrl(
+  const url = buildUrl(
     ['candidate', row.candidate_id, 'committees', 'history', cycle],
     { election_full: electionFull }
   );
@@ -33,7 +33,7 @@ function getCandidateCommittees(row, cycle, electionFull) {
 }
 
 function getCandidateFilings(row) {
-  var url = helpers.buildUrl(['candidate', row.candidate_id, 'filings'], {
+  const url = buildUrl(['candidate', row.candidate_id, 'filings'], {
     form_type: 'F2'
   });
 
@@ -55,7 +55,7 @@ var renderCandidatePanel = function(showFinancialTotals) {
     // Build a string showing the range covered by the financial totals
     // Only relevant on office pages
     var timePeriod = showFinancialTotals
-      ? helpers.getTimePeriod(electionYear, cycle, electionFull, row.office)
+      ? getTimePeriod(electionYear, cycle, electionFull, row.office)
       : null;
 
     if (showFinancialTotals) {

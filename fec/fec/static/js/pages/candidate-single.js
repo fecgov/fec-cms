@@ -11,7 +11,7 @@ import { init as initMapsEvent } from '../modules/maps-event.js';
 import { barsAfterRender, DataTable, SeekPaginator, simpleDOM } from '../modules/tables.js';
 
 import {
-  amendmentVersion, buildAppUrl, buildUrl, formatCycleRange, missingDataReason
+  amendmentVersion, amendmentVersionDescription, buildAppUrl, buildUrl, formatCycleRange, missingDataReason
 } from '../modules/helpers.js';
 import {
   buildEntityLink, buildTotalLink, getColumns, getSizeParams, sizeInfo, urlColumn
