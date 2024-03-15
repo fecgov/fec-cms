@@ -18,7 +18,6 @@ describe('Listeners', function() {
 
   it('adds listeners', function() {
     this.listeners.on('#fixtures', dummyListener);
-    // console.log(this.listeners.listeners[0].$elm);
     expect(this.listeners.listeners[0]).to.deep.equal(
       {$elm: $('#fixtures'), args: [dummyListener]}
     );

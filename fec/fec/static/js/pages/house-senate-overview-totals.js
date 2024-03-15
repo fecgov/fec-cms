@@ -1,7 +1,8 @@
-//
-
 import { download } from '../modules/download';
 import { buildUrl } from '../modules/helpers';
+/**
+ * 
+ */
 
 /**
  * Runs the Totals tab at /data/elections/house/ and /data/elections/senate/

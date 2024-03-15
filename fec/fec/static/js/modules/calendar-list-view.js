@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 import { chain as _chain, each as _each, pairs as _pairs, reduce as _reduce } from 'underscore';
 var moment = require('moment');
 require('fullcalendar');

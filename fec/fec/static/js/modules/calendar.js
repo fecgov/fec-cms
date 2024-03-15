@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 import { default as URI } from 'urijs';
 import { extend as _extend, isEqual as _isEqual } from 'underscore';
 var moment = require('moment');

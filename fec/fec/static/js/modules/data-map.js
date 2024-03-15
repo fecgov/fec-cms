@@ -100,7 +100,6 @@ export default function DataMap(elm, opts) {
  */
 DataMap.prototype.init = function() {
   const instance = this;
-
   maxUSbounds.width = maxUSbounds.east - maxUSbounds.west;
   maxUSbounds.height = maxUSbounds.south - maxUSbounds.north;
   maxUSbounds.heightRatio = maxUSbounds.height / maxUSbounds.width; // TODO - need this?

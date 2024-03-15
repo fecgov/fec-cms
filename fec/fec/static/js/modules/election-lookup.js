@@ -16,14 +16,11 @@ import { default as ElectionMap } from './election-map.js';
  */
 
 export default function ElectionLookup(selector) {
-  console.log('ElectionLookup(selector): ', selector);
   this.$elm = $(selector);
   this.$form = this.$elm.find('form');
   this.$state = this.$form.find('[name="state"]');
   this.$district = this.$form.find('[name="district"]').prop('disabled', true);
   this.$submit = this.$form.find('[type="submit"]');
-
-  console.log('  this.$elm: ', this.$elm);
 
   this.districts = 0;
   if (this.$elm.length && isInViewport(this.$elm)) {
@@ -66,7 +63,6 @@ ElectionLookup.prototype.init = function() {
  * element of the election search form
  */
 ElectionLookup.prototype.wakeTheMap = function() {
-  // console.log('wakeTheMap()');
   if (this.initialized === false) {p
     if (this.dormantMap) this.dormantMap.removeEventListener('click', this.wakeTheMap);
     document.removeEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap);

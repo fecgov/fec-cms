@@ -1,3 +1,6 @@
+/**
+ *
+ */
 import { default as URI } from 'urijs';
 
 // var moment = require('moment');

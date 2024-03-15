@@ -74,8 +74,6 @@ export default function ElectionMap(elm, opts) {
  * Initialize the map
  */
 ElectionMap.prototype.init = function() {
-  // console.log('ElectionMap.init()');
-  // console.log('  this.initialized: ', this.initialized);
   if (this.initialized === false) {
     this.overlay = null;
     this.districts = null;

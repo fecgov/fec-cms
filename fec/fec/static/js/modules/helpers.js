@@ -384,7 +384,7 @@ export function getTimePeriod(electionYear, cycle, electionFull, office) {
   return min + '–' + max;
 }
 
-/*
+/**
  * zeroPad: used to add decimals to numbers in order to right-align them
  * It does so by getting the width of a container element, measuring the length
  * of an item, and then appending decimals until the item is as long as the container
@@ -393,7 +393,6 @@ export function getTimePeriod(electionYear, cycle, electionFull, office) {
  * @param item: a selector for the items whose width we will equalize
  * @param appendee (optional): what to append the decimal to
  */
-
 export function zeroPad(container, item, appendee) {
   // Subtract 2 so if it's close we don't go over
   const maxWidth = $(container).width() - 6;

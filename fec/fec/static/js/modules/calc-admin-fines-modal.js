@@ -85,9 +85,4 @@ if (elementsWithAdminFinesCalcClass.length > 0) {
     document.querySelector('body').classList.remove('scroll-locked-for-modal');
   }
   // END TEMP
-
-  /* let calcAFScriptElem = document.createElement('script');
-  calcAFScriptElem.async = false;
-  calcAFScriptElem.src = "{% asset_for_js 'calc-admin-fines.js' %}";
-  document.head.appendChild(calcAFScriptElem); */
 }

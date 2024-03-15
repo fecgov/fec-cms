@@ -12,7 +12,6 @@ import { default as districtTemplate } from '../templates/districts.hbs';
  * It handles all logic around showing districts for the district select
  */
 export default function ElectionForm(elm) {
-  console.log('new ElectionForm(elm): ', elm);
   this.$elm = $(elm);
   this.$state = this.$elm.find('[name="state"]');
   this.$district = this.$elm.find('[name="district"]').prop('disabled', true);
@@ -23,7 +22,7 @@ export default function ElectionForm(elm) {
 
 /**
  * Identify if a select has an option matching a particular value
- * @param {jQuery.object} $select - jQuery.object selector of a <select>
+ * @param {jQuery.Object} $select - jQuery.Object selector of a <select>
  * @param {string} value - The value to check for
  * @return {boolean} Whether or not the select has the value
  */

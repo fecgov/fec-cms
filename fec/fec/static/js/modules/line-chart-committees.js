@@ -312,7 +312,6 @@ LineChartCommittees.prototype.xAxisFormatter = function() {
 
 LineChartCommittees.prototype.handleMouseMove = function() {
   var svg = this.element.select('svg')[0][0];
-  // console.log(d3.mouse(svg)[0])
   var x0 = this.x.invert(d3.mouse(svg)[0] - 20);
   var i = bisectDate(this.chartData, x0, 1);
   var d = this.chartData[i - 1];

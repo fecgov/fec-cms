@@ -37,7 +37,6 @@ const officeMap = {
  * @param {string} selector - Selector string
  */
 export default function ElectionSearch(selector) {
-  console.log('new ElectionSearch(selector): ', selector);
   this.$elm = $(selector);
   this.districts = 0;
   this.serialized = {};
@@ -87,7 +86,6 @@ ElectionSearch.constructor = ElectionSearch;
  * element of the election search form
  */
 ElectionSearch.prototype.wakeTheMap = function() {
-  // console.log('ElectionSearch.wakeTheMap(e): ', e);
   if (!this.initialized) {
     document.removeEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap.bind(this));
     if (this.dormantMap) this.dormantMap.removeEventListener('click', this.wakeTheMap.bind(this));
@@ -101,19 +99,13 @@ ElectionSearch.prototype.wakeTheMap = function() {
  * then initializes the interactive map
  */
 ElectionSearch.prototype.initInteractiveMap =function() {
-  // console.log('ElectionSearch.initInteractiveMap()');
-  // console.log('  this: ', this);
-  // console.log('  this.initialized: ', this.initialized);
   if (!this.initialized) {
-    // console.log('  if');
     if (this.dormantMap) {
-      // console.log('    if');
       this.dormantMap.classList.remove('dormant');
       this.dormantMap.removeAttribute('title');
       delete this.dormantMap;
     }
 
-    console.log('this.map: ', this.map);
     if (!this.map) {
       this.map = new ElectionMap(this.$map.get(0), {
         drawStates: _isEmpty(this.serialized),
@@ -122,15 +114,10 @@ ElectionSearch.prototype.initInteractiveMap =function() {
     }
     this.initialized = true;
 
-    // console.log('  calling the block');
     this.getUpcomingPresidentialElection();
     this.getUpcomingElections();
     this.performStateChange();
     this.handlePopState();
-    // console.log('  called the block');
-
-  } else {
-    // console.log('  else');
   }
 };
 
@@ -197,7 +184,6 @@ ElectionSearch.prototype.handleZipChange = function() {
  * @param {int} district - District number
  */
 ElectionSearch.prototype.handleSelectMap = function(state, district) {
-  console.log('election-search.handleSelectMap(state, district): ', state, district);
   this.$zip.val('');
   this.$state.val(state);
   this.updateDistricts(state);

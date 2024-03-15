@@ -1,5 +1,6 @@
-//
-
+/**
+ * 
+ */
 import { PartyMoneyBars } from '../modules/party-money-bars';
 import { FECContainerQuery } from '../modules/container-queries';
 
