@@ -19,7 +19,7 @@ const fileURLToPath = require('url');
 
 let entries = {
   polyfills: './fec/static/js/polyfills.js',
-  vendor: ['handlebars'],
+  vendors: ['handlebars', 'jquery'],
   global: './fec/static/js/global.js',
   home: './fec/static/js/pages/home.js',
   init: './fec/static/js/init.js',
