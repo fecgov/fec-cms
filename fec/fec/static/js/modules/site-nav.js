@@ -1,5 +1,5 @@
-import { BREAKPOINTS, getWindowWidth, } from './helpers.js';
 import { removeTabindex, restoreTabindex } from './accessibility.js';
+import { BREAKPOINTS, getWindowWidth } from './helpers.js';
 
 // window.$ = window.jQuery = $;
 

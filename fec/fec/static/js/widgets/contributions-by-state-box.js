@@ -18,12 +18,12 @@ const breakpointToXL = 860;
 const rootPathToIndividualContributions =
   '/data/receipts/individual-contributions/';
 
-import { buildUrl, passiveListenerIfSupported } from '../modules/helpers.js';
-import { default as Typeahead } from '../modules/typeahead.js';
-import 'abortcontroller-polyfill';
 import { customEvent } from '../modules/analytics.js';
-
 import DataMap from '../modules/data-map.js';
+import { buildUrl, passiveListenerIfSupported } from '../modules/helpers.js';
+import Typeahead from '../modules/typeahead.js';
+import 'abortcontroller-polyfill';
+
 const AbortController = window.AbortController;
 
 /**

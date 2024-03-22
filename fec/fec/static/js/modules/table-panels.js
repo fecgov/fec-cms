@@ -1,8 +1,8 @@
 import { extend as _extend } from 'underscore';
-import { buildUrl, getTimePeriod } from './helpers.js';
 import { default as URI } from 'urijs';
-import { modalRenderFactory } from './tables.js';
 
+import { buildUrl, getTimePeriod } from './helpers.js';
+import { modalRenderFactory } from './tables.js';
 import candidatesTemplate from '../templates/candidates.hbs';
 
 function getCandidateCommittees(row, cycle, electionFull) {

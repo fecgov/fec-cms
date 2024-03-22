@@ -1,9 +1,8 @@
 import { chain as _chain, each as _each } from 'underscore';
 
 const accessibility = require('./accessibility');
-const feedback = require('../templates/feedback.hbs');
-
 const loadRecaptcha = require('./load-recaptcha').loadRecaptcha;
+const feedback = require('../templates/feedback.hbs');
 
 const statusClasses = {
   success: 'message--success',

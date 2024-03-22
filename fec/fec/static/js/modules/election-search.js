@@ -3,21 +3,19 @@
  * Templates: /fec/data/templates/election-lookup.jinja
  * Not to be confused with election-lookup.js, which is used on /data/elections/
  */
-import { default as URI } from 'urijs';
-import { extend as _extend, filter as _filter, isEmpty as _isEmpty, isEqual as _isEqual } from 'underscore';
 import { default as moment } from 'moment';
+import { extend as _extend, filter as _filter, isEmpty as _isEmpty, isEqual as _isEqual } from 'underscore';
+import { default as URI } from 'urijs';
 
 import { pageView } from './analytics.js';
-
-import { default as ElectionForm } from './election-form.js';
-import { default as ElectionMap } from './election-map.js';
-import { buildAppUrl, buildUrl } from './helpers.js';
 import { states } from './decoders.js';
-
-import { default as resultTemplate } from '../templates/electionResult.hbs';
-import { default as upcomingTemplate } from '../templates/upcomingPresidential.hbs';
-import { default as zipWarningTemplate } from '../templates/electionZipWarning.hbs';
+import ElectionForm from './election-form.js';
+import ElectionMap from './election-map.js';
+import { buildAppUrl, buildUrl } from './helpers.js';
 import { default as noResultsTemplate } from '../templates/electionNoResults.hbs';
+import { default as resultTemplate } from '../templates/electionResult.hbs';
+import { default as zipWarningTemplate } from '../templates/electionZipWarning.hbs';
+import { default as upcomingTemplate } from '../templates/upcomingPresidential.hbs';
 // var resultTemplate = require('../templates/electionResult.hbs');
 // var upcomingTemplate = require('../templates/upcomingPresidential.hbs');
 // var zipWarningTemplate = require('../templates/electionZipWarning.hbs');

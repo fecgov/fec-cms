@@ -1,6 +1,7 @@
 import { chain as _chain, extend as _extend, range as _range, unique as _unique } from 'underscore';
-import { buildUrl, filterNull } from './helpers.js';
+
 import { encodeDistrict } from './election-utils.js';
+import { buildUrl, filterNull } from './helpers.js';
 import { default as districts } from '../data/stateDistricts.json' assert { type: 'json' };
 import { default as districtTemplate } from '../templates/districts.hbs';
 

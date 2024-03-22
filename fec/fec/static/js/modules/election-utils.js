@@ -1,14 +1,12 @@
+import { sprintf } from 'sprintf-js';
+import { feature } from 'topojson-client/dist/topojson-client.js';
 import { filter as _filter, find as _find } from 'underscore';
+
 import { fipsByCode, fipsByState } from './fips.js';
 // var fips = require('./fips');
 import { buildUrl } from './helpers.js';
-import { feature } from 'topojson-client/dist/topojson-client.js';
-
-import { sprintf } from 'sprintf-js';
-
-import { default as electionOfficesTemplate } from '../templates/electionOffices.hbs';
-
 import { default as districts } from '../data/districts.json' assert { type: 'json' };
+import { default as electionOfficesTemplate } from '../templates/electionOffices.hbs';
 
 export const districtFeatures = feature(districts, districts.objects.districts);
 

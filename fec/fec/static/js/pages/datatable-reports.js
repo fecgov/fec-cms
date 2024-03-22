@@ -1,14 +1,13 @@
 
-import { DataTable, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
-import { reports as cols_reports } from '../modules/columns.js';
-import { fetchReportDetails } from '../modules/filings';
 import { getColumns } from '../modules/column-helpers';
-import TableSwitcher from '../modules/table-switcher.js';
+import { reports as cols_reports } from '../modules/columns.js';
 import Dropdown from '../modules/dropdowns.js';
-
+import { fetchReportDetails } from '../modules/filings';
+import TableSwitcher from '../modules/table-switcher.js';
+import { DataTable, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 import candidateTemplate from '../templates/reports/candidate.hbs';
-import pacPartyTemplate from '../templates/reports/pac.hbs';
 import ieOnlyTemplate from '../templates/reports/ie-only.hbs';
+import pacPartyTemplate from '../templates/reports/pac.hbs';
 
 let pageTitle,
   pageTemplate,

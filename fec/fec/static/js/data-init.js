@@ -1,24 +1,21 @@
 // Implementing a polyfill for js native WeakMap
 // in order to patch functionality in an included library
 // require('es6-weak-map/implement');
-
-import { Sticky } from 'component-sticky';
-import { Accordion } from 'aria-accordion/src/accordion.js';
 import { default as A11yDialog } from 'a11y-dialog';
+import { Accordion } from 'aria-accordion/src/accordion.js';
+import { Sticky } from 'component-sticky';
+
+import CycleSelect from './modules/cycle-select.js';
+import { hydrate as downloadHydrate } from './modules/download.js';
+import Dropdown from './modules/dropdowns.js';
+import Search from './modules/search.js';
+import { default as initToggles } from './modules/toggle.js';
+import { init as initTablist } from './vendor/tablist.js';
 
 // Hack: Append jQuery to `window` for use by legacy libraries
 // window.$ = window.jQuery = $;
 
-import Dropdown from './modules/dropdowns.js';
-import { default as Search } from './modules/search.js';
-
-// Include vendor scripts
-import { init as initTablist } from './vendor/tablist.js';
 initTablist();
-
-import { default as initToggles } from './modules/toggle.js';
-import { hydrate as downloadHydrate } from './modules/download.js';
-import { default as CycleSelect } from './modules/cycle-select.js';
 
 $(document).ready(function() {
   $('.js-dropdown').each(function() {

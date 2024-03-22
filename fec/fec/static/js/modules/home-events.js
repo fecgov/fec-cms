@@ -1,16 +1,14 @@
-import { getUrl } from './calendar-helpers.js';
 import { default as moment } from 'moment';
+
+import { getUrl } from './calendar-helpers.js';
+// const eventsTemplate = require('../templates/homepage/events-and-deadlines.hbs');
+import { default as eventsTemplate } from '../templates/homepage/events-and-deadlines.hbs';
 
 const today = new Date();
 const day = today.getDate();
 const month = today.getMonth() + 1;
 const year = today.getFullYear();
 const todaysDate = year + '-' + month + '-' + day;
-
-// const eventsTemplate = require('../templates/homepage/events-and-deadlines.hbs');
-import { default as eventsTemplate } from '../templates/homepage/events-and-deadlines.hbs';
-
-
 
 // These values come from constants.py
 // and need to match API parameter `calendar_category_id`

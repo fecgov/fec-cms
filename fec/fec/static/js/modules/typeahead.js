@@ -2,19 +2,19 @@
  * @fileoverview Creates the Typeahead element, extending node_modules/typeahead.js/dist/typeahead.jquery.js
  */
 
-import { default as URI } from 'urijs';
-import { extend as _extend, map as _map } from 'underscore';
+// import 'corejs-typeahead/src/typeahead/typeahead.js';
+import 'corejs-typeahead/dist/typeahead.jquery.js';
+import { default as Bloodhound } from 'corejs-typeahead/dist/bloodhound.js';
 import { compile as compileHBS } from 'handlebars';
+import { extend as _extend, map as _map } from 'underscore';
+import { default as URI } from 'urijs';
+
+import initEvents from './events.js';
 import { sanitizeValue } from './helpers.js';
 
 // Hack: Append jQuery to `window` for use by typeahead.js
 // window.$ = window.jQuery = $;
 
-// import 'corejs-typeahead/src/typeahead/typeahead.js';
-import typeahead from 'corejs-typeahead/dist/typeahead.jquery.js';
-import { default as Bloodhound } from 'corejs-typeahead/dist/bloodhound.js';
-
-import initEvents from './events.js';
 const events = initEvents();
 
 const officeMap = {

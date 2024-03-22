@@ -1,8 +1,8 @@
 
-import { DataTable, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
-import TableSwitcher from '../modules/table-switcher.js';
 import { receipts as cols_receipts } from '../modules/columns.js';
 import { lineNumberFilters } from '../modules/filters-event.js';
+import TableSwitcher from '../modules/table-switcher.js';
+import { DataTable, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 import { default as donationTemplate } from '../templates/receipts.hbs';
 
 $(document).ready(function() {

@@ -1,4 +1,5 @@
 import { each, reduce } from 'underscore';
+
 import { default as stateJson } from '../data/state.json' assert { type: 'json' };
 
 function byField(values, key) {

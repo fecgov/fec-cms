@@ -1,9 +1,8 @@
 
-import { amendmentVersion } from '../modules/helpers.js';
-import { DataTable, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 import { independentExpenditures } from '../modules/columns.js';
+import { amendmentVersion } from '../modules/helpers.js';
 import TableSwitcher from '../modules/table-switcher.js';
-
+import { DataTable, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 import expenditureTemplate from '../templates/independent-expenditures.hbs';
 
 const fetchReportDetails = function(row) {

@@ -1,5 +1,5 @@
-import { highlightState } from '../modules/maps.js';
 import initEvents from './events.js';
+import { highlightState } from '../modules/maps.js';
 let events = initEvents();
 
 export function highlightRowAndState($map, $table, state, scroll) {

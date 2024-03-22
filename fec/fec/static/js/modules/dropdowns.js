@@ -1,10 +1,10 @@
+/**
+ *
+ */
+import PerfectScrollbar from 'perfect-scrollbar';
 
-import 'perfect-scrollbar/jquery.js';
-
-// require('perfect-scrollbar/jquery')($);
 import { removeTabindex, restoreTabindex } from './accessibility.js';
-
-import { default as Listeners } from './listeners.js';
+import Listeners from './listeners.js';
 
 const KEYCODE_ESC = 27;
 const KEYCODE_ENTER = 13;

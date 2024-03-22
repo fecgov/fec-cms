@@ -1,5 +1,4 @@
 import { debounce as _debounce } from 'underscore';
-
 import { default as URI } from 'urijs';
 
 export function lineNumberFilters() {

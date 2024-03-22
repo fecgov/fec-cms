@@ -1,13 +1,13 @@
 /**
  * Scripts used on every page of the site e.g. main nav, search, feedback
  */
+import Feedback from './modules/feedback.js';
 import Glossary from 'glossary-panel/src/glossary.js';
+import SiteNav from './modules/site-nav.js';
+import Skipnav from './modules/skip-nav.js';
+import TOC from './modules/toc.js';
+import Typeahead from './modules/typeahead.js';
 import { default as terms } from './data/terms.json' assert { type: 'json' };
-import { default as Feedback } from './modules/feedback.js';
-import { default as Skipnav } from './modules/skip-nav.js';
-import { default as SiteNav } from './modules/site-nav.js';
-import { default as TOC } from './modules/toc.js';
-import { default as Typeahead } from './modules/typeahead.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   /**

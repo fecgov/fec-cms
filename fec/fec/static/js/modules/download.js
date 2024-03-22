@@ -1,9 +1,9 @@
-import { default as URI } from 'urijs';
-import { extend as _extend, isEmpty as _isEmpty } from 'underscore';
 import { default as moment } from 'moment';
+import { extend as _extend, isEmpty as _isEmpty } from 'underscore';
+import { default as URI } from 'urijs';
 
-import { default as hbs_item } from '../templates/download/item.hbs';
 import { default as hbs_container } from '../templates/download/container.hbs';
+import { default as hbs_item } from '../templates/download/item.hbs';
 
 const templates = {
   item: hbs_item,

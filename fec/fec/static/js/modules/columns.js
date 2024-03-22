@@ -1,11 +1,10 @@
+import { default as moment } from 'moment';
 import { contains as _contains, extend as _extend, first as _first, last as _last } from 'underscore';
 
 import { barColumn, buildEntityLink, formattedColumn, urlColumn } from './column-helpers.js';
-import { getCycle, MODAL_TRIGGER_HTML, yearRange } from './tables.js';
-import { amendmentVersion, amendmentVersionDescription, buildAppUrl, currency, datetime, globals } from './helpers.js';
 import { supportOppose } from './decoders.js';
-import { default as moment } from 'moment';
-
+import { amendmentVersion, amendmentVersionDescription, buildAppUrl, currency, datetime, globals } from './helpers.js';
+import { MODAL_TRIGGER_HTML, getCycle, yearRange } from './tables.js';
 import { default as reportType } from '../templates/reports/reportType.hbs';
 
 export const dateColumn = formattedColumn(datetime, {

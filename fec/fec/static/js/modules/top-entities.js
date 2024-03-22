@@ -1,6 +1,6 @@
 import { default as URI } from 'urijs';
-import { buildAppUrl, buildUrl, currency } from '../modules/helpers.js';
 
+import { buildAppUrl, buildUrl, currency } from '../modules/helpers.js';
 import { default as TOP_ROW } from '../templates/top-entity-row.hbs';
 
 export function TopEntities(elm, type) {

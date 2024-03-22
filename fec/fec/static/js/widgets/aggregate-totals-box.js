@@ -12,9 +12,9 @@ const breakpointToXL = 860;
 const isModernBrowser = 'fetch' in window && 'assign' in Object;
 
 // Includes
+import { electionYearsOptions, officeDefs } from './widget-vars.js';
 import { customEvent } from '../modules/analytics.js';
 import { buildUrl } from '../modules/helpers.js';
-import { electionYearsOptions, officeDefs } from './widget-vars.js';
 
 /**
  * Handles the functionality for the aggregate totals box(es).

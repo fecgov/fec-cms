@@ -1,6 +1,8 @@
 /**
  * pagingType documentation: https://datatables.net/reference/option/pagingType
  */
+
+import DT_DataTable from 'datatables.net-dt';
 import {
   chain as _chain,
   clone as _clone,
@@ -16,33 +18,27 @@ import {
   pairs as _pairs,
   pluck as _pluck
 } from 'underscore';
-
-import 'datatables.net';
-import 'datatables.net-responsive';
+import 'datatables.net-responsive-dt';
 
 import { removeTabindex, restoreTabindex } from './accessibility.js';
 import { sizeColumns, stateColumns } from './column-helpers.js';
 import { download, isPending, pendingCount } from './download.js';
-import { default as Dropdown } from './dropdowns.js';
+import Dropdown from './dropdowns.js';
 import {
   buildUrl,
   filterNull,
-  numberFormatter as formatNumber,
   isLargeScreen,
+  numberFormatter as formatNumber,
   LOADING_DELAY,
-  SUCCESS_DELAY,
+  SUCCESS_DELAY
 } from './helpers.js';
-import { onShow as tabsOnShow } from '../vendor/tablist.js';
 import { updateQuery } from './urls.js';
-
-// Widgets
-import { default as TagList } from '../modules/filters/filter-tags.js';
 import { default as FilterPanel } from '../modules/filters/filter-panel.js';
-
+import { default as TagList } from '../modules/filters/filter-tags.js';
 import comparisonTemplate from '../templates/comparison.hbs';
 import exportWidgetTemplate from '../templates/tables/exportWidget.hbs';
 import missingTemplate from '../templates/tables/noData.hbs';
-
+import { onShow as tabsOnShow } from '../vendor/tablist.js';
 
 export const simpleDOM = 't<"results-info"lpi>';
 export const browseDOM = '<"panel__main"t>' + '<"results-info"lpi>';

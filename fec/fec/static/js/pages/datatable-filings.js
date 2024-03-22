@@ -1,10 +1,9 @@
-import { renderRow, renderModal } from '../modules/filings.js';
 import { getColumns } from '../modules/column-helpers.js';
 import { filings as cols_filings } from '../modules/columns.js';
-import { DataTable } from '../modules/tables.js';
-
+import Dropdown from '../modules/dropdowns.js';
+import { renderRow, renderModal } from '../modules/filings.js';
 import TableSwitcher from '../modules/table-switcher.js';
-import { default as Dropdown } from '../modules/dropdowns.js';
+import { DataTable } from '../modules/tables.js';
 
 var filingsColumns = getColumns(cols_filings, [
   'filer_name',

@@ -1,7 +1,8 @@
-import { default as Typeahead } from '../modules/typeahead.js';
 import { default as URI } from 'urijs';
-import { loadRecaptcha } from '../modules/load-recaptcha.js';
+
 import { customEvent } from '../modules/analytics.js';
+import { loadRecaptcha } from '../modules/load-recaptcha.js';
+import Typeahead from '../modules/typeahead.js';
 
 /**
  * ServiceNow contact form

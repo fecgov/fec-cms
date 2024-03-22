@@ -3,7 +3,11 @@
  */
 import { chain as _chain, each as _each, pairs as _pairs, reduce as _reduce } from 'underscore';
 import { default as moment } from 'moment';
-require('fullcalendar');
+import { Calendar } from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import listPlugin from '@fullcalendar/list';
+// import 'fullcalendar';
+// require('fullcalendar');
 
 import { default as Dropdown } from './dropdowns.js';
 

@@ -2,10 +2,9 @@ import { extend as _extend } from 'underscore';
 
 import { MODAL_TRIGGER_CLASS, modalRenderFactory } from './tables.js';
 import { amendmentVersion, amendmentVersionDescription, buildUrl } from '../modules/helpers.js';
-
 import { default as candidateTemplate } from '../templates/reports/candidate.hbs';
-import { default as pacTemplate } from '../templates/reports/pac.hbs';
 import { default as ieTemplate } from '../templates/reports/ie-only.hbs';
+import { default as pacTemplate } from '../templates/reports/pac.hbs';
 
 const templates = {
   F3: candidateTemplate,

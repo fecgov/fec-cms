@@ -1,9 +1,8 @@
 
-import { DataTable, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
-import TableSwitcher from '../modules/table-switcher.js';
 import { disbursements as cols_disbursements } from '../modules/columns.js';
 import { lineNumberFilters } from '../modules/filters-event.js';
-
+import TableSwitcher from '../modules/table-switcher.js';
+import { DataTable, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 import disbursementTemplate from '../templates/disbursements.hbs';
 
 $(document).ready(function() {

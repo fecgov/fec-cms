@@ -9,7 +9,8 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "plugin:import/recommended"
   ],
   "globals": {
     "document": true,
@@ -55,8 +56,34 @@
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     "react/prop-types": "off",
-    "semi": [ "error", "always" ]
+    "semi": [ "error", "always" ],
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal", ["parent", "sibling"]],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ]
   },
+  "overrides": [{
+    "files": ["/fec/fec/static/tests/js/*.js"],
+    "rules": {
+      "sort-imports": "off",
+      "import/order": ["off"]
+    }
+  }],
   "parser": "@babel/eslint-parser",
   "parserOptions": {
       "ecmaVersion": 6,
@@ -66,7 +93,8 @@
       }
   },
   "plugins": [
-    "react"
+    "react",
+    "import"
   ],
   "settings": {
     "react": {

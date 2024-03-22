@@ -1,9 +1,8 @@
 
-import { DataTable, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
-import TableSwitcher from '../modules/table-switcher.js';
 import { allocatedFederalNonfederalDisbursements as cols_allocatedFederalNonfederalDisbursements } from '../modules/columns.js';
 import { lineNumberFilters } from '../modules/filters-event.js';
-
+import TableSwitcher from '../modules/table-switcher.js';
+import { DataTable, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 import { default as allocatedFederalNonfederalDisbursementsTemplate } from '../templates/allocated-federal-nonfederal-disbursements.hbs';
 
 $(document).ready(function() {

@@ -1,5 +1,5 @@
-import { default as ElectionLookup } from '../modules/election-lookup.js';
 import { customEvent } from '../modules/analytics.js';
+import ElectionLookup from '../modules/election-lookup.js';
 
 $(document).ready(function() {
   new ElectionLookup('#election-lookup', false);

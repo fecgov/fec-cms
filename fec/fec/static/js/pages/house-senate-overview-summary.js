@@ -1,8 +1,8 @@
 /**
  * 
  */
-import { PartyMoneyBars } from '../modules/party-money-bars';
 import { FECContainerQuery } from '../modules/container-queries';
+import { PartyMoneyBars } from '../modules/party-money-bars';
 
 /**
  * Runs the Summary tab at /data/elections/house/ and /data/elections/senate/

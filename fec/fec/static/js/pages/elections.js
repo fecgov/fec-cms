@@ -1,11 +1,10 @@
 
 import { chain as _chain } from 'underscore';
 
-import { DistrictMap, initStateMaps } from '../modules/maps.js';
-import { drawComparison, initSpendingTables } from '../modules/tables.js';
-import { buildTableQuery, buildUrl, scrollAnchor } from '../modules/helpers.js';
+import ElectionForm from '../modules/election-form.js';
 import { getStateElectionOffices } from '../modules/election-utils.js';
-import { default as ElectionForm } from '../modules/election-form.js';
+import { buildTableQuery, buildUrl, scrollAnchor } from '../modules/helpers.js';
+import { DistrictMap, initStateMaps } from '../modules/maps.js';
 import {
   candidateInformationColumns,
   communicationCostColumns,
@@ -13,6 +12,7 @@ import {
   electioneeringColumns,
   independentExpenditureColumns
 } from '../modules/table-columns.js';
+import { drawComparison, initSpendingTables } from '../modules/tables.js';
 
 $(document).ready(function() {
   const spendingTableOpts = {

@@ -3,9 +3,9 @@
  * Templates: /fec/fec/data/templates/landing.jinja
  * Not to be confused with election-search.js, which is used on the homepage and /data/elections/
  */
+import ElectionForm from './election-form.js';
+import ElectionMap from './election-map.js';
 import { isInViewport } from './helpers.js';
-import { default as ElectionForm } from './election-form.js';
-import { default as ElectionMap } from './election-map.js';
 
 /**
  * ElectionLookup
@@ -63,7 +63,7 @@ ElectionLookup.prototype.init = function() {
  * element of the election search form
  */
 ElectionLookup.prototype.wakeTheMap = function() {
-  if (this.initialized === false) {p
+  if (this.initialized === false) {
     if (this.dormantMap) this.dormantMap.removeEventListener('click', this.wakeTheMap);
     document.removeEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap);
     this.initInteractiveMap();

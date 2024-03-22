@@ -1,4 +1,7 @@
+import { default as chroma } from 'chroma-js';
 import d3 from 'd3';
+import { default as L } from 'leaflet';
+import { feature } from 'topojson-client/dist/topojson-client.js';
 import _, {
   chain as _chain,
   each as _each,
@@ -9,20 +12,15 @@ import _, {
   min as _min,
   pluck as _pluck,
   reduce as _reduce,
-  values as _values,
+  values as _values
 } from 'underscore';
-import { default as chroma } from 'chroma-js';
-import { feature } from 'topojson-client/dist/topojson-client.js';
-
-import { default as L } from 'leaflet';
 import 'leaflet-providers';
 
+import { encodeDistrict, findDistrict } from './election-utils.js';
 import { fipsByCode, fipsByState } from './fips.js';
 import { buildUrl, currency } from './helpers.js';
-import { encodeDistrict, findDistrict } from './election-utils.js';
 import { default as states } from '../data/us-states-10m.json' assert { type: 'json' };
 import { default as candidateStateMapTemplate } from '../templates/candidateStateMap.hbs';
-
 
 const stateFeatures = feature(states, states.objects.states).features;
 const stateFeatureMap = _.chain(stateFeatures)

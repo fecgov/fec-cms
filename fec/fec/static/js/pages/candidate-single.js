@@ -6,23 +6,20 @@
 
 import { default as URI } from 'urijs';
 
-import { stateMap } from '../modules/maps.js';
-import { init as initMapsEvent } from '../modules/maps-event.js';
-import { barsAfterRender, DataTable, SeekPaginator, simpleDOM } from '../modules/tables.js';
-
-import {
-  amendmentVersion, amendmentVersionDescription, buildAppUrl, buildUrl, formatCycleRange, missingDataReason
-} from '../modules/helpers.js';
 import {
   buildEntityLink, buildTotalLink, getColumns, getSizeParams, sizeInfo, urlColumn
 } from '../modules/column-helpers.js';
 import { committeeColumn, currencyColumn, dateColumn, filings, supportOpposeColumn } from '../modules/columns.js';
+import Dropdown from '../modules/dropdowns.js';
 import initEvents from '../modules/events.js';
-const events = initEvents();
-import { default as OtherSpendingTotals } from '../modules/other-spending-totals.js';
 import { renderModal } from '../modules/filings.js';
-
-import { default as Dropdown } from '../modules/dropdowns.js';
+import {
+  amendmentVersion, amendmentVersionDescription, buildAppUrl, buildUrl, formatCycleRange, missingDataReason
+} from '../modules/helpers.js';
+import { init as initMapsEvent } from '../modules/maps-event.js';
+import { stateMap } from '../modules/maps.js';
+import OtherSpendingTotals from '../modules/other-spending-totals.js';
+import { barsAfterRender, DataTable, SeekPaginator, simpleDOM } from '../modules/tables.js';
 import { default as reportType } from '../templates/reports/reportType.hbs';
 
 const aggregateCallbacks = {

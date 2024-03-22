@@ -1,18 +1,19 @@
 /**
  * 
  */
-import { default as URI } from 'urijs';
-import { extend as _extend, isEqual as _isEqual } from 'underscore';
+import { default as Handlebars } from 'hbsfy/runtime.js';
 import moment from 'moment';
+import { extend as _extend, isEqual as _isEqual } from 'underscore';
+import { default as URI } from 'urijs';
+
+import { checkStartTime, className, getGoogleUrl, mapCategoryDescription } from './calendar-helpers.js';
+import { default as CalendarTooltip } from './calendar-tooltip.js';
+import Dropdown from './dropdowns.js';
+import { LOADING_DELAY, SUCCESS_DELAY, datetime, eq, isLargeScreen, toUpperCase } from './helpers.js';
+import { pushQuery, updateQuery } from './urls.js';
+
 require('fullcalendar');
 
-import { pushQuery, updateQuery } from './urls.js';
-import { default as Dropdown } from './dropdowns.js';
-import { default as Handlebars } from 'hbsfy/runtime.js';
-import { datetime, eq, isLargeScreen, LOADING_DELAY, SUCCESS_DELAY, toUpperCase } from './helpers.js';
-
-import { default as CalendarTooltip } from './calendar-tooltip.js';
-import { checkStartTime, className, getGoogleUrl, mapCategoryDescription } from './calendar-helpers.js';
 require('./calendar-list-view');
 
 Handlebars.registerHelper(helpers.helpers);

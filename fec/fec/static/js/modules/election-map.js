@@ -1,14 +1,15 @@
-import { chain as _chain, extend as _extend, filter as _filter, find as _find, map as _map, max as _max } from 'underscore';
-import { feature } from 'topojson-client/dist/topojson-client.js';
 import { Set1 } from 'colorbrewer';
+import { default as L } from 'leaflet';
+import { feature } from 'topojson-client/dist/topojson-client.js';
+import { chain as _chain, extend as _extend, filter as _filter, find as _find, map as _map, max as _max } from 'underscore';
+
 // var colorbrewer = require('colorbrewer');
 import { decodeDistrict, decodeState, districtFeatures, findDistricts } from './election-utils.js';
 // var utils = require('./election-utils');
 import { default as states } from '../data/us-states-10m.json' assert { type: 'json' };
 
 const stateFeatures = feature(states, states.objects.states).features;
-import { default as L } from 'leaflet';
-import 'leaflet-providers'
+import 'leaflet-providers';
 // require('leaflet-providers');
 
 const FEATURE_TYPES = {

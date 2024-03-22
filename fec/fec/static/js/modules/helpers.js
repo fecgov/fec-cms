@@ -1,10 +1,12 @@
 /* global BASE_PATH, API_LOCATION, API_VERSION, API_KEY_PUBLIC */
 
 import DOMPurify from 'dompurify';
-
-import { default as URI } from 'urijs';
-import { chain, extend } from 'underscore';
+import * as Handlebars from 'handlebars/runtime';
 import { default as moment } from 'moment';
+import { default as numeral } from 'numeral';
+import { chain, extend } from 'underscore';
+import { default as URI } from 'urijs';
+
 import {
   amendments as decoders_amendments,
   forms as decoders_forms,
@@ -15,8 +17,6 @@ import {
   supportOppose as decoders_supportOppose,
   states as decoders_states
 } from './decoders.js';
-import * as Handlebars from 'handlebars/runtime';
-import { default as numeral } from 'numeral';
 
 // set parameters from the API
 export const API = {

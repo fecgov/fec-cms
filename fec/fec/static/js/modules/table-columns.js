@@ -1,7 +1,7 @@
 import { default as moment } from 'moment';
 
-import { barCurrencyColumn, candidateColumn, committeeColumn, currencyColumn, supportOpposeColumn } from './columns.js';
 import { buildEntityLink, buildTotalLink } from './column-helpers.js';
+import { barCurrencyColumn, candidateColumn, committeeColumn, currencyColumn, supportOpposeColumn } from './columns.js';
 import { buildAppUrl } from './helpers.js';
 import { default as coverageEndDate } from '../templates/coverageEndDate.hbs';
 

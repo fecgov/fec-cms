@@ -1,10 +1,10 @@
 /**
  * 
  */
-import { default as FilterPanel } from '../modules/filters/filter-panel.js';
-import { default as TagList } from '../modules/filters/filter-tags.js';
-import { default as Calendar } from '../modules/calendar.js';
 import { calendarDownload, getUrl } from '../modules/calendar-helpers.js';
+import Calendar from '../modules/calendar.js';
+import FilterPanel from '../modules/filters/filter-panel.js';
+import TagList from '../modules/filters/filter-tags.js';
 
 // Initialize filters
 const filterPanel = new FilterPanel();
