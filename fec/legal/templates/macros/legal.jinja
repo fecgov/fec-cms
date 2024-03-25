@@ -14,7 +14,11 @@
     </button>
   </div>
   <div class="combo combo--search--mini--example">
-    <span class="t-note t-sans search__example">Examples: spending; 52 U.S.C. §30123</span>
+        {% if result_type == 'statutes' %}
+          <span class="t-note t-sans search__example">Examples: contribution; 52; 30123</span>
+        {% else %}
+          <span class="t-note t-sans search__example">Examples: spending; 52 U.S.C §30123</span>
+        {% endif %}
   </div>
   <button type="button" class="button--keywords" aria-controls="keyword-modal" data-a11y-dialog-show="keyword-modal">More keyword options</button>
 
