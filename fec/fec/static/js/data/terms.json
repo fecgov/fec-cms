@@ -141,11 +141,11 @@
   },
   {
     "term": "Date made",
-    "definition": "The date the contributor relinquishes control over a contribution. A contribution that is mailed is considered made on the date of the postmark. In the case of an in-kind contribution, a contribution is made on the date the goods or services are provided by the contributor. This date determines the election or calendar year limit against which a contribution counts. 11 CFR <a href=\"https://www.fec.gov/regulations/110-1/CURRENT#110-1-b-6\">110.1(b)(6)</a>."
+    "definition": "The date the contributor relinquishes control over a contribution. A contribution that is mailed is considered made on the date of the postmark. An electronic contribution is considered to be made when the contributor authorizes the transaction. In the case of an in-kind contribution, a contribution is made on the date the goods or services are provided by the contributor. This date determines the election or calendar year limit against which a contribution counts. 11 CFR <a href=\"https://www.fec.gov/regulations/110-1/CURRENT#110-1-b-6\">110.1(b)(6)</a>."
   },
   {
     "term": "Date received",
-    "definition": "The date a committee (or a person acting on the committee’s behalf) takes possession of the contribution. 11 CFR <a href=\"https://www.fec.gov/regulations/102-8/CURRENT#102-8\">102.8(a)</a>. This date is used for FEC reporting."
+    "definition": "The date a committee (or a person acting on the committee’s behalf) either takes possession of the contribution or, for an electronic contribution, obtains the contributor's authorization for the transaction. 11 CFR <a href=\"https://www.fec.gov/regulations/102-8/CURRENT#102-8\">102.8(a)</a>. This date is used for FEC reporting."
   },
   {
     "term": "Debt",
@@ -189,7 +189,7 @@
   },
   {
     "term": "Earmarked contribution",
-    "definition": "A contribution that the contributor directs (either orally or in writing) to or on behalf of a clearly identified candidate or authorized committee through an intermediary or conduit. Earmarking may take the form of a designation, instruction or encumbrance, and it may be direct or indirect, express or implied. 11 CFR <a href=\"https://www.fec.gov/regulations/110-6/CURRENT#110-6\">110.6</a>."
+    "definition": "A contribution that the contributor directs (either orally or in writing) to or on behalf of a clearly identified candidate or authorized committee through an intermediary or conduit. Earmarking may take the form of a designation, instruction or encumbrance, and it may be direct or indirect, express or implied. However, a contributor authorizing a commercial payment processor to transmit funds to a designated candidate or authorized committee in its ordinary course of business does not in itself constitute an earmark. 11 CFR <a href=\"https://www.fec.gov/regulations/110-6/CURRENT#110-6\">110.6</a>."
   },
   {
     "term": "Election",
@@ -261,7 +261,7 @@
   },
   {
     "term": "Filing",
-    "definition": "A report, designation or statement submitted to the FEC or Secretary of the Senate by a candidate, committee or other entity. Required filings include declarations of candidacy and committee reports of the money they receive and spend.  See also \"Reports, designations and statements\"."
+    "definition": "A report, designation or statement submitted to the FEC by a candidate, committee or other entity. Required filings include declarations of candidacy and committee reports of the money they receive and spend. See also \"Reports, designations and statements\"."
   },
   {
     "term": "Foreign national",
@@ -317,7 +317,7 @@
   },
   {
     "term": "Joint contribution",
-    "definition": "A contribution made by more than one person on a single check or other written instrument. 11 CFR <a href=\"https://www.fec.gov/regulations/110-1/CURRENT#110-1-k\">110.1(k)(1)</a>."
+    "definition": "A contribution made by more than one person, indicated by the signature of each contributor in writing. 11 CFR <a href=\"https://www.fec.gov/regulations/110-1/CURRENT#110-1-k\">110.1(k)(1)</a>."
   },
   {
     "term": "Joint fundraising",
@@ -531,9 +531,13 @@
     "term": "Prior approval",
     "definition": "A written request to a member corporation of a trade association to a member corporation for permission to solicit the member’s restricted class. This request for approval must inform the member corporation that corporate approval is necessary before the trade association or its SSF may conduct a solicitation and the corporation may not approve solicitations by another trade association for the same calendar year. 11 CFR <a href=\"https://www.fec.gov/regulations/114-8/CURRENT#114-8-d-3\">114.8(d)(3)</a>."
   },
+ {
+    "term": "Promoted for a fee",
+    "definition": "A public communication is promoted for a fee where a payment is made to a website, digital device, application, or advertising platform in order to increase the circulation, prominence, or availability of the communication on that website, digital device, application, or advertising platform. 11 CFR <a href=\"https://www.fec.gov/regulations/100-26/CURRENT#100-26\">100.26</a>."
+  },
   {
     "term": "Public communication",
-    "definition": "A communication by means of any broadcast, cable or satellite communication, newspaper, magazine, outdoor advertising facility, mass mailing or telephone bank to the general public, or any other form of general public political advertising. The term general public political advertising does not include communications made over the internet, except for communications placed for a fee on another person’s website, digital device, application, or advertising platform. 11 CFR <a href=\"https://www.fec.gov/regulations/100-26/CURRENT#100-26\">100.26</a>, <a href=\"https://www.fec.gov/regulations/100-27/CURRENT#100-27\">100.27</a> (definition of mass mailing) and <a href=\"https://www.fec.gov/regulations/100-28/CURRENT#100-28\">100.28</a> (definition of telephone bank)."
+    "definition": "A communication by means of any broadcast, cable or satellite communication, newspaper, magazine, outdoor advertising facility, mass mailing or telephone bank to the general public, or any other form of general public political advertising. The term general public political advertising does not include communications made over the internet, except for communications placed or promoted for a fee on another person’s website, digital device, application, or advertising platform. 11 CFR <a href=\"https://www.fec.gov/regulations/100-26/CURRENT#100-26\">100.26</a>, <a href=\"https://www.fec.gov/regulations/100-27/CURRENT#100-27\">100.27</a> (definition of mass mailing) and <a href=\"https://www.fec.gov/regulations/100-28/CURRENT#100-28\">100.28</a> (definition of telephone bank)."
   },
   {
     "term": "Qualified/non-qualified",
@@ -561,7 +565,7 @@
   },
   {
     "term": "Refunded contribution",
-    "definition": "A contribution is refunded when the recipient committee deposits the contribution and sends the contributor a check for the amount (or a portion) of the contribution. 11 CFR <a href=\"https://www.fec.gov/regulations/103-3/CURRENT#103-3-b\">103.3(b)</a>."
+    "definition": "A contribution is refunded when the recipient committee deposits the contribution and sends the contributor a check or similar draft, including electronic transfer, for the amount (or a portion) of the contribution. 11 CFR <a href=\"https://www.fec.gov/regulations/103-3/CURRENT#103-3-b\">103.3(b)</a>."
   },
   {
     "term": "Reports, designations and statements",
@@ -669,6 +673,6 @@
   },
   {
     "term": "Written instrument",
-    "definition": "A check written on a personal, escrow or trust account representing or containing the contributor's personal funds; a money order; any similar negotiable instrument; or, for contributions by credit or debit card, a paper record, or an electronic record that can be reproduced on paper, of the transaction. In the case of a contribution by a credit card or debit card, \"written instrument\" includes either a transaction slip or other writing signed by the cardholder, or in the case of such a contribution made over the internet, an electronic record of the transaction created and transmitted by the cardholder, and including the name of the cardholder and the card number, which can be maintained electronically and reproduced in a written form by the recipient candidate or candidate's committee. See 11 CFR <a href=\"https://www.fec.gov/regulations/9034-2/CURRENT#9034-2-b\">9034.2(b)</a>."
+    "definition": "A check written on a personal, escrow or trust account representing or containing the contributor's personal funds; a money order; any similar negotiable instrument; or, for contributions by credit or debit card, a paper record, or an electronic record that can be reproduced on paper, of the transaction. In the case of a contribution by a credit card or debit card, \"written instrument\" includes either a transaction slip or other writing signed by the cardholder, or in the case of such a contribution made over the internet, an electronic record of the transaction created and transmitted by the cardholder, and including the name of the cardholder, which can be maintained electronically and reproduced in a written form by the recipient candidate or candidate's committee. See 11 CFR <a href=\"https://www.fec.gov/regulations/9034-2/CURRENT#9034-2-b\">9034.2(b)</a>."
   }
 ]

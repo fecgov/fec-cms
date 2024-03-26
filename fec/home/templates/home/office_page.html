@@ -16,7 +16,7 @@ v{% load wagtailimages_tags %}
     {% for block in self.offices %}
     <div class="main__content--full"> 
      {% if block.block_type == 'office' %}
-       <a name="{{ block.value.office_title | slugify }}"></a>
+       <a id="{{ block.value.office_title | slugify }}"></a>
        {% if not block.value.hide_title %}
          <h2 class="content__section--ruled-responsive methodology-block t-serif office-title">{{ block.value.office_title }}</h2>
        {% endif %}
@@ -43,7 +43,9 @@ v{% load wagtailimages_tags %}
             </div>
            {% endif %}
            {% if block.value.extra_info %}
-             {{ block.value.extra_info }}
+             <div class='rich-text'>
+               {{ block.value.extra_info }}
+             </div>
            {% endif %}
       </div>
       <div class="sidebar-container sidebar-container--right offices-contact">
