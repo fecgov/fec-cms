@@ -556,7 +556,7 @@ class HomePageBannerAnnouncement(Page):
         )
     ]
 
-    def get_sitemap_urls(self, *args):
+    def get_sitemap_urls(self, request=None):
         return []
 
 
@@ -590,7 +590,7 @@ class AlertForEmergencyUseOnly(Page):
         )
     ]
     
-    def get_sitemap_urls(self, *args):
+    def get_sitemap_urls(self,request=None):
         return []
 
 
