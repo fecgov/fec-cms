@@ -14,6 +14,13 @@ from wagtail.contrib.sitemaps.views import sitemap
 from home import views as home_views
 from search import views as search_views
 
+# ############# NEW SITEMAP IMPORTS ############
+import re
+from django.contrib.sitemaps import Sitemap
+from wagtail.documents.models import Document
+from home.models import DocumentPage, DocumentFeedPage
+
+# ############# /END NEW SITEMAP IMPORTS ############
 
 urlpatterns = [
     re_path(
@@ -53,6 +60,99 @@ urlpatterns = [
         ),
     ),
 ]
+
+
+# ########### NEW SITEMAPS ################
+# SHOULD MOVE THESE CLASSES TO A views.py FILE OR ITS OWN FILE AND IMPORT IT HERE
+
+# ######## FORMS SITEMAP #########
+
+class FormsSitemap(Sitemap):
+    changefreq = "never"
+    priority = 0.5
+    protocol = 'https'
+
+    def items(self):
+        return Document.objects.filter(file__icontains="fecfrm")
+
+    def location(self, obj):
+
+        # WORKS: RETURNS JUST THE FILE THEN CONCATENATES THE PATH TO IT
+        # return '/resources/cms_content/'+str(obj.file)
+        # return str(obj.file).replace('documents/', '/resources/cms_content/documents/')
+
+        # `obj.file.url` RETURNS THIS ON LOCAL:
+        #  https://127.0.0.1:8000/media/documents/fecfrm13.pdf (make sure to change to http to test)
+        # `obj.file.url` RETURNS THIS ON DEV:
+        # `https://dev.fec.govhttps://fec-dev-proxy.app.cloud.gov/resources/cms-content/documents/fecfrm2sf.pdf`
+
+        # WORKS: THIS ONE REMOVES THE `https://fec-dev-proxy.app.cloud.gov` , TESTED ON DEV
+        loc = re.sub(r'^[^:]+:\/\/[^/?#]+', '', obj.file.url)
+        return loc
+
+    def lastmod(self, obj):
+        return obj.created_at
+
+
+urlpatterns += [
+
+    re_path(
+        r'^sitemap-forms\.xml/$',
+        sitemap,
+        {"sitemaps": {'forms': FormsSitemap()}},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
+]
+
+# ######## REPORT SITEMAP #########
+
+
+class ReportsSitemap(Sitemap):
+    changefreq = "never"
+    priority = 0.5
+    protocol = 'https'
+
+    def items(self):
+        # could just return all DocumentPages, but instead return all DocumentPages \
+        # that are descendants of DocumentFeedPages
+        # return DocumentPage.objects.live()
+
+        docfeeds = DocumentFeedPage.objects.live()
+
+        reports = []
+        for pg in docfeeds:
+            rpts = DocumentPage.objects.live().descendant_of(pg, inclusive=False)  # or child_of()
+            reports.extend(list(rpts))
+
+        return reports
+
+    def location(self, obj):
+        if obj.file_url:
+            loc = re.sub(r'https:\/\/(www|beta)\.fec\.gov', '', obj.file_url)
+        else:
+            loc = obj.url_path.replace('/home', '')
+
+        return loc
+
+    def lastmod(self, obj):
+        return obj.latest_revision_created_at
+
+    # Not a thing
+    def description(self, obj):
+        return obj.page_title
+
+
+urlpatterns += [
+
+    re_path(
+        r'^sitemap-reports\.xml/$',
+        sitemap,
+        {"sitemaps": {'reports': ReportsSitemap()}},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
+]
+
+# ################# /END NEW SITEMAPS ################
 
 
 if settings.FEC_CMS_ENVIRONMENT != 'LOCAL':
