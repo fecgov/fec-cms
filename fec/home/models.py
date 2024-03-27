@@ -556,6 +556,9 @@ class HomePageBannerAnnouncement(Page):
         )
     ]
 
+    def get_sitemap_urls(self, request=None):
+        return []
+
 
 class AlertForEmergencyUseOnly(Page):
     # Home page banner alert
@@ -586,6 +589,9 @@ class AlertForEmergencyUseOnly(Page):
             requires approval by Amy Kort or Wei Luo prior to deployment."
         )
     ]
+    
+    def get_sitemap_urls(self,request=None):
+        return []
 
 
 class CustomPage(Page):
