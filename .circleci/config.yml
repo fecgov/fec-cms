@@ -15,7 +15,7 @@ jobs:
           DATABASE_URL: postgres://postgres@0.0.0.0/cfdm_cms_test
 
       # PostgreSQL
-      - image: cimg/postgres:13.8
+      - image: cimg/postgres:14.11
         environment:
           POSTGRES_USER: postgres
           POSTGRES_HOST_AUTH_METHOD: "trust"
@@ -31,15 +31,15 @@ jobs:
           # https://circleci.com/docs/2.0/postgres-config/#postgresql-circleci-configuration-example
           command: |
             sudo apt-get update -qq && sudo apt-get install -y build-essential postgresql-client
-            echo 'export PATH=/usr/lib/postgresql/13.8/bin/:$PATH' >> $BASH_ENV
+            echo 'export PATH=/usr/lib/postgresql/14.11/bin/:$PATH' >> $BASH_ENV
             echo "en_US.UTF-8 UTF-8" | sudo tee /etc/locale.gen
             sudo locale-gen en_US.UTF-8
 
       - restore_cache:
           keys:
-          - v1-fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
+          - v2-fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
-          - v1-fec-cms-dependencies-
+          - v2-fec-cms-dependencies-
 
       - run:
           name: Install python dependencies
@@ -69,7 +69,7 @@ jobs:
           paths:
             - ./.env
             - ./node_modules
-          key: v1-fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
+          key: v2-fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
 
       - run:
           name: Ensure database is available
