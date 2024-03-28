@@ -6,8 +6,8 @@
  */
 var helpers = require('./helpers');
 
-function auditCategorySubcategory() {
   $('#primary_category_id').change(function() {
+export function auditCategorySubcategory() {
     var $select = $('#sub_category_id');
     $.getJSON(
       helpers.buildUrl(['audit-category'], {
@@ -39,15 +39,10 @@ function auditCategorySubcategory() {
   });
 }
 
-function showSubCategory() {
+export function showSubCategory() {
   var sub_selected = $('#sub_category_id option:selected').text();
   sub_selected == 'Choose a sub-category' ||
   $('#sub_category_id').val() == 'all'
     ? $('.tag__category.sub').css('visibility', 'hidden')
     : $('.tag__category.sub').css('visibility', 'visible');
 }
-
-module.exports = {
-  auditCategorySubcategory: auditCategorySubcategory,
-  showSubCategory: showSubCategory
-};

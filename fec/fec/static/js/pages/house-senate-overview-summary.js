@@ -9,7 +9,7 @@ import { PartyMoneyBars } from '../modules/party-money-bars';
  * @class
  * @property {HTMLInputElement} cycleSelector - the <input>
  */
-export function HSOverviewSummary() {
+export default function HSOverviewSummary() {
   this.tabPanel = document.querySelector('#election-summary');
   this.cycleSelector = document.querySelector('#election-summary .js-period-select');
 

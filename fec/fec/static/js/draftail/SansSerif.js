@@ -70,7 +70,7 @@ Sansserif.propTypes = {
   ])
 };
 
-module.exports = {
+export default {
   type: 'SANSSERIF',
   source: SansserifSource,
   decorator: Sansserif

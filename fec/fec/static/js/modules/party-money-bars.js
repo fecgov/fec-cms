@@ -39,7 +39,7 @@ const defaultSettings = {
  * @property {Object} settings - Combination of settings from opts overriding defaultSettings.
  * @returns {PartyMoneyBars} New instance of PartyMoneyBars.
  */
-export function PartyMoneyBars(putMetersHereSelector, putTotalHereSelector, opts = {}) {
+export default function PartyMoneyBars(putMetersHereSelector, putTotalHereSelector, opts = {}) {
   this.metersHolder = document.querySelector(putMetersHereSelector);
   this.totalElm = putTotalHereSelector.length > 1 ? document.querySelector(putTotalHereSelector) : null;
   this.settings = Object.assign({}, defaultSettings, opts);

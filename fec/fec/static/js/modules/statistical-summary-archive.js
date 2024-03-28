@@ -1,4 +1,7 @@
-function StatisticalSummaryArchive() {
+/**
+ *
+ */
+export default function StatisticalSummaryArchive() {
   this.chooseYear = document.getElementById('year');
 
   this.chooseFiler = document.getElementById('filer');
@@ -147,7 +150,3 @@ StatisticalSummaryArchive.prototype.showTable = function() {
     this.zebraStripeVisible(liveTable);
   }
 }; //end showTable()
-
-module.exports = {
-  StatisticalSummaryArchive: StatisticalSummaryArchive
-};

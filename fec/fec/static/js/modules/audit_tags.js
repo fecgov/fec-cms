@@ -1,7 +1,7 @@
 var $auditCategoryTags = require('../templates/audit_tags.hbs');
 
-function auditTags() {
   $('.data-container__tags').prepend($auditCategoryTags);
+export default function auditTags() {
   $('.tag__category.sub').css('visibility', 'hidden');
   $('#primary_category_id').change(function() {
     var current_category = $('#primary_category_id option:selected').text();
@@ -30,5 +30,3 @@ function auditTags() {
     $('.tag__item.primary button').hide();
   });
 }
-
-module.exports = auditTags;

@@ -31,7 +31,7 @@ var MAX_RANGE = 4000000000; // Set the max y-axis to 4 billion
  *
  */
 
-function LineChart(selector, snapshot, dataType) {
+export default function LineChart(selector, snapshot, dataType) {
   this.element = d3.select(selector);
   this.dataType = dataType;
   this.cycle = Number(DEFAULT_TIME_PERIOD);
@@ -414,8 +414,4 @@ LineChart.prototype.nextCycle = function() {
   this.removeSVG();
   this.cycle = this.cycle + 2;
   this.fetch(this.cycle);
-};
-
-module.exports = {
-  LineChart: LineChart
 };

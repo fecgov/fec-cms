@@ -79,8 +79,8 @@ Anchor.propTypes = {
   ])
 };
 
-module.exports = {
+export default {
   type: 'ANCHOR',
   source: AnchorSource,
   decorator: Anchor
-};
+}

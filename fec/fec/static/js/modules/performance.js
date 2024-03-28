@@ -23,7 +23,7 @@ function getMetric(mark) {
   };
 }
 
-function bar() {
+export function bar() {
   var marks =
     (window.performance &&
       window.performance.getEntriesByType &&
@@ -39,5 +39,3 @@ function bar() {
       perfBar.addMetric(getMetric(mark));
     });
 }
-
-module.exports = { bar: bar };

@@ -42,10 +42,10 @@ export function customEvent(eventObj) {
 /**
  * Common place for interactive elements to trigger a pageview event (that isn't an actual page load)
  */
-export function pageView() {
+export const pageView = () => {
   init();
   dataLayer.push({ event: 'pageview' });
-}
+};
 
 /**
  * As of November 2020, this is only being used inside a test

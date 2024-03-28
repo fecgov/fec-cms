@@ -17,4 +17,4 @@ function _loadRecaptchaIfNeeded() {
   }
 }
 
-module.exports = { loadRecaptcha: _loadRecaptchaIfNeeded };
+export { _loadRecaptchaIfNeeded as loadRecaptcha };

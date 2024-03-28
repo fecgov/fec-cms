@@ -11,7 +11,7 @@ var analytics = require('./analytics');
  * In the web app, it loads results by simply adding the new search query
  * to the window.location.search which forces a page refresh.
  */
-function KeywordModal() {
+export default function KeywordModal() {
   this.elm = document.querySelector('.js-keyword-modal');
   this.$elm = $(this.elm);
   this.$form = this.$elm.find('form');
@@ -118,5 +118,3 @@ KeywordModal.prototype.fireEvent = function(actionLabel) {
     eventValue: 1
   });
 };
-
-module.exports = { KeywordModal: KeywordModal };

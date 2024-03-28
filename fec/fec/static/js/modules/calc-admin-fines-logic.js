@@ -124,7 +124,7 @@ export function getTotalAdminFine(d) {
   if (isNaN(toReturn)) return 'ERROR';
 
   return toReturn;
-};
+}
 
 /**
  * These are the values that will be used when calculating fines for various years.
@@ -1119,9 +1119,3 @@ const adminFinesLogicValues = {
     }
   ]
 };
-
-// module.exports = {
-//   getTotalAdminFine: CalcAdminFineLogic.prototype.getTotalAdminFine
-// };
-
-// export CalcAdminFineLogic.prototype.getTotalAdminFine as getTotalAdminFine;

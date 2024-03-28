@@ -137,7 +137,7 @@ Glossary.propTypes = {
   ])
 };
 
-module.exports = {
+export default {
   type: 'GLOSSARY',
   source: GlossarySource,
   decorator: Glossary

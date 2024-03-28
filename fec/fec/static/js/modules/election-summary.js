@@ -12,7 +12,7 @@ function buildUrl(opts) {
   return URI(parts).toString();
 }
 
-function ElectionSummary(selector, opts) {
+export default function ElectionSummary(selector, opts) {
   this.$elm = $(selector);
   this.opts = opts;
 
@@ -34,5 +34,3 @@ ElectionSummary.prototype.draw = function(response) {
   this.$disbursements.text(helpers.currency(response.disbursements));
   this.$expenditures.text(helpers.currency(response.independent_expenditures));
 };
-
-module.exports = { ElectionSummary: ElectionSummary };

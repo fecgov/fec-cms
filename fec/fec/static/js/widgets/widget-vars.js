@@ -7,7 +7,7 @@ const electionYearsCount = 42; // Display election years back this many years
  * Simple list of election letter codes with their adjectives
  * TODO - set this through constants?
  */
-let officeDefs = {
+export const officeDefs = {
   P: 'Presidential',
   S: 'Senate',
   H: 'House'
@@ -31,7 +31,7 @@ function getNextPresidentialElectionYear() {
  * @param {string} type - P Presidential {@default}, H for House, or S for Senate
  * @returns {Array} An array of four-digit years
  */
-let electionYearsList = (type = 'P') => {
+export let electionYearsList = (type = 'P') => {
   let theLatestYear = getNextPresidentialElectionYear();
   let toReturn = [];
 
@@ -55,7 +55,7 @@ let electionYearsList = (type = 'P') => {
  * @param {string, number} selectedValue - (optional) Which value should be `selected`?
  * @returns A list of <option> elements
  */
-let electionYearsOptions = (
+export let electionYearsOptions = (
   office = 'P',
   selectedValue = window.DEFAULT_ELECTION_YEAR
 ) => {
@@ -83,11 +83,4 @@ let electionYearsOptions = (
       '</option>';
   });
   return toReturn;
-};
-
-// Make them available for import
-module.exports = {
-  electionYearsList,
-  electionYearsOptions,
-  officeDefs
 };
