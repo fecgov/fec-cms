@@ -57,7 +57,7 @@ const stateColumns = [
     width: '50%',
     className: 'all',
     render: function(data, type, row, meta) {
-      var span = document.createElement('span');
+      const span = document.createElement('span');
       span.textContent = data;
       span.setAttribute('data-state', data);
       span.setAttribute('data-row', meta.row);

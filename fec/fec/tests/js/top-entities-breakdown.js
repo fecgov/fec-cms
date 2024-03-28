@@ -10,7 +10,7 @@ use(sinonChai);
 
 import { TopEntities } from '../../static/js/modules/top-entities.js';
 
-var DOM =
+const DOM =
 '<select class="js-office">' +
   '<option value="P">President</option>' +
   '<option value="S">Senate</option>' +

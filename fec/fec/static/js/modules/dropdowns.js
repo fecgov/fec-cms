@@ -175,7 +175,7 @@ Dropdown.prototype.handleCheckboxRemoval = function($input) {
 };
 
 Dropdown.prototype.handleRemoveClick = function(e, opts) {
-  const $input = $(e.target)
+  let $input = $(e.target)
     .parent()
     .find('input');
 

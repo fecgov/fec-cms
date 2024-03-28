@@ -1,5 +1,3 @@
-/* global $ */
-
 /**
  * The financial map for presidential elections. e.g. https://www.fec.gov/data/candidates/president/presidential-map/
  * @copyright 2023 Federal Election Commission
@@ -791,7 +789,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidate = function(detail) {
   theOfficeField.innerHTML = theOfficeString;
   theIDField.innerHTML = theIDString;
   // Finally, put theNameString into every name field across the app
-  for (var i = 0; i < theNameFields.length; i++) {
+  for (let i = 0; i < theNameFields.length; i++) {
     theNameFields[i].innerHTML = theNameString;
   }
 };
@@ -875,7 +873,7 @@ PresidentialFundsMap.prototype.displayUpdatedData_candidates = function(
 PresidentialFundsMap.prototype.displayFinancialSummary = function(data) {
   let theHolder = this.element.querySelector(selector_summariesHolder);
   // for each property in the data object we receive,
-  for (var prop in data) {
+  for (let prop in data) {
     // find the field with the data-sum-id attribute that matches this property's name
     let field = theHolder.querySelector(`[data-sum-id="${prop}"]`);
     // If we found a field for this property,

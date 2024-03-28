@@ -1,14 +1,3 @@
-var DOM = '<fieldset class="js-filter" data-filter-ignore-count="true">' +
-            '<legend class="label">Data type</legend>' +
-            '<label for="processed">' +
-              '<input type="radio" value="processed" id="processed" checked name="data_type" data-prefix="Data type:" data-tag-value="processed">' +
-              '<span>Processed data</span>' +
-            '</label>' +
-            '<label for="efiling">' +
-              '<input type="radio" value="efiling" id="efiling" name="data_type" data-prefix="Data type:" data-tag-value="electronic filings">' +
-              '<span>Electronic filings</span>' +
-            '</label>' +
-          '</fieldset>';
 // Common for all/most tests
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
@@ -19,6 +8,17 @@ use(sinonChai);
 
 import ToggleFilter from '../../static/js/modules/filters/toggle-filter.js';
 
+const DOM = '<fieldset class="js-filter" data-filter-ignore-count="true">' +
+  '<legend class="label">Data type</legend>' +
+  '<label for="processed">' +
+    '<input type="radio" value="processed" id="processed" checked name="data_type" data-prefix="Data type:" data-tag-value="processed">' +
+    '<span>Processed data</span>' +
+  '</label>' +
+  '<label for="efiling">' +
+    '<input type="radio" value="efiling" id="efiling" name="data_type" data-prefix="Data type:" data-tag-value="electronic filings">' +
+    '<span>Electronic filings</span>' +
+  '</label>' +
+'</fieldset>';
 
 describe('toggle filters', function() {
   before(function() {

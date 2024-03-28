@@ -10,9 +10,9 @@ import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/ta
 
 import { default as partyCoordinatedExpendituresTemplate } from '../templates/party-coordinated-expenditures.hbs';
 
-  var $table = $('#results');
   new tables.DataTable($table, {
 $(function() {
+  const $table = $('#results');
     autoWidth: false,
     title: 'Party coordinated expenditures',
     path: ['schedules', 'schedule_f'],

@@ -17,8 +17,8 @@ function trim(text) {
 }
 
 function expectDisabled($elm, disabled) {
-  var $input = $elm.find('input');
-  var $span = $elm.find('span');
+  const $input = $elm.find('input');
+  const $span = $elm.find('span');
   if (disabled) {
     expect($input.prop('disabled')).to.be.ok;
     expect($span.hasClass('is-disabled')).to.be.true;

@@ -4,7 +4,7 @@ import $ from 'jquery';
 import SiteNav from '../../static/js/modules/site-nav.js';
 // import * as helpers from '../../static/js/modules/helpers.js';
 
-var dom = '<nav class="site-nav js-site-nav">' +
+const dom = '<nav class="site-nav js-site-nav">' +
   '<div id="site-menu" class="site-nav__container">' +
   '<ul>' +
   '<li class="site-nav__item" data-submenu="data">' +

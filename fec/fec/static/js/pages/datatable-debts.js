@@ -10,9 +10,9 @@ import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/ta
 
 import { default as debtsTemplate } from '../templates/debts.hbs';
 
-  var $table = $('#results');
   new tables.DataTable($table, {
 $(function() {
+  const $table = $('#results');
     autoWidth: false,
     title: 'Debts',
     path: ['schedules', 'schedule_d'],

@@ -19,8 +19,8 @@ $(document).bind( // TODO: jQuery deprecation
 $(function() {
   auditCategorySubcategory();
   auditTags();
-  var $table = $('#results');
   new tables.DataTable($table, {
+  const $table = $('#results');
     autoWidth: false,
     title: 'Audit Reports',
     path: ['audit-case'],

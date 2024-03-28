@@ -4,7 +4,7 @@ import { getTotalAdminFine } from '../../static/js/modules/calc-admin-fines-logi
 
 /**
  * The parameters for tests are abbreviated so 'var tests = […]' is easier to read
- * @param {number,String='latest'} y - Year the fine was assessed (penaltyAssessedDate)
+ * @param {number,string='latest'} y - Year the fine was assessed (penaltyAssessedDate)
  * @param {boolean} s - Whether it's an election-sensitive report (sensitiveReport)
  * @param {number} c - Cash / total receipts + disbursements (totalReceiptsAndDisbursements)
  * @param {string='late','non'} l - Whether the report was filed late or not filed (lateOrNonFiler)
@@ -15,7 +15,7 @@ import { getTotalAdminFine } from '../../static/js/modules/calc-admin-fines-logi
 describe('Admin fines calc', function() {
   // Define the tests (see var reference above)
   // (the 't' value is irrelevant for 'non')
-  var tests = [
+  const tests = [
     { y: 'latest', s: true, c: 0, l: 'late', t: 6, v: 10, e: 0 },
     { y: '2023', s: false, c: 1, l: 'non', t: 3, v: 10, e: 1407 },
     { y: '2024', s: false, c: 4999.99, l: 'late', t: 1, v: 1, e: 60 },
@@ -73,7 +73,7 @@ describe('Admin fines calc', function() {
     // Name it ('test0', 'test1', etc)
     it('test ' + i, function() {
       // Create the data object for the getTotalAdminFine function
-      let query = {
+      const query = {
         lateOrNonFiler: test.l,
         numberOfDaysLate: test.t,
         numberOfPrevViolations: test.v,

@@ -8,7 +8,7 @@ use(sinonChai);
 
 import { default as Tablefilter } from '../../static/js/modules/statistical-summary-archive.js';
 
-var dom =
+const dom =
     '<div class="filter-controls">' +
     '<div class="filter_year">' +
     '<label for="year" class="label">Two-year period</label>' +

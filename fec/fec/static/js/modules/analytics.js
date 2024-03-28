@@ -9,7 +9,7 @@
 
 import { chain as _chain, isArray as _isArray, map as _map } from 'underscore';
 
-var dataLayer = window.dataLayer;
+let dataLayer = window.dataLayer;
 
 /**
  * Create the window.dataLayer object (Array) for GTM if it doesn't already exist

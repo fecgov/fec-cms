@@ -4,9 +4,9 @@ import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/ta
 
 import { default as committeesTemplate } from '../templates/committees.hbs';
 
-  var $table = $('#results');
   new tables.DataTable($table, {
 $(function() {
+  const $table = $('#results');
     autoWidth: false,
     title: 'Committees',
     path: ['committees'],

@@ -4,9 +4,9 @@ import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/ta
 
 import { default as electioneeringTemplate } from '../templates/communication-costs.hbs';
 
-  var $table = $('#results');
   new tables.DataTable($table, {
 $(function() {
+  const $table = $('#results');
     autoWidth: false,
     title: 'Communication costs',
     path: ['communication_costs'],

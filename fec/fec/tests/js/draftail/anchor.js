@@ -22,13 +22,13 @@ describe('draftail - Anchor Block Component', function() {
   });
 
   it('the Anchor source should build an anchor component from selected text', function(done) {
-    var Source = Anchor.source;
-    var editorState = EditorState.createEmpty();
-    var entityType = editorState.getCurrentContent().createEntity();
-    var onComplete = function(next) {
+    const Source = Anchor.source;
+    const editorState = EditorState.createEmpty();
+    const entityType = editorState.getCurrentContent().createEntity();
+    const onComplete = function(next) {
       expect(next).to.be.an('object');
       done();
     };
-    var element = shallow(<Source editorState={editorState} entityType={entityType} onComplete={onComplete} />);
+    const element = shallow(<Source editorState={editorState} entityType={entityType} onComplete={onComplete} />);
   });
 });

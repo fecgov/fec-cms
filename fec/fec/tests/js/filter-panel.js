@@ -63,7 +63,7 @@ describe('filter panel', function() {
     });
 
     it('should start off open on wide windows', function() {
-      var panel = new FilterPanel();
+      const panel = new FilterPanel();
       expectOpen(panel);
     });
   });

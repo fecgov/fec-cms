@@ -8,7 +8,7 @@ use(sinonChai);
 
 import TOC from '../../static/js/modules/toc.js';
 
-var DOM =
+const DOM =
   '<ul class="toc">' +
     '<li><a href="#section-1">Section 1</a></li>' +
     '<li><a href="#section-2">Section 2</a></li>' +
