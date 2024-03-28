@@ -1,10 +1,11 @@
-import { extend as _extend } from 'underscore';
 const React = require('react');
-import { default as URI } from 'urijs';
-const Filters = require('./Filters');
-const SearchResults = require('./SearchResults');
-const Pagination = require('./Pagination');
-const Tags = require('./Tags');
+const _ = require('underscore');
+const URI = require('urijs');
+
+const Filters = require('./Filters.cjs');
+const SearchResults = require('./SearchResults.cjs');
+const Pagination = require('./Pagination.cjs');
+const Tags = require('./Tags.cjs');
 
 class LegalSearch extends React.Component {
   constructor(props) {
@@ -80,7 +81,7 @@ class LegalSearch extends React.Component {
   }
 
   getUserSearchCriteria(state) {
-    const queryState = _extend({}, state);
+    const queryState = _.extend({}, state);
     queryState.search = queryState.q;
     Object.keys(queryState).forEach(function(queryParam) {
       if (

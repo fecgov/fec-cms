@@ -1,15 +1,16 @@
 const React = require('react');
 const PropTypes = require('prop-types');
-const Dropdown = require('./filters/Dropdown');
-const TextFilter = require('./filters/TextFilter');
-const CheckboxFilter = require('./filters/CheckboxFilter');
-const CheckboxList = require('./filters/CheckboxList');
-const DateFilter = require('./filters/DateFilter');
-const CitationFilter = require('./filters/CitationFilter');
-const CitationRequireAllRadio = require('./filters/CitationRequireAllRadio');
-const FilterPanel = require('./FilterPanel');
-const requestorOptions = require('./requestorOptions');
-const documentTypes = require('./documentTypes');
+
+const Dropdown = require('./filters/Dropdown.cjs');
+const TextFilter = require('./filters/TextFilter.cjs');
+const CheckboxFilter = require('./filters/CheckboxFilter.cjs');
+const CheckboxList = require('./filters/CheckboxList.cjs');
+const DateFilter = require('./filters/DateFilter.cjs');
+const CitationFilter = require('./filters/CitationFilter.cjs');
+const CitationRequireAllRadio = require('./filters/CitationRequireAllRadio.cjs');
+const FilterPanel = require('./FilterPanel.cjs');
+const requestorOptions = require('./requestorOptions.cjs');
+const documentTypes = require('./documentTypes.cjs');
 
 function Filters(props) {
   const resultCountChange =

@@ -1,7 +1,8 @@
 const React = require('react');
 const PropTypes = require('prop-types');
-import { default as URI } from 'urijs';
-const Checkbox = require('./Checkbox');
+const URI = require('urijs');
+
+const Checkbox = require('./Checkbox.cjs');
 
 class CitationFilter extends React.Component {
   constructor(props) {
