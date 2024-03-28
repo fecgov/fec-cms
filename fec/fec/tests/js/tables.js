@@ -29,11 +29,11 @@ describe('data table', function() {
     $('body')
       .empty()
       .append(this.$fixture);
-    sinon.spy(DataTable.prototype, 'export');
+    sinon.spy(DataTable_FEC.prototype, 'export');
   });
 
   after(function() {
-    DataTable.prototype.export.restore();
+    DataTable_FEC.prototype.export.restore();
   });
 
   beforeEach(function() {
@@ -53,7 +53,7 @@ describe('data table', function() {
       );
     this.deferred = $.Deferred();
     sinon.stub($, 'ajax').returns(this.deferred);
-    this.table = new DataTable('table', {
+    this.table = new DataTable_FEC('table', {
       columns: [{ data: 'name' }, { data: 'office' }, { data: 'party' }],
       useExport: true
     });
@@ -70,7 +70,7 @@ describe('data table', function() {
     });
 
     it('adds self to registry', function() {
-      expect(DataTable.registry.table).to.equal(this.table);
+      expect(DataTable_FEC.registry.table).to.equal(this.table);
     });
 
     it('adds hidden loading widget', function() {
@@ -106,8 +106,8 @@ describe('data table', function() {
     });
 
     it('does nothing on click', function() {
-      expect(DataTable.prototype.export).not.to.have.been.called;
       this.table.$exportButton.click(); // TODO: jQuery deprecation
+      expect(DataTable_FEC.prototype.export).not.to.have.been.called;
     });
   });
 
@@ -122,7 +122,7 @@ describe('data table', function() {
 
     it('adds starts an export when clicked', function() {
       this.table.$exportButton.trigger('click');
-      expect(DataTable.prototype.export).to.have.been.called;
+      expect(DataTable_FEC.prototype.export).to.have.been.called;
     });
 
     it('does not show the message', function() {

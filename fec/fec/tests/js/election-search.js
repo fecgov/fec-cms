@@ -18,8 +18,8 @@ _extend(window, {
   }
 });
 
-var search = require('../../static/js/modules/election-search');
-var map = require('../../static/js/modules/election-map');
+import ElectionSearch from '../../static/js/modules/election-search.js';
+import ElectionMap from '../../static/js/modules/election-map.js';
 
 describe('election search', function() {
   before(function() {
