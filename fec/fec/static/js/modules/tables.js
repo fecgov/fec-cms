@@ -206,7 +206,7 @@ export function modalRenderFactory(template, fetch) {
               $modal.find('.js-pdf_url').remove();
             }
             // Set focus on the close button
-            $('.js-hide').focus();
+            $('.js-hide').focus(); // TODO: jQuery deprecation
 
             // When under $large-screen
             // TODO figure way to share these values with CSS.
@@ -231,7 +231,7 @@ export function modalRenderFactory(template, fetch) {
 }
 
 function hidePanel(api, $modal) {
-  $('.row-active .js-panel-button').focus();
+  $('.row-active .js-panel-button').focus(); // TODO: jQuery deprecation
   $('.js-panel-toggle tr').toggleClass('row-active', false);
   $('body').toggleClass('panel-active', false);
   $modal.attr('aria-hidden', 'true');
@@ -593,7 +593,7 @@ DataTable.prototype.checkFromQuery = function(){
       // ...if they are not already checked
       for (let box of queryBoxes) {
         if (!($(box).is(':checked'))) {
-              $(box).prop('checked', true).change();
+              $(box).prop('checked', true).change(); // TODO: jQuery deprecation
         }
        }
       }, 0);
@@ -605,7 +605,7 @@ DataTable.prototype.checkFromQuery = function(){
       // ...if they are not already checked
       for (let box of queryBoxes) {
         if (!($(box).is(':checked'))) {
-              $(box).prop('checked', true).change();
+              $(box).prop('checked', true).change(); // TODO: jQuery deprecation
         }
        }
       }

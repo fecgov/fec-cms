@@ -32,7 +32,7 @@ export default function Search($el, opts) {
   $(document.body).on('keyup', function(e) {
     // Focus search on "/"
     if (e.keyCode === KEYCODE_SLASH) {
-      $input.first().focus();
+      $input.first().focus(); // TODO: jQuery deprecation
     }
   });
 };

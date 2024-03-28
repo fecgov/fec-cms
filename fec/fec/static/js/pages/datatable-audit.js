@@ -10,7 +10,7 @@ import auditTags from '../modules/audit_tags.js';
 import { DataTable_FEC, modalRenderRow } from '../modules/tables.js';
 //for sub category filter-tag and results
 
-$(document).bind(
+$(document).bind( // TODO: jQuery deprecation
   'ready ajaxComplete',
   '#sub_category_id',
   showSubCategory

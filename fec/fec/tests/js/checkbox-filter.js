@@ -79,19 +79,19 @@ describe('checkbox filters', function() {
     });
 
     it('sets loaded-once on the input after loading', function() {
-      this.$input.prop('checked', true).change();
+      this.$input.prop('checked', true).change(); // TODO: jQuery deprecation
       expect(this.$input.data('loaded-once')).to.be.true;
       expect(this.$label.attr('class')).to.not.equal('is-loading');
     });
 
     it('adds the loading class if it has loaded once', function() {
-      this.$input.prop('checked', true).change();
-      this.$input.prop('checked', false).change();
+      this.$input.prop('checked', true).change(); // TODO: jQuery deprecation
+      this.$input.prop('checked', false).change(); // TODO: jQuery deprecation
       expect(this.$label.attr('class')).to.equal('is-loading');
     });
 
     it('triggers the add event on checking a checkbox', function() {
-      this.$input.prop('checked', true).change();
+      this.$input.prop('checked', true).change(); // TODO: jQuery deprecation
       expect(this.trigger).to.have.been.calledWith('filter:added', [
         {
           key: 'president',
@@ -104,7 +104,7 @@ describe('checkbox filters', function() {
     });
 
     it('triggers remove event on unchecking a checkbox', function() {
-      this.$input.prop('checked', false).change();
+      this.$input.prop('checked', false).change(); // TODO: jQuery deprecation
       expect(this.trigger).to.have.been.calledWith('filter:removed', [
         {
           key: 'president',
@@ -136,7 +136,7 @@ describe('checkbox filters', function() {
     });
 
     it('removes checkbox on clicking the button', function() {
-      this.filter.$elm.find('.js-remove').click();
+      this.filter.$elm.find('.js-remove').click(); // TODO: jQuery deprecation
       expect(this.filter.$elm.find('li').length).to.equal(0);
     });
 

@@ -142,7 +142,7 @@ FilterSet.prototype.handleTagRemoved = function(e, opts) {
     const type = $input.get(0).type;
 
     if (type === 'checkbox' || type === 'radio') {
-      $input.click();
+      $input.click(); // TODO: jQuery deprecation
     } else if (type === 'text') {
       $input.val('').trigger('change');
     }

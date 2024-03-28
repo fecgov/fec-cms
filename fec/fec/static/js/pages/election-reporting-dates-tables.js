@@ -115,7 +115,7 @@ function ReportingDates() {
     this.mediaQueryResponse(mql);
 
     //attach listener function to listen in on state changes
-    mql.addListener(this.mediaQueryResponse);
+    mql.addListener(this.mediaQueryResponse); // TODO: .addListener() has been deprecated
 
     //show footnotes on click of a link that wraps the superscripts in cells
     for (const anchor of this.anchors) {
@@ -350,7 +350,7 @@ ReportingDates.prototype.mediaQueryResponse = function(mql) {
       for (const close of jsmodalClose) {
         close.addEventListener('click', () => {
           jsmodal[0].setAttribute('aria-hidden', 'true');
-          close.focus();
+          close.focus(); // TODO: jQuery deprecation
         });
       }
     });

@@ -11,7 +11,7 @@ const ID_PATTERN = /^\w{9}$/;
 
 function slugify(value) {
   return value
-    .trim()
+    .trim() // TODO: jQuery deprecation
     .replace(/\s+/g, '-')
     .replace(/[^a-z0-9:._-]/gi, '');
 }
@@ -210,7 +210,7 @@ FilterTypeahead.prototype.handleSubmit = function(e) {
 };
 
 FilterTypeahead.prototype.clearInput = function() {
-  this.$field.typeahead('val', null).change();
+  this.$field.typeahead('val', null).change(); // TODO: jQuery deprecation
   this.disableButton();
 };
 
@@ -238,7 +238,7 @@ FilterTypeahead.prototype.appendCheckbox = function(opts) {
   }
   var checkbox = $(template_checkbox(data));
   checkbox.appendTo(this.$selected);
-  checkbox.find('input').change();
+  checkbox.find('input').change(); // TODO: jQuery deprecation
   this.clearInput();
 };
 

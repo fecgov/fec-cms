@@ -337,7 +337,7 @@ Calendar.prototype.handleEventClick = function(calEvent, jsEvent) {
 // Simulate clicks when hitting enter on certain full-calendar elements
 Calendar.prototype.simulateClick = function(e) {
   if (e.keyCode === 13) {
-    $(e.target).click();
+    $(e.target).click(); // TODO: jQuery deprecation
   }
 };
 
@@ -348,8 +348,8 @@ Calendar.prototype.managePopoverControl = function(e) {
   $popover
     .find('.fc-close')
     .attr('tabindex', '0')
-    .focus()
+    .focus() // TODO: jQuery deprecation
     .on('click', function() {
-      $target.focus();
+      $target.focus(); // TODO: jQuery deprecation
     });
 };

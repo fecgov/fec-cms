@@ -29,7 +29,7 @@ SelectFilter.prototype.fromQuery = function(query) {
 SelectFilter.prototype.setValue = function(value) {
   this.$input.find('option[selected]').prop('selected', false);
   this.$input.find('option[value="' + value + '"]').prop('selected', true);
-  this.$input.change();
+  this.$input.change(); // TODO: jQuery deprecation
 };
 
 SelectFilter.prototype.handleChange = function(e) {

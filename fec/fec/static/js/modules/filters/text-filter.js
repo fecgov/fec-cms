@@ -43,7 +43,7 @@ TextFilter.prototype.handleChange = function() {
   // set the button focus within a timeout
   // to prevent change event from firing twice
   setTimeout(function() {
-    button.focus();
+    button.focus(); // TODO: jQuery deprecation
   }, 0);
 
   if (value.length > 0) {

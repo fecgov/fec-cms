@@ -87,8 +87,8 @@ Dropdown.prototype.toggle = function(e) {
 Dropdown.prototype.show = function() {
   restoreTabindex(this.$panel);
   this.$panel.attr('aria-hidden', 'false');
-  this.$panel.find('input[type="checkbox"]:first').focus();
   new PerfectScrollbar(this.$panel.get(0), { suppressScrollX: true });
+  this.$panel.find('input[type="checkbox"]:first').focus(); // TODO: jQuery deprecation (:first and .focus)
   this.$button.addClass('is-active');
   this.isOpen = true;
 };
@@ -123,7 +123,7 @@ Dropdown.prototype.handleKeyup = function(e) {
   if (e.keyCode === KEYCODE_ESC) {
     if (this.isOpen) {
       this.hide();
-      this.$button.focus();
+      this.$button.focus(); // TODO: jQuery deprecation
     }
   }
 };
@@ -132,7 +132,7 @@ Dropdown.prototype.handleCheckKeyup = function(e) {
   if (e.keyCode === KEYCODE_ENTER) {
     $(e.target)
       .prop('checked', true)
-      .change();
+      .change(); // TODO: jQuery deprecation
   }
 };
 
@@ -148,7 +148,7 @@ Dropdown.prototype.handleDropdownItemClick = function(e) {
   const $input = this.$selected.find('#' + $button.data('label'));
 
   if (!$button.hasClass('is-checked')) {
-    $input.click();
+    $input.click(); // TODO: jQuery deprecation
   }
 };
 
@@ -224,14 +224,14 @@ Dropdown.prototype.selectItem = function($input) {
     if (next.length) {
       $(next[0])
         .find('input[type="checkbox"]')
-        .focus();
+        .focus(); // TODO: jQuery deprecation
     } else if (prev.length) {
       $(prev[0])
         .find('input[type="checkbox"]')
-        .focus();
+        .focus(); // TODO: jQuery deprecation
     }
   } else {
-    this.$selected.find('input[type="checkbox"]').focus();
+    this.$selected.find('input[type="checkbox"]').focus(); // TODO: jQuery deprecation
   }
 };
 

@@ -111,8 +111,8 @@ ValidateDateFilter.prototype.fromQuery = function(query) {
     ? query['min_' + this.name]
     : defaultStart;
   var maxDate = query['max_' + this.name] ? query['max_' + this.name] : now;
-  this.$minDate.val(minDate).change();
-  this.$maxDate.val(maxDate).change();
+  this.$minDate.val(minDate).change(); // TODO: jQuery deprecation
+  this.$maxDate.val(maxDate).change(); // TODO: jQuery deprecation
   return this;
 };
 

@@ -69,12 +69,12 @@ describe('Contact form', function() {
   });
 
   it('shows the other reason box when other is selected', function() {
-    this.form.category.val('other').change();
+    this.form.category.val('other').change(); // TODO: jQuery deprecation
     expect(this.form.otherReason.is(':visible')).to.be.true;
   });
 
   it('hides the other reason box when another value is selected', function() {
-    this.form.category.val('option-1').change();
+    this.form.category.val('option-1').change(); // TODO: jQuery deprecation
     expect(this.form.otherReason.is(':visible')).to.be.false;
   });
 
@@ -82,7 +82,7 @@ describe('Contact form', function() {
     $('#id_u_committee').val('12345');
     $('#id_u_other_reason').val('Some other reason');
     $('select').val('other');
-    this.form.$cancel.click();
+    this.form.$cancel.click(); // TODO: jQuery deprecation
     expect(this.form.committeeId.val()).to.equal('');
     expect($('select').val()).to.equal(null);
     expect($('#id_u_other_reason').val()).to.equal('');

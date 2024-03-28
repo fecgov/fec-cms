@@ -132,8 +132,8 @@ DateFilter.prototype.fromQuery = function(query) {
 
 DateFilter.prototype.setValue = function(value) {
   value = ensureArray(value);
-  this.$minDate.val(value[0]).change();
-  this.$maxDate.val(value[1]).change();
+  this.$minDate.val(value[0]).change(); // TODO: jQuery deprecation
+  this.$maxDate.val(value[1]).change(); // TODO: jQuery deprecation
 };
 
 DateFilter.prototype.handleModifyEvent = function(e, opts) {
@@ -142,12 +142,12 @@ DateFilter.prototype.handleModifyEvent = function(e, opts) {
   if (opts.filterName === this.name) {
     this.maxYear = parseInt(opts.filterValue);
     this.minYear = this.maxYear - 1;
-    this.$minDate.val('01/01/' + this.minYear.toString()).change();
+    this.$minDate.val('01/01/' + this.minYear.toString()).change(); // TODO: jQuery deprecation
     if (this.maxYear === today.getFullYear()) {
       today = moment(today).format('MM/DD/YYYY');
-      this.$maxDate.val(today).change();
+      this.$maxDate.val(today).change(); // TODO: jQuery deprecation
     } else {
-      this.$maxDate.val('12/31/' + this.maxYear.toString()).change();
+      this.$maxDate.val('12/31/' + this.maxYear.toString()).change(); // TODO: jQuery deprecation
     }
     this.validate();
   }
@@ -235,7 +235,7 @@ DateFilter.prototype.handleMinDateSelect = function() {
   this.$grid.find('.is-active').removeClass('is-active');
   $dateBegin.addClass('is-active');
 
-  this.$grid.find('li').hover(
+  this.$grid.find('li').hover( // TODO: jQuery deprecation
     function() {
       var dateBeginNum = parseInt(
         $(this)
@@ -272,7 +272,7 @@ DateFilter.prototype.handleMaxDateSelect = function() {
   this.$grid.find('.is-active').removeClass('is-active');
   $dateEnd.addClass('is-active');
 
-  this.$grid.find('li').hover(
+  this.$grid.find('li').hover( // TODO: jQuery deprecation
     function() {
       // turn dates to numbers for comparsion
       // to make sure hover date range is valid
@@ -327,10 +327,10 @@ DateFilter.prototype.handleGridItemSelect = function(e) {
       ? this.$maxDate
       : this.$submit;
     this.$grid.removeClass('pick-min pick-max');
-    this.$grid.find('li').unbind('mouseenter mouseleave');
+    this.$grid.find('li').unbind('mouseenter mouseleave'); // TODO: jQuery deprecation (.unbind())
     this.setValue(value);
     this.$grid.addClass('is-invalid');
-    $nextItem.focus();
+    $nextItem.focus(); // TODO: jQuery deprecation
   }
 };
 

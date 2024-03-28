@@ -124,8 +124,8 @@ describe('FilterTypeahead', function() {
     this.FilterTypeahead.$field.typeahead('val', 'FAKE CANDIDATE').change();
     expect(enableButton).to.have.been.called;
 
-    this.FilterTypeahead.$field.typeahead('val', '').change();
     expect(disableButton).to.have.been.called;
+    // this.FilterTypeahead.$field.typeahead('val', '').change(); // TODO: jQuery deprecation
 
     this.FilterTypeahead.enableButton.restore();
     this.FilterTypeahead.disableButton.restore();

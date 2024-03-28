@@ -122,7 +122,7 @@ describe('date filter', function() {
     });
 
     it('triggers an add event with all the right properties', function() {
-      this.filter.$minDate.val('01/01/2015').change();
+      this.filter.$minDate.val('01/01/2015').change(); // TODO: jQuery deprecation
       expect(this.trigger).to.have.been.calledWith('filter:added', [
         {
           key: 'min_date',
@@ -139,14 +139,14 @@ describe('date filter', function() {
 
     it('triggers a remove event if the field has no value', function() {
       this.filter.$minDate.val('01/01/2015');
-      this.filter.$minDate.val('').change();
+      this.filter.$minDate.val('').change(); // TODO: jQuery deprecation
       expect(this.trigger).to.have.been.calledWith('filter:removed');
     });
 
     it('triggers a rename event if the field had a value', function() {
       this.filter.$minDate.val('01/01/2015');
       this.filter.$minDate.data('had-value', true);
-      this.filter.$minDate.val('02/01/2015').change();
+      this.filter.$minDate.val('02/01/2015').change(); // TODO: jQuery deprecation
       expect(this.trigger).to.have.been.calledWith('filter:renamed');
       expect(this.filter.$minDate.data('loaded-once')).to.be.true;
     });

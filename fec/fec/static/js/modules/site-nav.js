@@ -35,7 +35,7 @@ export default function SiteNav(selector) {
   // call listener function explicitly at run time
   this.mediaQueryResponse(mql);
   // attach listener function to listen for change in mediaQuery list
-  mql.addListener(this.mediaQueryResponse);
+  mql.addListener(this.mediaQueryResponse); // TODO: .addListener() has been deprecated
 }
 
 SiteNav.prototype.initMenu = function() {

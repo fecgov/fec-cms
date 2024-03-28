@@ -18,7 +18,7 @@ describe('draftail - Anchor Block Component', function() {
     var Decorator = Anchor.decorator;
     var element = shallow(<Decorator>test</Decorator>);
     expect(element.childAt(0).text()).to.equal('test');
-    expect(element.type()).to.equal('span');
+    expect(element.type()).to.equal('span'); // TODO: jQuery deprecation (.type())
   });
 
   it('the Anchor source should build an anchor component from selected text', function(done) {

@@ -35,7 +35,7 @@ export function download(url, init, focus) {
   }
 
   if (focus) {
-    item.$button.focus();
+    item.$button.focus(); // TODO: jQuery deprecation
   }
 
   return item;

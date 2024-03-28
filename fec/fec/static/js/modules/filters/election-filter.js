@@ -42,7 +42,7 @@ ElectionFilter.prototype.fromQuery = function(query) {
     this.$cycles
       .find('input[value="' + cycle + ':' + full + '"]')
       .prop('checked', true)
-      .change();
+      .change(); // TODO: jQuery deprecation
   }
   return this;
 };
@@ -79,7 +79,7 @@ ElectionFilter.prototype.handleElectionChange = function(e) {
     .find('input')
     .eq(0)
     .prop('checked', true)
-    .change();
+    .change(); // TODO: jQuery deprecation
 };
 
 ElectionFilter.prototype.handleCycleChange = function(e) {
@@ -88,9 +88,9 @@ ElectionFilter.prototype.handleCycleChange = function(e) {
     .split(':');
   this.$cycle
     .val(selected[0])
-    .change()
+    .change() // TODO: jQuery deprecation
     .attr('checked', true);
-  this.$full.val(selected[1]).change();
+  this.$full.val(selected[1]).change(); // TODO: jQuery deprecation
   this.setTag();
 };
 

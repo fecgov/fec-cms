@@ -6,8 +6,8 @@
  */
 import { buildUrl } from './helpers.js';
 
-  $('#primary_category_id').change(function() {
 export function auditCategorySubcategory() {
+  $('#primary_category_id').change(function() { // TODO: jQuery deprecation
     var $select = $('#sub_category_id');
     $.getJSON(
       buildUrl(['audit-category'], {

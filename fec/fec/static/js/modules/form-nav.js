@@ -27,5 +27,5 @@ FormNav.prototype.clearNamesIfNull = function(e) {
     }
   }
 
-  if (e.type == 'change') this.form.submit();
+  if (e.type == 'change') this.form.submit(); // TODO: jQuery deprecation
 };

@@ -54,7 +54,7 @@ FilterPanel.prototype.show = function(focus) {
     this.$body
       .find('input, select, button:not(.js-filter-close)')
       .first()
-      .focus();
+      .focus(); // TODO: jQuery deprecation
   }
 };
 
@@ -65,7 +65,7 @@ FilterPanel.prototype.hide = function() {
   }
   this.$body.removeClass('is-open');
   this.$content.attr('aria-hidden', true);
-  this.$focus.focus();
+  this.$focus.focus(); // TODO: jQuery deprecation
   removeTabindex(this.$form);
   $('body').removeClass('is-showing-filters');
   this.isOpen = false;

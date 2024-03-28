@@ -243,17 +243,17 @@ describe('calendar tooltip', function() {
   });
 
   it('closes on click away', function() {
-    $(document.body).click();
+    $(document.body).click(); // TODO: jQuery deprecation
     expect($('.cal-details').length).to.equal(0);
   });
 
   it('stays open if you click inside it', function() {
-    this.calendarTooltip.$content.find('a').click();
+    this.calendarTooltip.$content.find('a').click(); // TODO: jQuery deprecation
     expect($('.cal-details').length).to.equal(1);
   });
 
   it('closes on clicking the close button', function() {
-    this.calendarTooltip.$content.find('.js-close').click();
+    this.calendarTooltip.$content.find('.js-close').click(); // TODO: jQuery deprecation
     expect($('.cal-details').length).to.equal(0);
   });
 

@@ -28,6 +28,6 @@ Skipnav.prototype.focusOnTarget = function(e) {
 
   if (e.keyCode === 13 || e.type === 'click') {
     this.$target.attr('tabindex', '0');
-    this.$target.focus();
+    this.$target.focus(); // TODO: jQuery deprecation
   }
 };
