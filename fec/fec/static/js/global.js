@@ -9,7 +9,7 @@ import TOC from './modules/toc.js';
 import Typeahead from './modules/typeahead.js';
 import { default as terms } from './data/terms.json' assert { type: 'json' };
 
-document.addEventListener("DOMContentLoaded", () => {
+$(function() {
   /**
    * Glossary and "Table of Contents"
    */
