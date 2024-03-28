@@ -1,8 +1,10 @@
 /* global DEFAULT_TIME_PERIOD */
 import { chain as _chain, each as _each, max as _max, sortBy as _sortBy } from 'underscore';
-var d3 = require('d3');
-var numeral = require('numeral');
-var helpers = require('./helpers');
+
+import * as d3 from 'd3';
+import * as numeral from 'numeral';
+
+import { buildUrl, currency, isMediumScreen, utcDate, zeroPad } from './helpers.js';
 
 var parseM = d3.time.format('%b');
 var parseMY = d3.time.format('%b %Y');
@@ -52,7 +54,7 @@ export default function LineChart(selector, snapshot, dataType) {
   this.fetch(this.cycle);
 
   // Set the snapshot height if we're in a medium-sized screen
-  if (helpers.isMediumScreen()) {
+  if (isMediumScreen()) {
     this.$snapshot.height(this.baseHeight - this.margin.bottom);
   }
 
@@ -63,7 +65,7 @@ export default function LineChart(selector, snapshot, dataType) {
 }
 
 LineChart.prototype.fetch = function(cycle) {
-  var entityTotalsURL = helpers.buildUrl(['totals', 'by_entity'], {
+  const entityTotalsURL = buildUrl(['totals', 'by_entity'], {
     cycle: cycle,
     per_page: '100'
   });
@@ -88,7 +90,7 @@ LineChart.prototype.groupDataByType = function(results) {
   var today = new Date();
   _each(results, function(item) {
     var datum;
-    var date = helpers.utcDate(item.end_date);
+    const date = utcDate(item.end_date);
     // If the data is in the future, it's probably wrong, so ignore it
     if (date > today) {
       return;
@@ -281,7 +283,7 @@ LineChart.prototype.drawCursor = function(svg) {
 LineChart.prototype.xAxisFormatter = function() {
   // Draw tick marks for the x-axis at different intervals depending on screen size
   var formatter;
-  if (helpers.isMediumScreen()) {
+  if (isMediumScreen()) {
     formatter = function(d) {
       if (d.getMonth() === 0) {
         return parseMY(d);
@@ -354,7 +356,7 @@ LineChart.prototype.populateSnapshot = function(datum) {
   this.snapshotSubtotals(datum);
   this.snapshotTotal(datum);
   this.$snapshot.find('.js-max-date').html(parseMDY(datum.date));
-  helpers.zeroPad(
+  zeroPad(
     this.$snapshot,
     '.snapshot__item-number',
     '.figure__decimals'
@@ -365,7 +367,7 @@ LineChart.prototype.snapshotSubtotals = function(datum) {
   // Update the snapshot with the values for each category
   this.$snapshot.find('[data-total-for]').each(function() {
     var category = $(this).data('total-for');
-    var value = helpers.currency(datum[category]);
+    const value = currency(datum[category]);
     $(this).html(value);
   });
 };
@@ -379,7 +381,7 @@ LineChart.prototype.snapshotTotal = function(datum) {
       return a + b;
     })
     .value();
-  this.$snapshot.find('[data-total-for="all"]').html(helpers.currency(total));
+  this.$snapshot.find('[data-total-for="all"]').html(currency(total));
 };
 
 LineChart.prototype.goToNextMonth = function() {

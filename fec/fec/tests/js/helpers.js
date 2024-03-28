@@ -1,10 +1,7 @@
-var chai = require('chai');
-var expect = chai.expect;
+import './setup.js';
+import { expect } from 'chai';
 
-
-require('./setup')();
-
-var helpers = require('../../static/js/modules/helpers');
+import * as helpers from '../../static/js/modules/helpers.js';
 
 describe('helpers', function() {
   describe('buildTableQuery', function() {

@@ -2,8 +2,10 @@
 
 import { default as URI } from 'urijs';
 import { escape as _escape } from 'underscore';
-import { default as typeahead } from '../typeahead.js';
+import { datasets } from '../typeahead.js';
 import { sanitizeValue } from '../helpers.js';
+
+import 'corejs-typeahead/dist/typeahead.jquery.js';
 
 const ID_PATTERN = /^\w{9}$/;
 
@@ -322,7 +324,7 @@ FilterTypeahead.prototype.changeDataset = function(e, opts) {
       this.typeaheadInit();
     } else {
       // Otherwise initialize with the committee dataset
-      this.dataset = typeahead.datasets.committees;
+      this.dataset = datasets.committees;
       this.typeaheadInit();
     }
   }

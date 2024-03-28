@@ -1,13 +1,12 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-
-require('./setup')();
-
-var ElectionFilter = require('../../static/js/modules/filters/election-filter').ElectionFilter;
+import ElectionFilter from '../../static/js/modules/filters/election-filter.js';
 
 describe('Election filter', function() {
   before(function() {

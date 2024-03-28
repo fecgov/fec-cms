@@ -1,10 +1,12 @@
-var chai = require('chai');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+// Common for all/most tests
+// import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+// import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-
-var SkipNav = require('../../static/js/modules/skip-nav').Skipnav;
+import SkipNav from '../../static/js/modules/skip-nav.js';
 
 var DOM = '<a class="skip-nav">Skip</a><main><h1>Welcome</h1></main>';
 

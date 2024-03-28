@@ -1,4 +1,4 @@
-var helpers = require('./helpers');
+import { zeroPad } from './helpers.js';
 
 export default function TopList(selector, dataType) {
   this.$element = $(selector);
@@ -18,7 +18,7 @@ export default function TopList(selector, dataType) {
 }
 
 TopList.prototype.zeroPad = function() {
-  helpers.zeroPad(this.$visibleList, '.figure__number', '.figure__decimals');
+  zeroPad(this.$visibleList, '.figure__number', '.figure__decimals');
 };
 
 TopList.prototype.handleToggle = function(e) {

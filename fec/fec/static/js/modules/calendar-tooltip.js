@@ -1,10 +1,10 @@
 /**
  *
  */
-import { default as Dropdown } from './dropdowns.js';
-import { default as Listeners } from './listeners.js';
+import Dropdown from './dropdowns.js';
+import Listeners from './listeners.js';
 
-export default function CalendarTooltip(content, $container) {
+export function CalendarTooltip(content, $container) {
   this.$content = $(content);
   this.$container = $container;
   this.$close = this.$content.find('.js-close');

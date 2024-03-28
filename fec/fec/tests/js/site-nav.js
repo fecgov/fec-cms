@@ -1,12 +1,8 @@
-/* global describe, before, beforeEach, it */
+import { expect } from 'chai';
+import $ from 'jquery';
 
-var chai = require('chai');
-var expect = chai.expect;
-var sinon = require('sinon');
-
-
-var SiteNav = require('../../static/js/modules/site-nav').SiteNav;
-var helpers = require('../../static/js/modules/helpers');
+import SiteNav from '../../static/js/modules/site-nav.js';
+// import * as helpers from '../../static/js/modules/helpers.js';
 
 var dom = '<nav class="site-nav js-site-nav">' +
   '<div id="site-menu" class="site-nav__container">' +

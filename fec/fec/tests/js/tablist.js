@@ -1,8 +1,6 @@
-var chai = require('chai');
-var expect = chai.expect;
+import { expect } from 'chai';
 
-
-var tablist = require('../../static/js/vendor/tablist');
+import { init as tablistInit } from '../../static/js/vendor/tablist.js';
 
 describe('tablist', function() {
   var fixture;
@@ -25,7 +23,7 @@ describe('tablist', function() {
         '</div>'
       );
 
-      tablist.init();
+      tablistInit();
 
       expect($('[data-name="tab0"]').attr('aria-selected')).to.be.eql('true');
       expect($('[data-name="tab1"]').attr('aria-selected')).to.be.undefined;

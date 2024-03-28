@@ -1,6 +1,6 @@
-const anchor = require('./Anchor');
-const glossary = require('./Glossary');
-const sansserif = require('./SansSerif');
+import * as anchor from './Anchor.js';
+import * as glossary from './Glossary.js';
+import * as sansserif from './SansSerif.js';
 
 window.draftail.registerPlugin(anchor);
 window.draftail.registerPlugin(glossary);

@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EditorState, Modifier } from 'draft-js';
-import Modal from './components/Modal';
-import { slugify } from './utils';
 
-const glossaryTerms = require('../data/terms.json');
+import Modal from './components/Modal.js';
+import { slugify } from './utils.js';
+
+import { default as glossaryTerms } from '../data/terms.json'; // assert { type: 'json' };
+
 const terms = [{ term: 'Select term' }].concat(glossaryTerms);
 
 const GlossarySelect = ({ handleChange, terms }) => {

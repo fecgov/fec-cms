@@ -1,24 +1,27 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
 import { default as URI } from 'urijs';
 import { extend as _extend } from 'underscore';
 
-require('./setup')();
-require('datatables.net')();
-require('datatables.net-responsive')();
+// require('datatables.net')();
+// require('datatables.net-responsive')();
 
-var columns = require('../../static/js/modules/columns');
-var columnHelpers = require('../../static/js/modules/column-helpers');
-var helpers = require('../../static/js/modules/helpers');
-var tables = require('../../static/js/modules/tables');
-var tablist = require('../../static/js/vendor/tablist');
-var context = require('../fixtures/context');
-var houseResults = require('../fixtures/house-results');
-var DataTable = tables.DataTable;
+import { committeeColumn, supportOpposeColumn } from '../../static/js/modules/columns.js';
+import { buildTotalLink } from '../../static/js/modules/column-helpers.js';
+import { buildUrl } from '../../static/js/modules/helpers.js';
+
+import { DataTable_FEC, drawComparison, getCycle, initSpendingTables, mapResponse, mapSort, yearRange } from '../../static/js/modules/tables.js';
+import { init as initTablist } from '../../static/js/vendor/tablist.js';
+
+import { default as context } from '../fixtures/context.js';
+import { default as houseResults } from '../fixtures/house-results.js';
+// const DataTable = DataTable_FEC;
 
 describe('data table', function() {
   before(function() {
@@ -144,7 +147,7 @@ describe('data table', function() {
         order: [{ column: 1, dir: 'desc' }]
       };
       var url = this.table.buildUrl(data);
-      var expected = helpers.buildUrl(['path', 'to', 'endpoint'], {
+      var expected = buildUrl(['path', 'to', 'endpoint'], {
         sort_hide_null: 'false',
         sort_nulls_last: 'true',
         party: 'DFL',
@@ -164,7 +167,7 @@ describe('data table', function() {
       };
       this.table.fetch({}, callback);
       this.deferred.resolve(resp);
-      expect(callback).to.have.been.calledWith(tables.mapResponse(resp));
+      expect(callback).to.have.been.calledWith(mapResponse(resp));
     });
 
     it('hides table on empty results', function() {
@@ -299,7 +302,7 @@ describe('data table', function() {
             '<thead><tr></tr></thead>' +
             '</table>'
         );
-      tables.drawComparison(houseResults, context);
+      drawComparison(houseResults, context);
       done();
     });
 
@@ -328,15 +331,15 @@ describe('data table', function() {
         .append(this.$fixture);
 
       this.independentExpenditureColumns = [
-        columns.committeeColumn({ data: 'committee', className: 'all' }),
-        columns.supportOpposeColumn,
-        columns.candidateColumn({ data: 'candidate', className: 'all' }),
+        committeeColumn({ data: 'committee', className: 'all' }),
+        supportOpposeColumn,
+        candidateColumn({ data: 'candidate', className: 'all' }),
         {
           data: 'total',
           className: 'all column--number t-mono',
           orderable: true,
           orderSequence: ['desc', 'asc'],
-          render: columnHelpers.buildTotalLink(
+          render: buildTotalLink(
             ['independent-expenditures'],
             function(data, type, row, meta) {
               return {
@@ -391,7 +394,7 @@ describe('data table', function() {
             '</section>' +
             '</div>'
         );
-      tablist.init();
+      initTablist();
       done();
     });
 
@@ -401,7 +404,7 @@ describe('data table', function() {
     });
 
     it('should add and init the tables', function() {
-      tables.initSpendingTables('.data-table', context, this.tableOpts);
+      initSpendingTables('.data-table', context, this.tableOpts);
       $('[role="tab"]').trigger($.Event('click'));
       var toggle = $('.js-panel-toggle');
       expect(toggle.length).to.equal(1);
@@ -410,7 +413,7 @@ describe('data table', function() {
 
   describe('getCycle', function() {
     before(function(done) {
-      this.spy = sinon.spy(tables.getCycle);
+      this.spy = sinon.spy(getCycle);
       done();
     });
 
@@ -428,12 +431,12 @@ describe('data table', function() {
 
   describe('yearRange', function() {
     it('should return a single year when same', function() {
-      var results = tables.yearRange('2018', '2018');
+      var results = yearRange('2018', '2018');
       expect(results).to.equal('2018');
     });
 
     it('should return a year range with hyphen', function() {
-      var results = tables.yearRange('2018', '2020');
+      var results = yearRange('2018', '2020');
       expect(results).to.equal('2018 - 2020');
     });
   });
@@ -443,7 +446,7 @@ describe('data table', function() {
       var order = [{ column: 'test' }];
       var columns = { test: { data: 'hello' } };
       var expected = ['hello'];
-      var results = tables.mapSort(order, columns);
+      var results = mapSort(order, columns);
       expect(results).to.deep.equal(expected);
     });
 
@@ -451,7 +454,7 @@ describe('data table', function() {
       var order = [{ column: 'test', dir: 'desc' }];
       var columns = { test: { data: 'hello' } };
       var expected = ['-hello'];
-      var results = tables.mapSort(order, columns);
+      var results = mapSort(order, columns);
       expect(results).to.deep.equal(expected);
     });
   });
@@ -464,7 +467,7 @@ describe('data table', function() {
         recordsFiltered: 501,
         data: 'test'
       };
-      var results = tables.mapResponse(response);
+      var results = mapResponse(response);
       expect(results).to.deep.equal(expected);
     });
 
@@ -475,7 +478,7 @@ describe('data table', function() {
         recordsFiltered: 512000,
         data: 'test'
       };
-      var results = tables.mapResponse(response);
+      var results = mapResponse(response);
       expect(results).to.deep.equal(expected);
     });
   });

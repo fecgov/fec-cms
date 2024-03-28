@@ -2,7 +2,7 @@
  * Handles the creation and animation for the animated three-row money comparison bars
  */
 
-import { currency } from './helpers';
+import { currency } from './helpers.js';
 
 /**
  * Quick lookup for converting api results to sometimes-abbreviated and punctuated versions

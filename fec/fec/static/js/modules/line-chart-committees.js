@@ -1,15 +1,15 @@
 /* global DEFAULT_TIME_PERIOD */
 import { chain as _chain, each as _each, max as _max, sortBy as _sortBy } from 'underscore';
-var d3 = require('d3');
-var numeral = require('numeral');
-var helpers = require('./helpers');
 
 var parseM = d3.time.format('%b');
 var parseMY = d3.time.format('%b %Y');
 var parseMDY = d3.time.format('%m/%d/%Y');
 var parsePlotPoints = d3.time.format('%Y-%m-01T%H:%M:%S.%L');
+import * as d3 from 'd3';
+import * as numeral from 'numeral';
 
 var bisectDate = d3.bisector(function(d) {
+import { buildUrl, dollar, isMediumScreen, utcDate } from './helpers.js';
   return d.date;
 }).left;
 
@@ -52,7 +52,7 @@ export default function LineChartCommittees(selector, snapshot, dataType) {
   this.fetch(this.cycle);
 
   // Set the snapshot height if we're in a medium-sized screen
-  if (helpers.isMediumScreen()) {
+  if (isMediumScreen()) {
     this.$snapshot.height(this.baseHeight - this.margin.bottom);
   }
 
@@ -63,7 +63,7 @@ export default function LineChartCommittees(selector, snapshot, dataType) {
 }
 
 LineChartCommittees.prototype.fetch = function(cycle) {
-  var entityTotalsURL = helpers.buildUrl(['totals', 'by_entity'], {
+  var entityTotalsURL = buildUrl(['totals', 'by_entity'], {
     cycle: cycle,
     per_page: '100'
   });
@@ -88,7 +88,7 @@ LineChartCommittees.prototype.groupDataByType = function(results) {
   var today = new Date();
   _each(results, function(item) {
     var datum;
-    var date = helpers.utcDate(item.end_date);
+    const date = utcDate(item.end_date);
     // If the data is in the future, it's probably wrong, so ignore it
     if (date > today) {
       return;
@@ -285,7 +285,7 @@ LineChartCommittees.prototype.xAxisFormatter = function() {
   // Draw tick marks for the x-axis at different intervals depending on screen size
   var formatter;
 
-  if (helpers.isMediumScreen()) {
+  if (isMediumScreen()) {
     formatter = function(d) {
       if (d.getMonth() === 0) {
         return parseMY(d);
@@ -364,7 +364,7 @@ LineChartCommittees.prototype.snapshotSubtotals = function(datum) {
   // Update the snapshot with the values for each category
   this.$snapshot.find('[data-total-for]').each(function() {
     var category = $(this).data('total-for');
-    var value = helpers.dollar(datum[category]);
+    const value = dollar(datum[category]);
     $(this).html(value);
   });
 };
@@ -378,7 +378,7 @@ LineChartCommittees.prototype.snapshotTotal = function(datum) {
       return a + b;
     })
     .value();
-  this.$snapshot.find('[data-total-for="all"]').html(helpers.dollar(total));
+  this.$snapshot.find('[data-total-for="all"]').html(dollar(total));
 };
 
 LineChartCommittees.prototype.goToNextMonth = function() {

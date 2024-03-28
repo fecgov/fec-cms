@@ -1,8 +1,8 @@
 
-import { getColumns } from '../modules/column-helpers';
+import { getColumns } from '../modules/column-helpers.js';
 import { reports as cols_reports } from '../modules/columns.js';
 import Dropdown from '../modules/dropdowns.js';
-import { fetchReportDetails } from '../modules/filings';
+import { fetchReportDetails } from '../modules/filings.js';
 import TableSwitcher from '../modules/table-switcher.js';
 import { DataTable, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 import candidateTemplate from '../templates/reports/candidate.hbs';

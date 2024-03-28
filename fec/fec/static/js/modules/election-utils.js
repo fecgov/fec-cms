@@ -65,7 +65,7 @@ export function getStateElectionOffices(state) {
   var query = {
     state: state
   };
-  var url = helpers.buildUrl(['state-election-office'], query);
+  var url = buildUrl(['state-election-office'], query);
   $.getJSON(url).done(function(response) {
     var $offices_list = $('#election-offices');
     var offices = response.results;

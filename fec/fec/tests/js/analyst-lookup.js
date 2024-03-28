@@ -1,13 +1,12 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-
-require('./setup')();
-
-var AnalystLookup = require('../../static/js/pages/contact-form').AnalystLookup;
+import { AnalystLookup } from '../../static/js/pages/contact-form';
 
 describe('AnalystLookup', function() {
     before(function() {

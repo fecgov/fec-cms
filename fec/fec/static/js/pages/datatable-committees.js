@@ -1,8 +1,8 @@
 
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
+import { committees as cols_committees } from '../modules/columns.js';
+import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 
-var committeesTemplate = require('../templates/committees.hbs');
+import { default as committeesTemplate } from '../templates/committees.hbs';
 
   var $table = $('#results');
   new tables.DataTable($table, {
@@ -10,13 +10,13 @@ $(function() {
     autoWidth: false,
     title: 'Committees',
     path: ['committees'],
-    columns: columns.committees,
+    columns: cols_committees,
     useFilters: true,
     useExport: true,
     order: [[5, 'desc']],
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: tables.modalRenderFactory(committeesTemplate)
+      afterRender: modalRenderFactory(committeesTemplate)
     }
   });
 });

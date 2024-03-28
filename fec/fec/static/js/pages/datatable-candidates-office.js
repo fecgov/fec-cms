@@ -1,18 +1,18 @@
 
-var tables = require('../modules/tables');
-var columnHelpers = require('../modules/column-helpers');
-var columns = require('../modules/columns');
-var tablePanels = require('../modules/table-panels');
+import { candidateOffice as cols_candidateOffice } from '../modules/columns.js';
+import { getColumns } from '../modules/column-helpers.js';
+import { renderCandidatePanel } from '../modules/table-panels.js';
+import { DataTable_FEC, modalRenderRow } from '../modules/tables.js';
 
 var columnGroups = {
-  president: columnHelpers.getColumns(columns.candidateOffice, [
+  president: getColumns(cols_candidateOffice, [
     'name',
     'party',
     'receipts',
     'disbursements',
     'trigger'
   ]),
-  senate: columnHelpers.getColumns(columns.candidateOffice, [
+  senate: getColumns(cols_candidateOffice, [
     'name',
     'party',
     'state',
@@ -20,7 +20,7 @@ var columnGroups = {
     'disbursements',
     'trigger'
   ]),
-  house: columnHelpers.getColumns(columns.candidateOffice, [
+  house: getColumns(cols_candidateOffice, [
     'name',
     'party',
     'state',
@@ -43,9 +43,9 @@ var officeTitleMap = {
   house: 'House of Representatives'
 };
 
-  var $table = $('#results');
   new tables.DataTable($table, {
 $(function() {
+  const $table = $('#results');
     autoWidth: false,
     title: 'Candidates for ' + officeTitleMap[global.context.office],
     path: ['candidates', 'totals'],
@@ -54,9 +54,9 @@ $(function() {
     order: [[defaultSort[global.context.office], 'desc']],
     useFilters: true,
     useExport: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: tablePanels.renderCandidatePanel(true)
+      afterRender: renderCandidatePanel(true)
     }
   });
 });

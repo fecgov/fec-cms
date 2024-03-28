@@ -1,10 +1,7 @@
-var chai = require('chai');
-var expect = chai.expect;
+import './setup.js';
+import { expect } from 'chai';
 
-
-require('./setup')();
-
-var FilterSet = require('../../static/js/modules/filters/filter-set').FilterSet;
+import FilterSet from '../../static/js/modules/filters/filter-set.js';
 
 describe('FilterSet', function() {
   describe('basic filter set', function() {

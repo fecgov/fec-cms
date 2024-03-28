@@ -1,12 +1,13 @@
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-
-var electionUtils = require('../../static/js/modules/election-utils');
-var electionOffices = require('../fixtures/election-offices');
-require('./setup')();
+import { getStateElectionOffices } from '../../static/js/modules/election-utils.js';
+import { default as electionOffices } from '../fixtures/election-offices.js';
 
 describe('election-utils', function() {
   before(function(done) {
@@ -37,7 +38,7 @@ describe('election-utils', function() {
   describe('getStateElectionOffices', function() {
     it('should query then attach state election office template', function(done) {
       var state = 'NV';
-      electionUtils.getStateElectionOffices(state);
+      getStateElectionOffices(state);
       var offices = $('#election-offices');
       this.stub.calledOnce;
       expect(offices.children().length).to.be.greaterThan(1);

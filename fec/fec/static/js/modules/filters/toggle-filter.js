@@ -1,4 +1,4 @@
-import { default as Filter } from './filter-base.js';
+import Filter from './filter-base.js';
 
 /* ToggleFilter that has to fire a custom event */
 export default function ToggleFilter(elm) {

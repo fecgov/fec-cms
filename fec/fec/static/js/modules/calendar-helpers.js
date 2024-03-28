@@ -1,10 +1,8 @@
 /**
  *
  */
-import { default as moment } from 'moment';
+import moment from 'moment';
 import { default as URI } from 'urijs';
-
-// var moment = require('moment');
 
 export function getGoogleUrl(event) {
   let fmt, dates;

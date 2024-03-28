@@ -5,12 +5,10 @@
  * the committee that are required to be disclosed.
  *
  */
+import { loans as cols_loans } from '../modules/columns.js';
+import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 
-
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-
-var loansTemplate = require('../templates/loans.hbs');
+import { default as loansTemplate } from '../templates/loans.hbs';
 
   var $table = $('#results');
   new tables.DataTable($table, {
@@ -18,13 +16,13 @@ $(function() {
     autoWidth: false,
     title: 'Loans',
     path: ['schedules', 'schedule_c'],
-    columns: columns.loans,
+    columns: cols_loans,
     order: [[2, 'desc']],
     useFilters: true,
     useExport: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: tables.modalRenderFactory(loansTemplate)
+      afterRender: modalRenderFactory(loansTemplate)
     }
   });
 });

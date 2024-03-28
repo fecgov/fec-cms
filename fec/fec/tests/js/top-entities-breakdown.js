@@ -1,15 +1,14 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-var moment = require('moment');
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-chai.use(sinonChai);
+// import moment from 'moment';
 
-
-require('./setup')();
-
-var TopEntities = require('../../static/js/modules/top-entities').TopEntities;
+import { TopEntities } from '../../static/js/modules/top-entities.js';
 
 var DOM =
 '<select class="js-office">' +

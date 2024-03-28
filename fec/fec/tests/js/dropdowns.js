@@ -1,13 +1,12 @@
-/* global document, describe, before, beforeEach, after, afterEach, it */
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
-
-
-var Dropdown = require('../../static/js/modules/dropdowns').Dropdown;
+import Dropdown from '../../static/js/modules/dropdowns.js';
 
 function isOpen(dropdown) {
   return dropdown.isOpen &&

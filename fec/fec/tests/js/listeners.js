@@ -1,11 +1,12 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+// Common for all/most tests
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+import * as sinonChai from 'sinon-chai';
+use(sinonChai);
+// import './setup.js';
+// (end common)
 
-
-var Listeners = require('../../static/js/modules/listeners').Listeners;
+import Listeners from '../../static/js/modules/listeners.js';
 
 function dummyListener() { return true; }
 

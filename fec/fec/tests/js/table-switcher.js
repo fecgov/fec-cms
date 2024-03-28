@@ -1,12 +1,12 @@
-var chai = require('chai');
-var expect = chai.expect;
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-chai.use(sinonChai);
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-require('./setup')();
-
-var TableSwitcher = require('../../static/js/modules/table-switcher').TableSwitcher;
+import TableSwitcher from '../../static/js/modules/table-switcher.js';
 
   describe('Table switcher', function() {
     before(function() {

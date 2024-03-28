@@ -1,4 +1,5 @@
-var A11yDialog = require('a11y-dialog');
+
+import { default as A11yDialog } from 'a11y-dialog';
 
 /**
  * KeywordModal

@@ -1,14 +1,12 @@
-var React = require('react');
-var chai = require('chai');
-var draftjs = require('draft-js');
-var Enzyme = require('./setup');
+import React from 'react';
+import { expect } from 'chai';
+import { EditorState } from 'draft-js';
 
-var mount = Enzyme.mount;
-var shallow = Enzyme.shallow;
-var expect = chai.expect;
-var EditorState = draftjs.EditorState;
-var Glossary = require('../../../static/js/draftail/Glossary');
-var terms = require('../../../static/js/data/terms.json');
+import './setup.js';
+import { mount, shallow } from 'enzyme';
+
+import { default as Glossary } from '../../../static/js/draftail/Glossary.js';
+import { default as terms } from '../../../static/js/data/terms.json' assert { type: 'json' };
 
 describe('draftail - Glossary Block Component', function() {
   it('should build a Glossary object for Draftail to Consume', function() {

@@ -1,10 +1,9 @@
 import { removeTabindex, restoreTabindex } from './accessibility.js';
 import { BREAKPOINTS, getWindowWidth } from './helpers.js';
 
-// window.$ = window.jQuery = $;
+window.$ = window.jQuery = $;
 
-// require('accessible-mega-menu');
-import 'accessible-mega-menu';
+import 'accessible-mega-menu/js/jquery-accessibleMegaMenu.js';
 
 /** SiteNav module
  * On mobile: Controls the visibility of the the hamburger menu and sublists
@@ -54,7 +53,8 @@ SiteNav.prototype.initMegaMenu = function() {
       });
   });
 
-  this.$menu.accessibleMegaMenu({
+  this.$menu.accessibleMegaMenu(
+    {
     uuidPrefix: 'mega-menu',
     menuClass: 'site-nav__panel--main',
     topNavItemClass: 'site-nav__item',

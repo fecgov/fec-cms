@@ -1,4 +1,4 @@
-var statisticalSummaryArchive = require('../modules/statistical-summary-archive')
-  .StatisticalSummaryArchive;
+// TODO: is this still necessary?
+import StatisticalSummaryArchive from '../modules/statistical-summary-archive.js';
 
-new statisticalSummaryArchive();
+new StatisticalSummaryArchive();

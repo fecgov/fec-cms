@@ -1,7 +1,6 @@
-import { buildUrl, buildAppUrl, dollar } from '../modules/helpers';
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-var decoders = require('../modules/decoders');
+import { buildUrl, buildAppUrl, dollar } from '../modules/helpers.js';
+import { currencyColumn } from '../modules/columns.js';
+import { states as decode_states } from '../modules/decoders.js';
 
 function AcrossTime() {
   this.element; // The HTML element of this feature
@@ -291,26 +290,26 @@ AcrossTime.prototype.loadData = function(query) {
 var election_house_totals = [
   { data: 'state', render: function(data, type, row) {
     // Concatenate the state full state name and the district number together for display.
-    return (decoders.states[row.state] + ' DISTRICT ' + row.district).toUpperCase();
+    return (decode_states[row.state] + ' DISTRICT ' + row.district).toUpperCase();
     },
   orderable: true, className: 'column-state' },
-  columns.currencyColumn({ data: 'total_receipts', orderable: true, className: 'column--number t-mono' }),
-  columns.currencyColumn({ data: 'total_disbursements', orderable: true, className: 'column--number t-mono' }),
-  columns.currencyColumn({ data: 'total_cash_on_hand_end_period', orderable: true, className: 'column--number t-mono' }),
-  columns.currencyColumn({ data: 'total_debts_owed_by_committee', orderable: true, className: 'column--number t-mono' })
+  currencyColumn({ data: 'total_receipts', orderable: true, className: 'column--number t-mono' }),
+  currencyColumn({ data: 'total_disbursements', orderable: true, className: 'column--number t-mono' }),
+  currencyColumn({ data: 'total_cash_on_hand_end_period', orderable: true, className: 'column--number t-mono' }),
+  currencyColumn({ data: 'total_debts_owed_by_committee', orderable: true, className: 'column--number t-mono' })
 ];
 
 // election senate totals for election overview pages
 var election_senate_totals = [
   { data: 'state', render: function(data, type, row) {
     // Display full state name in upper case
-    return decoders.states[row.state].toUpperCase();
+    return decode_states[row.state].toUpperCase();
     },
   orderable: true, className: 'column--state' },
-  columns.currencyColumn({ data: 'total_receipts', orderable: true, className: 'column--number t-mono' }),
-  columns.currencyColumn({ data: 'total_disbursements', orderable: true, className: 'column--number t-mono' }),
-  columns.currencyColumn({ data: 'total_cash_on_hand_end_period', orderable: true, className: 'column--number t-mono' }),
-  columns.currencyColumn({ data: 'total_debts_owed_by_committee', orderable: true, className: 'column--number t-mono' })
+  currencyColumn({ data: 'total_receipts', orderable: true, className: 'column--number t-mono' }),
+  currencyColumn({ data: 'total_disbursements', orderable: true, className: 'column--number t-mono' }),
+  currencyColumn({ data: 'total_cash_on_hand_end_period', orderable: true, className: 'column--number t-mono' }),
+  currencyColumn({ data: 'total_debts_owed_by_committee', orderable: true, className: 'column--number t-mono' })
 ];
 
 function initElectionTotalTable(election_year) {

@@ -1,5 +1,5 @@
 
-import { default as LineChartCommittees } from '../modules/line-chart-committees.js';
+import LineChartCommittees from '../modules/line-chart-committees.js';
 import { onShow as onTabShow } from '../vendor/tablist.js';
 
 function PlotChart(selector, type, index) {

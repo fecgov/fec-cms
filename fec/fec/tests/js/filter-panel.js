@@ -1,13 +1,10 @@
-const { expect } = require('chai');
-const sinon = require('sinon');
+import { expect } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+import './setup.js';
 
-require('./setup')();
-
-const FilterPanel = require('../../static/js/modules/filters/filter-panel')
-  .FilterPanel;
-const FilterSet = require('../../static/js/modules/filters/filter-set')
-  .FilterSet;
-const helpers = require('../../static/js/modules/helpers');
+import FilterPanel from '../../static/js/modules/filters/filter-panel.js';
+import FilterSet from '../../static/js/modules/filters/filter-set.js';
+import * as helpers from '../../static/js/modules/helpers.js';
 
 function expectOpen(panel) {
   expect(panel.isOpen).to.be.true;

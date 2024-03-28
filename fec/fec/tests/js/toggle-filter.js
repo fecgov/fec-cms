@@ -1,13 +1,3 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
-
-
-require('./setup')();
-
-var ToggleFilter = require('../../static/js/modules/filters/toggle-filter').ToggleFilter;
 var DOM = '<fieldset class="js-filter" data-filter-ignore-count="true">' +
             '<legend class="label">Data type</legend>' +
             '<label for="processed">' +
@@ -19,6 +9,16 @@ var DOM = '<fieldset class="js-filter" data-filter-ignore-count="true">' +
               '<span>Electronic filings</span>' +
             '</label>' +
           '</fieldset>';
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
+
+import ToggleFilter from '../../static/js/modules/filters/toggle-filter.js';
+
 
 describe('toggle filters', function() {
   before(function() {

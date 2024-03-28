@@ -1,8 +1,8 @@
 
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
+import { electioneeringCommunications as cols_elecComms } from '../modules/columns.js';
+import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 
-var electioneeringTemplate = require('../templates/electioneering-communications.hbs');
+import { default as electioneeringTemplate } from '../templates/electioneering-communications.hbs';
 
   var $table = $('#results');
   new tables.DataTable($table, {
@@ -10,13 +10,13 @@ $(function() {
     autoWidth: false,
     title: 'Electioneering communications',
     path: ['electioneering'],
-    columns: columns.electioneeringCommunications,
-    rowCallback: tables.modalRenderRow,
+    columns: cols_elecComms,
+    rowCallback: modalRenderRow,
     useExport: true,
     order: [[4, 'desc']],
     useFilters: true,
     callbacks: {
-      afterRender: tables.modalRenderFactory(electioneeringTemplate)
+      afterRender: modalRenderFactory(electioneeringTemplate)
     }
   });
 });

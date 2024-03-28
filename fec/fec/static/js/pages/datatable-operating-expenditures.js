@@ -1,8 +1,7 @@
+import { disbursements as cols_disbursements } from '../modules/columns.js';
+import { DataTable_FEC, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-
-var disbursementTemplate = require('../templates/disbursements.hbs');
+import { default as disbursementTemplate } from '../templates/disbursements.hbs';
 
   var $table = $('#results');
   new tables.DataTable($table, {
@@ -10,15 +9,15 @@ $(function() {
     title: 'Operating expenditures',
     path: ['schedules', 'schedule_b'],
     // query: {filter for operating expenditures},
-    columns: columns.disbursements,
-    paginator: tables.SeekPaginator,
+    columns: cols_disbursements,
+    paginator: SeekPaginator,
     order: [[3, 'desc']],
     useFilters: true,
     useExport: true,
     disableExport: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: tables.modalRenderFactory(disbursementTemplate)
+      afterRender: modalRenderFactory(disbursementTemplate)
     }
   });
 });

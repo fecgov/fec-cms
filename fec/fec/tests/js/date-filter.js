@@ -1,16 +1,15 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-var moment = require('moment');
+// Common for all/most tests
+import './setup.js';
+import * as chaiJQ from 'chai-jquery';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+use(chaiJQ);
+// (end common)
 
-chai.use(sinonChai);
-
-
-require('./setup')();
-
-var DateFilter = require('../../static/js/modules/filters/date-filter')
-  .DateFilter;
+import { default as moment } from 'moment';
+import DateFilter from '../../static/js/modules/filters/date-filter.js';
 
 describe('date filter', function() {
   before(function() {

@@ -4,13 +4,13 @@
  * to make a ajax call (api: audit-category) ,get sub_category_list(JSON type)back
  * dynamically update the #sub_category_id dropdown list value.
  */
-var helpers = require('./helpers');
+import { buildUrl } from './helpers.js';
 
   $('#primary_category_id').change(function() {
 export function auditCategorySubcategory() {
     var $select = $('#sub_category_id');
     $.getJSON(
-      helpers.buildUrl(['audit-category'], {
+      buildUrl(['audit-category'], {
         primary_category_id: $('#primary_category_id').val(),
         per_page: 100
       }),

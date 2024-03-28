@@ -1,11 +1,12 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+// Common for all/most tests
+// import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-
-var Feedback = require('../../static/js/modules/feedback').Feedback;
+import Feedback from '../../static/js/modules/feedback.js';
 
 describe('feedback', function() {
   beforeEach(function() {

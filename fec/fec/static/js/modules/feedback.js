@@ -1,8 +1,9 @@
 import { chain as _chain, each as _each } from 'underscore';
 
-const accessibility = require('./accessibility');
-const loadRecaptcha = require('./load-recaptcha').loadRecaptcha;
-const feedback = require('../templates/feedback.hbs');
+import { loadRecaptcha } from './load-recaptcha.js';
+import { removeTabindex, restoreTabindex } from './accessibility.js';
+
+import { default as feedback } from '../templates/feedback.hbs';
 
 const statusClasses = {
   success: 'message--success',
@@ -32,7 +33,7 @@ export default function Feedback(url, parent) {
   this.$button.on('click', this.toggle.bind(this));
   this.$reset.on('click', this.reset.bind(this));
 
-  accessibility.removeTabindex(this.$box);
+  removeTabindex(this.$box);
 
   $(document.body).on('feedback:open', this.show.bind(this));
 }
@@ -49,7 +50,7 @@ Feedback.prototype.show = function() {
   this.$button.attr('aria-expanded', 'true');
   this.isOpen = true;
 
-  accessibility.restoreTabindex(this.$box);
+  restoreTabindex(this.$box);
 };
 
 Feedback.prototype.hide = function() {
@@ -57,7 +58,7 @@ Feedback.prototype.hide = function() {
   this.$button.attr('aria-expanded', 'false');
   this.isOpen = false;
 
-  accessibility.removeTabindex(this.$box);
+  removeTabindex(this.$box);
 };
 
 Feedback.prototype.submit = function(token) {

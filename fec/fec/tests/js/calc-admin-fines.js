@@ -1,9 +1,6 @@
-var chai = require('chai');
-var expect = chai.expect;
+import { expect } from 'chai';
 
-// import getTotalAdminFine from '../../static/js/modules/calc-admin-fine-logic';
-var CalcLogic = require('../../static/js/modules/calc-admin-fines-logic');
-var getTotalAdminFine = CalcLogic.getTotalAdminFine;
+import { getTotalAdminFine } from '../../static/js/modules/calc-admin-fines-logic.js';
 
 /**
  * The parameters for tests are abbreviated so 'var tests = […]' is easier to read

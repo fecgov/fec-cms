@@ -4,33 +4,31 @@
  * inital show all audit case.
  *
  */
-
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-
-var auditCategorySubcategory = require('../modules/audit-category-sub-category');
-var auditTags = require('../modules/audit_tags');
+import { audit as cols_audit } from '../modules/columns.js';
+import { auditCategorySubcategory, showSubCategory } from '../modules/audit-category-sub-category.js';
+import auditTags from '../modules/audit_tags.js';
+import { DataTable_FEC, modalRenderRow } from '../modules/tables.js';
 //for sub category filter-tag and results
 
 $(document).bind(
   'ready ajaxComplete',
   '#sub_category_id',
-  auditCategorySubcategory.showSubCategory
+  showSubCategory
 );
 
-  auditCategorySubcategory.auditCategorySubcategory();
 $(function() {
+  auditCategorySubcategory();
   auditTags();
   var $table = $('#results');
   new tables.DataTable($table, {
     autoWidth: false,
     title: 'Audit Reports',
     path: ['audit-case'],
-    columns: columns.audit,
+    columns: cols_audit,
     order: [1, 'desc'],
     useFilters: true,
     useExport: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
       //     afterRender: tablePanels.renderauditPanel(false)
     }

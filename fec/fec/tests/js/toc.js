@@ -1,11 +1,12 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+// Common for all/most tests
+// import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-
-var TOC = require('../../static/js/modules/toc').TOC;
+import TOC from '../../static/js/modules/toc.js';
 
 var DOM =
   '<ul class="toc">' +

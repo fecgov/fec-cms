@@ -3,13 +3,10 @@
  */
 import { chain as _chain, each as _each, pairs as _pairs, reduce as _reduce } from 'underscore';
 import { default as moment } from 'moment';
-import { Calendar } from '@fullcalendar/core';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import listPlugin from '@fullcalendar/list';
-// import 'fullcalendar';
-// require('fullcalendar');
+import $ from 'jquery';
+import 'fullcalendar';
 
-import { default as Dropdown } from './dropdowns.js';
+import Dropdown from './dropdowns.js';
 
 import { default as eventTemplate } from '../templates/calendar/events.hbs';
 

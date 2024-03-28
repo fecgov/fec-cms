@@ -5,12 +5,10 @@
  * makes in connection with the general election campaigns of federal candidates.
  *
  */
+import { partyCoordinatedExpenditures as cols_partyCoordExpen} from '../modules/columns.js';
+import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 
-
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-
-var partyCoordinatedExpendituresTemplate = require('../templates/party-coordinated-expenditures.hbs');
+import { default as partyCoordinatedExpendituresTemplate } from '../templates/party-coordinated-expenditures.hbs';
 
   var $table = $('#results');
   new tables.DataTable($table, {
@@ -18,13 +16,13 @@ $(function() {
     autoWidth: false,
     title: 'Party coordinated expenditures',
     path: ['schedules', 'schedule_f'],
-    columns: columns.partyCoordinatedExpenditures,
+    columns: cols_partyCoordExpen,
     useExport: true,
     order: [[3, 'desc']],
     useFilters: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: tables.modalRenderFactory(
+      afterRender: modalRenderFactory(
         partyCoordinatedExpendituresTemplate
       )
     }

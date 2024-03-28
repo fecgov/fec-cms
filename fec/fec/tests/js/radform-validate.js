@@ -1,17 +1,15 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
-
-
-require('./setup')();
-
-var RadFormValidate = require('../../static/js/pages/contact-form').RadFormValidate;
-
 var dom =
 
     '<form class="js-contact-form contact-form" id="id_contact_form">' +
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
+
+import { RadFormValidate } from '../../static/js/pages/contact-form.js';
     '<div class="row">' +
     '<input type="text" name="u_contact_first_name" required="" id="id_u_contact_first_name">' +
     '<span class="error t-sans t-bold id_u_contact_first_name" aria-live="polite"></span>' +

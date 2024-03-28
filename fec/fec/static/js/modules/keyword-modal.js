@@ -1,6 +1,7 @@
 import { default as URI } from 'urijs';
-var A11yDialog = require('a11y-dialog');
-var analytics = require('./analytics');
+import { default as A11yDialog } from 'a11y-dialog';
+
+import { customEvent } from './analytics.js';
 
 /**
  * KeywordModal
@@ -111,7 +112,7 @@ KeywordModal.prototype.parseValue = function($input) {
  */
 KeywordModal.prototype.fireEvent = function(actionLabel) {
   // Updating this to use DataLayer for GTM
-  analytics.customEvent({
+  customEvent({
     eventName: 'fecCustomEvent',
     eventCategory: 'Legal interactions',
     eventAction: actionLabel,

@@ -1,13 +1,11 @@
-var React = require('react');
-var chai = require('chai');
-var draftjs = require('draft-js');
-var Enzyme = require('./setup');
+import React from 'react';
+import { expect } from 'chai';
+import { EditorState } from 'draft-js';
 
-var mount = Enzyme.mount;
-var shallow = Enzyme.shallow;
-var expect = chai.expect;
-var EditorState = draftjs.EditorState;
-var SansSerif = require('../../../static/js/draftail/SansSerif');
+import './setup.js';
+import { shallow } from 'enzyme';
+
+import { default as SansSerif } from '../../../static/js/draftail/SansSerif.js';
 
 describe('draftail - SansSerif Block Component', function() {
   it('should build a SansSerif object for Draftail to Consume', function() {

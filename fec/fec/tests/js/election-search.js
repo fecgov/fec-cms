@@ -1,13 +1,13 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
 import { default as URI } from 'urijs';
 import { extend as _extend } from 'underscore';
-
-require('./setup')();
 
 _extend(window, {
   context: {
@@ -28,8 +28,8 @@ describe('election search', function() {
   });
 
   before(function() {
-    sinon.stub(map.ElectionMap.prototype, 'init');
-    sinon.stub(map.ElectionMap.prototype, 'drawDistricts');
+    sinon.stub(ElectionMap.prototype, 'init');
+    sinon.stub(ElectionMap.prototype, 'drawDistricts');
   });
 
   beforeEach(function() {
@@ -52,7 +52,7 @@ describe('election search', function() {
           '</div>'
       );
     window.history.pushState({}, null, '/');
-    this.el = new search.ElectionSearch('#election-lookup');
+    this.el = new ElectionSearch('#election-lookup');
   });
 
   it('should memorize its selector', function() {
@@ -104,7 +104,7 @@ describe('election search', function() {
 
   describe('drawing search results', function() {
     beforeEach(function() {
-      this.drawItem = sinon.spy(search.ElectionSearch.prototype, 'drawResult');
+      this.drawItem = sinon.spy(ElectionSearch.prototype, 'drawResult');
       this.results = [
         { cycle: 2016, office: 'P', state: 'US' },
         { cycle: 2016, office: 'S', state: 'NJ' },

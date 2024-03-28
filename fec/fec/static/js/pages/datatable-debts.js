@@ -5,26 +5,24 @@
  * to/from the committee that are required to be disclosed.
  *
  */
+import { debts as cols_debts } from '../modules/columns.js';
+import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 
+import { default as debtsTemplate } from '../templates/debts.hbs';
 
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-
-var debtsTemplate = require('../templates/debts.hbs');
-
-$(document).ready(function() {
   var $table = $('#results');
   new tables.DataTable($table, {
+$(function() {
     autoWidth: false,
     title: 'Debts',
     path: ['schedules', 'schedule_d'],
-    columns: columns.debts,
+    columns: cols_debts,
     order: [[4, 'desc']],
     useFilters: true,
     useExport: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: tables.modalRenderFactory(debtsTemplate)
+      afterRender: modalRenderFactory(debtsTemplate)
     }
   });
 });

@@ -1,12 +1,12 @@
-var chai = require('chai');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+// import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-
-require('./setup')();
-
-var MultiFilter = require('../../static/js/modules/filters/multi-filter').MultiFilter;
+import MultiFilter from '../../static/js/modules/filters/multi-filter.js';
 
 describe('MultiFilter', function() {
   before(function() {

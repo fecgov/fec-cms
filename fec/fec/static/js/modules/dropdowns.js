@@ -87,8 +87,8 @@ Dropdown.prototype.toggle = function(e) {
 Dropdown.prototype.show = function() {
   restoreTabindex(this.$panel);
   this.$panel.attr('aria-hidden', 'false');
-  this.$panel.perfectScrollbar({ suppressScrollX: true });
   this.$panel.find('input[type="checkbox"]:first').focus();
+  new PerfectScrollbar(this.$panel.get(0), { suppressScrollX: true });
   this.$button.addClass('is-active');
   this.isOpen = true;
 };

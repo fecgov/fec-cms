@@ -22,6 +22,8 @@ import OtherSpendingTotals from '../modules/other-spending-totals.js';
 import { barsAfterRender, DataTable, SeekPaginator, simpleDOM } from '../modules/tables.js';
 import { default as reportType } from '../templates/reports/reportType.hbs';
 
+const events = initEvents();
+
 const aggregateCallbacks = {
   afterRender: barsAfterRender.bind(undefined, undefined)
 };

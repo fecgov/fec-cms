@@ -1,6 +1,15 @@
-/* global window, describe, before, beforeEach, afterEach, it */
+// Common for all/most tests
+// import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
 import { extend as _extend } from 'underscore';
+import 'corejs-typeahead/dist/typeahead.jquery.js';
+
+import $ from 'jquery';
 
 window.$ = window.jQuery = $;
 _extend(window, {
@@ -8,14 +17,8 @@ _extend(window, {
   API_VERSION: '/v1',
 });
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
-
-var typeahead = require('../../static/js/modules/typeahead');
-var FilterTypeahead = require('../../static/js/modules/filters/filter-typeahead').FilterTypeahead;
+import { datasets } from '../../static/js/modules/typeahead.js';
+import FilterTypeahead from '../../static/js/modules/filters/filter-typeahead.js';
 
 describe('FilterTypeahead', function() {
   before(function() {
@@ -32,7 +35,7 @@ describe('FilterTypeahead', function() {
       '</div>'
     );
 
-    this.FilterTypeahead = new FilterTypeahead('[data-filter="typeahead"]', typeahead.datasets.committees, true);
+    this.FilterTypeahead = new FilterTypeahead('[data-filter="typeahead"]', datasets.committees, true);
   });
 
   it('should initialize', function() {

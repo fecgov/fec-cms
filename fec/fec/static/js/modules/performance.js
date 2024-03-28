@@ -1,8 +1,7 @@
 /* global perfBar */
 
 import { chain as _chain, max as _max } from 'underscore';
-
-require('perfbar/build/perfbar');
+import 'perfbar/build/perfbar';
 
 var performanceBudgets = {
   loadTime: { max: 3000 },

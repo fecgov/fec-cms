@@ -1,13 +1,11 @@
-var React = require('react');
-var chai = require('chai');
-var draftjs = require('draft-js');
-var Enzyme = require('./setup');
+import React from 'react';
+import { expect } from 'chai';
+import { EditorState } from 'draft-js';
 
-var mount = Enzyme.mount;
-var shallow = Enzyme.shallow;
-var expect = chai.expect;
-var EditorState = draftjs.EditorState;
-var Anchor = require('../../../static/js/draftail/Anchor');
+import './setup.js';
+import { shallow } from 'enzyme';
+
+import { default as Anchor } from '../../../static/js/draftail/Anchor.js';
 
 describe('draftail - Anchor Block Component', function() {
   it('should build a Anchor object for Draftail to consume', function() {

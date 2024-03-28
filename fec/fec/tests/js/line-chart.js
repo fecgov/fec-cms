@@ -1,15 +1,14 @@
-var chai = require('chai');
-var expect = chai.expect;
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-chai.use(sinonChai);
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var helpers = require('../../static/js/modules/helpers');
+import * as helpers from '../../static/js/modules/helpers.js';
+import LineChart from '../../static/js/modules/line-chart.js';
 
-require('./setup')();
-
-var mockResponse = {
-  'results': [
     {
       'cycle': 2016,
       'end_date': '2015-01-31T00:00:00+00:00',
@@ -33,7 +32,6 @@ var mockResponse = {
   ]
 };
 
-var LineChart = require('../../static/js/modules/line-chart').LineChart;
 
   describe('LineChart', function() {
     before(function() {

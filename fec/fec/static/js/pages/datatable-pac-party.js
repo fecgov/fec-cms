@@ -1,12 +1,10 @@
 /**
  * PAC and party committee datatable page
  **/
+import { pac_party as cols_pacParty} from '../modules/columns.js';
+import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 
-
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-
-var pacPartyTemplate = require('../templates/pac-party.hbs');
+import { default as pacPartyTemplate } from '../templates/pac-party.hbs';
 
   var $table = $('#results');
   new tables.DataTable($table, {
@@ -14,13 +12,13 @@ $(function() {
     autoWidth: false,
     title: 'Political action and party committees',
     path: ['totals', 'pac-party'],
-    columns: columns.pac_party,
+    columns: cols_pacParty,
     order: [[2, 'desc']],
     useFilters: true,
     useExport: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: tables.modalRenderFactory(pacPartyTemplate)
+      afterRender: modalRenderFactory(pacPartyTemplate)
     }
   });
 });

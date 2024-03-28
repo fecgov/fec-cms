@@ -1,8 +1,7 @@
+import { individualContributions as cols_indivContribs } from '../modules/columns.js';
+import { DataTable_FEC, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-
-var donationTemplate = require('../templates/receipts.hbs');
+import { default as donationTemplate } from '../templates/receipts.hbs';
 
   var $table = $('#results');
   new tables.DataTable($table, {
@@ -11,16 +10,16 @@ $(function() {
     title: 'Individual contributions',
     path: ['schedules', 'schedule_a'],
     query: { is_individual: true, sort_nulls_last: false },
-    columns: columns.individualContributions,
-    paginator: tables.SeekPaginator,
+    columns: cols_indivContribs,
+    paginator: SeekPaginator,
     order: [[4, 'desc']],
     useFilters: true,
     useExport: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     error400Message:
       '<p>You&#39;re trying to search across multiple time periods. Filter by recipient name or ID, contributor details, or image number for results.</p>',
     callbacks: {
-      afterRender: tables.modalRenderFactory(donationTemplate)
+      afterRender: modalRenderFactory(donationTemplate)
     }
   });
 });

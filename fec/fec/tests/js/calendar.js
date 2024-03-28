@@ -1,19 +1,18 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var moment = require('moment');
+import { default as moment } from 'moment';
 
-require('./setup')();
-
-var helpers = require('../../static/js/modules/helpers');
-var Calendar = require('../../static/js/modules/calendar').Calendar;
-var calendarTooltip = require('../../static/js/modules/calendar-tooltip');
-var calendarHelpers = require('../../static/js/modules/calendar-helpers');
-
-var tooltipContent = require('../../static/js/templates/calendar/details.hbs');
+import { BREAKPOINTS } from '../../static/js/modules/helpers.js';
+import Calendar from '../../static/js/modules/calendar.js';
+import * as calendarTooltip from '../../static/js/modules/calendar-tooltip.js';
+import * as calendarHelpers from '../../static/js/modules/calendar-helpers.js';
+import { default as tooltipContent } from '../../static/js/templates/calendar/details.hbs';
 
 describe('calendar', function() {
   before(function() {
@@ -54,7 +53,7 @@ describe('calendar', function() {
   });
 
   beforeEach(function() {
-    $(document.body).width(helpers.BREAKPOINTS.MEDIUM);
+    $(document.body).width(BREAKPOINTS.MEDIUM);
   });
 
   describe('constructor()', function() {
@@ -265,7 +264,7 @@ describe('calendar tooltip', function() {
 });
 
 describe('helpers', function() {
-  describe('calendarHelpers.getGoogleurl()', function() {
+  describe('getGoogleUrl()', function() {
     it('builds the correct Google url', function() {
       var googleUrl = calendarHelpers.getGoogleUrl({
         title: 'the big one',
@@ -277,7 +276,7 @@ describe('helpers', function() {
     });
   });
 
-  describe('calendarHelpers.getUrl()', function() {
+  describe('getUrl()', function() {
     it('builds the correct url', function() {
       var url = calendarHelpers.getUrl('calendar', {category: 'election'});
       expect(url).to.equal('/v1/calendar/?api_key=12345&per_page=500&category=election');
@@ -304,7 +303,7 @@ describe('helpers', function() {
      });
    });
 
-  describe('calendarHelpers.className()', function() {
+  describe('className()', function() {
     it('adds a multi-day class for multi-day events', function() {
       var multiEvent = {
         start_date: moment('2012-11-02'),
