@@ -3,9 +3,9 @@ var tables = require('../modules/tables');
 var columns = require('../modules/columns');
 var tablePanels = require('../modules/table-panels');
 
-$(document).ready(function() {
   var $table = $('#results');
   new tables.DataTable($table, {
+$(function() {
     autoWidth: false,
     title: 'Candidates',
     path: ['candidates'],

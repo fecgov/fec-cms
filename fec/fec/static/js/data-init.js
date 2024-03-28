@@ -17,7 +17,7 @@ import { init as initTablist } from './vendor/tablist.js';
 
 initTablist();
 
-$(document).ready(function() {
+$(function() {
   $('.js-dropdown').each(function() {
     new Dropdown(this);
   });

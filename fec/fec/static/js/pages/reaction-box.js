@@ -133,7 +133,7 @@ ReactionBox.prototype.handleReset = function() {
 /**
  * Document ready function called when document is loaded
  */
-$(document).ready(function() {
+$(function() {
   //find any reaction box(es) on the page
   var reactionBoxes = document.querySelectorAll('.reaction-box');
   var names = [];

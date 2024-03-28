@@ -4,9 +4,9 @@ var columns = require('../modules/columns');
 
 var committeesTemplate = require('../templates/committees.hbs');
 
-$(document).ready(function() {
   var $table = $('#results');
   new tables.DataTable($table, {
+$(function() {
     autoWidth: false,
     title: 'Committees',
     path: ['committees'],

@@ -8,9 +8,9 @@ var columns = require('../modules/columns');
 
 var pacPartyTemplate = require('../templates/pac-party.hbs');
 
-$(document).ready(function() {
   var $table = $('#results');
   new tables.DataTable($table, {
+$(function() {
     autoWidth: false,
     title: 'Political action and party committees',
     path: ['totals', 'pac-party'],

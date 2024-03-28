@@ -397,7 +397,7 @@ const filingsReportsColumns = getColumns(filings, [
   'modal_trigger'
 ]);
 
-$(document).ready(function() {
+$(function() {
   let $mapTable;
   // Reset time period to the fallback_cycle, which is the LAST_CYCLE_HAS_FINANCIAL.
   if (global.context.cycleOutOfRange == 'true') {

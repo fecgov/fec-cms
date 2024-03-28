@@ -12,7 +12,7 @@ const fetchReportDetails = function(row) {
   return amendment_version;
 };
 
-$(document).ready(function() {
+$(function() {
   const $table = $('#results');
   new DataTable($table, {
     autoWidth: false,

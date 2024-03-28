@@ -45,7 +45,7 @@ if (global.context.form_type === 'presidential') {
 
 pageColumns = getColumns(cols_reports, columnKeys);
 
-$(document).ready(function() {
+$(function() {
   const $table = $('#results');
   new DataTable($table, {
     autoWidth: false,

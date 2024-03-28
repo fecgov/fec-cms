@@ -4,9 +4,9 @@ var columns = require('../modules/columns');
 
 var electioneeringTemplate = require('../templates/electioneering-communications.hbs');
 
-$(document).ready(function() {
   var $table = $('#results');
   new tables.DataTable($table, {
+$(function() {
     autoWidth: false,
     title: 'Electioneering communications',
     path: ['electioneering'],

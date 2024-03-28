@@ -1,7 +1,7 @@
 import { customEvent } from '../modules/analytics.js';
 import ElectionLookup from '../modules/election-lookup.js';
 
-$(document).ready(function() {
+$(function() {
   new ElectionLookup('#election-lookup', false);
 });
 

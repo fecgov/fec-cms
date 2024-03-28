@@ -12,9 +12,9 @@ var columns = require('../modules/columns');
 
 var partyCoordinatedExpendituresTemplate = require('../templates/party-coordinated-expenditures.hbs');
 
-$(document).ready(function() {
   var $table = $('#results');
   new tables.DataTable($table, {
+$(function() {
     autoWidth: false,
     title: 'Party coordinated expenditures',
     path: ['schedules', 'schedule_f'],

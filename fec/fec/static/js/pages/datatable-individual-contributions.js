@@ -4,9 +4,9 @@ var columns = require('../modules/columns');
 
 var donationTemplate = require('../templates/receipts.hbs');
 
-$(document).ready(function() {
   var $table = $('#results');
   new tables.DataTable($table, {
+$(function() {
     autoWidth: false,
     title: 'Individual contributions',
     path: ['schedules', 'schedule_a'],

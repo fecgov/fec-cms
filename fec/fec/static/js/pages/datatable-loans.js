@@ -12,9 +12,9 @@ var columns = require('../modules/columns');
 
 var loansTemplate = require('../templates/loans.hbs');
 
-$(document).ready(function() {
   var $table = $('#results');
   new tables.DataTable($table, {
+$(function() {
     autoWidth: false,
     title: 'Loans',
     path: ['schedules', 'schedule_c'],

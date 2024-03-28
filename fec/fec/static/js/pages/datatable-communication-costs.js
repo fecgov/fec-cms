@@ -4,9 +4,9 @@ var columns = require('../modules/columns');
 
 var electioneeringTemplate = require('../templates/communication-costs.hbs');
 
-$(document).ready(function() {
   var $table = $('#results');
   new tables.DataTable($table, {
+$(function() {
     autoWidth: false,
     title: 'Communication costs',
     path: ['communication_costs'],

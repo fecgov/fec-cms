@@ -14,9 +14,9 @@ var filingsColumns = getColumns(cols_filings, [
   'modal_trigger'
 ]);
 
-$(document).ready(function() {
   var $table = $('#results');
   new DataTable($table, {
+$(function() {
     autoWidth: false,
     tableSwitcher: true,
     title: 'Filings',

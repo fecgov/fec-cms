@@ -17,7 +17,7 @@ window.submitFeedback = function(token) {
   feedbackWidget.submit(token);
 };
 
-$(document).ready(function() {
+$(function() {
   // Initialize new accordions
   $('.js-accordion').each(function() {
     const contentPrefix = $(this).data('content-prefix') || 'accordion';

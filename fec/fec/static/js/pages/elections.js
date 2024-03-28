@@ -14,7 +14,7 @@ import {
 } from '../modules/table-columns.js';
 import { drawComparison, initSpendingTables } from '../modules/tables.js';
 
-$(document).ready(function() {
+$(function() {
   const spendingTableOpts = {
     'independent-expenditures': {
       path: ['schedules', 'schedule_e', 'by_candidate'],

@@ -5,7 +5,7 @@ import TableSwitcher from '../modules/table-switcher.js';
 import { DataTable, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 import disbursementTemplate from '../templates/disbursements.hbs';
 
-$(document).ready(function() {
+$(function() {
   const $table = $('#results');
   new DataTable($table, {
     autoWidth: false,

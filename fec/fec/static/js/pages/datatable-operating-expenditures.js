@@ -4,9 +4,9 @@ var columns = require('../modules/columns');
 
 var disbursementTemplate = require('../templates/disbursements.hbs');
 
-$(document).ready(function() {
   var $table = $('#results');
   new tables.DataTable($table, {
+$(function() {
     title: 'Operating expenditures',
     path: ['schedules', 'schedule_b'],
     // query: {filter for operating expenditures},

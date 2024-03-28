@@ -5,9 +5,9 @@ import TableSwitcher from '../modules/table-switcher.js';
 import { DataTable, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 import { default as allocatedFederalNonfederalDisbursementsTemplate } from '../templates/allocated-federal-nonfederal-disbursements.hbs';
 
-$(document).ready(function() {
   var $table = $('#results');
   new DataTable($table, {
+$(function() {
     autoWidth: false,
     title: 'Allocated federal/nonfederal disbursements',
     path: ['schedules', 'schedule_h4'],

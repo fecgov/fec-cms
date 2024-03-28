@@ -8,7 +8,7 @@ import { TopEntities } from '../modules/top-entities.js';
 // import { init as initTabList } from '../vendor/tablist.js';
 // initTabList();
 
-document.addEventListener('DOMContentLoaded', () => {
+$(function() {
   // Evergreen home page events and deadlines
   new HomepageEvents();
 

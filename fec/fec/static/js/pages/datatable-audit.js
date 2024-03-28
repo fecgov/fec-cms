@@ -18,8 +18,8 @@ $(document).bind(
   auditCategorySubcategory.showSubCategory
 );
 
-$(document).ready(function() {
   auditCategorySubcategory.auditCategorySubcategory();
+$(function() {
   auditTags();
   var $table = $('#results');
   new tables.DataTable($table, {

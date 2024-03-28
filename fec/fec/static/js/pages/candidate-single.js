@@ -655,7 +655,7 @@ function initRawFilingsTable() {
   });
 }
 
-$(document).ready(function() {
+$(function() {
   const query = URI.parseQuery(window.location.search);
 
   initOtherDocumentsTable();

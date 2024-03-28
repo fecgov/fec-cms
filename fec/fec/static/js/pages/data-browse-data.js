@@ -24,7 +24,7 @@ PlotChart.prototype.init = function() {
   this.initialized = true;
 };
 
-$(document).ready(function() {
+$(function() {
   onTabShow($('#raising'), function() {
     new PlotChart('.js-raised-overview', 'raised', 1).init();
   });
