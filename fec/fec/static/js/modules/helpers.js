@@ -140,10 +140,10 @@ Handlebars.registerHelper('formatNumber', numberFormatter);
 
 export function eq(v1, v2) {
   return v1 === v2;
-};
+}
 export function toUpperCase(value) {
   return value.substr(0, 1).toUpperCase() + value.substr(1);
-};
+}
 
 Handlebars.registerHelper({
   eq: eq,

@@ -45,7 +45,7 @@ function show($target, push) {
     window.history.pushState(query, search, search || window.location.pathname);
     pageView();
   }
-  events.emit('tabs.show.' + value, { $tab: $target, $panel: $panel });
+  events.emit('tabs.show.' + value, { '$tab': $target, '$panel': $panel });
 }
 
 function refreshTabs() {

@@ -26,8 +26,8 @@ function stringToElement(str) {
 describe('column helpers', function() {
   var data = '100';
   var type = 'test';
-  var row = {committee_id: 1, cycle: 2018};
-  var meta = {row: '1'};
+  var row = { committee_id: 1, cycle: 2018 };
+  var meta = { row: '1' };
 
   describe('barColumn', function() {
     it('should return a default formatted object', function() {

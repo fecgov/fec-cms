@@ -197,7 +197,7 @@ module.exports = [
               // presets: ['es2015', 'react']
               presets: ['@babel/preset-env', "@babel/preset-react"]
             }
-          }
+        }
         ]
       },
       //     stats: {
@@ -251,7 +251,6 @@ module.exports = [
     }
   // ]
 ];
-
 
 // const ManifestPlugin = require('webpack-manifest-plugin');
 // // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
