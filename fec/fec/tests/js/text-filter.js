@@ -42,7 +42,7 @@ describe('text filters', function() {
   });
 
   it('pulls values from the query', function() {
-    var query = {'name': ['george', 'martha']};
+    var query = { name: ['george', 'martha'] };
     sinon.spy(TextFilter.prototype, 'appendCheckbox');
     this.filter.fromQuery(query);
     expect(TextFilter.prototype.appendCheckbox).to.have.been.calledWith('george');

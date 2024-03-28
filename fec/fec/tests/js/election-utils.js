@@ -13,12 +13,12 @@ describe('election-utils', function() {
   before(function(done) {
     this.$fixture = $('<div id="fixtures"></div>');
     $('body').empty().append(this.$fixture);
-    this.stub = sinon.stub($, 'getJSON').returns({done: sinon.stub().callsArgWith(0, {results: electionOffices})});
+    this.stub = sinon.stub($, 'getJSON').returns({ done: sinon.stub().callsArgWith(0, { results: electionOffices }) });
     done();
   });
 
   after(function(done) {
-    $('body').empty()
+    $('body').empty();
     done();
   });
 
@@ -30,7 +30,7 @@ describe('election-utils', function() {
   });
 
   afterEach(function(done) {
-    this.$fixture.empty()
+    this.$fixture.empty();
     this.stub.restore();
     done();
   });

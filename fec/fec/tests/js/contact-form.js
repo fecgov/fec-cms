@@ -87,7 +87,7 @@ describe('Contact form', function() {
     expect($('select').val()).to.equal(null);
     expect($('#id_u_other_reason').val()).to.equal('');
   });
-  
+
   it('clears the ID on keyup of comm typahead field', function() {
     $('#id_u_committee').val('12345');
     //$('#id_committee_name').val('ACTBLUE')

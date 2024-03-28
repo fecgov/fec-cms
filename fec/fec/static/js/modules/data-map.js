@@ -714,7 +714,7 @@ function moveTooltip(tooltip, e, d) {
   const x = e.pageX - tooltip._groups[0][0].offsetWidth / 2;
   const y = e.pageY - tooltip._groups[0][0].offsetHeight;
   // TODO: referencing the html element through _groups seems wrong
-  
+
   const bottomPointerHeight = '.8rem';
 
   // The dom whose height we need to measure

@@ -306,7 +306,6 @@ describe('date filter', function() {
       );
     });
   });
-
   describe('handleMaxDateSelect()', function() {
     beforeEach(function() {
       this.filter.minYear = 2013;
@@ -329,7 +328,6 @@ describe('date filter', function() {
       );
     });
   });
-
   describe('handleGridItemSelect()', function() {
     beforeEach(function() {
       this.filter.minYear = 2013;

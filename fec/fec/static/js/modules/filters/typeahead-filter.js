@@ -5,8 +5,8 @@ import { datasets } from '../typeahead.js';
 import FilterTypeahead from './filter-typeahead.js';
 
 /**
- * 
- * @param {jQuery.Object} elm 
+ *
+ * @param {jQuery.Object} elm
  */
 export default function TypeaheadFilter(elm) {
   Filter.call(this, elm);
@@ -26,13 +26,13 @@ TypeaheadFilter.prototype = Object.create(Filter.prototype);
 TypeaheadFilter.constructor = TypeaheadFilter;
 
 /**
- * 
+ *
  * @param {Object} query
  * @param {string} query.data_type - "processed"
  * @param {string} query.max_date - "12312024"
  * @param {string} query.min_date - "01012023"
  * @param {string} query.two_year_transaction_period - "2024"
- * @returns 
+ * @returns
  */
 TypeaheadFilter.prototype.fromQuery = function(query) {
   const values = query[this.name] ? ensureArray(query[this.name]) : [];
@@ -42,7 +42,7 @@ TypeaheadFilter.prototype.fromQuery = function(query) {
 };
 
 // Ignore changes on typeahead input
-TypeaheadFilter.prototype.handleChange = function() {};
+TypeaheadFilter.prototype.handleChange = function() {}; // eslint-disable-line no-empty-function
 
 TypeaheadFilter.prototype.handleNestedChange = function(e) {
   const $input = $(e.target);

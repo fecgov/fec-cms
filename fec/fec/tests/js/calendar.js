@@ -42,9 +42,9 @@ describe('calendar', function() {
       exportUrl: 'http://test.calendar/export',
       subscribeUrl: 'http://test.calendar/export',
       filterPanel: {
-        $form: {on: function() {}},
+        $form: { on: function() {} }, // eslint-disable-line no-empty-function
         filterSet: {
-          serialize: function() {},
+          serialize: function() {}, // eslint-disable-line no-empty-function
           fields: {}
         }
       }
@@ -88,13 +88,13 @@ describe('calendar', function() {
         ]
       };
       this.server.respondWith(
-        [200, {'Content-Type': 'application/json'}, JSON.stringify(this.response)]
+        [200, { 'Content-Type': 'application/json' }, JSON.stringify(this.response)]
       );
     });
 
     beforeEach(function() {
       sinon.stub(this.calendar.filterSet, 'serialize');
-      this.calendar.filterSet.serialize.returns({category: ['election-P']});
+      this.calendar.filterSet.serialize.returns({ category: ['election-P'] });
     });
 
     afterEach(function() {
@@ -116,27 +116,27 @@ describe('calendar', function() {
     it('triggers a render event', function() {
       var callback = sinon.stub();
       $(document.body).on('calendar:rendered', callback);
-      this.calendar.handleRender({name: 'month'});
+      this.calendar.handleRender({ name: 'month' });
       expect(callback).to.have.been.called;
     });
 
     it('calls manageListToggles() on list views', function() {
       sinon.stub(this.calendar, 'manageListToggles');
-      this.calendar.handleRender({name: 'monthTime'});
+      this.calendar.handleRender({ name: 'monthTime' });
       expect(this.calendar.manageListToggles).to.have.been.called;
       this.calendar.manageListToggles.restore();
     });
 
     it('does not call manageListToggles() toggles on grid view', function() {
       sinon.stub(this.calendar, 'manageListToggles');
-      this.calendar.handleRender({name: 'month'});
+      this.calendar.handleRender({ name: 'month' });
       expect(this.calendar.manageListToggles).to.not.have.been.called;
       this.calendar.manageListToggles.restore();
     });
 
     it('removes list toggles on grid view', function() {
-      this.calendar.handleRender({name: 'monthTime'});
-      this.calendar.handleRender({name: 'month'});
+      this.calendar.handleRender({ name: 'monthTime' });
+      this.calendar.handleRender({ name: 'month' });
       expect($('.cal-list__toggles').length).to.equal(0);
       expect(this.calendar.$listToggles).to.not.exist;
     });
@@ -144,7 +144,7 @@ describe('calendar', function() {
 
   describe('manageListToggles()', function() {
     it('adds them to the dom if they do not exist', function() {
-      this.calendar.manageListToggles({name: 'monthTime'});
+      this.calendar.manageListToggles({ name: 'monthTime' });
       expect(this.calendar.$calendar.find('.cal-list__toggles')).to.exist;
     });
 
@@ -153,13 +153,13 @@ describe('calendar', function() {
         duration: 'month',
         sortBy: 'time'
       };
-      this.calendar.manageListToggles({name: 'monthTime', options: opts});
+      this.calendar.manageListToggles({ name: 'monthTime', options: opts });
       var $monthToggle = this.calendar.$calendar.find('button[data-trigger-view="monthTime"]');
       expect($monthToggle.hasClass('is-active')).to.exist;
     });
 
     it('highlights the list toggle', function() {
-      this.calendar.manageListToggles({name: 'monthCategory'});
+      this.calendar.manageListToggles({ name: 'monthCategory' });
       var $listToggle = this.calendar.$calendar.find('.fc-monthTime-button');
       expect($listToggle.hasClass('fc-state-active')).to.be.true;
     });
@@ -200,13 +200,13 @@ describe('calendar', function() {
 
     it('makes a new tooltip if there is none', function() {
       var target = '<a><span class="fc-content"></span></a>';
-      this.calendar.handleEventClick({}, {target: target});
+      this.calendar.handleEventClick({}, { target: target });
       expect(calendarTooltip.CalendarTooltip).to.have.been.called;
     });
-
+    
     it('does not make a tooltip if there is one', function() {
       var target = '<a><span class="fc-content"></span></a><div class="tooltip"></div>';
-      this.calendar.handleEventClick({}, {target: target});
+      this.calendar.handleEventClick({}, { target: target });
       expect(calendarTooltip.CalendarTooltip).to.not.have.been.called;
     });
   });
@@ -215,7 +215,7 @@ describe('calendar', function() {
     it('adds the correct attributes to the popover', function() {
       var $popover = $('<div class="fc-popover"><span class="fc-close"></span></div>');
       this.calendar.$calendar.append($popover);
-      this.calendar.managePopoverControl({target: '<a></a>'});
+      this.calendar.managePopoverControl({ target: '<a></a>' });
       expect($popover.attr('role')).to.equal('tooltip');
       expect($popover.attr('id')).to.equal(this.calendar.popoverId);
       expect($popover.find('.fc-close').attr('tabindex')).to.equal('0');
@@ -278,12 +278,12 @@ describe('helpers', function() {
 
   describe('getUrl()', function() {
     it('builds the correct url', function() {
-      var url = calendarHelpers.getUrl('calendar', {category: 'election'});
+      var url = calendarHelpers.getUrl('calendar', { category: 'election' });
       expect(url).to.equal('/v1/calendar/?api_key=12345&per_page=500&category=election');
     });
 
     it('builds the correct subscribe url', function() {
-      var subscribeUrl = calendarHelpers.getUrl('calendar', {category: 'election'}, 'sub');
+      var subscribeUrl = calendarHelpers.getUrl('calendar', { category: 'election' }, 'sub');
       expect(subscribeUrl).to.equal('/v1/calendar/?api_key=67890&per_page=500&category=election');
     
     });
@@ -292,7 +292,7 @@ describe('helpers', function() {
 
   describe('calendar.updateLinks()', function() {
       it('builds the correct, encoded googleSubscribe url', function() {
-      var subscribeUrl = calendarHelpers.getUrl('calendar-dates/export', {category: 'election'}, 'sub').toString();
+      var subscribeUrl = calendarHelpers.getUrl('calendar-dates/export', { category: 'election' }, 'sub').toString();
        var googleSubscribe =
       'https://calendar.google.com/calendar/render?cid=' + 
       encodeURIComponent(

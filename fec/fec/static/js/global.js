@@ -55,6 +55,4 @@ document.addEventListener("DOMContentLoaded", () => {
   window.submitFeedback = function(token) {
     feedbackWidget.submit(token);
   };
-  
-
-})
+});

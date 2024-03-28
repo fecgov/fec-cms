@@ -93,7 +93,7 @@ describe('column helpers', function() {
       expect(element.getAttribute('href')).to.equal(url);
       expect(element.getAttribute('title')).to.equal(input);
       expect(element.getAttribute('data-category')).to.equal(category);
-      expect(element.getAttribute('class')).to.equal('is-incumbent')
+      expect(element.getAttribute('class')).to.equal('is-incumbent');
     });
   });
 
@@ -185,11 +185,11 @@ describe('column helpers', function() {
       var columns = {
         a: {
           name: 'a',
-          'type': 'int'
+          type: 'int'
         },
         b: {
           name: 'b',
-          'type': 'int'
+          type: 'int'
         }
       };
 

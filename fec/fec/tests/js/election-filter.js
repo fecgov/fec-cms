@@ -63,14 +63,14 @@ describe('Election filter', function() {
   });
 
   it('builds cycle toggles on election change', function() {
-    this.filter.handleElectionChange({target: this.filter.$election});
+    this.filter.handleElectionChange({ target: this.filter.$election });
     expect(this.filter.$cycles.find('label').length).to.equal(3);
     expect(this.filter.$cycles.find('label:first-of-type input').is(':checked')).to.be.true;
   });
 
   it('handles cycle change', function() {
     var target = '<input type="radio" value="2014:false">';
-    this.filter.handleCycleChange({target: target});
+    this.filter.handleCycleChange({ target: target });
     expect(this.filter.$cycle.val()).to.equal('2014');
     expect(this.filter.$full.val()).to.equal('false');
   });

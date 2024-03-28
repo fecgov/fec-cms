@@ -34,7 +34,6 @@ function ContributionsByStateFrame() {
  */
 ContributionsByStateFrame.prototype.init = function() {
   this.scriptElement = document.querySelector('#js-script-contribs-by-state');//document.currentScript; // The <script> on the page
-  
 
   // Build the element
   this.element = buildElement(this.scriptElement);

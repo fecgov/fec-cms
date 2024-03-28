@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 import { download } from '../modules/download.js';
 import { buildUrl } from '../modules/helpers.js';

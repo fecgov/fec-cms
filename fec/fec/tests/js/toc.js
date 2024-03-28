@@ -38,7 +38,7 @@ describe('Table of contents', function() {
   it('highlights the active item', function() {
     var $firstItem = this.toc.$menu.find('a[href="#section-1"]');
     var $secondItem = this.toc.$menu.find('a[href="#section-2"]');
-    var mockWatcher = {isInViewport: true, $menuItem: $secondItem};
+    var mockWatcher = { isInViewport: true, $menuItem: $secondItem };
     $firstItem.addClass('is-active');
     this.toc.highlightActiveItem(mockWatcher);
     expect($firstItem.hasClass('is-active')).to.be.false;
@@ -49,8 +49,8 @@ describe('Table of contents', function() {
     var $secondItem = this.toc.$menu.find('a[href="#section-2"]');
     var animate = sinon.spy($.prototype, 'animate');
     var top = $('#section-2').offset().top + 20;
-    this.toc.scrollTo({target: $secondItem, preventDefault: function() {}});
-    expect(animate).to.have.been.calledWith({scrollTop: top});
+    this.toc.scrollTo({ target: $secondItem, preventDefault: function() {} }); // eslint-disable-line no-empty-function
+    expect(animate).to.have.been.calledWith({ scrollTop: top });
     animate.restore();
   });
 });

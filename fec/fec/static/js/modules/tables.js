@@ -49,10 +49,10 @@ export const browseDOM = '<"panel__main"t>' + '<"results-info"lpi>';
 // $.fn.DataTable.ext.pager.numbers_length = 5;
 // Must be an odd number
 
-export const  DOWNLOAD_CAP = 500000;
-export const  downloadCapFormatted = formatNumber(DOWNLOAD_CAP);
-export const  MAX_DOWNLOADS = 5;
-export const  DOWNLOAD_MESSAGES = {
+export const DOWNLOAD_CAP = 500000;
+export const downloadCapFormatted = formatNumber(DOWNLOAD_CAP);
+export const MAX_DOWNLOADS = 5;
+export const DOWNLOAD_MESSAGES = {
   recordCap:
     'Use <a href="' +
     window.BASE_PATH +
@@ -155,8 +155,8 @@ export function modalRenderRow(row) {
 
 /**
  * @param {Function} template - Is this a function?
- * @param {*} fetch 
- * @returns 
+ * @param {*} fetch
+ * @returns Function
  */
 export function modalRenderFactory(template, fetch) {
   let callback;
@@ -248,7 +248,7 @@ function hidePanel(api, $modal) {
   removeTabindex($modal);
 }
 /**
- * 
+ *
  * @param {?string} template
  * @param {object} api
  */

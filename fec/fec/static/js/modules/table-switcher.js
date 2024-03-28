@@ -6,9 +6,9 @@
  */
 
 /**
- * 
+ *
  * @param {string} control - the selector text like '.js-table-switcher'
- * @param {Object} opts - 
+ * @param {Object} opts -
  * @param {Object} opts.efiling - {path[], dataType: 'efiling', hideColumns: '.hide-efiling', paginator()}
  * @param {Object} opts.processed - {dataType: 'processed', hideColumns: '.hide-processed', paginator()}
  */

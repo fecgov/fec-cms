@@ -54,7 +54,7 @@ describe('feedback', function() {
     });
 
     it('clears text on success', function() {
-      this.feedback.handleSuccess({html_url: 'https://github.com/fecgov/FEC/issue/1'});
+      this.feedback.handleSuccess({ html_url: 'https://github.com/fecgov/FEC/issue/1' });
       expect(this.feedback.$box.find('textarea').val()).to.equal('');
       expect(this.feedback.message).to.have.been.called;
     });
@@ -84,15 +84,15 @@ describe('feedback', function() {
       this.ajaxStub = sinon.stub($, 'ajax');
       sinon.stub(this.feedback, 'handleSuccess');
       sinon.stub(this.feedback, 'handleError');
-      this.event = {preventDefault: sinon.spy()};
-      this.token = "fake-token";
+      this.event = { preventDefault: sinon.spy() };
+      this.token = 'fake-token';
       this.feedback.$box.find('textarea').val('awesome site good job');
       var grecaptchaMock = sinon.stub({
-            render: function (options) { },
-            reset: function (id) { },
-            getResponse: function (id) { },
-            execute: function() { }
-        })
+            render: function (options) { }, // eslint-disable-line no-unused-vars, no-empty-function
+            reset: function (id) { }, // eslint-disable-line no-unused-vars, no-empty-function
+            getResponse: function (id) { }, // eslint-disable-line no-unused-vars, no-empty-function
+            execute: function() { } // eslint-disable-line no-empty-function
+        });
        window.grecaptcha = grecaptchaMock;
     });
 

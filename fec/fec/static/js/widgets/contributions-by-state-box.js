@@ -59,7 +59,7 @@ function buildIndividualContributionsUrl(
   // If we're missing required params, just return '' and be done
   if (!cycle || !office || !committeeIDs) return '';
 
-  let transactionPeriodsString = 'two_year_transaction_period=' + cycle;
+  let transactionPeriodsString = '';//'two_year_transaction_period=' + cycle;
   // TODO: Do we need maxDate and minDate?
   // let maxDate = `12-13-${this.baseStatesQuery.cycle}`;
   // let minDate = `01-01-${this.baseStatesQuery.cycle - 1}`;
@@ -71,11 +71,11 @@ function buildIndividualContributionsUrl(
   // Also, Puerto Rico's House elections are for four years so we'll need to
   // add the previous two-year period to the query string for House candidates from Puerto Rico
   if (office == 'P' || (office == 'H' && candidateState == 'PR')) {
-    transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 2);
+    transactionPeriodsString = 'two_year_transaction_period=' + (cycle - 2);
     // and the two earlier two-year periods for Senate races
   } else if (office == 'S') {
-    transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 2);
-    transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 4);
+    transactionPeriodsString = 'two_year_transaction_period=' + (cycle - 2);
+    transactionPeriodsString = 'two_year_transaction_period=' + (cycle - 4);
   }
 
   for (let i = 0; i < committeeIDs.length; i++) {

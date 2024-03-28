@@ -28,13 +28,13 @@ describe('Skip nav link', function() {
   });
 
   it('focuses on the target when clicked', function() {
-    var e = {type: 'click', preventDefault: function() {}};
+    var e = { type: 'click', preventDefault: function() {} }; // eslint-disable-line no-empty-function
     this.skipNav.focusOnTarget(e);
     expect($(document.activeElement).is(this.skipNav.$target)).to.be.true;
   });
 
   it('focuses on the target when enter pressed', function() {
-    var e = {keyCode: 13, preventDefault: function() {}};
+    var e = { keyCode: 13, preventDefault: function() {} }; // eslint-disable-line no-empty-function
     this.skipNav.focusOnTarget(e);
     expect($(document.activeElement).is(this.skipNav.$target)).to.be.true;
   });

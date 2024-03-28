@@ -97,7 +97,7 @@ describe('cycle select', function() {
     });
 
     it('disables cycles not included in context', function() {
-      global.context = {cycles: [2016]};
+      global.context = { cycles: [2016] };
       this.cycleSelect.initCyclesMulti(2016);
       var labels = this.cycleSelect.$cycles.find('label');
       expectDisabled(labels.eq(0), false);
@@ -106,7 +106,7 @@ describe('cycle select', function() {
     });
 
     it('disables all two year periods if context cycles is null', function() {
-      global.context = {cycles: null};
+      global.context = { cycles: null };
       this.cycleSelect.initCyclesMulti(null);
       var labels = this.cycleSelect.$cycles.find('label');
       expectDisabled(labels.eq(0), false);

@@ -9,7 +9,7 @@ use(sinonChai);
 import { AnalystLookup } from '../../static/js/pages/contact-form';
 
 describe('AnalystLookup', function() {
-    before(function() {
+  before(function() {
     this.$fixture = $('<div id="fixtures"></div>');
     $('body').append(this.$fixture);
   });
@@ -68,7 +68,7 @@ describe('AnalystLookup', function() {
   });
 
   it('shows the analyst', function() {
-    this.lookup.showAnalyst({'results': [{'first_name': 'Kim', 'last_name': 'Radical', 'telephone_ext': '1234'}]});
+    this.lookup.showAnalyst({ results: [{ first_name: 'Kim', last_name: 'Radical', telephone_ext: '1234' }] });
     expect(this.lookup.$name.html()).to.equal('Kim Radical');
     expect(this.lookup.$ext.html()).to.equal('1234');
     expect(this.lookup.$analystContainer.attr('aria-hidden')).to.equal('false');
@@ -78,7 +78,7 @@ describe('AnalystLookup', function() {
   });
 
   it('shows no assigned analyst', function() {
-    this.lookup.showAnalyst({'results': []});
+    this.lookup.showAnalyst({ results: [] });
     expect(this.lookup.$analystContainer.attr('aria-hidden')).to.equal('false');
     expect(this.lookup.$analystDetails.attr('aria-hidden')).to.equal('true');
     expect(this.lookup.$analystNoResults.attr('aria-hidden')).to.equal('false');
@@ -106,14 +106,14 @@ describe('AnalystLookup', function() {
 
     it('clears the input if it is empty', function() {
       var $input = this.lookup.$input;
-      this.lookup.handleChange({target: $input});
+      this.lookup.handleChange({ target: $input });
       expect(this.hide).to.have.been.called;
     });
 
     it('does not clear the input if there is a value', function() {
       var $input = this.lookup.$input;
       $input.val('Some value');
-      this.lookup.handleChange({target: $input});
+      this.lookup.handleChange({ target: $input });
       expect(this.hide).to.not.have.been.called;
     });
   });

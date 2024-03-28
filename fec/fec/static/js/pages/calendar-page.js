@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 import { calendarDownload, getUrl } from '../modules/calendar-helpers.js';
 import Calendar from '../modules/calendar.js';

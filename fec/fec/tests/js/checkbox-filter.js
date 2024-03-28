@@ -48,7 +48,7 @@ describe('checkbox filters', function() {
   });
 
   it('pulls values from the query', function() {
-    var query = {'office': ['p', 's']};
+    var query = { office: ['p', 's'] };
     this.filter.fromQuery(query);
     expect(this.filter.$elm.find('#president').is(':checked')).to.be.true;
     expect(this.filter.$elm.find('#senate').is(':checked')).to.be.true;
@@ -98,7 +98,7 @@ describe('checkbox filters', function() {
           value: 'President',
           loadedOnce: false,
           filterLabel: this.filter.$filterLabel,
-          name: 'office',
+          name: 'office'
         }
       ]);
     });

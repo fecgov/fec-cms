@@ -163,19 +163,19 @@ describe('dropdown', function() {
 
     it('hides when clicking somewhere else', function() {
       this.dropdown.show();
-      this.dropdown.handleClickAway({target: 'other'});
+      this.dropdown.handleClickAway({ target: 'other' });
       expect(isClosed(this.dropdown)).to.be.true;
     });
 
     it('hides when focusing somewhere else', function() {
       this.dropdown.show();
-      this.dropdown.handleFocusAway({target: 'other'});
+      this.dropdown.handleFocusAway({ target: 'other' });
       expect(isClosed(this.dropdown)).to.be.true;
     });
 
     it('hides on ESC', function(){
       this.dropdown.show();
-      this.dropdown.handleKeyup({keyCode: 27});
+      this.dropdown.handleKeyup({ keyCode: 27 });
       expect(isClosed(this.dropdown)).to.be.true;
     });
   });
@@ -224,7 +224,7 @@ describe('dropdown', function() {
     });
 
     it('removal of tag does not delete non-removable checkbox', function() {
-      $(document.body).trigger('tag:removed', [{key: 'party-DEM'}]);
+      $(document.body).trigger('tag:removed', [{ key: 'party-DEM' }]);
       var selectedItems = this.dropdown.$selected.find('.dropdown__item');
       expect(selectedItems.length).to.equal(2);
     });

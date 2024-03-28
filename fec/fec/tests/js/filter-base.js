@@ -50,7 +50,7 @@ describe('base filter', function() {
 
   it('pulls values from the query', function() {
     sinon.spy(Filter.prototype, 'setValue');
-    var query = {'name': ['george', 'martha'], 'office': 'president'};
+    var query = { name: ['george', 'martha'], office: 'president' };
     this.filter.fromQuery(query);
     expect(Filter.prototype.setValue).to.have.been.calledWith(['george', 'martha']);
     expect(this.filter.loadedOnce).to.be.true;
@@ -68,22 +68,22 @@ describe('base filter', function() {
   });
 
   it('increases filter count', function() {
-    this.filter.handleAddEvent({}, {name: 'name'});
+    this.filter.handleAddEvent({}, { name: 'name' });
     expect(this.filter.$filterLabel.find('.filter-count').html()).to.equal('1');
   });
 
   it('decreases filter count', function() {
-    this.filter.handleAddEvent({}, {name: 'name'});
-    this.filter.handleRemoveEvent({}, {name: 'name', loadedOnce: true});
+    this.filter.handleAddEvent({}, { name: 'name' });
+    this.filter.handleRemoveEvent({}, { name: 'name', loadedOnce: true });
     expect(this.filter.$filterLabel.find('.filter-count').length).to.equal(0);
   });
 
   it('sets lastAction', function() {
-    this.filter.setLastAction({type: 'filter:added'}, {name: 'name'});
+    this.filter.setLastAction({ type: 'filter:added' }, { name: 'name' });
     expect(this.filter.lastAction).to.equal('Filter added');
-    this.filter.setLastAction({type: 'filter:removed'}, {name: 'name'});
+    this.filter.setLastAction({ type: 'filter:removed' }, { name: 'name' });
     expect(this.filter.lastAction).to.equal('Filter removed');
-    this.filter.setLastAction({type: ''}, {name: 'name'});
+    this.filter.setLastAction({ type: '' }, { name: 'name' });
     expect(this.filter.lastAction).to.equal('Filter changed');
   });
 
@@ -102,7 +102,7 @@ describe('base filter', function() {
         expect(this.filter.isEnabled).to.be.false;
         expect(this.filter.$input.attr('class')).to.equal('is-disabled');
         expect(this.filter.$elm.find('label').attr('class')).to.equal('is-disabled');
-        expect(this.trigger).to.have.been.calledWith('filter:disabled', {key: 'name'});
+        expect(this.trigger).to.have.been.calledWith('filter:disabled', { key: 'name' });
       });
 
     it('enables filters', function() {
@@ -111,7 +111,7 @@ describe('base filter', function() {
         expect(this.filter.isEnabled).to.be.true;
         expect(this.filter.$input.attr('class')).to.not.equal('is-disabled');
         expect(this.filter.$elm.find('label').attr('class')).to.not.equal('is-disabled');
-        expect(this.trigger).to.have.been.calledWith('filter:enabled', {key: 'name'});
+        expect(this.trigger).to.have.been.calledWith('filter:enabled', { key: 'name' });
     });
   });
 });

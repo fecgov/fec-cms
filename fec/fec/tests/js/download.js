@@ -131,7 +131,7 @@ describe('DownloadItem', function() {
       expect($.ajax).to.have.been.calledWith({
         method: 'POST',
         url: this.item.apiUrl,
-        data: JSON.stringify({filename: this.item.filename}),
+        data: JSON.stringify({ filename: this.item.filename }),
         contentType: 'application/json',
         dataType: 'json'
       });
@@ -139,13 +139,13 @@ describe('DownloadItem', function() {
 
     it('handles success on queued', function() {
       this.item.refresh();
-      this.promise.resolve({status: 'queued'});
+      this.promise.resolve({ status: 'queued' });
       expect(this.item.finish).not.to.have.been.called;
     });
 
     it('handles success on complete', function() {
       this.item.refresh();
-      this.promise.resolve({status: 'complete', url: '/download'});
+      this.promise.resolve({ status: 'complete', url: '/download' });
       expect(this.item.finish).to.have.been.calledWith('/download');
     });
 

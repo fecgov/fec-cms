@@ -112,7 +112,6 @@ describe('FilterSet', function() {
       expect(Object.keys(this.filterSet.filters)).to.deep.equal(['cycle']);
     });
 
-
     it('does not activate filters if it has efiling filters', function() {
       this.filterSet.activateAll();
       expect(this.filterSet.fields).to.deep.equal([]);

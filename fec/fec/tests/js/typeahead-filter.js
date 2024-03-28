@@ -14,7 +14,7 @@ import $ from 'jquery';
 window.$ = window.jQuery = $;
 _extend(window, {
   API_LOCATION: '',
-  API_VERSION: '/v1',
+  API_VERSION: '/v1'
 });
 
 import { datasets } from '../../static/js/modules/typeahead.js';
@@ -44,7 +44,7 @@ describe('FilterTypeahead', function() {
   });
 
   it('should set firstItem', function() {
-    this.FilterTypeahead.setFirstItem({}, {id: 'smith'});
+    this.FilterTypeahead.setFirstItem({}, { id: 'smith' });
     expect(this.FilterTypeahead.firstItem.id).to.equal('smith');
   });
 
@@ -52,7 +52,7 @@ describe('FilterTypeahead', function() {
     var appendCheckbox = sinon.spy(this.FilterTypeahead, 'appendCheckbox');
     var datum = {
       name: 'FAKE CANDIDATE',
-      id: '12345',
+      id: '12345'
     };
     this.FilterTypeahead.handleSelect({}, datum);
 
@@ -70,7 +70,7 @@ describe('FilterTypeahead', function() {
     var input = {
       name: 'committee_id',
       label: '"George Washington"',
-      value: '"George Washington"',
+      value: '"George Washington"'
     };
 
     var expectedOutput = {
@@ -106,14 +106,14 @@ describe('FilterTypeahead', function() {
   });
 
   it('should set this.datum on typeahead:autocomplte', function() {
-    this.FilterTypeahead.handleAutocomplete({}, {id: '12345'});
-    expect(this.FilterTypeahead.datum).to.deep.equal({id: '12345'});
+    this.FilterTypeahead.handleAutocomplete({}, { id: '12345' });
+    expect(this.FilterTypeahead.datum).to.deep.equal({ id: '12345' });
   });
 
   it('should submit on enter', function() {
     var handleSubmit = sinon.spy(this.FilterTypeahead, 'handleSubmit');
-    this.FilterTypeahead.handleKeypress({keyCode: 13});
-    expect(handleSubmit).to.have.been.calledWith({keyCode: 13});
+    this.FilterTypeahead.handleKeypress({ keyCode: 13 });
+    expect(handleSubmit).to.have.been.calledWith({ keyCode: 13 });
     this.FilterTypeahead.handleSubmit.restore();
   });
 
@@ -154,11 +154,11 @@ describe('FilterTypeahead', function() {
   describe('handleSubmit()', function() {
     beforeEach(function() {
       this.handleSelect = sinon.spy(this.FilterTypeahead, 'handleSelect');
-      this.e = {name: 'event'};
+      this.e = { name: 'event' };
     });
 
     it('should select this.datum if present', function() {
-      this.FilterTypeahead.datum = {id: '12345'};
+      this.FilterTypeahead.datum = { id: '12345' };
       this.FilterTypeahead.handleSubmit(this.e);
       expect(this.handleSelect).to.have.been.called;
     });
@@ -166,16 +166,16 @@ describe('FilterTypeahead', function() {
     it('should select this.firstItem if no datum and it does not allow text', function() {
       this.FilterTypeahead.datum = null;
       this.FilterTypeahead.allowText = false;
-      this.FilterTypeahead.firstItem = {id: 'firstItem'};
+      this.FilterTypeahead.firstItem = { id: 'firstItem' };
       this.FilterTypeahead.handleSubmit(this.e);
-      expect(this.handleSelect).to.have.been.calledWith(this.e, {id: 'firstItem'});
+      expect(this.handleSelect).to.have.been.calledWith(this.e, { id: 'firstItem' });
     });
 
     it('should select the free text input if present', function() {
       this.FilterTypeahead.allowText = true;
       this.FilterTypeahead.$field.typeahead('val', 'freetext');
       this.FilterTypeahead.handleSubmit(this.e);
-      expect(this.handleSelect).to.have.been.calledWith(this.e, {id: 'freetext'});
+      expect(this.handleSelect).to.have.been.calledWith(this.e, { id: 'freetext' });
     });
 
     afterEach(function() {

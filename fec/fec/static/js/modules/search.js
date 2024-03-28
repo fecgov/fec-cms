@@ -35,4 +35,4 @@ export default function Search($el, opts) {
       $input.first().focus(); // TODO: jQuery deprecation
     }
   });
-};
+}

@@ -127,7 +127,7 @@ describe('election search', function() {
     this.el.serialized = { cycle: '2016', zip: '19041' };
     this.el.draw([]);
     expect(this.el.$resultsItems.text()).to.contain(
-      "We can't find any results for this ZIP code"
+      `We can't find any results for this ZIP code`
     );
     expect(this.el.$resultsTitle.text()).to.equal('');
   });
@@ -136,7 +136,7 @@ describe('election search', function() {
     this.el.serialized = { cycle: '2016', state: 'VI' };
     this.el.draw([]);
     expect(this.el.$resultsItems.text()).to.contain(
-      "We can't find any results for this location"
+      `We can't find any results for this location`
     );
     expect(this.el.$resultsTitle.text()).to.equal('');
   });
