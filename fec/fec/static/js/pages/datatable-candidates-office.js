@@ -43,9 +43,9 @@ var officeTitleMap = {
   house: 'House of Representatives'
 };
 
-  new tables.DataTable($table, {
 $(function() {
   const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Candidates for ' + officeTitleMap[global.context.office],
     path: ['candidates', 'totals'],

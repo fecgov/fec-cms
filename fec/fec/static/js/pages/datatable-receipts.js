@@ -2,12 +2,12 @@
 import { receipts as cols_receipts } from '../modules/columns.js';
 import { lineNumberFilters } from '../modules/filters-event.js';
 import TableSwitcher from '../modules/table-switcher.js';
-import { DataTable, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+import { DataTable_FEC, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 import { default as donationTemplate } from '../templates/receipts.hbs';
 
 $(function() {
   const $table = $('#results');
-  new DataTable($table, {
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Receipts',
     path: ['schedules', 'schedule_a'],

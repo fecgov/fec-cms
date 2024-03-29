@@ -327,7 +327,7 @@ function initElectionTotalTable(election_year) {
     aggregate_by = 'office-state';
   }
 
-  new tables.DataTable($table, {
+  new DataTable_FEC($table, {
     autoWidth: true,
     path: ['candidates', 'totals', 'aggregates'],
     query: {

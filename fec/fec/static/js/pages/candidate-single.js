@@ -19,7 +19,7 @@ import {
 import { init as initMapsEvent } from '../modules/maps-event.js';
 import { stateMap } from '../modules/maps.js';
 import OtherSpendingTotals from '../modules/other-spending-totals.js';
-import { barsAfterRender, DataTable, SeekPaginator, simpleDOM } from '../modules/tables.js';
+import { barsAfterRender, DataTable_FEC, SeekPaginator, simpleDOM } from '../modules/tables.js';
 import { default as reportType } from '../templates/reports/reportType.hbs';
 
 const events = initEvents();
@@ -314,7 +314,7 @@ function initOtherDocumentsTable() {
   const $table = $('table[data-type="other-documents"]');
   const candidateId = $table.data('candidate');
   const path = ['filings'];
-  DataTable.defer($table, {
+  DataTable_FEC.defer($table, {
     path: path,
     query: {
       candidate_id: candidateId,
@@ -375,7 +375,7 @@ function initSpendingTables() {
       displayCycle = 'unspecified cycle';
     }
     if (opts) {
-      DataTable.defer($table, {
+      DataTable_FEC.defer($table, {
         path: opts.path,
         query: query,
         columns: opts.columns,
@@ -420,7 +420,7 @@ function initDisbursementsTable() {
   if (displayCycle == null) {
     displayCycle = 'unspecified cycle';
   }
-  DataTable.defer($table, {
+  DataTable_FEC.defer($table, {
     path: path,
     query: {
       committee_id: opts.committee_id,
@@ -471,7 +471,7 @@ function initContributionsTables() {
 
   var reason = missingDataReason('contributions');
 
-  DataTable.defer($allTransactions, {
+  DataTable_FEC.defer($allTransactions, {
     path: ['schedules', 'schedule_a'],
     query: {
       committee_id: opts.committee_id,
@@ -495,7 +495,7 @@ function initContributionsTables() {
     }
   });
 
-  DataTable.defer($contributorState, {
+  DataTable_FEC.defer($contributorState, {
     path: ['schedules', 'schedule_a', 'by_state', 'by_candidate'],
     query: {
       candidate_id: opts.candidate_id,
@@ -541,7 +541,7 @@ function initContributionsTables() {
     scrollCollapse: true
   });
 
-  DataTable.defer($contributionSize, {
+  DataTable_FEC.defer($contributionSize, {
     path: ['schedules', 'schedule_a', 'by_size', 'by_candidate'],
     query: {
       candidate_id: opts.candidate_id,
@@ -600,7 +600,7 @@ function initStatementsOfCandidacyTable() {
   var opts = {
     cycle: $table.data('cycle')
   };
-  DataTable.defer($table, {
+  DataTable_FEC.defer($table, {
     path: path,
     query: {
       candidate_id: candidateId,
@@ -632,7 +632,7 @@ function initRawFilingsTable() {
   var candidateId = $table.attr('data-committee');
   var min_date = $table.attr('data-min-date');
   var path = ['efile', 'filings'];
-  DataTable.defer($table, {
+  DataTable_FEC.defer($table, {
     path: path,
     query: {
       committee_id: candidateId,

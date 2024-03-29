@@ -490,7 +490,7 @@ const defaultCallbacks = {
   afterRender: function() {} //eslint-disable-line no-empty-function
 };
 
-export function DataTable(selector, opts) {
+export function DataTable_FEC(selector, opts) {
   opts = opts || {};
   this.$body = $(selector);
   this.opts = _extend({}, defaultOpts, { ajax: this.fetch.bind(this) }, opts);
@@ -516,9 +516,9 @@ export function DataTable(selector, opts) {
   $(document.body).on('table:switch', this.handleSwitch.bind(this));
 }
 
-DataTable.prototype.initTable = function() {
+DataTable_FEC.prototype.initTable = function() {
   this.api = this.$body.DataTable(this.opts);
-  DataTable.registry[this.$body.attr('id')] = this;
+  DataTable_FEC.registry[this.$body.attr('id')] = this;
 
   if (!_isEmpty(this.filterPanel)) {
     updateOnChange(this.filterSet.$body, this.api);
@@ -535,13 +535,13 @@ DataTable.prototype.initTable = function() {
 };
 
 // Get the full querystring on-load
-DataTable.prototype.getVars = function () {
+DataTable_FEC.prototype.getVars = function () {
   const initialParams = window.location.search;
   return initialParams.toString();
 };
 
 // Parse querystring's parameters and return an object
-DataTable.prototype.parseParams = function(querystring){
+DataTable_FEC.prototype.parseParams = function(querystring){
     // Parse query string
     const params = new URLSearchParams(querystring);
     const obj = {};
@@ -557,7 +557,7 @@ DataTable.prototype.parseParams = function(querystring){
 };
 
 // Activate checkbox filter fields that filterSet.js cannot find to activate (see commitee_types.jinja)
-DataTable.prototype.checkFromQuery = function(){
+DataTable_FEC.prototype.checkFromQuery = function(){
     // Create a variable representing the querysring key/vals as an object
     const queryFields = this.parseParams(this.getVars());
     // Create an array to hold checkbox html elements
@@ -614,7 +614,7 @@ DataTable.prototype.checkFromQuery = function(){
   $('button.is-loading, label.is-loading').removeClass('is-loading');
 };
 
-DataTable.prototype.initFilters = function() {
+DataTable_FEC.prototype.initFilters = function() {
   // Set `this.filterSet` before instantiating the nested `DataTable` so that
   // filters are available on fetching initial data
   if (this.opts.useFilters) {
@@ -637,7 +637,7 @@ DataTable.prototype.initFilters = function() {
   }
 };
 
-DataTable.prototype.refreshExport = function() {
+DataTable_FEC.prototype.refreshExport = function() {
   if (this.opts.useExport && !this.opts.disableExport) {
     const numRows = this.api.context[0].fnRecordsTotal();
     if (numRows > DOWNLOAD_CAP) {
@@ -659,12 +659,12 @@ DataTable.prototype.refreshExport = function() {
   }
 };
 
-DataTable.prototype.destroy = function() {
+DataTable_FEC.prototype.destroy = function() {
   this.api.destroy();
   delete DataTable.registry[this.$body.attr('id')];
 };
 
-DataTable.prototype.handlePopState = function() {
+DataTable_FEC.prototype.handlePopState = function() {
   this.filterSet.activateAll();
   const filters = this.filterSet.serialize();
   if (!_isEqual(filters, this.filters)) {
@@ -672,7 +672,7 @@ DataTable.prototype.handlePopState = function() {
   }
 };
 
-DataTable.prototype.ensureWidgets = function() {
+DataTable_FEC.prototype.ensureWidgets = function() {
   if (this.hasWidgets) {
     return;
   }
@@ -709,7 +709,7 @@ DataTable.prototype.ensureWidgets = function() {
   this.hasWidgets = true;
 };
 
-DataTable.prototype.disableExport = function(opts) {
+DataTable_FEC.prototype.disableExport = function(opts) {
   this.$exportButton.addClass('is-disabled');
   this.$exportButton.off('click');
 
@@ -719,7 +719,7 @@ DataTable.prototype.disableExport = function(opts) {
   }
 };
 
-DataTable.prototype.enableExport = function() {
+DataTable_FEC.prototype.enableExport = function() {
   this.$exportButton.off('click');
   this.$exportButton.removeClass('is-disabled');
   this.$exportButton.on('click', this.export.bind(this));
@@ -728,7 +728,7 @@ DataTable.prototype.enableExport = function() {
   }
 };
 
-DataTable.prototype.fetch = function(data, callback) {
+DataTable_FEC.prototype.fetch = function(data, callback) {
   const self = this;
   self.ensureWidgets();
 
@@ -877,18 +877,18 @@ DataTable.prototype.fetch = function(data, callback) {
   });
 };
 
-DataTable.prototype.export = function() {
+DataTable_FEC.prototype.export = function() {
   const url = this.buildUrl(this.api.ajax.params(), false, true);
   download(url, false, true);
   this.disableExport({ message: DOWNLOAD_MESSAGES.pending });
 };
 
-DataTable.prototype.isPending = function() {
+DataTable_FEC.prototype.isPending = function() {
   const url = this.buildUrl(this.api.ajax.params(), false);
   return isPending(url);
 };
 
-DataTable.prototype.buildUrl = function(data, paginate, download) {
+DataTable_FEC.prototype.buildUrl = function(data, paginate, download) {
   let query = _extend(
     { sort_hide_null: false, sort_nulls_last: true }, // eslint-disable-line camelcase
     this.filters || {}
@@ -911,7 +911,7 @@ DataTable.prototype.buildUrl = function(data, paginate, download) {
   );
 };
 
-DataTable.prototype.fetchSuccess = function(resp) {
+DataTable_FEC.prototype.fetchSuccess = function(resp) {
   this.paginator.handleResponse(this.fetchContext.data, resp);
   this.fetchContext.callback(mapResponse(resp));
   this.callbacks.afterRender(this.api, this.fetchContext.data, resp);
@@ -946,7 +946,7 @@ DataTable.prototype.fetchSuccess = function(resp) {
   }
 };
 
-DataTable.prototype.fetchError = function(jqXHR, textStatus) {
+DataTable_FEC.prototype.fetchError = function(jqXHR, textStatus) {
   const self = this;
   // Default error message that occurs most likely due to timeout
   let errorMessage =
@@ -1008,7 +1008,7 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
  * be used with unfiltered tables, else tables may be destroyed on restrictive
  * filtering.
  */
-DataTable.prototype.hideEmpty = function(response) {
+DataTable_FEC.prototype.hideEmpty = function(response) {
   if (!response.pagination.count) {
     this.destroy();
     this.$body.before(missingTemplate(this.opts.hideEmptyOpts));
@@ -1016,15 +1016,15 @@ DataTable.prototype.hideEmpty = function(response) {
   }
 };
 
-DataTable.registry = {};
+DataTable_FEC.registry = {};
 
-DataTable.defer = function($table, opts) {
+DataTable_FEC.defer = function($table, opts) {
   tabsOnShow($table, function() {
-    new DataTable($table, opts);
+    new DataTable_dt_net($table, opts);
   });
 };
 
-DataTable.prototype.handleSwitch = function(e, opts) {
+DataTable_FEC.prototype.handleSwitch = function(e, opts) {
   this.opts.hideColumns = opts.hideColumns;
   this.opts.disableExport = opts.disableExport;
   this.opts.path = opts.path;
@@ -1060,7 +1060,7 @@ export function initSpendingTables(className, pageContext, options) {
     const dataType = $table.attr('data-type');
     const opts = options[dataType];
     if (opts) {
-      DataTable.defer($table, {
+      DataTable_FEC.defer($table, {
         autoWidth: false,
         path: opts.path,
         query: filterNull(pageContext.election),

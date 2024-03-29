@@ -3,7 +3,7 @@ import { filings as cols_filings } from '../modules/columns.js';
 import Dropdown from '../modules/dropdowns.js';
 import { renderRow, renderModal } from '../modules/filings.js';
 import TableSwitcher from '../modules/table-switcher.js';
-import { DataTable } from '../modules/tables.js';
+import { DataTable_FEC } from '../modules/tables.js';
 
 var filingsColumns = getColumns(cols_filings, [
   'filer_name',
@@ -14,9 +14,9 @@ var filingsColumns = getColumns(cols_filings, [
   'modal_trigger'
 ]);
 
-  new DataTable($table, {
 $(function() {
   const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     tableSwitcher: true,
     title: 'Filings',

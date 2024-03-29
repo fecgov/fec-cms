@@ -2,12 +2,12 @@
 import { disbursements as cols_disbursements } from '../modules/columns.js';
 import { lineNumberFilters } from '../modules/filters-event.js';
 import TableSwitcher from '../modules/table-switcher.js';
-import { DataTable, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+import { DataTable_FEC, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 import disbursementTemplate from '../templates/disbursements.hbs';
 
 $(function() {
   const $table = $('#results');
-  new DataTable($table, {
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Disbursements',
     path: ['schedules', 'schedule_b'],

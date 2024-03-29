@@ -6,9 +6,9 @@ import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/ta
 
 import { default as pacPartyTemplate } from '../templates/pac-party.hbs';
 
-  new tables.DataTable($table, {
 $(function() {
   const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Political action and party committees',
     path: ['totals', 'pac-party'],

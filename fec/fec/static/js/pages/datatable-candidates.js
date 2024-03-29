@@ -3,9 +3,9 @@ import { candidates as cols_candidates } from '../modules/columns.js';
 import { renderCandidatePanel } from '../modules/table-panels.js';
 import { DataTable_FEC, modalRenderRow } from '../modules/tables.js';
 
-  new tables.DataTable($table, {
 $(function() {
   const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Candidates',
     path: ['candidates'],

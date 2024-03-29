@@ -4,7 +4,8 @@ import { reports as cols_reports } from '../modules/columns.js';
 import Dropdown from '../modules/dropdowns.js';
 import { fetchReportDetails } from '../modules/filings.js';
 import TableSwitcher from '../modules/table-switcher.js';
-import { DataTable, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+
 import candidateTemplate from '../templates/reports/candidate.hbs';
 import ieOnlyTemplate from '../templates/reports/ie-only.hbs';
 import pacPartyTemplate from '../templates/reports/pac.hbs';
@@ -47,7 +48,7 @@ pageColumns = getColumns(cols_reports, columnKeys);
 
 $(function() {
   const $table = $('#results');
-  new DataTable($table, {
+  new DataTable_FEC($table, {
     autoWidth: false,
     tableSwitcher: true,
     title: pageTitle,

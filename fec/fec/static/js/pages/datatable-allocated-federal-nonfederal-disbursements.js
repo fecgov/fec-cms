@@ -1,13 +1,14 @@
 
 import { allocatedFederalNonfederalDisbursements as cols_allocatedFederalNonfederalDisbursements } from '../modules/columns.js';
 import { lineNumberFilters } from '../modules/filters-event.js';
+import { DataTable_FEC, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 import TableSwitcher from '../modules/table-switcher.js';
-import { DataTable, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+
 import { default as allocatedFederalNonfederalDisbursementsTemplate } from '../templates/allocated-federal-nonfederal-disbursements.hbs';
 
-  new DataTable($table, {
 $(function() {
   const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Allocated federal/nonfederal disbursements',
     path: ['schedules', 'schedule_h4'],

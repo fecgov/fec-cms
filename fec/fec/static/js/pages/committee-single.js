@@ -13,7 +13,7 @@ import { renderModal, renderRow } from '../modules/filings.js';
 import { buildAppUrl, buildUrl, missingDataReason } from '../modules/helpers.js';
 import { init as initMapsEvent } from '../modules/maps-event.js';
 import { stateMap } from '../modules/maps.js';
-import { barsAfterRender, DataTable, SeekPaginator, simpleDOM } from '../modules/tables.js';
+import { barsAfterRender, DataTable_FEC, SeekPaginator, simpleDOM } from '../modules/tables.js';
 const events = initEvents();
 
 const tableOpts = {
@@ -437,7 +437,7 @@ $(function() {
         path = ['schedules', 'schedule_a', 'by_size'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = global.context.cycle || $table.attr('data-cycle');
-        DataTable.defer($table, {
+        DataTable_FEC.defer($table, {
           path: path,
           query: _extend(query, {
             committee_id: committeeId,
@@ -464,7 +464,7 @@ $(function() {
         path = ['schedules', 'schedule_a', 'by_state'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = global.context.cycle || $table.attr('data-cycle');
-        DataTable.defer($table, {
+        DataTable_FEC.defer($table, {
           path: path,
           query: _extend(query, {
             committee_id: committeeId,
@@ -488,7 +488,7 @@ $(function() {
         path = ['schedules', 'schedule_a', 'by_employer'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = global.context.cycle || $table.attr('data-cycle');
-        DataTable.defer(
+        DataTable_FEC.defer(
           $table,
           _extend({}, tableOpts, {
             path: path,
@@ -512,7 +512,7 @@ $(function() {
         path = ['schedules', 'schedule_a', 'by_occupation'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = global.context.cycle || $table.attr('data-cycle');
-        DataTable.defer(
+        DataTable_FEC.defer(
           $table,
           _extend({}, tableOpts, {
             path: path,
@@ -536,7 +536,7 @@ $(function() {
         path = ['schedules', 'schedule_a'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = global.context.cycle || $table.attr('data-cycle');
-        DataTable.defer(
+        DataTable_FEC.defer(
           $table,
           _extend({}, tableOpts, {
             path: path,
@@ -564,7 +564,7 @@ $(function() {
         path = ['schedules', 'schedule_b', 'by_recipient'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = global.context.cycle || $table.attr('data-cycle');
-        DataTable.defer(
+        DataTable_FEC.defer(
           $table,
           _extend({}, tableOpts, {
             path: path,
@@ -588,7 +588,7 @@ $(function() {
         path = ['schedules', 'schedule_b'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = global.context.cycle || $table.attr('data-cycle');
-        DataTable.defer(
+        DataTable_FEC.defer(
           $table,
           _extend({}, tableOpts, {
             path: path,
@@ -615,7 +615,7 @@ $(function() {
         path = ['electioneering'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = global.context.cycle || $table.attr('data-cycle');
-        DataTable.defer(
+        DataTable_FEC.defer(
           $table,
           _extend({}, tableOpts, {
             path: path,
@@ -642,7 +642,7 @@ $(function() {
         path = ['schedules', 'schedule_b', 'by_recipient_id'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = global.context.cycle || $table.attr('data-cycle');
-        DataTable.defer(
+        DataTable_FEC.defer(
           $table,
           _extend({}, tableOpts, {
             path: path,
@@ -666,7 +666,7 @@ $(function() {
         path = ['schedules', 'schedule_e', 'by_candidate'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = global.context.cycle || $table.attr('data-cycle');
-        DataTable.defer($table, {
+        DataTable_FEC.defer($table, {
           path: path,
           query: _extend(query, {
             committee_id: committeeId,
@@ -689,7 +689,7 @@ $(function() {
         path = ['electioneering', 'aggregates'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = global.context.cycle || $table.attr('data-cycle');
-        DataTable.defer($table, {
+        DataTable_FEC.defer($table, {
           path: path,
           query: _extend(query, {
             cycle: cycle,
@@ -711,7 +711,7 @@ $(function() {
         path = ['communication_costs', 'aggregates'];
         // For raising/spending tabs, use previous cycle if provided
         cycle = global.context.cycle || $table.attr('data-cycle');
-        DataTable.defer($table, {
+        DataTable_FEC.defer($table, {
           path: path,
           query: _extend(query, {
             cycle: cycle,
@@ -753,7 +753,7 @@ $(function() {
           },
           filingsOpts
         );
-        DataTable.defer($table, opts);
+        DataTable_FEC.defer($table, opts);
         break;
       case 'filings-reports':
         // For filings-reports, use previous cycle if provided
@@ -808,7 +808,7 @@ $(function() {
           },
           filingsOpts
         );
-        DataTable.defer($table, opts);
+        DataTable_FEC.defer($table, opts);
         break;
       case 'filings-notices':
         // For filings-notices, use previous cycle if provided
@@ -844,7 +844,7 @@ $(function() {
           },
           filingsOpts
         );
-        DataTable.defer($table, opts);
+        DataTable_FEC.defer($table, opts);
         break;
       case 'filings-statements':
         // For filings-statements, use previous cycle if provided
@@ -877,7 +877,7 @@ $(function() {
           },
           filingsOpts
         );
-        DataTable.defer($table, opts);
+        DataTable_FEC.defer($table, opts);
         break;
       case 'filings-other':
         // For filings-other, use previous cycle if provided
@@ -909,7 +909,7 @@ $(function() {
           },
           filingsOpts
         );
-        DataTable.defer($table, opts);
+        DataTable_FEC.defer($table, opts);
         break;
     }
   });

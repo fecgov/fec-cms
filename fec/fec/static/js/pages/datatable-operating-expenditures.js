@@ -3,9 +3,9 @@ import { DataTable_FEC, SeekPaginator, modalRenderFactory, modalRenderRow } from
 
 import { default as disbursementTemplate } from '../templates/disbursements.hbs';
 
-  new tables.DataTable($table, {
 $(function() {
   const $table = $('#results');
+  new DataTable_FEC($table, {
     title: 'Operating expenditures',
     path: ['schedules', 'schedule_b'],
     // query: {filter for operating expenditures},

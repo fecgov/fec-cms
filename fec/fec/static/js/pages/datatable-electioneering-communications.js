@@ -4,9 +4,9 @@ import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/ta
 
 import { default as electioneeringTemplate } from '../templates/electioneering-communications.hbs';
 
-  new tables.DataTable($table, {
 $(function() {
   const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Electioneering communications',
     path: ['electioneering'],

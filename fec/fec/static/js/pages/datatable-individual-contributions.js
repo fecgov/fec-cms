@@ -3,9 +3,9 @@ import { DataTable_FEC, SeekPaginator, modalRenderFactory, modalRenderRow } from
 
 import { default as donationTemplate } from '../templates/receipts.hbs';
 
-  new tables.DataTable($table, {
 $(function() {
   const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Individual contributions',
     path: ['schedules', 'schedule_a'],
