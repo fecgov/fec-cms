@@ -12,13 +12,30 @@ data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{
 
 
 {% macro select_json_indentation(name, label, keys, options={}, default=none) %}
-<div class="filter js-filter js-filter-control sub--filter--indent" data-filter="select"
+<div class="filter js-filter js-filter-control sub--filter--indent" data-filter="select" 
 data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{{ default }}">
   <label for="{{ name }}" class="label">{{ label }}</label>
   <select id={{ name }} name="{{ name }}">
     {% for option in options %}
       <option value={{option[keys[0]]}}>{{ option[keys[1]] }}</option>
     {% endfor %}
+  </select>
+</div>
+{% endmacro %}
+
+
+{% macro select_single(name, label, options={}, default=none, selected={}, placeholder_prefix='') %}
+<div class="filter js-filter js-filter-control"  data-filter="select" data-name="{{ name }}" data-validate="false" data-modifies-filter="{{ name }}">
+  <label for="{{ name }}" class="label">{{ label }}</label>
+  <select id={{ name }} name="{{ name }}" data-filter-change="true" data-removeable-filter="true">
+    <option value=''>More</option>
+    {% for title, val in options.items() %}
+    <optgroup label="{{ placeholder_prefix }} {{ title }}">
+       {% for value, label in val.items() %}
+          <option value={{value}} data-line-type="{{ title }}">{{ label }}</option>
+      {% endfor %}
+    {% endfor %}
+    </optgroup>
   </select>
 </div>
 {% endmacro %}
