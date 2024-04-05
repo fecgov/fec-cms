@@ -482,7 +482,7 @@ table_columns = OrderedDict([
 
 line_numbers = {
     'receipts': {
-        'House or Senate committees (Form 3)': OrderedDict([
+        'House or Senate committees': OrderedDict([
             ('F3-11AI', 'Line 11ai: Contributions from individuals'),
             ('F3-11B', 'Line 11b: Contributions from political party committees'),
             ('F3-11C', 'Line 11c: Contributions from other political committees'),
@@ -493,7 +493,7 @@ line_numbers = {
             ('F3-14', 'Line 14: Offsets to operating expenditures'),
             ('F3-15', 'Line 15: Other receipts'),
         ]),
-        'Presidential committees (Form 3P)': OrderedDict([
+        'Presidential committees': OrderedDict([
             ('F3P-16', 'Line 16: Federal funds'),
             ('F3P-17A', 'Line 17ai: Contributions from individuals'),
             ('F3P-17B', 'Line 17b: Contributions from political party committees'),
@@ -507,7 +507,7 @@ line_numbers = {
             ('F3P-20C', 'Line 20c: Offsets to operating expenditures - legal and accounting'),
             ('F3P-21', 'Line 21: Other receipts'),
         ]),
-        'PACs or Party committees (Form 3X)': OrderedDict([
+        'PACs or Party committees': OrderedDict([
             ('F3X-11AI', 'Line 11ai: Contributions from individuals'),
             ('F3X-11B', 'Line 11b: Contributions from political party committees'),
             ('F3X-11C', 'Line 11c: Contributions from other political committees'),
@@ -520,7 +520,7 @@ line_numbers = {
         ])
     },
     'disbursements': {
-        'House or Senate committees (Form 3)': OrderedDict([
+        'House or Senate committees': OrderedDict([
             ('F3-17', 'Line 17: Operating expenditures'),
             ('F3-18', 'Line 18: Transfers to other authorized committees'),
             ('F3-19', 'Line 19: Loan repayments'),
@@ -531,7 +531,7 @@ line_numbers = {
             ('F3-20C', 'Line 20c: Refunds of contributions to other political committees'),
             ('F3-21', 'Line 21: Other disbursements'),
         ]),
-        'Presidential committees (Form 3P)': OrderedDict([
+        'Presidential committees': OrderedDict([
             ('F3P-23', 'Line 23: Operating expenditures'),
             ('F3P-24', 'Line 24: Transfers to other authorized committees'),
             ('F3P-25', 'Line 25: Fundraising disbursements'),
@@ -543,7 +543,7 @@ line_numbers = {
             ('F3P-28C', 'Line 28c: Refunds of contributions to other political committees'),
             ('F3P-29', 'Line 29: Other disbursements'),
         ]),
-        'PACs or Party committees (Form 3X)': OrderedDict([
+        'PACs or Party committees': OrderedDict([
             ('F3X-21B', 'Line 21b: Other federal operating expenditures'),
             ('F3X-22', 'Line 22: Transfers to affiliated/other party committees'),
             ('F3X-23', 'Line 23: Contributions to federal candidates/committees and other political committees'),
