@@ -176,11 +176,13 @@ def legal_search(request):
                     "name": obj['headings']['section'],
                     "no": obj['hierarchy']['section'],
                     "type": None,
-                    "url": ("https://www.ecfr.gov/current/title-11/",
-                            f"chapter-{obj['hierarchy']['chapter']}/",
-                            f"subchapter-{obj['hierarchy']['subchapter']}/",
-                            f"part-{obj['hierarchy']['part']}/",
-                            f"section-{obj['hierarchy']['section']}")
+                    "url":  (
+                        "https://www.ecfr.gov/current/title-11/"
+                        f"chapter-{obj['hierarchy']['chapter']}/"
+                        f"subchapter-{obj['hierarchy']['subchapter']}/"
+                        f"part-{obj['hierarchy']['part']}/"
+                        f"section-{obj['hierarchy']['section']}"
+                    )
                     } for obj in ecfr_results['results']]
 
     results['regulations'] = regulations
@@ -314,11 +316,13 @@ def legal_doc_search_regulations(request):
                 "name": obj['headings']['section'],
                 "no": obj['hierarchy']['section'],
                 "type": None,
-                "url": ("https://www.ecfr.gov/current/title-11/",
-                        f"chapter-{obj['hierarchy']['chapter']}/",
-                        f"subchapter-{obj['hierarchy']['subchapter']}/",
-                        f"part-{obj['hierarchy']['part']}/",
-                        f"section-{obj['hierarchy']['section']}")
+                "url":  (
+                    "https://www.ecfr.gov/current/title-11/"
+                    f"chapter-{obj['hierarchy']['chapter']}/"
+                    f"subchapter-{obj['hierarchy']['subchapter']}/"
+                    f"part-{obj['hierarchy']['part']}/"
+                    f"section-{obj['hierarchy']['section']}"
+                )
                 } for obj in ecfr_results['results']]
     current_page = ecfr_results['meta']['current_page']
     total_pages = ecfr_results['meta']['total_pages']
