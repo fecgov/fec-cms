@@ -184,6 +184,7 @@ def legal_search(request):
                     } for obj in ecfr_results['results']]
 
     results['regulations'] = regulations
+    results['total_regulations'] = ecfr_results['meta']['total_count']
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
         'query': query,
