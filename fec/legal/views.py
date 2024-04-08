@@ -179,8 +179,6 @@ def legal_search(request):
                     "url":  (
                         "https://www.ecfr.gov/current/title-11/"
                         f"chapter-{obj['hierarchy']['chapter']}/"
-                        f"subchapter-{obj['hierarchy']['subchapter']}/"
-                        f"part-{obj['hierarchy']['part']}/"
                         f"section-{obj['hierarchy']['section']}"
                     )
                     } for obj in ecfr_results['results']]
@@ -319,8 +317,6 @@ def legal_doc_search_regulations(request):
                 "url":  (
                     "https://www.ecfr.gov/current/title-11/"
                     f"chapter-{obj['hierarchy']['chapter']}/"
-                    f"subchapter-{obj['hierarchy']['subchapter']}/"
-                    f"part-{obj['hierarchy']['part']}/"
                     f"section-{obj['hierarchy']['section']}"
                 )
                 } for obj in ecfr_results['results']]
