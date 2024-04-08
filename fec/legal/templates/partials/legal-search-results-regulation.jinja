@@ -10,9 +10,12 @@
       <div class="simple-table__cell">
         <div class="legal-search-result__name">{{ section.name|safe }}</div>
         <div class="t-serif legal-search-result__hit">
-          &hellip;
           {% for highlight in section.highlights %}
-            {{ highlight|safe }} &hellip;
+            {% if highlight is not none %}
+            &hellip; {{ highlight|safe }} &hellip;
+            {% else %}
+            &hellip;
+            {% endif %}
           {% endfor %}
         </div>
       </div>
