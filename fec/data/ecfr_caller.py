@@ -7,12 +7,15 @@ logger = logging.getLogger(__name__)
 
 
 def fetch_ecfr_data(query, date="current", limit=20, page=1):
+    order = "hierarchy"
+    if query:
+        order = "relevance"
     url = (f"https://www.ecfr.gov/api/search/v1/results?query={query}&"
            f"agency_slugs%5B%5D=federal-election-commission&"
            f"date={date}&"
            f"per_page={limit}&"
            f"page={page}&"
-           f"order=relevance&"
+           f"order={order}&"
            f"paginate_by=results")
     response = requests.get(url)
 
