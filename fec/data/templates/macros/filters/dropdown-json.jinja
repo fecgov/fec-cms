@@ -32,7 +32,7 @@ data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{
   <select id={{ name }} name="{{ name }}" data-filter-change="true" data-removeable-filter="true">
     <option value=''>More</option>
     {% for title, val in options.items() %}
-    <optgroup>
+    <optgroup label="{{ title_prefix }} {{ title }} ({{ forms[loop.index-1] }})">
        {% for value, label in val.items() %}
           <option value={{value}} data-line-type="{{ title }}">{{ label }}</option>
       {% endfor %}
