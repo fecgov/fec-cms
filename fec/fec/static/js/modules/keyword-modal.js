@@ -70,8 +70,12 @@ KeywordModal.prototype.combineFields = function() {
 
   this.$fields.each(function() {
     var $input = $(this);
+    var operator = $input.data('operator');
     if ($input.val() && query) {
       query = query + ' OR ' + '(' + self.parseValue($input) + ')';
+      if (operator === 'or-regs') {
+        query = query + ' | ' + '(' + self.parseValue($input) + ')';
+      }
     } else if ($input.val()) {
       query = '(' + self.parseValue($input) + ')';
     }
@@ -79,6 +83,9 @@ KeywordModal.prototype.combineFields = function() {
 
   if (this.$excludeField.val() && query) {
     query = '(' + query + ') AND (' + self.parseValue(this.$excludeField) + ')';
+    if (operator === 'and-regs') {
+      query = query + ' ' + self.parseValue(this.$excludeField);
+    }
   } else if (this.$excludeField.val()) {
     query = self.parseValue(this.$excludeField);
   }
@@ -99,10 +106,14 @@ KeywordModal.prototype.parseValue = function($input) {
   var operator = $input.data('operator');
   if (operator === 'and') {
     return words.join(' AND ');
+  } else if (operator === 'and-regs') {
+    return words.join(' ');
   } else if (operator === 'or') {
     return words.join(' OR ');
+  } else if (operator === 'or-regs') {
+    return words.join(' | ');
   } else if (operator === 'exact') {
-    return '"' + $input.val().replace(/"/g, '') + '"';
+    return '"' + $input.val() + '"';
   } else if (operator === 'exclude') {
     return '-' + words.join(' -');
   }
