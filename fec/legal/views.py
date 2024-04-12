@@ -161,6 +161,7 @@ def legal_search(request):
     query = request.GET.get('search', '')
     result_type = request.GET.get('search_type', 'all')
     results = {}
+    ecfr_results = {}
     regulations = {}
 
     # Only hit the API if there's an actual query
@@ -168,23 +169,25 @@ def legal_search(request):
         results = api_caller.load_legal_search_results(query, result_type,
                                                        limit=3)
         ecfr_results = ecfr_caller.fetch_ecfr_data(query, limit=3, page=1)
-        regulations = [{
-                    "doc_id": None,
-                    "document_highlights": {},
-                    "highlights": [obj['headings']['part'],
-                                   obj['full_text_excerpt']],
-                    "name": obj['headings']['section'],
-                    "no": obj['hierarchy']['section'],
-                    "type": None,
-                    "url":  (
-                        "https://www.ecfr.gov/current/title-11/"
-                        f"chapter-{obj['hierarchy']['chapter']}/"
-                        f"section-{obj['hierarchy']['section']}"
-                    )
-                    } for obj in ecfr_results['results']]
+        if 'results' in ecfr_results:
+            regulations = [{
+                        "doc_id": None,
+                        "document_highlights": {},
+                        "highlights": [obj['headings']['part'],
+                                       obj['full_text_excerpt']],
+                        "name": obj['headings']['section'],
+                        "no": obj['hierarchy']['section'],
+                        "type": None,
+                        "url":  (
+                            "https://www.ecfr.gov/current/title-11/"
+                            f"chapter-{obj['hierarchy']['chapter']}/"
+                            f"section-{obj['hierarchy']['section']}"
+                        )
+                        } for obj in ecfr_results['results']]
 
     results['regulations'] = regulations
-    results['total_regulations'] = ecfr_results['meta']['total_count']
+    results['total_regulations'] = ecfr_results.get('meta', {}).get(
+                                                    'total_count', 0)
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
         'query': query,

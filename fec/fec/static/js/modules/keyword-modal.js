@@ -67,14 +67,16 @@ KeywordModal.prototype.handleSubmit = function(e) {
 KeywordModal.prototype.combineFields = function() {
   var query = '';
   var self = this;
+  var isRegulationsModal = document.getElementsByClassName('regulations-modal');
 
   this.$fields.each(function() {
     var $input = $(this);
-    var operator = $input.data('operator');
+
     if ($input.val() && query) {
-      query = query + ' OR ' + '(' + self.parseValue($input) + ')';
-      if (operator === 'or-regs') {
+      if (isRegulationsModal.length > 0){
         query = query + ' | ' + '(' + self.parseValue($input) + ')';
+      } else {
+        query = query + ' OR ' + '(' + self.parseValue($input) + ')';
       }
     } else if ($input.val()) {
       query = '(' + self.parseValue($input) + ')';
@@ -82,9 +84,10 @@ KeywordModal.prototype.combineFields = function() {
   });
 
   if (this.$excludeField.val() && query) {
-    query = '(' + query + ') AND (' + self.parseValue(this.$excludeField) + ')';
-    if (operator === 'and-regs') {
+    if (isRegulationsModal.length > 0) {
       query = query + ' ' + self.parseValue(this.$excludeField);
+    } else {
+      query = '(' + query + ') AND (' + self.parseValue(this.$excludeField) + ')';
     }
   } else if (this.$excludeField.val()) {
     query = self.parseValue(this.$excludeField);
