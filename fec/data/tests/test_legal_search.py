@@ -9,6 +9,7 @@ from django.test import TestCase
 from data import api_caller
 from data import ecfr_caller
 from data import legal_test_data
+from legal import views
 
 client = Client()
 
@@ -75,6 +76,24 @@ class TestLegalSearch(TestCase):
         assert response.status_code == 200
         load_legal_search_results.assert_called_once_with(
             'in-kind donation', page=1)
+
+    # Test transform boolean queries for eCFR API
+    def test_transform_ecfr_query_string(self):
+        # Define input query string
+        input_query_string = '((coordinated OR communications) OR (in-kind AND'
+        + ' contributions) OR ("independent expenditure")) AND (-travel)'
+
+        # Expected output after transformation
+        expected_output = '((coordinated | communications) | (in-kind'
+        + ' contributions) | ("independent expenditure")) -travel'
+
+        # Apply transformation
+        updated_ecfr_query_string = views.transform_ecfr_query_string(
+            input_query_string
+        )
+
+        # Check if the transformation is correct
+        self.assertEqual(updated_ecfr_query_string, expected_output)
 
     # Test 5 : OK
     @mock.patch.object(api_caller, 'load_legal_search_results')
