@@ -1,3 +1,4 @@
+
 import datetime
 from unittest import mock
 import io
@@ -6,6 +7,7 @@ import logging
 from django.test import Client
 from django.test import TestCase
 from data import api_caller
+from data import ecfr_caller
 from data import legal_test_data
 
 client = Client()
@@ -28,11 +30,10 @@ class TestLegalSearch(TestCase):
     #                           data={
     #                               'search': 'in kind donation',
     #                               'search_type': 'regulations'})
-    #     print("::: Test2 ::: search_type_regulations_redirects :::RESPONSE :::", response.status_code)
+    #     print("::: Test2 ::: search_type_regulations_redirects" +
+    #           " :::RESPONSE :::", response.status_code)
     #     assert response.status_code == 302
 
-    #     url = urlparse(response)
-    #     query = parse_qs(url.query)
     #     assert url == 'data/legal/search/regulations/'
     #     assert 'search' in query
     #     assert 'search_type' in query
@@ -42,56 +43,54 @@ class TestLegalSearch(TestCase):
     # Test3 : OK
     @mock.patch.object(api_caller, 'load_legal_search_results')
     def test_search_universal(self, load_legal_search_results):
-        load_legal_search_results.return_value = legal_test_data.legal_universal_search_results()
+        load_legal_search_results.return_value = (
+            legal_test_data.legal_universal_search_results()
+        )
         response = client.get(
             '/data/legal/search/',
             data={'search': 'in kind donation', 'search_type': 'all'}
         )
         assert response.status_code == 200
-        load_legal_search_results.assert_called_once_with('in kind donation', 'all', limit=3)
+        load_legal_search_results.assert_called_once_with(
+            'in kind donation', 'all', limit=3
+        )
 
-    # Test4 : This test is checking against the static data on legal_test_data.py.
-    # offset value is 3 and not 0. revisit the test
-    # AssertionError: Expected call: load_legal_search_results('in kind donation', 'regulations', offset=0)
-    # Actual call: load_legal_search_results('in kind donation', 'regulations', limit=3)
-    @mock.patch.object(api_caller, 'load_legal_search_results')
+    # Test4 : This test is checking against the static data on
+    # legal_test_data.py.
+    # AssertionError: Expected call: load_legal_search_results(
+    # 'in-kind donation', 'regulations')
+    # Actual call:
+    # load_legal_search_results.assert_called_once_with(
+    #   'in kind donation', 'all', limit=3
+    # )
+    @mock.patch.object(ecfr_caller, 'fetch_ecfr_data')
     def test_search_regulations(self, load_legal_search_results):
-        load_legal_search_results.return_value = legal_test_data.regulations_search_results()
-        response = client.get(
-            '/data/legal/search/regulations/',
-            data={'search': 'in kind donation', 'search_type': 'regulations'}
-        )
-        assert response.status_code == 200
-        load_legal_search_results.assert_called_once_with(
-            'in kind donation', 'regulations', offset=0)
-
-    # Test5 : OK. This test works only if offset value is set
-    # as a string and not integer in the assert_called_once_with.
-    @mock.patch.object(api_caller, 'load_legal_search_results')
-    def test_search_pagination(self, load_legal_search_results):
-        load_legal_search_results.return_value =\
+        load_legal_search_results.return_value = (
             legal_test_data.regulations_search_results()
-
+        )
         response = client.get(
             '/data/legal/search/regulations/',
-            data={'search': 'in kind donation', 'search_type': 'regulations', 'offset': 20}
+            data={'search': 'in-kind donation', 'search_type': 'regulations'}
         )
         assert response.status_code == 200
         load_legal_search_results.assert_called_once_with(
-            'in kind donation', 'regulations', offset='20')
+            'in-kind donation', page=1)
 
-    # Test 6 : OK
+    # Test 5 : OK
     @mock.patch.object(api_caller, 'load_legal_search_results')
     def test_search_statutes(self, load_legal_search_results):
-        load_legal_search_results.return_value = legal_test_data.statutes_search_results()
+        load_legal_search_results.return_value = (
+            legal_test_data.statutes_search_results()
+        )
         response = client.get(
             '/data/legal/search/statutes/',
             data={'search': 'in kind donation', 'search_type': 'statutes'}
         )
         assert response.status_code == 200
-        load_legal_search_results.assert_called_once_with('in kind donation', 'statutes', offset=0)
+        load_legal_search_results.assert_called_once_with('in kind donation',
+                                                          'statutes', offset=0)
 
-    # # Test 7: OK
+    # # Test 6: OK
     @mock.patch.object(api_caller, '_call_api')
     def test_result_counts(self, _call_api_mock):
         _call_api_mock.return_value = {
@@ -106,7 +105,7 @@ class TestLegalSearch(TestCase):
         assert results['statutes_returned'] == 4
         assert results['regulations_returned'] == 5
 
-    # Test 8: OK
+    # Test 7: OK
     @mock.patch.object(api_caller, 'load_legal_search_results')
     def test_ao_landing_page(self, load_legal_search_results):
         today = datetime.date.today()
@@ -132,7 +131,7 @@ class TestLegalSearch(TestCase):
         ]
         load_legal_search_results.assert_has_calls(calls, any_order=True)
 
-    # Test 9:
+    # Test 8:
     @mock.patch.object(api_caller, '_call_api')
     def test_missing_action_mur(self, _call_api_mock):
         log_capture_string = io.StringIO()
@@ -163,6 +162,15 @@ class TestLegalSearch(TestCase):
         }
         api_caller.load_legal_mur('1')
         log_contents = log_capture_string.getvalue()
-        assert "MUR 1: There were no data for commission_votes action at index 0" in log_contents
-        assert "MUR 1: There were no data for commission_votes action at index 2" in log_contents
-        assert "MUR 1: There were no data for commission_votes action at index 1" not in log_contents
+        assert (
+            "MUR 1: There were no data for commission_votes action at index 0"
+            in log_contents
+        )
+        assert (
+            "MUR 1: There were no data for commission_votes action at index 2"
+            in log_contents
+        )
+        assert (
+            "MUR 1: There were no data for commission_votes action at index 1"
+            not in log_contents
+        )
