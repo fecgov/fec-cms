@@ -157,8 +157,33 @@ def admin_fine_page(request, admin_fine_no):
     })
 
 
+# Transform boolean queries for eCFR API
+# Query string:
+# ((coordinated OR communications) OR (in-kind AND contributions) OR
+# ("independent expenditure")) AND (-authorization)
+# eCFR query string transformation:
+# (coordinated | communications) | (in-kind contributions) |
+# ("independent expenditure") -authorization
+
+def transform_ecfr_query_string(query_string):
+
+    # Define the replacements for eCFR query string
+    replacements = [
+        (r'\((-[^)]*)\)', r'\1'),  # Removes parentheses around on statement
+        (r' OR ', ' | '),  # Replace OR with |
+        (r' AND ', ' '),  # Replace AND with space
+    ]
+
+    # Apply replacements sequentially
+    for pattern, replacement in replacements:
+        query_string = re.sub(pattern, replacement, query_string)
+
+    return query_string
+
+
 def legal_search(request):
     query = request.GET.get('search', '')
+    Updated_ecfr_query_string = transform_ecfr_query_string(query)
     result_type = request.GET.get('search_type', 'all')
     results = {}
     ecfr_results = {}
@@ -168,7 +193,9 @@ def legal_search(request):
     if query:
         results = api_caller.load_legal_search_results(query, result_type,
                                                        limit=3)
-        ecfr_results = ecfr_caller.fetch_ecfr_data(query, limit=3, page=1)
+        ecfr_results = ecfr_caller.fetch_ecfr_data(Updated_ecfr_query_string,
+                                                   limit=3, page=1)
+
         if 'results' in ecfr_results:
             regulations = [{
                         "doc_id": None,
@@ -188,6 +215,7 @@ def legal_search(request):
     results['regulations'] = regulations
     results['total_regulations'] = ecfr_results.get('meta', {}).get(
                                                     'total_count', 0)
+
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
         'query': query,
@@ -310,7 +338,9 @@ def legal_doc_search_regulations(request):
     results = {}
     query = request.GET.get('search', '')
     page = request.GET.get('page', 1)
-    ecfr_results = ecfr_caller.fetch_ecfr_data(query, page=page)
+    Updated_ecfr_query_string = transform_ecfr_query_string(query)
+    ecfr_results = ecfr_caller.fetch_ecfr_data(Updated_ecfr_query_string,
+                                               page=page)
 
     regulations = [{
                 "highlights": [obj['full_text_excerpt']],

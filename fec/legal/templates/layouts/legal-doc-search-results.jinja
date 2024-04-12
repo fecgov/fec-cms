@@ -82,11 +82,7 @@
 {% endblock %}
 
 {% block modals %}
-  {% if document_type_display_name == 'Regulations' %}
-    {% include 'partials/legal-keyword-regulations-modal.jinja' %}
-  {% else %}
-    {% include 'partials/legal-keyword-modal.jinja' %}
-  {% endif %}
+  {% include 'partials/legal-keyword-modal.jinja' %}
 {% endblock %}
 
 {% block scripts %}

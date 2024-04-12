@@ -67,28 +67,18 @@ KeywordModal.prototype.handleSubmit = function(e) {
 KeywordModal.prototype.combineFields = function() {
   var query = '';
   var self = this;
-  var isRegulationsModal = document.getElementsByClassName('regulations-modal');
 
   this.$fields.each(function() {
     var $input = $(this);
-
     if ($input.val() && query) {
-      if (isRegulationsModal.length > 0){
-        query = query + ' | ' + '(' + self.parseValue($input) + ')';
-      } else {
-        query = query + ' OR ' + '(' + self.parseValue($input) + ')';
-      }
+      query = query + ' OR ' + '(' + self.parseValue($input) + ')';
     } else if ($input.val()) {
       query = '(' + self.parseValue($input) + ')';
     }
   });
 
   if (this.$excludeField.val() && query) {
-    if (isRegulationsModal.length > 0) {
-      query = query + ' ' + self.parseValue(this.$excludeField);
-    } else {
-      query = '(' + query + ') AND (' + self.parseValue(this.$excludeField) + ')';
-    }
+    query = '(' + query + ') AND (' + self.parseValue(this.$excludeField) + ')';
   } else if (this.$excludeField.val()) {
     query = self.parseValue(this.$excludeField);
   }
@@ -109,14 +99,10 @@ KeywordModal.prototype.parseValue = function($input) {
   var operator = $input.data('operator');
   if (operator === 'and') {
     return words.join(' AND ');
-  } else if (operator === 'and-regs') {
-    return words.join(' ');
   } else if (operator === 'or') {
     return words.join(' OR ');
-  } else if (operator === 'or-regs') {
-    return words.join(' | ');
   } else if (operator === 'exact') {
-    return '"' + $input.val() + '"';
+    return '"' + $input.val().replace(/"/g, '') + '"';
   } else if (operator === 'exclude') {
     return '-' + words.join(' -');
   }
