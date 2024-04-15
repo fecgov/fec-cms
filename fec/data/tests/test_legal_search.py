@@ -80,12 +80,16 @@ class TestLegalSearch(TestCase):
     # Test transform boolean queries for eCFR API
     def test_transform_ecfr_query_string(self):
         # Define input query string
-        input_query_string = '((coordinated OR communications) OR (in-kind AND'
-        + ' contributions) OR ("independent expenditure")) AND (-travel)'
+        input_query_string = (
+            '((coordinated OR communications) OR (in-kind AND' +
+            ' contributions) OR ("independent expenditure")) AND (-travel)'
+        )
 
         # Expected output after transformation
-        expected_output = '((coordinated | communications) | (in-kind'
-        + ' contributions) | ("independent expenditure")) -travel'
+        expected_output = (
+            '((coordinated | communications) | (in-kind' +
+            ' contributions) | ("independent expenditure")) -travel'
+        )
 
         # Apply transformation
         updated_ecfr_query_string = views.transform_ecfr_query_string(
