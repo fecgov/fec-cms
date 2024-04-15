@@ -73,9 +73,12 @@ def _detect_space(repo, branch=None, yes=False):
 
 DEPLOY_RULES = (
     ('prod', _detect_prod),
-    ('stage', lambda _, branch: branch.startswith('release')),
+    # ('stage', lambda _, branch: branch.startswith('release')),
+    ('stage', lambda _, branch: branch == 'feature/test-regulation-search-' +
+                                          'using-ecfr-api'),
     ('dev', lambda _, branch: branch == 'develop'),
-    # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
+    # Uncomment below and adjust branch name to deploy desired feature branch
+    # to the feature space
     # ('feature', lambda _, branch: branch == '[BRANCH NAME]'),
 )
 
@@ -83,9 +86,10 @@ DEPLOY_RULES = (
 @task
 def deploy(ctx, space=None, branch=None, login=None, yes=False):
     """Deploy app to Cloud Foundry. Log in using credentials stored in
-    `FEC_CF_USERNAME` and `FEC_CF_PASSWORD`; push to either `space` or the space
-    detected from the name and tags of the current branch. Note: Must pass `space`
-    or `branch` if repo is in detached HEAD mode, e.g. when running on Travis.
+    `FEC_CF_USERNAME` and `FEC_CF_PASSWORD`; push to either `space` or the
+    space detected from the name and tags of the current branch. Note: Must
+    pass `space` or `branch` if repo is in detached HEAD mode, e.g. when
+    running on CircleCI.
     """
     # Detect space
     repo = git.Repo('.')
@@ -99,7 +103,8 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
     # functionality of the Python buildpack conflicting with our setup.
     ctx.run('npm run build-production', echo=True)
     ctx.run(
-        'cd fec && DJANGO_SETTINGS_MODULE=fec.settings.production python manage.py collectstatic --noinput -v 0',
+        'cd fec && DJANGO_SETTINGS_MODULE=fec.settings.production python' +
+        'manage.py collectstatic --noinput -v 0',
         echo=True,
     )
 
@@ -135,17 +140,20 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
         app_guid = ctx.run('cf app cms --guid', hide=True, warn=True)
         app_guid_formatted = app_guid.stdout.strip()
         status = ctx.run(
-            'cf curl "/v3/deployments?app_guids={}&status_values=ACTIVE"'.format(app_guid_formatted),
+            'cf curl "/v3/deployments?app_guids={}&status_values=ACTIVE"'
+            .format(app_guid_formatted),
             hide=True,
             warn=True,
         )
-        active_deployments = json.loads(status.stdout).get("pagination").get("total_results")
+        active_deployments = json.loads(status.stdout).get("pagination").get(
+            "total_results")
         # Try to roll back
         if active_deployments > 0:
             print("Attempting to roll back any deployment in progress...")
             # Show the in-between state
             ctx.run('cf app cms', echo=True, warn=True)
-            cancel_deploy = ctx.run('cf cancel-deployment cms', echo=True, warn=True)
+            cancel_deploy = ctx.run('cf cancel-deployment cms', echo=True,
+                                    warn=True)
             if cancel_deploy.ok:
                 print("Successfully cancelled deploy. Check logs.")
             else:
@@ -162,14 +170,17 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
     )
     if not add_network_policy.ok:
         print(
-            "Unable to add network policy. Make sure the proxy app is deployed.\n"
+            "Unable to add network policy. Make sure the proxy app is" +
+            " deployed.\n"
             "For more information, check logs."
         )
 
-        # Fail the build because the CMS will be down until the proxy can connect
+        # Fail the build because the CMS will be down until the proxy can
+        # connect
         return sys.exit(1)
 
-    print("\nA new version of your application 'cms' has been successfully pushed!")
+    print("\nA new version of your application 'cms' has been successfully"
+          + " pushed!")
     ctx.run('cf apps', echo=True, warn=True)
 
     # Needed by CircleCI
@@ -185,7 +196,8 @@ def notify(ctx):
     slack = Slacker(env.get_credential('FEC_SLACK_TOKEN'))
     slack.chat.post_message(
         env.get_credential('FEC_SLACK_CHANNEL', '#fec'),
-        'deploying branch {branch} of app {name} to space {space} by {user}'.format(
+        'deploying branch {branch} of app {name} to space {space} by {user}'
+        .format(
             name=env.name,
             space=env.space,
             user=meta.get('user'),
