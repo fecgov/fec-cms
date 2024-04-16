@@ -22,6 +22,8 @@ FEC_API_URL = env.get_credential('FEC_API_URL', 'http://localhost:5000')
 FEC_API_KEY_PRIVATE = env.get_credential('FEC_WEB_API_KEY_PRIVATE')
 FEC_API_VERSION = env.get_credential('FEC_API_VERSION', 'v1')
 FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
+FEC_INTERNAL_API_KEY_PUBLIC = env.get_credential('FEC_INTERNAL_API_KEY_PUBLIC', '')
+FEC_INTERNAL_IP = env.get_credential('FEC_INTERNAL_IP', '')
 FEC_API_KEY_PUBLIC_CALENDAR = env.get_credential('FEC_WEB_API_KEY_PUBLIC_CALENDAR', FEC_API_KEY_PUBLIC)
 FEC_CAL_DOWNLOAD_API_KEY = env.get_credential('FEC_CAL_DOWNLOAD_API_KEY')
 FEC_DOWNLOAD_API_KEY = env.get_credential('FEC_DOWNLOAD_API_KEY', '')
@@ -183,14 +185,14 @@ TEMPLATES = [
                 'CANONICAL_BASE': CANONICAL_BASE,
                 'FEC_API_KEY_PRIVATE': FEC_API_KEY_PRIVATE,
                 'FEC_DOWNLOAD_API_KEY': FEC_DOWNLOAD_API_KEY,
-                'FEC_API_KEY_PUBLIC': FEC_API_KEY_PUBLIC,
                 'FEC_API_URL': FEC_API_URL,
                 'WEBMANAGER_EMAIL': WEBMANAGER_EMAIL,
                 'FEC_CMS_ENVIRONMENT': FEC_CMS_ENVIRONMENT,
                 'FEATURES': FEATURES,
             },
             'context_processors': [
-                'django.template.context_processors.request'
+                'django.template.context_processors.request',
+                'fec.context.api_key',
             ]
         }
     },
@@ -206,6 +208,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'fec.context.show_settings',
                 'fec.context.features',
+                'fec.context.api_key',
             ],
         },
     },
