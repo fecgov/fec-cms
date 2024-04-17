@@ -132,15 +132,20 @@ FilterSet.prototype.clear = function() {
   });
 };
 
+//This removes the checkboxes in the panel that show whats been selected when you remove the tag from
+//the tags panel at the top of the table
 FilterSet.prototype.handleTagRemoved = function(e, opts) {
   var $input = $(document.getElementById(opts.key));
   if ($input.length > 0) {
     var type = $input.get(0).type;
-
     if (type === 'checkbox' || type === 'radio') {
       $input.click();
     } else if (type === 'text') {
-      $input.val('').trigger('change');
+      $input.val('').trigger('change');  
+    } 
+    else if (type === 'select-one') {
+        $input.find("option[value='']").prop('selected', true);
+        $input.trigger('change');       
     }
   }
 };

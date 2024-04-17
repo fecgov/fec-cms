@@ -9,6 +9,8 @@
 {% import 'macros/filters/range.jinja' as range %}
 {% import 'macros/filters/checkbox.jinja' as checkbox %}
 
+{% import 'macros/filters/dropdown-json.jinja' as dropdown %}
+
 {% block heading %}
 Filter receipts
 {% endblock %}
@@ -56,12 +58,7 @@ Filter receipts
   <button type="button" class="js-accordion-trigger accordion__button">Receipt details</button>
   <div class="accordion__content">
     {{ range.amount('amount', 'Receipt amount') }}
-    <legend class="label  u-margin--top">Receipt type</legend>
-    <fieldset class="js-filter js-line-number-filters" data-filter="checkbox">
-      {{ checkbox.checkbox_dropdown_multiple('line_number', 'Received by House or Senate committees', options=constants.line_numbers.receipts.house_senate, legend=False, prefix='House or Senate committees:') }}
-      {{ checkbox.checkbox_dropdown_multiple('line_number', 'Received by Presidential committees', options=constants.line_numbers.receipts.presidential, legend=False, prefix='Presidential committees:') }}
-      {{ checkbox.checkbox_dropdown_multiple('line_number', 'Received by PACs or party committees', options=constants.line_numbers.receipts.pac_party, legend=False, prefix='PACs or party committees:') }}
-    </fieldset>
+    {{ dropdown.select_single('line_number', 'Receipt type', options=constants.line_numbers.receipts, default='', title_prefix='Received by', forms =['Form 3','Form 3P','Fotm 3X'] )}}
     <div class="js-line-number-message message message--info message--small">
       <span class="t-block">Filters for receipt types are available only for filings from 2007 or later.</span>
     </div>
