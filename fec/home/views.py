@@ -62,7 +62,7 @@ def get_records(category_list=None, year=None, search=None):
         )
 
     if search:
-        records = records.search(search)
+        records = search_updates(records,search)
 
     return records
 
@@ -76,7 +76,7 @@ def get_digests(year=None, search=None):
         )
 
     if search:
-        digests = digests.search(search)
+        digests = search_updates(digests, search)
 
     return digests
 
@@ -96,7 +96,7 @@ def get_press_releases(category_list=None, year=None, search=None):
         )
 
     if search:
-        press_releases = press_releases.search(search)
+        press_releases = search_updates(press_releases, search)
 
     return press_releases
 
@@ -111,7 +111,7 @@ def get_tips(year=None, search=None):
         )
 
     if search:
-        tips = tips.search(search)
+        tips = search_updates(tips, search)
 
     return tips
 
