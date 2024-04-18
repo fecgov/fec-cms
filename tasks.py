@@ -73,11 +73,13 @@ def _detect_space(repo, branch=None, yes=False):
 
 DEPLOY_RULES = (
     ('prod', _detect_prod),
-    ('stage', lambda _, branch: branch.startswith('release')),
-    # ('dev', lambda _, branch: branch == 'develop'),
-    ('dev', lambda _, branch: branch == 'feature/test-separate-api-key'),
-    # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
-    ('feature', lambda _, branch: branch == 'feature/6073-single-line-number-dropdown-receipts-disbursements'),
+    # ('stage', lambda _, branch: branch.startswith('release')),
+    ('stage', lambda _, branch: branch.startswith('feature/test-separate' +
+                                                  '-api-key')),
+    ('dev', lambda _, branch: branch == 'develop'),
+    # Uncomment below and adjust branch name to deploy desired feature branch
+    # to the feature space
+    # ('feature', lambda _, branch: branch == '[BRANCH_NAME]'),
 )
 
 
