@@ -173,7 +173,13 @@ def load_legal_adr(adr_no):
         if "complainant" in participant["role"].lower():
             complainants.append(participant["name"])
 
-    adr["disposition_text"] = [d["action"] for d in adr["commission_votes"]]
+    # Check if the list is not empty
+    if adr["commission_votes"]:
+        # Use the first one in the list
+        adr["disposition_text"] = adr["commission_votes"][0]["action"]
+    else:
+        # Or any default value you prefer if the list is empty
+        adr["disposition_text"] = None
 
     adr["collated_dispositions"] = collate_dispositions(adr["adr_dispositions"])
     adr["complainants"] = complainants
