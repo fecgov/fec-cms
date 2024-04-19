@@ -97,6 +97,16 @@
         <p>
           <strong>DISPOSITION:</strong> {{ adr['disposition_text'] | safe }}
         </p>
+        <p>
+          <strong>NON-MONETARY TERMS:</strong>
+          {% for non_monetary_term in adr.non_monetary_terms %}
+            {{ non_monetary_term }}{% if loop.index < loop.length %};{% endif %}
+          {% endfor %}<br />
+          <strong>NON-MONETARY TERMS RESPONDENTS:</strong>
+          {% for non_monetary_terms_respondent in adr.non_monetary_terms_respondents %}
+            {{ non_monetary_terms_respondent }}{% if loop.index < loop.length %};{% endif %}
+          {% endfor %}
+        </p>
       </div>
     </div>
   </section>
