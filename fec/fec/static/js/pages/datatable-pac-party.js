@@ -1,9 +1,8 @@
 /**
  * PAC and party committee datatable page
  **/
-import { pac_party as cols_pacParty} from '../modules/columns.js';
+import { pac_party as cols_pacParty } from '../modules/columns.js';
 import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
-
 import { default as pacPartyTemplate } from '../templates/pac-party.hbs';
 
 $(function() {

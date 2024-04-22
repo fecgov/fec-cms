@@ -1,8 +1,8 @@
 /* global DEFAULT_TIME_PERIOD */
-import { chain as _chain, each as _each, max as _max, sortBy as _sortBy } from 'underscore';
 
 import * as d3 from 'd3';
 import * as numeral from 'numeral';
+import { chain as _chain, each as _each, max as _max, sortBy as _sortBy } from 'underscore';
 
 import { buildUrl, currency, isMediumScreen, utcDate, zeroPad } from './helpers.js';
 

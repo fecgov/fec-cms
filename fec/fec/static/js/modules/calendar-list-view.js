@@ -1,13 +1,12 @@
 /**
- * 
+ *
  */
-import { chain as _chain, each as _each, pairs as _pairs, reduce as _reduce } from 'underscore';
-import { default as moment } from 'moment';
 import $ from 'jquery';
+import { default as moment } from 'moment';
+import { chain as _chain, each as _each, pairs as _pairs, reduce as _reduce } from 'underscore';
 import 'fullcalendar';
 
 import Dropdown from './dropdowns.js';
-
 import { default as eventTemplate } from '../templates/calendar/events.hbs';
 
 const FC = $.fullCalendar;

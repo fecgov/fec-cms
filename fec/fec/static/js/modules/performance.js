@@ -1,5 +1,8 @@
 /* global perfBar */
-
+/**
+ * TODO: Is this file being used?
+ */
+/*
 import { chain as _chain, max as _max } from 'underscore';
 import 'perfbar/build/perfbar';
 
@@ -38,3 +41,4 @@ export function bar() {
       perfBar.addMetric(getMetric(mark));
     });
 }
+*/

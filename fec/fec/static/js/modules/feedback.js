@@ -1,8 +1,7 @@
 import { chain as _chain, each as _each } from 'underscore';
 
-import { loadRecaptcha } from './load-recaptcha.js';
 import { removeTabindex, restoreTabindex } from './accessibility.js';
-
+import { loadRecaptcha } from './load-recaptcha.js';
 import { default as feedback } from '../templates/feedback.hbs';
 
 const statusClasses = {

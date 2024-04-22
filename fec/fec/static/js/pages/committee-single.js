@@ -730,7 +730,7 @@ $(function() {
         });
         break;
       case 'raw-filings':
-        const min_date = $table.attr('data-min-date');
+        const min_date = $table.attr('data-min-date'); //eslint-disable-line no-case-declarations
         // For raw-filings, use previous cycle if provided
         cycle = global.context.cycle || $table.attr('data-cycle');
         opts = _extend(

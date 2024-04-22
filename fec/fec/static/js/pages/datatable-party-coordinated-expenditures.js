@@ -5,9 +5,8 @@
  * makes in connection with the general election campaigns of federal candidates.
  *
  */
-import { partyCoordinatedExpenditures as cols_partyCoordExpen} from '../modules/columns.js';
+import { partyCoordinatedExpenditures as cols_partyCoordExpen } from '../modules/columns.js';
 import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
-
 import { default as partyCoordinatedExpendituresTemplate } from '../templates/party-coordinated-expenditures.hbs';
 
 $(function() {

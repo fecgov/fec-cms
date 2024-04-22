@@ -3,7 +3,7 @@
  */
 
 /**
- * 
+ *
  * @param {jQuery Element} form
  */
 export default function FormNav(form) {

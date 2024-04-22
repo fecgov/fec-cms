@@ -1,6 +1,6 @@
-import { buildUrl, buildAppUrl, dollar } from '../modules/helpers.js';
 import { currencyColumn } from '../modules/columns.js';
 import { states as decode_states } from '../modules/decoders.js';
+import { buildUrl, buildAppUrl, dollar } from '../modules/helpers.js';
 
 function AcrossTime() {
   this.element; // The HTML element of this feature

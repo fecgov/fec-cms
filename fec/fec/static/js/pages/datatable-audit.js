@@ -1,15 +1,12 @@
 /**
- * audit datatable page
- * ---------------------
- * inital show all audit case.
- *
+ * Data and initialization for audit datatable page {@link /legal-resources/enforcement/audit-search/}
  */
-import { audit as cols_audit } from '../modules/columns.js';
 import { auditCategorySubcategory, showSubCategory } from '../modules/audit-category-sub-category.js';
 import auditTags from '../modules/audit_tags.js';
+import { audit as cols_audit } from '../modules/columns.js';
 import { DataTable_FEC, modalRenderRow } from '../modules/tables.js';
-//for sub category filter-tag and results
 
+// for sub category filter-tag and results
 $(document).bind( // TODO: jQuery deprecation
   'ready ajaxComplete',
   '#sub_category_id',

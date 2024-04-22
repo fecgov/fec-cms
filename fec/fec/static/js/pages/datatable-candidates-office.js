@@ -1,6 +1,11 @@
-
-import { candidateOffice as cols_candidateOffice } from '../modules/columns.js';
+/**
+ * Data and initialization for
+ * {@link /data/candidates/house/}
+ * {@link /data/candidates/president/}
+ * {@link /data/candidates/senate/}
+ */
 import { getColumns } from '../modules/column-helpers.js';
+import { candidateOffice as cols_candidateOffice } from '../modules/columns.js';
 import { renderCandidatePanel } from '../modules/table-panels.js';
 import { DataTable_FEC, modalRenderRow } from '../modules/tables.js';
 

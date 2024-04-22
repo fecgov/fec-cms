@@ -2,11 +2,11 @@
  *
  */
 import { default as Handlebars } from 'hbsfy/runtime.js';
+import $ from 'jquery';
 import moment from 'moment';
 import { extend as _extend, isEqual as _isEqual } from 'underscore';
 import { default as URI } from 'urijs';
 
-import $ from 'jquery';
 import 'fullcalendar';
 
 import { checkStartTime, className, getGoogleUrl, mapCategoryDescription } from './calendar-helpers.js';
@@ -14,13 +14,11 @@ import { CalendarTooltip } from './calendar-tooltip.js';
 import Dropdown from './dropdowns.js';
 import { LOADING_DELAY, SUCCESS_DELAY, datetime, eq, isLargeScreen, toUpperCase } from './helpers.js';
 import { pushQuery, updateQuery } from './urls.js';
-
 import './calendar-list-view.js';
-
 import { default as template_details } from '../templates/calendar/details.hbs';
 import { default as template_download } from '../templates/calendar/download.hbs';
-import { default as template_subscribe } from '../templates/calendar/subscribe.hbs';
 import { default as template_listToggles } from '../templates/calendar/listToggles.hbs';
+import { default as template_subscribe } from '../templates/calendar/subscribe.hbs';
 
 Handlebars.registerHelper(helpers.helpers);
 

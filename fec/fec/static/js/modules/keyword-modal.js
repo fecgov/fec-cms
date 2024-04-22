@@ -1,5 +1,5 @@
-import { default as URI } from 'urijs';
 import { default as A11yDialog } from 'a11y-dialog';
+import { default as URI } from 'urijs';
 
 import { customEvent } from './analytics.js';
 

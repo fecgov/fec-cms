@@ -1,6 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { EditorState, Modifier } from 'draft-js';
+import PropTypes from 'prop-types';
 
 // Creates the entities as soon as it is rendered.
 class SansserifSource extends React.Component {
