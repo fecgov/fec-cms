@@ -1,3 +1,5 @@
+import Inputmask from 'inputmask';
+
 import { default as Filter } from './filter-base.js';
 
 export default function RangeFilter(elm) {

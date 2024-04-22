@@ -1,9 +1,10 @@
 /* global API_LOCATION, API_VERSION, API_KEY_PUBLIC */
 
-import { default as URI } from 'urijs';
 import { escape as _escape } from 'underscore';
-import { datasets } from '../typeahead.js';
+import { default as URI } from 'urijs';
+
 import { sanitizeValue } from '../helpers.js';
+import { datasets } from '../typeahead.js';
 
 import 'corejs-typeahead/dist/typeahead.jquery.js';
 
@@ -90,7 +91,7 @@ export default function FilterTypeahead(selector, dataset, allowText) {
 
   this.typeaheadInit();
   this.disableButton();
-};
+}
 
 FilterTypeahead.prototype.typeaheadInit = function() {
   const opts = { minLength: 3, hint: false, highlight: true };

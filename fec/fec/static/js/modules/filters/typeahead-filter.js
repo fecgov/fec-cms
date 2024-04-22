@@ -1,8 +1,8 @@
 import { escape as _escape } from 'underscore';
 
 import Filter, { ensureArray } from './filter-base.js';
-import { datasets } from '../typeahead.js';
 import FilterTypeahead from './filter-typeahead.js';
+import { datasets } from '../typeahead.js';
 
 /**
  *

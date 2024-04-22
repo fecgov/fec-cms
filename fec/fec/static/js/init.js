@@ -1,7 +1,8 @@
 import { Accordion } from 'aria-accordion/src/accordion.js';
+import { default as Sticky } from 'component-sticky/index.js';
+
 import Dropdown from './modules/dropdowns.js';
 import FormNav from './modules/form-nav.js';
-import { default as Sticky } from 'component-sticky/index.js';
 import { isLargeScreen } from './modules/helpers.js';
 import { init as tablistInit } from './vendor/tablist.js';
 
@@ -73,6 +74,6 @@ $(function() {
     } else {
       $link.remove();
     }
-    $p.nextAll().remove()
+    $p.nextAll().remove();
   });
 });

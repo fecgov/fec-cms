@@ -8,16 +8,16 @@ import {
 } from 'underscore';
 import { default as URI } from 'urijs';
 
-import { sanitizeQueryParams } from '../helpers.js';
-import { default as TextFilter } from './text-filter.js';
 import { default as CheckboxFilter } from './checkbox-filter.js';
-import { default as MultiFilter } from './multi-filter.js';
-import { default as TypeaheadFilter } from './typeahead-filter.js';
-import { default as SelectFilter } from './select-filter.js';
 import { default as DateFilter } from './date-filter.js';
 import { default as ElectionFilter } from './election-filter.js';
-import { default as ToggleFilter } from './toggle-filter.js';
+import { default as MultiFilter } from './multi-filter.js';
 import { default as RangeFilter } from './range-filter.js';
+import { default as SelectFilter } from './select-filter.js';
+import { default as TextFilter } from './text-filter.js';
+import { default as ToggleFilter } from './toggle-filter.js';
+import { default as TypeaheadFilter } from './typeahead-filter.js';
+import { sanitizeQueryParams } from '../helpers.js';
 
 export default function FilterSet(elm) {
   this.$body = $(elm);

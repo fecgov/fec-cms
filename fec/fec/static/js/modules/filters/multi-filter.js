@@ -1,5 +1,5 @@
-import { default as Filter } from './filter-base.js';
 import { default as CheckboxFilter } from './checkbox-filter.js';
+import { default as Filter } from './filter-base.js';
 
 /* MultiFilters used when there are multiple filters that share the
  * same name attribute

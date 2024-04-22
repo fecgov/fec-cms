@@ -1,8 +1,8 @@
+import Inputmask from 'inputmask';
 import { escape as _escape } from 'underscore';
 
-import { default as Filter, ensureArray } from './filter-base.js';
 import { default as CheckboxFilter } from './checkbox-filter.js';
-import Inputmask from 'inputmask';
+import { default as Filter, ensureArray } from './filter-base.js';
 
 export default function TextFilter(elm) {
   Filter.call(this, elm);
@@ -85,7 +85,6 @@ const template_checkbox = value => `
     </button>
   </li>
 `;
-
 
 // Remove the event handlers for adding and removing tags
 // So the filter count doesn't count double for the text filter and checkbox

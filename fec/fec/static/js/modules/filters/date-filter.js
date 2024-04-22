@@ -1,13 +1,12 @@
+import Inputmask from 'inputmask';
 import { default as moment } from 'moment';
 
 import { default as Filter, ensureArray } from './filter-base.js';
 
-import Inputmask from 'inputmask';
-
 /**
- * 
+ *
  * @param {jQuery.Object} elm
- * @property 
+ * @property
  */
 export default function DateFilter(elm) {
   Filter.call(this, elm);

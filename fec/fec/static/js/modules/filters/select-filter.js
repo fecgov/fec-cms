@@ -1,4 +1,4 @@
-import { default as Filter }  from './filter-base.js';
+import { default as Filter } from './filter-base.js';
 
 export default function SelectFilter(elm) {
   Filter.call(this, elm);

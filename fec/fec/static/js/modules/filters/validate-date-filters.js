@@ -1,8 +1,8 @@
 /**
  * TODO: IS THIS FILE BEING USED?
  */
-import * as moment from 'moment';
 import Inputmask from 'inputmask';
+import * as moment from 'moment';
 
 import Filter from './filter-base.js';
 
