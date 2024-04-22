@@ -1,5 +1,5 @@
 /**
- * PAC and party committee datatable page
+ * PAC and party committee datatable page {@link /data/committees/pac-party/}
  **/
 import { pac_party as cols_pacParty } from '../modules/columns.js';
 import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';

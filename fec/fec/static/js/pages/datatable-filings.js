@@ -1,3 +1,7 @@
+/**
+ * Data and initialization for {@link /data/filings/}
+ * Creates a new TableSwitcher
+ */
 import { getColumns } from '../modules/column-helpers.js';
 import { filings as cols_filings } from '../modules/columns.js';
 import Dropdown from '../modules/dropdowns.js';

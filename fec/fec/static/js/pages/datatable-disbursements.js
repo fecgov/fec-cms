@@ -1,4 +1,6 @@
-
+/**
+ * Data and initialization for {@link /data/disbursements/}
+ */
 import { disbursements as cols_disbursements } from '../modules/columns.js';
 import { lineNumberFilters } from '../modules/filters-event.js';
 import TableSwitcher from '../modules/table-switcher.js';

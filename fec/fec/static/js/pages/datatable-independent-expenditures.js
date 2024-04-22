@@ -1,4 +1,6 @@
-
+/**
+ * Data and initialization for {@link /data/independent-expenditures/}
+ */
 import { independentExpenditures } from '../modules/columns.js';
 import { amendmentVersion } from '../modules/helpers.js';
 import TableSwitcher from '../modules/table-switcher.js';

@@ -1,13 +1,11 @@
 /**
- * Debts datatable page
+ * Debts datatable page {@link /data/debts/}
  * ---------------------
  * Schedule D shows debts
  * to/from the committee that are required to be disclosed.
- *
  */
 import { debts as cols_debts } from '../modules/columns.js';
 import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
-
 import { default as debtsTemplate } from '../templates/debts.hbs';
 
 $(function() {

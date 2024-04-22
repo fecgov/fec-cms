@@ -1,5 +1,6 @@
 /**
  * Party Coordinated Expenditures datatable page
+ * {@link /data/party-coordinated-expenditures/}
  * ---------------------
  * Schedule F shows all special expenditures a national or state party committee
  * makes in connection with the general election campaigns of federal candidates.

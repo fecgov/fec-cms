@@ -1,4 +1,10 @@
-
+/**
+ * Data and initialization for
+ * {@link /data/reports/house-senate/}
+ * {@link /data/reports/ie-only/}
+ * {@link /data/reports/pac-party/}
+ * {@link /data/reports/presidential/}
+ */
 import { getColumns } from '../modules/column-helpers.js';
 import { reports as cols_reports } from '../modules/columns.js';
 import Dropdown from '../modules/dropdowns.js';

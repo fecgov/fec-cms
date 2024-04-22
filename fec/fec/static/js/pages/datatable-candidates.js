@@ -1,4 +1,6 @@
-
+/**
+ * Data and initialization for {@link /data/candidates/}
+ */
 import { candidates as cols_candidates } from '../modules/columns.js';
 import { renderCandidatePanel } from '../modules/table-panels.js';
 import { DataTable_FEC, modalRenderRow } from '../modules/tables.js';

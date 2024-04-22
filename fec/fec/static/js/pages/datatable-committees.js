@@ -1,7 +1,8 @@
-
+/**
+ * Data and initialization for {@link /data/committees/}
+ */
 import { committees as cols_committees } from '../modules/columns.js';
 import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
-
 import { default as committeesTemplate } from '../templates/committees.hbs';
 
 $(function() {

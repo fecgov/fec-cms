@@ -1,7 +1,8 @@
-
+/**
+ * Data and initialization for {@link /data/communication-costs/}
+ */
 import { communicationCosts as col_commCosts } from '../modules/columns.js';
 import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
-
 import { default as electioneeringTemplate } from '../templates/communication-costs.hbs';
 
 $(function() {

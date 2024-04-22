@@ -1,4 +1,6 @@
-
+/**
+ * Data and initialization for {@link /data/receipts/}
+ */
 import { receipts as cols_receipts } from '../modules/columns.js';
 import { lineNumberFilters } from '../modules/filters-event.js';
 import TableSwitcher from '../modules/table-switcher.js';

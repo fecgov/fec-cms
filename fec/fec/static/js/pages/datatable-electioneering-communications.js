@@ -1,7 +1,8 @@
-
+/**
+ * Data and initialization for {@link /data/electioneering-communications/}
+ */
 import { electioneeringCommunications as cols_elecComms } from '../modules/columns.js';
 import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
-
 import { default as electioneeringTemplate } from '../templates/electioneering-communications.hbs';
 
 $(function() {

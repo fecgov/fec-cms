@@ -1,6 +1,8 @@
+/**
+ * Data and initialization for {@link /data/operating-expenditures/}
+ */
 import { disbursements as cols_disbursements } from '../modules/columns.js';
 import { DataTable_FEC, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
-
 import { default as disbursementTemplate } from '../templates/disbursements.hbs';
 
 $(function() {

@@ -1,6 +1,8 @@
+/**
+ * Data and initialization for {@link /data/individual-contributions/}
+ */
 import { individualContributions as cols_indivContribs } from '../modules/columns.js';
 import { DataTable_FEC, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
-
 import { default as donationTemplate } from '../templates/receipts.hbs';
 
 $(function() {
