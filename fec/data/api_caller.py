@@ -220,18 +220,18 @@ def load_legal_admin_fines(admin_fine_no):
 
 
 def collate_dispositions(dispositions):
-    """ Collate dispositions - group them by disposition, penalty """
+    """Collate dispositions - group them by disposition, penalty"""
     collated_dispositions = OrderedDict()
     for row in dispositions:
-        if row["disposition"] in collated_dispositions:
-            if row["penalty"] in collated_dispositions[row["disposition"]]:
-                collated_dispositions[row["disposition"]][row["penalty"]].append(row)
+        # Filtering out rows with disposition containing "Received from"
+        if "Received from" not in row["disposition"]:
+            if row["disposition"] in collated_dispositions:
+                if row["penalty"] in collated_dispositions[row["disposition"]]:
+                    collated_dispositions[row["disposition"]][row["penalty"]].append(row)
+                else:
+                    collated_dispositions[row["disposition"]][row["penalty"]] = [row]
             else:
-                collated_dispositions[row["disposition"]][row["penalty"]] = [row]
-        else:
-            collated_dispositions[row["disposition"]] = OrderedDict(
-                {row["penalty"]: [row]}
-            )
+                collated_dispositions[row["disposition"]] = OrderedDict({row["penalty"]: [row]})
     return collated_dispositions
 
 
