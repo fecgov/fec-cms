@@ -102,20 +102,38 @@
         </tr>
       </thead>
       <tbody>
+        {% set row_classes = ['row-color-normal', 'row-color-contrast'] %}
         {% for disposition in adr.collated_dispositions %}
-          {% set dispositionloop = loop %}
+          {% set main_row_class = row_classes[loop.index % row_classes|length] %}
           {% for penalty in adr.collated_dispositions[disposition] %}
             {% for entry in adr.collated_dispositions[disposition][penalty] %}
-              <tr class="{{ dispositionloop.cycle('row-color-normal', 'row-color-contrast') }}">
+              <tr class="{{ main_row_class }}">
                 {% if loop.first %}
                 <td rowspan="{{ adr.collated_dispositions[disposition][penalty] | length }}">{{ disposition }}</td>
                 <td rowspan="{{ adr.collated_dispositions[disposition][penalty] | length }}"> {{ penalty | currency or '' }} </td>
                 {% endif %}
-                <td> {{ entry.respondent }}</td>
+                <td>{{ entry.respondent }}</td>
               </tr>
             {% endfor %}
           {% endfor %}
         {% endfor %}
+        <!-- Appending rows for non_monetary_terms and non_monetary_terms_respondents -->
+        {% if adr['non_monetary_terms']|length > 1 %}
+          <tr class="{{ main_row_class }}">
+              <td rowspan="{{ adr['non_monetary_terms_respondents'] | length }}">
+                {% for non_monetary_term in adr.non_monetary_terms %}
+                  {{ non_monetary_term }}{% if loop.index < loop.length %};{% endif %}
+                {% endfor %}
+              </td>
+              <td rowspan="{{ adr['non_monetary_terms_respondents'] | length }}">
+                Non-monetary term
+              </td>
+              <td>{{ adr.non_monetary_terms_respondents[0] }}</td>
+          </tr>
+          {% for second_respondent_and_beyond in adr.non_monetary_terms_respondents[1:] %}
+              <tr class="{{ main_row_class }}"><td>{{ second_respondent_and_beyond }}</td></tr>
+          {% endfor %}
+        {% endif %}
       </tbody>
     </table>
   </section>

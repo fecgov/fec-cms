@@ -130,6 +130,14 @@ class MURSearchBlock(blocks.StaticBlock):
         template = 'blocks/mur_search.html'
 
 
+class ADRSearchBlock(blocks.StaticBlock):
+    """A block that displays the ADR search box"""
+    class Meta:
+        icon = 'search'
+        admin_text = 'Show the ADR search field. No configuration needed.'
+        template = 'blocks/adr_search.html'
+
+
 class AuditSearchBlock(blocks.StaticBlock):
     """A block that displays the Audit search box"""
     class Meta:
@@ -274,6 +282,7 @@ class ResourceBlock(blocks.StructBlock):
         ('current_commissioners', CurrentCommissionersBlock()),
         ('fec_jobs', CareersBlock()),
         ('mur_search', MURSearchBlock()),
+        ('adr_search', ADRSearchBlock()),
         ('audit_search', AuditSearchBlock()),
         ('af_search', AFSearchBlock()),
         ('table', TableBlock(table_options=core_table_options)),
