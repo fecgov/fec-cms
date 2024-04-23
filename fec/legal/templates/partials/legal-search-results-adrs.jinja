@@ -4,7 +4,6 @@
       <th class="simple-table__header-cell cell--50">Case</th>
       <th class="simple-table__header-cell">Election cycle(s)</th>
       <th class="simple-table__header-cell">Closing date</th>
-      <th class="simple-table__header-cell">Subject(s)</th>
     </tr>
   </thead>
   <tbody>
@@ -36,11 +35,6 @@
       </td>
       <td class="simple-table__cell">
         <div class="t-sans">{{ adr.close_date | date(fmt='%m/%d/%Y') }}</div>
-      </td>
-      <td class="simple-table__cell">
-        {% for subject in adr.subjects %}
-          <div class="t-sans">{{ subject }}</div>
-        {% endfor %}
       </td>
     </tr>
     {% endfor %}

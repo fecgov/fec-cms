@@ -4,7 +4,7 @@
 
 {% set breadcrumb_links=[('/legal-resources', 'Legal resources'), ('/legal-resources/enforcement', 'Enforcement'), ('/data/legal/search/adrs', 'Alternative Dispute Resolution')] %}
 
-{% block title %}ADR #{{ adr.no }}{% endblock %}
+{% block title %}ADR {{ adr.no }}{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{{ asset_for_css('legal-common.css') }}" />
@@ -36,15 +36,6 @@
     <section id="summary" class="content__section">
     <div>
       <h2 class="t-ruled--bold t-ruled--bottom">Summary</h2>
-      <div class="legal-adr__property">
-        <p>
-          {% if adr['respondents']|length > 1 %}
-            <strong>SUBJECT:</strong> {{ '; '.join(adr['subjects']) }}
-          {% else %}
-            <strong>SUBJECT:</strong> None
-          {% endif %}
-        </p>
-      </div>
       <div class="legal-adr__property">
         <p>   
           <strong>
@@ -97,16 +88,6 @@
         <p>
           <strong>DISPOSITION:</strong> {{ adr['disposition_text'] | safe }}
         </p>
-        <p>
-          <strong>NON-MONETARY TERMS:</strong>
-          {% for non_monetary_term in adr.non_monetary_terms %}
-            {{ non_monetary_term }}{% if loop.index < loop.length %};{% endif %}
-          {% endfor %}<br />
-          <strong>NON-MONETARY TERMS RESPONDENTS:</strong>
-          {% for non_monetary_terms_respondent in adr.non_monetary_terms_respondents %}
-            {{ non_monetary_terms_respondent }}{% if loop.index < loop.length %};{% endif %}
-          {% endfor %}
-        </p>
       </div>
     </div>
   </section>
@@ -118,7 +99,6 @@
           <th>Disposition</th>
           <th>Penalty</th>
           <th>Respondent</th>
-          <th>Citation</th>
         </tr>
       </thead>
       <tbody>
@@ -132,24 +112,6 @@
                 <td rowspan="{{ adr.collated_dispositions[disposition][penalty] | length }}"> {{ penalty | currency or '' }} </td>
                 {% endif %}
                 <td> {{ entry.respondent }}</td>
-                <td>
-                {% for citation in entry.citations %}
-                    {{ citation.title }}
-                    {% if citation.type == 'statute' %}
-                        U.S.C.
-                    {% else %}
-                        CFR
-                    {% endif %}
-                    <a href="{{ citation.url }}">
-                    {% if citation.type == 'statute' %}
-                        &sect;{{ citation.text -}}
-                    {% else %}
-                        {{ citation.text }}
-                    {% endif %}
-                    {% if not loop.last %}<br>{% endif %}
-                    </a>
-                {% endfor %}
-                </td>
               </tr>
             {% endfor %}
           {% endfor %}
