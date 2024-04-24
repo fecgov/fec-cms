@@ -36,18 +36,17 @@
     <section id="summary" class="content__section">
     <div>
       <h2 class="t-ruled--bold t-ruled--bottom">Summary</h2>
+      {% if adr.referring_office %}
       <div class="legal-adr__property">
         <p>   
           <strong>
-              {% if adr['complainants']|length > 1 %}
-                REFERRING OFFICES:
-              {% else %}
                 REFERRING OFFICE:
-              {% endif %}
           </strong>
-          {{ '; '.join(adr['complainants']) }}
+            {{ adr.referring_office }}
         </p>
       </div>
+      {% endif %}
+      {% if adr['respondents']|length > 0 %}
       <div class="legal-adr__property">
         <p>
           <strong>
@@ -60,9 +59,8 @@
           {{ '; '.join(adr['respondents']) }}
         </p>
       </div>
-      <div class="legal-adr__property">
-        <p></p>
-      </div>
+      {% endif %}
+      {% if adr.election_cycles|length > 0 %}
       <div class="legal-adr__property">
           {% if adr.election_cycles|length > 1 %}
             <p><strong>ELECTION CYCLES:</strong>
@@ -72,23 +70,30 @@
           {% for election_cycle in adr.election_cycles | unique %}
             {{ election_cycle }}{% if loop.index < loop.length %};{% endif %}
           {% endfor %}
-        </p>
+            </p>
       </div>
+      {% endif %}
+      {% if adr.open_date %}
       <div class="legal-adr__property">
         <p>
           <strong>OPENING DATE:</strong> {{ adr.open_date | date(fmt='%m/%d/%Y') }}
         </p>
       </div>
+      {% endif %}
+      {% if adr.close_date %}
       <div class="legal-adr__property">
         <p>
           <strong>CLOSING DATE:</strong> {{ adr.close_date | date(fmt='%m/%d/%Y') }}
         </p>
       </div>
+      {% endif %}
+      {% if adr['disposition_text']|length > 0 %}
       <div class="legal-adr__property">
         <p>
           <strong>DISPOSITION:</strong> {{ adr['disposition_text'] | safe }}
         </p>
       </div>
+      {% endif %}
     </div>
   </section>
   <section id="disposition" class="content__section">

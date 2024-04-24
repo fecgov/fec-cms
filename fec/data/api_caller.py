@@ -185,6 +185,15 @@ def load_legal_adr(adr_no):
     adr["complainants"] = complainants
     adr["participants_by_type"] = _get_sorted_participants_by_type(adr)
 
+    # Initialize referring_office variable
+    referring_office = None
+    for disposition in adr["adr_dispositions"]:
+        if "Received from" in disposition["disposition"]:
+            referring_office = disposition["disposition"]
+            break  # Stop iterating if "Received from" disposition found
+    # Assign referring_office to adr dictionary
+    adr["referring_office"] = referring_office
+
     documents_by_type = OrderedDict()
     for doc in adr["documents"]:
         if doc["category"] in documents_by_type:
