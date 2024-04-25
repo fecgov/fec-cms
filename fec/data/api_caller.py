@@ -194,7 +194,8 @@ def load_legal_adr(adr_no):
             transformation_dict = {
                 "Received from Commission": "FEC Commission",
                 "Received from OGC": "FEC Office of General Counsel",
-                "Received from RAD": "FEC Reports Analysis Division"
+                "Received from RAD": "FEC Reports Analysis Division",
+                "Received from Audit Division": "FEC Audit Division",
             }
             # Perform transformation if match found
             if referring_office in transformation_dict:
