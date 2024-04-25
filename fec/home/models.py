@@ -590,7 +590,7 @@ class AlertForEmergencyUseOnly(Page):
         )
     ]
     
-    def get_sitemap_urls(self,request=None):
+    def get_sitemap_urls(self, request=None):
         return []
 
 
@@ -921,7 +921,10 @@ class ResourcePage(Page):
         max_length=255, null=True, blank=True, default='',
         help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
     intro = StreamField([
-        ('paragraph', blocks.RichTextBlock())
+        ('paragraph', blocks.RichTextBlock()),
+        ('informational_message', SnippetChooserBlock(
+            'home.EmbedSnippet',
+            template='blocks/embed-info-message.html', icon='warning', help_text="Use for an info or alert message banner")),
     ], null=True, blank=True, use_json_field=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
     related_pages = StreamField([
@@ -1210,11 +1213,13 @@ class EmbedSnippet(models.Model):
     title = models.TextField()
     description = models.TextField()
     text = models.TextField()
+    banner_icon = models.TextField(blank=True, default='info', help_text="This field applies to informational-message snippets only. Input 'info' or 'alert'. Default is 'info'")
 
     panels = [
         FieldPanel('title'),
         FieldPanel('description'),
         FieldPanel('text'),
+        FieldPanel('banner_icon'),
     ]
 
     def __str__(self):
@@ -1379,7 +1384,7 @@ class ReportingDatesTable(Page):
         ('html', blocks.RawHTMLBlock()),
         ('internal_button', InternalButtonBlock()),
         ('external_button', ExternalButtonBlock()),
-        ('dates_table', ReportingTableBlock(blank=True, required=False,form_classname='title')),
+        ('dates_table', ReportingTableBlock(blank=True, required=False, form_classname='title')),
     ], blank=True, null=True, use_json_field=True, collapsed=False)
 
     footnotes = StreamField([
