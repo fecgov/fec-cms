@@ -87,7 +87,7 @@
         </p>
       </div>
       {% endif %}
-      {% if adr['disposition_text']|length > 0 %}
+      {% if adr['disposition_text'] is not none %}
       <div class="legal-adr__property">
         <p>
           <strong>DISPOSITION:</strong> {{ adr['disposition_text'] | safe }}
