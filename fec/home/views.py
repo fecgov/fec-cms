@@ -19,6 +19,20 @@ from home.models import (CommissionerPage, DigestPage, MeetingPage,
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+def search_updates(queryset,search):
+    results_html = []
+    for result in queryset:
+        # Convert body to string for pages with html blocks, and perform a string search
+        if "'type': 'html'" in str(result.body.raw_data):
+            body = str(result.body.raw_data)
+            if (str(search) in body):
+                results_html.append(result)
+
+    results = queryset.search(search)
+    # Remove duplicates where pages that have both html and other fields-types, may return results for both search options 
+    results = chain(results,  [x for x in results_html if x not in results])
+    
+    return results
 
 def replace_dash(string):
     # Leave the dash in place for non-filer publications
@@ -48,7 +62,7 @@ def get_records(category_list=None, year=None, search=None):
         )
 
     if search:
-        records = records.search(search)
+        records = search_updates(records,search)
 
     return records
 
@@ -62,7 +76,7 @@ def get_digests(year=None, search=None):
         )
 
     if search:
-        digests = digests.search(search)
+        digests = search_updates(digests, search)
 
     return digests
 
@@ -82,7 +96,7 @@ def get_press_releases(category_list=None, year=None, search=None):
         )
 
     if search:
-        press_releases = press_releases.search(search)
+        press_releases = search_updates(press_releases, search)
 
     return press_releases
 
@@ -97,7 +111,7 @@ def get_tips(year=None, search=None):
         )
 
     if search:
-        tips = tips.search(search)
+        tips = search_updates(tips, search)
 
     return tips
 
@@ -158,10 +172,10 @@ def updates(request):
             )
 
         if search:
-            press_releases = press_releases.search(search)
-            digests = digests.search(search)
-            records = records.search(search)
-            tips = tips.search(search)
+            press_releases = search_updates(press_releases, search)
+            digests = search_updates(digests, search)
+            records = search_updates(records, search)
+            tips = search_updates(tips, search)
 
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981

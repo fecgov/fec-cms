@@ -16,6 +16,8 @@
   <div class="combo combo--search--mini--example">
         {% if result_type == 'statutes' %}
           <span class="t-note t-sans search__example">Examples: contribution; 52; 30123</span>
+        {% elif result_type == 'adrs' %}
+          <span class="t-note t-sans search__example">Examples: contributions, "financial activity"</span>
         {% else %}
           <span class="t-note t-sans search__example">Examples: spending; 52 U.S.C §30123</span>
         {% endif %}
