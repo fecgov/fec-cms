@@ -83,6 +83,7 @@ export default function DataMap(elm, opts) {
   this.focusedStateID = 'US';
 
   // Elements
+  // this.instance = this;
   this.elm = elm;
   this.legendSVG;
   this.svg;
@@ -108,8 +109,8 @@ DataMap.prototype.init = function() {
   // Initialize the D3 map
   // viewBox is necessary for responsive scaling
   // preserveAspectRatio tells the map how to scale
-  instance.svg = select(this.elm).append('svg');
-  instance.svg
+  this.svg = select(this.elm).append('svg');
+  this.svg
     .attr('viewBox', this.opts.viewBox)
     .attr('preserveAspectRatio', 'xMaxYMax meet'); // xMidYMid meet');
 
@@ -122,7 +123,7 @@ DataMap.prototype.init = function() {
   this.pathProjection = d3_geoPath().projection(this.projection);
 
   /** Go through our data results and pair/merge them with the fips state codes {@see this.mapData} */
-  const results = instance.data['results'].reduce((acc, val) => {
+  const results = this.data['results'].reduce((acc, val) => {
     const row = fipsByState[val.state] || {};
     const code = row.STATE ? parseInt(row.STATE) : null;
     acc[code] = val.total;
@@ -135,12 +136,12 @@ DataMap.prototype.init = function() {
   // Work through how to group these results for the legend
   // For our current usage, we'll only be dealing with one map,
   // but the functionality will work with multiple maps using the same legend
-  const quantiles = instance.opts.quantiles;
+  const quantiles = this.opts.quantiles;
   // For each item in results, look at its total but only work with the value if it's truthy
   // Double bangs (!!value) :
   // `!!0` = false, `!!null` = false
   // `!!1` = true, `!!468546` = true
-  const totals = instance.data['results']
+  const totals = this.data['results']
     .map(value => value['total'])
     .filter(value => {
       return !!value;
@@ -151,12 +152,12 @@ DataMap.prototype.init = function() {
   maxValue = trimmedMaxValue(minValue, maxValue);
 
   // Decide the legend color scale for our values
-  const legendScale_colors = chroma_scale(instance.opts.colorScale).domain([minValue, maxValue]);
+  const legendScale_colors = chroma_scale(this.opts.colorScale).domain([minValue, maxValue]);
   const legendQuantize_colors = d3_scaleLinear().domain([minValue, maxValue]);
 
   // Create the states SVG, color them, initialize mouseover interactivity
   // (`selectAll()` will select elements if they exist, or will create them if they don't.)
-  this.g = instance.svg.append('g');
+  this.g = this.svg.append('g');
 
   this.pathDataEnter = this.g
     .selectAll('path')
@@ -203,7 +204,7 @@ DataMap.prototype.init = function() {
 
   // If we're supposed to add tooltips, let's do that, too
   if (this.opts.addTooltips) {
-    buildStateTooltips(instance.svg, this.pathProjection, this);
+    buildStateTooltips(this.svg, this.pathProjection, instance);
   }
 };
 
@@ -224,11 +225,10 @@ DataMap.prototype.getStateValue = function(pathID) {
  * @param {json} newData
  */
 DataMap.prototype.handleDataRefresh = function(newData) {
-  const instance = this;
   this.data = newData;
   this.data.results.sort((a, b) => a.value - b.value);
 
-  if (!instance.svg) this.init();
+  if (!this.svg) this.init();
   else this.applyNewData();
 };
 
@@ -249,7 +249,7 @@ DataMap.prototype.handleZoomReset = function() {
 DataMap.prototype.applyNewData = function() {
   let instance = this;
 
-  const results = instance.data['results'].reduce((acc, val) => {
+  const results = this.data['results'].reduce((acc, val) => {
     const row = fipsByState[val.state] || {};
     const code = row.STATE ? parseInt(row.STATE) : null;
     acc[code] = val.total;
@@ -258,8 +258,8 @@ DataMap.prototype.applyNewData = function() {
 
   this.mapData = results;
 
-  const quantiles = instance.opts.quantiles;
-  const totals = instance.data['results']
+  const quantiles = this.opts.quantiles;
+  const totals = this.data['results']
     .map(value => value['total'])
     .filter(value => {
       return !!value;
@@ -269,14 +269,14 @@ DataMap.prototype.applyNewData = function() {
   let maxValue = Math.max(...totals);
   maxValue = trimmedMaxValue(minValue, maxValue);
 
-  const legendScale_colors = chroma_scale(instance.opts.colorScale).domain([minValue, maxValue]);
+  const legendScale_colors = chroma_scale(this.opts.colorScale).domain([minValue, maxValue]);
 
   const legendQuantize_colors = d3_scaleLinear().domain([minValue, maxValue]);
 
   // This bit is the big difference from init() }
   // because we're transitioning states' colors,
   // states we know already exist, have IDs, and may have mouseenter listeners, etc.
-  instance.svg
+  this.svg
     .selectAll('path')
     .transition()
     .delay(function(d, i) {
@@ -297,7 +297,7 @@ DataMap.prototype.applyNewData = function() {
       );
     })
     .attr('class', d => {
-      return this.chooseStateClasses(d, 'shape');
+      return instance.chooseStateClasses(d, 'shape');
     });
 
   // The rest of applyNewData is back to the same code from init()
@@ -332,10 +332,10 @@ DataMap.prototype.zoomToState = function(stateID, d) {
   select('body #map-tooltip').style.display = 'none';
 
   // Assign classes to paths and circles
-  instance.svg.selectAll('path').attr('class', d => {
+  this.svg.selectAll('path').attr('class', d => {
     return this.chooseStateClasses(d, 'shape');
   });
-  instance.svg.selectAll('circle').attr('class', d => {
+  this.svg.selectAll('circle').attr('class', d => {
     return this.chooseStateClasses(d, 'circle');
   });
 
@@ -386,7 +386,7 @@ DataMap.prototype.zoomToState = function(stateID, d) {
  *
  */
 DataMap.prototype.sortCircles = function() {
-  instance.svg.selectAll('circle').sort((a, b) => {
+  this.svg.selectAll('circle').sort((a, b) => {
     return d3_sort_descending(a.value, b.value);
   });
 };
@@ -640,7 +640,7 @@ function buildStateTooltips(svg, path, instance) {
       if (!shouldClick) {
         return null;
       } else {
-        this.dispatchEvent(
+        d.statePath.dispatchEvent(
           new CustomEvent('STATE_CLICKED', {
             detail: {
               abbr: fipsByCode[d.id].STUSAB,
