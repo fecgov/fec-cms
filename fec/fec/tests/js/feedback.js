@@ -2,7 +2,7 @@
 // import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy, stub } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -46,7 +46,7 @@ describe('feedback', function() {
 
   describe('callbacks', function() {
     beforeEach(function() {
-      this.message = sinon.spy(this.feedback, 'message');
+      this.message = spy(this.feedback, 'message');
     });
 
     afterEach(function() {
@@ -81,13 +81,13 @@ describe('feedback', function() {
 
   describe('submission', function() {
     beforeEach(function() {
-      this.ajaxStub = sinon.stub($, 'ajax');
-      sinon.stub(this.feedback, 'handleSuccess');
-      sinon.stub(this.feedback, 'handleError');
-      this.event = { preventDefault: sinon.spy() };
+      this.ajaxStub = stub($, 'ajax');
+      stub(this.feedback, 'handleSuccess');
+      stub(this.feedback, 'handleError');
+      this.event = { preventDefault: spy() };
       this.token = 'fake-token';
       this.feedback.$box.find('textarea').val('awesome site good job');
-      var grecaptchaMock = sinon.stub({
+      var grecaptchaMock = stub({
             render: function (options) { }, // eslint-disable-line no-unused-vars, no-empty-function
             reset: function (id) { }, // eslint-disable-line no-unused-vars, no-empty-function
             getResponse: function (id) { }, // eslint-disable-line no-unused-vars, no-empty-function
@@ -103,7 +103,7 @@ describe('feedback', function() {
     });
 
     it('skips submit on empty inputs', function() {
-      var message = sinon.spy(this.feedback, 'message');
+      var message = spy(this.feedback, 'message');
       this.feedback.$box.find('#feedback-1').val('');
       this.feedback.submit(this.token);
       expect(message).to.have.been.called;

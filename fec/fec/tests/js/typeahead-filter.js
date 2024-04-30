@@ -2,7 +2,7 @@
 // import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -49,7 +49,7 @@ describe('FilterTypeahead', function() {
   });
 
   it('should append checkbox and clear datum on typeahead:select', function() {
-    var appendCheckbox = sinon.spy(this.FilterTypeahead, 'appendCheckbox');
+    var appendCheckbox = spy(this.FilterTypeahead, 'appendCheckbox');
     var datum = {
       name: 'FAKE CANDIDATE',
       id: '12345'
@@ -111,15 +111,15 @@ describe('FilterTypeahead', function() {
   });
 
   it('should submit on enter', function() {
-    var handleSubmit = sinon.spy(this.FilterTypeahead, 'handleSubmit');
+    var handleSubmit = spy(this.FilterTypeahead, 'handleSubmit');
     this.FilterTypeahead.handleKeypress({ keyCode: 13 });
     expect(handleSubmit).to.have.been.calledWith({ keyCode: 13 });
     this.FilterTypeahead.handleSubmit.restore();
   });
 
   it('should enable and disable button when the input changes', function() {
-    var enableButton = sinon.spy(this.FilterTypeahead, 'enableButton');
-    var disableButton = sinon.spy(this.FilterTypeahead, 'disableButton');
+    var enableButton = spy(this.FilterTypeahead, 'enableButton');
+    var disableButton = spy(this.FilterTypeahead, 'disableButton');
 
     console.debug('this: ', this);
     console.debug('this.FilterTypeahead: ', this.FilterTypeahead);
@@ -156,7 +156,7 @@ describe('FilterTypeahead', function() {
 
   describe('handleSubmit()', function() {
     beforeEach(function() {
-      this.handleSelect = sinon.spy(this.FilterTypeahead, 'handleSelect');
+      this.handleSelect = spy(this.FilterTypeahead, 'handleSelect');
       this.e = { name: 'event' };
     });
 

@@ -1,6 +1,6 @@
 // Common for all/most tests
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy } from 'sinon/pkg/sinon-esm';
 import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 // import './setup.js';
@@ -25,7 +25,7 @@ describe('Listeners', function() {
   });
 
   it('removes listeners', function() {
-    var off = sinon.spy($.prototype, 'off');
+    var off = spy($.prototype, 'off');
     this.listeners.on('#fixtures', dummyListener);
     this.listeners.clear();
     expect(off).to.have.been.called;

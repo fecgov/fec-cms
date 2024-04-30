@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { stub } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -113,10 +113,10 @@ describe('DownloadItem', function() {
 
     beforeEach(function() {
       this.promise = $.Deferred();
-      sinon.stub($, 'ajax').returns(this.promise);
-      sinon.stub(DownloadItem.prototype, 'schedule');
-      sinon.stub(DownloadItem.prototype, 'finish');
-      sinon.stub(DownloadItem.prototype, 'handleServerError');
+      stub($, 'ajax').returns(this.promise);
+      stub(DownloadItem.prototype, 'schedule');
+      stub(DownloadItem.prototype, 'finish');
+      stub(DownloadItem.prototype, 'handleServerError');
     });
 
     afterEach(function() {

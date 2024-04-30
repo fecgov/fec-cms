@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { stub } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -35,7 +35,7 @@ describe('cycle select', function() {
   });
 
   beforeEach(function() {
-    sinon.stub(CycleSelect.prototype, 'setUrl');
+    stub(CycleSelect.prototype, 'setUrl');
   });
 
   afterEach(function() {

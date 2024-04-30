@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -46,7 +46,7 @@ describe('Table switcher', function() {
       }
       );
 
-    this.trigger = sinon.spy($.prototype, 'trigger');
+    this.trigger = spy($.prototype, 'trigger');
   });
 
   afterEach(function() {

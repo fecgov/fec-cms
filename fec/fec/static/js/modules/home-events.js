@@ -1,7 +1,6 @@
 import { default as moment } from 'moment';
 
 import { getUrl } from './calendar-helpers.js';
-// const eventsTemplate = require('../templates/homepage/events-and-deadlines.hbs');
 import { default as eventsTemplate } from '../templates/homepage/events-and-deadlines.hbs';
 
 const today = new Date();

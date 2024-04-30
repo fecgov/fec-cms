@@ -1,4 +1,4 @@
-/* global BASE_PATH, API_LOCATION, API_VERSION, API_KEY_PUBLIC */
+/* global API_LOCATION, API_VERSION, API_KEY_PUBLIC */
 
 import DOMPurify from 'dompurify';
 import * as Handlebars from 'handlebars/runtime';
@@ -222,7 +222,7 @@ Handlebars.registerHelper('formatSentence', function(value) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 });
 
-Handlebars.registerHelper('basePath', BASE_PATH);
+Handlebars.registerHelper('basePath', global.BASE_PATH);
 
 Handlebars.registerHelper('panelRow', function(label, options) {
   return new Handlebars.SafeString(
@@ -340,7 +340,7 @@ export function filterNull(params) {
 
 export function buildAppUrl(path, query) {
   return URI('')
-    .path(Array.prototype.concat(BASE_PATH, path || [], '').join('/'))
+    .path(Array.prototype.concat(global.BASE_PATH, path || [], '').join('/'))
     .addQuery(query || {})
     .toString();
 }

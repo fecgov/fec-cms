@@ -3,7 +3,7 @@
 // require('es6-weak-map/implement');
 import { default as A11yDialog } from 'a11y-dialog';
 import { Accordion } from 'aria-accordion/src/accordion.js';
-import { Sticky } from 'component-sticky';
+import { default as Sticky } from 'component-sticky/index.js';
 
 import CycleSelect from './modules/cycle-select.js';
 import { hydrate as downloadHydrate } from './modules/download.js';
@@ -76,12 +76,6 @@ $(function() {
       $('body').css('overflow', 'scroll');
     });
   });
-
-  // TODO: Restore
-  // @if DEBUG
-  // var perf = require('./modules/performance');
-  // perf.bar();
-  // @endif
 
   // Initialize cycle selects
   $('.js-cycle').each(function(idx, elm) {

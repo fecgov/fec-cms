@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -29,7 +29,7 @@ describe('Contact form', function() {
         '<button class="js-cancel">Cancel</button>' +
       '</form>'
     );
-    this.initTypeahead = sinon.spy(ContactForm.prototype, 'initTypeahead');
+    this.initTypeahead = spy(ContactForm.prototype, 'initTypeahead');
     this.form = new ContactForm($('#form'));
   });
 

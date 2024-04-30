@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { fakeServer, stub } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -21,7 +21,7 @@ describe('calendar', function() {
   });
 
   before(function() {
-    this.server = sinon.fakeServer.create();
+    this.server = fakeServer.create();
   });
 
   after(function() {
@@ -93,7 +93,7 @@ describe('calendar', function() {
     });
 
     beforeEach(function() {
-      sinon.stub(this.calendar.filterSet, 'serialize');
+      stub(this.calendar.filterSet, 'serialize');
       this.calendar.filterSet.serialize.returns({ category: ['election-P'] });
     });
 
@@ -124,14 +124,14 @@ describe('calendar', function() {
     */
 
     it('calls manageListToggles() on list views', function() {
-      sinon.stub(this.calendar, 'manageListToggles');
+      stub(this.calendar, 'manageListToggles');
       this.calendar.handleRender({ name: 'monthTime' });
       expect(this.calendar.manageListToggles).to.have.been.called;
       this.calendar.manageListToggles.restore();
     });
 
     it('does not call manageListToggles() toggles on grid view', function() {
-      sinon.stub(this.calendar, 'manageListToggles');
+      stub(this.calendar, 'manageListToggles');
       this.calendar.handleRender({ name: 'month' });
       expect(this.calendar.manageListToggles).to.not.have.been.called;
       this.calendar.manageListToggles.restore();
@@ -194,7 +194,7 @@ describe('calendar', function() {
 
   describe('handleEventClick()', function() {
     beforeEach(function() {
-      sinon.stub(calendarTooltip, 'CalendarTooltip');
+      stub(calendarTooltip, 'CalendarTooltip');
     });
 
     afterEach(function() {

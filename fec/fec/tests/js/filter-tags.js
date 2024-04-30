@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -35,7 +35,7 @@ describe('filter tags', function() {
       expect(tag.text()).to.contain('timmy');
     });
 
-    it('adds tag in correct category', function () {
+    it('adds tag in correct category', function() {
       this.tagList.addTag({}, { key: 'name', name: 'people', value: 'xtine' });
       this.tagList.addTag({}, { key: 'checkbox', name: 'secretary', value: 'john' });
       var tagCategory = this.tagList.$list.find('[data-tag-category="people"]');
@@ -68,7 +68,7 @@ describe('filter tags', function() {
 
   describe('removeTag()', function() {
     beforeEach(function() {
-      sinon.spy($.prototype, 'trigger');
+      spy($.prototype, 'trigger');
     });
 
     afterEach(function() {

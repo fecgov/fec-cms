@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy, stub } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -65,7 +65,7 @@ describe('LineChart', function() {
         '</div>'
     );
     this.lineChart = new LineChart('.js-chart', '.js-snapshot', 'raised');
-    this.fetch = sinon.stub(this.lineChart, 'fetch').callsFake(function() {
+    this.fetch = stub(this.lineChart, 'fetch').callsFake(function() {
       this.handleResponse(mockResponse);
     });
   });
@@ -89,10 +89,10 @@ describe('LineChart', function() {
         pac: 500,
         party: 600
       };
-      this.groupDataByType = sinon.spy(this.lineChart, 'groupDataByType');
-      this.drawChart = sinon.spy(this.lineChart, 'drawChart');
-      this.moveCursor = sinon.spy(this.lineChart, 'moveCursor');
-      this.setupSnapshot = sinon.spy(this.lineChart, 'setupSnapshot');
+      this.groupDataByType = spy(this.lineChart, 'groupDataByType');
+      this.drawChart = spy(this.lineChart, 'drawChart');
+      this.moveCursor = spy(this.lineChart, 'moveCursor');
+      this.setupSnapshot = spy(this.lineChart, 'setupSnapshot');
       this.lineChart.handleResponse(mockResponse);
     });
 
@@ -206,8 +206,8 @@ describe('LineChart', function() {
 
   describe('drawChart()', function() {
     beforeEach(function() {
-      this.drawCursor = sinon.spy(this.lineChart, 'drawCursor');
-      this.appendSVG = sinon.spy(this.lineChart, 'appendSVG');
+      this.drawCursor = spy(this.lineChart, 'drawCursor');
+      this.appendSVG = spy(this.lineChart, 'appendSVG');
       this.lineChart.groupDataByType(mockResponse.results);
       this.lineChart.drawChart();
     });
@@ -302,7 +302,7 @@ describe('LineChart', function() {
       this.lineChart.groupDataByType(mockResponse.results);
       this.lineChart.drawChart();
       this.datum = this.lineChart.chartData[1];
-      this.populateSnapshot = sinon.spy(this.lineChart, 'populateSnapshot');
+      this.populateSnapshot = spy(this.lineChart, 'populateSnapshot');
       this.lineChart.moveCursor(this.datum);
     });
 
@@ -374,9 +374,9 @@ describe('LineChart', function() {
 
   describe('navigating between cycles', function() {
     beforeEach(function() {
-      this.moveCursor = sinon.stub(this.lineChart, 'moveCursor');
-      this.previousCycle = sinon.stub(this.lineChart, 'previousCycle');
-      this.nextCycle = sinon.stub(this.lineChart, 'nextCycle');
+      this.moveCursor = stub(this.lineChart, 'moveCursor');
+      this.previousCycle = stub(this.lineChart, 'previousCycle');
+      this.nextCycle = stub(this.lineChart, 'nextCycle');
     });
 
     afterEach(function() {
@@ -440,7 +440,7 @@ describe('LineChart', function() {
     var removeSVG;
 
     beforeEach(function() {
-      removeSVG = sinon.spy(this.lineChart, 'removeSVG');
+      removeSVG = spy(this.lineChart, 'removeSVG');
     });
 
     afterEach(function() {

@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { stub } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -13,7 +13,7 @@ describe('election-utils', function() {
   before(function(done) {
     this.$fixture = $('<div id="fixtures"></div>');
     $('body').empty().append(this.$fixture);
-    this.stub = sinon.stub($, 'getJSON').returns({ done: sinon.stub().callsArgWith(0, { results: electionOffices }) });
+    this.stub = stub($, 'getJSON').returns({ done: stub().callsArgWith(0, { results: electionOffices }) });
     done();
   });
 

@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -131,8 +131,8 @@ describe('Top entities breakdown', function() {
 
     describe('event handling', function() {
       beforeEach(function() {
-        sinon.spy(this.chart, 'loadData');
-        sinon.spy(this.chart, 'updateCoverageDateRange');
+        spy(this.chart, 'loadData');
+        spy(this.chart, 'updateCoverageDateRange');
       });
 
       afterEach(function() {
@@ -184,8 +184,8 @@ describe('Top entities breakdown', function() {
     describe('DOM updates', function() {
       describe('loading data', function() {
         beforeEach(function() {
-          sinon.spy(this.chart, 'updatePagination');
-          sinon.spy(this.chart, 'drawBars');
+          spy(this.chart, 'updatePagination');
+          spy(this.chart, 'drawBars');
           this.candidateResponse = {
             pagination: {
               page: 1,

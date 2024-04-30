@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -28,7 +28,7 @@ describe('toggle filters', function() {
 
   beforeEach(function() {
     this.$fixture.empty().append(DOM);
-    this.handleChange = sinon.spy(ToggleFilter.prototype, 'handleChange');
+    this.handleChange = spy(ToggleFilter.prototype, 'handleChange');
     this.filter = new ToggleFilter(this.$fixture.find('.js-filter'));
   });
 
@@ -66,7 +66,7 @@ describe('toggle filters', function() {
 
   describe('handleChange()', function() {
     beforeEach(function() {
-      this.trigger = sinon.spy($.prototype, 'trigger');
+      this.trigger = spy($.prototype, 'trigger');
       this.$fixture.empty().append(DOM);
       this.filter = new ToggleFilter(this.$fixture.find('.js-filter'));
     });

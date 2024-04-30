@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -42,7 +42,7 @@ describe('Election filter', function() {
       cycle: '2014',
       election_full: false
     });
-    this.trigger = sinon.spy($.prototype, 'trigger');
+    this.trigger = spy($.prototype, 'trigger');
   });
 
   it('sets its initial state', function() {

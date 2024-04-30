@@ -9,7 +9,7 @@ import { candidateOffice as cols_candidateOffice } from '../modules/columns.js';
 import { renderCandidatePanel } from '../modules/table-panels.js';
 import { DataTable_FEC, modalRenderRow } from '../modules/tables.js';
 
-var columnGroups = {
+const columnGroups = {
   president: getColumns(cols_candidateOffice, [
     'name',
     'party',
@@ -36,13 +36,13 @@ var columnGroups = {
   ])
 };
 
-var defaultSort = {
+const defaultSort = {
   president: 2,
   senate: 3,
   house: 4
 };
 
-var officeTitleMap = {
+const officeTitleMap = {
   president: 'president',
   senate: 'Senate',
   house: 'House of Representatives'

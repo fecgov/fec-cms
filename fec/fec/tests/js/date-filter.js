@@ -3,7 +3,7 @@ import './setup.js';
 import * as chaiJQ from 'chai-jquery';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 use(chaiJQ);
 // (end common)
@@ -114,7 +114,7 @@ describe('date filter', function() {
 
   describe('handleInputChange()', function() {
     beforeEach(function() {
-      this.trigger = sinon.spy($.prototype, 'trigger');
+      this.trigger = spy($.prototype, 'trigger');
     });
 
     afterEach(function() {
@@ -152,7 +152,7 @@ describe('date filter', function() {
     });
 
     it('sets up the date grid', function() {
-      sinon.spy(DateFilter.prototype, 'setupDateGrid');
+      spy(DateFilter.prototype, 'setupDateGrid');
       this.filter.handleInputChange({ target: this.filter.$minDate });
       expect(this.filter.setupDateGrid).to.have.been.called;
       DateFilter.prototype.setupDateGrid.restore();
@@ -202,9 +202,9 @@ describe('date filter', function() {
 
   describe('validate()', function() {
     beforeEach(function() {
-      this.trigger = sinon.spy($.prototype, 'trigger');
-      this.hideWarning = sinon.spy(DateFilter.prototype, 'hideWarning');
-      this.showWarning = sinon.spy(DateFilter.prototype, 'showWarning');
+      this.trigger = spy($.prototype, 'trigger');
+      this.hideWarning = spy(DateFilter.prototype, 'hideWarning');
+      this.showWarning = spy(DateFilter.prototype, 'showWarning');
     });
 
     afterEach(function() {

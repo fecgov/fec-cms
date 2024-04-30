@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -31,8 +31,8 @@ describe('AnalystLookup', function() {
         '</div>' +
       '</div>'
     );
-    this.initTypeahead = sinon.spy(AnalystLookup.prototype, 'initTypeahead');
-    this.fetch = sinon.spy(AnalystLookup.prototype, 'fetchAnalyst');
+    this.initTypeahead = spy(AnalystLookup.prototype, 'initTypeahead');
+    this.fetch = spy(AnalystLookup.prototype, 'fetchAnalyst');
     this.lookup = new AnalystLookup($('.js-analyst-lookup'));
   });
 
@@ -97,7 +97,7 @@ describe('AnalystLookup', function() {
 
   describe('handleChange()', function() {
     beforeEach(function() {
-      this.hide = sinon.spy(AnalystLookup.prototype, 'hideAnalyst');
+      this.hide = spy(AnalystLookup.prototype, 'hideAnalyst');
     });
 
     afterEach(function() {

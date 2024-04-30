@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy, stub } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -28,8 +28,8 @@ describe('election search', function() {
   });
 
   before(function() {
-    sinon.stub(ElectionMap.prototype, 'init');
-    sinon.stub(ElectionMap.prototype, 'drawDistricts');
+    stub(ElectionMap.prototype, 'init');
+    stub(ElectionMap.prototype, 'drawDistricts');
   });
 
   beforeEach(function() {
@@ -104,7 +104,7 @@ describe('election search', function() {
 
   describe('drawing search results', function() {
     beforeEach(function() {
-      this.drawItem = sinon.spy(ElectionSearch.prototype, 'drawResult');
+      this.drawItem = spy(ElectionSearch.prototype, 'drawResult');
       this.results = [
         { cycle: 2016, office: 'P', state: 'US' },
         { cycle: 2016, office: 'S', state: 'NJ' },
@@ -151,7 +151,7 @@ describe('election search', function() {
         ]
       };
       this.deferred = $.Deferred();
-      sinon.stub($, 'ajax').returns(this.deferred);
+      stub($, 'ajax').returns(this.deferred);
       this.deferred.resolve(this.response);
     });
 
@@ -160,7 +160,7 @@ describe('election search', function() {
     });
 
     it('should fetch search results', function() {
-      sinon.stub(this.el, 'draw');
+      stub(this.el, 'draw');
       this.el.$zip.val('19041');
       this.el.search();
       expect($.ajax).to.have.been.called;
@@ -181,7 +181,7 @@ describe('election search', function() {
     });
 
     it('should update form and search on popstate', function() {
-      sinon.stub(this.el, 'draw');
+      stub(this.el, 'draw');
       window.history.pushState({}, null, '?cycle=2016&zip=19041');
       this.el.handlePopState();
       expect(this.el.$zip.val()).to.equal('19041');
@@ -198,7 +198,7 @@ describe('election search', function() {
     });
 
     it('should skip search if missing params', function() {
-      sinon.stub(this.el, 'draw');
+      stub(this.el, 'draw');
       this.el.search();
       expect($.ajax).not.to.have.been.called;
       expect(this.el.draw).not.to.have.been.called;

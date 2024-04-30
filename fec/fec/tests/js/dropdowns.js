@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -156,7 +156,7 @@ describe('dropdown', function() {
           '</div>' +
         '</fieldset>'
       );
-      sinon.spy(Dropdown.prototype, 'removePanel');
+      spy(Dropdown.prototype, 'removePanel');
       var dropdown = new Dropdown('.js-dropdown');
       expect(Dropdown.prototype.removePanel).to.have.been.called;
     });

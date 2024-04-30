@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -29,7 +29,7 @@ describe('Select filter', function() {
       '</div>'
     );
     this.filter = new SelectFilter(this.$fixture.find('.js-filter'));
-    this.trigger = sinon.spy($.prototype, 'trigger');
+    this.trigger = spy($.prototype, 'trigger');
   });
 
   it('sets its initial state', function() {

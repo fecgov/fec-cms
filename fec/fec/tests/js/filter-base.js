@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -49,7 +49,7 @@ describe('base filter', function() {
   });
 
   it('pulls values from the query', function() {
-    sinon.spy(Filter.prototype, 'setValue');
+    spy(Filter.prototype, 'setValue');
     var query = { name: ['george', 'martha'], office: 'president' };
     this.filter.fromQuery(query);
     expect(Filter.prototype.setValue).to.have.been.calledWith(['george', 'martha']);
@@ -89,7 +89,7 @@ describe('base filter', function() {
 
   describe('enabling and disabling filters', function() {
     beforeEach(function() {
-      this.trigger = sinon.spy($.prototype, 'trigger');
+      this.trigger = spy($.prototype, 'trigger');
     });
 
     afterEach(function() {

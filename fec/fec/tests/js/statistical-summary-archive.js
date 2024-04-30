@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -54,7 +54,7 @@ describe('Tablefilter', function() {
 
         this.tableTitle = this.$fixture.find(".js-table-title");
 
-        this.showTable = sinon.spy(Tablefilter.prototype, 'showTable');
+        this.showTable = spy(Tablefilter.prototype, 'showTable');
 
         this.filter = new Tablefilter();
 
@@ -82,7 +82,7 @@ describe('Tablefilter', function() {
 
     describe('disableNonPresYears', function() {
         beforeEach(function() {
-            this.disableNonPresYears = sinon.spy(Tablefilter.prototype, 'disableNonPresYears');
+            this.disableNonPresYears = spy(Tablefilter.prototype, 'disableNonPresYears');
             this.chooseYear.val('1982').change(); // TODO: jQuery deprecation
             this.chooseFiler.val('presidential').change(); // TODO: jQuery deprecation
             this.filter.showTable();

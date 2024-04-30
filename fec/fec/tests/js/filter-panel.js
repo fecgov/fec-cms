@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { stub } from 'sinon/pkg/sinon-esm';
 import './setup.js';
 
 import FilterPanel from '../../static/js/modules/filters/filter-panel.js';
@@ -74,7 +74,7 @@ describe('filter panel', function() {
   // TODO: DO WE STILL NEED THIS TEST NOW THAT THE it HAS BEEN REMOVED?
   describe('interaction with filterset', function() {
     beforeEach(function() {
-      sinon.stub(FilterSet.prototype, 'serialize').returns({ name: 'jed' });
+      stub(FilterSet.prototype, 'serialize').returns({ name: 'jed' });
     });
 
     afterEach(function() {
