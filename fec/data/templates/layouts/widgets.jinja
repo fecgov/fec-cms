@@ -35,6 +35,8 @@
     END_YEAR = '{{ END_YEAR }}';{# see note #}
     {# note: these are set through fec/data/views.py and come from /data/constants.py #}
 
+    {#
+      Removing trackMetric since nobody has looking at it or performance.js
     function trackMetric(name, imagesSelector) {
       if (imagesSelector) {
         var images = document.querySelectorAll(imagesSelector);
@@ -47,7 +49,7 @@
         }
       }
       window.performance.mark(name);
-    }
+    } #}
   </script>
 </head>
 <body>

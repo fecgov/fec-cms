@@ -47,7 +47,9 @@
     TRANSITION_URL = '{{ TRANSITION_URL }}';
     {% if election_year %}ELECTION_YEAR = '{{ election_year }}';{% endif %}
 
-    function trackMetric(name, imagesSelector) {
+    {#
+      Removing trackMetric since nobody has looking at it or performance.js
+      function trackMetric(name, imagesSelector) {
       if (imagesSelector) {
         var images = document.querySelectorAll(imagesSelector);
         if (images && images.length) {
@@ -59,7 +61,7 @@
         }
       }
       window.performance.mark(name);
-    }
+    } #}
   </script>
 </head>
 <body>
