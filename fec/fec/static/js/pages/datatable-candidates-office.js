@@ -52,11 +52,11 @@ $(function() {
   const $table = $('#results');
   new DataTable_FEC($table, {
     autoWidth: false,
-    title: 'Candidates for ' + officeTitleMap[global.context.office],
+    title: 'Candidates for ' + officeTitleMap[window.context.office],
     path: ['candidates', 'totals'],
-    query: { office: global.context.office.slice(0, 1).toUpperCase() },
-    columns: columnGroups[global.context.office],
-    order: [[defaultSort[global.context.office], 'desc']],
+    query: { office: window.context.office.slice(0, 1).toUpperCase() },
+    columns: columnGroups[window.context.office],
+    order: [[defaultSort[window.context.office], 'desc']],
     useFilters: true,
     useExport: true,
     rowCallback: modalRenderRow,

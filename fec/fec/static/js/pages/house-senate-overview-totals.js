@@ -31,12 +31,12 @@ HSOverviewTotalsTable.prototype.handleExportClick = function() {
 
   const exportPath = ['candidates', 'totals', 'aggregates'];
   const exportQuery = {
-    aggregate_by: global.context.office_code == 'H' ? 'office-state-district' : 'office-state',
+    aggregate_by: window.context.office_code == 'H' ? 'office-state-district' : 'office-state',
     api_key: window.DOWNLOAD_API_KEY,
     election_full: true,
     election_year: exportCycle,
     is_active_candidate: true,
-    office: global.context.office_code,
+    office: window.context.office_code,
     sort_hide_null: false,
     sort_null_only: false,
     sort_nulls_last: false

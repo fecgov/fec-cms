@@ -130,8 +130,8 @@ export function buildTotalLink(path, getParams) {
       if (path.indexOf('receipts') > -1 || path.indexOf('disbursements') > -1) {
         includeTransactionPeriod = true;
       }
-      if (global.context.election) {
-        electionDuration = global.context.election.duration;
+      if (window.context.election) {
+        electionDuration = window.context.election.duration;
       }
       var uri = buildAppUrl(
         path,

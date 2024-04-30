@@ -13,7 +13,7 @@ export const candidateInformationColumns = [
       return buildEntityLink(
         data,
         buildAppUrl(['candidate', row.candidate_id], {
-          cycle: global.context.election.cycle,
+          cycle: window.context.election.cycle,
           election_full: true
         }),
         'candidate',

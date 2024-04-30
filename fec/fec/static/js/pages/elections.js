@@ -36,7 +36,7 @@ $(function() {
     },
     'candidate-financial-totals': {
       path: ['elections'],
-      columns: createElectionColumns(global.context),
+      columns: createElectionColumns(window.context),
       title: 'candidate financial total',
       order: [[2, 'desc']]
     },
@@ -47,25 +47,25 @@ $(function() {
       order: [[3, 'desc']]
     }
   };
-  const query = buildTableQuery(global.context.election);
+  const query = buildTableQuery(window.context.election);
   const url = buildUrl(['elections'], query);
 
   $.getJSON(url).done(function(response) {
-    global.context.candidates = _chain(response.results)
+    window.context.candidates = _chain(response.results)
       .map(function(candidate) {
         return [candidate.candidate_id, candidate];
       })
       .object()
       .value();
 
-    drawComparison(response.results, global.context);
+    drawComparison(response.results, window.context);
     initStateMaps(response.results);
     scrollAnchor();
   });
 
-  if (global.context && global.context.election && global.context.election.state)
-    getStateElectionOffices(global.context.election.state);
-  initSpendingTables('.data-table', global.context, spendingTableOpts);
+  if (window.context && window.context.election && window.context.election.state)
+    getStateElectionOffices(window.context.election.state);
+  initSpendingTables('.data-table', window.context, spendingTableOpts);
 
   new ElectionForm('#election-nav');
 
@@ -73,6 +73,6 @@ $(function() {
     const districtMap = new DistrictMap($('#election-map').get(0), {
       color: '#36BDBB'
     });
-    districtMap.load(global.context.election);
+    districtMap.load(window.context.election);
   }
 });

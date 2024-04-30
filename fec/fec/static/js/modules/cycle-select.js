@@ -40,8 +40,8 @@ CycleSelect.prototype.initCyclesMulti = function(selected) {
       cycleId: cycleId,
       // Two year period buttons are only active if there are fec_cycles_in_election
       active:
-        typeof context !== 'undefined' && global.context.cycles
-          ? global.context.cycles.indexOf(cycle) !== -1
+        typeof context !== 'undefined' && window.context.cycles
+          ? window.context.cycles.indexOf(cycle) !== -1
           : false,
       checked:
         cycle.toString() === params.cycle && params.electionFull === 'false'
@@ -81,7 +81,7 @@ CycleSelect.prototype.initCyclesSingle = function(selected) {
 CycleSelect.prototype.setTimePeriod = function(min, max) {
   // Defines a timePeriod property on the global context object in order
   // to easily get a time period string without having to calculate it every time
-  global.context.timePeriod = min.toString() + '–' + max.toString();
+  window.context.timePeriod = min.toString() + '–' + max.toString();
 };
 
 CycleSelect.build = function($elm) {

@@ -24,9 +24,9 @@ OtherSpendingTotals.prototype.fetchData = function(page) {
   // to loop through all the pages
   var self = this;
   var url = buildUrl(pathMap[this.type], {
-    candidate_id: global.context.candidateID,
-    cycle: global.context.cycle,
-    election_full: global.context.electionFull,
+    candidate_id: window.context.candidateID,
+    cycle: window.context.cycle,
+    election_full: window.context.electionFull,
     page: page,
     per_page: 100
   });

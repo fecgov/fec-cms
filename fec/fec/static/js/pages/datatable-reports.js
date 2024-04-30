@@ -26,15 +26,15 @@ let pageTitle,
     'coverage_end_date'
   ];
 
-if (global.context.form_type === 'presidential') {
+if (window.context.form_type === 'presidential') {
   pageTitle = 'Presidential committee reports';
   pageTemplate = candidateTemplate;
   columnKeys.push('receipts', 'disbursements', 'trigger');
-} else if (global.context.form_type === 'house-senate') {
+} else if (window.context.form_type === 'house-senate') {
   pageTitle = 'House and Senate committee reports';
   pageTemplate = candidateTemplate;
   columnKeys.push('receipts', 'disbursements', 'trigger');
-} else if (global.context.form_type === 'pac-party') {
+} else if (window.context.form_type === 'pac-party') {
   pageTitle = 'PAC and party committee reports';
   pageTemplate = pacPartyTemplate;
   columnKeys.push(
@@ -43,7 +43,7 @@ if (global.context.form_type === 'presidential') {
     'independentExpenditures',
     'trigger'
   );
-} else if (global.context.form_type === 'ie-only') {
+} else if (window.context.form_type === 'ie-only') {
   pageTitle = 'Independent expenditure only committee reports';
   pageTemplate = ieOnlyTemplate;
   columnKeys.push('contributions', 'independentExpenditures', 'trigger');
@@ -57,7 +57,7 @@ $(function() {
     autoWidth: false,
     tableSwitcher: true,
     title: pageTitle,
-    path: ['reports', global.context.form_type],
+    path: ['reports', window.context.form_type],
     columns: pageColumns,
     rowCallback: modalRenderRow,
     // Order by coverage date descending
@@ -82,11 +82,11 @@ $(function() {
   new TableSwitcher('.js-table-switcher', {
     efiling: {
       dataType: 'efiling',
-      path: ['efile', 'reports', global.context.form_type]
+      path: ['efile', 'reports', window.context.form_type]
     },
     processed: {
       dataType: 'processed',
-      path: ['reports', global.context.form_type]
+      path: ['reports', window.context.form_type]
     }
   }).init();
 });

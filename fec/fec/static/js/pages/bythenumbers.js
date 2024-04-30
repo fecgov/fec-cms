@@ -2,7 +2,7 @@ import { customEvent } from '../modules/analytics.js';
 // var analytics = require('../modules/analytics');
 // var TopEntities = require('../modules/top-entities').TopEntities;
 import { TopEntities } from '../modules/top-entities.js';
-new TopEntities('.js-top-entities', global.context.type);
+new TopEntities('.js-top-entities', window.context.type);
 
 $('.js-ga-event').each(function() {
   var eventName = $(this).data('ga-event');
