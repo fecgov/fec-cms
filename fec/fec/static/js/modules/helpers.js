@@ -163,9 +163,7 @@ Handlebars.registerHelper({
   gte: function(v1, v2) {
     return v1 >= v2;
   },
-  toUpperCase: function(value) {
-    return value.substr(0, 1).toUpperCase() + value.substr(1);
-  }
+  toUpperCase: toUpperCase
 });
 
 export const globals = {
