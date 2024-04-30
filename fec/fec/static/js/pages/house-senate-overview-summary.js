@@ -88,7 +88,7 @@ HSOverviewSummary.prototype.init = function() {
 /**
  * Removes functionality from the input/select assigned to this.cycleSelector
  */
-HSOverviewSummary.prototype.deactivateInput = function () {
+HSOverviewSummary.prototype.deactivateInput = function() {
   this.cycleSelector.setAttribute('aria-disabled', 'true');
   this.cycleSelector.setAttribute('disabled', 'true');
 };
@@ -96,7 +96,7 @@ HSOverviewSummary.prototype.deactivateInput = function () {
 /**
  * Restores functionality from the input/select assigned to this.cycleSelector
  */
-HSOverviewSummary.prototype.reactivateInput = function () {
+HSOverviewSummary.prototype.reactivateInput = function() {
   this.cycleSelector.removeAttribute('aria-disabled');
   this.cycleSelector.removeAttribute('disabled');
 };

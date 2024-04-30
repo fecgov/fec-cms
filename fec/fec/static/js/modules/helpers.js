@@ -226,14 +226,10 @@ Handlebars.registerHelper('basePath', global.BASE_PATH);
 
 Handlebars.registerHelper('panelRow', function(label, options) {
   return new Handlebars.SafeString(
-    '<tr>' +
-      '<td class="panel__term">' +
-      label +
-      '</td>' +
-      '<td class="panel__data">' +
-      options.fn(this) +
-      '</td>' +
-      '</tr>'
+    `<tr>` +
+      `<td class="panel__term">${label}</td>` +
+      `<td class="panel__data">${options.fn(this)}</td>` +
+    '</tr>'
   );
 });
 

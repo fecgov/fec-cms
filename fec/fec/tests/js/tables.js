@@ -2,7 +2,7 @@
 import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import sinon from 'sinon/pkg/sinon-esm';
+import { spy, stub } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -12,7 +12,7 @@ import { extend as _extend } from 'underscore';
 // require('datatables.net')();
 // require('datatables.net-responsive')();
 
-import { committeeColumn, supportOpposeColumn } from '../../static/js/modules/columns.js';
+import { candidateColumn, committeeColumn, supportOpposeColumn } from '../../static/js/modules/columns.js';
 import { buildTotalLink } from '../../static/js/modules/column-helpers.js';
 import { buildUrl } from '../../static/js/modules/helpers.js';
 
@@ -29,7 +29,7 @@ describe('data table', function() {
     $('body')
       .empty()
       .append(this.$fixture);
-    sinon.spy(DataTable_FEC.prototype, 'export');
+    spy(DataTable_FEC.prototype, 'export');
   });
 
   after(function() {
@@ -52,7 +52,7 @@ describe('data table', function() {
           '</table>'
       );
     this.deferred = $.Deferred();
-    sinon.stub($, 'ajax').returns(this.deferred);
+    stub($, 'ajax').returns(this.deferred);
     this.table = new DataTable_FEC('table', {
       columns: [{ data: 'name' }, { data: 'office' }, { data: 'party' }],
       useExport: true
@@ -160,7 +160,7 @@ describe('data table', function() {
     });
 
     it('renders data', function() {
-      var callback = sinon.stub();
+      var callback = stub();
       var resp = {
         results: [{ name: 'Jed Bartlet', office: 'President', party: 'DEM' }],
         pagination: { count: 42 }
@@ -172,7 +172,7 @@ describe('data table', function() {
 
     it('hides table on empty results', function() {
       this.table.opts.hideEmpty = true;
-      var callback = sinon.stub();
+      var callback = stub();
       var resp = {
         results: [],
         pagination: { count: 0 }
@@ -185,8 +185,8 @@ describe('data table', function() {
 
     describe('post-fetch', function() {
       beforeEach(function() {
-        sinon.spy(this.table, 'disableExport');
-        sinon.spy(this.table, 'enableExport');
+        spy(this.table, 'disableExport');
+        spy(this.table, 'enableExport');
       });
 
       afterEach(function() {
@@ -226,7 +226,7 @@ describe('data table', function() {
     });
 
     it('terminates ongoing ajax requests', function() {
-      var xhr = (this.table.xhr = { abort: sinon.stub() });
+      var xhr = (this.table.xhr = { abort: stub() });
       this.table.fetch({}, function() {});
       expect(xhr.abort).to.have.been.called;
     });
@@ -234,7 +234,7 @@ describe('data table', function() {
 
   describe('listens to window state', function() {
     beforeEach(function() {
-      sinon.stub(this.table.api.ajax, 'reload');
+      stub(this.table.api.ajax, 'reload');
     });
 
     afterEach(function() {
@@ -413,7 +413,7 @@ describe('data table', function() {
 
   describe('getCycle', function() {
     before(function(done) {
-      this.spy = sinon.spy(getCycle);
+      this.spy = spy(getCycle);
       done();
     });
 
@@ -531,7 +531,7 @@ describe('data table', function() {
         ]
       };
       this.table.filterSet.isValid = true;
-      var callback = sinon.stub();
+      var callback = stub();
       this.table.fetch({}, callback);
       expect(this.table.filters).to.deep.equal(serialized);
       var self = this;
@@ -569,7 +569,7 @@ describe('data table', function() {
         fields: ['committee_id', 'recipient_name', 'recipient_city']
       };
       this.table.filterSet.isValid = true;
-      var callback = sinon.stub();
+      var callback = stub();
       this.table.fetch({}, callback);
       expect(this.table.filters).to.deep.equal(serialized);
       expect(this.table.filters.data_type, 'Expected raw data type').to.equal('raw');
@@ -611,7 +611,7 @@ describe('data table', function() {
         fields: ['is_notice', 'filing_form']
       };
       this.table.filterSet.isValid = true;
-      var callback = sinon.stub();
+      var callback = stub();
       this.table.fetch({}, callback);
       expect(this.table.filters).to.deep.equal(serialized);
       expect(

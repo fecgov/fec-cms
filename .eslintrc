@@ -6,6 +6,8 @@
   "env": {
     "browser": true,
     "es6": true,
+    "jquery": true,
+    "node": true
   },
   "extends": [
     "eslint:recommended",
@@ -78,7 +80,7 @@
     ]
   },
   "overrides": [{
-    "files": ["/fec/fec/static/tests/js/*.js"],
+    "files": ["./fec/fec/static/tests/js/*.js"],
     "rules": {
       "sort-imports": "off",
       "import/order": ["off"]
@@ -86,11 +88,17 @@
   }],
   "parser": "@babel/eslint-parser",
   "parserOptions": {
-      "ecmaVersion": 6,
-      "sourceType": "module",
-      "ecmaFeatures": {
-          "jsx": true
-      }
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "babelOptions": {
+      "plugins": [
+        "@babel/plugin-syntax-import-assertions"
+      ],
+      "presets": ["@babel/preset-react"]
+    }
   },
   "plugins": [
     "react",

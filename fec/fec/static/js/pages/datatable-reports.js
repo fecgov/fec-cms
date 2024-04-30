@@ -71,7 +71,7 @@ $(function() {
       )
     },
     drawCallback: function() {
-      this.dropdowns = $table.find('.dropdown').map(function(idx, elm) {
+      this.dropdowns = $table.find('.dropdown').map(function (idx, elm) {
         return new Dropdown($(elm), { checkboxes: false });
       });
     }

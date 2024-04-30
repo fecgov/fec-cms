@@ -337,7 +337,7 @@ DateFilter.prototype.showWarning = function() {
   if (!this.showingWarning) {
     var warning =
       '<div class="message message--error message--small">' +
-      "You entered a date that's outside the two-year time period. " +
+      'You entered a date that&apos;s outside the two-year time period. ' +
       'Please enter a receipt date from ' +
       '<strong>' +
       this.minYear +
