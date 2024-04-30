@@ -2,7 +2,7 @@
  * pagingType documentation: https://datatables.net/reference/option/pagingType
  */
 
-import DT_DataTable from 'datatables.net-dt';
+import DataTable from 'datatables.net-dt';
 import {
   chain as _chain,
   clone as _clone,
@@ -69,7 +69,10 @@ export const DOWNLOAD_MESSAGES = {
   pending: 'You\'re already exporting this data set.'
 };
 
-export const  DATA_WIDGETS = '.js-data-widgets';
+/**
+ * The selector string for data widgets
+ */
+export const DATA_WIDGETS = '.js-data-widgets';
 
 // id for the last changed element on form for status update
 let updateChangedEl;
@@ -81,7 +84,13 @@ $(document.body).on('draw.dt', function() {
   $('.dataTable tbody td:first-child').attr('scope', 'row');
 });
 
-export function yearRange(first, last) {
+/**
+ *
+ * @param {number} first - The beginning year of the range
+ * @param {number} last - The ending year of the range
+ * @returns {string} Formatted as `${first} - ${last}`
+ */
+ export function yearRange(first, last) {
   if (first === last) {
     return first;
   } else {
@@ -89,8 +98,14 @@ export function yearRange(first, last) {
   }
 }
 
+/**
+ *
+ * @param {*} value
+ * @param {*} meta
+ * @returns {Object} Either { cycles: {number} } or {}
+ */
 export function getCycle(value, meta) {
-  const dataTable = DataTable.registry[meta.settings.sTableId];
+  const dataTable = DataTable_FEC.registry[meta.settings.sTableId];
   const filters = dataTable && dataTable.filters;
 
   if (filters && filters.cycle) {
@@ -106,6 +121,12 @@ export function getCycle(value, meta) {
   }
 }
 
+/**
+ *
+ * @param {*} order
+ * @param {*} column
+ * @returns
+ */
 export function mapSort(order, column) {
   return _map(order, function(item) {
     let name = column[item.column].data;
@@ -126,6 +147,11 @@ function getCount(response) {
   return pagination_count; // eslint-disable-line camelcase
 }
 
+/**
+ *
+ * @param {*} response
+ * @returns An object with values for `recordsTotal`, `recordsFiltered`, and `data` (response.results)
+ */
 export function mapResponse(response) {
   const pagination_count = getCount(response); // eslint-disable-line camelcase
 
@@ -412,8 +438,17 @@ function filterSuccessUpdates(changeCount) {
   }
 }
 
-export function OffsetPaginator() {} //eslint-disable-line no-empty-function
+/**
+ * The OffsetPaginator class
+ * @function mapQuery
+ * @function handleResponse
+ */
+export function OffsetPaginator() {/* */}
 
+/**
+ * @param {*} data
+ * @returns Object with number values for `per_page` and `page`
+ */
 OffsetPaginator.prototype.mapQuery = function(data) {
   return {
     per_page: data.length, // eslint-disable-line camelcase
@@ -423,6 +458,9 @@ OffsetPaginator.prototype.mapQuery = function(data) {
 
 OffsetPaginator.prototype.handleResponse = function() {}; //eslint-disable-line no-empty-function
 
+/**
+ * The SeekPaginator class
+ */
 export function SeekPaginator() {
   this.indexes = {};
   this.query = null;
@@ -490,6 +528,13 @@ const defaultCallbacks = {
   afterRender: function() {} //eslint-disable-line no-empty-function
 };
 
+/**
+ * The FEC's class of DataTable (the `_FEC` suffix is to differentiate between
+ * datatables v1's '.Datatable' jQuery plugin and
+ * datatables v2's official DataTable object.
+ * @param {*} selector
+ * @param {*} opts
+ */
 export function DataTable_FEC(selector, opts) {
   opts = opts || {};
   this.$body = $(selector);
@@ -535,7 +580,7 @@ DataTable_FEC.prototype.initTable = function() {
 };
 
 // Get the full querystring on-load
-DataTable_FEC.prototype.getVars = function () {
+DataTable_FEC.prototype.getVars = function() {
   const initialParams = window.location.search;
   return initialParams.toString();
 };
@@ -661,7 +706,7 @@ DataTable_FEC.prototype.refreshExport = function() {
 
 DataTable_FEC.prototype.destroy = function() {
   this.api.destroy();
-  delete DataTable.registry[this.$body.attr('id')];
+  delete DataTable_FEC.registry[this.$body.attr('id')];
 };
 
 DataTable_FEC.prototype.handlePopState = function() {
@@ -1020,7 +1065,7 @@ DataTable_FEC.registry = {};
 
 DataTable_FEC.defer = function($table, opts) {
   tabsOnShow($table, function() {
-    new DataTable_dt_net($table, opts);
+    new DataTable_FEC($table, opts);
   });
 };
 
@@ -1045,7 +1090,7 @@ DataTable_FEC.prototype.handleSwitch = function(e, opts) {
 /**
  * Used for…
  * @param {string} className - Selector text, including the leading period (ex: `.data-table` instead of `data-table`)
- * @param {Object} pageContext - The global.context or window.context data object
+ * @param {Object} pageContext - The window.context data object
  * @param {string} pageContext.candidateID
  * @param {number} pageContext.cycle
  * @param {number[]} pageContext.cycles
