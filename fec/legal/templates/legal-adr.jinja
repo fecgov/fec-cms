@@ -108,9 +108,10 @@
       </thead>
       <tbody>
         {% for disposition in adr.collated_dispositions %}
+          {% set dispositionloop = loop %}
           {% for penalty in adr.collated_dispositions[disposition] %}
             {% for entry in adr.collated_dispositions[disposition][penalty] %}
-              <tr>
+            <tr class="{{ dispositionloop.cycle('row-color-normal', 'row-color-contrast') }}">
                 {% if loop.first %}
                 <td rowspan="{{ adr.collated_dispositions[disposition][penalty] | length }}">{{ disposition }}</td>
                 <td rowspan="{{ adr.collated_dispositions[disposition][penalty] | length }}"> {{ penalty | currency or '' }} </td>
