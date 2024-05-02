@@ -58,11 +58,35 @@ function formatAuditCandidate(result) {
   };
 }
 
+function formatCaseRegulatoryCitation(result) {
+  return {
+    citation: result.citation_text,
+    type: 'caseRegulatoryCitation'
+  };
+}
+
+function formatCaseStatutoryCitation(result) {
+  return {
+    citation: result.citation_text,
+    type: 'caseStatutoryCitation'
+  };
+}
+
 function getUrl(resource) {
   return URI(window.API_LOCATION)
     .path([window.API_VERSION, 'names', resource, ''].join('/'))
     .query({
       q: '%QUERY',
+      api_key: window.API_KEY_PUBLIC
+    })
+    .readable();
+}
+
+function getCitationUrl(citationType) {
+  return URI(window.API_LOCATION)
+    .path([window.API_VERSION, 'legal', 'citation', citationType, ''].join('/'))
+    .query({
+      wildcard: '%QUERY',
       api_key: window.API_KEY_PUBLIC
     })
     .readable();
@@ -114,6 +138,28 @@ var auditCandidateEngine = createEngine({
     wildcard: '%QUERY',
     transform: function(response) {
       return _.map(response.results, formatAuditCandidate);
+    }
+  }
+});
+
+// Uses seperate resource path: /legal/citation/regulation/[query_string]/
+var caseRegulatoryEngine = createEngine({
+  remote: {
+    url: getCitationUrl('regulation'),
+    wildcard: '%QUERY',
+    transform: function(response) {
+      return _.map(response.results, formatCaseRegulatoryCitation);
+    }
+  }
+});
+
+// Uses seperate resource path: /legal/citation/statute/[query_string]/
+var caseStatutoryEngine = createEngine({
+  remote: {
+    url: getCitationUrl('statute'),
+    wildcard: '%QUERY',
+    transform: function(response) {
+      return _.map(response.results, formatCaseStatutoryCitation);
     }
   }
 });
@@ -187,6 +233,39 @@ var auditCandidateDataset = {
   }
 };
 
+var caseRegulatoryCitationDataset = {
+  name: 'caseRegulatoryCitation',
+  display: 'regulatory',
+  limit: 10,
+  source: caseRegulatoryEngine,
+  templates: {
+    header: '<span class="tt-suggestion__header">Select a citation:</span>',
+    pending:
+      '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
+    notFound: Handlebars.compile(''), // This has to be empty to not show anything
+    suggestion: Handlebars.compile(
+      '<span class="tt-suggestion__name">{{ citation }}</span>'
+    )
+  }
+};
+
+var caseStatutoryCitationDataset = {
+  name: 'caseStatutoryCitation',
+  display: 'statutory',
+  limit: 10,
+  source: caseStatutoryEngine,
+  templates: {
+    header: '<span class="tt-suggestion__header">Select a citation:</span>',
+    pending:
+      '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
+    notFound: Handlebars.compile(''), // This has to be empty to not show anything
+    suggestion: Handlebars.compile(
+      '<span class="tt-suggestion__name">{{ citation }}</span>'
+    )
+  }
+};
+
+
 /* This is a fake dataset for showing an empty option with the query
  * when clicked, this will load the receipts page,
  * filtered to contributions from this person
@@ -239,6 +318,8 @@ var datasets = {
   committees: committeeDataset,
   auditCandidates: auditCandidateDataset,
   auditCommittees: auditCommitteeDataset,
+  caseRegulatoryCitation: caseRegulatoryCitationDataset,
+  caseStatutoryCitation: caseStatutoryCitationDataset,
   allData: [candidateDataset, committeeDataset],
   all: [candidateDataset, committeeDataset, individualDataset, siteDataset]
 };
