@@ -122,8 +122,9 @@
           {% endfor %}
         {% endfor %}
         <!-- Appending rows for non_monetary_terms and non_monetary_terms_respondents -->
-        {% if adr['non_monetary_terms']|length > 1 %}
-        <tr class="{% if  adr.collated_dispositions | length % 2 == 0 %}row-color-normal{% else %}row-color-contrast{% endif %}">
+        {% if adr['non_monetary_terms']|length > 0 %}
+          {% set row_class = "row-color-normal" if adr.collated_dispositions | length is even else "row-color-contrast" %}
+          <tr class="{{ row_class }}">
               <td rowspan="{{ adr['non_monetary_terms_respondents'] | length }}">
                 {% for non_monetary_term in adr.non_monetary_terms %}
                   {{ non_monetary_term }}{% if loop.index < loop.length %};{% endif %}
@@ -135,7 +136,7 @@
                 <td>{{ adr.non_monetary_terms_respondents[0] }}</td>
           </tr>
           {% for second_respondent_and_beyond in adr.non_monetary_terms_respondents[1:] %}
-          <tr class="{% if  adr.collated_dispositions | length % 2 == 0 %}row-color-normal{% else %}row-color-contrast{% endif %}">
+          <tr class="{{ row_class }}">
             <td>{{ second_respondent_and_beyond }}</td></tr>
           {% endfor %}
         {% endif %}
