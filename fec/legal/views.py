@@ -250,18 +250,36 @@ def legal_doc_search_adr(request):
     offset = request.GET.get('offset', 0)
     case_no = request.GET.get('case_no', '')
     case_respondents = request.GET.get('case_respondents', '')
+    case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
 
     results = api_caller.load_legal_search_results(
-        query, 'adrs', offset=offset, case_no=case_no, case_respondents=case_respondents)
+        query, 'adrs',
+        offset=offset,
+        case_no=case_no,
+        case_respondents=case_respondents,
+        case_doc_category_id=case_doc_category_ids,
+    )
+
+    # Define ADR document categories dictionary
+    adr_document_categories = {
+        "1001": "Settlement Agreements",
+        "1002": "Complaint, Responses, Designation of Counsel and Extensions of Time",
+        "1003": "ADR Memoranda, Notifications Responses",
+        "1004": "Certifications",
+        "1005": "Civil Penalties, Disgorgements, Other Payments and Letters of Compliance",
+        "1006": "Statements of Reasons"
+    }
 
     return render(request, 'legal-search-results-adrs.jinja', {
         'parent': 'legal',
         'results': results,
+        'adr_document_categories': adr_document_categories,
         'result_type': 'adrs',
         'case_no': case_no,
         'case_respondents': case_respondents,
         'query': query,
         'social_image_identifier': 'legal',
+        'selected_categories': case_doc_category_ids,
     })
 
 
