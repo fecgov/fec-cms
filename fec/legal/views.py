@@ -40,7 +40,7 @@ def advisory_opinions_landing(request):
                 # This regex searches in the document description for a string in this format:
                 # "(Comments due by October 24, 2022)", case insensitive, forgiving for extra spaces and 1-digit month
                 pattern = re.search(r'(?i)\(\s*Comments\s*due\s*by\s*(([a-z,A-Z]+)\s*\d{1,2}\s*,*\s*\d{4})\s*\)',
-                    doc['description'])
+                                    doc['description'])
 
                 # If a match is found.
                 if pattern:
@@ -183,7 +183,6 @@ def legal_doc_search_ao(request):
 
 
 def legal_doc_search_mur(request):
-    results = {}
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
     case_no = request.GET.get('case_no', '')
@@ -193,12 +192,14 @@ def legal_doc_search_mur(request):
     case_max_open_date = request.GET.get('case_max_open_date', '')
     case_min_close_date = request.GET.get('case_min_close_date', '')
     case_max_close_date = request.GET.get('case_max_close_date', '')
+    case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
 
     # For JS sorting
     sort_dir = 'descending' if sort == '-case_no' or sort == '' or sort == 'null' else 'ascending'
     sort_dir_option = 'descending' if sort_dir == 'ascending' else 'ascending'
     sort_class = sort_dir[0:-6]
 
+    # Call the function and unpack its return values
     results = api_caller.load_legal_search_results(
         query, 'murs',
         offset=offset,
@@ -208,12 +209,24 @@ def legal_doc_search_mur(request):
         case_min_open_date=case_min_open_date,
         case_max_open_date=case_max_open_date,
         case_min_close_date=case_min_close_date,
-        case_max_close_date=case_max_close_date
+        case_max_close_date=case_max_close_date,
+        case_doc_category_id=case_doc_category_ids,
     )
+
+    # Define MUR document categories dictionary
+    mur_document_categories = {
+        "1": "Conciliation Agreements",
+        "2": "Complaint, Responses, Designation of Counsel and Extensions of Time",
+        "3": "General Counsel Reports, Briefs, Notifications and Responses",
+        "4": "Certifications",
+        "5": "Civil Penalties, Disgorgements and Other Payments",
+        "6": "Statements of Reasons"
+    }
 
     return render(request, 'legal-search-results-murs.jinja', {
         'parent': 'legal',
         'results': results,
+        'mur_document_categories': mur_document_categories,
         'result_type': 'murs',
         'case_no': case_no,
         'sort': sort,
@@ -227,6 +240,7 @@ def legal_doc_search_mur(request):
         'case_max_close_date': case_max_close_date,
         'query': query,
         'social_image_identifier': 'legal',
+        'selected_categories': case_doc_category_ids,
     })
 
 
