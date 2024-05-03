@@ -117,8 +117,34 @@
                   </li>
                 </ul>
               {% endif %}
-              
-            {% endif %}
+            {%else%}
+            {# Only show document list when filtering by document type #}
+            {% for category_id, category_label in mur_document_categories.items() %}
+              {% if category_id in selected_doc_category_ids %}
+                <div class="post--icon u-padding--top">
+                  <span class="icon icon--inline--left i-document"></span>
+                  <a href="{{document.url}}">
+                {% if mur.mur_type == 'current' %}
+                    {{ document.description }}
+                  {% else %}
+                    {% if mur.get('documents', {}) | length == 1 %}
+                      Case document
+                    {% else %}
+                      Case documents, part {{ document.document_id }}
+                    {% endif %}
+                  {% endif %}
+                  </a>
+                  {% if mur.mur_type == 'current' %}
+                  <ul class="tags u-padding--bottom">
+                    <li class="tag__category tag__category--doc">
+                      <div class="tag tag--primary">{{ document.category }}</div>
+                    </li>
+                  </ul>
+                {% endif %}
+                  </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
           {% endfor %}
         </div>
       </div>

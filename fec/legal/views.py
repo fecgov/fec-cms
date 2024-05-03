@@ -240,7 +240,7 @@ def legal_doc_search_mur(request):
         'case_max_close_date': case_max_close_date,
         'query': query,
         'social_image_identifier': 'legal',
-        'selected_categories': case_doc_category_ids,
+        'selected_doc_category_ids': case_doc_category_ids,
     })
 
 
@@ -279,7 +279,7 @@ def legal_doc_search_adr(request):
         'case_respondents': case_respondents,
         'query': query,
         'social_image_identifier': 'legal',
-        'selected_categories': case_doc_category_ids,
+        'selected_doc_category_ids': case_doc_category_ids,
     })
 
 

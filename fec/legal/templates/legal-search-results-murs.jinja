@@ -24,7 +24,7 @@
         <legend class="label">Document Type</legend>
         {% for category_id, category_label in mur_document_categories.items() %}
             <div>
-                <input type="checkbox" id="case_doc_category_id_{{ category_id }}" name="case_doc_category_id" value="{{ category_id }}" {% if category_id in selected_categories %}checked{% endif %}>
+                <input type="checkbox" id="case_doc_category_id_{{ category_id }}" name="case_doc_category_id" value="{{ category_id }}" {% if category_id in selected_doc_category_ids %}checked{% endif %}>
                 <label for="case_doc_category_id_{{ category_id }}">{{ category_label }}</label>
             </div>
         {% endfor %}
