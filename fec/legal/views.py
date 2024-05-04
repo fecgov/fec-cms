@@ -222,6 +222,10 @@ def legal_doc_search_mur(request):
         "5": "Civil Penalties, Disgorgements and Other Payments",
         "6": "Statements of Reasons"
     }
+    for mur in results['murs']:
+        for index, doc in enumerate(mur['documents']):
+            doc['category_match'] = str(doc['doc_order_id']) in case_doc_category_ids
+            doc['text_match'] = str(index) in mur['document_highlights']
 
     return render(request, 'legal-search-results-murs.jinja', {
         'parent': 'legal',

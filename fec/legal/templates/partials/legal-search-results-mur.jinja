@@ -62,9 +62,16 @@
         {% endif %}
         </div>
         <div class="legal-search-result__hit u-padding--left--small split__cell">
+          {% set filters_category_type = selected_doc_category_ids | length > 0 %}
+          {% set filters_keyword = query | length > 0 %}
+          {% if filters_category_type or filters_keyword %}
           {% for document in mur.documents %}
-            {% set query_highlight = mur.document_highlights[loop.index0 | string]%}
-            {% if(query_highlight) %}
+            {% set category_match = (filters_category_type and document.category_match) or not filters_category_type %}
+            {% set keyword_match = (filters_keyword and document.text_match) or not filters_keyword %}
+            {% set show_document = category_match and keyword_match  %}
+
+            {%if show_document %}
+            
               <div class="post--icon u-padding--top">
                 <span class="icon icon--inline--left i-document"></span>
                 <a href="{{document.url}}">
@@ -79,26 +86,29 @@
                 {% endif %}
                 </a>
               </div>
-              {# show only first document highlight result #}
-              <ul>
-                  <li class="post--icon t-serif t-italic u-padding--top--med">
-                    &#8230;{{ query_highlight[0] | safe }}&#8230;
-                  </li>
-              </ul>
-              {# show additional document highlight results, if any #}
-              {% if(query_highlight|length > 1) %}
-              {% if mur.mur_type == 'current' %}
-                <div class="js-accordion u-margin--top" data-content-prefix="additional-result-{{ mur.no }}-{{loop.index0}}">
-              {% else %}
-                <div class="js-accordion u-margin--top u-padding--bottom" data-content-prefix="additional-result-{{ mur.no }}-{{loop.index0}}">
-              {% endif %}
-                <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ mur.no }}-{{loop.index0}}" aria-expanded="false">
-                  {% if(query_highlight|length == 2) %}
-                    1 more match
-                  {% elif(query_highlight|length > 2)  %}
-                    {{ query_highlight|length -1 }} more matches
+              {% set query_highlight = mur.document_highlights[loop.index0 | string]%}
+              {% if(query_highlight) %}
+                
+                {# show only first document highlight result #}
+                <ul>
+                    <li class="post--icon t-serif t-italic u-padding--top--med">
+                      &#8230;{{ query_highlight[0] | safe }}&#8230;
+                    </li>
+                </ul>
+                {# show additional document highlight results, if any #}
+                {% if(query_highlight|length > 1) %}
+                  {% if mur.mur_type == 'current' %}
+                    <div class="js-accordion u-margin--top" data-content-prefix="additional-result-{{ mur.no }}-{{loop.index0}}">
+                  {% else %}
+                    <div class="js-accordion u-margin--top u-padding--bottom" data-content-prefix="additional-result-{{ mur.no }}-{{loop.index0}}">
                   {% endif %}
-                </button>
+                  <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ mur.no }}-{{loop.index0}}" aria-expanded="false">
+                    {% if(query_highlight|length == 2) %}
+                      1 more match
+                    {% elif(query_highlight|length > 2)  %}
+                      {{ query_highlight|length -1 }} more matches
+                    {% endif %}
+                  </button>
                   <div class="accordion__content results__content" aria-hidden="true">
                       <ul>
                         {% for highlight in query_highlight %}
@@ -108,44 +118,22 @@
                         {% endfor %}
                       </ul>
                   </div>
-              </div>
+                </div>
+                {% endif %}
+                  
               {% endif %}
               {% if mur.mur_type == 'current' %}
-                <ul class="tags u-padding--bottom">
-                  <li class="tag__category tag__category--doc">
-                    <div class="tag tag--primary">{{ document.category }}</div>
-                  </li>
-                </ul>
-              {% endif %}
-            {%else%}
-            {# Only show document list when filtering by document type #}
-            {% for category_id, category_label in mur_document_categories.items() %}
-              {% if category_id in selected_doc_category_ids %}
-                <div class="post--icon u-padding--top">
-                  <span class="icon icon--inline--left i-document"></span>
-                  <a href="{{document.url}}">
-                {% if mur.mur_type == 'current' %}
-                    {{ document.description }}
-                  {% else %}
-                    {% if mur.get('documents', {}) | length == 1 %}
-                      Case document
-                    {% else %}
-                      Case documents, part {{ document.document_id }}
-                    {% endif %}
-                  {% endif %}
-                  </a>
-                  {% if mur.mur_type == 'current' %}
                   <ul class="tags u-padding--bottom">
                     <li class="tag__category tag__category--doc">
                       <div class="tag tag--primary">{{ document.category }}</div>
                     </li>
                   </ul>
-                {% endif %}
-                  </div>
               {% endif %}
-            {% endfor %}
-          {% endif %}
+            {% else %}
+            {# documents we skip #}
+            {%endif%}
           {% endfor %}
+          {% endif %}
         </div>
       </div>
     </div>
