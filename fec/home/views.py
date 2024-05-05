@@ -21,11 +21,11 @@ logger = logging.getLogger(__name__)
 
 
 def search_updates(queryset, search):
-    # Use icontains to search html in older pages that cannot be searched by the wagtail.search.backends.database
+    # Use icontains to cover html blocks which are not searched by the below wagtail.search.backends.database
     results_html = queryset.filter(body__icontains=search)
-    # Use wagtail.search.backends.database (Postgres) to search all pages
+    # Use wagtail.search.backends.database (Postgres) to search all pages' search_fields defined in page models
     results = queryset.search(search)
-    # Combine results, removing duplicates where pages that have both html and other fields-types, may return results for both search options
+    # Combine results, removing any duplicates
     results = chain(results,  [x for x in results_html if x not in results])
 
     return results
