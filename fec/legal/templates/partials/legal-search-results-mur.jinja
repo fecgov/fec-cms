@@ -62,16 +62,24 @@
         {% endif %}
         </div>
         <div class="legal-search-result__hit u-padding--left--small split__cell">
+          {# Check for set document categories #}
           {% set filters_category_type = selected_doc_category_ids | length > 0 %}
+          {# Check for set keyword queries #}
           {% set filters_keyword = query | length > 0 %}
+          
+          {# Only show documents when categories or keywords are set #}
           {% if filters_category_type or filters_keyword %}
           {% for document in mur.documents %}
+          
+            {# This will show documents in all 3 scenarios:
+               - When there is a keyword query and selected document categories
+               - When there is selected document categories and no keyword query
+               - When there is a keyword query and no selected document categories #}
             {% set category_match = (filters_category_type and document.category_match) or not filters_category_type %}
             {% set keyword_match = (filters_keyword and document.text_match) or not filters_keyword %}
             {% set show_document = category_match and keyword_match  %}
 
             {%if show_document %}
-            
               <div class="post--icon u-padding--top">
                 <span class="icon icon--inline--left i-document"></span>
                 <a href="{{document.url}}">
@@ -88,7 +96,6 @@
               </div>
               {% set query_highlight = mur.document_highlights[loop.index0 | string]%}
               {% if(query_highlight) %}
-                
                 {# show only first document highlight result #}
                 <ul>
                     <li class="post--icon t-serif t-italic u-padding--top--med">
