@@ -63,6 +63,118 @@
   </div>
 {% endblock %}
 
+{% block message %}
+<div class="data-container__tags">
+  <div class="row">
+    <h3 class="tags__title">Viewing <span class="tags__count">{{ results.total_murs }}</span>  filtered results for:</h3>
+  </div>
+  
+  <div class="js-filter-tags data-container__tags">
+    <ul class="tags" aria-hidden="false">
+      <li data-tag-category="data_type" class="tag__category tag__category--and">
+        {% if query %}
+          <div data-removable="true" class="tag__item">{{ query }}</div>
+        {% endif %}
+        {% if case_no %}
+          <div data-removable="true" class="tag__item">{{ case_no }}</div>
+        {% endif %}
+        {% if case_respondents %}
+          <div data-removable="true" class="tag__item">{{ case_respondents }}</div>
+        {% endif %}
+        {% if case_min_open_date %}
+          <div data-removable="true" class="tag__item">{{ case_min_open_date | safe }}</div>
+        {% endif %}
+        {% if case_max_open_date %}
+          <div data-removable="true" class="tag__item">{{ case_max_open_date | safe }}</div>
+        {% endif %}
+        {% if case_min_close_date %}
+          <div data-removable="true" class="tag__item">{{ case_min_close_date | safe }}</div>
+        {% endif %}
+        {% if case_max_close_date %}
+          <div data-removable="true" class="tag__item">{{ case_max_close_date | safe }}</div>
+        {% endif %}
+      </li>
+      {% if selected_doc_category_names %}
+          <li data-tag-category="data_type" class="tag__category">
+            {% for selected_doc_category_name in selected_doc_category_names %}
+              <div data-removable="true" class="tag__item">{{ selected_doc_category_name }}</div>{% if not loop.last %}<span></span>{% endif %}
+            {% endfor %}
+          </li>
+      {% endif %}
+    </ul>
+
+    {# <ul class="tags" aria-hidden="false">
+      {% if query %}
+        <li data-tag-category="data_type" class="tag__category">
+          <div data-id="data_type-toggle" data-removable="false" data-remove-on-switch="false" class="tag__item">
+            <span class="prefix">Document keyword:</span>
+                {{ query }}
+          </div>
+        </li>
+      {% endif %}
+      {% if case_no %}
+        <li data-tag-category="data_type" class="tag__category tag__category--and">
+          <div data-id="data_type-toggle" data-removable="false" data-remove-on-switch="false" class="tag__item">
+            <span class="prefix">MUR #:</span>
+                {{ case_no }}
+          </div>
+        </li>
+      {% endif %}
+      {% if case_respondents %}
+        <li data-tag-category="data_type" class="tag__category tag__category--and">
+          <div data-id="data_type-toggle" data-removable="false" data-remove-on-switch="false" class="tag__item">
+            <span class="prefix">Respondents:</span>
+                {{ case_respondents }}
+          </div>
+        </li>
+      {% endif %}
+      {% if selected_doc_category_names %}
+      {% for selected_doc_category_name in selected_doc_category_names %}
+        <li data-tag-category="data_type" class="tag__category">
+          <div data-id="data_type-toggle" data-removable="false" data-remove-on-switch="false" class="tag__item">
+            <span class="prefix">Document type:</span>
+                {{ selected_doc_category_name }}
+          </div>
+        </li>
+      {% endfor %}
+      {% endif %}
+      {% if case_min_open_date %}
+        <li data-tag-category="data_type" class="tag__category tag__category--and">
+          <div data-id="data_type-toggle" data-removable="false" data-remove-on-switch="false" class="tag__item">
+            <span class="prefix">Case open beginning date:</span>
+                {{ case_min_open_date | safe }}
+          </div>
+        </li>
+      {% endif %}
+      {% if case_max_open_date %}
+        <li data-tag-category="data_type" class="tag__category tag__category--and">
+          <div data-id="data_type-toggle" data-removable="false" data-remove-on-switch="false" class="tag__item">
+            <span class="prefix">Case open ending date:</span>
+                {{ case_max_open_date | safe }}
+          </div>
+        </li>
+      {% endif %}
+      {% if case_min_close_date %}
+        <li data-tag-category="data_type" class="tag__category tag__category--and">
+          <div data-id="data_type-toggle" data-removable="false" data-remove-on-switch="false" class="tag__item">
+            <span class="prefix">Case close beginning date:</span>
+                {{ case_min_close_date | safe }}
+          </div>
+        </li>
+      {% endif %}
+      {% if case_max_close_date %}
+        <li data-tag-category="data_type" class="tag__category tag__category--and">
+          <div data-id="data_type-toggle" data-removable="false" data-remove-on-switch="false" class="tag__item">
+            <span class="prefix">Case close ending date:</span>
+                {{ case_max_close_date | safe }}
+          </div>
+        </li>
+      {% endif %}
+    </ul> #}
+  </div>
+</div>
+{% endblock %}
+
 {% block results %}
 {% with murs = results.murs %}
 

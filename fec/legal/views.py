@@ -222,6 +222,10 @@ def legal_doc_search_mur(request):
         "5": "Civil Penalties, Disgorgements and Other Payments",
         "6": "Statements of Reasons"
     }
+
+    # Return the selected document category name
+    mur_document_category_names = [mur_document_categories.get(id) for id in case_doc_category_ids]
+
     for mur in results['murs']:
         for index, doc in enumerate(mur['documents']):
             # Checks if the selected document category filters matching the document categories
@@ -247,6 +251,7 @@ def legal_doc_search_mur(request):
         'query': query,
         'social_image_identifier': 'legal',
         'selected_doc_category_ids': case_doc_category_ids,
+        'selected_doc_category_names': mur_document_category_names,
     })
 
 
