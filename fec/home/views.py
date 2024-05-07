@@ -348,7 +348,8 @@ def index_meetings(request):
     executive_years = list(
         map(lambda x: x.year, executive_sessions.dates("date", "year", order="DESC"))
     )
-
+    
+    # These clear the search field upon navigating tabs as requested by content team
     meetings_query = ""
     hearings_query = ""
     executive_query = ""
@@ -373,23 +374,29 @@ def index_meetings(request):
     if search:
         if active == "open-meetings":
             meetings_query = search
-            # Use icontains to search imported_html in older pages that cannot be searched by the wagtail.search.backends.database
-            legacy_meetings = list(open_meetings.filter(date__lte='2017-04-27').filter(imported_html__icontains=meetings_query))
-            # Use wagtail.search.backends.database (Postgres) to search all open meeting pages
+            """
+            Perform text search on agenda field for newer open meetings and imported_html field for older 
+            open meetings who's html cannot be searched by the wagtail.search.backends.database (<= 2017-04-27)
+            """
+            text_search_meetings = list(open_meetings.filter(Q(agenda__icontains=meetings_query) |  Q(imported_html__icontains=meetings_query)))
+            # Also use wagtail.search.backends.database (Postgres) to search open meeting pages
             open_meetings = list(open_meetings.search(meetings_query))
             # Combine the results, removing any duplicates
-            open_meetings = open_meetings + [x for x in legacy_meetings if x not in open_meetings]
+            open_meetings = open_meetings + [x for x in text_search_meetings if x not in open_meetings]
             # Sort results because db search does not recognize the order_by of the original queryset
             open_meetings.sort(key=attrgetter('date'), reverse=True)
 
         if active == "hearings":
             hearings_query = search
-            # Use icontains to search imported_html in older pages that cannot be searched by the wagtail.search.backends.database
-            legacy_hearings = list(hearings.filter(date__lte='2016-12-06').filter(imported_html__icontains=hearings_query))
-            # Use wagtail.search.backends.database (Postgres) to search all heariing pages
+            """
+            Perform text search on agenda field for newer hearings and imported_html field for older 
+            hearings who's html cannot be searched by the wagtail.search.backends.database (<= 2016-12-06)
+            """
+            text_search_hearings = list(hearings.filter(Q(agenda__icontains=hearings_query) |  Q(imported_html__icontains=hearings_query)))
+            # Also Use wagtail.search.backends.database (Postgres) to search heariing pages
             hearings = list(hearings.search(hearings_query))
             # Combine the results, removing any duplicates
-            hearings = hearings + [x for x in legacy_hearings if x not in hearings]
+            hearings = hearings + [x for x in text_search_hearings if x not in hearings]
             # Sort results because db search does not recognize the order_by of the original queryset
             hearings.sort(key=attrgetter('date'), reverse=True)
 
