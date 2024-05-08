@@ -229,7 +229,7 @@ def legal_doc_search_mur(request):
     for mur in results['murs']:
         for index, doc in enumerate(mur['documents']):
             # Checks if the selected document category filters matching the document categories
-            doc['category_match'] = str(doc['doc_order_id']) in case_doc_category_ids
+            doc['category_match'] = mur["mur_type"] != "archived" and str(doc['doc_order_id']) in case_doc_category_ids
             # Checks for document keyword text match
             doc['text_match'] = str(index) in mur['document_highlights']
 
