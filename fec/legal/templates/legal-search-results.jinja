@@ -85,7 +85,7 @@
                       {% include 'partials/legal-search-results-advisory-opinion.jinja' %}
                       {% endwith %}
                       <div class="results-info">
-                      <a class="button button--browse button--alt" href="/data/legal/search/{{ category }}/?search={{ query }}&search_type={{ category}}">All results</a>
+                      <a class="button button--browse button--alt" href="/data/legal/search/{{ category | replace('_', '-') }}/?search={{ query }}&search_type={{ category}}">All results</a>
                       </div>
                   {% else %}
                   {{ legal.no_results("advisory opinions", category, query, fec_resources=['Advisory_Opinion', 'fec.gov']) }}
