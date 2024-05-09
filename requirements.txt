@@ -1,4 +1,4 @@
-Django==4.2.10
+Django==4.2.13
 cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
@@ -16,6 +16,7 @@ CacheControl==0.11.5
 cachetools==1.0.2
 github3.py==3.2.0
 django-utils-six==2.0 # pinning until other packages support Django 3.x
+sqlparse==0.5.0  # brought in by Django, pinning until django updates min version
 
 
 # Development
