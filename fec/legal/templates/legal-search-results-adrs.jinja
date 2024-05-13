@@ -39,6 +39,33 @@
   <div class="row">
     <h3 class="tags__title">Viewing <span class="tags__count">{{ results.total_adrs }}</span>  filtered results for:</h3>
   </div>
+  <div class="js-filter-tags data-container__tags">
+    <div class="tags" aria-hidden="false">
+      {% if query or case_no or case_respondents or case_min_open_date or case_max_open_date or case_min_close_date or case_max_close_date %}
+        <div data-tag-category="data_type" class="tag__category tag__category--and">
+          {% if query %}
+            <div data-removable="true" class="tag__item">{{ query }}</div>
+          {% endif %}
+          {% if case_no %}
+            <div data-removable="true" class="tag__item">{{ case_no }}</div>
+          {% endif %}
+          {% if case_respondents %}
+            <div data-removable="true" class="tag__item">{{ case_respondents }}</div>
+          {% endif %}
+        </div>
+        
+      {% endif %}
+      
+      {% if selected_doc_category_names %}
+        <div class="row u-margin--top u-margin--bottom"><strong>and</strong></div>
+        <div data-tag-category="data_type" class="tag__category">
+          {% for selected_doc_category_name in selected_doc_category_names %}
+            <div data-removable="true" class="tag__item">{{ selected_doc_category_name }}</div>{% if not loop.last %}<span></span>{% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </ul>
+  </div>
 </div>
 {% endblock %}
 

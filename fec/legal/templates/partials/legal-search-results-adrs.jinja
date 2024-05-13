@@ -1,9 +1,9 @@
 <table class="simple-table simple-table--display">
   <thead>
     <tr class="simple-table__header">
-      <th class="simple-table__header-cell cell--50">Case</th>
-      <th class="simple-table__header-cell">Election cycle(s)</th>
-      <th class="simple-table__header-cell">Closing date</th>
+      <th class="simple-table__header-cell cell--15">Case number</th>
+      <th class="simple-table__header-cell cell--15">Case name</th>
+      <th class="simple-table__header-cell">Case details and documents</th>
     </tr>
   </thead>
   <tbody>
@@ -12,29 +12,93 @@
       <td class="simple-table__cell">
         <div class="t-sans">
           <i class="icon i-folder icon--inline--left"></i>
-          <a class="t-bold" title="{{ adr.name }}" href="/data/legal/alternative-dispute-resolution/{{ adr.no }}">ADR {{ adr.no }}</a><br />
-            {{ adr.name.upper() }}
-          {% if adr.highlights %}
-            <div class="t-sans u-padding--top">Keyword match:</div>
-            <div class="legal-search-result__hit u-padding--left">
-              {% for highlight in adr.highlights %}
-                <span class="t-serif t-italic">
-                    {{ highlight|safe }} &hellip;
-                </span>
-              {% endfor %}
-            </div>
-          {% endif %}
+          <a class="t-bold" title="{{ adr.name }}" href="/data/legal/alternative-dispute-resolution/{{ adr.no }}">ADR {{ adr.no }}</a>
+        </div>
+      </td>
+      <td class="simple-table__cell">
+        <div class="t-sans">
+          {{ adr.name.upper() }}
         </div>
       </td>
       <td class="simple-table__cell">
         <div class="t-sans">
           {% for election_cycle in adr.election_cycles | unique %}
-            {{ election_cycle }}<br />
+            <strong>Election cycle(s):</strong> {{ election_cycle }}<br />
           {% endfor %}
         </div>
-      </td>
-      <td class="simple-table__cell">
-        <div class="t-sans">{{ adr.close_date | date(fmt='%m/%d/%Y') }}</div>
+        <div class="t-sans"><strong>Case closing date:</strong> {{ adr.close_date | date(fmt='%m/%d/%Y') }}</div>
+        <div class="legal-search-result__hit u-padding--left--small split__cell">
+          {# Check for set document categories #}
+          {% set filters_category_type = selected_doc_category_ids | length > 0 %}
+          {# Check for set keyword queries #}
+          {% set filters_keyword = query | length > 0 %}
+          
+          {# Only show documents when categories or keywords are set #}
+          {% if filters_category_type or filters_keyword %}
+            {% for document in adr.documents %}
+              {# This will show documents in all 3 scenarios:
+                 - When there is a keyword query and selected document categories
+                 - When there are selected document categories and no keyword query
+                 - When there is a keyword query and no selected document categories #}
+              {% set category_match = (filters_category_type and document.category_match) or not filters_category_type %}
+              {% set keyword_match = (filters_keyword and document.text_match) or not filters_keyword %}
+              {% set show_document = category_match and keyword_match  %}
+
+              {% if show_document %}
+                <div class="post--icon u-padding--top">
+                  <span class="icon icon--inline--left i-document"></span>
+                  <a href="{{document.url}}">{{ document.description }}</a>
+                </div>
+                {% set query_highlight = adr.document_highlights[loop.index0 | string]%}
+                {% if query_highlight %}
+                  <div class="post--icon u-padding--top">
+                    <span class="icon icon--inline--left i-document"></span>
+                    <a href="{{document.url}}">
+                      {{ document.description }}
+                    </a>
+                  </div>
+                  {# show only first document highlight result #}
+                  <ul>
+                    <li class="post--icon t-serif t-italic u-padding--top--med">
+                      &#8230;{{ query_highlight[0] | safe }}&#8230;
+                    </li>
+                  </ul>
+                  {# show additional document highlight results, if any #}
+                  {% if query_highlight|length > 1 %}
+                    <div class="js-accordion u-margin--top" data-content-prefix="additional-result-{{ adr.no }}-{{loop.index0}}">
+                      <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ adr.no }}-{{loop.index0}}" aria-expanded="false">
+                        {% if query_highlight|length == 2 %}
+                          1 more match
+                        {% elif query_highlight|length > 2 %}
+                          {{ query_highlight|length -1 }} more matches
+                        {% endif %}
+                      </button>
+                      <div class="accordion__content results__content" aria-hidden="true">
+                        <ul>
+                          {% for highlight in query_highlight %}
+                            {% if loop.index0 != 0 %}
+                              <li class="t-serif t-italic">&#8230;{{ highlight | safe }}&#8230;</li>
+                            {% endif %}
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  {% endif %}
+                  <ul class="tags u-padding--bottom">
+                    <li class="tag__category tag__category--doc">
+                      <div class="tag tag--primary">{{ document.category }}</div>
+                    </li>
+                  </ul>
+                {% endif %}
+                <ul class="tags u-padding--bottom">
+                  <li class="tag__category tag__category--doc">
+                    <div class="tag tag--primary">{{ document.category }}</div>
+                  </li>
+                </ul>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        </div>
       </td>
     </tr>
     {% endfor %}

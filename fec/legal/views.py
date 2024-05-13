@@ -215,7 +215,7 @@ def legal_doc_search_mur(request):
 
     # Define MUR document categories dictionary
     mur_document_categories = {
-        "1": "Conciliation Agreements",
+        "1": "Conciliation and Settlement Agreements",
         "2": "Complaint, Responses, Designation of Counsel and Extensions of Time",
         "3": "General Counsel Reports, Briefs, Notifications and Responses",
         "4": "Certifications",
@@ -281,6 +281,16 @@ def legal_doc_search_adr(request):
         "1006": "Statements of Reasons"
     }
 
+    # Return the selected document category name
+    adr_document_category_names = [adr_document_categories.get(id) for id in case_doc_category_ids]
+
+    for adr in results['adrs']:
+        for index, doc in enumerate(adr['documents']):
+            # Checks if the selected document category filters matching the document categories
+            doc['category_match'] = str(doc['doc_order_id']) in case_doc_category_ids
+            # Checks for document keyword text match
+            doc['text_match'] = str(index) in adr['document_highlights']
+
     return render(request, 'legal-search-results-adrs.jinja', {
         'parent': 'legal',
         'results': results,
@@ -291,6 +301,7 @@ def legal_doc_search_adr(request):
         'query': query,
         'social_image_identifier': 'legal',
         'selected_doc_category_ids': case_doc_category_ids,
+        'selected_doc_category_names': adr_document_category_names,
     })
 
 
