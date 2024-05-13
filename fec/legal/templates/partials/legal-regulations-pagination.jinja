@@ -1,0 +1,28 @@
+<div class="results-info">
+<div class="dataTables_info">
+{% if current_page > 1 %}
+{{ current_page * limit - limit + 1 }}
+{% else %}
+{{ current_page }}
+{% endif %}
+&ndash;
+{% if current_page * limit < total_count %}
+{{ current_page * limit }} 
+{% else %}
+{{ total_count }}
+{% endif %}
+of {{ total_count }}</div>
+<div class="dataTables_paginate">
+{% if current_page > 1 %}
+<a class="paginate_button previous" href="/data/legal/search/regulations/?search={{ query }}&page={{ current_page | int - 1 }}">Previous</a>
+{% else %}
+<span class="paginate_button previous is-disabled">Previous</span>
+{% endif %}
+{% if total_count / limit  > current_page %}
+<a class="paginate_button next" href="/data/legal/search/regulations/?search={{ query }}&page={{ current_page | int + 1 }}">Next</a>
+{# <h1>{{ results.page | int }}</h1> #}
+{% else %}
+<span class="paginate_button next is-disabled">Next</span>
+{% endif %}
+</div>
+</div>
