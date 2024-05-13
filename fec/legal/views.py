@@ -261,6 +261,10 @@ def legal_doc_search_adr(request):
     offset = request.GET.get('offset', 0)
     case_no = request.GET.get('case_no', '')
     case_respondents = request.GET.get('case_respondents', '')
+    case_min_open_date = request.GET.get('case_min_open_date', '')
+    case_max_open_date = request.GET.get('case_max_open_date', '')
+    case_min_close_date = request.GET.get('case_min_close_date', '')
+    case_max_close_date = request.GET.get('case_max_close_date', '')
     case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
 
     results = api_caller.load_legal_search_results(
@@ -268,6 +272,10 @@ def legal_doc_search_adr(request):
         offset=offset,
         case_no=case_no,
         case_respondents=case_respondents,
+        case_min_open_date=case_min_open_date,
+        case_max_open_date=case_max_open_date,
+        case_min_close_date=case_min_close_date,
+        case_max_close_date=case_max_close_date,
         case_doc_category_id=case_doc_category_ids,
     )
 
@@ -298,6 +306,10 @@ def legal_doc_search_adr(request):
         'result_type': 'adrs',
         'case_no': case_no,
         'case_respondents': case_respondents,
+        'case_min_open_date': case_min_open_date,
+        'case_max_open_date': case_max_open_date,
+        'case_min_close_date': case_min_close_date,
+        'case_max_close_date': case_max_close_date,
         'query': query,
         'social_image_identifier': 'legal',
         'selected_doc_category_ids': case_doc_category_ids,

@@ -28,6 +28,36 @@
           </div>
       {% endfor %}
     </div>
+
+    <div class="filter">
+      <legend class="label">Case open date range</legend>
+      <div class="range range--date js-date-range">
+        <div class="range__input range__input--min" data-filter="range">
+          <label for="case_min_open_date">Beginning</label>
+          <input id="case_min_open_date" name="case_min_open_date" placeholder="mm/dd/yyyy" value="{{ case_min_open_date }}">
+        </div>
+        <div class="range__hyphen">-</div>
+        <div class="range__input range__input--max" data-filter="range">
+          <label for="case_max_open_date">Ending</label>
+          <input id="case_max_open_date" name="case_max_open_date" placeholder="mm/dd/yyyy" value="{{ case_max_open_date }}">
+        </div>
+      </div>
+    </div>
+    <div class="filter">
+      <legend class="label">Case close date range</legend>
+      <div class="range range--date js-date-range">
+        <div class="range__input range__input--min" data-filter="range">
+          <label for="case_min_close_date">Beginning</label>
+          <input id="case_min_close_date" name="case_min_close_date" placeholder="mm/dd/yyyy" value="{{ case_min_close_date }}">
+        </div>
+        <div class="range__hyphen">-</div>
+        <div class="range__input range__input--max" data-filter="range">
+          <label for="case_max_close_date">Ending</label>
+          <input id="case_max_close_date" name="case_max_close_date" placeholder="mm/dd/yyyy" value="{{ case_max_close_date }}">
+        </div>
+      </div>
+    </div>
+    
     <div class="filter">
       <button type="submit" class="button button--cta">Apply filters</button>
     </div>
@@ -51,6 +81,18 @@
           {% endif %}
           {% if case_respondents %}
             <div data-removable="true" class="tag__item">{{ case_respondents }}</div>
+          {% endif %}
+          {% if case_min_open_date %}
+            <div data-removable="true" class="tag__item">{{ case_min_open_date | safe }}</div>
+          {% endif %}
+          {% if case_max_open_date %}
+            <div data-removable="true" class="tag__item">{{ case_max_open_date | safe }}</div>
+          {% endif %}
+          {% if case_min_close_date %}
+            <div data-removable="true" class="tag__item">{{ case_min_close_date | safe }}</div>
+          {% endif %}
+          {% if case_max_close_date %}
+            <div data-removable="true" class="tag__item">{{ case_max_close_date | safe }}</div>
           {% endif %}
         </div>
         
