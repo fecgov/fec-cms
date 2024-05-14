@@ -509,13 +509,13 @@ function calculateStateFill(
 }
 
 /**
- *
+ * Only needed if we switch to bubbles again
  * @param {number} value
  * @param {Array} valueRange
  * @param {int} quantiles
  * @param {Array} circleSizeRange
  * @param {boolean} hasLegend
- */
+ * /
 function calculateCircleSize(
   value,
   valueRange,
@@ -566,7 +566,7 @@ function calculateCircleSize(
   }
 
   return `${sizeToReturn}px`;
-}
+}*/
 
 /**
  * Used to adjust scales so the higher values don't skew the range / blow the curve,
@@ -708,7 +708,7 @@ DataMap.prototype.chooseStateClasses = function(d, shapeType) {
  * @param {MouseEvent} e
  * @param {Object} d
  */
-function moveTooltip(tooltip, e, d) {
+function moveTooltip(tooltip, e) { // Third parameter is d
   // Where's the pointer / where should the tooltip appear/move
   const x = e.pageX - tooltip._groups[0][0].offsetWidth / 2;
   const y = e.pageY - tooltip._groups[0][0].offsetHeight;
