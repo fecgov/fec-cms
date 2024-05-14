@@ -1,19 +1,10 @@
-/* global import */
-
-// import { CleanWebpackPlugin } from 'clean-webpack-plugin';
-// import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-
-// import fs from 'fs';
-// import webpack from 'webpack';
 const fs = require('fs');
-const webpack = require('webpack');
-
-// import path from 'path';
-// import { fileURLToPath } from 'url';
 const path = require('path');
 const fileURLToPath = require('url');
+
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const webpack = require('webpack');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 // const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -24,16 +15,12 @@ let entries = {
   home: './fec/static/js/pages/home.js',
   init: './fec/static/js/init.js',
   'data-init': './fec/static/js/data-init.js',
-  // 'calc-admin-fines-modal': './fec/static/js/modules/calc-admin-fines-modal.js', // Used inside base.html
+  'calc-admin-fines-modal': './fec/static/js/modules/calc-admin-fines-modal.js', // Used inside base.html
   'calc-admin-fines': './fec/static/js/modules/calc-admin-fines.js',
+  'data-elections': './fec/static/js/pages/elections.js',
+  'data-landing': './fec/static/js/pages/data-landing.js',
   'candidate-single': './fec/static/js/pages/candidate-single.js',
-  'dataviz-common':
-    [
-      './fec/static/js/pages/data-landing.js',
-      // './fec/static/js/pages/candidate-single.js',
-      './fec/static/js/pages/committee-single.js',
-      './fec/static/js/pages/elections.js'
-    ],
+  'committee-single': './fec/static/js/pages/committee-single.js',
     // 'aggregate-totals': './fec/static/js/widgets/aggregate-totals.js',
     'aggregate-totals-box': {
       import: './fec/static/js/widgets/aggregate-totals-box.js',
@@ -60,17 +47,17 @@ fs.readdirSync('./fec/static/js/pages').forEach(function(f) {
   if (f.search('.js') < 0) {
     return;
   } // Skip non-js files
-  let name = f.split('.js')[0];
-  // console.log('readdirSync.forEach name: ', name);
-  let p = path.join('./fec/static/js/pages', f);
-//   entries[name] = './' + p;
-  if (['bythenumbers', 'dataviz-common', 'election-lookup'].includes(name))
-    entries[name] = './' + p;
+  const name = f.split('.js')[0];
+  const p = path.join('./fec/static/js/pages', f);
+  entries[name] = './' + p;
 //   // Note all datatable pages for getting the common chunk
+// if (['bythenumbers', 'dataviz-common', 'election-lookup'].includes(name))
   if (name.search('datatable-') > -1) {
-//     datatablePages.push(name);
+    datatablePages.push(`./fec/static/js/pages/${name}`);
   }
 });
+
+// entries['datatable-common'] = datatablePages;
 
 const env = { production: false };
 
@@ -114,15 +101,19 @@ module.exports = [
         // fullySpecified: false,
         // modules: [path.join(__dirname, '../node_modules')],
         alias: {
+          // bloodhound: path.join(__dirname, '../node_modules/corejs-typeahead/dist/typeahead.jquery.min.js'),
+          // typeahead: path.join(__dirname, '../node_modules/corejs-typeahead/dist/bloodhound.min.js'),
           // These were 18F but have been archived so we've moved them to our own */modules/*
-          'aria-accordion': path.join(__dirname, 'fec/static/js/modules/aria-accordion/src/accordion.js'),
-          'component-sticky': path.join(__dirname, 'fec/static/js/modules/component-sticky/index.js'),
-          'glossary-panel': path.join(__dirname, 'fec/static/js/modules/glossary-panel/src/glossary.js'),
+          // 'aria-accordion': path.join(__dirname, 'fec/static/js/modules/aria-accordion/src/accordion.js'),
+          // 'component-sticky': path.join(__dirname, 'fec/static/js/modules/component-sticky/index.js'),
+          // 'glossary-panel': path.join(__dirname, 'fec/static/js/modules/glossary-panel/src/glossary.js'),
           // jQuery aliases
-          jquery: path.join(__dirname, '../node_modules/jquery/dist/jquery.js'),
-          'inputmask.dependencyLib': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.dependencyLib.js'),
-          inputmask: path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.js'),
-          'inputmask.date.extensions': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.date.extensions.js'),
+          jquery: require.resolve(path.join(__dirname, '../node_modules/jquery/dist/jquery.js')),
+          // inputmask: path.join(__dirname, '../node_modules/inputmask/dist/inputmask.es6.js'),
+          // 'inputmask.date.extensions': path.join(__dirname, '../node_modules/inputmask/lib/extensions/inputmask.date.extensions.js'),
+          // 'inputmask.dependencyLib': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.dependencyLib.js'),
+          // inputmask: path.join(__dirname, '../node_modules/inputmask/dist/jquery.inputmask.js'),
+          // 'inputmask.date.extensions': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.date.extensions.js'),
           //
           'abortcontroller-polyfill': path.join(__dirname, '../node_modules/abortcontroller-polyfill/dist/polyfill-patch-fetch.js'),
           underscore: path.join(__dirname, '../node_modules/underscore/underscore-umd.js'),
@@ -142,14 +133,11 @@ module.exports = [
         new WebpackManifestPlugin({
           fileName: 'rev-manifest-js.json',
           basePath: '/static/js/',
-          publicPath: '/static/js/',
+          publicPath: '/static/js/'
         }),
         // new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         new webpack.DefinePlugin({
-          // 'process.env': {
-          //   NODE_ENV: '"production"'
-          // }
-          context: {},
+          context: {}
         }),
         new webpack.ProvidePlugin({
           $: 'jquery',
@@ -169,7 +157,7 @@ module.exports = [
       //     name: 'legal',
       mode: env.production ? 'production' : 'development',
       entry: {
-        legalApp: './fec/static/js/legal/LegalApp.js',
+        'legal-app': './fec/static/js/legal/LegalApp.cjs',
         // polyfills: './fec/static/js/polyfills.js'
       },
       output: {
@@ -180,7 +168,11 @@ module.exports = [
         // new webpack.SourceMapDevToolPlugin(),
         new WebpackManifestPlugin({
           fileName: 'rev-legal-manifest-js.json',
-          basePath: '/static/js/'
+          basePath: '/static/js/',
+          publicPath: '/static/js/'
+        }),
+        new webpack.DefinePlugin({
+          context: {}
         }),
         new webpack.ProvidePlugin({
           $: 'jquery',
@@ -190,16 +182,19 @@ module.exports = [
       module: {
         rules: [
           {
-            test: /\.js$/,
+            test: /\.(cjs|js)$/,
             exclude: /node_modules/,
             loader: 'babel-loader',
             options: {
               // presets: ['es2015', 'react']
-              presets: ['@babel/preset-env', "@babel/preset-react"]
+              presets: ['@babel/preset-env', '@babel/preset-react']
             }
         }
         ]
       },
+      // resolve: {
+      //   extensions: ['*', '.js', 'jsx']
+      // }
       //     stats: {
       //       assetsSort: 'field',
       //       modules: false,
@@ -238,7 +233,7 @@ module.exports = [
             exclude: /node_modules/,
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-env', "@babel/preset-react"]
+              presets: ['@babel/preset-env', '@babel/preset-react']
             }
           }
         ]
