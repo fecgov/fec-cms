@@ -15,7 +15,7 @@ def advisory_opinions_landing(request):
     recent_aos = api_caller.load_legal_search_results(
         query='',
         query_type='advisory_opinions',
-        ao_category=['F', 'W'],
+        ao_category=['F', 'W'],  # TODO: this is erring, expecting a string
         ao_min_issue_date=ao_min_date
     )
 
