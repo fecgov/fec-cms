@@ -14,11 +14,13 @@ import 'accessible-mega-menu/js/jquery-accessibleMegaMenu.js';
  */
 
 export default function SiteNav(selector) {
+  // console.debug('new SiteNav(selector): ', selector);
   this.$body = $('body');
   this.$element = $(selector);
   this.$menu = this.$element.find('#site-menu');
   this.$toggle = this.$element.find('.js-nav-toggle');
   this.$searchbox = this.$body.find('.utility-nav__search');
+  // console.debug('static/js/modules/site-nav.js this.$menu: ', this.$menu);
 
   this.assignAria();
 
@@ -43,6 +45,15 @@ SiteNav.prototype.initMenu = function() {
 };
 
 SiteNav.prototype.initMegaMenu = function() {
+  // console.log('SiteNav.initMegaMenu()');
+  // console.log('  this: ', this);
+  // console.log('  this.$menu: ', this.$menu);
+  // console.log('  this.$menu.accessibleMegaMenu: ', this.$menu.accessibleMegaMenu);
+
+  // console.debug('SiteNav.initMegaMenu()');
+  // console.debug('  this: ', this);
+  // console.debug('  this.$menu: ', this.$menu);
+  // console.debug('  this.$menu.accessibleMegaMenu: ', this.$menu.accessibleMegaMenu);
   this.$element.find('[data-submenu]').each(function() {
     // Remove hrefs and default click behavior for links that have submenus
     $(this)

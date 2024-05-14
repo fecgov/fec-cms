@@ -2,7 +2,7 @@
  * pagingType documentation: https://datatables.net/reference/option/pagingType
  */
 
-import DataTable from 'datatables.net-dt';
+// import DataTable from 'datatables.net-dt';
 import {
   chain as _chain,
   clone as _clone,
@@ -107,6 +107,11 @@ $(document.body).on('draw.dt', function() {
 export function getCycle(value, meta) {
   const dataTable = DataTable_FEC.registry[meta.settings.sTableId];
   const filters = dataTable && dataTable.filters;
+  // console.log('tables.js getCycle(value, meta): ', value, meta);
+  // console.log('  DataTable: ', DataTable);
+  // console.log('  DataTable.filters: ', DataTable.filters);
+  // console.log('  DataTable_FEC.filters: ', DataTable_FEC.filters);
+  // console.log('  dataTable: ', dataTable);
 
   if (filters && filters.cycle) {
     const cycles = _intersection(

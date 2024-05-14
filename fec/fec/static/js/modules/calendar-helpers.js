@@ -30,6 +30,10 @@ export function getGoogleUrl(event) {
 }
 
 export function calendarDownload(path, params) {
+  // console.log('calendarDownload(path, params): ', path, params);
+  // console.log('  Array: ', Array);
+  // console.log('  Array.prototype: ', Array.prototype);
+  // console.log('  Array.prototype.concat: ', Array.prototype.concat);
   const url = URI(window.API_LOCATION)
     .path(Array.prototype.concat(window.API_VERSION, path || [], '').join('/'))
     .addQuery({
@@ -44,6 +48,10 @@ export function calendarDownload(path, params) {
 }
 
 export function getUrl(path, params, type) {
+  // console.log('getUrl(path, params, type): ', path, params, type);
+  // console.log('  Array: ', Array);
+  // console.log('  Array.prototype: ', Array.prototype);
+  // console.log('  Array.prototype.concat: ', Array.prototype.concat);
   //if 'type' arg is present and set to 'sub', use API_KEY_PUBLIC_CALENDAR as api_key, otherwise use API_KEY_PUBLIC;
   const apiKey =
     type == 'sub' ? window.API_KEY_PUBLIC_CALENDAR : window.API_KEY_PUBLIC;

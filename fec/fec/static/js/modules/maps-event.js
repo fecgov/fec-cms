@@ -11,7 +11,7 @@ export function highlightRowAndState($map, $table, state, scroll) {
     $scrollBody.find('.row-active').removeClass('row-active');
     $row.parents('tr').addClass('row-active');
     if (scroll) {
-      let i = 6;
+      // let i = 6;
       $scrollBody.animate(
         {
           scrollTop:

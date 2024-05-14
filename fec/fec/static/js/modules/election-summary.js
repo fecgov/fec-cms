@@ -2,7 +2,7 @@ import { default as URI } from 'urijs';
 
 import { buildUrl, currency } from './helpers.js';
 
-function buildUrl(opts) {
+function buildElectionSummaryUrl(opts) {
   var parts = ['elections', opts.office, opts.state, opts.district, opts.cycle]
     .filter(function(part) {
       return !!part;
@@ -21,7 +21,7 @@ export default function ElectionSummary(selector, opts) {
   this.$expenditures = this.$elm.find('.js-expenditures');
 
   this.fetch();
-  this.$elm.find('.js-election-url').attr('href', buildUrl(this.opts));
+  this.$elm.find('.js-election-url').attr('href', buildElectionSummaryUrl(this.opts));
 }
 
 ElectionSummary.prototype.fetch = function() {

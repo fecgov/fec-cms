@@ -25,11 +25,10 @@
 // import * as d3 from 'd3';
 import { scale as chroma_scale } from 'chroma-js';
 import { descending as d3_sort_descending } from 'd3-array';
-import { geoAlbersUsa as d3_albersUsa, geoPath as d3_geoPath, projection as d3_projection, translate as d3_translate } from 'd3-geo';
-import { scaleLinear as d3_scaleLinear, scaleOrdinal as d3_scaleOrdinal } from 'd3-scale';
-import { scale as d3_scale_chroma } from 'd3-scale-chromatic';
-import { pointer as d3_pointer, select, selectAll } from 'd3-selection';
-import { transition } from 'd3-transition';
+import { geoAlbersUsa as d3_albersUsa, geoPath as d3_geoPath } from 'd3-geo';
+import { scaleLinear as d3_scaleLinear } from 'd3-scale';
+import { select } from 'd3-selection';
+import 'd3-transition';
 import { feature } from 'topojson-client/dist/topojson-client.js';
 
 import { fipsByCode, fipsByState } from './fips.js';
