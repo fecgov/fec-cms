@@ -22,6 +22,8 @@ FEC_API_URL = env.get_credential('FEC_API_URL', 'http://localhost:5000')
 FEC_API_KEY_PRIVATE = env.get_credential('FEC_WEB_API_KEY_PRIVATE')
 FEC_API_VERSION = env.get_credential('FEC_API_VERSION', 'v1')
 FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
+FEC_INTERNAL_API_KEY_PUBLIC = env.get_credential('FEC_INTERNAL_API_KEY_PUBLIC', '')
+FEC_INTERNAL_IP = env.get_credential('FEC_INTERNAL_IP', '')
 FEC_API_KEY_PUBLIC_CALENDAR = env.get_credential('FEC_WEB_API_KEY_PUBLIC_CALENDAR', FEC_API_KEY_PUBLIC)
 FEC_CAL_DOWNLOAD_API_KEY = env.get_credential('FEC_CAL_DOWNLOAD_API_KEY')
 FEC_DOWNLOAD_API_KEY = env.get_credential('FEC_DOWNLOAD_API_KEY', '')
@@ -80,6 +82,13 @@ FEATURES = {
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
 }
 
+# Set feature flags to True for Feature
+if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['feature']:
+    FEATURES['house_senate_overview'] = True
+    FEATURES['house_senate_overview_methodology'] = True
+    FEATURES['house_senate_overview_summary'] = True
+    FEATURES['house_senate_overview_totals'] = True
+
 # Set feature flags to True for local
 if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['adrs'] = True
@@ -107,14 +116,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
-
     'django_jinja',
-
     'taggit',
     'compressor',
     'modelcluster',
     'storages',
-
     'wagtail',
     'wagtail.admin',
     'wagtail.search',
@@ -127,12 +133,9 @@ INSTALLED_APPS = (
     'wagtail.contrib.redirects',
     'wagtail.contrib.forms',
     'wagtail.locales',
-
-    'wagtail.contrib.modeladmin',
     'wagtail.contrib.search_promotions',
     'wagtail.contrib.table_block',
     'wagtail.contrib.styleguide',
-
     'fec',
     'search',
     'home',
@@ -161,9 +164,9 @@ MIDDLEWARE = (
 
 SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
-CSRF_TRUSTED_ORIGINS = ["fec.gov", "app.cloud.gov"]
+CSRF_TRUSTED_ORIGINS = ["https://*.fec.gov", "https://*.app.cloud.gov"]
 if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
-    CSRF_TRUSTED_ORIGINS.extend(["127.0.0.1:5000"])
+    CSRF_TRUSTED_ORIGINS.extend(["http://127.0.0.1:5000"])
 
 ROOT_URLCONF = 'fec.urls'
 
@@ -182,14 +185,14 @@ TEMPLATES = [
                 'CANONICAL_BASE': CANONICAL_BASE,
                 'FEC_API_KEY_PRIVATE': FEC_API_KEY_PRIVATE,
                 'FEC_DOWNLOAD_API_KEY': FEC_DOWNLOAD_API_KEY,
-                'FEC_API_KEY_PUBLIC': FEC_API_KEY_PUBLIC,
                 'FEC_API_URL': FEC_API_URL,
                 'WEBMANAGER_EMAIL': WEBMANAGER_EMAIL,
                 'FEC_CMS_ENVIRONMENT': FEC_CMS_ENVIRONMENT,
                 'FEATURES': FEATURES,
             },
             'context_processors': [
-                'django.template.context_processors.request'
+                'django.template.context_processors.request',
+                'fec.context.api_key',
             ]
         }
     },
@@ -205,6 +208,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'fec.context.show_settings',
                 'fec.context.features',
+                'fec.context.api_key',
             ],
         },
     },
@@ -258,7 +262,7 @@ STATICFILES_DIRS = (
 DIST_DIR = os.path.join(BASE_DIR, 'dist')
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -309,9 +313,15 @@ if FEC_CMS_ENVIRONMENT != ENVIRONMENTS['local']:
     AWS_S3_CUSTOM_DOMAIN = env.get_credential('CMS_AWS_CUSTOM_DOMAIN')
     AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL = None
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_LOCATION = 'cms-content'
-
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+                    },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+                        },
+    }
 UAA_CLIENT_ID = env.get_credential('CMS_LOGIN_CLIENT_ID', 'my-client-id')
 UAA_CLIENT_SECRET = env.get_credential('CMS_LOGIN_CLIENT_SECRET', 'my-client-secret')
 # fake uaa server deploys locally on port 8080.  Will be needed to login for local use

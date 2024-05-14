@@ -11,8 +11,7 @@ const template_body = value => `
   <ul class="tags">
   </ul>
 </div>`;
-
-const template_tag = value => `<div data-id="${value.key}" data-removable="true" class="tag__item">${value.value}
+const template_tag = value => `<div data-id="${value.key}" data-removable="true" class="tag__item">${value.lineType || ''}${value.value}
   <button class="button js-close tag__remove"><span class="u-visually-hidden">Remove</span></button>
 </div>`;
 

@@ -173,11 +173,37 @@ def load_legal_adr(adr_no):
         if "complainant" in participant["role"].lower():
             complainants.append(participant["name"])
 
-    adr["disposition_text"] = [d["action"] for d in adr["commission_votes"]]
+    # Check if the list is not empty
+    if adr["commission_votes"]:
+        # Use the first one in the list
+        adr["disposition_text"] = adr["commission_votes"][0]["action"]
+    else:
+        # Or any default value you prefer if the list is empty
+        adr["disposition_text"] = None
 
     adr["collated_dispositions"] = collate_dispositions(adr["adr_dispositions"])
     adr["complainants"] = complainants
     adr["participants_by_type"] = _get_sorted_participants_by_type(adr)
+
+    referring_office = None  # Initialize referring_office variable
+
+    for disposition in adr["adr_dispositions"]:
+        if "Received from" in disposition["disposition"]:
+            referring_office = disposition["disposition"]
+            # Transformation dictionary for referring office
+            transformation_dict = {
+                "Received from Commission": "FEC Commission",
+                "Received from OGC": "FEC Office of General Counsel",
+                "Received from RAD": "FEC Reports Analysis Division",
+                "Received from Audit Division": "FEC Audit Division",
+            }
+            # Perform transformation if match found
+            if referring_office in transformation_dict:
+                referring_office = transformation_dict[referring_office]
+            break  # Stop iterating if "Received from" disposition found
+
+    # Assign referring_office to adr dictionary
+    adr["referring_office"] = referring_office
 
     documents_by_type = OrderedDict()
     for doc in adr["documents"]:
@@ -214,18 +240,18 @@ def load_legal_admin_fines(admin_fine_no):
 
 
 def collate_dispositions(dispositions):
-    """ Collate dispositions - group them by disposition, penalty """
+    """Collate dispositions - group them by disposition, penalty"""
     collated_dispositions = OrderedDict()
     for row in dispositions:
-        if row["disposition"] in collated_dispositions:
-            if row["penalty"] in collated_dispositions[row["disposition"]]:
-                collated_dispositions[row["disposition"]][row["penalty"]].append(row)
+        # Filtering out rows with disposition containing "Received from"
+        if "Received from" not in row["disposition"]:
+            if row["disposition"] in collated_dispositions:
+                if row["penalty"] in collated_dispositions[row["disposition"]]:
+                    collated_dispositions[row["disposition"]][row["penalty"]].append(row)
+                else:
+                    collated_dispositions[row["disposition"]][row["penalty"]] = [row]
             else:
-                collated_dispositions[row["disposition"]][row["penalty"]] = [row]
-        else:
-            collated_dispositions[row["disposition"]] = OrderedDict(
-                {row["penalty"]: [row]}
-            )
+                collated_dispositions[row["disposition"]] = OrderedDict({row["penalty"]: [row]})
     return collated_dispositions
 
 

@@ -136,6 +136,8 @@ FilterSet.prototype.clear = function() {
   });
 };
 
+//This removes the checkboxes in the panel that show whats been selected when you remove the tag from
+//the tags panel at the top of the table
 FilterSet.prototype.handleTagRemoved = function(e, opts) {
   const $input = $(document.getElementById(opts.key));
   if ($input.length > 0) {
@@ -145,6 +147,10 @@ FilterSet.prototype.handleTagRemoved = function(e, opts) {
       $input.click(); // TODO: jQuery deprecation
     } else if (type === 'text') {
       $input.val('').trigger('change');
+    }
+    else if (type === 'select-one') {
+        $input.find('option[value=""]').prop('selected', true);
+        $input.trigger('change');
     }
   }
 };
@@ -179,7 +185,7 @@ FilterSet.prototype.activateSwitchedFilters = function(dataType) {
     URI.parseQuery(window.location.search)
   );
 
-  // Set forceRemove: true to clear date filters that are usually nonremovable
+  // Set forceRemove: true to clear date filters that are usually non-removable
   this.$body.trigger('tag:removeAll', {
     forceRemove: true,
     fromFilterSet: true

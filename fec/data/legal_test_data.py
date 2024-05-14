@@ -47,38 +47,74 @@ def statutes_search_results():
 @factory
 def regulations_search_results():
     return {
-        "total_regulations": 17,
-        "regulations": [
+        "results": [
             {
-                "doc_id": "2_6",
-                "highlights": [
-                    faker.sentence(),
-                    faker.sentence(),
-                    faker.sentence(),
-                ],
-                "name": "Transcripts and recordings.",
-                "no": "2.6",
-                "url": "/regulations/2-6/2016-annual-2#2-6"
-            },
-            {
-                "doc_id": "104_18",
-                "highlights": [
-                    faker.sentence(),
-                    faker.sentence(),
-                ],
-                "name": "Electronic filing of reports (52 U.S.C. 30102(d) and 30104(a)(11)).",
-                "no": "104.18",
-                "url": "/regulations/104-18/2016-annual-104#104-18"
-            },
-            {
-                "doc_id": "2_3",
-                "highlights": [
-                ],
-                "name": "General rules.",
-                "no": "2.3",
-                "url": "/regulations/2-3/2016-annual-2#2-3"
+                "starts_on": "2016-12-23",
+                "ends_on": "",
+                "type": "Section",
+                "hierarchy": {
+                    "title": "11",
+                    "subtitle": "",
+                    "chapter": "I",
+                    "subchapter": "E",
+                    "part": "9008",
+                    "subpart": "B",
+                    "subject_group": "",
+                    "section": "9008.55",
+                    "appendix": ""
+                },
+                "hierarchy_headings": {
+                    "title": "Title 11",
+                    "subtitle": "",
+                    "chapter": " Chapter I",
+                    "subchapter": "Subchapter E",
+                    "part": "Part 9008",
+                    "subpart": "Subpart B",
+                    "subject_group": "",
+                    "section": "§ 9008.55",
+                    "appendix": ""
+                },
+                "headings": {
+                    "title": "Federal Elections",
+                    "subtitle": "",
+                    "chapter": "Federal Election Commission",
+                    "subchapter": "Presidential Election Campaign Fund:" +
+                                  " General Election Financing",
+                    "part": "Federal Financing of Presidential Nominating" +
+                            " Conventions",
+                    "subpart": "Host Committees and Municipal Funds" +
+                               " Representing a Convention City",
+                    "subject_group": "",
+                    "section": "Funding for convention committees, host" +
+                               "committees and municipal funds.",
+                    "appendix": ""
+                },
+                "full_text_excerpt": "that convention committees may accept" +
+                                     " <strong>in-kind</strong>" +
+                                     " <strong>donations</strong> from host" +
+                                     " committees and municipal" +
+                                     " <span class=\"elipsis\">…</span>" +
+                                     " municipal funds provided that the" +
+                                     " <strong>in-kind</strong>" +
+                                     " <strong>donations</strong> are in" +
+                                     " accordance with the requirements of",
+                "score": 23.934675,
+                "structure_index": 10462,
+                "reserved": "",
+                "removed": "",
+                "change_types": [
+                    "effective",
+                    "initial"
+                ]
             }
         ],
+        "meta": {
+            "current_page": 1,
+            "total_pages": 1,
+            "total_count": 1,
+            "max_score": 23.934675,
+            "description": "Changes to sections matching 'in-kind donation' from Federal Election Commission"
+        }
     }
 
 
@@ -114,7 +150,7 @@ def legal_universal_search_results():
     """Test data from the universal search API."""
     advisory_opinions = advisory_opinions_search_results()
     regulations = regulations_search_results()
-    total_count = advisory_opinions['total_advisory_opinions'] + regulations['total_regulations']
+    total_count = advisory_opinions['total_advisory_opinions']
     results = {"total_all": total_count}
     results.update(advisory_opinions)
     results.update(regulations)

@@ -20,6 +20,7 @@ SelectFilter.prototype.setRequiredDefault = function() {
     this.$input.find('option[value=""]').remove();
     this.setValue(this.requiredDefault);
   }
+  
 };
 
 SelectFilter.prototype.fromQuery = function(query) {
@@ -50,13 +51,27 @@ SelectFilter.prototype.handleChange = function(e) {
   }
   var fireTrigger = $input.data('filter-change');
   if (fireTrigger) {
-    $input.trigger(eventName, [
-      {
-        key: $input.attr('id'),
-        value: this.formatValue($input, $optElement.text()),
-        name: this.name,
-        nonremovable: true
-      }
-    ]);
+    if ($input.data('removeable-filter')) {
+      $input.trigger(eventName, [
+        {
+          key: $input.attr('id'),
+          value: this.formatValue($input, $optElement.text()),
+          name: this.name,
+          nonremovable: false,
+          lineType: `${$optElement.data('line-type')} - ` || '',
+          loadedOnce: $input.data('loaded-once') || true
+        }  
+      ])
+    }
+    else {
+      $input.trigger(eventName, [
+        {
+          key: $input.attr('id'),
+          value: this.formatValue($input, $optElement.text()),
+          name: this.name,
+          nonremovable: true
+        }
+      ]);
+   }
   }
 };

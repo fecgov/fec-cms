@@ -20,6 +20,17 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def search_updates(queryset, search):
+    # Use icontains to cover html blocks which are not searched by the below wagtail.search.backends.database
+    results_html = queryset.filter(body__icontains=search)
+    # Use wagtail.search.backends.database (Postgres) to search all pages' search_fields defined in page models
+    results = queryset.search(search)
+    # Combine results, removing any duplicates
+    results = chain(results,  [x for x in results_html if x not in results])
+
+    return results
+
+
 def replace_dash(string):
     # Leave the dash in place for non-filer publications
     # This matches what's in the database
@@ -48,7 +59,7 @@ def get_records(category_list=None, year=None, search=None):
         )
 
     if search:
-        records = records.search(search)
+        records = search_updates(records, search)
 
     return records
 
@@ -62,7 +73,7 @@ def get_digests(year=None, search=None):
         )
 
     if search:
-        digests = digests.search(search)
+        digests = search_updates(digests, search)
 
     return digests
 
@@ -82,7 +93,7 @@ def get_press_releases(category_list=None, year=None, search=None):
         )
 
     if search:
-        press_releases = press_releases.search(search)
+        press_releases = search_updates(press_releases, search)
 
     return press_releases
 
@@ -97,7 +108,7 @@ def get_tips(year=None, search=None):
         )
 
     if search:
-        tips = tips.search(search)
+        tips = search_updates(tips, search)
 
     return tips
 
@@ -158,10 +169,10 @@ def updates(request):
             )
 
         if search:
-            press_releases = press_releases.search(search)
-            digests = digests.search(search)
-            records = records.search(search)
-            tips = tips.search(search)
+            press_releases = search_updates(press_releases, search)
+            digests = search_updates(digests, search)
+            records = search_updates(records, search)
+            tips = search_updates(tips, search)
 
     # Chain all the QuerySets together
     # via http://stackoverflow.com/a/434755/1864981
@@ -338,6 +349,7 @@ def index_meetings(request):
         map(lambda x: x.year, executive_sessions.dates("date", "year", order="DESC"))
     )
 
+    # These clear the search field upon navigating tabs as requested by content team
     meetings_query = ""
     hearings_query = ""
     executive_query = ""
@@ -362,10 +374,32 @@ def index_meetings(request):
     if search:
         if active == "open-meetings":
             meetings_query = search
-            open_meetings = open_meetings.search(meetings_query)
+            """
+            Perform text search on agenda field for newer open meetings and imported_html field for older
+            open meetings where html cannot be searched by the wagtail.search.backends.database (<= 2017-04-27)
+            """
+            text_search_meetings = list(open_meetings.filter(Q(agenda__icontains=meetings_query) | Q(imported_html__icontains=meetings_query)))
+            # Also use wagtail.search.backends.database (Postgres) to search open meeting pages
+            open_meetings = list(open_meetings.search(meetings_query))
+            # Combine the results, removing any duplicates
+            open_meetings = open_meetings + [x for x in text_search_meetings if x not in open_meetings]
+            # Sort results because db search does not recognize the order_by of the original queryset
+            open_meetings.sort(key=attrgetter('date'), reverse=True)
+
         if active == "hearings":
             hearings_query = search
-            hearings = hearings.search(hearings_query)
+            """
+            Perform text search on agenda field for newer hearings and imported_html field for older
+            hearings where html cannot be searched by the wagtail.search.backends.database (<= 2016-12-06)
+            """
+            text_search_hearings = list(hearings.filter(Q(agenda__icontains=hearings_query) | Q(imported_html__icontains=hearings_query)))
+            # Also Use wagtail.search.backends.database (Postgres) to search hearing pages
+            hearings = list(hearings.search(hearings_query))
+            # Combine the results, removing any duplicates
+            hearings = hearings + [x for x in text_search_hearings if x not in hearings]
+            # Sort results because db search does not recognize the order_by of the original queryset
+            hearings.sort(key=attrgetter('date'), reverse=True)
+
         if active == "executive-sessions":
             executive_query = search
             executive_sessions = executive_sessions.search(executive_query)

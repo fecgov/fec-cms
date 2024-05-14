@@ -1,6 +1,6 @@
 {% extends "layouts/legal-doc-search-results.jinja" %}
 {% import 'macros/legal.jinja' as legal %}
-{% set document_type_display_name = 'Alternative dispute resolution' %}
+{% set document_type_display_name = 'Alternative Dispute Resolution' %}
 
 {% block header %}
 <header class="page-header slab slab--primary">
@@ -30,9 +30,6 @@
   <div class="row">
     <h3 class="tags__title">Viewing <span class="tags__count">{{ results.total_adrs }}</span>  filtered results for:</h3>
   </div>
-</div>
-<div class="message message--info u-no-margin-top">
-  <p>You can search all FEC ADR cases using keywords, ADR case numbers, names of respondents and more. For additional search filters, you can still search ADR cases using our legacy <a href="https://eqs.fec.gov" title="FEC Enforcement Query System">FEC Enforcement Query System</a>.</p>
 </div>
 {% endblock %}
 

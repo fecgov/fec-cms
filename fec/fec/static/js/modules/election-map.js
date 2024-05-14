@@ -3,9 +3,7 @@ import { default as L } from 'leaflet';
 import { feature } from 'topojson-client/dist/topojson-client.js';
 import { chain as _chain, extend as _extend, filter as _filter, find as _find, map as _map, max as _max } from 'underscore';
 
-// var colorbrewer = require('colorbrewer');
 import { decodeDistrict, decodeState, districtFeatures, findDistricts } from './election-utils.js';
-// var utils = require('./election-utils');
 import { default as states } from '../data/us-states-10m.json' assert { type: 'json' };
 
 const stateFeatures = feature(states, states.objects.states).features;
@@ -18,9 +16,14 @@ const FEATURE_TYPES = {
 };
 const STATE_ZOOM_THRESHOLD = 4;
 
-const defaultOpts = {
-  colorScale: Set1
+let defaultOpts = {
+  colorScale_states: Set1,
+  colorScale_districts: Set1
 };
+// Doing the district color adjustment here in case Object.assign isn't supported
+defaultOpts.colorScale_districts = Object.assign({}, Set1);
+// Delete the last color for dists because the grey gets lost over our current map tiles
+delete defaultOpts.colorScale_districts['9'];
 
 const boundsOverrides = {
   200: { coords: [64.06, -152.23], zoom: 3 } // eslint-disable-line quote-props
@@ -63,8 +66,8 @@ function getDistrictPalette(scale) {
 export default function ElectionMap(elm, opts) {
   this.elm = elm;
   this.opts = _extend({}, defaultOpts, opts);
-  this.statePalette = getStatePalette(this.opts.colorScale);
-  this.districtPalette = getDistrictPalette(this.opts.colorScale);
+  this.statePalette = getStatePalette(this.opts.colorScale_states);
+  this.districtPalette = getDistrictPalette(this.opts.colorScale_districts);
   this.mapMessage = document.querySelector('.js-map-message');
   this.mapApproxMessage = document.querySelector('.js-map-approx-message');
   this.initialized = false;
@@ -238,8 +241,8 @@ ElectionMap.prototype.handleReset = function(e) {
  */
 ElectionMap.prototype.hide = function() {
   this.elm.setAttribute('aria-hidden', 'true');
-  this.mapMessage.setAttribute('aria-hidden', 'false');
-  this.mapApproxMessage.setAttribute('aria-hidden', 'true');
+  if (this.mapMessage) this.mapMessage.setAttribute('aria-hidden', 'false');
+  if (this.mapApproxMessage) this.mapApproxMessage.setAttribute('aria-hidden', 'true');
 };
 
 /**

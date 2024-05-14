@@ -4,7 +4,7 @@
   <div class="tooltip__container">
    <button class="tooltip__trigger"><span class="u-visually-hidden">Learn more</span></button>
    <div class="tooltip tooltip--left tooltip--above">
-     <p class="tooltip__content tooltip__content">Refine a keyword search by using AND, OR, “ ”, -, to expand or limit results.</p>
+      <p class="tooltip__content tooltip__content">Refine a keyword search by using AND, OR, “ ”, -, to expand or limit results.</p>
    </div>
   </div>
   <div class="combo combo--search--mini no-mar-b">
@@ -14,7 +14,13 @@
     </button>
   </div>
   <div class="combo combo--search--mini--example">
-    <span class="t-note t-sans search__example">Examples: spending; 52 U.S.C. §30123</span>
+        {% if result_type == 'statutes' %}
+          <span class="t-note t-sans search__example">Examples: contribution; 52; 30123</span>
+        {% elif result_type == 'adrs' %}
+          <span class="t-note t-sans search__example">Examples: contributions, "financial activity"</span>
+        {% else %}
+          <span class="t-note t-sans search__example">Examples: spending; 52 U.S.C §30123</span>
+        {% endif %}
   </div>
   <button type="button" class="button--keywords" aria-controls="keyword-modal" data-a11y-dialog-show="keyword-modal">More keyword options</button>
 
