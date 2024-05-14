@@ -20,7 +20,10 @@ import { default as template_download } from '../templates/calendar/download.hbs
 import { default as template_listToggles } from '../templates/calendar/listToggles.hbs';
 import { default as template_subscribe } from '../templates/calendar/subscribe.hbs';
 
-Handlebars.registerHelper(helpers.helpers);
+// TODO: do we need to registerHelper?
+Handlebars.registerHelper('eq', eq);
+Handlebars.registerHelper('datetime', datetime);
+Handlebars.registerHelper('toUpperCase', toUpperCase);
 
 const templates = {
   details: template_details,
