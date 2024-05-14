@@ -16,7 +16,10 @@ export default function TextFilter(elm) {
   this.$input.on('blur', this.handleBlur.bind(this));
 
   if (this.$input.data('inputmask')) {
-    this.$input.inputmask();
+    // this.$input.inputmask();
+    Inputmask({
+      mask: this.$input.data('inputmask')
+    }).mask(this.$input);
   }
 
   this.checkboxIndex = 1;

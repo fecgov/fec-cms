@@ -11,7 +11,9 @@ export default function RangeFilter(elm) {
   this.$input.on('keyup', this.handleKeyup.bind(this));
 
   if (this.$input.data('inputmask')) {
-    this.$input.inputmask();
+    Inputmask({
+      mask: this.$input.data('inputmask')
+    }).mask(this.$input);
   }
 }
 

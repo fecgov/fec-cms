@@ -17,12 +17,17 @@ export default function DateFilter(elm) {
   this.$maxDate = this.$elm.find('.js-max-date');
   this.$submit = this.$elm.find('button');
 
-  this.$minDate.inputmask('mm/dd/yyyy', {
+  Inputmask({
+    inputFormat: 'mm/dd/yyyy',
+    alias: 'datetime',
     oncomplete: this.validate.bind(this)
-  });
-  this.$maxDate.inputmask('mm/dd/yyyy', {
+  }).mask(this.$minDate);
+
+  Inputmask({
+    inputFormat: 'mm/dd/yyyy',
+    alias: 'datetime',
     oncomplete: this.validate.bind(this)
-  });
+  }).mask(this.$maxDate);
 
   this.$input.on('change', this.handleInputChange.bind(this));
 

@@ -20,12 +20,22 @@ export default function ValidateDateFilter(elm) {
   this.$maxDate = this.$elm.find('.js-max-date');
   this.$submit = this.$elm.find('button');
 
-  this.$minDate.inputmask('mm/dd/yyyy', {
+  Inputmask({
+    mask: this.$input.data('mm/dd/yyyy'),
     oncomplete: this.validate.bind(this)
-  });
-  this.$maxDate.inputmask('mm/dd/yyyy', {
+  }).mask(this.$minDate);
+
+  Inputmask({
+    mask: this.$maxDate.data('mm/dd/yyyy'),
     oncomplete: this.validate.bind(this)
-  });
+  }).mask(this.$input);
+
+  // this.$minDate.inputmask('mm/dd/yyyy', {
+  //   oncomplete: this.validate.bind(this)
+  // });
+  // this.$maxDate.inputmask('mm/dd/yyyy', {
+  //   oncomplete: this.validate.bind(this)
+  // });
 
   this.$input.on('change', this.handleInputChange.bind(this));
 
