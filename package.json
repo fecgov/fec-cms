@@ -17,8 +17,7 @@
     "lint": "eslint --quiet ./fec/fec/static/js/**/*.js",
     "format-lint": "npm run format && npm run lint",
     "test": "karma start",
-    "orig-test-single": "npm run lint && karma start --single-run --browsers ChromeHeadless",
-    "test-single": "karma start --single-run",
+    "test-single": "npm run lint && karma start --single-run --browsers ChromeHeadless",
     "watch-js": "npm-watch build-js",
     "watch-css": "npm-watch build-sass",
     "watch": "concurrently \"npm run watch-js\" \"npm run watch-css\""

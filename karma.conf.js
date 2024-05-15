@@ -1,6 +1,5 @@
 const istanbul = require('browserify-istanbul');
 process.env.CHROME_BIN = require('puppeteer').executablePath();
-process.env.CHROMIUM_BIN = require('puppeteer').executablePath();
 
 module.exports = function(config) {
   const browserify = {
@@ -101,8 +100,7 @@ module.exports = function(config) {
       fixWebpackSourcePaths: true
     },
 
-    browsers: ['ChromiumHeadless'],
-    // plugins: [require('karma-firefox-launcher')],
+    browsers: ['ChromeHeadless'],
 
     port: 9876,
 

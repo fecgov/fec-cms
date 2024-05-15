@@ -9,7 +9,7 @@ jobs:
       # use `-browsers` prefix for selenium tests, e.g. `<image_name>-browsers`
 
       # Python
-      - image: cimg/python:3.10-browsers
+      - image: cimg/python:3.9-browsers
         environment:
           TZ: America/New_York
           DATABASE_URL: postgres://postgres@0.0.0.0/cfdm_cms_test
@@ -57,9 +57,9 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-            nvm install 20.12.2
-            nvm use 20.12.2
-            nvm alias default 20.12.2
+            nvm install 22.1.0
+            nvm use 22.1.0
+            nvm alias default 22.1.0
             sudo npm install -g npm
             npm install
             npm rebuild sass
