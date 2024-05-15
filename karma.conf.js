@@ -1,5 +1,4 @@
 const istanbul = require('browserify-istanbul');
-process.env.CHROME_BIN = require('puppeteer').executablePath();
 
 module.exports = function(config) {
   const browserify = {
