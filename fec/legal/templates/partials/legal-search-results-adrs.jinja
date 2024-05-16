@@ -44,58 +44,52 @@
               {% set keyword_match = (filters_keyword and document.text_match) or not filters_keyword %}
               {% set show_document = category_match and keyword_match  %}
 
-              {% if show_document %}
-                <div class="post--icon u-padding--top">
-                  <span class="icon icon--inline--left i-document"></span>
-                  <a href="{{document.url}}">{{ document.description }}</a>
-                </div>
-                {% set query_highlight = adr.document_highlights[loop.index0 | string]%}
-                {% if query_highlight %}
-                  <div class="post--icon u-padding--top">
-                    <span class="icon icon--inline--left i-document"></span>
-                    <a href="{{document.url}}">
-                      {{ document.description }}
-                    </a>
-                  </div>
-                  {# show only first document highlight result #}
-                  <ul>
+            {%if show_document %}
+              <div class="post--icon u-padding--top">
+                <span class="icon icon--inline--left i-document"></span>
+                <a href="{{document.url}}">
+                  {{ document.description }}
+                </a>
+              </div>
+              {% set query_highlight = adr.document_highlights[loop.index0 | string]%}
+              {% if(query_highlight) %}
+                {# show only first document highlight result #}
+                <ul>
                     <li class="post--icon t-serif t-italic u-padding--top--med">
                       &#8230;{{ query_highlight[0] | safe }}&#8230;
                     </li>
-                  </ul>
-                  {# show additional document highlight results, if any #}
-                  {% if query_highlight|length > 1 %}
-                    <div class="js-accordion u-margin--top" data-content-prefix="additional-result-{{ adr.no }}-{{loop.index0}}">
-                      <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ adr.no }}-{{loop.index0}}" aria-expanded="false">
-                        {% if query_highlight|length == 2 %}
-                          1 more match
-                        {% elif query_highlight|length > 2 %}
-                          {{ query_highlight|length -1 }} more matches
-                        {% endif %}
-                      </button>
-                      <div class="accordion__content results__content" aria-hidden="true">
-                        <ul>
-                          {% for highlight in query_highlight %}
-                            {% if loop.index0 != 0 %}
-                              <li class="t-serif t-italic">&#8230;{{ highlight | safe }}&#8230;</li>
-                            {% endif %}
-                          {% endfor %}
-                        </ul>
-                      </div>
-                    </div>
-                  {% endif %}
-                  <ul class="tags u-padding--bottom">
-                    <li class="tag__category tag__category--doc">
-                      <div class="tag tag--primary">{{ document.category }}</div>
-                    </li>
-                  </ul>
-                {% endif %}
-                <ul class="tags u-padding--bottom">
-                  <li class="tag__category tag__category--doc">
-                    <div class="tag tag--primary">{{ document.category }}</div>
-                  </li>
                 </ul>
+                {# show additional document highlight results, if any #}
+                {% if(query_highlight|length > 1) %}
+                  <div class="js-accordion u-margin--top" data-content-prefix="additional-result-{{ adr.no }}-{{loop.index0}}">
+                  <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ adr.no }}-{{loop.index0}}" aria-expanded="false">
+                    {% if(query_highlight|length == 2) %}
+                      1 more match
+                    {% elif(query_highlight|length > 2)  %}
+                      {{ query_highlight|length -1 }} more matches
+                    {% endif %}
+                  </button>
+                  <div class="accordion__content results__content" aria-hidden="true">
+                      <ul>
+                        {% for highlight in query_highlight %}
+                          {% if(loop.index0 != 0) %}
+                            <li class="t-serif t-italic">&#8230;{{ highlight | safe }}&#8230;</li>
+                          {% endif %}
+                        {% endfor %}
+                      </ul>
+                  </div>
+                </div>
+                {% endif %}
+                  
               {% endif %}
+              <ul class="tags u-padding--bottom">
+                <li class="tag__category tag__category--doc">
+                  <div class="tag tag--primary">{{ document.category }}</div>
+                </li>
+              </ul>
+            {% else %}
+            {# documents we skip #}
+            {% endif %}
             {% endfor %}
           {% endif %}
         </div>
