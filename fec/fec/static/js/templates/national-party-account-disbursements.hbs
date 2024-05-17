@@ -1,0 +1,68 @@
+{{!--
+Template for national party accounts disbursements datatable details panel
+--}}
+<div class="panel__row">
+  <h4 class="panel__title">Recipient information</h4>
+  <table>
+    {{#panelRow "Name"}}
+      {{recipient_name}}
+    {{/panelRow}}
+    {{#panelRow "City and state"}}
+      {{recipient_city}}, {{recipient_state}}  {{recipient_zip}}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Disbursement information</h4>
+  <table>
+    {{#panelRow "Amount"}}
+      {{currency disbursement_amount}}
+    {{/panelRow}}
+    {{#panelRow "Disbursement date"}}
+      {{{datetime disbursement_date format="pretty"}}}
+    {{/panelRow}}
+    {{#panelRow "Report year"}}
+      {{report_year}}
+    {{/panelRow}}
+    {{#panelRow "TODO: Filing date IS THIS A THING?"}}
+      {{designation_full}}
+    {{/panelRow}}
+    {{#panelRow "Description"}}
+      {{disbursement_description}}
+    {{/panelRow}}
+    {{#panelRow "Purpose category"}}
+      {{disbursement_purpose_category}}
+    {{/panelRow}}
+    {{#panelRow "Disbursement type"}}
+      {{disbursement_type_desc}}
+    {{/panelRow}}
+    {{#panelRow "Memo"}}
+      {{memo_text}}
+    {{/panelRow}}
+    {{#panelRow "Memo code"}}
+      {{memo_cd_desc}}
+    {{/panelRow}}
+    {{#panelRow "Reported on"}}
+      {{filing_form}} on Line {{line_number}}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Spender information</h4>
+  <table>
+    {{#panelRow "Name"}}
+      {{committee_name}}
+    {{/panelRow}}
+    {{#panelRow "TODO: Designation"}}
+      {{spender_committee_designation}}
+    {{/panelRow}}
+    {{#panelRow "Treasurer"}}
+      {{treasurer_name}}
+    {{/panelRow}}
+    {{#panelRow "State"}}
+      {{state_full}}
+    {{/panelRow}}
+  </table>
+</div>

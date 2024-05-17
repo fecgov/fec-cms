@@ -1,0 +1,46 @@
+{% extends 'partials/filters.jinja' %}
+
+{% import 'macros/filters/text.jinja' as text %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+
+{% import 'macros/filters/contributor-states.jinja' as states %}
+{% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/years.jinja' as years %}
+{% import 'macros/filters/range.jinja' as range %}
+
+{% import 'macros/filters/dropdown-json.jinja' as dropdown %}
+{% import 'macros/filters/committee-types.jinja' as committee_type %}
+
+
+{% block heading %}
+Filter national party account disbursements
+{% endblock %}
+
+{% block filters %}
+<div class="filters__inner">
+  {{ typeahead.field('committee_id', 'Spender name or ID') }}
+  {{ text.field('recipient_name', 'Recipient name or ID') }}
+  {{ years.cycles('two_year_transaction_period', 'Report time period', show_tooltip=True)  }}
+  {{ date.field('disbursement_date', 'Disbursement date range') }}
+</div>
+<div class="js-accordion accordion--neutral restricted-fields" data-content-prefix="filter" data-open-first="false">
+  <button type="button" class="js-accordion-trigger accordion__button">Recipient details</button>
+  <div class="accordion__content">
+    {{ text.field('recipient_city', 'City') }}
+    {{ states.field('recipient_state') }}
+    {{ text.field(name = 'recipient_zip', title = 'ZIP code', attrs = {'maxlength':5}, minor_label_text = True, helper_text = 'Limit 10 ZIP codes') }}
+    {{ text.field('image_number', 'CANT: Image number') }}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Recipient committee type</button>
+  <div class="accordion__content">
+    {{ committee_type.field(committee_type='recipient_committee_type', organization_type='recipient_committee_org', designation='spender_committee_designation', display_authorized_committee_filter=True, display_default_other_committees_filter=True, display_parties_only_filter=False) }}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Disbursement details</button>
+  <div class="accordion__content">
+    {{ range.amount('disbursement_amount', 'Disbursement amount') }}
+    {{ dropdown.select_json( 'line_number', 'Line number', keys=constants.national_party_account_keys, options=constants.national_party_account_dropdowns.disbursements_line_numbers, default='false') }}
+    {{ dropdown.select_json( 'disbursement_type', 'National party account disbursement type', keys=constants.national_party_account_keys, options=constants.national_party_account_dropdowns.disbursements_types, default='false') }}
+    {{ dropdown.select_json( 'party_account_type', 'National party account', keys=constants.national_party_account_keys, options=constants.national_party_account_dropdowns.account_types, default='false') }}
+  </div>
+</div>
+{% endblock %}
