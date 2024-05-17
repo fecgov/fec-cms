@@ -111,7 +111,7 @@
         
       {% endif %}
       
-      {% if selected_doc_category_names %}
+      {% if selected_doc_category_names and selected_doc_category_names | reject('equalto', none) | list %}
         {% if query or case_no or case_respondents or case_min_open_date or case_max_open_date or case_min_close_date or case_max_close_date %}
           <div class="row u-margin--top u-margin--bottom"><strong>and</strong></div>
         {% endif %}
