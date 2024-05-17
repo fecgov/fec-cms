@@ -204,6 +204,28 @@ def audit(request):
     })
 
 
+def national_party_account_receipts(request):
+    return render(request, 'datatable.jinja', {
+        'parent': 'data',
+        'result_type': 'national_party_account_receipts',
+        'slug': 'national-party-account-receipts',
+        'title': 'National party account receipts',
+        'columns': constants.table_columns['national-party-account-receipts'],
+        'social_image_identifier': 'data',
+    })
+
+
+def national_party_account_disbursements(request):
+    return render(request, 'datatable.jinja', {
+        'parent': 'data',
+        'result_type': 'national_party_account_receipts',
+        'slug': 'national-party-account-disbursements',
+        'title': 'National party account disbursements',
+        'columns': constants.table_columns['national-party-account-disbursements'],
+        'social_image_identifier': 'data',
+    })
+
+
 def party_coordinated_expenditures(request):
     return render(request, 'datatable.jinja', {
         'parent': 'data',

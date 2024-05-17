@@ -1,5 +1,3 @@
-'use strict';
-
 var _ = require('underscore');
 
 var columnHelpers = require('./column-helpers');
@@ -984,6 +982,58 @@ var audit = [
   }
 ];
 
+const nationalPartyReceipts = [
+  {
+    data: 'committee_name',
+    className: 'all'
+  },
+  {
+    data: 'contributor_name',
+    className: 'all'
+  },
+  {
+    data: 'party_account_type',
+    className: 'all'
+  },
+  dateColumn({
+    data: 'contribution_receipt_date',
+    className: 'min-tablet hide-panel column--small'
+  }),
+  currencyColumn({
+    data: 'contribution_receipt_amount',
+    className: 'min-desktop hide-panel column--number t-mono'
+  }),
+  modalTriggerColumn
+];
+
+const nationalPartyDisbursements = [
+  {
+    data: 'committee_name',
+    className: 'all'
+  },
+  {
+    data: 'recipient_name',
+    className: 'all'
+  },
+  {
+    data: 'party_account',
+    className: 'all'
+  },
+  {
+    data: 'disbursement_description',
+    className: 'all'
+  },
+  dateColumn({
+    data: 'disbursement_date',
+    className: 'min-tablet hide-panel column--small'
+  }),
+  currencyColumn({
+    data: 'disbursement_amount',
+    className: 'min-desktop hide-panel column--number t-mono'
+  }),
+  modalTriggerColumn
+];
+
 module.exports = {
   candidateColumn: candidateColumn,
   committeeColumn: committeeColumn,
@@ -1007,5 +1057,7 @@ module.exports = {
   loans: loans,
   debts: debts,
   pac_party: pac_party,
-  audit: audit
+  audit: audit,
+  nationalPartyReceipts: nationalPartyReceipts,
+  nationalPartyDisbursements: nationalPartyDisbursements
 };
