@@ -99,7 +99,9 @@
       {% endif %}
       
       {% if selected_doc_category_names %}
-        <div class="row u-margin--top u-margin--bottom"><strong>and</strong></div>
+        {% if query or case_no or case_respondents or case_min_open_date or case_max_open_date or case_min_close_date or case_max_close_date %}
+          <div class="row u-margin--top u-margin--bottom"><strong>and</strong></div>
+        {% endif %}
         <div data-tag-category="data_type" class="tag__category">
           {% for selected_doc_category_name in selected_doc_category_names %}
             <div data-removable="true" class="tag__item">{{ selected_doc_category_name }}</div>{% if not loop.last %}<span></span>{% endif %}
