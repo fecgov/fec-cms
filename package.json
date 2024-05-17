@@ -39,6 +39,7 @@
     "dompurify": "^2.2.7",
     "draftail": "^1.4.1",
     "es6-weak-map": "2.0.1",
+    "es5-ext": "^0.10.64",
     "eventemitter2": "0.4.14",
     "fullcalendar": "3.3.1",
     "glossary-panel": "1.0.0",
