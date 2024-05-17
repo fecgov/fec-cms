@@ -1,0 +1,68 @@
+{{!--
+Template for national party accounts disbursements datatable details panel
+--}}
+<div class="panel__row">
+  <h4 class="panel__title">Source information</h4>
+  <table>
+    {{#panelRow "CHECK: Name"}}
+      {{contributor_name}}
+    {{/panelRow}}
+    {{#panelRow "CHECK: City and state"}}
+      {{contributor_city}}, {{contributor_state}}  {{contributor_zip}}
+    {{/panelRow}}
+    {{#panelRow "Occupation"}}
+      {{contributor_occupation}}
+    {{/panelRow}}
+    {{#panelRow "Employer"}}
+      {{contributor_employer}}
+    {{/panelRow}}
+    {{#panelRow "Year to date"}}
+      {{{currency contributor_aggregate_ytd}}}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Receipt information</h4>
+  <table>
+    {{#panelRow "Amount"}}
+      {{{currency contribution_receipt_amount}}}
+    {{/panelRow}}
+    {{#panelRow "Receipt date"}}
+      {{{datetime contribution_receipt_date format="pretty"}}}
+    {{/panelRow}}
+    {{#panelRow "Report year"}}
+      {{report_year}}
+    {{/panelRow}}
+    {{#panelRow "Receipt type"}}
+      {{receipt_type_desc}}
+    {{/panelRow}}
+    {{#panelRow "Memo"}}
+      {{memo_text}}
+    {{/panelRow}}
+    {{#panelRow "Reported on"}}
+      {{filing_form}} on Line {{line_num}}
+    {{/panelRow}}
+    {{#panelRow "Election type"}}
+      {{fec_election_type_desc}}
+    {{/panelRow}}
+  </table>
+</div>
+
+<div class="panel__row">
+  <h4 class="panel__title">Recipient information</h4>
+  <table>
+    {{#panelRow "Committee"}}
+      {{committee_name}}
+    {{/panelRow}}
+    {{#panelRow "Political party"}}
+      {{party_full}}
+    {{/panelRow}}
+    {{#panelRow "Type"}}
+      {{recipient_committee_type_full}}
+    {{/panelRow}}
+    {{#panelRow "State"}}
+        {{state_full}}
+    {{/panelRow}}
+  </table>
+</div>

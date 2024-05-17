@@ -1,0 +1,49 @@
+{% extends 'partials/filters.jinja' %}
+
+{% import 'macros/filters/text.jinja' as text %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+
+{% import 'macros/filters/contributor-states.jinja' as states %}
+{% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/years.jinja' as years %}
+{% import 'macros/filters/range.jinja' as range %}
+
+{% import 'macros/filters/dropdown-json.jinja' as dropdown %}
+{% import 'macros/filters/committee-types.jinja' as committee_type %}
+
+
+{% block heading %}
+Filter national party account disbursements
+{% endblock %}
+
+{% block filters %}
+<div class="filters__inner">
+  {{ typeahead.field('committee_id', 'Recipient name or ID') }}
+  {{ text.field('contributor_name', 'Source name or ID') }}
+  {{ years.cycles('two_year_transaction_period', 'Report time period', show_tooltip=True)  }}
+  {{ date.field('contribution_receipt_date', 'Receipt date range') }}
+</div>
+<div class="js-accordion accordion--neutral restricted-fields" data-content-prefix="filter" data-open-first="false">
+  <button type="button" class="js-accordion-trigger accordion__button">Source details</button>
+  <div class="accordion__content">
+    {{ text.field('contributor_city', 'City') }}
+    {{ states.field('contributor_state') }}
+    {{ text.field(name='contributor_zip', title='ZIP code', attrs={'maxlength':5}, minor_label_text=True, helper_text='Limit 10 ZIP codes') }}
+    {{ text.field(name='contributor_occupation', title='Occupation', minor_label_text=True, helper_text='Use the employer field to search by occupation in reports filed before 2003. Limit 10 occupations') }}
+    {{ text.field(name='contributor_employer', title='Employer', minor_label_text=True, helper_text='Limit 10 employers') }}
+    {{ text.field(name='image_number', title='Image number') }}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Source committee type</button>
+  <div class="accordion__content">
+    {{ committee_type.field(committee_type='recipient_committee_type', organization_type='recipient_committee_org', designation='spender_committee_designation', display_authorized_committee_filter=True, display_default_other_committees_filter=True, display_parties_only_filter=False) }}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Receipt details</button>
+  <div class="accordion__content">
+    {{ range.amount('contribution_receipt_amount', 'Receipt amount') }}
+    <p>TODO: No line number?</p>
+    {# {{ dropdown.select_json( 'line_number', 'Line number', keys=constants.national_party_account_keys, options=constants.national_party_account_dropdowns.disbursements_line_numbers, default='false') }} #}
+    {{ dropdown.select_json( 'receipt_type', 'National party account receipt type', keys=constants.national_party_account_keys, options=constants.national_party_account_dropdowns.receipt_types, default='false') }}
+    {{ dropdown.select_json( 'party_account_type', 'National party account', keys=constants.national_party_account_keys, options=constants.national_party_account_dropdowns.account_types, default='false') }}
+  </div>
+</div>
+{% endblock %}
