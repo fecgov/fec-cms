@@ -1,15 +1,17 @@
 import dateutil.parser
 import requests
+from requests.exceptions import ConnectionError
 import json
 
 from django import template
 from django.conf import settings
 from fec.constants import USAJOBS_CODE_LIST as CODE_LIST
 
+
 JOB_URL = "https://data.usajobs.gov/api/Search"
 CODES_URL = "https://data.usajobs.gov/api/codelist/hiringpaths"
 USAJOB_SEARCH_ERROR = """
-USAJOBS is unavailable. Please visit <a href="https://www.usajobs.gov/">usajobs.gov</a> for more information.
+USAJOBS is unavailable. We are temporarily unable to post open FEC positions. Please visit <a href="https://www.usajobs.gov/">usajobs.gov</a> for more information.
 """
 register = template.Library()
 
@@ -35,18 +37,29 @@ def get_jobs():
         "cache-control": "no-cache",
     }
 
-    # query usajobs API for all open fec jobs
-    response = requests.get(JOB_URL, headers=headers, params=querystring)
-    if response.status_code != 200:
-        return {"error": USAJOB_SEARCH_ERROR}
-    responses = response.json()
+    # Query usajobs API for all open FEC jobs, catch any connection errors to avoid server error
+    try:
+        response = requests.get(JOB_URL, headers=headers, params=querystring)
+    except ConnectionError:
+        return {'error': USAJOB_SEARCH_ERROR}
 
-    # query usajobs API for list of all hiring-path codes
+    """
+    Parse the JSON content of the response body and check that the JSON in the correct format for jobs listings.
+    This will also catch any 4xx, 5xx responses that don't return JSON in the correct format
+    """
+    try:
+        responses = response.json()
+        responses.get("SearchResult", {})['SearchResultItems']
+    except (KeyError, IndexError, TypeError):
+        return {'error': USAJOB_SEARCH_ERROR}
+
+    # Query the codelist/hiringpaths endpoint for mapping map hiring-path code(s) to description(s)
     codes_response = requests.get(CODES_URL, headers=headers)
-    if codes_response.status_code != 200:
-        codes_responses = json.loads(CODE_LIST)
-    else:
+    # Parse the JSON content of the codes_response body or Use the backup CODE_LIST constant if the codelist/hiringpaths enpoint is unsuccesful
+    try:
         codes_responses = codes_response.json()
+    except (KeyError, IndexError, TypeError):
+        codes_responses = json.loads(CODE_LIST)
 
     jobData = []
     search_results = responses.get("SearchResult", {})
