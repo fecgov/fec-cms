@@ -92,6 +92,12 @@
     }
   }
 
+  .taxpayer-statement {
+    font-family: $sans-serif;
+    font-size: 1.4rem;
+    max-width: 30rem;
+  }
+
   @include media($med) {
     .seal {
       @include span-columns(9);
