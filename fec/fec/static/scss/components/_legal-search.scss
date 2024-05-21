@@ -34,6 +34,15 @@
   font-weight: 600;
 }
 
+#results-regulations {
+  .legal-search-result__name,
+  .legal-search-result__hit {
+    strong {
+      @include t-highlight;
+    }
+  }
+}
+
 .legal-search-result__hit {
 
   em {

@@ -19,20 +19,17 @@ from home.models import (CommissionerPage, DigestPage, MeetingPage,
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def search_updates(queryset,search):
-    results_html = []
-    for result in queryset:
-        # Convert body to string for pages with html blocks, and perform a string search
-        if "'type': 'html'" in str(result.body.raw_data):
-            body = str(result.body.raw_data)
-            if (str(search) in body):
-                results_html.append(result)
 
+def search_updates(queryset, search):
+    # Use icontains to cover html blocks which are not searched by the below wagtail.search.backends.database
+    results_html = queryset.filter(body__icontains=search)
+    # Use wagtail.search.backends.database (Postgres) to search all pages' search_fields defined in page models
     results = queryset.search(search)
-    # Remove duplicates where pages that have both html and other fields-types, may return results for both search options 
+    # Combine results, removing any duplicates
     results = chain(results,  [x for x in results_html if x not in results])
-    
+
     return results
+
 
 def replace_dash(string):
     # Leave the dash in place for non-filer publications
@@ -62,7 +59,7 @@ def get_records(category_list=None, year=None, search=None):
         )
 
     if search:
-        records = search_updates(records,search)
+        records = search_updates(records, search)
 
     return records
 
@@ -352,6 +349,7 @@ def index_meetings(request):
         map(lambda x: x.year, executive_sessions.dates("date", "year", order="DESC"))
     )
 
+    # These clear the search field upon navigating tabs as requested by content team
     meetings_query = ""
     hearings_query = ""
     executive_query = ""
@@ -376,10 +374,32 @@ def index_meetings(request):
     if search:
         if active == "open-meetings":
             meetings_query = search
-            open_meetings = open_meetings.search(meetings_query)
+            """
+            Perform text search on agenda field for newer open meetings and imported_html field for older
+            open meetings where html cannot be searched by the wagtail.search.backends.database (<= 2017-04-27)
+            """
+            text_search_meetings = list(open_meetings.filter(Q(agenda__icontains=meetings_query) | Q(imported_html__icontains=meetings_query)))
+            # Also use wagtail.search.backends.database (Postgres) to search open meeting pages
+            open_meetings = list(open_meetings.search(meetings_query))
+            # Combine the results, removing any duplicates
+            open_meetings = open_meetings + [x for x in text_search_meetings if x not in open_meetings]
+            # Sort results because db search does not recognize the order_by of the original queryset
+            open_meetings.sort(key=attrgetter('date'), reverse=True)
+
         if active == "hearings":
             hearings_query = search
-            hearings = hearings.search(hearings_query)
+            """
+            Perform text search on agenda field for newer hearings and imported_html field for older
+            hearings where html cannot be searched by the wagtail.search.backends.database (<= 2016-12-06)
+            """
+            text_search_hearings = list(hearings.filter(Q(agenda__icontains=hearings_query) | Q(imported_html__icontains=hearings_query)))
+            # Also Use wagtail.search.backends.database (Postgres) to search hearing pages
+            hearings = list(hearings.search(hearings_query))
+            # Combine the results, removing any duplicates
+            hearings = hearings + [x for x in text_search_hearings if x not in hearings]
+            # Sort results because db search does not recognize the order_by of the original queryset
+            hearings.sort(key=attrgetter('date'), reverse=True)
+
         if active == "executive-sessions":
             executive_query = search
             executive_sessions = executive_sessions.search(executive_query)
