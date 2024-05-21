@@ -116,14 +116,18 @@
     margin-top: 2rem;
   } // TODO: I don't like this one-off and am open to suggestions to get the margins correct
 
+  p {
+    margin-bottom: 1.2rem;
+  }
   @include media($lg) {
     .container {
       position: relative;
 
       a {
-        position: absolute;
+        // position: absolute;
         right: 0;
         top: 4rem;
+        margin-bottom: u(1.2rem);
       }
     }
     .grid--2-wide .grid__item {
