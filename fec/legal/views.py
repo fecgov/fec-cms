@@ -5,6 +5,7 @@ import datetime
 import re
 
 from data import api_caller
+from data import ecfr_caller
 from data import constants
 
 
@@ -37,14 +38,19 @@ def advisory_opinions_landing(request):
         for doc in pending_ao.get('documents'):
             if doc['category'] == 'AO Request, Supplemental Material, and Extensions of Time':
 
-                # This regex searches in the document description for a string in this format:
-                # "(Comments due by October 24, 2022)", case insensitive, forgiving for extra spaces and 1-digit month
-                pattern = re.search(r'(?i)\(\s*Comments\s*due\s*by\s*(([a-z,A-Z]+)\s*\d{1,2}\s*,*\s*\d{4})\s*\)',
+                # This regex searches in the document description for a string
+                # in this format:
+                # "(Comments due by October 24, 2022)", case insensitive,
+                # forgiving for extra spaces and 1-digit month
+                pattern = re.search(r'(?i)\(\s*Comments\s*due\s*by\s*'
+                                    r'(([a-z,A-Z]+)\s*\d{1,2}\s*,'
+                                    r'*\s*\d{4})\s*\)',
                                     doc['description'])
 
                 # If a match is found.
                 if pattern:
-                    # group(1) is the date only, as input by user. Example. "October 24, 2022"
+                    # group(1) is the date only, as input by user.
+                    # Example. "October 24, 2022"
                     display_date = pattern.group(1)
                     # rm comma
                     parseable_date = display_date.replace(',', '')
@@ -58,9 +64,11 @@ def advisory_opinions_landing(request):
                         # pass to avoid throwing a datetime error
                         pass
                     else:
-                        # Since  `parseable_date_time` is parseable date string, parse it into a Python-readable date.
+                        # Since  `parseable_date_time` is parseable date
+                        # string, parse it into a Python-readable date.
                         # Example code_date_time: 2022-10-24 23:59:00
-                        code_date_time = datetime.datetime.strptime(parseable_date_time, '%B %d %Y %I:%M%p')
+                        code_date_time = datetime.datetime.strptime(
+                            parseable_date_time, '%B %d %Y %I:%M%p')
 
                         # Check if `code_date_time` has not expired.
                         present = datetime.datetime.now()
@@ -86,7 +94,8 @@ def advisory_opinion_page(request, ao_no):
     if not advisory_opinion:
         raise Http404()
 
-    final_opinion = [doc for doc in advisory_opinion['documents'] if doc['category'] == 'Final Opinion']
+    final_opinion = [doc for doc in advisory_opinion['documents']
+                     if doc['category'] == 'Final Opinion']
     final_opinion = final_opinion[0] if len(final_opinion) > 0 else None
 
     return render(request, 'legal-advisory-opinion.jinja', {
@@ -135,7 +144,9 @@ def adr_page(request, adr_no):
 def admin_fine_page(request, admin_fine_no):
     admin_fine = api_caller.load_legal_admin_fines(admin_fine_no)
     # If report code not found in report_type_full dict, then use report code
-    report_type_full = constants.report_type_full.get(admin_fine['report_type']) or admin_fine['report_type']
+    report_type_full = (constants.report_type_full.get(
+                        admin_fine['report_type'])
+                        or admin_fine['report_type'])
     if not admin_fine:
         raise Http404()
     return render(request, 'legal' + '-admin_fine.jinja', {
@@ -146,15 +157,64 @@ def admin_fine_page(request, admin_fine_no):
     })
 
 
+# Transform boolean queries for eCFR API
+# Query string:
+# ((coordinated OR communications) OR (in-kind AND contributions) OR
+# ("independent expenditure")) AND (-authorization)
+# eCFR query string transformation:
+# (coordinated | communications) | (in-kind contributions) |
+# ("independent expenditure") -authorization
+
+def transform_ecfr_query_string(query_string):
+
+    # Define the replacements for eCFR query string
+    replacements = [
+        (r'\((-[^)]*)\)', r'\1'),  # Removes parentheses around on statement
+        (r' OR ', ' | '),  # Replace OR with |
+        (r' AND ', ' '),  # Replace AND with space
+    ]
+
+    # Apply replacements sequentially
+    for pattern, replacement in replacements:
+        query_string = re.sub(pattern, replacement, query_string)
+
+    return query_string
+
+
 def legal_search(request):
     query = request.GET.get('search', '')
+    Updated_ecfr_query_string = transform_ecfr_query_string(query)
     result_type = request.GET.get('search_type', 'all')
-
     results = {}
+    ecfr_results = {}
+    regulations = {}
 
     # Only hit the API if there's an actual query
     if query:
-        results = api_caller.load_legal_search_results(query, result_type, limit=3)
+        results = api_caller.load_legal_search_results(query, result_type,
+                                                       limit=3)
+        ecfr_results = ecfr_caller.fetch_ecfr_data(Updated_ecfr_query_string,
+                                                   limit=3, page=1)
+
+        if 'results' in ecfr_results:
+            regulations = [{
+                        "doc_id": None,
+                        "document_highlights": {},
+                        "highlights": [obj['headings']['part'],
+                                       obj['full_text_excerpt']],
+                        "name": obj['headings']['section'],
+                        "no": obj['hierarchy']['section'],
+                        "type": None,
+                        "url":  (
+                            "https://www.ecfr.gov/current/title-11/"
+                            f"chapter-{obj['hierarchy']['chapter']}/"
+                            f"section-{obj['hierarchy']['section']}"
+                        )
+                        } for obj in ecfr_results['results']]
+
+    results['regulations'] = regulations
+    results['total_regulations'] = ecfr_results.get('meta', {}).get(
+                                                    'total_count', 0)
 
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
@@ -171,7 +231,8 @@ def legal_doc_search_ao(request):
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
 
-    results = api_caller.load_legal_search_results(query, 'advisory_opinions', offset=offset)
+    results = api_caller.load_legal_search_results(query, 'advisory_opinions',
+                                                   offset=offset)
 
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
         'parent': 'legal',
@@ -195,7 +256,8 @@ def legal_doc_search_mur(request):
     case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
 
     # For JS sorting
-    sort_dir = 'descending' if sort == '-case_no' or sort == '' or sort == 'null' else 'ascending'
+    sort_dir = ('descending' if sort == '-case_no' or sort == '' or
+                sort == 'null' else 'ascending')
     sort_dir_option = 'descending' if sort_dir == 'ascending' else 'ascending'
     sort_class = sort_dir[0:-6]
 
@@ -340,13 +402,35 @@ def legal_doc_search_af(request):
 def legal_doc_search_regulations(request):
     results = {}
     query = request.GET.get('search', '')
-    offset = request.GET.get('offset', 0)
+    page = request.GET.get('page', 1)
+    Updated_ecfr_query_string = transform_ecfr_query_string(query)
+    ecfr_results = ecfr_caller.fetch_ecfr_data(Updated_ecfr_query_string,
+                                               page=page)
 
-    results = api_caller.load_legal_search_results(query, 'regulations', offset=offset)
+    regulations = [{
+                "highlights": [obj['full_text_excerpt']],
+                "name": obj['headings']['section'],
+                "no": obj['hierarchy']['section'],
+                "type": None,
+                "url":  (
+                    "https://www.ecfr.gov/current/title-11/"
+                    f"chapter-{obj['hierarchy']['chapter']}/"
+                    f"section-{obj['hierarchy']['section']}"
+                )
+                } for obj in ecfr_results['results']]
+    current_page = ecfr_results['meta']['current_page']
+    total_pages = ecfr_results['meta']['total_pages']
+    total_count = ecfr_results['meta']['total_count']
+    results['regulations'] = regulations
+    results['total_all'] = total_count
 
     return render(request, 'legal-search-results-regulations.jinja', {
         'parent': 'legal',
         'results': results,
+        'current_page': current_page,
+        'total_pages': total_pages,
+        'total_count': total_count,
+        'limit': 20,
         'result_type': 'regulations',
         'query': query,
         'social_image_identifier': 'legal',
@@ -358,7 +442,8 @@ def legal_doc_search_statutes(request):
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
 
-    results = api_caller.load_legal_search_results(query, 'statutes', offset=offset)
+    results = api_caller.load_legal_search_results(query, 'statutes',
+                                                   offset=offset)
 
     return render(request, 'legal-search-results-statutes.jinja', {
         'parent': 'legal',
@@ -370,8 +455,8 @@ def legal_doc_search_statutes(request):
 
 
 def get_legal_category_order(results):
-    """ Return categories in pre-defined order, moving categories with empty results
-        to the end.
+    """ Return categories in pre-defined order, moving categories with empty
+        results to the end.
     """
     categories = ["advisory_opinions", "murs", "regulations", "statutes"]
     category_order = [x for x in categories if results.get("total_" + x, 0) > 0] +\

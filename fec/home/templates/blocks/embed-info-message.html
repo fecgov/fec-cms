@@ -1,6 +1,5 @@
 {% load wagtailcore_tags %}
-
- <div class="message message--info">
+ <div class="message message--{{ self.banner_icon|default:'info' }}">
     {{ self.text | richtext}}
 </div>
 
