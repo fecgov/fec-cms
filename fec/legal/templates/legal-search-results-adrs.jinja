@@ -70,43 +70,51 @@
     <h3 class="tags__title">Viewing <span class="tags__count">{{ results.total_adrs }}</span>  filtered results for:</h3>
   </div>
   <div class="js-filter-tags data-container__tags">
-    <div class="tags" aria-hidden="false">
+    <ul class="tags">
       {% if query or case_no or case_respondents or case_min_open_date or case_max_open_date or case_min_close_date or case_max_close_date %}
-        <div data-tag-category="data_type" class="tag__category tag__category--and">
-          {% if query %}
+        {% if query %}
+          <li data-tag-category="data_type" class="tag__category">
             <div data-removable="true" class="tag__item">{{ query }}</div>
-          {% endif %}
-          {% if case_no %}
+          </li>
+        {% endif %}
+        {% if case_no %}
+          <li data-tag-category="data_type" class="tag__category">
             <div data-removable="true" class="tag__item">{{ case_no }}</div>
-          {% endif %}
-          {% if case_respondents %}
+          </li>
+        {% endif %}
+        {% if case_respondents %}
+          <li data-tag-category="data_type" class="tag__category">
             <div data-removable="true" class="tag__item">{{ case_respondents }}</div>
-          {% endif %}
-          {% if case_min_open_date %}
-            <div data-removable="true" class="tag__item">{{ case_min_open_date | safe }}</div>
-          {% endif %}
-          {% if case_max_open_date %}
-            <div data-removable="true" class="tag__item">{{ case_max_open_date | safe }}</div>
-          {% endif %}
-          {% if case_min_close_date %}
-            <div data-removable="true" class="tag__item">{{ case_min_close_date | safe }}</div>
-          {% endif %}
-          {% if case_max_close_date %}
-            <div data-removable="true" class="tag__item">{{ case_max_close_date | safe }}</div>
-          {% endif %}
-        </div>
-        
+          </li>
+        {% endif %}
+        {% if case_min_open_date or case_max_open_date %}
+          <li data-tag-category="date" class="tag__category tag__category__range--date">
+            {% if case_min_open_date %} 
+            <div data-removable="true" data-id="min_date" class="tag__item">{% if not case_max_open_date %}Beginning {% endif %}{{ case_min_open_date | safe }}</div>
+            {% endif %}
+            {% if case_max_open_date %}
+              <div data-removable="true" data-id="max_date" class="tag__item">{% if not case_min_open_date %}Ending {% endif %}{{ case_max_open_date | safe }}</div>
+            {% endif %}
+          </li>
+        {% endif %}
+        {% if case_min_close_date or case_max_close_date %}
+          <li data-tag-category="date" class="tag__category tag__category__range--date">
+            {% if case_min_close_date %}
+            <div data-removable="true" data-id="min_date" class="tag__item">{% if not case_max_close_date %}Beginning {% endif %}{{ case_min_close_date | safe }}</div>
+            {% endif %}
+            {% if case_max_close_date %}
+              <div data-removable="true" data-id="max_date" class="tag__item">{% if not case_min_close_date %}Ending {% endif %}{{ case_max_close_date | safe }}</div>
+            {% endif %}
+          </li>
+        {% endif %}
       {% endif %}
       
       {% if selected_doc_category_names and selected_doc_category_names | reject('equalto', none) | list %}
-        {% if query or case_no or case_respondents or case_min_open_date or case_max_open_date or case_min_close_date or case_max_close_date %}
-          <div class="row u-margin--top u-margin--bottom"><strong>and</strong></div>
-        {% endif %}
-        <div data-tag-category="data_type" class="tag__category">
+        <li data-tag-category="data_type" class="tag__category">
           {% for selected_doc_category_name in selected_doc_category_names %}
             <div data-removable="true" class="tag__item">{{ selected_doc_category_name }}</div>{% if not loop.last %}<span></span>{% endif %}
           {% endfor %}
-        </div>
+        </li>
       {% endif %}
     </ul>
   </div>

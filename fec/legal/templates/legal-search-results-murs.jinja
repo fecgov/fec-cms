@@ -20,7 +20,7 @@
       <input id="case_respondents" name="case_respondents" type="text" value="{{ case_respondents }}">
     </div>
   </div>
-  <ul class="accordion--neutral js-accordion u-margin--top" data-content-prefix="mur-accordion" data-open-first="true">
+  <ul class="accordion--neutral js-accordion u-margin--top" data-content-prefix="mur-accordion" data-open-first="true" data-reflect-static="true">
     <li>
     <button type="button" class="js-accordion-trigger accordion__button">Documents</button>
     <div class="accordion__content">
@@ -37,8 +37,8 @@
     </div>
     </li>
 
-    <button type="button" class="js-accordion-trigger accordion__button" aria-expanded="false">Time period</button>
-    <div class="accordion__content">
+    <button type="button" class="js-accordion-trigger accordion__button" {% if case_min_open_date or case_max_open_date or case_min_close_date or case_max_close_date %}aria-expanded="true"{% endif %}>Time period</button>
+    <div class="accordion__content" {% if case_min_open_date or case_max_open_date or case_min_close_date or case_max_close_date %}aria-hidden="false"{% endif %}>
       <div class="filter">
         <legend class="label">Case open date range</legend>
         <div class="range range--date js-date-range">
@@ -83,43 +83,51 @@
     <h3 class="tags__title">Viewing <span class="tags__count">{{ results.total_murs }}</span>  filtered results for:</h3>
   </div>
   <div class="js-filter-tags data-container__tags">
-    <div class="tags" aria-hidden="false">
+    <ul class="tags">
       {% if query or case_no or case_respondents or case_min_open_date or case_max_open_date or case_min_close_date or case_max_close_date %}
-        <div data-tag-category="data_type" class="tag__category tag__category--and">
-          {% if query %}
+        {% if query %}
+          <li data-tag-category="data_type" class="tag__category">
             <div data-removable="true" class="tag__item">{{ query }}</div>
-          {% endif %}
-          {% if case_no %}
+          </li>
+        {% endif %}
+        {% if case_no %}
+          <li data-tag-category="data_type" class="tag__category">
             <div data-removable="true" class="tag__item">{{ case_no }}</div>
-          {% endif %}
-          {% if case_respondents %}
+          </li>
+        {% endif %}
+        {% if case_respondents %}
+          <li data-tag-category="data_type" class="tag__category">
             <div data-removable="true" class="tag__item">{{ case_respondents }}</div>
-          {% endif %}
-          {% if case_min_open_date %}
-            <div data-removable="true" class="tag__item">{{ case_min_open_date | safe }}</div>
-          {% endif %}
-          {% if case_max_open_date %}
-            <div data-removable="true" class="tag__item">{{ case_max_open_date | safe }}</div>
-          {% endif %}
-          {% if case_min_close_date %}
-            <div data-removable="true" class="tag__item">{{ case_min_close_date | safe }}</div>
-          {% endif %}
-          {% if case_max_close_date %}
-            <div data-removable="true" class="tag__item">{{ case_max_close_date | safe }}</div>
-          {% endif %}
-        </div>
-        
+          </li>
+        {% endif %}
+        {% if case_min_open_date or case_max_open_date %}
+          <li data-tag-category="date" class="tag__category tag__category__range--date">
+            {% if case_min_open_date %} 
+            <div data-removable="true" data-id="min_date" class="tag__item">{% if not case_max_open_date %}Beginning {% endif %}{{ case_min_open_date | safe }}</div>
+            {% endif %}
+            {% if case_max_open_date %}
+              <div data-removable="true" data-id="max_date" class="tag__item">{% if not case_min_open_date %}Ending {% endif %}{{ case_max_open_date | safe }}</div>
+            {% endif %}
+          </li>
+        {% endif %}
+        {% if case_min_close_date or case_max_close_date %}
+          <li data-tag-category="date" class="tag__category tag__category__range--date">
+            {% if case_min_close_date %}
+            <div data-removable="true" data-id="min_date" class="tag__item">{% if not case_max_close_date %}Beginning {% endif %}{{ case_min_close_date | safe }}</div>
+            {% endif %}
+            {% if case_max_close_date %}
+              <div data-removable="true" data-id="max_date" class="tag__item">{% if not case_min_close_date %}Ending {% endif %}{{ case_max_close_date | safe }}</div>
+            {% endif %}
+          </li>
+        {% endif %}
       {% endif %}
       
       {% if selected_doc_category_names and selected_doc_category_names | reject('equalto', none) | list %}
-        {% if query or case_no or case_respondents or case_min_open_date or case_max_open_date or case_min_close_date or case_max_close_date %}
-          <div class="row u-margin--top u-margin--bottom"><strong>and</strong></div>
-        {% endif %}
-        <div data-tag-category="data_type" class="tag__category">
+        <li data-tag-category="data_type" class="tag__category">
           {% for selected_doc_category_name in selected_doc_category_names %}
             <div data-removable="true" class="tag__item">{{ selected_doc_category_name }}</div>{% if not loop.last %}<span></span>{% endif %}
           {% endfor %}
-        </div>
+        </li>
       {% endif %}
     </ul>
   </div>
@@ -128,55 +136,53 @@
 {% endblock %}
 
 {% block results %}
-{% with murs = results.murs %}
-
-{% include 'partials/legal-search-results-mur.jinja' %}
-{% endwith %}
-
-{% with results=results %}
-{% include 'partials/legal-pagination.jinja' %}
-{% endwith %}
-
+  {% with results=results %}
+    {% include 'partials/legal-pagination.jinja' %}
+  {% endwith %}
+  {% with murs = results.murs %}
+    {% include 'partials/legal-search-results-mur.jinja' %}
+  {% endwith %}
 {% endblock %}
+
 {% block scripts %}
-{# super loads scripts from parent #}
-{{ super() }}
-<script>
-let sort_val = "{{ sort | safe }}"
-// The case_no column, header-cell
-let sort_btn = document.getElementById('js-sort-mur')
+  {# super loads scripts from parent #}
+  {{ super() }}
+  <script>
+  let sort_val = "{{ sort | safe }}"
+  // The case_no column, header-cell
+  let sort_btn = document.getElementById('js-sort-mur')
 
 
-const toggle_sort = function() {
-    let new_val;
-    //On first, there is no querystring yet, so this handles possible null value for 'sort_val' 
-    if (sort_val == '-case_no' || sort_val == null || sort_val == '') {
-        new_val = 'case_no'
-    } else {
-        new_val = '-case_no'
-    }
-    //populate hidden field with current sort value
-    document.getElementById('sort').value = new_val
+  const toggle_sort = function() {
+      let new_val;
+      //On first, there is no querystring yet, so this handles possible null value for 'sort_val' 
+      if (sort_val == '-case_no' || sort_val == null || sort_val == '') {
+          new_val = 'case_no'
+      } else {
+          new_val = '-case_no'
+      }
+      //populate hidden field with current sort value
+      document.getElementById('sort').value = new_val
 
-    //submit the filters form
-    document.forms["category-filters"].submit()
-}
+      //submit the filters form
+      document.forms["category-filters"].submit()
+  }
 
-//If there are no results to the query, the table is not rendered so there is no sort_btn and thus an error on trying to add an event listener to it, so:
-if (sort_btn) {
-    sort_btn.addEventListener("click", toggle_sort);
-}
+  //If there are no results to the query, the table is not rendered so there is no sort_btn and thus an error on trying to add an event listener to it, so:
+  if (sort_btn) {
+      sort_btn.addEventListener("click", toggle_sort);
+  }
 
-// Keep scroll-position with each reload
-//https://stackoverflow.com/questions/17642872/refresh-page-and-keep-scroll-position 
-document.addEventListener("DOMContentLoaded", function(event) {
-    var scrollpos = localStorage.getItem('scrollpos');
-    if (scrollpos) window.scrollTo(0, scrollpos);
-});
+  // Keep scroll-position with each reload
+  //https://stackoverflow.com/questions/17642872/refresh-page-and-keep-scroll-position 
+  document.addEventListener("DOMContentLoaded", function(event) {
+      var scrollpos = localStorage.getItem('scrollpos');
+      if (scrollpos) window.scrollTo(0, scrollpos);
+  });
 
-window.onbeforeunload = function(e) {
-    localStorage.setItem('scrollpos', window.scrollY);
-    location.reload();
-};
-</script>
+  window.onbeforeunload = function(e) {
+      localStorage.setItem('scrollpos', window.scrollY);
+      location.reload();
+  };
+  </script>
 {% endblock %}
