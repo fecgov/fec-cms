@@ -1,5 +1,5 @@
-<div class="results-info">
-<div class="dataTables_info">{{ results.offset | int + 1 }}&ndash;{{ results.offset | int + results[result_type + '_returned'] | int }} of about {{ results.total_all }}</div>
+<div class="results-info u-border-top-base">
+<div class="dataTables_info">Showing {{ results.offset | int + 1 }}&ndash;{{ results.offset | int + results[result_type + '_returned'] | int }} of {{ results.total_all }} results</div>
 <div class="dataTables_paginate">
 {% if results.offset | int > 0 %}
 <a class="paginate_button previous" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}{% for category_id in selected_doc_category_ids %}&case_doc_category_id={{ category_id }}{% endfor %}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ results.offset | int - results.limit | int }}&sort={{ sort }}#results-{{ result_type }}">Previous</a>

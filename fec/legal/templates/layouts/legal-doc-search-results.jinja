@@ -23,7 +23,7 @@
 {% block body %}
 
 {% block search %}
-<section class="main__content--full data-container__wrapper">
+<section class="main__content--full data-container__wrapper dataTables_wrapper">
   <div id="filters" class="filters is-open">
     <button class="filters__header filters__toggle js-filter-toggle" type="button">
       <span class="filters__title">Edit filters</span>
@@ -37,7 +37,7 @@
     </div>
   </div>
   <div id="results-{{ result_type }}" class="content__section">
-    <div class="data-container__widgets">
+    <div class="data-container__widgets u-no-border">
       <div class="data-container__head">
         <h1 class="data-container__title">{{ document_type_display_name }}</h1>
       </div>

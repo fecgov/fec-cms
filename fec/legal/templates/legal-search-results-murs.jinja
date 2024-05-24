@@ -102,16 +102,18 @@
         {% endif %}
         {% if case_min_open_date or case_max_open_date %}
           <li data-tag-category="date" class="tag__category tag__category__range--date">
-            {% if case_min_open_date %} 
-            <div data-removable="true" data-id="min_date" class="tag__item">{% if not case_max_open_date %}Beginning {% endif %}{{ case_min_open_date | safe }}</div>
+            <span class="tag__label">Open date</span>
+            {% if case_min_open_date %}
+            <div data-removable="true" data-id="min_date" class="tag__item">{% if not case_max_open_date %}Beginning {% endif %} {{ case_min_open_date | safe }}</div>
             {% endif %}
             {% if case_max_open_date %}
-              <div data-removable="true" data-id="max_date" class="tag__item">{% if not case_min_open_date %}Ending {% endif %}{{ case_max_open_date | safe }}</div>
+              <div data-removable="true" data-id="max_date" class="tag__item">{% if not case_min_open_date %}Ending {% endif %} {{ case_max_open_date | safe }}</div>
             {% endif %}
           </li>
         {% endif %}
         {% if case_min_close_date or case_max_close_date %}
           <li data-tag-category="date" class="tag__category tag__category__range--date">
+            <span class="tag__label">Close date</span>
             {% if case_min_close_date %}
             <div data-removable="true" data-id="min_date" class="tag__item">{% if not case_max_close_date %}Beginning {% endif %}{{ case_min_close_date | safe }}</div>
             {% endif %}
