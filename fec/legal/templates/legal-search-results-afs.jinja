@@ -40,4 +40,7 @@
   {% with results=results %}
     {% include 'partials/legal-search-results-afs.jinja' %}
   {% endwith %}
+  {% with results=results %}
+    {% include 'partials/legal-pagination.jinja' %}
+  {% endwith %}
 {% endblock %}

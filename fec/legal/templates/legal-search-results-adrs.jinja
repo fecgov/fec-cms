@@ -129,4 +129,7 @@
   {% with results=results %}
     {% include 'partials/legal-search-results-adrs.jinja' %}
   {% endwith %}
+  {% with results=results %}
+    {% include 'partials/legal-pagination.jinja' %}
+  {% endwith %}
 {% endblock %}

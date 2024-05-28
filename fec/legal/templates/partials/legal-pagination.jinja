@@ -1,15 +1,48 @@
 <div class="results-info u-border-top-base">
-<div class="dataTables_info">Showing {{ results.offset | int + 1 }}&ndash;{{ results.offset | int + results[result_type + '_returned'] | int }} of {{ results.total_all }} results</div>
-<div class="dataTables_paginate">
-{% if results.offset | int > 0 %}
-<a class="paginate_button previous" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}{% for category_id in selected_doc_category_ids %}&case_doc_category_id={{ category_id }}{% endfor %}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ results.offset | int - results.limit | int }}&sort={{ sort }}#results-{{ result_type }}">Previous</a>
-{% else %}
-<span class="paginate_button previous is-disabled">Previous</span>
-{% endif %}
-{% if results.offset | int + results.limit | int  < results.total_all | int %}
-<a class="paginate_button next" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}{% for category_id in selected_doc_category_ids %}&case_doc_category_id={{ category_id }}{% endfor %}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ results.offset | int + results.limit | int }}&sort={{ sort }}#results-{{ result_type }}">Next</a>
-{% else %}
-<span class="paginate_button next is-disabled">Next</span>
-{% endif %}
-</div>
+  <div class="dataTables_paginate">
+    {% set limit = results.limit | int %}
+    {% set offset = results.offset | int %}
+    {% set total_all = results.total_all | int %}
+    {% set total_pages = (total_all + limit - 1) // limit %}
+    {% set current_page = (offset // limit) + 1 %}
+    {% set max_display_pages = 5 %}
+
+    {% set start_page = current_page - max_display_pages // 2 %}
+    {% set end_page = current_page + max_display_pages // 2 %}
+    {% if start_page < 1 %}
+      {% set end_page = end_page + (1 - start_page) %}
+      {% set start_page = 1 %}
+    {% endif %}
+    {% if end_page > total_pages %}
+      {% set start_page = start_page - (end_page - total_pages) %}
+      {% set end_page = total_pages %}
+    {% endif %}
+    {% if start_page < 1 %}
+      {% set start_page = 1 %}
+    {% endif %}
+
+    {% if current_page > 1 %}
+      <a class="paginate_button previous" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}{% for category_id in selected_doc_category_ids %}&case_doc_category_id={{ category_id }}{% endfor %}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ offset - limit }}&sort={{ sort }}#results-{{ result_type }}">Previous</a>
+    {% else %}
+      <span class="paginate_button previous is-disabled">Previous</span>
+    {% endif %}
+
+    {% for page in range(start_page, end_page + 1) %}
+      {% set page_offset = (page - 1) * limit %}
+      {% if page == current_page %}
+        <span class="paginate_button current">{{ page }}</span>
+      {% else %}
+        <a class="paginate_button" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}{% for category_id in selected_doc_category_ids %}&case_doc_category_id={{ category_id }}{% endfor %}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ page_offset }}&sort={{ sort }}#results-{{ result_type }}">{{ page }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if offset + limit < total_all %}
+      <a class="paginate_button next" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}{% for category_id in selected_doc_category_ids %}&case_doc_category_id={{ category_id }}{% endfor %}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ offset + limit }}&sort={{ sort }}#results-{{ result_type }}">Next</a>
+    {% else %}
+      <span class="paginate_button next is-disabled">Next</span>
+    {% endif %}
+  </div>
+  <div class="dataTables_info">
+    Showing {{ results.offset | int + 1 }}&ndash;{{ results.offset | int + results[result_type + '_returned'] | int }} of {{ results.total_all }} results
+  </div>
 </div>
