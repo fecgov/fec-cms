@@ -62,12 +62,17 @@
   @include u-bg--primary();
   @include u-font-color($neutral);
   padding: u(5rem 0);
+  position: relative;
 
   .address__title {
     font-size: u(2.2rem);
     font-weight: bold;
   }
 
+  .address {
+    margin-bottom: u(2.4rem);
+    margin-right: 0;
+  }
   .social-media {
     margin-bottom: u(2rem);
 
@@ -92,6 +97,19 @@
     }
   }
 
+  .taxpayer-statement {
+    clear: both;
+    float: left;
+    font-family: $sans-serif;
+    font-size: 1.4rem;
+    line-height: 1.25em;
+    width: 100%;
+
+    & p {
+      max-width: 30rem;
+    }
+  }
+
   @include media($med) {
     .seal {
       @include span-columns(9);
@@ -99,6 +117,8 @@
 
     .address {
       @include span-columns(3);
+      margin-right: 0;
+      float: right;
     }
   }
 }
