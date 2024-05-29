@@ -48,7 +48,7 @@
     "jquery.inputmask": "^3.3.4",
     "moment": "2.29.4",
     "numeral": "^1.5.3",
-    "perfect-scrollbar": "0.6.2",
+    "perfect-scrollbar": "0.8.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
