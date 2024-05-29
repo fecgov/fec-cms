@@ -1,7 +1,7 @@
 from django.test import Client
 from django.test import TestCase
 
-from fec import settings  # TODO: debts dates (remove the import with the flag)
+from fec import settings  # TODO: remove the import with the flags
 
 client = Client()
 
@@ -44,7 +44,7 @@ class TestDatatablesRender(TestCase):
 
     # TODO: remove the conditional with the flag
     if settings.FEATURES.get('h4_allocated_disbursements'):
-        def test_debts(self):
+        def test_allocated_federal_nonfederal_disbursements(self):
             response = client.get('/data/allocated-federal-nonfederal-disbursements/', follow=True)
             assert response.status_code == 200
 
@@ -55,6 +55,7 @@ class TestDatatablesRender(TestCase):
         assert response.status_code == 200
 
     # Debts
+
     # TODO: debts dates (remove the conditional with the flag)
     if settings.FEATURES.get('debts'):
         def test_debts(self):
