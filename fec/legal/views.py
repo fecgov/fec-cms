@@ -345,7 +345,7 @@ def legal_doc_search_adr(request):
     adr_document_categories = {
         "1001": "Settlement Agreements",
         "1002": "Complaint, Responses, Designation of Counsel and Extensions of Time",
-        "1003": "ADR Memoranda, Notifications Responses",
+        "1003": "ADR Memoranda, Notifications and Responses",
         "1004": "Certifications",
         "1005": "Civil Penalties, Disgorgements, Other Payments and Letters of Compliance",
         "1006": "Statements of Reasons"
