@@ -103,3 +103,17 @@ class TestDatatablesRender(TestCase):
     def test_pac_party_reports(self):
         response = client.get('/data/reports/pac-party/', follow=True)
         assert response.status_code == 200
+
+    # National party accounts
+
+    def test_national_party_account_receipts(self):
+        # TODO: remove the conditional with the flag
+        if settings.FEATURES.get('nat_party_acct_receipts'):
+            response = client.get('/data/national-party-account-receipts/', follow=True)
+            assert response.status_code == 200
+
+    def test_national_party_account_disbursements(self):
+        # TODO: remove the conditional with the flag
+        if settings.FEATURES.get('nat_party_acct_disbursements'):
+            response = client.get('/data/national-party-account-disbursements/', follow=True)
+            assert response.status_code == 200
