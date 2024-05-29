@@ -986,7 +986,8 @@ const nationalPartyReceipts = [
   {
     data: 'committee_name',
     className: 'all',
-    orderable: false
+    orderable: false,
+    render: renderCommitteeColumn
   },
   {
     data: 'contributor_name',
@@ -1013,7 +1014,8 @@ const nationalPartyDisbursements = [
   {
     data: 'committee_name',
     className: 'all',
-    orderable: false
+    orderable: false,
+    render: renderCommitteeColumn
   },
   {
     data: 'recipient_name',
