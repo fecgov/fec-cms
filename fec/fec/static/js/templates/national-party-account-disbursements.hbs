@@ -25,9 +25,6 @@ Template for national party accounts disbursements datatable details panel
     {{#panelRow "Report year"}}
       {{report_year}}
     {{/panelRow}}
-    {{#panelRow "TODO: Filing date IS THIS A THING?"}}
-      {{designation_full}}
-    {{/panelRow}}
     {{#panelRow "Description"}}
       {{disbursement_description}}
     {{/panelRow}}
@@ -55,8 +52,8 @@ Template for national party accounts disbursements datatable details panel
     {{#panelRow "Name"}}
       {{committee_name}}
     {{/panelRow}}
-    {{#panelRow "TODO: Designation"}}
-      {{spender_committee_designation}}
+    {{#panelRow "Designation"}}
+      {{spender_committee_designation}} {{!-- TODO: this will change to spender_committee_designation_full --}}
     {{/panelRow}}
     {{#panelRow "Treasurer"}}
       {{treasurer_name}}

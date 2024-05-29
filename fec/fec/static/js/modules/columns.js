@@ -985,15 +985,18 @@ var audit = [
 const nationalPartyReceipts = [
   {
     data: 'committee_name',
-    className: 'all'
+    className: 'all',
+    orderable: false
   },
   {
     data: 'contributor_name',
-    className: 'all'
+    className: 'all',
+    orderable: false
   },
   {
     data: 'party_account_type',
-    className: 'all'
+    className: 'all',
+    orderable: false
   },
   dateColumn({
     data: 'contribution_receipt_date',
@@ -1009,19 +1012,23 @@ const nationalPartyReceipts = [
 const nationalPartyDisbursements = [
   {
     data: 'committee_name',
-    className: 'all'
+    className: 'all',
+    orderable: false
   },
   {
     data: 'recipient_name',
-    className: 'all'
+    className: 'all',
+    orderable: false
   },
   {
     data: 'party_account',
-    className: 'all'
+    className: 'all',
+    orderable: false
   },
   {
     data: 'disbursement_description',
-    className: 'all'
+    className: 'all',
+    orderable: false
   },
   dateColumn({
     data: 'disbursement_date',

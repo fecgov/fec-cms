@@ -40,8 +40,6 @@ Filter national party account disbursements
   <button type="button" class="js-accordion-trigger accordion__button">Receipt details</button>
   <div class="accordion__content">
     {{ range.amount('contribution_receipt_amount', 'Receipt amount') }}
-    <p>TODO: No line number?</p>
-    {# {{ dropdown.select_json( 'line_number', 'Line number', keys=constants.national_party_account_keys, options=constants.national_party_account_dropdowns.disbursements_line_numbers, default='false') }} #}
     {{ dropdown.select_json( 'receipt_type', 'National party account receipt type', keys=constants.national_party_account_keys, options=constants.national_party_account_dropdowns.receipt_types, default='false') }}
     {{ dropdown.select_json( 'party_account_type', 'National party account', keys=constants.national_party_account_keys, options=constants.national_party_account_dropdowns.account_types, default='false') }}
   </div>
