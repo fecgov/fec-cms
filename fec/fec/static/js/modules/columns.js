@@ -992,7 +992,23 @@ const nationalPartyReceipts = [
   {
     data: 'contributor_name',
     className: 'all',
-    orderable: false
+    orderable: false,
+    render: function(data, type, row) {
+      // We want to link the committee ID,
+      // but only if there's a contributor_id AND entity_type isn't an individual
+      if (data) {
+        if (!row.contributor_id || row.entity_type == 'IND') return row.contributor_name;
+        else {
+          return columnHelpers.buildEntityLink(
+            data,
+            helpers.buildAppUrl(
+              ['committee', row.contributor_id]
+            ),
+            'committee'
+          );
+        }
+      }
+    }
   },
   {
     data: 'party_account_type',
@@ -1020,7 +1036,22 @@ const nationalPartyDisbursements = [
   {
     data: 'recipient_name',
     className: 'all',
-    orderable: false
+    orderable: false,
+    render: function(data, type, row) {
+      // We want to link the recipient name column to the committee if it is a committee
+      if (data) {
+        if (!row.recipient_committee_id) return row.recipient_name;
+        else {
+          return columnHelpers.buildEntityLink(
+            data,
+            helpers.buildAppUrl(
+              ['committee', row.recipient_committee_id]
+            ),
+            'committee'
+          );
+        }
+      }
+    }
   },
   {
     data: 'party_account',

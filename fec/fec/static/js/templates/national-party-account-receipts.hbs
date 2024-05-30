@@ -5,7 +5,15 @@ Template for national party accounts disbursements datatable details panel
   <h4 class="panel__title">Source information</h4>
   <table>
     {{#panelRow "Name"}}
-      {{contributor_name}}
+      {{#if contributor_id}}{{! If there's a contributor_id}}
+        {{#if (stringsMatch entity_type 'IND')}}{{! If this is an individual and not a committee }}
+        {{contributor_name}}{{! Don't link the name }}
+        {{else}}{{! Otherwise, if it's not an individual, }}
+        <a href="/data/committee/{{contributor_id}}/">{{contributor_name}}</a>{{! Link the name }}
+        {{/if}}
+      {{else}}{{! Otherwise, if there's no contributor_id, }}
+        {{contributor_name}}{{! There's no id to link }}
+      {{/if}}
     {{/panelRow}}
     {{#panelRow "City and state"}}
       {{contributor_city}}, {{contributor_state}}  {{contributor_zip}}
@@ -53,7 +61,7 @@ Template for national party accounts disbursements datatable details panel
   <h4 class="panel__title">Recipient information</h4>
   <table>
     {{#panelRow "Committee"}}
-      {{committee_name}}
+      <a href="{{entityUrl this type="committee"}}">{{committee_name}}</a>
     {{/panelRow}}
     {{#panelRow "Political party"}}
       {{party_full}}

@@ -5,7 +5,11 @@ Template for national party accounts disbursements datatable details panel
   <h4 class="panel__title">Recipient information</h4>
   <table>
     {{#panelRow "Name"}}
+      {{#if recipient_committee_id}}
+        <a href="/data/committee/{{recipient_committee_id}}/">{{recipient_name}}</a>
+      {{else}}
       {{recipient_name}}
+      {{/if}}
     {{/panelRow}}
     {{#panelRow "City and state"}}
       {{recipient_city}}, {{recipient_state}}  {{recipient_zip}}
@@ -50,7 +54,7 @@ Template for national party accounts disbursements datatable details panel
   <h4 class="panel__title">Spender information</h4>
   <table>
     {{#panelRow "Name"}}
-      {{committee_name}}
+      <a href="{{entityUrl this type="committee"}}">{{committee_name}}</a>
     {{/panelRow}}
     {{#panelRow "Designation"}}
       {{spender_committee_designation}} {{!-- TODO: this will change to spender_committee_designation_full --}}
