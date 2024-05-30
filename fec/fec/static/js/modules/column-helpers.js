@@ -88,7 +88,6 @@ function urlColumn(attr, opts) {
 }
 
 /**
- * 
  * @param {string} data - Used for textContent and title
  * @param {string} url - Set to returned element's href
  * @param {string} category - Added as the element's dataset.category
