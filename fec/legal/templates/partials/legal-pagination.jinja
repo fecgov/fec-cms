@@ -1,6 +1,15 @@
 <div class="results-info u-border-top-base">
-  <div class="dataTables_paginate">
-    {% set limit = results.limit | int %}
+    <div class="dataTables_length" class="results_length">
+      {% set limit = results.limit | int %}
+      <label for="results-length">Results per page: 
+        <select name="results_length" aria-controls="results" class="results-length">
+            <option value="20" {% if limit == 20 %}selected{% endif %}>20</option>
+            <option value="50" {% if limit == 50 %}selected{% endif %}>50</option>
+            <option value="100" {% if limit == 100 %}selected{% endif %}>100</option>
+        </select>
+      </label> 
+    </div>
+    <div class="dataTables_paginate">
     {% set offset = results.offset | int %}
     {% set total_all = results.total_all | int %}
     {% set total_pages = (total_all + limit - 1) // limit %}
@@ -22,7 +31,7 @@
     {% endif %}
 
     {% if current_page > 1 %}
-      <a class="paginate_button previous" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}{% for category_id in selected_doc_category_ids %}&case_doc_category_id={{ category_id }}{% endfor %}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ offset - limit }}&sort={{ sort }}#results-{{ result_type }}">Previous</a>
+      <a class="paginate_button previous" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}{% for category_id in selected_doc_category_ids %}&case_doc_category_id={{ category_id }}{% endfor %}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ offset - limit }}&limit={{ limit }}&sort={{ sort }}#results-{{ result_type }}">Previous</a>
     {% else %}
       <span class="paginate_button previous is-disabled">Previous</span>
     {% endif %}
@@ -32,12 +41,12 @@
       {% if page == current_page %}
         <span class="paginate_button current">{{ page }}</span>
       {% else %}
-        <a class="paginate_button" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}{% for category_id in selected_doc_category_ids %}&case_doc_category_id={{ category_id }}{% endfor %}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ page_offset }}&sort={{ sort }}#results-{{ result_type }}">{{ page }}</a>
+        <a class="paginate_button" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}{% for category_id in selected_doc_category_ids %}&case_doc_category_id={{ category_id }}{% endfor %}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ page_offset }}&limit={{ limit }}&sort={{ sort }}#results-{{ result_type }}">{{ page }}</a>
       {% endif %}
     {% endfor %}
 
     {% if offset + limit < total_all %}
-      <a class="paginate_button next" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}{% for category_id in selected_doc_category_ids %}&case_doc_category_id={{ category_id }}{% endfor %}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ offset + limit }}&sort={{ sort }}#results-{{ result_type }}">Next</a>
+      <a class="paginate_button next" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}{% for category_id in selected_doc_category_ids %}&case_doc_category_id={{ category_id }}{% endfor %}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ offset + limit }}&limit={{ limit }}&sort={{ sort }}#results-{{ result_type }}">Next</a>
     {% else %}
       <span class="paginate_button next is-disabled">Next</span>
     {% endif %}
@@ -46,3 +55,20 @@
     Showing {{ results.offset | int + 1 }}&ndash;{{ results.offset | int + results[result_type + '_returned'] | int }} of {{ results.total_all }} results
   </div>
 </div>
+
+{% block scripts %}
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var resultsLengthSelects = document.querySelectorAll('.results-length');
+    resultsLengthSelects.forEach(function(select) {
+      select.addEventListener('change', function() {
+        var selectedLimit = this.value;
+        var urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('limit', selectedLimit);
+        urlParams.set('offset', 0);  // Reset to first page
+        window.location.search = urlParams.toString();
+      });
+    });
+  });
+  </script>
+{% endblock %}

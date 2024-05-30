@@ -246,6 +246,7 @@ def legal_doc_search_ao(request):
 def legal_doc_search_mur(request):
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
+    limit = request.GET.get('limit', 20)
     case_no = request.GET.get('case_no', '')
     sort = request.GET.get('sort', '')
     case_respondents = request.GET.get('case_respondents', '')
@@ -265,6 +266,7 @@ def legal_doc_search_mur(request):
     results = api_caller.load_legal_search_results(
         query, 'murs',
         offset=offset,
+        limit=limit,
         case_no=case_no,
         sort=sort,
         case_respondents=case_respondents,
@@ -321,6 +323,7 @@ def legal_doc_search_adr(request):
     results = {}
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
+    limit = request.GET.get('limit', 20)
     case_no = request.GET.get('case_no', '')
     case_respondents = request.GET.get('case_respondents', '')
     case_min_open_date = request.GET.get('case_min_open_date', '')
@@ -332,6 +335,7 @@ def legal_doc_search_adr(request):
     results = api_caller.load_legal_search_results(
         query, 'adrs',
         offset=offset,
+        limit=limit,
         case_no=case_no,
         case_respondents=case_respondents,
         case_min_open_date=case_min_open_date,
@@ -383,10 +387,11 @@ def legal_doc_search_af(request):
     results = {}
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
+    limit = request.GET.get('limit', 20)
     case_no = request.GET.get('case_no', '')
     af_name = request.GET.get('af_name', '')
     results = api_caller.load_legal_search_results(
-        query, 'admin_fines', offset=offset, case_no=case_no, af_name=af_name)
+        query, 'admin_fines', offset=offset, limit=limit, case_no=case_no, af_name=af_name)
 
     return render(request, 'legal-search-results-afs.jinja', {
         'parent': 'legal',
