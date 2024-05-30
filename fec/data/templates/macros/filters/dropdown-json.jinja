@@ -49,3 +49,22 @@ data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{
   </select>
 </div>
 {% endmacro %}
+
+{#
+  @param {string} name - Used in <label for="{name}"><input id="{name}" name="{name}"
+  @param {string} label - Used in <label>{label}</label> and <label>Limit 1 {label}</label>
+  @param {list} options[] - The data used for <option value="{}">{}</option>
+#}
+{% macro select_single_flat_list(name, label, options={}) %}
+<div class="filter js-filter js-filter-control"  data-filter="select" data-name="{{ name }}" data-validate="false" data-modifies-filter="{{ name }}">
+  <label for="{{ name }}" class="label">{{ label }}</label>
+  <label class="label--help u-margin--top">Limit 1 {{ label | lower }}</label>
+  <select id={{ name }} name="{{ name }}" data-filter-change="true" data-removeable-filter="true">
+    <option value=''>More</option>
+    {% for itemValue, itemLabel in options.items() %}
+      <option value={{itemValue}} data-line-type="">{{ itemLabel }}</option>
+    {% endfor %}
+    </optgroup>
+  </select>
+</div>
+{% endmacro %}
