@@ -40,8 +40,8 @@ Filter national party account disbursements
   <button type="button" class="js-accordion-trigger accordion__button">Receipt details</button>
   <div class="accordion__content">
     {{ range.amount('contribution_receipt_amount', 'Receipt amount') }}
-    {{ dropdown.select_json( 'receipt_type', 'National party account receipt type', keys=constants.national_party_account_keys, options=constants.national_party_account_dropdowns.receipt_types, default='false') }}
-    {{ dropdown.select_json( 'party_account_type', 'National party account', keys=constants.national_party_account_keys, options=constants.national_party_account_dropdowns.account_types, default='false') }}
+    {{ dropdown.select_single_flat_list( 'receipt_type', 'National party account receipt type', options=constants.national_party_account_dropdowns.receipt_types) }}
+    {{ dropdown.select_single_flat_list( 'party_account_type', 'National party account', options=constants.national_party_account_dropdowns.account_types) }}
   </div>
 </div>
 {% endblock %}

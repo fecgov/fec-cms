@@ -39,8 +39,8 @@ Filter national party account disbursements
   <button type="button" class="js-accordion-trigger accordion__button">Disbursement details</button>
   <div class="accordion__content">
     {{ range.amount('disbursement_amount', 'Disbursement amount') }}
-    {{ dropdown.select_json( 'disbursement_type', 'National party account disbursement type', keys=constants.national_party_account_keys, options=constants.national_party_account_dropdowns.disbursements_types, default='false') }}
-    {{ dropdown.select_json( 'party_account_type', 'National party account', keys=constants.national_party_account_keys, options=constants.national_party_account_dropdowns.account_types, default='false') }}
+    {{ dropdown.select_single_flat_list( 'disbursement_type', 'National party account disbursement type', options=constants.national_party_account_dropdowns.disbursements_types) }}
+    {{ dropdown.select_single_flat_list( 'party_account_type', 'National party account', options=constants.national_party_account_dropdowns.account_types) }}
   </div>
 </div>
 {% endblock %}
