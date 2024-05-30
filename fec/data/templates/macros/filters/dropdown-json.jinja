@@ -23,7 +23,16 @@ data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{
 </div>
 {% endmacro %}
 
-
+{#
+  @param {string} name - Used in <label for="{name}"><input id="{name}" name="{name}"
+  @param {string} label - Used in <label>{label}</label> and <label>Limit 1 {label}</label>
+  @param {list} options[] - The data used for <optgroup label="{}">
+  @param {list} options[][] - The data used for <optgroup><option value="{}" data-line-type="{}">{}</option>
+  @param {*} [default=none] - unused
+  @param {*} [selected={}] - unused
+  @param {string} [title_prefix=''] - Used in <optgroup label="{title_prefix} …">
+  @param {list} [forms=[]] - Used in <optgroup label="… {forms[loop.index-1]}"></optgroup>
+#}
 {% macro select_single(name, label, options={}, default=none, selected={}, title_prefix='', forms=[]) %}
 <div class="filter js-filter js-filter-control"  data-filter="select" data-name="{{ name }}" data-validate="false" data-modifies-filter="{{ name }}">
   <label for="{{ name }}" class="label">{{ label }}</label>
