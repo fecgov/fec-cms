@@ -65,11 +65,11 @@
 {% endblock %}
 
 {% block message %}
-<div class="data-container__tags">
+<div class="data-container__tags u-no-padding-left">
   <div class="row">
     <h3 class="tags__title">Viewing <span class="tags__count">{{ results.total_adrs }}</span>  filtered results for:</h3>
   </div>
-  <div class="js-filter-tags data-container__tags">
+  <div class="js-filter-tags data-container__tags u-no-padding-left">
     <ul class="tags">
       {% if query or case_no or case_respondents or case_min_open_date or case_max_open_date or case_min_close_date or case_max_close_date %}
         {% if query %}
