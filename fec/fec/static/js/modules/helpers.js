@@ -91,6 +91,13 @@ function datetime(value, options) {
 
 Handlebars.registerHelper('datetime', datetime);
 
+function stringsMatch(string1, string2, caseSensitive=false) {
+  if (caseSensitive) return string1.toLowerCase() == string2.toLowerCase();
+  else return string1 == string2;
+}
+
+Handlebars.registerHelper('stringsMatch', stringsMatch);
+
 /**
  * @param {number} number
  * @param {boolean} roundToWhole - Any number to be converted to US Dollars
