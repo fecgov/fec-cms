@@ -62,7 +62,7 @@ SelectFilter.prototype.handleChange = function(e) {
           value: this.formatValue($input, $optElement.text()),
           name: this.name,
           nonremovable: false,
-          lineType: `${$optElement.data('line-type')} - ` || '',
+          lineType: $optElement.data('line-type') ? `${$optElement.data('line-type')} - ` : '',
           loadedOnce: $input.data('loaded-once') || true
         }  
       ])
