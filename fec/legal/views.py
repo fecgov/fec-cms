@@ -316,6 +316,7 @@ def legal_doc_search_mur(request):
         'social_image_identifier': 'legal',
         'selected_doc_category_ids': case_doc_category_ids,
         'selected_doc_category_names': mur_document_category_names,
+        'is_loading': True,  # Indicate that the page is loading initially
     })
 
 
@@ -380,6 +381,7 @@ def legal_doc_search_adr(request):
         'social_image_identifier': 'legal',
         'selected_doc_category_ids': case_doc_category_ids,
         'selected_doc_category_names': adr_document_category_names,
+        'is_loading': True,  # Indicate that the page is loading initially
     })
 
 
@@ -401,6 +403,7 @@ def legal_doc_search_af(request):
         'af_name': af_name,
         'query': query,
         'social_image_identifier': 'legal',
+        'is_loading': True,  # Indicate that the page is loading initially
     })
 
 

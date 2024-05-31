@@ -58,16 +58,34 @@
 
 {% block scripts %}
   <script>
+  // Update results per page limit 
+  // Shows overlay when page is loading
   document.addEventListener('DOMContentLoaded', function() {
     var resultsLengthSelects = document.querySelectorAll('.results-length');
+    var overlayContainer = document.querySelector('.overlay.is-loading');
+
+    function setLoadingState(isLoading) {
+      if (isLoading) {
+        overlayContainer.style.display = 'block';
+      } else {
+        overlayContainer.style.display = 'none';
+      }
+    }
+
     resultsLengthSelects.forEach(function(select) {
       select.addEventListener('change', function() {
         var selectedLimit = this.value;
         var urlParams = new URLSearchParams(window.location.search);
         urlParams.set('limit', selectedLimit);
         urlParams.set('offset', 0);  // Reset to first page
+        setLoadingState(true);
         window.location.search = urlParams.toString();
       });
+    });
+
+    // Ends loading state after DOM content loaded
+    window.addEventListener('load', function() {
+      setLoadingState(false);
     });
   });
   </script>
