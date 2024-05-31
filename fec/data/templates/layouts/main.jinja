@@ -2,28 +2,28 @@
 <html lang="en">
 <head>
 
-  <title>{% block title %}{% endblock %} | FEC </title>
-  {% set title = self.title() %}
+  <title>{% block title %}{% endblock %} | FEC</title>
+  {%- set title = self.title() -%}
 
-  {% include 'partials/meta-tags.jinja' %}
-  {% if (FEC_CMS_ENVIRONMENT == 'PRODUCTION') %}
+  {%- include 'partials/meta-tags.jinja' -%}
+  {% if (FEC_CMS_ENVIRONMENT == 'PRODUCTION') -%}
   {% include 'partials/meta-tags-preconnects.jinja' %}
-  {% endif %}
+  {%- endif %}
 
   {% block css %}
   <link rel="stylesheet" type="text/css" href="{{ asset_for_css('base.css') }}" />
   {% endblock css %}
 
-  {% block head_js %}
-    <script>
-      var canSkipPolyfills = ('fetch' in window && 'assign' in Object);
-      if (!canSkipPolyfills) {
-        var pfScriptElem = document.createElement('script');
-        pfScriptElem.async = false;
-        pfScriptElem.src = '{{ asset_for_js('polyfills.js') }}';
-        document.head.appendChild(pfScriptElem);
-      }
-    </script>
+  {% block head_js -%}
+  <script>
+    var canSkipPolyfills = ('fetch' in window && 'assign' in Object);
+    if (!canSkipPolyfills) {
+      var pfScriptElem = document.createElement('script');
+      pfScriptElem.async = false;
+      pfScriptElem.src = '{{ asset_for_js('polyfills.js') }}';
+      document.head.appendChild(pfScriptElem);
+    }
+  </script>
   {% endblock %}
 
   {% include 'partials/google-tag-manager-script.jinja' %}
