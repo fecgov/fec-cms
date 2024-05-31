@@ -150,6 +150,11 @@
     .data-table {
       width: 100% !important;
     }
+
+    &.legal-search-results {
+      width: 100% !important;
+      height: auto;
+    }
   }
 
   .panel__overlay {
