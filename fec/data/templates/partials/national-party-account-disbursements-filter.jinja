@@ -19,8 +19,7 @@ Filter national party account disbursements
 {% block filters %}
 <div class="filters__inner">
   {{ typeahead.field('committee_id', 'Spender name or ID') }}
-  {{ typeahead.field('recipient_name', 'Recipient name or ID') }}
-  {# {{ years.cycles('two_year_transaction_period', 'Report time period', show_tooltip=True, start_year=2015)  }} #}
+  {{ typeahead.field('recipient_name', 'Recipient name or ID', allow_text=True) }}
   {{ years.years('two_year_transaction_period', 'Report time period', start_year=2015)  }}
   {{ date.field('disbursement_date', 'Disbursement date range') }}
 </div>
