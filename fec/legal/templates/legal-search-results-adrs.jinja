@@ -71,50 +71,47 @@
   </div>
   <div class="js-filter-tags data-container__tags u-no-padding-left">
     <ul class="tags">
-      {% if query or case_no or case_respondents or case_min_open_date or case_max_open_date or case_min_close_date or case_max_close_date %}
-        {% if query %}
-          <li data-tag-category="data_type" class="tag__category">
-            <div data-removable="true" class="tag__item">{{ query }}</div>
-          </li>
-        {% endif %}
-        {% if case_no %}
-          <li data-tag-category="data_type" class="tag__category">
-            <div data-removable="true" class="tag__item">{{ case_no }}</div>
-          </li>
-        {% endif %}
-        {% if case_respondents %}
-          <li data-tag-category="data_type" class="tag__category">
-            <div data-removable="true" class="tag__item">{{ case_respondents }}</div>
-          </li>
-        {% endif %}
-        {% if case_min_open_date or case_max_open_date %}
-          <li data-tag-category="date" class="tag__category tag__category__range--date">
-            <span class="tag__label">Open date</span>
-            {% if case_min_open_date %}
-            <div data-removable="true" data-id="min_date" class="tag__item">{% if not case_max_open_date %}Beginning {% endif %} {{ case_min_open_date | safe }}</div>
-            {% endif %}
-            {% if case_max_open_date %}
-              <div data-removable="true" data-id="max_date" class="tag__item">{% if not case_min_open_date %}Ending {% endif %} {{ case_max_open_date | safe }}</div>
-            {% endif %}
-          </li>
-        {% endif %}
-        {% if case_min_close_date or case_max_close_date %}
-          <li data-tag-category="date" class="tag__category tag__category__range--date">
-            <span class="tag__label">Close date</span>
-            {% if case_min_close_date %}
-            <div data-removable="true" data-id="min_date" class="tag__item">{% if not case_max_close_date %}Beginning {% endif %}{{ case_min_close_date | safe }}</div>
-            {% endif %}
-            {% if case_max_close_date %}
-              <div data-removable="true" data-id="max_date" class="tag__item">{% if not case_min_close_date %}Ending {% endif %}{{ case_max_close_date | safe }}</div>
-            {% endif %}
-          </li>
-        {% endif %}
+      {% if query %}
+        <li data-tag-category="query" class="tag__category">
+          <div data-removable="true" class="tag__item">{{ query }}<button class="button js-close tag__remove" data-tag="query"><span class="u-visually-hidden">Remove</span></button></div>
+        </li>
       {% endif %}
-      
+      {% if case_no %}
+        <li data-tag-category="case_no" class="tag__category">
+          <div data-removable="true" class="tag__item">{{ case_no }}<button class="button js-close tag__remove" data-tag="case_no"><span class="u-visually-hidden">Remove</span></button></div>
+        </li>
+      {% endif %}
+      {% if case_respondents %}
+        <li data-tag-category="case_respondents" class="tag__category">
+          <div data-removable="true" class="tag__item">{{ case_respondents }}<button class="button js-close tag__remove" data-tag="case_respondents"><span class="u-visually-hidden">Remove</span></button></div>
+        </li>
+      {% endif %}
+      {% if case_min_open_date or case_max_open_date %}
+        <li data-tag-category="open_date" class="tag__category tag__category__range--date">
+          <span class="tag__label">Open date</span>
+          {% if case_min_open_date %}
+          <div data-removable="true" data-id="min_open_date" class="tag__item">{% if not case_max_open_date %}Beginning {% endif %}{{ case_min_open_date }}<button class="button js-close tag__remove" data-tag="case_min_open_date"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+          {% if case_max_open_date %}
+          <div data-removable="true" data-id="max_open_date" class="tag__item">{% if not case_min_open_date %}Ending {% endif %}{{ case_max_open_date }}<button class="button js-close tag__remove" data-tag="case_max_open_date"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+        </li>
+      {% endif %}
+      {% if case_min_close_date or case_max_close_date %}
+        <li data-tag-category="close_date" class="tag__category tag__category__range--date">
+          <span class="tag__label">Close date</span>
+          {% if case_min_close_date %}
+          <div data-removable="true" data-id="min_close_date" class="tag__item">{% if not case_max_close_date %}Beginning {% endif %}{{ case_min_close_date }}<button class="button js-close tag__remove" data-tag="case_min_close_date"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+          {% if case_max_close_date %}
+          <div data-removable="true" data-id="max_close_date" class="tag__item">{% if not case_min_close_date %}Ending {% endif %}{{ case_max_close_date }}<button class="button js-close tag__remove" data-tag="case_max_close_date"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+        </li>
+      {% endif %}
       {% if selected_doc_category_names and selected_doc_category_names | reject('equalto', none) | list %}
-        <li data-tag-category="data_type" class="tag__category">
+        <li data-tag-category="doc_category" class="tag__category">
           {% for selected_doc_category_name in selected_doc_category_names %}
-            <div data-removable="true" class="tag__item">{{ selected_doc_category_name }}</div>{% if not loop.last %}<span></span>{% endif %}
+            <div data-removable="true" class="tag__item">{{ selected_doc_category_name }}<button class="button js-close tag__remove" data-tag="doc_category_{{ loop.index0 }}"><span class="u-visually-hidden">Remove</span></button></div>
           {% endfor %}
         </li>
       {% endif %}
