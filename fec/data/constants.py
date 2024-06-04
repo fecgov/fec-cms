@@ -127,7 +127,8 @@ contributor_states = OrderedDict(sorted(utils.extend(states, {
     ('AA', 'Armed Forces Americas'),
     ('AE', 'Armed Forces Europe'),
     ('AP', 'Armed Forces Pacific'),
-    ('ZZ', 'Foreign Countries'), }).items(), key=operator.itemgetter(1)))
+    ('ZZ', 'Foreign Countries'),
+}).items(), key=operator.itemgetter(1)))
 
 parties = OrderedDict([
     ('DEM', 'Democratic Party'),
@@ -478,6 +479,11 @@ table_columns = OrderedDict([
         ['Filer', 'Report type', 'Version', 'Receipt date', 'Coverage end date', 'Total contributions',
             'Total independent expenditures']),
     ('audit', ['Committee name', 'Election cycle', 'Final report', 'Findings and issues', 'Candidate']),
+    ('national-party-account-receipts',
+        ['Recipient', 'Source', 'Party account', 'Date', 'Amount']),
+    ('national-party-account-disbursements',
+        ['Spender name', 'Recipient', 'Party account', 'Description', 'Date', 'Amount']),
+    ('debts', ['Committee name', 'Creditor/Debtor name', 'Beginning balance', 'Ending balance', 'Coverage end date']),
 ])
 
 line_numbers = {
@@ -549,7 +555,8 @@ line_numbers = {
             ('F3X-23', 'Line 23: Contributions to federal candidates/committees and other political committees'),
             ('F3X-26', 'Line 26: Loan repayments made'),
             ('F3X-27', 'Line 27: Loans made'),
-            ('F3X-28A', 'Line 28a: Refunds of contributions made to individuals/persons other than political committees'),
+            ('F3X-28A',
+                'Line 28a: Refunds of contributions made to individuals/persons other than political committees'),
             ('F3X-28B', 'Line 28b: Refunds of contributions to political party committees'),
             ('F3X-28C', 'Line 28c: Refunds of contributions to other political committees'),
             ('F3X-28D', 'Line 28d: Total contributions refunds'),
@@ -571,6 +578,51 @@ line_numbers = {
             ('F3X-10', 'Debts and obligations owed by the committee (Line 10)'),
         ]),
     },
+}
+
+national_party_account_dropdowns = {
+    'account_types': OrderedDict([
+        ('CONVENTION', 'Convention'),
+        ('HEADQUARTERS', 'Headquarters'),
+        ('RECOUNT', 'Recount'),
+    ]),
+    'disbursements_types': OrderedDict([
+        ('40', '40: CONVENTION ACCOUNT DISBURSEMENT'),
+        ('40T', '40T: CONVENTION ACCOUNT REFUND - TRIBAL'),
+        ('40Y', '40: CONVENTION ACCOUNT REFUND - INDIVIDUAL'),
+        ('40Z', '40: CONVENTION ACCOUNT REFUND - REGISTERED FILER'),
+        ('41', '41: HEADQUARTERS ACCOUNT DISBURSEMENT'),
+        ('41T', '41T: HEADQUARTERS ACCOUNT REFUND - TRIBAL'),
+        ('41Y', '41Y: HEADQUARTERS ACCOUNT REFUND - INDIVIDUAL'),
+        ('41Z', '41Z: HEADQUARTERS ACCOUNT REFUND - REGISTERED FILER'),
+        ('42', '42: RECOUNT ACCOUNT DISBURSEMENT'),
+        ('42T', '42T: RECOUNT ACCOUNT REFUND - TRIBAL'),
+        ('42Y', '42Y: RECOUNT ACCOUNT REFUND - INDIVIDUAL'),
+        ('42Z', '42Z: RECOUNT ACCOUNT REFUND - REGISTERED FILER'),
+    ]),
+    'receipt_types': OrderedDict([
+        ('30', '30: CONVENTION ACCOUNT RECEIPT - INDIVIDUAL'),
+        ('30E', '30E: EARMARKED - CONVENTION'),
+        ('30F', '30F: MEMO RECEIPT FROM REGISTERED FILER - JF CONVENTION ACCOUNT'),
+        ('30G', '30G: TRANSFER IN - CONVENTION ACCOUNT'),
+        ('30J', '30J: MEMO RECEIPT FROM INDIVIDUAL - JF CONVENTION ACCOUNT'),
+        ('30K', '30K: CONVENTION ACCOUNT RECEIPT - REGISTERED FILER'),
+        ('30T', '30T: CONVENTION ACCOUNT RECEIPT - TRIBAL'),
+        ('31', '31: HEADQUARTERS ACCOUNT RECEIPT - INDIVIDUAL'),
+        ('31E', '31E: EARMARKED - HEADQUARTERS'),
+        ('31F', '31F: MEMO RECEIPT FROM REGISTERED FILER - JF HEADQUARTERS ACCOUNT'),
+        ('31G', '31G: TRANSFER IN - HEADQUARTERS ACCOUNT'),
+        ('31J', '31J: MEMO RECEIPT FROM INDIVIDUAL - JF HEADQUARTERS ACCOUNT'),
+        ('31K', '31K: HEADQUARTERS ACCOUNT RECEIPT - REGISTERED FILER'),
+        ('31T', '31T: HEADQUARTERS ACCOUNT RECEIPT - TRIBAL'),
+        ('32', '32: RECOUNT ACCOUNT RECEIPT - INDIVIDUAL'),
+        ('32E', '32E: EARMARKED - RECOUNT'),
+        ('32F', '32F: MEMO RECEIPT FROM REGISTERED FILER - JF RECOUNT ACCOUNT'),
+        ('32G', '32G: TRANSFER IN - RECOUNT ACCOUNT'),
+        ('32J', '32J: MEMO RECEIPT FROM INDIVIDUAL - JF RECOUNT ACCOUNT'),
+        ('32K', '32K: RECOUNT ACCOUNT RECEIPT - REGISTERED FILER'),
+        ('32T', '32T: RECOUNT ACCOUNT RECEIPT - TRIBAL'),
+    ])
 }
 
 
@@ -704,7 +756,7 @@ SPENDING_FORMATTER = OrderedDict([
             'label': 'Allocated operating expenditures - federal share',
             'level': '3',
             'type': {'link': 'allocated-federal-nonfederal-disbursements'},
-         }),
+        }),
     ('shared_nonfed_operating_expenditures',  # F3X, H4
         {
             'label': 'Allocated operating expenditures - nonfederal share',

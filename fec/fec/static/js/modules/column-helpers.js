@@ -84,6 +84,14 @@ export function urlColumn(attr, opts) {
   );
 }
 
+/**
+ * @param {string} data - Used for textContent and title
+ * @param {string} url - Set to returned element's href
+ * @param {string} category - Added as the element's dataset.category
+ * @param {Object} [opts={}] - Options
+ * @param {boolean} [opts.isIncumbent] - If true, the returned element string will include `class="is-incumbent"`
+ * @returns String in the format of `<a href="{url}" title="{data}" data-category="{category}">{data}</a>`
+ */
 export function buildEntityLink(data, url, category, opts) {
   opts = opts || {};
   var anchor = document.createElement('a');

@@ -20,6 +20,15 @@
           <p>Search individual contributions to see who is donating to candidates and committees. Search for contributors by name, location, employer and occupation.</p>
         </div>
       </li>
+      {%- if FEATURES.nat_party_acct_receipts -%}
+      <li>
+        <i class="icon i-magnifying-glass icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <h4><a href="/data/national-party-account-receipts/">National party account receipts</a></h4>
+          <p>Search contributions to <span class="term" data-term="national party committee" title="Click to define" tabindex="0">national party committee accounts</span> including presidential nominating conventions, national party headquarters buildings, and election recounts and contests and other legal proceedings accounts. Search for contributsions by name, location, employer and occupation and party account.</p>
+        </div>
+      </li>
+      {%- endif -%}
       <li>
         <div class="content__section--indent-left">
         <h4>Lobbyist bundled contributions</h4>

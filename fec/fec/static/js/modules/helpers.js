@@ -98,6 +98,20 @@ export function datetime(value, options) {
 Handlebars.registerHelper('datetime', datetime);
 
 /**
+ * Compares two strings with an optional
+ * @param {string} string1 - First string to compare
+ * @param {string} string2 - Second string to compare
+ * @param {Boolean} [caseSensitive=false] - Whether to compare capitalization
+ * @returns true if they match, false if they don't
+ */
+function stringsMatch(string1, string2, caseSensitive=false) {
+  if (caseSensitive) return string1.toLowerCase() == string2.toLowerCase();
+  else return string1 == string2;
+}
+
+Handlebars.registerHelper('stringsMatch', stringsMatch);
+
+/**
  * @param {number} number
  * @param {boolean} roundToWhole - Any number to be converted to US Dollars
  * @returns {string} String from the value and rounding argument
@@ -231,6 +245,16 @@ Handlebars.registerHelper('panelRow', function(label, options) {
   );
 });
 
+/**
+ * @function entityUrl
+ * @param {Object} entity - the data object, likely from the API
+ * @param {string} [entity.candidate_id]
+ * @param {string} [entity.committee_id]
+ * @param {Object} options
+ * @param {string} options.hash.type
+ * @param {*} [options.hash.query]
+ * @returns A sterilized URL string from buildAppUrl()
+ */
 Handlebars.registerHelper('entityUrl', function(entity, options) {
   let query, id, url;
   if (options.hash.query) {
@@ -332,6 +356,12 @@ export function filterNull(params) {
     .value();
 }
 
+/**
+ * Returns a full URL with BASE_PATH, {path}, and {query} parameters
+ * @param {string} path - A string of paths after the BASE_PATH and before query parameters. (Don't include leading and trailing slashes)
+ * @param {*} query - Used by URI.addQuery() to create query parameters
+ * @returns A string in the form of `/data/{path}?{query}
+ */
 export function buildAppUrl(path, query) {
   return URI('')
     .path(Array.prototype.concat(global.BASE_PATH, path || [], '').join('/'))
