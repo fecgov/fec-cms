@@ -24,7 +24,6 @@ SelectFilter.prototype.setRequiredDefault = function() {
     this.$input.find('option[value=""]').remove();
     this.setValue(this.requiredDefault);
   }
-  
 };
 
 SelectFilter.prototype.fromQuery = function(query) {
@@ -40,7 +39,7 @@ SelectFilter.prototype.setValue = function(value) {
 SelectFilter.prototype.handleChange = function(e) {
   var $input = $(e.target);
   var value = $input.val();
-  var $optElement = $input.find("option[value='" + value + "']");
+  var $optElement = $input.find(`option[value="${value}"]`);
   var eventName;
 
   // Handles change for select box filter tags when data-filter-change="true" is present
@@ -62,10 +61,10 @@ SelectFilter.prototype.handleChange = function(e) {
           value: this.formatValue($input, $optElement.text()),
           name: this.name,
           nonremovable: false,
-          lineType: `${$optElement.data('line-type')} - ` || '',
+          lineType: $optElement.data('line-type') ? `${$optElement.data('line-type')} - ` : '',
           loadedOnce: $input.data('loaded-once') || true
-        }  
-      ])
+        }
+      ]);
     }
     else {
       $input.trigger(eventName, [
