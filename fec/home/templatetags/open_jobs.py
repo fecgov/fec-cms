@@ -7,7 +7,6 @@ from django import template
 from django.conf import settings
 from fec.constants import USAJOBS_CODE_LIST as CODE_LIST
 
-
 JOB_URL = "https://data.usajobs.gov/api/Search"
 CODES_URL = "https://data.usajobs.gov/api/codelist/hiringpaths"
 USAJOB_SEARCH_ERROR = """
@@ -42,24 +41,26 @@ def get_jobs():
         response = requests.get(JOB_URL, headers=headers, params=querystring)
     except ConnectionError:
         return {'error': USAJOB_SEARCH_ERROR}
+    
+    # Catch any non-200 responses
+    if response.status_code != 200:
+        return {"error": USAJOB_SEARCH_ERROR}
 
-    """
-    Parse the JSON content of the response body and check that the JSON in the correct format for jobs listings.
-    This will also catch any 4xx, 5xx responses that don't return JSON in the correct format
-    """
+    # Parse the JSON content of the response body and check that the JSON in the correct format for jobs listings.
     try:
         responses = response.json()
         responses.get("SearchResult", {})['SearchResultItems']
-    except (KeyError, IndexError, TypeError):
-        return {'error': USAJOB_SEARCH_ERROR}
+    except (KeyError, IndexError, TypeError, ValueError, json.decoder.JSONDecodeError) as ex:
+        return {'error': USAJOB_SEARCH_ERROR + '(' + ex.__class__.__name__ + ')'}
 
     # Query the codelist/hiringpaths endpoint for mapping map hiring-path code(s) to description(s)
     codes_response = requests.get(CODES_URL, headers=headers)
-    # Parse the JSON content of the codes_response body or Use the backup CODE_LIST constant if the codelist/hiringpaths enpoint is unsuccesful
-    try:
-        codes_responses = codes_response.json()
-    except (KeyError, IndexError, TypeError):
+         
+    # Catch any non-200 response on the codelists endpoint and load the alternative CODE_LIST constant
+    if codes_response.status_code != 200:
         codes_responses = json.loads(CODE_LIST)
+    else:
+        codes_responses = codes_response.json()
 
     jobData = []
     search_results = responses.get("SearchResult", {})
