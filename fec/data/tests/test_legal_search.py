@@ -119,14 +119,13 @@ class TestLegalSearch(TestCase):
         _call_api_mock.return_value = {
             'advisory_opinions': [
                 {'no': 1, 'date': '2016'}, {'no': 2, 'date': '1999'}],
-            'statutes': [{}] * 4,
-            'regulations': [{}] * 5}
+            'statutes': [{}] * 4}
         results = api_caller.load_legal_search_results(query='president')
 
         assert len(results['advisory_opinions']) == 2
         assert results['advisory_opinions_returned'] == 2
         assert results['statutes_returned'] == 4
-        assert results['regulations_returned'] == 5
+
 
     # Test 7: OK
     @mock.patch.object(api_caller, 'load_legal_search_results')
