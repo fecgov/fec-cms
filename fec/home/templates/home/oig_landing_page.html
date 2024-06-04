@@ -11,7 +11,7 @@
     <div class="container">
       <h1 id="hero-heading">{{ self.title }}</h1>
       <div class="hero__content">{{ self.intro_message|safe }}</div>
-      {% if self.complaint_url is not null %}<a href="{{ self.complaint_url }}" class="button--cta-primary button--go">Submit a complaint</a>{% endif %}
+      {% if self.complaint_url is not null %}<a href="{{ self.complaint_url }}" class="button--cta-primary button--go">Submit a complaint about fraud, waste or abuse concerning FEC programs or personnel</a>{% endif %}
     </div>
   </section>
   {% if self.show_info_message is True and self.info_message is not '' %}
@@ -26,7 +26,7 @@
   <div class="container">
     <div class="grid--2-wide grid--flex">
       {% if self.stats_content %}
-      <div class="grid__item card body-blocks">
+      <div class="grid__item card body-blocks" style="background:transparent;padding:0;">
         {% comment %}
         Wagtail did away with the .rich-text wrapper
         but we still have some style rules that rely on it

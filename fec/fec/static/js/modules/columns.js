@@ -1,5 +1,3 @@
-'use strict';
-
 var _ = require('underscore');
 
 var columnHelpers = require('./column-helpers');
@@ -984,6 +982,98 @@ var audit = [
   }
 ];
 
+const nationalPartyReceipts = [
+  {
+    data: 'committee_name',
+    className: 'all',
+    orderable: false,
+    render: renderCommitteeColumn
+  },
+  {
+    data: 'contributor_name',
+    className: 'all',
+    orderable: false,
+    render: function(data, type, row) {
+      // We want to link the committee ID,
+      // but only if there's a contributor_id AND entity_type isn't an individual
+      if (data) {
+        if (!row.contributor_id || row.entity_type == 'IND') return row.contributor_name;
+        else {
+          return columnHelpers.buildEntityLink(
+            data,
+            helpers.buildAppUrl(
+              ['committee', row.contributor_id]
+            ),
+            'committee'
+          );
+        }
+      }
+    }
+  },
+  {
+    data: 'party_account_type',
+    className: 'all',
+    orderable: false
+  },
+  dateColumn({
+    data: 'contribution_receipt_date',
+    className: 'min-tablet hide-panel column--small'
+  }),
+  currencyColumn({
+    data: 'contribution_receipt_amount',
+    className: 'min-desktop hide-panel column--number t-mono'
+  }),
+  modalTriggerColumn
+];
+
+const nationalPartyDisbursements = [
+  {
+    data: 'committee_name',
+    className: 'all',
+    orderable: false,
+    render: renderCommitteeColumn
+  },
+  {
+    data: 'recipient_name',
+    className: 'all',
+    orderable: false,
+    render: function(data, type, row) {
+      // We want to link the recipient name column to the committee if it is a committee
+      if (data) {
+        if (!row.recipient_committee_id) return row.recipient_name;
+        else {
+          return columnHelpers.buildEntityLink(
+            data,
+            helpers.buildAppUrl(
+              ['committee', row.recipient_committee_id]
+            ),
+            'committee'
+          );
+        }
+      }
+    }
+  },
+  {
+    data: 'party_account',
+    className: 'all',
+    orderable: false
+  },
+  {
+    data: 'disbursement_description',
+    className: 'all',
+    orderable: false
+  },
+  dateColumn({
+    data: 'disbursement_date',
+    className: 'min-tablet hide-panel column--small'
+  }),
+  currencyColumn({
+    data: 'disbursement_amount',
+    className: 'min-desktop hide-panel column--number t-mono'
+  }),
+  modalTriggerColumn
+];
+
 module.exports = {
   candidateColumn: candidateColumn,
   committeeColumn: committeeColumn,
@@ -1007,5 +1097,7 @@ module.exports = {
   loans: loans,
   debts: debts,
   pac_party: pac_party,
-  audit: audit
+  audit: audit,
+  nationalPartyReceipts: nationalPartyReceipts,
+  nationalPartyDisbursements: nationalPartyDisbursements
 };

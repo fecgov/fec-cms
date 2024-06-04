@@ -108,9 +108,10 @@
       </thead>
       <tbody>
         {% for disposition in adr.collated_dispositions %}
+          {% set dispositionloop = loop %}
           {% for penalty in adr.collated_dispositions[disposition] %}
             {% for entry in adr.collated_dispositions[disposition][penalty] %}
-              <tr>
+            <tr class="{{ dispositionloop.cycle('row-color-normal', 'row-color-contrast') }}">
                 {% if loop.first %}
                 <td rowspan="{{ adr.collated_dispositions[disposition][penalty] | length }}">{{ disposition }}</td>
                 <td rowspan="{{ adr.collated_dispositions[disposition][penalty] | length }}"> {{ penalty | currency or '' }} </td>
@@ -121,8 +122,9 @@
           {% endfor %}
         {% endfor %}
         <!-- Appending rows for non_monetary_terms and non_monetary_terms_respondents -->
-        {% if adr['non_monetary_terms']|length > 1 %}
-          <tr>
+        {% if adr['non_monetary_terms']|length > 0 %}
+          {% set row_class = "row-color-normal" if adr.collated_dispositions | length is even else "row-color-contrast" %}
+          <tr class="{{ row_class }}">
               <td rowspan="{{ adr['non_monetary_terms_respondents'] | length }}">
                 {% for non_monetary_term in adr.non_monetary_terms %}
                   {{ non_monetary_term }}{% if loop.index < loop.length %};{% endif %}
@@ -134,7 +136,8 @@
                 <td>{{ adr.non_monetary_terms_respondents[0] }}</td>
           </tr>
           {% for second_respondent_and_beyond in adr.non_monetary_terms_respondents[1:] %}
-              <tr><td>{{ second_respondent_and_beyond }}</td></tr>
+          <tr class="{{ row_class }}">
+            <td>{{ second_respondent_and_beyond }}</td></tr>
           {% endfor %}
         {% endif %}
       </tbody>

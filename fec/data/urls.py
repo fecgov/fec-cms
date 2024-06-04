@@ -96,3 +96,17 @@ if settings.FEATURES.get('h4_allocated_disbursements'):
         re_path(r'^data/allocated-federal-nonfederal-disbursements/$',
                 views_datatables.allocated_federal_nonfederal_disbursements)
     )
+
+if settings.FEATURES.get('nat_party_acct_receipts'):
+    # Feature flag for the national party account receipts tables and data
+    urlpatterns.append(
+        re_path(r'^data/national-party-account-receipts/$',
+                views_datatables.national_party_account_receipts)
+    )
+
+if settings.FEATURES.get('nat_party_acct_disbursements'):
+    # Feature flag for the national party account disbursements tables and data
+    urlpatterns.append(
+        re_path(r'^data/national-party-account-disbursements/$',
+                views_datatables.national_party_account_disbursements)
+    )
