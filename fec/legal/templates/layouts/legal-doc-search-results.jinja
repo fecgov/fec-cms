@@ -23,7 +23,7 @@
 {% block body %}
 
 {% block search %}
-<section class="main__content--full data-container__wrapper">
+<section class="main__content--full data-container__wrapper dataTables_wrapper">
   <div id="filters" class="filters is-open">
     <button class="filters__header filters__toggle js-filter-toggle" type="button">
       <span class="filters__title">Edit filters</span>
@@ -36,8 +36,8 @@
       </form>
     </div>
   </div>
-  <div id="results-{{ result_type }}" class="content__section">
-    <div class="data-container__widgets">
+  <div id="results-{{ result_type }}" class="content__section u-no-padding">
+    <div class="data-container__widgets u-no-border">
       <div class="data-container__head">
         <h1 class="data-container__title">{{ document_type_display_name }}</h1>
       </div>
@@ -86,5 +86,47 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ asset_for_js('legal.js') }}"></script>
+  <script src="{{ asset_for_js('legal.js') }}"></script>
+  <script>
+    // Add the script for removing tags
+    document.addEventListener("DOMContentLoaded", function() {
+      // Select all elements with the class 'tag__remove'
+      const removeButtons = document.querySelectorAll('.tag__remove');
+
+      // Iterate over each remove button and add a click event listener
+      removeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Get the value of the 'data-tag' attribute
+          const tag = this.getAttribute('data-tag');
+          // Create a new URL object from the current window location
+          const url = new URL(window.location);
+
+          // Check if the tag is 'query' and remove it from the URL search parameters
+          if (tag === 'query') {
+            url.searchParams.delete('search');
+          // Check if the tag starts with 'doc_category_' for document types
+          } else if (tag && tag.startsWith('doc_category_')) { // Check if tag is not null or undefined
+            // Get the index from the tag
+            const index = tag.split('_')[2];
+            // Get all selected document categories from the URL
+            const selectedCategories = url.searchParams.getAll('case_doc_category_id');
+            // Remove all instances of 'case_doc_category_id' from the URL
+            url.searchParams.delete('case_doc_category_id');
+            // Re-add all categories except the one at the specified index
+            selectedCategories.forEach((cat, i) => {
+              if (i != index) {
+                url.searchParams.append('case_doc_category_id', cat);
+              }
+            });
+          } else {
+            // For all other tags, remove the corresponding search parameter
+            url.searchParams.delete(tag);
+          }
+
+          // Redirect to the updated URL
+          window.location = url.toString();
+        });
+      });
+    });
+  </script>
 {% endblock %}

@@ -7,7 +7,7 @@
   @include clearfix();
   border-top: 2px solid $primary;
   border-bottom: 2px solid $primary;
-  padding: u(1rem 0);
+  padding: u(1rem);
 
   .button--export {
     float: right;
@@ -112,6 +112,6 @@
 
 @include media($lg) {
   .results-info {
-    padding: u(1rem 0);
+    padding: u(1rem);
   }
 }

@@ -69,6 +69,11 @@
   padding: u(0 .75rem .5rem .7rem);
   margin: u(.5rem .5rem 0 0);
 
+  .tag__label {
+    font-weight: bold;
+    color: $federal-blue;
+  }
+
   .tag__item {
     line-height: 1.25em;
     max-width: 15em;

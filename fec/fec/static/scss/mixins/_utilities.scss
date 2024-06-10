@@ -46,6 +46,10 @@
   border-bottom: none !important;
 }
 
+.u-border-top-base {
+  border-top: 1px solid $base !important;
+}
+
 .u-border-top-inverse {
   border-top: 2px solid $inverse;
 }
