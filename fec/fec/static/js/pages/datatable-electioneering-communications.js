@@ -1,25 +1,23 @@
-'use strict';
+/**
+ * Data and initialization for {@link /data/electioneering-communications/}
+ */
+import { electioneeringCommunications as cols_elecComms } from '../modules/columns.js';
+import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+import { default as electioneeringTemplate } from '../templates/electioneering-communications.hbs';
 
-var $ = require('jquery');
-
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-
-var electioneeringTemplate = require('../templates/electioneering-communications.hbs');
-
-$(document).ready(function() {
-  var $table = $('#results');
-  new tables.DataTable($table, {
+$(function() {
+  const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Electioneering communications',
     path: ['electioneering'],
-    columns: columns.electioneeringCommunications,
-    rowCallback: tables.modalRenderRow,
+    columns: cols_elecComms,
+    rowCallback: modalRenderRow,
     useExport: true,
     order: [[4, 'desc']],
     useFilters: true,
     callbacks: {
-      afterRender: tables.modalRenderFactory(electioneeringTemplate)
+      afterRender: modalRenderFactory(electioneeringTemplate)
     }
   });
 });

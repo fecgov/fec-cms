@@ -1,10 +1,11 @@
-'use strict';
-
-/* global perfBar */
-
-var _ = require('underscore');
-
-require('perfbar/build/perfbar');
+// global perfBar
+/**
+ * This is being called by window.performance.mark() in
+ * fec/data/templates/layouts/main.jinja and fec/data/templates/layouts/widgets.jinja
+*/
+/*
+import { chain as _chain, max as _max } from 'underscore';
+import 'perfbar/build/perfbar';
 
 var performanceBudgets = {
   loadTime: { max: 3000 },
@@ -25,7 +26,7 @@ function getMetric(mark) {
   };
 }
 
-function bar() {
+export function bar() {
   var marks =
     (window.performance &&
       window.performance.getEntriesByType &&
@@ -34,12 +35,11 @@ function bar() {
 
   perfBar.init({ budget: performanceBudgets });
 
-  _.chain(marks)
+  _chain(marks)
     .groupBy('name')
     .each(function(marks) {
-      var mark = _.max(marks, 'startTime');
+      var mark = _max(marks, 'startTime');
       perfBar.addMetric(getMetric(mark));
     });
 }
-
-module.exports = { bar: bar };
+*/

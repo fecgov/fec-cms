@@ -1,16 +1,12 @@
-'use strict';
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
-
-var $ = require('jquery');
-
-require('./setup')();
-
-var TextFilter = require('../../static/js/modules/filters/text-filter').TextFilter;
+import TextFilter from '../../static/js/modules/filters/text-filter.js';
 
 describe('text filters', function() {
   before(function() {
@@ -46,7 +42,7 @@ describe('text filters', function() {
   });
 
   it('pulls values from the query', function() {
-    var query = {'name': ['george', 'martha']};
+    var query = { name: ['george', 'martha'] };
     sinon.spy(TextFilter.prototype, 'appendCheckbox');
     this.filter.fromQuery(query);
     expect(TextFilter.prototype.appendCheckbox).to.have.been.calledWith('george');

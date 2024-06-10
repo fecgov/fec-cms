@@ -52,7 +52,6 @@ def committees(request):
 
 
 def pac_party(request):
-
     return render(request, 'datatable.jinja', {
         'parent': 'data',
         'result_type': 'pac_party',

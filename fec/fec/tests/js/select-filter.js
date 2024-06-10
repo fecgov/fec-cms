@@ -1,16 +1,12 @@
-'use strict';
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import { spy } from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
-
-var $ = require('jquery');
-
-require('./setup')();
-
-var SelectFilter = require('../../static/js/modules/filters/select-filter').SelectFilter;
+import SelectFilter from '../../static/js/modules/filters/select-filter.js';
 
 describe('Select filter', function() {
   before(function() {
@@ -33,7 +29,7 @@ describe('Select filter', function() {
       '</div>'
     );
     this.filter = new SelectFilter(this.$fixture.find('.js-filter'));
-    this.trigger = sinon.spy($.prototype, 'trigger');
+    this.trigger = spy($.prototype, 'trigger');
   });
 
   it('sets its initial state', function() {

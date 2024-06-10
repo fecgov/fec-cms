@@ -7,8 +7,9 @@
     <div class="hero__content">
       {{ search.search('hero', 'candidates') }}
     </div>
-    <script type="application/javascript">
+    {# <script type="application/javascript">
+      trackMetric is defined in fec/data/templates/layouts/[main.jinja and widgets.jinja]
       trackMetric('large_search_loaded', '#large-search .js-search_img');
-    </script>
+    </script> #}
   </div>
 </section>

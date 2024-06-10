@@ -1,5 +1,9 @@
-'use strict';
 
-var eventemitter = require('eventemitter2');
-var EventEmitter2 = eventemitter.EventEmitter2 || eventemitter;
-module.exports = window.events = window.events || new EventEmitter2();
+const EventEmitter2 = require('eventemitter2');
+// const emitter = EventEmitter2();
+// window.events = window.events || new EventEmitter2();
+
+export default function initEvents() {
+    window.events = window.events || new EventEmitter2();
+    return window.events;
+}

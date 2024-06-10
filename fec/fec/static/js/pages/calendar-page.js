@@ -1,16 +1,16 @@
-'use strict';
-
-var $ = require('jquery');
-var FilterPanel = require('../modules/filters/filter-panel').FilterPanel;
-var filterTags = require('../modules/filters/filter-tags');
-var Calendar = require('../modules/calendar').Calendar;
-var calendarHelpers = require('../modules/calendar-helpers');
+/**
+ *
+ */
+import { calendarDownload, getUrl } from '../modules/calendar-helpers.js';
+import Calendar from '../modules/calendar.js';
+import FilterPanel from '../modules/filters/filter-panel.js';
+import TagList from '../modules/filters/filter-tags.js';
 
 // Initialize filters
-var filterPanel = new FilterPanel();
+const filterPanel = new FilterPanel();
 
 // Initialize filter tags
-var $tagList = new filterTags.TagList({
+const $tagList = new TagList({
   resultType: 'events',
   emptyText: 'all events'
 }).$body;
@@ -22,9 +22,9 @@ new Calendar({
   selector: '#calendar',
   download: '#calendar-download',
   subscribe: '#calendar-subscribe',
-  url: calendarHelpers.getUrl(['calendar-dates']),
-  exportUrl: calendarHelpers.calendarDownload(['calendar-dates', 'export']),
-  subscribeUrl: calendarHelpers.getUrl(['calendar-dates', 'export'], '', [
+  url: getUrl(['calendar-dates']),
+  exportUrl: calendarDownload(['calendar-dates', 'export']),
+  subscribeUrl: getUrl(['calendar-dates', 'export'], '', [
     'sub'
   ]),
   filterPanel: filterPanel

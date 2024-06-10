@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * How many election years should we include? In places like lists.
  */
@@ -9,7 +7,7 @@ const electionYearsCount = 42; // Display election years back this many years
  * Simple list of election letter codes with their adjectives
  * TODO - set this through constants?
  */
-let officeDefs = {
+export const officeDefs = {
   P: 'Presidential',
   S: 'Senate',
   H: 'House'
@@ -17,7 +15,7 @@ let officeDefs = {
 
 /**
  * Calculates the next presidential election year, including this year if applicable
- * @returns {Number} The four-digit year of the next presidential year
+ * @returns {number} The four-digit year of the next presidential year
  */
 function getNextPresidentialElectionYear() {
   let now = new Date();
@@ -30,10 +28,10 @@ function getNextPresidentialElectionYear() {
 
 /**
  * Builds an Array of four-digit years, limited by {@see electionYearsCount}
- * @param {String} type - P Presidential {@default}, H for House, or S for Senate
+ * @param {string} type - P Presidential {@default}, H for House, or S for Senate
  * @returns {Array} An array of four-digit years
  */
-let electionYearsList = (type = 'P') => {
+export let electionYearsList = (type = 'P') => {
   let theLatestYear = getNextPresidentialElectionYear();
   let toReturn = [];
 
@@ -53,11 +51,11 @@ let electionYearsList = (type = 'P') => {
  * Builds a String of <option> elements for the given office and year, marking the given year as 'selected'.
  * Note: if a presidential list is requested with an invalid year, the next earlier presidential year will be selected if available. Otherwise, it will select the next presidential list.
  * For example, if someone requests a presidential list with 1998 selected, 1996 will be selected if it's part of the list, otherwise 2000 will be
- * @param {String} office - What kind of years? (P are every four years, H and S are two years) {@default: 'P'}
- * @param {String, Number} selectedValue - (optional) Which value should be `selected`?
+ * @param {string} office - What kind of years? (P are every four years, H and S are two years) {@default: 'P'}
+ * @param {string, number} selectedValue - (optional) Which value should be `selected`?
  * @returns A list of <option> elements
  */
-let electionYearsOptions = (
+export let electionYearsOptions = (
   office = 'P',
   selectedValue = window.DEFAULT_ELECTION_YEAR
 ) => {
@@ -85,11 +83,4 @@ let electionYearsOptions = (
       '</option>';
   });
   return toReturn;
-};
-
-// Make them available for import
-module.exports = {
-  electionYearsList,
-  electionYearsOptions,
-  officeDefs
 };

@@ -1,11 +1,11 @@
-import 'babel-polyfill';
+import 'babel-polyfill/dist/polyfill.js';
 
 /**
  * Object.assign
  * used in calendars
  * filter-panel, top-entities,
  */
-import 'core-js/es/object/assign';
+import 'core-js/es/object/assign.js';
 
 /**
  * NodeList.forEach
@@ -40,13 +40,13 @@ import 'whatwg-fetch';
 /**
  * Promise
  */
-import 'promise-polyfill/src/polyfill';
+import 'promise-polyfill/src/polyfill.js';
 
 /**
  * element-closest
  * used to find closest ancestor of element in IE
  */
-import 'element-closest/browser';
+import 'element-closest/browser.js';
 
 /**
  * array-from-polyfill
@@ -65,6 +65,11 @@ import 'element-remove';
  * Used for reporting-dates for non-standard css selectors in IE
  */
 import 'css.escape';
+
+/**
+ * WeakMap polyfill
+ */
+import 'core-js/es/weak-map/index.js';
 
 /**
  * Adds CustomEvent capabilities to IE < 11

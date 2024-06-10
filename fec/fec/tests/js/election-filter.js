@@ -1,16 +1,12 @@
-'use strict';
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import { spy } from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
-
-var $ = require('jquery');
-
-require('./setup')();
-
-var ElectionFilter = require('../../static/js/modules/filters/election-filter').ElectionFilter;
+import ElectionFilter from '../../static/js/modules/filters/election-filter.js';
 
 describe('Election filter', function() {
   before(function() {
@@ -46,7 +42,7 @@ describe('Election filter', function() {
       cycle: '2014',
       election_full: false
     });
-    this.trigger = sinon.spy($.prototype, 'trigger');
+    this.trigger = spy($.prototype, 'trigger');
   });
 
   it('sets its initial state', function() {
@@ -67,14 +63,14 @@ describe('Election filter', function() {
   });
 
   it('builds cycle toggles on election change', function() {
-    this.filter.handleElectionChange({target: this.filter.$election});
+    this.filter.handleElectionChange({ target: this.filter.$election });
     expect(this.filter.$cycles.find('label').length).to.equal(3);
     expect(this.filter.$cycles.find('label:first-of-type input').is(':checked')).to.be.true;
   });
 
   it('handles cycle change', function() {
     var target = '<input type="radio" value="2014:false">';
-    this.filter.handleCycleChange({target: target});
+    this.filter.handleCycleChange({ target: target });
     expect(this.filter.$cycle.val()).to.equal('2014');
     expect(this.filter.$full.val()).to.equal('false');
   });

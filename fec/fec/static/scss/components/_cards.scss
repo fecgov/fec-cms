@@ -416,10 +416,12 @@
       background-size: 60%;
     }
 
-    &.i-shield-star {
-      @include u-icon-bg($shield-star, $primary-contrast);
-      background-size: 75%;
-    }
+    // In fec/fec/static/scss/_icon-variables.scss, $shield-star is empty.
+    // Doesn't seem like `i-shield-star` is being used anywhere else in the repo
+    // &.i-shield-star {
+    //   @include u-icon-bg($shield-star, $primary-contrast);
+    //   background-size: 75%;
+    // }
 
     &.i-arrow-target {
       @include u-icon-bg($arrow-target, $primary-contrast);

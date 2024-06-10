@@ -1,5 +1,3 @@
-'use strict';
-
 function StatisticalSummary() {
   window.addEventListener('popstate', this.handlePopState.bind(this));
 

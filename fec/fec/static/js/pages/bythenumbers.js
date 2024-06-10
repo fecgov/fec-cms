@@ -1,15 +1,13 @@
-'use strict';
-
-var $ = require('jquery');
-var analytics = require('../modules/analytics');
-var TopEntities = require('../modules/top-entities').TopEntities;
-
-new TopEntities('.js-top-entities', context.type);
+import { customEvent } from '../modules/analytics.js';
+// var analytics = require('../modules/analytics');
+// var TopEntities = require('../modules/top-entities').TopEntities;
+import { TopEntities } from '../modules/top-entities.js';
+new TopEntities('.js-top-entities', window.context.type);
 
 $('.js-ga-event').each(function() {
   var eventName = $(this).data('ga-event');
   $(this).on('click', function() {
-    analytics.customEvent({
+    customEvent({
       event: 'Widget Interaction',
       eventName: 'fecCustomEvent',
       eventCategory: 'Misc. events',

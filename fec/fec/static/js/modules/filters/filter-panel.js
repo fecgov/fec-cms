@@ -1,10 +1,6 @@
-'use strict';
-
-const $ = require('jquery');
-
-const FilterSet = require('./filter-set').FilterSet;
-const accessibility = require('../accessibility');
-const helpers = require('../helpers');
+import { default as FilterSet } from './filter-set.js';
+import { removeTabindex, restoreTabindex } from '../accessibility.js';
+import { BREAKPOINTS, getWindowWidth, isLargeScreen } from '../helpers.js';
 
 const defaultOptions = {
   body: '.filters',
@@ -15,7 +11,7 @@ const defaultOptions = {
   toggle: '.js-filter-toggle'
 };
 
-function FilterPanel(options) {
+export default function FilterPanel(options) {
   this.isOpen = false;
   this.options = Object.assign(defaultOptions, options);
 
@@ -36,7 +32,7 @@ function FilterPanel(options) {
 }
 
 FilterPanel.prototype.setInitialDisplay = function() {
-  if (helpers.getWindowWidth() >= helpers.BREAKPOINTS.LARGE) {
+  if (getWindowWidth() >= BREAKPOINTS.LARGE) {
     this.show();
   } else if (!this.isOpen) {
     this.hide();
@@ -44,12 +40,12 @@ FilterPanel.prototype.setInitialDisplay = function() {
 };
 
 FilterPanel.prototype.show = function(focus) {
-  if (!helpers.isLargeScreen()) {
+  if (!isLargeScreen()) {
     this.$content.css('top', 0);
   }
   this.$body.addClass('is-open');
   this.$content.attr('aria-hidden', false);
-  accessibility.restoreTabindex(this.$form);
+  restoreTabindex(this.$form);
   $('body').addClass('is-showing-filters');
   this.isOpen = true;
   // Don't focus on the first filter unless explicitly intended to
@@ -58,19 +54,19 @@ FilterPanel.prototype.show = function(focus) {
     this.$body
       .find('input, select, button:not(.js-filter-close)')
       .first()
-      .focus();
+      .focus(); // TODO: jQuery deprecation
   }
 };
 
 FilterPanel.prototype.hide = function() {
-  if (!helpers.isLargeScreen()) {
+  if (!isLargeScreen()) {
     var top = this.$toggle.outerHeight() + this.$toggle.position().top;
     this.$content.css('top', top);
   }
   this.$body.removeClass('is-open');
   this.$content.attr('aria-hidden', true);
-  this.$focus.focus();
-  accessibility.removeTabindex(this.$form);
+  this.$focus.focus(); // TODO: jQuery deprecation
+  removeTabindex(this.$form);
   $('body').removeClass('is-showing-filters');
   this.isOpen = false;
 };
@@ -111,5 +107,3 @@ FilterPanel.prototype.handleRemoveEvent = function(e, opts) {
     filterCount.html(parseInt(filterCount.html(), 10) - 1);
   }
 };
-
-module.exports = { FilterPanel: FilterPanel };

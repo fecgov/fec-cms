@@ -1,20 +1,16 @@
-'use strict';
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import { spy } from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-var moment = require('moment');
+// import moment from 'moment';
 
-chai.use(sinonChai);
+import { TopEntities } from '../../static/js/modules/top-entities.js';
 
-var $ = require('jquery');
-
-require('./setup')();
-
-var TopEntities = require('../../static/js/modules/top-entities').TopEntities;
-
-var DOM =
+const DOM =
 '<select class="js-office">' +
   '<option value="P">President</option>' +
   '<option value="S">Senate</option>' +
@@ -135,8 +131,8 @@ describe('Top entities breakdown', function() {
 
     describe('event handling', function() {
       beforeEach(function() {
-        sinon.spy(this.chart, 'loadData');
-        sinon.spy(this.chart, 'updateCoverageDateRange');
+        spy(this.chart, 'loadData');
+        spy(this.chart, 'updateCoverageDateRange');
       });
 
       afterEach(function() {
@@ -188,8 +184,8 @@ describe('Top entities breakdown', function() {
     describe('DOM updates', function() {
       describe('loading data', function() {
         beforeEach(function() {
-          sinon.spy(this.chart, 'updatePagination');
-          sinon.spy(this.chart, 'drawBars');
+          spy(this.chart, 'updatePagination');
+          spy(this.chart, 'drawBars');
           this.candidateResponse = {
             pagination: {
               page: 1,

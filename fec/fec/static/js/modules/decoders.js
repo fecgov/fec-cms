@@ -1,6 +1,4 @@
-'use strict';
-
-var forms = {
+export const forms = {
   F1: 'Statements Of Organization',
   F1M: 'Multicandidate status',
   F2: 'Statements Of Candidacy',
@@ -24,7 +22,7 @@ var forms = {
   RFAI: 'Request For Additional Information'
 };
 
-var reports = {
+export const reports = {
   M2: 'February monthly',
   M3: 'March monthly',
   M4: 'April monthly',
@@ -75,7 +73,7 @@ var reports = {
   YE: 'Year end'
 };
 
-var states = {
+export const states = {
   AK: 'Alaska',
   AL: 'Alabama',
   AR: 'Arkansas',
@@ -134,7 +132,7 @@ var states = {
   WY: 'Wyoming'
 };
 
-var parties = {
+export const parties = {
   DEM: 'Democratic Party',
   REP: 'Republican Party',
   AIC: 'American Independent Conservative',
@@ -182,13 +180,7 @@ var parties = {
   USP: 'US People\'s Party'
 };
 
-module.exports = {
-  amendments: { A: 'Amendment', N: 'New' },
-  office: { P: 'President', S: 'Senate', H: 'House of Representatives' },
-  supportOppose: { S: 'Support', O: 'Oppose' },
-  means: { 'e-file': 'Electronic filing', paper: 'Paper filing' },
-  forms: forms,
-  parties: parties,
-  states: states,
-  reports: reports
-};
+export const amendments = { A: 'Amendment', N: 'New' };
+export const office = { P: 'President', S: 'Senate', H: 'House of Representatives' };
+export const supportOppose = { S: 'Support', O: 'Oppose' };
+export const means = { 'e-file': 'Electronic filing', paper: 'Paper filing' };

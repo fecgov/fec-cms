@@ -24,7 +24,7 @@ const breakpoints = [
  * @property {string[]} allClassNames - Derived from breakpoints, used when removing all cq class names
  * @property {object[]} elementPairs - Array of Objects like {child: HTMLElement, parent: HTMLElement}
  */
-function FECContainerQuery(resizeSelector, containerSelector) {
+export default function FECContainerQuery(resizeSelector, containerSelector) {
   // Now that we have the breakpoints set, let's create a quick array of only the class names
   this.allClassNames = breakpoints.map(point => {
     return point.classname;
@@ -66,5 +66,3 @@ FECContainerQuery.prototype.handleResize = function() {
     }
   });
 };
-
-module.exports = { FECContainerQuery };

@@ -1,11 +1,8 @@
-'use strict';
+import { default as URI } from 'urijs';
 
-var $ = require('jquery');
-var URI = require('urijs');
+import { buildUrl, currency } from './helpers.js';
 
-var helpers = require('./helpers');
-
-function buildUrl(opts) {
+function buildElectionSummaryUrl(opts) {
   var parts = ['elections', opts.office, opts.state, opts.district, opts.cycle]
     .filter(function(part) {
       return !!part;
@@ -15,7 +12,7 @@ function buildUrl(opts) {
   return URI(parts).toString();
 }
 
-function ElectionSummary(selector, opts) {
+export default function ElectionSummary(selector, opts) {
   this.$elm = $(selector);
   this.opts = opts;
 
@@ -24,18 +21,16 @@ function ElectionSummary(selector, opts) {
   this.$expenditures = this.$elm.find('.js-expenditures');
 
   this.fetch();
-  this.$elm.find('.js-election-url').attr('href', buildUrl(this.opts));
+  this.$elm.find('.js-election-url').attr('href', buildElectionSummaryUrl(this.opts));
 }
 
 ElectionSummary.prototype.fetch = function() {
-  var url = helpers.buildUrl(['elections', 'summary'], this.opts);
+  var url = buildUrl(['elections', 'summary'], this.opts);
   $.getJSON(url).done(this.draw.bind(this));
 };
 
 ElectionSummary.prototype.draw = function(response) {
-  this.$receipts.text(helpers.currency(response.receipts));
-  this.$disbursements.text(helpers.currency(response.disbursements));
-  this.$expenditures.text(helpers.currency(response.independent_expenditures));
+  this.$receipts.text(currency(response.receipts));
+  this.$disbursements.text(currency(response.disbursements));
+  this.$expenditures.text(currency(response.independent_expenditures));
 };
-
-module.exports = { ElectionSummary: ElectionSummary };

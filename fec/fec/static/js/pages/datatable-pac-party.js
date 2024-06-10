@@ -1,29 +1,23 @@
-'use strict';
-
 /**
- * PAC and party committee datatable page
+ * PAC and party committee datatable page {@link /data/committees/pac-party/}
  **/
+import { pac_party as cols_pacParty } from '../modules/columns.js';
+import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+import { default as pacPartyTemplate } from '../templates/pac-party.hbs';
 
-var $ = require('jquery');
-
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-
-var pacPartyTemplate = require('../templates/pac-party.hbs');
-
-$(document).ready(function() {
-  var $table = $('#results');
-  new tables.DataTable($table, {
+$(function() {
+  const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Political action and party committees',
     path: ['totals', 'pac-party'],
-    columns: columns.pac_party,
+    columns: cols_pacParty,
     order: [[2, 'desc']],
     useFilters: true,
     useExport: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: tables.modalRenderFactory(pacPartyTemplate)
+      afterRender: modalRenderFactory(pacPartyTemplate)
     }
   });
 });

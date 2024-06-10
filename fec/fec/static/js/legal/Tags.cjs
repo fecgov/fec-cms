@@ -1,8 +1,9 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const _ = require('underscore');
-const requestorOptions = require('./requestorOptions');
-const documentTypes = require('./documentTypes');
+
+const requestorOptions = require('./requestorOptions.cjs');
+const documentTypes = require('./documentTypes.cjs');
 
 function Tags(props) {
   const namedFields = [];

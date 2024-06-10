@@ -1,19 +1,15 @@
-'use strict';
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import { spy } from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
-
-var $ = require('jquery');
-
-require('./setup')();
-
-var AnalystLookup = require('../../static/js/pages/contact-form').AnalystLookup;
+import { AnalystLookup } from '../../static/js/pages/contact-form';
 
 describe('AnalystLookup', function() {
-    before(function() {
+  before(function() {
     this.$fixture = $('<div id="fixtures"></div>');
     $('body').append(this.$fixture);
   });
@@ -35,8 +31,8 @@ describe('AnalystLookup', function() {
         '</div>' +
       '</div>'
     );
-    this.initTypeahead = sinon.spy(AnalystLookup.prototype, 'initTypeahead');
-    this.fetch = sinon.spy(AnalystLookup.prototype, 'fetchAnalyst');
+    this.initTypeahead = spy(AnalystLookup.prototype, 'initTypeahead');
+    this.fetch = spy(AnalystLookup.prototype, 'fetchAnalyst');
     this.lookup = new AnalystLookup($('.js-analyst-lookup'));
   });
 
@@ -72,7 +68,7 @@ describe('AnalystLookup', function() {
   });
 
   it('shows the analyst', function() {
-    this.lookup.showAnalyst({'results': [{'first_name': 'Kim', 'last_name': 'Radical', 'telephone_ext': '1234'}]});
+    this.lookup.showAnalyst({ results: [{ first_name: 'Kim', last_name: 'Radical', telephone_ext: '1234' }] });
     expect(this.lookup.$name.html()).to.equal('Kim Radical');
     expect(this.lookup.$ext.html()).to.equal('1234');
     expect(this.lookup.$analystContainer.attr('aria-hidden')).to.equal('false');
@@ -82,7 +78,7 @@ describe('AnalystLookup', function() {
   });
 
   it('shows no assigned analyst', function() {
-    this.lookup.showAnalyst({'results': []});
+    this.lookup.showAnalyst({ results: [] });
     expect(this.lookup.$analystContainer.attr('aria-hidden')).to.equal('false');
     expect(this.lookup.$analystDetails.attr('aria-hidden')).to.equal('true');
     expect(this.lookup.$analystNoResults.attr('aria-hidden')).to.equal('false');
@@ -101,7 +97,7 @@ describe('AnalystLookup', function() {
 
   describe('handleChange()', function() {
     beforeEach(function() {
-      this.hide = sinon.spy(AnalystLookup.prototype, 'hideAnalyst');
+      this.hide = spy(AnalystLookup.prototype, 'hideAnalyst');
     });
 
     afterEach(function() {
@@ -110,14 +106,14 @@ describe('AnalystLookup', function() {
 
     it('clears the input if it is empty', function() {
       var $input = this.lookup.$input;
-      this.lookup.handleChange({target: $input});
+      this.lookup.handleChange({ target: $input });
       expect(this.hide).to.have.been.called;
     });
 
     it('does not clear the input if there is a value', function() {
       var $input = this.lookup.$input;
       $input.val('Some value');
-      this.lookup.handleChange({target: $input});
+      this.lookup.handleChange({ target: $input });
       expect(this.hide).to.not.have.been.called;
     });
   });

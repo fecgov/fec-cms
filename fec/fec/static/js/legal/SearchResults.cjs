@@ -1,6 +1,5 @@
 const React = require('react');
 const PropTypes = require('prop-types');
-const $ = require('jquery');
 const moment = require('moment');
 
 function SearchResults(props) {

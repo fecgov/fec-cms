@@ -1,11 +1,9 @@
-'use strict';
-
 /**
  * @fileoverview Interactive map based on fec/fec/static/js/modules/maps.js. Displays color-coded states based on the dataset provided
- * @copyright 2019 Federal Election Commission
+ * @copyright 2024 Federal Election Commission
  * @license CC0-1.0
  * @owner  fec.gov
- * @version 1.0
+ * @version 1.1
  */
 
 /**
@@ -24,14 +22,21 @@
  * this.map.handleDataRefresh(theData);
  */
 
-const d3 = require('d3');
-const chroma = require('chroma-js');
-const topojson = require('topojson-client');
-const statesJSON = require('../data/us-states-10m.json');
-const stateFeatures = topojson.feature(statesJSON, statesJSON.objects.states)
-  .features;
+// import * as d3 from 'd3';
+import { scale as chroma_scale } from 'chroma-js';
+import { descending as d3_sort_descending } from 'd3-array';
+import { geoAlbersUsa as d3_albersUsa, geoPath as d3_geoPath } from 'd3-geo';
+import { scaleLinear as d3_scaleLinear } from 'd3-scale';
+import { select } from 'd3-selection';
+import 'd3-transition';
+import { feature } from 'topojson-client/dist/topojson-client.js';
 
-const fips = require('./fips');
+import { fipsByCode, fipsByState } from './fips.js';
+import { default as statesJSON } from '../data/us-states-10m.json' assert { type: 'json' };
+
+const stateFeatures = feature(statesJSON, statesJSON.objects.states).features;
+
+// const fips = require('./fips');
 const maxUSbounds = {
   west: Math.floor(31.268536820638), // (Alaska)
   east: Math.ceil(382.5599341), // (Maine)
@@ -40,7 +45,7 @@ const maxUSbounds = {
 }; // used to set the viewBox for the main SVG
 const compactRules = [['B', 9], ['M', 6], ['K', 3], ['', 0]];
 
-let defaultOpts = {
+const defaultOpts = {
   colorScale: ['#e2ffff', '#278887'],
   colorZero: '#ffffff',
   circleSizeScale: [5, 20], // Smallest and largest circle sizes
@@ -57,18 +62,18 @@ let defaultOpts = {
 /**
  * @constructor
  * @param {string} elm - selector for the div to put the map in
- * @param {object} opts - configuration options
- * @param {Boolean} opts.data - placeholder for this object to save its own data
- * @param {Boolean} opts.addLegend - whether to add a legend
- * @param {Boolean} opts.addTooltips - whether to add the tooltip functionality
+ * @param {Object} opts - configuration options
+ * @param {boolean} opts.data - placeholder for this object to save its own data
+ * @param {boolean} opts.addLegend - whether to add a legend
+ * @param {boolean} opts.addTooltips - whether to add the tooltip functionality
  * @param {Array} opts.colorScale - list of hex color codes to use
- * @param {String} opts.colorZero - hex color code to use when no value is present
+ * @param {string} opts.colorZero - hex color code to use when no value is present
  * @param {Array} opts.circleSizeScale -
- * @param {String} opts.viewBox -
- * @param {String} opts.mapStyle -
- * @param {String} opts.eventAppID -
+ * @param {string} opts.viewBox -
+ * @param {string} opts.mapStyle -
+ * @param {string} opts.eventAppID -
  */
-function DataMap(elm, opts) {
+export default function DataMap(elm, opts) {
   // Data, vars
   this.data;
   this.mapData; // saves results from init() and applyNewData(), formatted like {1: 123456789, 2: 6548, 4: 91835247} / {stateID: stateValue, stateID: stateValue}
@@ -77,6 +82,7 @@ function DataMap(elm, opts) {
   this.focusedStateID = 'US';
 
   // Elements
+  // this.instance = this;
   this.elm = elm;
   this.legendSVG;
   this.svg;
@@ -95,7 +101,6 @@ function DataMap(elm, opts) {
  */
 DataMap.prototype.init = function() {
   let instance = this;
-
   maxUSbounds.width = maxUSbounds.east - maxUSbounds.west;
   maxUSbounds.height = maxUSbounds.south - maxUSbounds.north;
   maxUSbounds.heightRatio = maxUSbounds.height / maxUSbounds.width; // TODO - need this?
@@ -103,24 +108,23 @@ DataMap.prototype.init = function() {
   // Initialize the D3 map
   // viewBox is necessary for responsive scaling
   // preserveAspectRatio tells the map how to scale
-  this.svg = d3.select(this.elm).append('svg');
+  this.svg = select(this.elm).append('svg');
   this.svg
     .attr('viewBox', this.opts.viewBox)
     .attr('preserveAspectRatio', 'xMaxYMax meet'); // xMidYMid meet');
 
   // Create the base-level state/country shapes
-  this.projection = d3.geo
-    .albersUsa()
+  this.projection = d3_albersUsa()
     .scale(450) // lower numbers make the map smaller
     .translate([220, 150]); // lower numbers move the map up and to the left
 
   // Create the path based on those base-level shapes
-  this.pathProjection = d3.geo.path().projection(this.projection);
+  this.pathProjection = d3_geoPath().projection(this.projection);
 
   /** Go through our data results and pair/merge them with the fips state codes {@see this.mapData} */
-  let results = instance.data['results'].reduce((acc, val) => {
-    let row = fips.fipsByState[val.state] || {};
-    let code = row.STATE ? parseInt(row.STATE) : null;
+  const results = this.data['results'].reduce((acc, val) => {
+    const row = fipsByState[val.state] || {};
+    const code = row.STATE ? parseInt(row.STATE) : null;
     acc[code] = val.total;
     return acc;
   }, {});
@@ -131,26 +135,24 @@ DataMap.prototype.init = function() {
   // Work through how to group these results for the legend
   // For our current usage, we'll only be dealing with one map,
   // but the functionality will work with multiple maps using the same legend
-  let quantiles = instance.opts.quantiles;
+  const quantiles = this.opts.quantiles;
   // For each item in results, look at its total but only work with the value if it's truthy
   // Double bangs (!!value) :
   // `!!0` = false, `!!null` = false
   // `!!1` = true, `!!468546` = true
-  let totals = instance.data['results']
+  const totals = this.data['results']
     .map(value => value['total'])
     .filter(value => {
       return !!value;
     });
   // Of all of the values across all DataMap instances, these are the smallest and largest values:
-  let minValue = minValue || Math.min(...totals);
-  let maxValue = maxValue || Math.max(...totals);
+  const minValue = Math.min(...totals);
+  let maxValue = Math.max(...totals);
   maxValue = trimmedMaxValue(minValue, maxValue);
 
   // Decide the legend color scale for our values
-  let legendScale_colors = chroma
-    .scale(instance.opts.colorScale)
-    .domain([minValue, maxValue]);
-  let legendQuantize_colors = d3.scale.linear().domain([minValue, maxValue]);
+  const legendScale_colors = chroma_scale(this.opts.colorScale).domain([minValue, maxValue]);
+  const legendQuantize_colors = d3_scaleLinear().domain([minValue, maxValue]);
 
   // Create the states SVG, color them, initialize mouseover interactivity
   // (`selectAll()` will select elements if they exist, or will create them if they don't.)
@@ -177,10 +179,10 @@ DataMap.prototype.init = function() {
         );
       })
       .attr('data-state', d => {
-        return fips.fipsByCode[d.id].STATE_NAME;
+        return fipsByCode[d.id].STATE_NAME;
       })
       .attr('data-stateID', d => {
-        return fips.fipsByCode[d.id].STUSAB;
+        return fipsByCode[d.id].STUSAB;
       })
       .attr('class', d => {
         return this.chooseStateClasses(d, 'shape');
@@ -188,50 +190,9 @@ DataMap.prototype.init = function() {
       .attr('d', this.pathProjection);
   }
 
-  if (this.opts.mapStyle.indexOf('bubbles') !== -1) {
-    this.pathDataEnter
-      .append('circle')
-      .attr('cx', function(d) {
-        let stateBounds = d3
-          .select(d.statePath)
-          .node()
-          .getBBox();
-
-        d.cx = stateBounds.x + stateBounds.width / 2;
-        d.cy = stateBounds.y + stateBounds.height / 2;
-
-        return d.cx;
-      })
-      .attr('cy', function(d) {
-        return d.cy;
-      })
-      .attr('r', function(d) {
-        d.value = instance.getStateValue(d.id); // TODO - COPY THIS TO applyNewData()?
-        return calculateCircleSize(
-          d.value, // TODO - COPY THIS TO applyNewData()?
-          [minValue, maxValue],
-          instance.opts.circleSizeScale,
-          quantiles,
-          instance.opts.addLegend
-        );
-      })
-      .attr('data-state', function(d) {
-        return fips.fipsByCode[d.id].STATE_NAME;
-      })
-      .attr('data-stateID', function(d) {
-        return fips.fipsByCode[d.id].STUSAB;
-      })
-      .attr('class', d => {
-        return this.chooseStateClasses(d, 'circle');
-      })
-      .attr('d', this.pathProjection);
-
-    this.sortCircles();
-  }
-
   // If we're supposed to add a legend, let's do it
   if (this.opts.addLegend || typeof this.opts.addLegend === 'undefined') {
-    this.legendSVG = d3.select('.legend-container svg');
+    this.legendSVG = select('.legend-container svg');
     drawStateLegend(
       this.legendSVG,
       legendScale_colors,
@@ -242,14 +203,14 @@ DataMap.prototype.init = function() {
 
   // If we're supposed to add tooltips, let's do that, too
   if (this.opts.addTooltips) {
-    buildStateTooltips(this.svg, this.pathProjection, this);
+    buildStateTooltips(this.svg, this.pathProjection, instance);
   }
 };
 
 /**
  * Takes an ID and finds that ID's dollar value in {@see this.mapData }
- * @param {String, Number} pathID
- * @returns {Number} the value associated with the ID passed to it
+ * @param {string, number} pathID
+ * @returns {number} the value associated with the ID passed to it
  * @returns {Object} else returns the full {@see this.mapData } when no pathID is included
  */
 DataMap.prototype.getStateValue = function(pathID) {
@@ -276,7 +237,6 @@ DataMap.prototype.handleDataRefresh = function(newData) {
 DataMap.prototype.handleZoomReset = function() {
   // TODO: zoom out to the full US
   this.zoomToState('US');
-  // Show bubbles if they need to be shown
 };
 
 /**
@@ -288,89 +248,60 @@ DataMap.prototype.handleZoomReset = function() {
 DataMap.prototype.applyNewData = function() {
   let instance = this;
 
-  let results = instance.data['results'].reduce((acc, val) => {
-    let row = fips.fipsByState[val.state] || {};
-    let code = row.STATE ? parseInt(row.STATE) : null;
+  const results = this.data['results'].reduce((acc, val) => {
+    const row = fipsByState[val.state] || {};
+    const code = row.STATE ? parseInt(row.STATE) : null;
     acc[code] = val.total;
     return acc;
   }, {});
 
   this.mapData = results;
 
-  let quantiles = instance.opts.quantiles;
-  let totals = instance.data['results']
+  const quantiles = this.opts.quantiles;
+  const totals = this.data['results']
     .map(value => value['total'])
     .filter(value => {
       return !!value;
     });
 
-  let minValue = minValue || Math.min(...totals);
-  let maxValue = maxValue || Math.max(...totals);
+  let minValue = Math.min(...totals);
+  let maxValue = Math.max(...totals);
   maxValue = trimmedMaxValue(minValue, maxValue);
 
-  let legendScale_colors = chroma
-    .scale(instance.opts.colorScale)
-    .domain([minValue, maxValue]);
+  const legendScale_colors = chroma_scale(this.opts.colorScale).domain([minValue, maxValue]);
 
-  let legendQuantize_colors = d3.scale.linear().domain([minValue, maxValue]);
+  const legendQuantize_colors = d3_scaleLinear().domain([minValue, maxValue]);
 
   // This bit is the big difference from init() }
   // because we're transitioning states' colors,
   // states we know already exist, have IDs, and may have mouseenter listeners, etc.
-  if (this.opts.mapStyle.indexOf('gradients') !== -1) {
-    this.svg
-      .selectAll('path')
-      .transition()
-      .delay(function(d, i) {
-        //
-        d.value = instance.getStateValue(d.id);
+  this.svg
+    .selectAll('path')
+    .transition()
+    .delay(function(d, i) {
+      //
+      d.value = instance.getStateValue(d.id);
 
-        if (!d.value) return 0;
-        else return 20 * i;
-      })
-      .attr('fill', function(d) {
-        return calculateStateFill(
-          d.value,
-          legendScale_colors,
-          legendQuantize_colors,
-          instance.opts.colorZero,
-          instance.opts.addLegend,
-          quantiles
-        );
-      })
-      .attr('class', d => {
-        return this.chooseStateClasses(d, 'shape');
-      });
-  }
-
-  if (this.opts.mapStyle.indexOf('bubbles') !== -1) {
-    this.svg
-      .selectAll('circle')
-      .transition()
-      .delay(function(d, i) {
-        d.value = instance.getStateValue(d.id);
-        if (!d.value) return 0;
-        else return 20 * i;
-      })
-      .attr('r', function(d) {
-        return calculateCircleSize(
-          d.value,
-          [minValue, maxValue],
-          instance.opts.circleSizeScale,
-          quantiles,
-          instance.opts.addLegend
-        );
-      })
-      .attr('class', d => {
-        return this.chooseStateClasses(d, 'circle');
-      });
-
-    this.sortCircles();
-  }
+      if (!d.value) return 0;
+      else return 20 * i;
+    })
+    .attr('fill', function(d) {
+      return calculateStateFill(
+        d.value,
+        legendScale_colors,
+        legendQuantize_colors,
+        instance.opts.colorZero,
+        instance.opts.addLegend,
+        quantiles
+      );
+    })
+    .attr('class', d => {
+      return instance.chooseStateClasses(d, 'shape');
+    });
 
   // The rest of applyNewData is back to the same code from init()
   if (this.legendSVG) {
-    let theCurrentLegend = document.querySelector(
+    const theCurrentLegend = document.querySelector(
       '.map-wrapper .legend-container svg'
     );
 
@@ -378,7 +309,7 @@ DataMap.prototype.applyNewData = function() {
       theCurrentLegend.removeChild(theCurrentLegend.lastChild);
     }
 
-    this.legendSVG = d3.select('.legend-container svg');
+    this.legendSVG = select('.legend-container svg');
     drawStateLegend(
       this.legendSVG,
       legendScale_colors,
@@ -397,7 +328,7 @@ DataMap.prototype.zoomToState = function(stateID, d) {
   this.focusedStateID = stateID;
 
   // hide the tooltip when we start a zoom change
-  d3.select('body #map-tooltip').style.display = 'none';
+  select('body #map-tooltip').style.display = 'none';
 
   // Assign classes to paths and circles
   this.svg.selectAll('path').attr('class', d => {
@@ -414,20 +345,20 @@ DataMap.prototype.zoomToState = function(stateID, d) {
       .duration(750)
       .attr('transform', '');
   } else {
-    let gutter = maxUSbounds.height * 0.05; // map "pixels" between edge of state and edge of svg stage
+    const gutter = maxUSbounds.height * 0.05; // map "pixels" between edge of state and edge of svg stage
 
-    let viewboxWidth = maxUSbounds.width;
-    let viewboxHeight = maxUSbounds.height;
+    const viewboxWidth = maxUSbounds.width;
+    const viewboxHeight = maxUSbounds.height;
 
-    let featBounds = this.pathProjection.bounds(d);
-    let featWest = featBounds[0][0] - gutter;
-    let featNorth = featBounds[0][1] - gutter;
+    const featBounds = this.pathProjection.bounds(d);
+    const featWest = featBounds[0][0] - gutter;
+    const featNorth = featBounds[0][1] - gutter;
 
-    let featEast = Number(featBounds[1][0] + gutter);
-    let featSouth = Number(featBounds[1][1] + gutter);
-    let featWidth = featEast - featWest;
-    let featHeight = featSouth - featNorth;
-    let newScale = Math.min(
+    const featEast = Number(featBounds[1][0] + gutter);
+    const featSouth = Number(featBounds[1][1] + gutter);
+    const featWidth = featEast - featWest;
+    const featHeight = featSouth - featNorth;
+    const newScale = Math.min(
       viewboxWidth / featWidth,
       viewboxHeight / featHeight
     );
@@ -438,9 +369,9 @@ DataMap.prototype.zoomToState = function(stateID, d) {
     translateX += (viewboxWidth - featWidth * newScale) / 2;
     translateY += (viewboxHeight - featHeight * newScale) / 2;
 
-    let scale = newScale;
+    const scale = newScale;
 
-    let translate = [translateX, translateY];
+    const translate = [translateX, translateY];
 
     this.g
       .transition()
@@ -455,21 +386,21 @@ DataMap.prototype.zoomToState = function(stateID, d) {
  */
 DataMap.prototype.sortCircles = function() {
   this.svg.selectAll('circle').sort((a, b) => {
-    return d3.descending(a.value, b.value);
+    return d3_sort_descending(a.value, b.value);
   });
 };
 
 /**
  * Creates (and updates) the map's legend
- * @param {d3.svg} svg - the element created by d3.select()
+ * @param {d3.svg} svg - the element created by select()
  * @param {Function} scale
  * @param {*} quantize
- * @param {Number} quantiles
+ * @param {number} quantiles
  */
 function drawStateLegend(svg, scale, quantize, quantiles) {
-  let legendWidth = 40;
-  let legendBar = 35;
-  let ticks = quantize.ticks(quantiles);
+  const legendWidth = 40;
+  const legendBar = 35;
+  const ticks = quantize.ticks(quantiles);
   // .ticks() returns an array of the values at the various breaking points
   // The number of ticks (quantiles) is just a guide.
   // If the data range is more evenly split into one or two above this number, it will be.
@@ -477,7 +408,7 @@ function drawStateLegend(svg, scale, quantize, quantiles) {
   // instead of $750K, $1.5M, $2.25M, $3M
 
   // Create the legend itself
-  let legend = svg
+  const legend = svg
     .attr('width', legendWidth * ticks.length)
     .selectAll('g.legend')
     .data(ticks)
@@ -499,7 +430,7 @@ function drawStateLegend(svg, scale, quantize, quantiles) {
     });
 
   // Now add the text under each tile
-  let compactRule = chooseRule(ticks[Math.ceil(ticks.length / 2)]);
+  const compactRule = chooseRule(ticks[Math.ceil(ticks.length / 2)]);
 
   legend
     .append('text')
@@ -531,13 +462,13 @@ function drawStateLegend(svg, scale, quantize, quantiles) {
 
 /**
  * Used to determine the fill color based on the value, scale, and quantiles of the legend
- * @param {Number} value Value to be used to determine the color.
+ * @param {number} value Value to be used to determine the color.
  * @param {Function} legendScale_colors Determines the color scale for the current range of values.
- * @param {d3.scale} legendQuantize_colors Represents the range of data.
- * @param {Number} quantiles How many bars to include in the legend.
+ * @param {d3_scaleLinear} legendQuantize_colors Represents the range of data.
+ * @param {number} quantiles How many bars to include in the legend.
  * @param {*} colorZero Color code to use if the value is 0.
- * @param {Boolean} hasLegend Default: false. If a legend is being used, will "round" colors to those in the legend. If no legend is being used, colors will not be rounded.
- * @returns {String} 'fill' value based on the parameters provided.
+ * @param {boolean} hasLegend Default: false. If a legend is being used, will "round" colors to those in the legend. If no legend is being used, colors will not be rounded.
+ * @returns {string} 'fill' value based on the parameters provided.
  */
 function calculateStateFill(
   value,
@@ -548,7 +479,7 @@ function calculateStateFill(
   quantiles
 ) {
   let colorToReturn = colorZero;
-  let legendValueTicks = legendQuantize_colors.ticks(quantiles);
+  const legendValueTicks = legendQuantize_colors.ticks(quantiles);
 
   if (!value || value == 0) {
     // If the state value is zero, use the zero color (default) and be done
@@ -557,7 +488,7 @@ function calculateStateFill(
     // If we aren't using the legend we don't have to stick to its color stops
     colorToReturn = legendScale_colors(value);
   } else {
-    // Otherwise, let's figure out which legend color we should use
+    // Otherwise, const s figure out which legend color we should use
     // Let's change the default to the highest color because we're checking if each value is less than each legend block
     colorToReturn = legendScale_colors(
       legendValueTicks[legendValueTicks.length - 1]
@@ -578,13 +509,13 @@ function calculateStateFill(
 }
 
 /**
- *
- * @param {Number} value
+ * Only needed if we switch to bubbles again
+ * @param {number} value
  * @param {Array} valueRange
  * @param {int} quantiles
  * @param {Array} circleSizeRange
- * @param {Boolean} hasLegend
- */
+ * @param {boolean} hasLegend
+ * /
 function calculateCircleSize(
   value,
   valueRange,
@@ -592,8 +523,8 @@ function calculateCircleSize(
   quantiles,
   hasLegend = false
 ) {
-  let sizeToReturn = 0;
-  // let legendValueTicks = legendQuantize_sizes.ticks(quantiles);
+  const sizeToReturn = 0;
+  // const legendValueTicks = legendQuantize_sizes.ticks(quantiles);
 
   if (!value || value == 0) {
     // If the state value is zero, use the zero color (default) and be done
@@ -604,13 +535,13 @@ function calculateCircleSize(
     // TODO - this
   } else {
     // How much is each step in the value range?
-    let valueStepValue = (valueRange[1] - valueRange[0]) / quantiles;
+    const valueStepValue = (valueRange[1] - valueRange[0]) / quantiles;
     // How much is each step in the size range?
-    let sizeStepValue = (sizeRange[1] - sizeRange[0]) / quantiles;
+    const sizeStepValue = (sizeRange[1] - sizeRange[0]) / quantiles;
 
     // Let's break the value and size ranges into steps
-    let valueSteps = [];
-    let sizeSteps = [];
+    const valueSteps = [];
+    const sizeSteps = [];
     // Until we've made enough steps (i < quantiles),
     // Assign the next step value to the lowest value in the range times the number of the loop
     for (let i = 0; i < quantiles; i++) {
@@ -635,14 +566,14 @@ function calculateCircleSize(
   }
 
   return `${sizeToReturn}px`;
-}
+}*/
 
 /**
  * Used to adjust scales so the higher values don't skew the range / blow the curve,
  * to show more variation in our map colors.
- * @param {Number} minValue The smaller number / the starting point of the return value.
- * @param {Number} maxValue The largest number on the scale.
- * @returns {Number} A new maxValue about half-way between minValue and maxValue
+ * @param {number} minValue The smaller number / the starting point of the return value.
+ * @param {number} maxValue The largest number on the scale.
+ * @returns {number} A new maxValue about half-way between minValue and maxValue
  * @example trimmedMaxValue(10, 100); // 55
  */
 function trimmedMaxValue(minValue, maxValue) {
@@ -659,8 +590,7 @@ function trimmedMaxValue(minValue, maxValue) {
  */
 function buildStateTooltips(svg, path, instance) {
   // Create and style the tooltip object itself
-  let tooltip = d3
-    .select('body')
+  const tooltip = select('body')
     .append('div')
     .attr('id', 'map-tooltip')
     .attr('class', 'tooltip tooltip--above tooltip--mouse data-map-tooltip')
@@ -671,49 +601,49 @@ function buildStateTooltips(svg, path, instance) {
   // Go through our svg/map and assign the mouse listeners to each path
   svg
     .selectAll('path, circle')
-    .on('mouseenter', function(d) {
-      let thisValue = instance.getStateValue(d.id);
+    .on('mouseenter', (e, d) => {
+      const thisValue = instance.getStateValue(d.id);
       if (thisValue && thisValue !== 0) {
         // If the value is <$0, we want to move the negative sign to in front of the dollar sign
-        let valueString =
+        const valueString =
           thisValue > 0
             ? '$' + Math.round(thisValue).toLocaleString()
             : '-$' + Math.abs(Math.round(thisValue).toLocaleString());
-        let html = tooltipTemplate({
-          name: fips.fipsByCode[d.id].STATE_NAME,
+        const html = tooltipTemplate({
+          name: fipsByCode[d.id].STATE_NAME,
           total: valueString
         });
         tooltip.style('display', 'block').html(html);
-        moveTooltip(tooltip);
+        moveTooltip(tooltip, e, d);
       }
     })
-    .on('mousemove', function(d) {
-      let thisValue = instance.getStateValue(d.id);
+    .on('mousemove', (e, d) => {
+      const thisValue = instance.getStateValue(d.id);
       if (thisValue && thisValue !== 0) {
-        let valueString =
+        const valueString =
           thisValue > 0
             ? '$' + Math.round(thisValue).toLocaleString()
             : '-$' + Math.abs(Math.round(thisValue).toLocaleString());
-        let html = tooltipTemplate({
-          name: fips.fipsByCode[d.id].STATE_NAME,
+        const html = tooltipTemplate({
+          name: fipsByCode[d.id].STATE_NAME,
           total: valueString
         });
-        moveTooltip(tooltip);
+        moveTooltip(tooltip, e, d);
         tooltip.style('display', 'block').html(html);
       } else {
         tooltip.style('display', 'none');
       }
     })
-    .on('click', function(d) {
-      let shouldClick = instance.opts.clickableFeatures;
+    .on('click', (e, d) => {
+      const shouldClick = instance.opts.clickableFeatures;
       if (!shouldClick) {
         return null;
       } else {
-        this.dispatchEvent(
+        d.statePath.dispatchEvent(
           new CustomEvent('STATE_CLICKED', {
             detail: {
-              abbr: fips.fipsByCode[d.id].STUSAB,
-              name: fips.fipsByCode[d.id].STATE_NAME,
+              abbr: fipsByCode[d.id].STUSAB,
+              name: fipsByCode[d.id].STATE_NAME,
               d: d
             },
             bubbles: true
@@ -730,8 +660,8 @@ function buildStateTooltips(svg, path, instance) {
 
   // Add the mouseleave listeners to the dom elements rather than relying on d3
   // (d3 kept converting mouseleave to mouseout for IE11 and they're different for IE)
-  let theLargeMap = document.querySelector('.election-map svg');
-  let theStatesPaths = theLargeMap.querySelectorAll('path');
+  const theLargeMap = document.querySelector('.election-map svg');
+  const theStatesPaths = theLargeMap.querySelectorAll('path');
 
   theLargeMap.addEventListener('mouseleave', () => {
     tooltip.style('display', 'none');
@@ -745,7 +675,7 @@ function buildStateTooltips(svg, path, instance) {
   // IE doesn't always recognize mouseout or mouseleave
   // When the toolip is visible and the window changes size,
   // the tooltip can jump to very different parts of the screen.
-  // So let's hide it on resize, just in case.
+  // So const s hide it on resize, just in case.
   window.addEventListener('resize', function() {
     tooltip.style('display', 'none');
   });
@@ -760,7 +690,7 @@ DataMap.prototype.chooseStateClasses = function(d, shapeType) {
   // For fills, if we're looking at the zoomed state, add 'zoomed',
   // Otherwise 'blur' it
   if (
-    this.focusedStateID == fips.fipsByCode[d.id].STUSAB &&
+    this.focusedStateID == fipsByCode[d.id].STUSAB &&
     shapeType != 'circle'
   )
     toReturn += ' zoomed';
@@ -774,17 +704,21 @@ DataMap.prototype.chooseStateClasses = function(d, shapeType) {
 
 /**
  * Controls the tooltip position and visibility, called on each state's mouseenter and mousemove
- * @param {HTMLElement} tooltip
+ * @param {HTMLElement} Selection - the D3 Selection
+ * @param {MouseEvent} e
+ * @param {Object} d
  */
-function moveTooltip(tooltip) {
+function moveTooltip(tooltip, e) { // Third parameter is d
   // Where's the pointer / where should the tooltip appear/move
-  let x = d3.event.pageX - tooltip[0][0].offsetWidth / 2;
-  let y = d3.event.pageY - tooltip[0][0].offsetHeight;
-  let bottomPointerHeight = '.8rem';
+  const x = e.pageX - tooltip._groups[0][0].offsetWidth / 2;
+  const y = e.pageY - tooltip._groups[0][0].offsetHeight;
+  // TODO: referencing the html element through _groups seems wrong
+
+  const bottomPointerHeight = '.8rem';
 
   // The dom whose height we need to measure
-  let theTooltipTitle = document.querySelector('#map-tooltip .tooltip__title');
-  let theTooltipValue = document.querySelector('#map-tooltip .tooltip__value');
+  const theTooltipTitle = document.querySelector('#map-tooltip .tooltip__title');
+  const theTooltipValue = document.querySelector('#map-tooltip .tooltip__value');
 
   // Measure those elements for our total height
   // IE doesn't handle mouseleave well so we'll set a value for it,
@@ -809,8 +743,10 @@ function moveTooltip(tooltip) {
  * @param {*} rule
  */
 function compactNumber(value, rule) {
-  let divisor = Math.pow(10, rule[1]);
-  return d3.round(value / divisor, 1).toString() + rule[0];
+  const divisor = Math.pow(10, rule[1]);
+  // return d3.round(value / divisor, 1).toString() + rule[0];
+  return Math.round(value/divisor).toFixed(1) + rule[0];
+  // return d3_scaleBandRound(value / divisor, 1).toString() + rule[0];
 }
 
 /**
@@ -826,14 +762,10 @@ function chooseRule(value) {
 /**
  * The html to go into the tooltips
  * @param {Object} obj
- * @param {String} obj.name - The state name to appear in the tooltip
- * @param {String} obj.total - The value for that state
+ * @param {string} obj.name - The state name to appear in the tooltip
+ * @param {string} obj.total - The value for that state
  */
 function tooltipTemplate(obj) {
   return `<div class="tooltip__title">${obj.name}</div>
     <div class="tooltip__value">${obj.total}</div>`;
 }
-
-module.exports = {
-  DataMap
-};

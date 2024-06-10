@@ -1,33 +1,28 @@
-'use strict';
-
 /**
  * Party Coordinated Expenditures datatable page
+ * {@link /data/party-coordinated-expenditures/}
  * ---------------------
  * Schedule F shows all special expenditures a national or state party committee
  * makes in connection with the general election campaigns of federal candidates.
  *
  */
+import { partyCoordinatedExpenditures as cols_partyCoordExpen } from '../modules/columns.js';
+import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+import { default as partyCoordinatedExpendituresTemplate } from '../templates/party-coordinated-expenditures.hbs';
 
-var $ = require('jquery');
-
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-
-var partyCoordinatedExpendituresTemplate = require('../templates/party-coordinated-expenditures.hbs');
-
-$(document).ready(function() {
-  var $table = $('#results');
-  new tables.DataTable($table, {
+$(function() {
+  const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Party coordinated expenditures',
     path: ['schedules', 'schedule_f'],
-    columns: columns.partyCoordinatedExpenditures,
+    columns: cols_partyCoordExpen,
     useExport: true,
     order: [[3, 'desc']],
     useFilters: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: tables.modalRenderFactory(
+      afterRender: modalRenderFactory(
         partyCoordinatedExpendituresTemplate
       )
     }

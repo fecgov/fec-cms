@@ -3,7 +3,7 @@
 */
 import Vue from 'vue/dist/vue.esm.js';
 
-import { availableDates, getTotalAdminFine } from './calc-admin-fines-logic';
+import { availableDates, getTotalAdminFine } from './calc-admin-fines-logic.js';
 
 // For each of the availableDates from the logic file,
 // take the availableDates[i] object and add the parameters we need for our Vue layout

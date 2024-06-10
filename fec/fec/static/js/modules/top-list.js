@@ -1,9 +1,6 @@
-'use strict';
+import { zeroPad } from './helpers.js';
 
-var $ = require('jquery');
-var helpers = require('./helpers');
-
-function TopList(selector, dataType) {
+export default function TopList(selector, dataType) {
   this.$element = $(selector);
   this.$topRaising = this.$element.find('.js-top-raising');
   this.$topSpending = this.$element.find('.js-top-spending');
@@ -21,7 +18,7 @@ function TopList(selector, dataType) {
 }
 
 TopList.prototype.zeroPad = function() {
-  helpers.zeroPad(this.$visibleList, '.figure__number', '.figure__decimals');
+  zeroPad(this.$visibleList, '.figure__number', '.figure__decimals');
 };
 
 TopList.prototype.handleToggle = function(e) {
@@ -53,8 +50,4 @@ TopList.prototype.showSpending = function() {
   this.$topType.text('spending');
   this.$visibleList = this.$topSpending;
   this.zeroPad();
-};
-
-module.exports = {
-  TopList: TopList
 };

@@ -1,10 +1,7 @@
-'use strict';
 
-var $ = require('jquery');
+import { default as Filter } from './filter-base.js';
 
-var Filter = require('./filter-base.js').Filter;
-
-function CheckboxFilter(elm) {
+export default function CheckboxFilter(elm) {
   Filter.call(this, elm);
   this.removable = this.$elm.data('removable') || false;
 
@@ -70,5 +67,3 @@ CheckboxFilter.prototype.handleClearFilters = function() {
     self.removeCheckbox({ target: this });
   });
 };
-
-module.exports = { CheckboxFilter: CheckboxFilter };

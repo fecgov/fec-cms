@@ -1,17 +1,14 @@
-'use strict';
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import { stub } from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+import { default as URI } from 'urijs';
 
-var $ = require('jquery');
-var URI = require('urijs');
-
-require('./setup')();
-
-var CycleSelect = require('../../static/js/modules/cycle-select').CycleSelect;
+import CycleSelect from '../../static/js/modules/cycle-select.js';
 
 function trim(text) {
   return text
@@ -20,8 +17,8 @@ function trim(text) {
 }
 
 function expectDisabled($elm, disabled) {
-  var $input = $elm.find('input');
-  var $span = $elm.find('span');
+  const $input = $elm.find('input');
+  const $span = $elm.find('span');
   if (disabled) {
     expect($input.prop('disabled')).to.be.ok;
     expect($span.hasClass('is-disabled')).to.be.true;
@@ -38,7 +35,7 @@ describe('cycle select', function() {
   });
 
   beforeEach(function() {
-    sinon.stub(CycleSelect.prototype, 'setUrl');
+    stub(CycleSelect.prototype, 'setUrl');
   });
 
   afterEach(function() {
@@ -62,7 +59,7 @@ describe('cycle select', function() {
     });
 
     it('changes the query string on change', function() {
-      this.cycleSelect.$elm.val('2014').change();
+      this.cycleSelect.$elm.val('2014').change(); // TODO: jQuery deprecation
       expect(CycleSelect.prototype.setUrl).to.have.been.calledWith(window.location.href + '?cycle=2014');
     });
   });
@@ -91,7 +88,7 @@ describe('cycle select', function() {
     });
 
     it('changes the query string on change', function() {
-      this.cycleSelect.$cycles.find('[name="cycle-toggle-cycle-1"]').val('2014').change();
+      this.cycleSelect.$cycles.find('[name="cycle-toggle-cycle-1"]').val('2014').change(); // TODO: jQuery deprecation
       expect(
         CycleSelect.prototype.setUrl
       ).to.have.been.calledWith(
@@ -100,7 +97,7 @@ describe('cycle select', function() {
     });
 
     it('disables cycles not included in context', function() {
-      window.context = {cycles: [2016]};
+      window.context = { cycles: [2016] };
       this.cycleSelect.initCyclesMulti(2016);
       var labels = this.cycleSelect.$cycles.find('label');
       expectDisabled(labels.eq(0), false);
@@ -109,7 +106,7 @@ describe('cycle select', function() {
     });
 
     it('disables all two year periods if context cycles is null', function() {
-      window.context = {cycles: null};
+      window.context = { cycles: null };
       this.cycleSelect.initCyclesMulti(null);
       var labels = this.cycleSelect.$cycles.find('label');
       expectDisabled(labels.eq(0), false);
@@ -131,7 +128,7 @@ describe('cycle select', function() {
     });
 
     it('changes the query string on change', function() {
-      this.cycleSelect.$elm.val('2014').change();
+      this.cycleSelect.$elm.val('2014').change(); // TODO: jQuery deprecation
       var url = URI(window.location.href);
       url.path('2014/');
       expect(CycleSelect.prototype.setUrl).to.have.been.calledWith(url.toString());

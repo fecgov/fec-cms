@@ -1,6 +1,6 @@
-'use strict';
+import { each, reduce } from 'underscore';
 
-var _ = require('underscore');
+import { default as stateJson } from '../data/state.json' assert { type: 'json' };
 
 function byField(values, key) {
   var getter =
@@ -9,7 +9,7 @@ function byField(values, key) {
       : function(val) {
           return val[key];
         };
-  return _.reduce(
+  return reduce(
     values,
     function(acc, val) {
       acc[getter(val)] = val;
@@ -19,14 +19,8 @@ function byField(values, key) {
   );
 }
 
-var fips = _.each(require('../data/state.json'), function(row) {
+export const fips = each(stateJson, function(row) {
   row.STATE = parseInt(row.STATE);
 });
-var fipsByCode = byField(fips, 'STATE');
-var fipsByState = byField(fips, 'STUSAB');
-
-module.exports = {
-  fips: fips,
-  fipsByCode: fipsByCode,
-  fipsByState: fipsByState
-};
+export const fipsByCode = byField(fips, 'STATE');
+export const fipsByState = byField(fips, 'STUSAB');

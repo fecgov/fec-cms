@@ -1,14 +1,11 @@
-'use strict';
+import { map as _map, range as _range } from 'underscore';
 
-var $ = require('jquery');
-var _ = require('underscore');
+// window.$ = window.jQuery = $;
 
-window.$ = window.jQuery = $;
+import { default as Filter } from './filter-base.js';
+import { default as cyclesTemplate } from '../../templates/election-cycles.hbs';
 
-var Filter = require('./filter-base.js').Filter;
-var cyclesTemplate = require('../../templates/election-cycles.hbs');
-
-function ElectionFilter(elm) {
+export default function ElectionFilter(elm) {
   Filter.call(this, elm);
 
   this.duration = parseInt(this.$elm.data('duration'));
@@ -45,7 +42,7 @@ ElectionFilter.prototype.fromQuery = function(query) {
     this.$cycles
       .find('input[value="' + cycle + ':' + full + '"]')
       .prop('checked', true)
-      .change();
+      .change(); // TODO: jQuery deprecation
   }
   return this;
 };
@@ -57,8 +54,8 @@ ElectionFilter.prototype.handleElectionChange = function(e) {
     return;
   }
   var election = parseInt($(e.target).val());
-  var cycles = _.range(election - this.duration + 2, election + 2, 2);
-  var bins = _.map(
+  var cycles = _range(election - this.duration + 2, election + 2, 2);
+  var bins = _map(
     cycles,
     function(cycle) {
       return {
@@ -82,7 +79,7 @@ ElectionFilter.prototype.handleElectionChange = function(e) {
     .find('input')
     .eq(0)
     .prop('checked', true)
-    .change();
+    .change(); // TODO: jQuery deprecation
 };
 
 ElectionFilter.prototype.handleCycleChange = function(e) {
@@ -91,9 +88,9 @@ ElectionFilter.prototype.handleCycleChange = function(e) {
     .split(':');
   this.$cycle
     .val(selected[0])
-    .change()
+    .change() // TODO: jQuery deprecation
     .attr('checked', true);
-  this.$full.val(selected[1]).change();
+  this.$full.val(selected[1]).change(); // TODO: jQuery deprecation
   this.setTag();
 };
 
@@ -112,5 +109,3 @@ ElectionFilter.prototype.setTag = function() {
   ]);
   this.loadedOnce = true;
 };
-
-module.exports = { ElectionFilter: ElectionFilter };

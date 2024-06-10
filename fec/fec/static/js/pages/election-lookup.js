@@ -1,8 +1,6 @@
-'use strict';
+// var lookup = require('../modules/election-search');
+import ElectionSearch from '../modules/election-search.js';
 
-var $ = require('jquery');
-var lookup = require('../modules/election-search');
-
-$(document).ready(function() {
-  new lookup.ElectionSearch('#election-lookup', true);
+$(function() {
+  new ElectionSearch('#election-lookup', true);
 });

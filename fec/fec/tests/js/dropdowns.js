@@ -1,16 +1,12 @@
-'use strict';
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import { spy } from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-/* global document, describe, before, beforeEach, after, afterEach, it */
-
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
-
-var $ = require('jquery');
-
-var Dropdown = require('../../static/js/modules/dropdowns').Dropdown;
+import Dropdown from '../../static/js/modules/dropdowns.js';
 
 function isOpen(dropdown) {
   return dropdown.isOpen &&
@@ -69,15 +65,15 @@ describe('dropdown', function() {
     });
 
     it('toggles', function() {
-      this.dropdown.$button.click();
+      this.dropdown.$button.click(); // TODO: jQuery deprecation
       expect(isOpen(this.dropdown)).to.be.true;
-      this.dropdown.$button.click();
+      this.dropdown.$button.click(); // TODO: jQuery deprecation
       expect(isClosed(this.dropdown)).to.be.true;
     });
 
     it('handles a check', function() {
       var checkbox = this.dropdown.$panel.find('#A');
-      checkbox.click();
+      checkbox.click(); // TODO: jQuery deprecation
       expect(checkbox.is(':checked')).to.be.true;
     });
 
@@ -107,8 +103,8 @@ describe('dropdown', function() {
 
     it('unchecks an input', function() {
       var checkbox = this.dropdown.$panel.find('#B');
-      checkbox.click();
-      checkbox.click();
+      checkbox.click(); // TODO: jQuery deprecation
+      checkbox.click(); // TODO: jQuery deprecation
       var dropdownItem = this.dropdown.$panel.find('.dropdown__item--selected');
       expect(dropdownItem.hasClass('is-checked')).to.be.false;
     });
@@ -125,8 +121,8 @@ describe('dropdown', function() {
 
     it('removes an unchecked input', function() {
       var checkbox = this.dropdown.$panel.find('#B');
-      checkbox.click();
-      checkbox.click();
+      checkbox.click(); // TODO: jQuery deprecation
+      checkbox.click(); // TODO: jQuery deprecation
       expect(checkbox.is(':checked')).to.be.false;
       this.dropdown.handleCheckboxRemoval(checkbox);
       var selectedItems = this.dropdown.$selected.find('.dropdown__item');
@@ -160,26 +156,26 @@ describe('dropdown', function() {
           '</div>' +
         '</fieldset>'
       );
-      sinon.spy(Dropdown.prototype, 'removePanel');
+      spy(Dropdown.prototype, 'removePanel');
       var dropdown = new Dropdown('.js-dropdown');
       expect(Dropdown.prototype.removePanel).to.have.been.called;
     });
 
     it('hides when clicking somewhere else', function() {
       this.dropdown.show();
-      this.dropdown.handleClickAway({target: 'other'});
+      this.dropdown.handleClickAway({ target: 'other' });
       expect(isClosed(this.dropdown)).to.be.true;
     });
 
     it('hides when focusing somewhere else', function() {
       this.dropdown.show();
-      this.dropdown.handleFocusAway({target: 'other'});
+      this.dropdown.handleFocusAway({ target: 'other' });
       expect(isClosed(this.dropdown)).to.be.true;
     });
 
     it('hides on ESC', function(){
       this.dropdown.show();
-      this.dropdown.handleKeyup({keyCode: 27});
+      this.dropdown.handleKeyup({ keyCode: 27 });
       expect(isClosed(this.dropdown)).to.be.true;
     });
   });
@@ -228,7 +224,7 @@ describe('dropdown', function() {
     });
 
     it('removal of tag does not delete non-removable checkbox', function() {
-      $(document.body).trigger('tag:removed', [{key: 'party-DEM'}]);
+      $(document.body).trigger('tag:removed', [{ key: 'party-DEM' }]);
       var selectedItems = this.dropdown.$selected.find('.dropdown__item');
       expect(selectedItems.length).to.equal(2);
     });

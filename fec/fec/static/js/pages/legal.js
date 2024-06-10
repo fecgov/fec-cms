@@ -1,7 +1,8 @@
-'use strict';
-
-var FilterPanel = require('../modules/filters/filter-panel').FilterPanel;
-var KeywordModal = require('../modules/keyword-modal').KeywordModal;
+import FilterPanel from '../modules/filters/filter-panel.js';
+import KeywordModal from '../modules/keyword-modal.js';
 
 new FilterPanel();
-new KeywordModal();
+
+if (document.querySelector('.js-keyword-modal')) {
+  new KeywordModal();
+}

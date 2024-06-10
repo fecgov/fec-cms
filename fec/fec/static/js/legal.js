@@ -1,7 +1,5 @@
-'use strict';
 
-var $ = require('jquery');
-var A11yDialog = require('a11y-dialog');
+import { default as A11yDialog } from 'a11y-dialog';
 
 /**
  * KeywordModal
@@ -12,10 +10,12 @@ var A11yDialog = require('a11y-dialog');
  *
  * NOTE: This is a slightly adapted version of the one in the web app for use
  * on the legal resources landing page. Rather than updating the window.location.search param
- * It actually submits the form to whichever URL its directed to
+ * it actually submits the form to whichever URL it's directed to
  */
 function KeywordModal() {
+  console.log('fec/fec/static/js/legal.js KeywordModal()');
   this.elm = document.querySelector('.js-keyword-modal');
+  console.log('  this.elm: ', this.elm);
   this.$elm = $(this.elm);
   this.$form = this.$elm.find('form');
   this.$fields = this.$elm.find(
@@ -52,7 +52,7 @@ KeywordModal.prototype.handleSubmit = function(e) {
     $(this).val();
   });
   this.$excludeField.val();
-  this.$form.submit();
+  this.$form.submit(); // TODO: jQuery deprecation? (.submit() )
 };
 
 /**

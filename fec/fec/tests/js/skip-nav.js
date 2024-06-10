@@ -1,15 +1,14 @@
-'use strict';
+// Common for all/most tests
+// import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+// import sinon from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var chai = require('chai');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+import SkipNav from '../../static/js/modules/skip-nav.js';
 
-var $ = require('jquery');
-
-var SkipNav = require('../../static/js/modules/skip-nav').Skipnav;
-
-var DOM = '<a class="skip-nav">Skip</a><main><h1>Welcome</h1></main>';
+const DOM = '<a class="skip-nav">Skip</a><main><h1>Welcome</h1></main>';
 
 describe('Skip nav link', function() {
   before(function() {
@@ -29,13 +28,13 @@ describe('Skip nav link', function() {
   });
 
   it('focuses on the target when clicked', function() {
-    var e = {type: 'click', preventDefault: function() {}};
+    var e = { type: 'click', preventDefault: function() {} }; // eslint-disable-line no-empty-function
     this.skipNav.focusOnTarget(e);
     expect($(document.activeElement).is(this.skipNav.$target)).to.be.true;
   });
 
   it('focuses on the target when enter pressed', function() {
-    var e = {keyCode: 13, preventDefault: function() {}};
+    var e = { keyCode: 13, preventDefault: function() {} }; // eslint-disable-line no-empty-function
     this.skipNav.focusOnTarget(e);
     expect($(document.activeElement).is(this.skipNav.$target)).to.be.true;
   });

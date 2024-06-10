@@ -1,15 +1,11 @@
-'use strict';
-
 /**
  * This calls `reactionFeedback(request)` in `/data/views.py `to post as a Github issue.
  * Previously implemented here (ported to this Django project):
  * https://github.com/18F/openFEC-web-app/blob/develop/openfecwebapp/views.py#L302
  */
-var $ = require('jquery');
-var helpers = require('../modules/helpers');
-var analytics = require('../modules/analytics');
-
-const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
+import { customEvent } from '../modules/analytics.js';
+import { buildAppUrl } from '../modules/helpers.js';
+import { loadRecaptcha } from '../modules/load-recaptcha.js';
 
 function ReactionBox(selector) {
   this.$element = $(selector);
@@ -24,7 +20,7 @@ function ReactionBox(selector) {
   this.name = this.$element.data('name');
   this.location = this.$element.data('location');
   this.path = window ? window.location.pathname : null;
-  this.url = helpers.buildAppUrl(['issue', 'reaction']);
+  this.url = buildAppUrl(['issue', 'reaction']);
 
   this.$element.on('click', '.js-reaction', this.submitReaction.bind(this));
   this.$element.on('click', '.js-reset', this.handleReset.bind(this));
@@ -40,7 +36,7 @@ function ReactionBox(selector) {
 
 ReactionBox.prototype.submitReaction = function(e) {
   this.reaction = $(e.target).data('reaction');
-  analytics.customEvent({
+  customEvent({
     eventName: 'fecCustomEvent',
     eventCategory: 'Reactions',
     eventAction: this.location + '-' + this.name + ': ' + this.reaction,
@@ -136,7 +132,7 @@ ReactionBox.prototype.handleReset = function() {
 /**
  * Document ready function called when document is loaded
  */
-$(document).ready(function() {
+$(function() {
   //find any reaction box(es) on the page
   var reactionBoxes = document.querySelectorAll('.reaction-box');
   var names = [];

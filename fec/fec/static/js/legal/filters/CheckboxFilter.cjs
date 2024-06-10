@@ -1,6 +1,7 @@
 const React = require('react');
 const PropTypes = require('prop-types');
-const Checkbox = require('./Checkbox');
+
+const Checkbox = require('./Checkbox.cjs');
 
 function CheckboxFilter(props) {
   return (

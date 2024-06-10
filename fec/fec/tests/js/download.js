@@ -1,18 +1,14 @@
-'use strict';
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import { stub } from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var MockDate = require('mockdate');
-var expect = chai.expect;
-chai.use(sinonChai);
-
-var $ = require('jquery');
-var moment = require('moment');
-
-require('./setup')();
-
-var download = require('../../static/js/modules/download');
+import { default as moment } from 'moment';
+import MockDate from 'mockdate';
+import { download, hydrate, DownloadContainer, DownloadItem } from '../../static/js/modules/download.js';
 
 function clearStorage() {
   Object.keys(window.localStorage).forEach(function(key) {
@@ -25,19 +21,19 @@ describe('helpers', function() {
 
   describe('download', function() {
     it('adds a pending download', function() {
-      var item = download.download('/1');
+      var item = download('/1');
       expect(item.$body).not.to.be.null;
     });
 
     it('is idempotent', function() {
-      var item1 = download.download('/1');
-      var item2 = download.download('/1');
+      var item1 = download('/1');
+      var item2 = download('/1');
       expect(item1.$body).not.to.be.null;
       expect(item2.$body).to.be.null;
     });
 
     it('focuses on the button', function() {
-      var item = download.download('/1', false, true);
+      var item = download('/1', false, true);
       expect(item.$button[0]).to.equal(document.activeElement);
     });
   });
@@ -51,7 +47,7 @@ describe('helpers', function() {
           downloadUrl: '/download/1'
         })
       );
-      var items = download.hydrate();
+      var items = hydrate();
       expect(items.length).to.equal(1);
       expect(items[0].$body).not.to.be.null;
     });
@@ -69,8 +65,8 @@ describe('DownloadItem', function() {
     });
 
     beforeEach(function() {
-      this.container = download.DownloadContainer.getInstance(document.body);
-      this.item = new download.DownloadItem('/v1/1/', this.container);
+      this.container = DownloadContainer.getInstance(document.body);
+      this.item = new DownloadItem('/v1/1/', this.container);
     });
 
     afterEach(function() {
@@ -102,7 +98,7 @@ describe('DownloadItem', function() {
           downloadUrl: downloadUrl
         })
       );
-      var item = new download.DownloadItem('/v1/1/', this.container);
+      var item = new DownloadItem('/v1/1/', this.container);
       expect(item.isPending).to.be.true;
       expect(item.timestamp).to.equal('2015-10-01');
       expect(item.downloadUrl).to.equal(downloadUrl);
@@ -111,23 +107,23 @@ describe('DownloadItem', function() {
 
   describe('refresh()', function() {
     beforeEach(function() {
-      this.container = download.DownloadContainer.getInstance(document.body);
-      this.item = new download.DownloadItem('/v1/1/', this.container);
+      this.container = DownloadContainer.getInstance(document.body);
+      this.item = new DownloadItem('/v1/1/', this.container);
     });
 
     beforeEach(function() {
       this.promise = $.Deferred();
-      sinon.stub($, 'ajax').returns(this.promise);
-      sinon.stub(download.DownloadItem.prototype, 'schedule');
-      sinon.stub(download.DownloadItem.prototype, 'finish');
-      sinon.stub(download.DownloadItem.prototype, 'handleServerError');
+      stub($, 'ajax').returns(this.promise);
+      stub(DownloadItem.prototype, 'schedule');
+      stub(DownloadItem.prototype, 'finish');
+      stub(DownloadItem.prototype, 'handleServerError');
     });
 
     afterEach(function() {
       $.ajax.restore();
-      download.DownloadItem.prototype.schedule.restore();
-      download.DownloadItem.prototype.finish.restore();
-      download.DownloadItem.prototype.handleServerError.restore();
+      DownloadItem.prototype.schedule.restore();
+      DownloadItem.prototype.finish.restore();
+      DownloadItem.prototype.handleServerError.restore();
     });
 
     it('sends an ajax request', function() {
@@ -135,7 +131,7 @@ describe('DownloadItem', function() {
       expect($.ajax).to.have.been.calledWith({
         method: 'POST',
         url: this.item.apiUrl,
-        data: JSON.stringify({filename: this.item.filename}),
+        data: JSON.stringify({ filename: this.item.filename }),
         contentType: 'application/json',
         dataType: 'json'
       });
@@ -143,13 +139,13 @@ describe('DownloadItem', function() {
 
     it('handles success on queued', function() {
       this.item.refresh();
-      this.promise.resolve({status: 'queued'});
+      this.promise.resolve({ status: 'queued' });
       expect(this.item.finish).not.to.have.been.called;
     });
 
     it('handles success on complete', function() {
       this.item.refresh();
-      this.promise.resolve({status: 'complete', url: '/download'});
+      this.promise.resolve({ status: 'complete', url: '/download' });
       expect(this.item.finish).to.have.been.calledWith('/download');
     });
 
@@ -175,23 +171,23 @@ describe('DownloadItem', function() {
 
 describe('DownloadContainer', function() {
   beforeEach(function() {
-    download.DownloadContainer.getInstance().destroy();
+    DownloadContainer.getInstance().destroy();
   });
 
   afterEach(clearStorage);
 
   it('shows the container on download', function() {
-    expect(download.DownloadContainer.instance).not.to.be.ok;
-    download.download('/1');
-    expect(download.DownloadContainer.instance).to.be.ok;
+    expect(DownloadContainer.instance).not.to.be.ok;
+    download('/1');
+    expect(DownloadContainer.instance).to.be.ok;
   });
 
   it('hides the container on download dismiss', function() {
-    var item1 = download.download('/1');
-    var item2 = download.download('/2');
+    var item1 = download('/1');
+    var item2 = download('/2');
     item1.close();
-    expect(download.DownloadContainer.instance).to.be.ok;
+    expect(DownloadContainer.instance).to.be.ok;
     item2.close();
-    expect(download.DownloadContainer.instance).not.to.be.ok;
+    expect(DownloadContainer.instance).not.to.be.ok;
   });
 });

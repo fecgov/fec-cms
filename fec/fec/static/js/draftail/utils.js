@@ -1,4 +1,4 @@
-function slugify(text) {
+export function slugify(text) {
   return text
     .toString()
     .toLowerCase()
@@ -8,5 +8,3 @@ function slugify(text) {
     .replace(/^-+/, '')
     .replace(/-+$/, '');
 }
-
-module.exports.slugify = slugify;

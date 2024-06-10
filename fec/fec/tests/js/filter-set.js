@@ -1,13 +1,7 @@
-'use strict';
+import './setup.js';
+import { expect } from 'chai';
 
-var chai = require('chai');
-var expect = chai.expect;
-
-var $ = require('jquery');
-
-require('./setup')();
-
-var FilterSet = require('../../static/js/modules/filters/filter-set').FilterSet;
+import FilterSet from '../../static/js/modules/filters/filter-set.js';
 
 describe('FilterSet', function() {
   describe('basic filter set', function() {
@@ -117,7 +111,6 @@ describe('FilterSet', function() {
       expect(Object.keys(this.filterSet.efilingFilters)).to.deep.equal(['cycle']);
       expect(Object.keys(this.filterSet.filters)).to.deep.equal(['cycle']);
     });
-
 
     it('does not activate filters if it has efiling filters', function() {
       this.filterSet.activateAll();

@@ -1,11 +1,11 @@
-const $ = require('jquery');
-const _ = require('underscore');
 const React = require('react');
+const _ = require('underscore');
 const URI = require('urijs');
-const Filters = require('./Filters');
-const SearchResults = require('./SearchResults');
-const Pagination = require('./Pagination');
-const Tags = require('./Tags');
+
+const Filters = require('./Filters.cjs');
+const SearchResults = require('./SearchResults.cjs');
+const Pagination = require('./Pagination.cjs');
+const Tags = require('./Tags.cjs');
 
 class LegalSearch extends React.Component {
   constructor(props) {

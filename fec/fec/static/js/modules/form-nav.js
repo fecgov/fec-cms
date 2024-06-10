@@ -1,10 +1,12 @@
-'use strict';
-
-/* FormNav
+/**
  * Submits the form on select change and clears out unnecessary params
  */
 
-function FormNav(form) {
+/**
+ *
+ * @param {jQuery Element} form
+ */
+export default function FormNav(form) {
   this.form = form;
   this.form.addEventListener('change', this.clearNamesIfNull.bind(this));
   this.form.addEventListener('submit', this.clearNamesIfNull.bind(this));
@@ -25,7 +27,5 @@ FormNav.prototype.clearNamesIfNull = function(e) {
     }
   }
 
-  if (e.type == 'change') this.form.submit();
+  if (e.type == 'change') this.form.submit(); // TODO: jQuery deprecation
 };
-
-module.exports = { FormNav: FormNav };

@@ -1,12 +1,10 @@
-'use strict';
 
-var $ = require('jquery');
+import initEvents from './events.js';
+const events = initEvents();
 
-var events = require('./events.js');
+const KEYCODE_SLASH = 191;
 
-var KEYCODE_SLASH = 191;
-
-var defaultOpts = {
+const defaultOpts = {
   placeHolderOptions: {
     candidates: 'Search candidates',
     committees: 'Search committees'
@@ -17,7 +15,7 @@ function onSelectChange($input, updatedText) {
   $input.attr('placeholder', updatedText).attr('aria-label', updatedText);
 }
 
-var Search = function($el, opts) {
+export default function Search($el, opts) {
   var $select = $el.find('.js-search-type'),
     $input = $el.find('input[type="text"]'),
     settings = $.extend({}, defaultOpts, opts);
@@ -34,9 +32,7 @@ var Search = function($el, opts) {
   $(document.body).on('keyup', function(e) {
     // Focus search on "/"
     if (e.keyCode === KEYCODE_SLASH) {
-      $input.first().focus();
+      $input.first().focus(); // TODO: jQuery deprecation
     }
   });
-};
-
-module.exports = Search;
+}

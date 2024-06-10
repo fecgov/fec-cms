@@ -1,15 +1,11 @@
-'use strict';
+import React from 'react';
+import { expect } from 'chai';
+import { EditorState } from 'draft-js';
 
-var React = require('react');
-var chai = require('chai');
-var draftjs = require('draft-js');
-var Enzyme = require('./setup');
+import './setup.js';
+import { shallow } from 'enzyme';
 
-var mount = Enzyme.mount;
-var shallow = Enzyme.shallow;
-var expect = chai.expect;
-var EditorState = draftjs.EditorState;
-var SansSerif = require('../../../static/js/draftail/SansSerif');
+import { default as SansSerif } from '../../../static/js/draftail/SansSerif.js';
 
 describe('draftail - SansSerif Block Component', function() {
   it('should build a SansSerif object for Draftail to Consume', function() {
@@ -22,7 +18,7 @@ describe('draftail - SansSerif Block Component', function() {
     var Decorator = SansSerif.decorator;
     var element = shallow(<Decorator>test</Decorator>);
     expect(element.childAt(0).text()).to.equal('test');
-    expect(element.type()).to.equal('span')
+    expect(element.type()).to.equal('span') // TODO: jQuery deprecation (.type())
   });
 
   it('the SansSerif source should make selected font sans serif', function(done) {
