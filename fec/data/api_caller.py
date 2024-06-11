@@ -82,9 +82,6 @@ def load_legal_search_results(query, query_type="all", offset=0, limit=20, **kwa
     if "statutes" in results:
         results["statutes_returned"] = len(results["statutes"])
 
-    if "regulations" in results:
-        results["regulations_returned"] = len(results["regulations"])
-
     if "advisory_opinions" in results:
         results["advisory_opinions_returned"] = len(results["advisory_opinions"])
 

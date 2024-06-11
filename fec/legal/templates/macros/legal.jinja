@@ -88,7 +88,7 @@
 {% endif %}
 <form id="{{ location }}-search" action="/data/legal/search/" autocomplete="off" class="search__container">
   <div class="combo combo--search {{ size }}">
-    {% set document_types = (('all', 'All'),('statutes', 'Statutes'),('regulations', 'Regulations'),('advisory_opinions', 'Advisory opinions'),('murs', 'Closed Matters Under Review')) %}
+    {% set document_types = (('all', 'All'),('statutes', 'Statutes'),('regulations', 'Regulations'),('advisory_opinions', 'Advisory opinions'),('murs', 'Closed Matters Under Review'), ('adrs', 'Alternative dispute resolutions'), ('admin_fines', 'Administrative fines')) %}
     <select class="search__select {{select_class}}" name="search_type" aria-label="Select a document type">
       {% for value, name in document_types %}
       <option value="{{ value }}" {% if result_type == value %}selected{% endif %}>{{ name }}</option>
@@ -106,10 +106,12 @@
 </form>
 {% endmacro %}
 
-{% macro no_results(display_name, result_type, query, fec_resources=None) %}
+{% macro no_results(display_name, result_type, query, search ,fec_resources=None) %}
 <div class="message message--no-icon">
   <h2 class="message__title">No results</h2>
+  {% if search == result_type or search == 'all' %}
   <p>Sorry, we didn&rsquo;t find any {{ display_name }} matching {% if query %}<span class="t-bold">{{ query }}</span>{% else %}your query{% endif %}.</p>
+  {% endif %}
   <div class="message--alert__bottom">
     <p>Think this was a mistake?</p>
     <ul class="list--buttons">
