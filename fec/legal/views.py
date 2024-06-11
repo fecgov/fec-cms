@@ -215,6 +215,7 @@ def legal_search(request):
     results['regulations'] = regulations
     results['total_regulations'] = ecfr_results.get('meta', {}).get(
                                                     'total_count', 0)
+    results["regulations_returned"] = results['total_regulations']
 
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
