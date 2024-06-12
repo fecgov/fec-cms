@@ -8,7 +8,7 @@
         {{recipient_name}}
       {{/if}}
     {{/panelRow}}
-    {{#panelRow "Recipient city and state"}}
+    {{#panelRow "Recipient city, state and ZIP code"}}
       {{recipient_city}}, {{recipient_state}}  {{zipCode recipient_zip}}
     {{/panelRow}}
     {{#panelRow "Beneficiary committee name"}}
@@ -72,7 +72,7 @@
     {{#panelRow "Treasurer"}}
       {{committee.treasurer_name}}
     {{/panelRow}}
-    {{#panelRow "Committee city and state"}}
+    {{#panelRow "Committee city, state and ZIP code"}}
       {{committee.city}}, {{committee.state}}  {{zipCode committee.zip}}
     {{/panelRow}}
   </table>
