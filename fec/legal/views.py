@@ -463,7 +463,6 @@ def legal_doc_search_statutes(request):
     })
 
 def get_legal_category_order(results, result_type):
-#def get_legal_category_order(results):
     """ Return categories in pre-defined order, moving categories with empty
         results to the end. Move chosen category(result_type) to top when not searching 'all'
     """
@@ -472,9 +471,9 @@ def get_legal_category_order(results, result_type):
     category_order = [x for x in categories if results.get("total_" + x, 0) > 0]  +\
         [x for x in categories if results.get("total_" + x, 0) == 0]
     
-    # Default to 'advisory_opinions' if result type is 'all', because we dont want 'all' in category_order 
+    # Default to 'advisory_opinions' first if result_type is 'all', because we dont want 'all' in category_order 
     result_type = "advisory_opinions" if result_type == 'all' else result_type
     # Move chosen search type to the top if not searching 'all'
-    #category_order.insert(0, category_order.pop(category_order.index(result_type)))
+    category_order.insert(0, category_order.pop(category_order.index(result_type)))
 
     return category_order
