@@ -1,7 +1,7 @@
 from django.test import Client
 from django.test import TestCase
 
-from fec import settings  # TODO: debts dates (remove the import with the flag)
+from fec import settings  # TODO: remove the import with the flags
 
 client = Client()
 
@@ -44,7 +44,7 @@ class TestDatatablesRender(TestCase):
 
     # TODO: remove the conditional with the flag
     if settings.FEATURES.get('h4_allocated_disbursements'):
-        def test_debts(self):
+        def test_allocated_federal_nonfederal_disbursements(self):
             response = client.get('/data/allocated-federal-nonfederal-disbursements/', follow=True)
             assert response.status_code == 200
 
@@ -55,6 +55,7 @@ class TestDatatablesRender(TestCase):
         assert response.status_code == 200
 
     # Debts
+
     # TODO: debts dates (remove the conditional with the flag)
     if settings.FEATURES.get('debts'):
         def test_debts(self):
@@ -102,3 +103,17 @@ class TestDatatablesRender(TestCase):
     def test_pac_party_reports(self):
         response = client.get('/data/reports/pac-party/', follow=True)
         assert response.status_code == 200
+
+    # National party accounts
+
+    def test_national_party_account_receipts(self):
+        # TODO: remove the conditional with the flag
+        if settings.FEATURES.get('nat_party_acct_receipts'):
+            response = client.get('/data/national-party-account-receipts/', follow=True)
+            assert response.status_code == 200
+
+    def test_national_party_account_disbursements(self):
+        # TODO: remove the conditional with the flag
+        if settings.FEATURES.get('nat_party_acct_disbursements'):
+            response = client.get('/data/national-party-account-disbursements/', follow=True)
+            assert response.status_code == 200

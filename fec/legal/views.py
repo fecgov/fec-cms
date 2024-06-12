@@ -214,7 +214,8 @@ def legal_search(request):
                             } for obj in ecfr_results['results']]
 
                 results['regulations'] = regulations
-                results["total_regulations"] = ecfr_results.get('meta', {}).get( 'total_count', 0)
+                results["total_regulations"] = ecfr_results.get('meta', {}).get(
+                                                                'total_count', 0)
                 results["regulations_returned"] =  '3' if results["total_regulations"] > 3 else results["total_regulations"]
 
     return render(request, 'legal-search-results.jinja', {
