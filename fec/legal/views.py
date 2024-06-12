@@ -186,8 +186,6 @@ def legal_search(request):
     Updated_ecfr_query_string = transform_ecfr_query_string(query)
     result_type = request.GET.get('search_type', 'all')
     results = {}
-    # ecfr_results = {}
-    # regulations = {}
 
     # Only hit the API if there's an actual query
     if query:
@@ -477,6 +475,6 @@ def get_legal_category_order(results, result_type):
     # Default to 'advisory_opinions' if result type is 'all', because we dont want 'all' in category_order 
     result_type = "advisory_opinions" if result_type == 'all' else result_type
     # Move chosen search type to the top if not searching 'all'
-    category_order.insert(0, category_order.pop(category_order.index(result_type)))
+    #category_order.insert(0, category_order.pop(category_order.index(result_type)))
 
     return category_order

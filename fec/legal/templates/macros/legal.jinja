@@ -106,7 +106,7 @@
 </form>
 {% endmacro %}
 
-{% macro no_results(display_name, result_type, query, search ,fec_resources=None) %}
+{% macro no_results(display_name, result_type, query, search, fec_resources=None) %}
 <div class="message message--no-icon">
   <h2 class="message__title">No results</h2>
   {% if search == result_type or search == 'all' %}
