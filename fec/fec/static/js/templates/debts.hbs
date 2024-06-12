@@ -19,7 +19,7 @@ This shows fields available on the Schedule D form.
       {{committee.treasurer_name}}
     {{/panelRow}}
     {{#panelRow "City and state"}}
-      {{committee.city}}, {{committee.state}}  {{committee.zip}}
+      {{committee.city}}, {{committee.state}}  {{zipCode committee.zip}}
     {{/panelRow}}
   </table>
 </div>
@@ -33,7 +33,7 @@ This shows fields available on the Schedule D form.
       {{/if}}
     {{/panelRow}}
     {{#panelRow "City and state"}}
-      {{creditor_debtor_city}}, {{creditor_debtor_state}}  {{creditor_debtor_zip}}
+      {{creditor_debtor_city}}, {{creditor_debtor_state}}  {{zipCode creditor_debtor_zip}}
     {{/panelRow}}
   </table>
 </div>

@@ -18,6 +18,7 @@ This shows all the fields available on the Schedule F form.
     {{#panelRow "Mailing Address"}}
       {{committee.street_1}}<br>
       {{committee.city}}, {{committee.state}} {{committee.zip}}
+      {{committee.city}}, {{committee.state}} {{zipCode committee.zip}}
     {{/panelRow}}
   </table>
 </div>
