@@ -466,13 +466,12 @@ def get_legal_category_order(results, result_type):
     """ Return categories in pre-defined order, moving categories with empty
         results to the end. Move chosen category(result_type) to top when not searching 'all'
     """
-    
-    categories = ["advisory_opinions", "murs", "regulations", "statutes", "adrs", "admin_fines"]
+    categories = ["admin_fines", "advisory_opinions", "adrs", "murs", "regulations", "statutes"]
     category_order = [x for x in categories if results.get("total_" + x, 0) > 0]  +\
         [x for x in categories if results.get("total_" + x, 0) == 0]
     
-    # Default to 'advisory_opinions' first if result_type is 'all', because we dont want 'all' in category_order 
-    result_type = "advisory_opinions" if result_type == 'all' else result_type
+    # Default to 'admin_fines' first if result_type is 'all', because we dont want 'all' in category_order 
+    result_type = "admin_fines" if result_type == 'all' else result_type
     # Move chosen search type to the top if not searching 'all'
     category_order.insert(0, category_order.pop(category_order.index(result_type)))
 
