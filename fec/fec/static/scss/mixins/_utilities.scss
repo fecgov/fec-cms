@@ -85,6 +85,14 @@
   width: 100%;
 }
 
+.u-break-titles {
+
+  li {
+  line-height: 1.4;
+  margin-bottom: u(1rem);
+  }
+}
+
 // u-icon-bg()
 //
 // Most basic mixin for using a variable svg as a background image
