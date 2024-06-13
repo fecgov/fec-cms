@@ -32,11 +32,13 @@
             {% set document_types = ({'all': 'All','statutes': 'Statutes','regulations': 'Regulations','advisory_opinions': 'Advisory opinions','murs': 'Closed Matters Under Review', 'adrs': 'Alternative dispute resolutions', 'admin_fines': 'Administrative fines'}) %}
             {% for category in category_order %}
               {% set category_title = document_types[category] %}
-                <li class="side-nav__item">
-                    <a class="side-nav__link" href="#results-{{ category|replace('_', '-') }}">
-                        {{ category_title }} ({{ results["total_" + category]|default(0) }})
-                </a>
-                </li>
+                  {% if result_type == category or result_type == 'all' %}
+                    <li class="side-nav__item">
+                        <a class="side-nav__link" href="#results-{{ category|replace('_', '-') }}">
+                            {{ category_title }} ({{ results["total_" + category]|default(0) }})
+                    </a>
+                    </li>
+                 {% endif %}
             {% endfor %}
           </ul>
         </nav>
