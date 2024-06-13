@@ -1,6 +1,326 @@
 <section id="committees" class="row" aria-hidden="true" role="tabpanel">
   <h2>Committees</h2>
   <p>The term <span class="term" data-term="political committee">committee</span> encompasses several different political groups that receive and spend money in federal elections.</p>
+  <div class="content__section--ruled t-sans" >
+    <div id="pac-comparator">
+      <h3>PAC Comparator</h3>
+    </div>
+    <style>
+      #pac-comparator .top-left {
+        float: left;
+        padding-right: 2rem;
+        position: relative;
+        width: 25%;
+
+        /* from Sketch */
+        border-right: 1px solid #979797;
+      }
+      #pac-comparator .top-right {
+        float: left;
+        padding-left: 2rem;
+        position: relative;
+        width: 75%;
+      }
+      #pac-comparator .controls-holder {
+        display: flex;
+        position: relative;
+      }
+      #pac-comparator .overlay__container {
+        min-height: 100px;
+      }
+      .typeaheads-holder {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+      }
+      .typeaheads-holder .ta {
+        margin-bottom: 1rem;
+        position: relative;
+        padding: 0 2.5rem;
+        width: 50%;
+      }
+      .typeaheads-holder .ta:first-child {
+        padding-left: 0;
+      }
+      .typeaheads-holder .ta:last-child {
+        padding-right: 0;
+      }
+      .typeaheads-holder:after {
+        content: "with";
+        display: block;
+        float: left;
+        left: 50%;
+        margin-left: -2rem;
+        padding-top: 4rem;
+        position: absolute;
+        text-align: center;
+        text-transform: uppercase;
+        top: 0;
+        width: 4rem;
+
+        /* from Sketch */
+        font-size: 14px;
+        color: #212121;
+        letter-spacing: -0.3px;
+        line-height: 16px;
+      }
+      .committees-holder .committee-details {
+        float: left;
+        min-height: 100px;
+        padding: 0 2.5rem;
+        width: 50%;
+      }
+      .committees-holder .committee-details:first-child {
+        padding-left: 0;
+      }
+      .committees-holder .committee-details:last-child {
+        padding-right: 0;
+      }
+      .committee-details h1 {
+        font-family: karla,sans-serif;
+        padding-left: 1.5rem;
+
+        /* from Sketch */
+        font-size: 14px;
+        color: #212121;
+        letter-spacing: -0.3px;
+      }
+      .committee-details h2 {
+        font-family: karla;
+        margin-bottom: 0;
+        padding-left: 1.5rem;
+        position: relative;
+
+        /* from Sketch */
+        font-size: 18px;
+        color: #212121;
+        letter-spacing: -0.38px;
+      }
+      .committee-details h3 {
+        font-family: karla,sans-serif;
+        padding-left: 1.5rem;
+
+        /* from Sketch */
+        font-size: 10px;
+        color: #5B616B;
+        letter-spacing: -0.22px;
+      }
+      .message__error {
+        /* from Sketch */
+        color: #CD2026;
+        font-family: Helvetica;
+        font-size: 12px;
+        letter-spacing: -0.25px;
+      }
+      .icon-pac {
+        border-radius: 50%;
+        display: inline-block;
+        height: 1rem;
+        position: absolute;
+        width: 1rem;
+      }
+      .icon-bar {
+        border-radius: 0;
+        height: .5rem;
+        min-width: 1px;
+        width: 1px;
+      }
+      .icon-pac.pac-0 {
+        /* Sketch */
+        background-color: #F77B42;
+      }
+      .icon-pac.pac-1 {
+        /* Sketch */
+        background-color: #36BDBB;
+      }
+      h2 .icon-pac {
+        left: 0;
+        top: 5px;
+      }
+      th .icon-pac {
+        position: relative;
+      }
+      table.sliders {
+        display: block;
+        font-family: karla,sans-serif;
+        width: 100%;
+      }
+      table.sliders th {
+        /* Sketch */
+        color: #212121;
+        font-size: 16px;
+        font-weight: bold;
+        letter-spacing: -0.34px;
+        line-height: 16px;
+        text-align: center;
+      }
+      table.sliders td, table.sliders th {
+        padding: 1rem;
+      }
+      table.sliders td.meters {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      table.sliders th.t-right-aligned {
+        text-align: right;
+      }
+      table.sliders thead tr:first-child th {
+        border-bottom: solid thin #112E51;
+        padding: .5em;
+      }
+      table.sliders thead tr:first-child th {
+        border-left: solid 1rem white;
+        border-right: solid 1rem white;
+      }
+      table.sliders thead th:first-child {
+        border-left: none;
+      }
+      table.sliders thead th:last-child {
+        border-right: none;
+      }
+      table.sliders tbody th {
+        font-weight: normal;
+
+        /* Sketch */
+        color: #000000;
+        font-size: 14px;
+        letter-spacing: -0.31px;
+        line-height: 13px;
+        text-align: right;
+      }
+      table.sliders tbody td:last-child, table.sliders thead tr:last-child th:last-child {
+        border-left: solid thin #979797;
+      }
+      table.sliders .slider {
+        position: relative;
+
+        /* Sketch */
+        height: 2px;
+        background-color: #E8E8E8;
+      }
+      table.sliders .slider.bars {
+        height: 1rem;
+      }
+      table.sliders .slider .icon-pac {
+        top: calc(-.5rem + 1px);
+        transition: left 1s;
+      }
+      table.sliders .slider .icon-bar.pac-0 {
+        top: 0;
+        transition: width 1s;
+      }
+      table.sliders .slider .icon-bar.pac-1 {
+        top: .5rem;
+        transition: width 1s;
+      }
+      table.sliders .t-right-aligned span {
+        display: block;
+        line-height: 1.1em;
+      }
+
+      table.sliders .ticks {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 0;
+        padding-right: 0;
+        margin-right: -2rem;
+        margin-left: -1.5rem;
+        position: relative;
+      }
+      table.sliders .ticks .tick {
+        display: inline-block;
+        font-weight: normal;
+        position: relative;
+        text-align: center;
+        width: 4rem;
+
+        /* Sketch */
+        color: #4A4A4A;
+        font-size: 12px;
+        letter-spacing: -0.29px;
+      }
+      table.sliders .ticks .tick:before {
+        background-color: #E8E8E8;
+        bottom: 100%;
+        content: "";
+        display: block;
+        height: 1rem;
+        left: 50%;
+        position: absolute;
+        width: 2px;
+      }
+      table.sliders .ticks .rule {
+        background-color: #E8E8E8;
+        height: 1px;
+        left: 2rem;
+        position: absolute;
+        top: .5rem;
+        width: calc(100% - 4rem);
+      }
+      table.sliders thead tr:last-child th {
+        padding-bottom: 0;
+      }
+      table.sliders tbody tr:first-child > * {
+        padding-top: 0;
+      }
+
+      .barsV {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      .barsV figure {
+        width: 25%;
+        text-align: center;
+      }
+      .barsV figure figcaption {
+        line-height: 1.25em;
+      }
+      .bar-v-group {
+        height: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+      }
+      .bar-v-group .icon-pac {
+        position: relative;
+      }
+      .icon-bar-v {
+        border-radius: 0;
+        height: 1px;
+        min-height: 1px;
+        width: 4rem;
+      }
+      .icon-bar-v label {
+        line-height: 1.1em;
+        padding-top: .25rem;
+        position: absolute;
+        top: .5rem;
+      }
+      .icon-bar-v.pac-0 label {
+        right: .5rem;
+        text-align: right;
+      }
+      .icon-bar-v.pac-1 label {
+        left: .5rem;
+        text-align: left;
+      }
+      .icon-bar-v label span {
+        display: block;
+        font-style: normal;
+      }
+      .icon-bar-v label span:first-child {
+        font-weight: bold;
+        font-size: 1.5rem;
+      }
+      .icon-bar-v label span:last-child {
+        font-size: 1.1rem;
+      }
+      .icon-bar-v label.above {
+        top: -35px;
+      }
+    </style>
+  </div>
   <h3>Search or browse data</h3>
   <div class="content__section--ruled-responsive t-sans">
     <ul>
