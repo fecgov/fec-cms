@@ -107,7 +107,7 @@ var employerColumns = [
     render: columnHelpers.buildTotalLink(
       ['receipts', 'individual-contributions'],
       function(data, type, row) {
-        if (row.employer) {
+        if (row.employer && row.employer !== 'N/A' ) {
           return {
             contributor_employer: row.employer
           };
