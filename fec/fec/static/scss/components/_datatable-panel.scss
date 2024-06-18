@@ -102,8 +102,12 @@
 .panel__term {
   font-weight: bold;
   letter-spacing: -.3px;
+  line-height: 1.4em;
   padding-right: u(2rem);
   vertical-align: top;
+}
+.panel__data {
+  line-height: 1.4em;
 }
 
 // Panel Navigation
