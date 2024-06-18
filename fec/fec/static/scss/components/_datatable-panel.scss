@@ -278,6 +278,10 @@
     td {
       padding-left: 0 !important;
       vertical-align: bottom;
+
+      &.panel__term, &.panel__data {
+        vertical-align: top;
+      }
     }
   }
 }
