@@ -1,128 +1,152 @@
-<div class="simple-table simple-table--responsive simple-table--display legal-search-results legal-mur data-container__datatable">
-  <div class="simple-table__header">
-    <div class="simple-table__header-cell cell--15 sorting sorting_{{ sort_class }}" id="js-sort-mur" aria-label="MUR Number: activate to sort column {{ sort_dir_option }}" aria-sort="{{ sort_dir }}">Case number</div>
-    <div class="simple-table__header-cell cell--15">Case name</div>
-    <div class="simple-table__header-cell">Case details and documents</div>
-  </div>
-  <div class="simple-table__row-group">
-  {% for mur in murs %}
-    <div class="simple-table__row legal-search-result">
-      <div class="simple-table__cell">
-        <div class="t-sans">
-          <span class="t-bold">MUR #{{ mur.no }}</span>
-        </div>
-        {% if mur.mur_type == 'archived' %}
-        <div class="legal-mur__archive"><span class="legal-mur__archive-icon"><span class="u-visually-hidden">Icon representing an archived case</span></span>Archived case</div>
-        {% endif %}
-      </div>
-      <div class="simple-table__cell">
-        <div class="t-sans">
-          {% if mur.mur_type == 'current' %}
-            <a title="{{ mur.name }}" href="/data/legal/matter-under-review/{{ mur.no }}">
-              {{ mur.name|upper }}
-            </a>
-          {% else %}
-            <a title="{{ mur.mur_name }}" href="/data/legal/matter-under-review/{{ mur.no }}">
-              {{ mur.mur_name|upper }}
-          {% endif %}
-          </a>
-        </div>
-      </div>
-      <div class="simple-table__cell no--pad">
-        {% if mur.mur_type == 'current' %}
-        <div class="u-margin--bottom u-padding--top--med u-margin--left"><strong>Election cycle(s):</strong> {{ '; '.join(mur['election_cycles'] | map('string') | unique | sort) }}</div>
-        {% endif %}
-        {% if mur.mur_type == 'current' %}
-        {# Archived MUR subjects are a tree-structure so we don't render them inline #}
-          <div class="u-margin--bottom u-margin--left">
-            <strong>Subject(s):</strong> {{ '; '.join(mur['subjects']) }}
-          </div>
-        {% endif %}
-        <div class="u-margin--top u-margin--bottom u-margin--left">
-        {% if mur.mur_type == 'current' %}
-          <strong>Disposition(s):</strong>
-          {# group disposition by disposition names #}
-          {% set disposition_dict = dict() %}
-          {% for disposition_record in mur.dispositions %}
-            {% set disposition = disposition_record.disposition %}
-            {% if( disposition_dict[disposition] ) %}
-              {# increment the respondents count for existing dispositions #}
-              {% do disposition_dict.update({disposition: disposition_dict[disposition] + 1 }) %}
-            {% else %}
-              {# set the count to 1 for new dispositions #}
-              {% do disposition_dict.update({disposition: 1}) %}
-            {% endif %}
-          {% endfor %}
-          {# for each unique disposition, display the count of respondents/records #}
-          {% for disposition in disposition_dict %}
-            {{ disposition }} ({{ disposition_dict[disposition] }} respondents){% if not loop.last %};&nbsp;{% endif %}
-          {% endfor %}
-        {% else %}
-          <strong>Disposition(s):</strong> Not available for archived cases
-        {% endif %}
-        </div>
-        <div class="legal-search-result__hit u-padding--left--small split__cell">
-          {% for document in mur.documents %}
-            {% set query_highlight = mur.document_highlights[loop.index0 | string]%}
-            {% if(query_highlight) %}
-              <div class="post--icon u-padding--top">
-                <span class="icon icon--inline--left i-document"></span>
-                <a href="{{document.url}}">
-                {% if mur.mur_type == 'current' %}
-                  {{ document.description }}
-                {% else %}
-                  {% if mur.get('documents', {}) | length == 1 %}
-                    Case document
-                  {% else %}
-                    Case documents, part {{ document.document_id }}
-                  {% endif %}
-                {% endif %}
-                </a>
-              </div>
-              {# show only first document highlight result #}
-              <ul>
-                  <li class="post--icon t-serif t-italic u-padding--top--med">
-                    &#8230;{{ query_highlight[0] | safe }}&#8230;
-                  </li>
-              </ul>
-              {# show additional document highlight results, if any #}
-              {% if(query_highlight|length > 1) %}
-              {% if mur.mur_type == 'current' %}
-                <div class="js-accordion u-margin--top" data-content-prefix="additional-result-{{ mur.no }}-{{loop.index0}}">
-              {% else %}
-                <div class="js-accordion u-margin--top u-padding--bottom" data-content-prefix="additional-result-{{ mur.no }}-{{loop.index0}}">
-              {% endif %}
-                <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ mur.no }}-{{loop.index0}}" aria-expanded="false">
-                  {% if(query_highlight|length == 2) %}
-                    1 more match
-                  {% elif(query_highlight|length > 2)  %}
-                    {{ query_highlight|length -1 }} more matches
-                  {% endif %}
-                </button>
-                  <div class="accordion__content results__content" aria-hidden="true">
-                      <ul>
-                        {% for highlight in query_highlight %}
-                          {% if(loop.index0 != 0) %}
-                            <li class="t-serif t-italic">&#8230;{{ highlight | safe }}&#8230;</li>
-                          {% endif %}
-                        {% endfor %}
-                      </ul>
-                  </div>
-              </div>
-              {% endif %}
-              {% if mur.mur_type == 'current' %}
-                <ul class="tags u-padding--bottom">
-                  <li class="tag__category tag__category--doc">
-                    <div class="tag tag--primary">{{ document.category }}</div>
-                  </li>
-                </ul>
-              {% endif %}
-              
-            {% endif %}
-          {% endfor %}
-        </div>
-      </div>
+<div class="panel__main legal-search-results">
+  <div class="overlay is-loading" {% if is_loading %}style="display:block;"{% else %}style="display:none;"{% endif %}></div>
+  <div class="simple-table simple-table--responsive simple-table--display legal-mur data-container__datatable">
+    <div class="simple-table__header">
+      <div class="simple-table__header-cell cell--15 sorting sorting_{{ sort_class }}" id="js-sort-mur" aria-label="MUR Number: activate to sort column {{ sort_dir_option }}" aria-sort="{{ sort_dir }}">Case number</div>
+      <div class="simple-table__header-cell cell--15">Case name</div>
+      <div class="simple-table__header-cell">Case details and documents</div>
     </div>
-  {% endfor %}
+    <div class="simple-table__row-group">
+    {% for mur in murs %}
+      <div class="simple-table__row legal-search-result">
+        <div class="simple-table__cell">
+          <div class="t-sans">
+            <span class="t-bold">MUR #{{ mur.no }}</span>
+          </div>
+          {% if mur.mur_type == 'archived' %}
+          <div class="legal-mur__archive"><span class="legal-mur__archive-icon"><span class="u-visually-hidden">Icon representing an archived case</span></span>Archived case</div>
+          {% endif %}
+        </div>
+        <div class="simple-table__cell">
+          <div class="t-sans">
+            {% if mur.mur_type == 'current' %}
+              <a title="{{ mur.name }}" href="/data/legal/matter-under-review/{{ mur.no }}">
+                {{ mur.name|upper }}
+              </a>
+            {% else %}
+              <a title="{{ mur.mur_name }}" href="/data/legal/matter-under-review/{{ mur.no }}">
+                {{ mur.mur_name|upper }}
+            {% endif %}
+            </a>
+          </div>
+        </div>
+        <div class="simple-table__cell no--pad">
+          {% if mur.mur_type == 'current' %}
+          <div class="u-margin--bottom u-padding--top--med u-margin--left"><strong>Election cycle(s):</strong> {{ '; '.join(mur['election_cycles'] | map('string') | unique | sort) }}</div>
+          {% endif %}
+          {% if mur.mur_type == 'current' %}
+          {# Archived MUR subjects are a tree-structure so we don't render them inline #}
+            <div class="u-margin--bottom u-margin--left">
+              <strong>Subject(s):</strong> {{ '; '.join(mur['subjects']) }}
+            </div>
+          {% endif %}
+          <div class="u-margin--top u-margin--bottom u-margin--left">
+          {% if mur.mur_type == 'current' %}
+            <strong>Disposition(s):</strong>
+            {# group disposition by disposition names #}
+            {% set disposition_dict = dict() %}
+            {% for disposition_record in mur.dispositions %}
+              {% set disposition = disposition_record.disposition %}
+              {% if( disposition_dict[disposition] ) %}
+                {# increment the respondents count for existing dispositions #}
+                {% do disposition_dict.update({disposition: disposition_dict[disposition] + 1 }) %}
+              {% else %}
+                {# set the count to 1 for new dispositions #}
+                {% do disposition_dict.update({disposition: 1}) %}
+              {% endif %}
+            {% endfor %}
+            {# for each unique disposition, display the count of respondents/records #}
+            {% for disposition in disposition_dict %}
+              {{ disposition }} ({{ disposition_dict[disposition] }} respondents){% if not loop.last %};&nbsp;{% endif %}
+            {% endfor %}
+          {% else %}
+            <strong>Disposition(s):</strong> Not available for archived cases
+          {% endif %}
+          </div>
+          <div class="legal-search-result__hit u-padding--left--small split__cell">
+            {# Check for set document categories #}
+            {% set filters_category_type = selected_doc_category_ids | length > 0 %}
+            {# Check for set keyword queries #}
+            {% set filters_keyword = query | length > 0 %}
+            
+            {# Only show documents when categories or keywords are set #}
+            {% if filters_category_type or filters_keyword %}
+            {% for document in mur.documents %}
+            
+              {# This will show documents in all 3 scenarios:
+                - When there is a keyword query and selected document categories
+                - When there is selected document categories and no keyword query
+                - When there is a keyword query and no selected document categories #}
+              {% set category_match = (filters_category_type and document.category_match) or not filters_category_type %}
+              {% set keyword_match = (filters_keyword and document.text_match) or not filters_keyword %}
+              {% set show_document = category_match and keyword_match  %}
+
+              {%if show_document %}
+                <div class="post--icon u-padding--top">
+                  <span class="icon icon--inline--left i-document"></span>
+                  <a href="{{document.url}}">
+                  {% if mur.mur_type == 'current' %}
+                    {{ document.description }}
+                  {% else %}
+                    {% if mur.get('documents', {}) | length == 1 %}
+                      Case document
+                    {% else %}
+                      Case documents, part {{ document.document_id }}
+                    {% endif %}
+                  {% endif %}
+                  </a>
+                </div>
+                {% set query_highlight = mur.document_highlights[loop.index0 | string]%}
+                {% if(query_highlight) %}
+                  {# show only first document highlight result #}
+                  <ul>
+                      <li class="post--icon t-serif t-italic u-padding--top--med">
+                        &#8230;{{ query_highlight[0] | safe }}&#8230;
+                      </li>
+                  </ul>
+                  {# show additional document highlight results, if any #}
+                  {% if(query_highlight|length > 1) %}
+                    {% if mur.mur_type == 'current' %}
+                      <div class="js-accordion u-margin--top" data-content-prefix="additional-result-{{ mur.no }}-{{loop.index0}}">
+                    {% else %}
+                      <div class="js-accordion u-margin--top u-padding--bottom" data-content-prefix="additional-result-{{ mur.no }}-{{loop.index0}}">
+                    {% endif %}
+                    <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ mur.no }}-{{loop.index0}}" aria-expanded="false">
+                      {% if(query_highlight|length == 2) %}
+                        1 more match
+                      {% elif(query_highlight|length > 2)  %}
+                        {{ query_highlight|length -1 }} more matches
+                      {% endif %}
+                    </button>
+                    <div class="accordion__content results__content" aria-hidden="true">
+                        <ul>
+                          {% for highlight in query_highlight %}
+                            {% if(loop.index0 != 0) %}
+                              <li class="t-serif t-italic">&#8230;{{ highlight | safe }}&#8230;</li>
+                            {% endif %}
+                          {% endfor %}
+                        </ul>
+                    </div>
+                  </div>
+                  {% endif %}
+                    
+                {% endif %}
+                {% if mur.mur_type == 'current' %}
+                    <ul class="tags u-padding--bottom">
+                      <li class="tag__category tag__category--doc">
+                        <div class="tag tag--primary">{{ document.category }}</div>
+                      </li>
+                    </ul>
+                {% endif %}
+              {% else %}
+              {# documents we skip #}
+              {%endif%}
+            {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
   </div>
 </div>

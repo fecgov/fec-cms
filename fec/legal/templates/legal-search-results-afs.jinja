@@ -26,21 +26,40 @@
 {% endblock %}
 
 {% block message %}
-<div class="data-container__tags">
+<div class="data-container__tags u-no-padding-left">
   <div class="row">
     <h3 class="tags__title">Viewing <span class="tags__count">{{ results.total_admin_fines }}</span>  filtered results for:</h3>
+  </div>
+  <div class="js-filter-tags data-container__tags u-no-padding-left">
+    <ul class="tags">
+      {% if query %}
+        <li data-tag-category="query" class="tag__category">
+          <div data-removable="true" class="tag__item">{{ query }}<button class="button js-close tag__remove" data-tag="query"><span class="u-visually-hidden">Remove</span></button></div>
+        </li>
+      {% endif %}
+      {% if case_no %}
+        <li data-tag-category="case_no" class="tag__category">
+          <div data-removable="true" class="tag__item">{{ case_no }}<button class="button js-close tag__remove" data-tag="case_no"><span class="u-visually-hidden">Remove</span></button></div>
+        </li>
+      {% endif %}
+      {% if af_name %}
+        <li data-tag-category="af_name" class="tag__category">
+          <div data-removable="true" class="tag__item">{{ af_name }}<button class="button js-close tag__remove" data-tag="af_name"><span class="u-visually-hidden">Remove</span></button></div>
+        </li>
+      {% endif %}
+    </ul>
   </div>
 </div>
 {% endblock %}
 
 {% block results %}
-{% with results=results %}
-
-{% include 'partials/legal-search-results-afs.jinja' %}
-{% endwith %}
-
-{% with results=results %}
-{% include 'partials/legal-pagination.jinja' %}
-{% endwith %}
-
+  {% with results=results %}
+    {% include 'partials/legal-pagination.jinja' %}
+  {% endwith %}
+  {% with results=results %}
+    {% include 'partials/legal-search-results-afs.jinja' %}
+  {% endwith %}
+  {% with results=results %}
+    {% include 'partials/legal-pagination.jinja' %}
+  {% endwith %}
 {% endblock %}
