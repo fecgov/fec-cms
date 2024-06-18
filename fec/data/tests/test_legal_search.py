@@ -126,7 +126,6 @@ class TestLegalSearch(TestCase):
         assert results['advisory_opinions_returned'] == 2
         assert results['statutes_returned'] == 4
 
-
     # Test 7: OK
     @mock.patch.object(api_caller, 'load_legal_search_results')
     def test_ao_landing_page(self, load_legal_search_results):
