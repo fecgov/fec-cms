@@ -39,8 +39,8 @@ def get_jobs():
     # Query usajobs API for all open FEC jobs, catch any connection errors to avoid server error
     try:
         response = requests.get(JOB_URL, headers=headers, params=querystring)
-    except ConnectionError:
-        return {'error': USAJOB_SEARCH_ERROR}
+    except ConnectionError as ex:
+        return {'error': USAJOB_SEARCH_ERROR + '(' + ex.__class__.__name__ + ')'}
     
     # Catch any non-200 responses
     if response.status_code != 200:
@@ -50,7 +50,7 @@ def get_jobs():
     try:
         responses = response.json()
         responses.get("SearchResult", {})['SearchResultItems']
-    except (KeyError, IndexError, TypeError, ValueError, json.decoder.JSONDecodeError) as ex:
+    except (Exception) as ex:
         return {'error': USAJOB_SEARCH_ERROR + '(' + ex.__class__.__name__ + ')'}
 
     # Query the codelist/hiringpaths endpoint for mapping map hiring-path code(s) to description(s)
