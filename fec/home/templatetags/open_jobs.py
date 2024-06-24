@@ -1,5 +1,6 @@
 import dateutil.parser
 import requests
+from requests.exceptions import ConnectionError
 import json
 
 from django import template
@@ -9,7 +10,7 @@ from fec.constants import USAJOBS_CODE_LIST as CODE_LIST
 JOB_URL = "https://data.usajobs.gov/api/Search"
 CODES_URL = "https://data.usajobs.gov/api/codelist/hiringpaths"
 USAJOB_SEARCH_ERROR = """
-USAJOBS is unavailable. Please visit <a href="https://www.usajobs.gov/">usajobs.gov</a> for more information.
+USAJOBS is unavailable. We are temporarily unable to post open FEC positions. Please visit <a href="https://www.usajobs.gov/">usajobs.gov</a> for more information.
 """
 register = template.Library()
 
@@ -35,14 +36,27 @@ def get_jobs():
         "cache-control": "no-cache",
     }
 
-    # query usajobs API for all open fec jobs
-    response = requests.get(JOB_URL, headers=headers, params=querystring)
+    # Query usajobs API for all open FEC jobs, catch any connection errors to avoid server error
+    try:
+        response = requests.get(JOB_URL, headers=headers, params=querystring)
+    except ConnectionError as ex:
+        return {'error': USAJOB_SEARCH_ERROR + '(' + ex.__class__.__name__ + ')'}
+    
+    # Catch any non-200 responses
     if response.status_code != 200:
         return {"error": USAJOB_SEARCH_ERROR}
-    responses = response.json()
 
-    # query usajobs API for list of all hiring-path codes
+    # Parse the JSON content of the response body and check that the JSON in the correct format for jobs listings.
+    try:
+        responses = response.json()
+        responses.get("SearchResult", {})['SearchResultItems']
+    except (Exception) as ex:
+        return {'error': USAJOB_SEARCH_ERROR + '(' + ex.__class__.__name__ + ')'}
+
+    # Query the codelist/hiringpaths endpoint for mapping map hiring-path code(s) to description(s)
     codes_response = requests.get(CODES_URL, headers=headers)
+         
+    # Catch any non-200 response on the codelists endpoint and load the alternative CODE_LIST constant
     if codes_response.status_code != 200:
         codes_responses = json.loads(CODE_LIST)
     else:
