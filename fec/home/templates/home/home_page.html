@@ -100,13 +100,12 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-  var canSkipPolyfills = ('fetch' in window && 'assign' in Object);
-  if (!canSkipPolyfills) {
-    var pfScriptElem = document.createElement('script');
-    pfScriptElem.async = false;
-    pfScriptElem.src = "{% asset_for_js 'polyfills.js' %}";
-    document.head.appendChild(pfScriptElem);
+<script>{# Currently checking for window.fetch and Object.assign #}
+  var browserIsCapable = ('fetch' in window && 'assign' in Object);
+  if (!browserIsCapable) {
+    var browserWarningElement = document.getElementById('browser_warning');
+    browserWarningElement.style.display = 'block';
+    window.scrollTo(0,0);
   }
 </script>
 <script src="{% asset_for_js 'home.js' %}"></script>
