@@ -234,8 +234,7 @@ var siteDataset = {
   }
 };
 
-/* When clicked, this will submit the query to the legal search form 
- */
+/* When clicked, this will submit the query to the legal search form */
 var legalDataset = {
   display: 'id',
   source: function(query, syncResults) {
