@@ -10,7 +10,6 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const fs = require('graceful-fs');
 
 const entries = {
-  polyfills: './fec/static/js/polyfills.js',
   init: './fec/static/js/init.js',
   'data-init': './fec/static/js/data-init.js',
   vendor: ['jquery', 'handlebars'],
@@ -183,8 +182,7 @@ module.exports = [
   {
     name: 'legal',
     entry: {
-      legalApp: './fec/static/js/legal/LegalApp.js',
-      polyfills: './fec/static/js/polyfills.js'
+      legalApp: './fec/static/js/legal/LegalApp.js'
     },
     output: {
       filename: '[name]-[hash].js',
