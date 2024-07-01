@@ -781,7 +781,7 @@ class AboutLandingPage(Page):
         ('sections', OptionBlock())
     ], null=True, use_json_field=True)
 
-    subpage_types = ['ResourcePage', 'DocumentFeedPage', 'ReportsLandingPage', 'OfficePage']
+    subpage_types = ['ResourcePage', 'DocumentFeedPage', 'ReportsLandingPage', 'OfficePage', 'CustomPage']
 
     content_panels = Page.content_panels + [
         FieldPanel('hero'),
