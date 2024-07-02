@@ -15,8 +15,8 @@ Template for national party accounts disbursements datatable details panel
         {{contributor_name}}{{! There's no id to link }}
       {{/if}}
     {{/panelRow}}
-    {{#panelRow "City and state"}}
-      {{contributor_city}}, {{contributor_state}}  {{contributor_zip}}
+    {{#panelRow "City, state and ZIP code"}}
+      {{contributor_city}}, {{contributor_state}}  {{zipCode contributor_zip}}
     {{/panelRow}}
     {{#panelRow "Occupation"}}
       {{contributor_occupation}}
