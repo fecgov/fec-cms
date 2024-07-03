@@ -99,6 +99,29 @@ class TestLegalSearch(TestCase):
         # Check if the transformation is correct
         self.assertEqual(updated_ecfr_query_string, expected_output)
 
+    # Test transform_simple_query_string function
+    def test_transform_simple_query_string(self):
+        # Define input query string
+        input_query_string = (
+            '((coordinated OR communications) OR (in-kind AND' +
+            ' contributions) OR ("independent expenditure")) AND' +
+            ' (-authorization)'
+        )
+
+        # Expected output after transformation
+        expected_output = (
+            '((coordinated|communications)|(in\\-kind +contributions)|' +
+            '("independent expenditure")) +(-authorization)'
+        )
+
+        # Apply transformation
+        updated_query_string = views.transform_simple_query_string(
+            input_query_string
+        )
+
+        # Check if the transformation is correct
+        self.assertEqual(updated_query_string, expected_output)
+
     # Test 5 : OK
     @mock.patch.object(api_caller, 'load_legal_search_results')
     def test_search_statutes(self, load_legal_search_results):
