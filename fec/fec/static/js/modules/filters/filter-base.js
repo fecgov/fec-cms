@@ -1,9 +1,9 @@
-import { escape as _escape, isArray as _isArray } from 'underscore';
+import { escape as _escape } from 'underscore';
 
 import { default as FilterControl } from './filter-control.js';
 
 export function ensureArray(value) {
-  return _isArray(value) ? value : [value];
+  return Array.isArray(value) ? value : [value];
 }
 
 export function prepareValue($elm, value) {

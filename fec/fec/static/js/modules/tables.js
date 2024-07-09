@@ -617,7 +617,7 @@ DataTable_FEC.prototype.checkFromQuery = function(){
       // Create a variable for matching checkbox
       let queryBox;
       // Handle val as array
-      if ($.isArray(val)){ // TODO: remove jQuery.isArray as it's been deprecated
+      if (Array.isArray(val)) {
           // iterate the val array
           val.forEach(i => {
             // Find matching checkboxes

@@ -7,7 +7,7 @@
 // TODO
 // TODO
 
-import { chain as _chain, isArray as _isArray, map as _map } from 'underscore';
+import { chain as _chain, map as _map } from 'underscore';
 
 let dataLayer = window.dataLayer;
 
@@ -55,7 +55,7 @@ export function sortQuery(query) {
   return _chain(query)
     .pairs()
     .map(function(pair) {
-      return [pair[0], _isArray(pair[1]) ? pair[1] : [pair[1]]];
+      return [pair[0], Array.isArray(pair[1]) ? pair[1] : [pair[1]]];
     })
     .reduce(function(memo, pair) {
       return memo.concat(

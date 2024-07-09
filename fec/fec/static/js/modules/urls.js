@@ -2,7 +2,6 @@ import {
   each as _each,
   extend as _extend,
   find as _find,
-  isArray as _isArray,
   isEqual as _isEqual,
   keys as _keys,
   union as _union
@@ -66,5 +65,5 @@ export function compareQuery(first, second, keys) {
 }
 
 export function ensureArray(value) {
-  return _isArray(value) ? value : [value];
+  return Array.isArray(value) ? value : [value];
 }
