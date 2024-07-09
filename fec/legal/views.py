@@ -181,28 +181,53 @@ def transform_ecfr_query_string(query_string):
     return query_string
 
 
+# Transform boolean queries for legal search simple_query_string
+# Query string:
+# ((coordinated OR communications) OR (in-kind AND contributions) OR
+# ("independent expenditure")) AND (-authorization)
+# API simple_query_string transformation:
+# ((coordinated|communications)|(in\-kind +contributions)|
+# ("independent expenditure")) +(-authorization)
+
+def transform_simple_query_string(query_string):
+
+    # Define the replacements for simple query string
+    replacements = [
+        (r' OR ', '|'),  # Replace OR with |
+        (r' AND ', ' +'),  # Replace AND with +
+        (r'(\b\w+)-(\w+\b)', r'\1\\-\2'),  # Escape hyphens in words
+    ]
+
+    # Apply replacements sequentially
+    for pattern, replacement in replacements:
+        query_string = re.sub(pattern, replacement, query_string)
+
+    return query_string
+
+
 def legal_search(request):
     query = request.GET.get('search', '')
-    Updated_ecfr_query_string = transform_ecfr_query_string(query)
+    updated_ecfr_query_string = transform_ecfr_query_string(query)
+    updated_simple_query_string = transform_simple_query_string(query)
     result_type = request.GET.get('search_type', 'all')
     results = {}
 
     # Only hit the API if there's an actual query
     if query:
-        results = api_caller.load_legal_search_results(query, result_type,
-                                                        limit=3)
-        
+        results = api_caller.load_legal_search_results(
+                  updated_simple_query_string, result_type, limit=3)
+
         # Only search regulations if result type is all or regulations
-        if result_type == 'all' or result_type == 'regulations':                                           
-            ecfr_results = ecfr_caller.fetch_ecfr_data(Updated_ecfr_query_string,
-                                                       limit=3, page=1)
+        if result_type == 'all' or result_type == 'regulations':
+            ecfr_results = ecfr_caller.fetch_ecfr_data(
+                           updated_ecfr_query_string, limit=3, page=1)
             if 'results' in ecfr_results:
 
                 regulations = [{
                             "doc_id": None,
                             "document_highlights": {},
                             "highlights": [obj['headings']['part'],
-                                        obj['full_text_excerpt']],
+                                           obj['full_text_excerpt']],
                             "name": obj['headings']['section'],
                             "no": obj['hierarchy']['section'],
                             "type": None,
@@ -216,7 +241,7 @@ def legal_search(request):
                 results['regulations'] = regulations
                 results["total_regulations"] = ecfr_results.get('meta', {}).get(
                                                                 'total_count', 0)
-                results["regulations_returned"] =  '3' if results["total_regulations"] > 3 else results["total_regulations"]
+                results["regulations_returned"] = '3' if results["total_regulations"] > 3 else results["total_regulations"]  # noqa: E501
 
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
@@ -231,9 +256,10 @@ def legal_search(request):
 def legal_doc_search_ao(request):
     results = {}
     query = request.GET.get('search', '')
+    updated_simple_query_string = transform_simple_query_string(query)
     offset = request.GET.get('offset', 0)
 
-    results = api_caller.load_legal_search_results(query, 'advisory_opinions',
+    results = api_caller.load_legal_search_results(updated_simple_query_string, 'advisory_opinions',
                                                    offset=offset)
 
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
@@ -247,6 +273,7 @@ def legal_doc_search_ao(request):
 
 def legal_doc_search_mur(request):
     query = request.GET.get('search', '')
+    updated_simple_query_string = transform_simple_query_string(query)
     offset = request.GET.get('offset', 0)
     limit = request.GET.get('limit', 20)
     case_no = request.GET.get('case_no', '')
@@ -266,7 +293,7 @@ def legal_doc_search_mur(request):
 
     # Call the function and unpack its return values
     results = api_caller.load_legal_search_results(
-        query, 'murs',
+        updated_simple_query_string, 'murs',
         offset=offset,
         limit=limit,
         case_no=case_no,
@@ -325,6 +352,7 @@ def legal_doc_search_mur(request):
 def legal_doc_search_adr(request):
     results = {}
     query = request.GET.get('search', '')
+    updated_simple_query_string = transform_simple_query_string(query)
     offset = request.GET.get('offset', 0)
     limit = request.GET.get('limit', 20)
     case_no = request.GET.get('case_no', '')
@@ -336,7 +364,7 @@ def legal_doc_search_adr(request):
     case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
 
     results = api_caller.load_legal_search_results(
-        query, 'adrs',
+        updated_simple_query_string, 'adrs',
         offset=offset,
         limit=limit,
         case_no=case_no,
@@ -390,12 +418,13 @@ def legal_doc_search_adr(request):
 def legal_doc_search_af(request):
     results = {}
     query = request.GET.get('search', '')
+    updated_simple_query_string = transform_simple_query_string(query)
     offset = request.GET.get('offset', 0)
     limit = request.GET.get('limit', 20)
     case_no = request.GET.get('case_no', '')
     af_name = request.GET.get('af_name', '')
     results = api_caller.load_legal_search_results(
-        query, 'admin_fines', offset=offset, limit=limit, case_no=case_no, af_name=af_name)
+        updated_simple_query_string, 'admin_fines', offset=offset, limit=limit, case_no=case_no, af_name=af_name)
 
     return render(request, 'legal-search-results-afs.jinja', {
         'parent': 'legal',
@@ -413,8 +442,8 @@ def legal_doc_search_regulations(request):
     results = {}
     query = request.GET.get('search', '')
     page = request.GET.get('page', 1)
-    Updated_ecfr_query_string = transform_ecfr_query_string(query)
-    ecfr_results = ecfr_caller.fetch_ecfr_data(Updated_ecfr_query_string,
+    updated_ecfr_query_string = transform_ecfr_query_string(query)
+    ecfr_results = ecfr_caller.fetch_ecfr_data(updated_ecfr_query_string,
                                                page=page)
 
     regulations = [{
@@ -450,9 +479,10 @@ def legal_doc_search_regulations(request):
 def legal_doc_search_statutes(request):
     results = {}
     query = request.GET.get('search', '')
+    updated_simple_query_string = transform_simple_query_string(query)
     offset = request.GET.get('offset', 0)
 
-    results = api_caller.load_legal_search_results(query, 'statutes',
+    results = api_caller.load_legal_search_results(updated_simple_query_string, 'statutes',
                                                    offset=offset)
 
     return render(request, 'legal-search-results-statutes.jinja', {
@@ -463,15 +493,16 @@ def legal_doc_search_statutes(request):
         'social_image_identifier': 'legal',
     })
 
+
 def get_legal_category_order(results, result_type):
     """ Return categories in pre-defined order, moving categories with empty
         results to the end. Move chosen category(result_type) to top when not searching 'all'
     """
     categories = ["admin_fines", "advisory_opinions", "adrs", "murs", "regulations", "statutes"]
-    category_order = [x for x in categories if results.get("total_" + x, 0) > 0]  +\
+    category_order = [x for x in categories if results.get("total_" + x, 0) > 0] +\
         [x for x in categories if results.get("total_" + x, 0) == 0]
-    
-    # Default to 'admin_fines' first if result_type is 'all', because we dont want 'all' in category_order 
+
+    # Default to 'admin_fines' first if result_type is 'all', because we dont want 'all' in category_order
     result_type = "admin_fines" if result_type == 'all' else result_type
     # Move chosen search type to the top if not searching 'all'
     category_order.insert(0, category_order.pop(category_order.index(result_type)))
