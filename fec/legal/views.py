@@ -186,42 +186,43 @@ def legal_search(request):
     Updated_ecfr_query_string = transform_ecfr_query_string(query)
     result_type = request.GET.get('search_type', 'all')
     results = {}
-    ecfr_results = {}
-    regulations = {}
 
     # Only hit the API if there's an actual query
     if query:
-        results = api_caller.load_legal_search_results(query, result_type,
-                                                       limit=3)
-        ecfr_results = ecfr_caller.fetch_ecfr_data(Updated_ecfr_query_string,
-                                                   limit=3, page=1)
+        results = api_caller.load_legal_search_results(query, result_type, limit=3)
 
-        if 'results' in ecfr_results:
-            regulations = [{
-                        "doc_id": None,
-                        "document_highlights": {},
-                        "highlights": [obj['headings']['part'],
-                                       obj['full_text_excerpt']],
-                        "name": obj['headings']['section'],
-                        "no": obj['hierarchy']['section'],
-                        "type": None,
-                        "url":  (
-                            "https://www.ecfr.gov/current/title-11/"
-                            f"chapter-{obj['hierarchy']['chapter']}/"
-                            f"section-{obj['hierarchy']['section']}"
-                        )
-                        } for obj in ecfr_results['results']]
+        # Only search regulations if result type is all or regulations
+        if result_type == 'all' or result_type == 'regulations':
+            ecfr_results = ecfr_caller.fetch_ecfr_data(Updated_ecfr_query_string, limit=3, page=1)
+            if 'results' in ecfr_results:
 
-    results['regulations'] = regulations
-    results['total_regulations'] = ecfr_results.get('meta', {}).get(
-                                                    'total_count', 0)
+                regulations = [{
+                            "doc_id": None,
+                            "document_highlights": {},
+                            "highlights": [obj['headings']['part'],
+                                           obj['full_text_excerpt']],
+                            "name": obj['headings']['section'],
+                            "no": obj['hierarchy']['section'],
+                            "type": None,
+                            "url":  (
+                                "https://www.ecfr.gov/current/title-11/"
+                                f"chapter-{obj['hierarchy']['chapter']}/"
+                                f"section-{obj['hierarchy']['section']}"
+                            )
+                            } for obj in ecfr_results['results']]
+
+                results['regulations'] = regulations
+                results["total_regulations"] = ecfr_results.get('meta', {}).get(
+                                                                'total_count', 0)
+                results["regulations_returned"] = ('3' if results["total_regulations"] > 3
+                                                   else results["total_regulations"])
 
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
         'query': query,
         'results': results,
         'result_type': result_type,
-        'category_order': get_legal_category_order(results),
+        'category_order': get_legal_category_order(results, result_type),
         'social_image_identifier': 'legal',
     })
 
@@ -244,9 +245,9 @@ def legal_doc_search_ao(request):
 
 
 def legal_doc_search_mur(request):
-    results = {}
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
+    limit = request.GET.get('limit', 20)
     case_no = request.GET.get('case_no', '')
     sort = request.GET.get('sort', '')
     case_respondents = request.GET.get('case_respondents', '')
@@ -254,6 +255,7 @@ def legal_doc_search_mur(request):
     case_max_open_date = request.GET.get('case_max_open_date', '')
     case_min_close_date = request.GET.get('case_min_close_date', '')
     case_max_close_date = request.GET.get('case_max_close_date', '')
+    case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
 
     # For JS sorting
     sort_dir = ('descending' if sort == '-case_no' or sort == '' or
@@ -261,21 +263,45 @@ def legal_doc_search_mur(request):
     sort_dir_option = 'descending' if sort_dir == 'ascending' else 'ascending'
     sort_class = sort_dir[0:-6]
 
+    # Call the function and unpack its return values
     results = api_caller.load_legal_search_results(
         query, 'murs',
         offset=offset,
+        limit=limit,
         case_no=case_no,
         sort=sort,
         case_respondents=case_respondents,
         case_min_open_date=case_min_open_date,
         case_max_open_date=case_max_open_date,
         case_min_close_date=case_min_close_date,
-        case_max_close_date=case_max_close_date
+        case_max_close_date=case_max_close_date,
+        case_doc_category_id=case_doc_category_ids,
     )
+
+    # Define MUR document categories dictionary
+    mur_document_categories = {
+        "1": "Conciliation and Settlement Agreements",
+        "2": "Complaint, Responses, Designation of Counsel and Extensions of Time",
+        "3": "General Counsel Reports, Briefs, Notifications and Responses",
+        "4": "Certifications",
+        "5": "Civil Penalties, Disgorgements and Other Payments",
+        "6": "Statements of Reasons"
+    }
+
+    # Return the selected document category name
+    mur_document_category_names = [mur_document_categories.get(id) for id in case_doc_category_ids]
+
+    for mur in results['murs']:
+        for index, doc in enumerate(mur['documents']):
+            # Checks if the selected document category filters matching the document categories
+            doc['category_match'] = mur["mur_type"] != "archived" and str(doc['doc_order_id']) in case_doc_category_ids
+            # Checks for document keyword text match
+            doc['text_match'] = str(index) in mur['document_highlights']
 
     return render(request, 'legal-search-results-murs.jinja', {
         'parent': 'legal',
         'results': results,
+        'mur_document_categories': mur_document_categories,
         'result_type': 'murs',
         'case_no': case_no,
         'sort': sort,
@@ -289,6 +315,9 @@ def legal_doc_search_mur(request):
         'case_max_close_date': case_max_close_date,
         'query': query,
         'social_image_identifier': 'legal',
+        'selected_doc_category_ids': case_doc_category_ids,
+        'selected_doc_category_names': mur_document_category_names,
+        'is_loading': True,  # Indicate that the page is loading initially
     })
 
 
@@ -296,21 +325,64 @@ def legal_doc_search_adr(request):
     results = {}
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
+    limit = request.GET.get('limit', 20)
     case_no = request.GET.get('case_no', '')
     case_respondents = request.GET.get('case_respondents', '')
+    case_min_open_date = request.GET.get('case_min_open_date', '')
+    case_max_open_date = request.GET.get('case_max_open_date', '')
+    case_min_close_date = request.GET.get('case_min_close_date', '')
+    case_max_close_date = request.GET.get('case_max_close_date', '')
+    case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
 
     results = api_caller.load_legal_search_results(
-        query, 'adrs', offset=offset, case_no=case_no,
-        case_respondents=case_respondents)
+        query, 'adrs',
+        offset=offset,
+        limit=limit,
+        case_no=case_no,
+        case_respondents=case_respondents,
+        case_min_open_date=case_min_open_date,
+        case_max_open_date=case_max_open_date,
+        case_min_close_date=case_min_close_date,
+        case_max_close_date=case_max_close_date,
+        case_doc_category_id=case_doc_category_ids,
+    )
+
+    # Define ADR document categories dictionary
+    adr_document_categories = {
+        "1001": "Settlement Agreements",
+        "1002": "Complaint, Responses, Designation of Counsel and Extensions of Time",
+        "1003": "ADR Memoranda, Notifications and Responses",
+        "1004": "Certifications",
+        "1005": "Civil Penalties, Disgorgements, Other Payments and Letters of Compliance",
+        "1006": "Statements of Reasons"
+    }
+
+    # Return the selected document category name
+    adr_document_category_names = [adr_document_categories.get(id) for id in case_doc_category_ids]
+
+    for adr in results['adrs']:
+        for index, doc in enumerate(adr['documents']):
+            # Checks if the selected document category filters matching the document categories
+            doc['category_match'] = str(doc['doc_order_id']) in case_doc_category_ids
+            # Checks for document keyword text match
+            doc['text_match'] = str(index) in adr['document_highlights']
 
     return render(request, 'legal-search-results-adrs.jinja', {
         'parent': 'legal',
         'results': results,
+        'adr_document_categories': adr_document_categories,
         'result_type': 'adrs',
         'case_no': case_no,
         'case_respondents': case_respondents,
+        'case_min_open_date': case_min_open_date,
+        'case_max_open_date': case_max_open_date,
+        'case_min_close_date': case_min_close_date,
+        'case_max_close_date': case_max_close_date,
         'query': query,
         'social_image_identifier': 'legal',
+        'selected_doc_category_ids': case_doc_category_ids,
+        'selected_doc_category_names': adr_document_category_names,
+        'is_loading': True,  # Indicate that the page is loading initially
     })
 
 
@@ -318,10 +390,11 @@ def legal_doc_search_af(request):
     results = {}
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
+    limit = request.GET.get('limit', 20)
     case_no = request.GET.get('case_no', '')
     af_name = request.GET.get('af_name', '')
     results = api_caller.load_legal_search_results(
-        query, 'admin_fines', offset=offset, case_no=case_no, af_name=af_name)
+        query, 'admin_fines', offset=offset, limit=limit, case_no=case_no, af_name=af_name)
 
     return render(request, 'legal-search-results-afs.jinja', {
         'parent': 'legal',
@@ -331,6 +404,7 @@ def legal_doc_search_af(request):
         'af_name': af_name,
         'query': query,
         'social_image_identifier': 'legal',
+        'is_loading': True,  # Indicate that the page is loading initially
     })
 
 
@@ -389,11 +463,17 @@ def legal_doc_search_statutes(request):
     })
 
 
-def get_legal_category_order(results):
+def get_legal_category_order(results, result_type):
     """ Return categories in pre-defined order, moving categories with empty
-        results to the end.
+        results to the end. Move chosen category(result_type) to top when not searching 'all'
     """
-    categories = ["advisory_opinions", "murs", "regulations", "statutes"]
+    categories = ["admin_fines", "advisory_opinions", "adrs", "murs", "regulations", "statutes"]
     category_order = [x for x in categories if results.get("total_" + x, 0) > 0] +\
         [x for x in categories if results.get("total_" + x, 0) == 0]
+
+    # Default to 'admin_fines' first if result_type is 'all', because we dont want 'all' in category_order
+    result_type = "admin_fines" if result_type == 'all' else result_type
+    # Move chosen search type to the top if not searching 'all'
+    category_order.insert(0, category_order.pop(category_order.index(result_type)))
+
     return category_order
