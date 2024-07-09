@@ -234,13 +234,33 @@ var siteDataset = {
   }
 };
 
+/* When clicked, this will submit the query to the legal search form */
+var legalDataset = {
+  display: 'id',
+  source: function(query, syncResults) {
+    syncResults([
+      {
+        id: helpers.sanitizeValue(query),
+        type: 'legal'
+      }
+    ]);
+  },
+  templates: {
+    suggestion: function(datum) {
+      return (
+        '<span><strong>Search legal resources:</strong> "' + datum.id + '"</span>'
+      );
+    }
+  }
+};
+
 var datasets = {
   candidates: candidateDataset,
   committees: committeeDataset,
   auditCandidates: auditCandidateDataset,
   auditCommittees: auditCommitteeDataset,
   allData: [candidateDataset, committeeDataset],
-  all: [candidateDataset, committeeDataset, individualDataset, siteDataset]
+  all: [candidateDataset, committeeDataset, individualDataset, siteDataset, legalDataset]
 };
 
 var typeaheadOpts = {
@@ -311,6 +331,11 @@ Typeahead.prototype.select = function(event, datum) {
       datum.id;
   } else if (datum.type === 'site') {
     this.searchSite(datum.id);
+  } else if (datum.type === 'legal') {
+    window.location =
+      this.url +
+      'legal/search/?search_type=all&search=' +
+      datum.id;
   } else {
     window.location = this.url + datum.type + '/' + datum.id;
   }
