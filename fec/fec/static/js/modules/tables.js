@@ -606,9 +606,9 @@ DataTable_FEC.prototype.parseParams = function(querystring){
     return obj;
 };
 
-// Activate checkbox filter fields that filterSet.js cannot find to activate (see commitee_types.jinja)
+// Activate checkbox filter fields that filterSet.js cannot find to activate (see committee_types.jinja)
 DataTable_FEC.prototype.checkFromQuery = function(){
-    // Create a variable representing the querysring key/vals as an object
+    // Create a variable representing the querystring key/vals as an object
     const queryFields = this.parseParams(this.getVars());
     // Create an array to hold checkbox html elements
     const queryBoxes = [];
