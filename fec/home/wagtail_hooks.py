@@ -6,7 +6,7 @@ from wagtail.admin.panels import TabbedInterface, ObjectList
 from wagtail import hooks
 
 from home.models import (Author, PressReleasePage, DigestPage,
-                     TipsForTreasurersPage, RecordPage, CustomPage)
+                         TipsForTreasurersPage, RecordPage, CustomPage)
 
 
 class AuthorSnippetView(SnippetViewSet):
@@ -19,6 +19,7 @@ class AuthorSnippetView(SnippetViewSet):
     search_fields = ('name', 'title', 'email')
     add_to_admin_menu = True  # When set to false, with wagtail5 this shows under snippet menu
 
+
 @hooks.register('get_updates_id(')
 def get_updates_id():
     page = CustomPage.objects.live().get(slug__exact="updates")
@@ -26,13 +27,14 @@ def get_updates_id():
     pg_id = page
     return pg_id
 
+
 @hooks.register('page_edit_handler')
 def page_edit_handler(model):
     return TabbedInterface([
         ObjectList(model.content_panels, heading='Content'),
         ObjectList(model.promote_panels, heading='Promote'),
     ])
-   
+
 
 class UpdatesSnippetView(IndexView):
     def get_context_data(self, **kwargs):

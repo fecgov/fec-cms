@@ -4,7 +4,7 @@ import git
 import sys
 import cfenv
 
-from invoke import run  # noqa F401
+from invoke import run  # noqa: F401
 from invoke import task
 from slacker import Slacker
 
@@ -63,7 +63,7 @@ def _detect_space(repo, branch=None, yes=False):
         return None
     print('Detected space {space}'.format(**locals()))
     if not yes:
-        run = input(  # noqa F811
+        run = input(  # noqa: F811
             'Deploy to space {space} (enter "yes" to deploy)? > '.format(**locals())
         )
         if run.lower() not in ['y', 'yes']:
@@ -157,7 +157,7 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
 
     # Allow proxy to connect to CMS via internal route
     add_network_policy = ctx.run(
-        'cf add-network-policy proxy cms'.format(cmd, space),  # noqa F523
+        'cf add-network-policy proxy cms'.format(cmd, space),  # noqa: F523
         echo=True,
         warn=True,
     )

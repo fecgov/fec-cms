@@ -99,7 +99,7 @@ def clean_id(value):
 
 @library.filter
 def fmt_year_range(year):
-    if type(year) == int:
+    if type(year) is int:
         return "{}–{}".format(year - 1, year)
     return None
 

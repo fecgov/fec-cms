@@ -10,9 +10,9 @@ bucket_url = 'https://cg-26646295-a781-431c-ab40-895616b7ea28.s3.amazonaws.com'
 def new_press_link(link):
     if len(re.findall(r'\d+', link)) > 0:
         new_url = bucket_url + '/fecgov-assets/news_releases/{0}/'.format(re.findall(r'\d+', link)[0])
-        return(new_url)
+        return (new_url)
     else:
-        return(link)
+        return (link)
 
 
 # using this one on staging for now

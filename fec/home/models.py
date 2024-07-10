@@ -589,7 +589,7 @@ class AlertForEmergencyUseOnly(Page):
             requires approval by Amy Kort or Wei Luo prior to deployment."
         )
     ]
-    
+
     def get_sitemap_urls(self, request=None):
         return []
 
@@ -668,7 +668,11 @@ class CustomPage(Page):
     ]
 
 # Adds a settings choice-field for conditionally adding a JS script to a CustomPage
-    conditional_js = models.CharField(max_length=255, choices=constants.conditional_js.items(), blank=True, null=True, help_text='Choose a JS script to add only to this page')
+    conditional_js = models.CharField(max_length=255,
+                                      choices=constants.conditional_js.items(),
+                                      blank=True,
+                                      null=True,
+                                      help_text='Choose a JS script to add only to this page')
     # Adds a settings field for making a custom title that displays in the Wagtail page explorer
     menu_title = models.CharField(max_length=255, blank=True)
     settings_panels = Page.settings_panels + [
@@ -924,7 +928,9 @@ class ResourcePage(Page):
         ('paragraph', blocks.RichTextBlock()),
         ('informational_message', SnippetChooserBlock(
             'home.EmbedSnippet',
-            template='blocks/embed-info-message.html', icon='warning', help_text="Use for an info or alert message banner")),
+            template='blocks/embed-info-message.html',
+            icon='warning',
+            help_text="Use for an info or alert message banner")),
     ], null=True, blank=True, use_json_field=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
     related_pages = StreamField([
@@ -1213,7 +1219,11 @@ class EmbedSnippet(models.Model):
     title = models.TextField()
     description = models.TextField()
     text = models.TextField()
-    banner_icon = models.TextField(blank=True, default='info', help_text="This field applies to informational-message snippets only. Input 'info' or 'alert'. Default is 'info'")
+    banner_icon = models.TextField(
+        blank=True,
+        default='info',
+        help_text="This field applies to informational-message snippets only. \
+            Input 'info' or 'alert'. Default is 'info'")
 
     panels = [
         FieldPanel('title'),
@@ -1353,14 +1363,20 @@ class OfficePage(Page):
             ], blank=True, required=False, help_text='Use for internal/external btns or document-links')),
             ('employee', blocks.StructBlock([
                 ('employee_name', blocks.CharBlock(blank=True, required=False)),
-                ('employee_title', EmployeeTitle(blank=True,  required=False,
-                                                 help_text='<b style="color:green">For footnote on title, use html block with &lt;sup&gt;1&lt;/sup&gt;</b>')),
+                ('employee_title', EmployeeTitle(
+                    blank=True,
+                    required=False,
+                    help_text='<b style="color:green">For footnote on title, \
+                        use html block with &lt;sup&gt;1&lt;/sup&gt;</b>')),
                 ('employee_image', ImageChooserBlock(blank=True, required=False)),
                 ('employee_bio', blocks.RichTextBlock(blank=True, required=False)),
             ], blank=True, required=False, null=True, default=[])),
             ('contact_info', ContactInfoBlock(blank=True)),
             ('extra_info', blocks.StreamBlock([
-                ('html', blocks.RawHTMLBlock(blank=True, required=False, help_text='<b style="color:green">For footnote, use &lt;sup&gt;1&lt;/sup&gt;</b>')),
+                ('html', blocks.RawHTMLBlock(
+                    blank=True,
+                    required=False,
+                    help_text='<b style="color:green">For footnote, use &lt;sup&gt;1&lt;/sup&gt;</b>')),
                 ('text', blocks.RichTextBlock(blank=True, required=False)),
              ], blank=True, required=False, null=True,
                     help_text='Use for sub-offices, staff-lists, footnotes or \
@@ -1399,7 +1415,10 @@ class ReportingDatesTable(Page):
             ])))
         ], blank=True))
     ], blank=True, use_json_field=True)
-    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))], null=True, blank=True, use_json_field=True)
+    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
+                            null=True,
+                            blank=True,
+                            use_json_field=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('reporting_dates_table'),
