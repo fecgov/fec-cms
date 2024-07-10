@@ -243,7 +243,7 @@ export const legalDataset = {
   source: function(query, syncResults) {
     syncResults([
       {
-        id: helpers.sanitizeValue(query),
+        id: sanitizeValue(query),
         type: 'legal'
       }
     ]);
