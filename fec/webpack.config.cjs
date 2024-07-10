@@ -236,7 +236,7 @@ module.exports = [
       // Don't clean any file whose name doesn't contain 'draftail' (while bundling this entry)
       clean: {
         keep(asset) {
-          return !asset.indexOf('draftail') < 0;
+          return asset.indexOf('draftail') < 0;
         }
       },
       filename: '[name]-[contenthash].js',
