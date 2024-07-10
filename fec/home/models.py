@@ -785,7 +785,7 @@ class AboutLandingPage(Page):
         ('sections', OptionBlock())
     ], null=True, use_json_field=True)
 
-    subpage_types = ['ResourcePage', 'DocumentFeedPage', 'ReportsLandingPage', 'OfficePage']
+    subpage_types = ['ResourcePage', 'DocumentFeedPage', 'ReportsLandingPage', 'OfficePage', 'CustomPage']
 
     content_panels = Page.content_panels + [
         FieldPanel('hero'),
@@ -1353,7 +1353,7 @@ class OfficePage(Page):
     offices = StreamField([
         ('office', blocks.StructBlock([
             ('office_title', blocks.CharBlock(required=True, blank=True, null=True, help_text='Required')),
-            ('hide_title', blocks.BooleanBlock(required=False, help_text='Should the offfice title be displayed?')),
+            ('hide_title', blocks.BooleanBlock(required=False, help_text='Should the office title be displayed?')),
             ('office_description', blocks.RichTextBlock(blank=True)),
             ('more_info', blocks.StreamBlock([
                ('html', blocks.RawHTMLBlock(blank=True)),

@@ -41,7 +41,6 @@ class AddSecureHeaders(MiddlewareMixin):
                 "'unsafe-eval'",
                 "https://code.jquery.com",
                 "https://dap.digitalgov.gov",
-                "https://polyfill.io/",
                 "https://www.google.com/recaptcha/",
                 "https://ssl.google-analytics.com",
                 "https://www.google-analytics.com",

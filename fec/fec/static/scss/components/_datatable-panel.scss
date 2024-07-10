@@ -102,8 +102,12 @@
 .panel__term {
   font-weight: bold;
   letter-spacing: -.3px;
+  line-height: 1.4em;
   padding-right: u(2rem);
   vertical-align: top;
+}
+.panel__data {
+  line-height: 1.4em;
 }
 
 // Panel Navigation
@@ -149,6 +153,11 @@
 
     .data-table {
       width: 100% !important;
+    }
+
+    &.legal-search-results {
+      width: 100% !important;
+      height: auto;
     }
   }
 
@@ -269,6 +278,10 @@
     td {
       padding-left: 0 !important;
       vertical-align: bottom;
+
+      &.panel__term, &.panel__data {
+        vertical-align: top;
+      }
     }
   }
 }

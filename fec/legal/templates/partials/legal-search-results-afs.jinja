@@ -1,46 +1,48 @@
-
-<table class="simple-table simple-table--display">
-  <thead>
-    <tr class="simple-table__header">
-      <th class="simple-table__header-cell cell--50">Case</th>
-      <th class="simple-table__header-cell">Report</th>
-      <th class="simple-table__header-cell">Closed date</th>
-      <th class="simple-table__header-cell">Final civil penalty or fine</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for admin_fine in results.admin_fines %}
-    <tr class="simple-table__row">
-      <td class="simple-table__cell">
-        <div class="t-sans">
-          <i class="icon i-folder icon--inline--left"></i>
-          <a class="t-bold" title="{{ admin_fine.name }}" href="/data/legal/administrative-fine/{{ admin_fine.no }}">AF #{{ admin_fine.no }}</a><br />
-            {{ admin_fine.name.upper() }}
-          {% if admin_fine.highlights %}
-            <div class="t-sans u-padding--top">Keyword match:</div>
-            <div class="legal-search-result__hit u-padding--left">
-              {% for highlight in admin_fine.highlights %}
-                <span class="t-serif t-italic">
-                    {{ highlight|safe }} &hellip;
-                </span>
-              {% endfor %}
-            </div>
-          {% endif %}
-        </div>
-      </td>
-      <td class="simple-table__cell">
-        <div class="t-sans">
-            {{ admin_fine.report_year }} {%if constants.report_type_full[admin_fine.report_type] %}{{ constants.report_type_full[admin_fine.report_type] }} {% else %} {{ admin_fine.report_type }}
+<div class="panel__main legal-search-results">
+  <div class="overlay is-loading" {% if is_loading %}style="display:block;"{% else %}style="display:none;"{% endif %}></div>
+  <table class="simple-table simple-table--display">
+    <thead>
+      <tr class="simple-table__header">
+        <th class="simple-table__header-cell cell--50">Case</th>
+        <th class="simple-table__header-cell">Report</th>
+        <th class="simple-table__header-cell">Closed date</th>
+        <th class="simple-table__header-cell">Final civil penalty or fine</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for admin_fine in results.admin_fines %}
+      <tr class="simple-table__row">
+        <td class="simple-table__cell">
+          <div class="t-sans">
+            <i class="icon i-folder icon--inline--left"></i>
+            <a class="t-bold" title="{{ admin_fine.name }}" href="/data/legal/administrative-fine/{{ admin_fine.no }}">AF #{{ admin_fine.no }}</a><br />
+              {{ admin_fine.name.upper() }}
+            {% if admin_fine.highlights %}
+              <div class="t-sans u-padding--top">Keyword match:</div>
+              <div class="legal-search-result__hit u-padding--left">
+                {% for highlight in admin_fine.highlights %}
+                  <span class="t-serif t-italic">
+                      {{ highlight|safe }} &hellip;
+                  </span>
+                {% endfor %}
+              </div>
             {% endif %}
-        </div>
-      </td>
-      <td class="simple-table__cell">
-        <div class="t-sans">{{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') }}</div>
-      </td>
-      <td class="simple-table__cell">
-          <div class="t-sans">{{ "${:,.2f}".format(admin_fine.final_determination_amount) }}</div>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+          </div>
+        </td>
+        <td class="simple-table__cell">
+          <div class="t-sans">
+              {{ admin_fine.report_year }} {%if constants.report_type_full[admin_fine.report_type] %}{{ constants.report_type_full[admin_fine.report_type] }} {% else %} {{ admin_fine.report_type }}
+              {% endif %}
+          </div>
+        </td>
+        <td class="simple-table__cell">
+          <div class="t-sans">{{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') }}</div>
+        </td>
+        <td class="simple-table__cell">
+            <div class="t-sans">{{ "${:,.2f}".format(admin_fine.final_determination_amount) }}</div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

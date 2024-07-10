@@ -44,12 +44,14 @@ $(function() {
   $('.js-accordion').each(function() {
     const contentPrefix = $(this).data('content-prefix') || 'accordion';
     const openFirst = $(this).data('open-first');
+    const reflectStatic = $(this).data('reflect-static');
     const selectors = {
       trigger: '.js-accordion-trigger'
     };
     const opts = {
       contentPrefix: contentPrefix,
       openFirst: openFirst,
+      reflectStatic: reflectStatic,
       collapseOthers:
         window.location.href.indexOf('president/presidential-map') > 0
           ? true

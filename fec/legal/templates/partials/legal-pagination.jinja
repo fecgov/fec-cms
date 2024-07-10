@@ -1,15 +1,92 @@
-<div class="results-info">
-<div class="dataTables_info">{{ results.offset | int + 1 }}&ndash;{{ results.offset | int + results[result_type + '_returned'] | int }} of about {{ results.total_all }}</div>
-<div class="dataTables_paginate">
-{% if results.offset | int > 0 %}
-<a class="paginate_button previous" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ results.offset | int - results.limit | int }}&sort={{ sort }}#results-{{ result_type }}">Previous</a>
-{% else %}
-<span class="paginate_button previous is-disabled">Previous</span>
-{% endif %}
-{% if results.offset | int + results.limit | int  < results.total_all | int %}
-<a class="paginate_button next" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ results.offset | int + results.limit | int }}&sort={{ sort }}#results-{{ result_type }}">Next</a>
-{% else %}
-<span class="paginate_button next is-disabled">Next</span>
-{% endif %}
+<div class="results-info u-border-top-base">
+    <div class="dataTables_length" class="results_length">
+      {% set limit = results.limit | int %}
+      <label for="results-length">Results per page: 
+        <select name="results_length" aria-controls="results" class="results-length">
+            <option value="20" {% if limit == 20 %}selected{% endif %}>20</option>
+            <option value="50" {% if limit == 50 %}selected{% endif %}>50</option>
+            <option value="100" {% if limit == 100 %}selected{% endif %}>100</option>
+        </select>
+      </label> 
+    </div>
+    <div class="dataTables_paginate">
+    {% set offset = results.offset | int %}
+    {% set total_all = results.total_all | int %}
+    {% set total_pages = (total_all + limit - 1) // limit %}
+    {% set current_page = (offset // limit) + 1 %}
+    {% set max_display_pages = 5 %}
+
+    {% set start_page = current_page - max_display_pages // 2 %}
+    {% set end_page = current_page + max_display_pages // 2 %}
+    {% if start_page < 1 %}
+      {% set end_page = end_page + (1 - start_page) %}
+      {% set start_page = 1 %}
+    {% endif %}
+    {% if end_page > total_pages %}
+      {% set start_page = start_page - (end_page - total_pages) %}
+      {% set end_page = total_pages %}
+    {% endif %}
+    {% if start_page < 1 %}
+      {% set start_page = 1 %}
+    {% endif %}
+
+    {% if current_page > 1 %}
+      <a class="paginate_button previous" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}{% for category_id in selected_doc_category_ids %}&case_doc_category_id={{ category_id }}{% endfor %}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ offset - limit }}&limit={{ limit }}&sort={{ sort }}#results-{{ result_type }}">Previous</a>
+    {% else %}
+      <span class="paginate_button previous is-disabled">Previous</span>
+    {% endif %}
+
+    {% for page in range(start_page, end_page + 1) %}
+      {% set page_offset = (page - 1) * limit %}
+      {% if page == current_page %}
+        <span class="paginate_button current">{{ page }}</span>
+      {% else %}
+        <a class="paginate_button" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}{% for category_id in selected_doc_category_ids %}&case_doc_category_id={{ category_id }}{% endfor %}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ page_offset }}&limit={{ limit }}&sort={{ sort }}#results-{{ result_type }}">{{ page }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if offset + limit < total_all %}
+      <a class="paginate_button next" href="/data/legal/search/{{ result_type }}/?search={{ query }}&case_respondents={{ case_respondents }}{% for category_id in selected_doc_category_ids %}&case_doc_category_id={{ category_id }}{% endfor %}&case_min_open_date={{ case_min_open_date }}&case_max_open_date={{ case_max_open_date }}&case_min_close_date={{ case_min_close_date }}&case_max_close_date={{ case_max_close_date }}&offset={{ offset + limit }}&limit={{ limit }}&sort={{ sort }}#results-{{ result_type }}">Next</a>
+    {% else %}
+      <span class="paginate_button next is-disabled">Next</span>
+    {% endif %}
+  </div>
+  <div class="dataTables_info">
+    Showing {{ results.offset | int + 1 }}&ndash;{{ results.offset | int + results[result_type + '_returned'] | int }} of {{ results.total_all }} results
+  </div>
 </div>
-</div>
+
+{% block scripts %}
+  <script>
+  // Update results per page limit 
+  // Shows overlay when page is loading
+  document.addEventListener('DOMContentLoaded', function() {
+    var resultsLengthSelects = document.querySelectorAll('.results-length');
+    var overlayContainer = document.querySelector('.overlay.is-loading');
+
+    function setLoadingState(isLoading) {
+      if (isLoading) {
+        overlayContainer.style.display = 'block';
+      } else {
+        overlayContainer.style.display = 'none';
+      }
+    }
+
+    resultsLengthSelects.forEach(function(select) {
+      select.addEventListener('change', function() {
+        var selectedLimit = this.value;
+        var urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('limit', selectedLimit);
+        urlParams.set('offset', 0);  // Reset to first page
+        setLoadingState(true);
+        window.location.search = urlParams.toString();
+      });
+    });
+
+    // Ends loading state after DOM content loaded
+    window.addEventListener('load', function() {
+      setLoadingState(false);
+    });
+  });
+  </script>
+{% endblock %}
