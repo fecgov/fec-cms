@@ -8,14 +8,14 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 // const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-let entries = {
-  polyfills: './fec/static/js/polyfills.js',
+/**
+ * Queue up the files for the entries for the homepage and the data pages
+ */
+const homeAndDataEntries = {
   global: './fec/static/js/global.js',
   home: {
-    import: './fec/static/js/pages/home.js',
     dependOn: 'global',
-    filename: 'YAY/home-filename.js',
-    runtime: 'my-home-runtime'
+    import: './fec/static/js/pages/home.js'
   },
   init: './fec/static/js/init.js',
   'data-init': './fec/static/js/data-init.js',
@@ -45,24 +45,43 @@ let entries = {
   },
 };
 
+/**
+ * Start the list of datatable pages
+ */
 const datatablePages = [];
 
+/**
+ * For every .js file in fec/static/js/pages,
+ */
 fs.readdirSync('./fec/static/js/pages').forEach(function(f) {
+  // Skip non-js files
   if (f.search('.js') < 0) {
     return;
-  } // Skip non-js files
+  }
+  // Grab the name (the filename before the first .)
   const name = f.split('.js')[0];
+  // Set the path to be fec/static/js/pages/ plus its filename
   const p = path.join('./fec/static/js/pages', f);
-  entries[name] = './' + p;
-//   // Note all datatable pages for getting the common chunk
-// if (['bythenumbers', 'dataviz-common', 'election-lookup'].includes(name))
+  // If the file name isn't 'home', create an entry for this filename and point it to this file
+  if (name != 'home')
+    homeAndDataEntries[name] = './' + p;
+  // // Note all datatable pages for getting the common chunk
+// // if (['bythenumbers', 'dataviz-common', 'election-lookup'].includes(name))
+  // if it's a datatable page, queue it into datatablePages
   if (name.search('datatable-') > -1) {
     datatablePages.push(`./fec/static/js/pages/${name}`);
   }
 });
 
-entries['datatable-common'] = datatablePages;
+// Create a single datatable-common entry for all of the datatablePages queued
+// TODO: is this still necessary
+// TODO: i.e. do we still need a -common file if the individual datatable pages have their own file
+// TODO: and share webpack chunks?
+homeAndDataEntries['datatable-common'] = datatablePages;
 
+/**
+ * Which source map type should devtool use?
+ */
 const sourceMapType = 'source-map'; // separate files
 // const sourceMapType = 'eval-source-map';
 const mode = process.argv[process.argv.indexOf('--mode') + 1] || 'development';
@@ -71,43 +90,23 @@ module.exports = [
   {
     // Data and Home
     name: 'data_and_home',
-    entry: entries,
-    externals: {
-      jquery: 'jQuery'
-    },
+    entry: homeAndDataEntries,
     devtool: mode == 'production' ? undefined : sourceMapType,
     optimization: {
-      runtimeChunk: true,
-      // chunkIds: 'named',
       emitOnErrors: true,
       innerGraph: true,
-      moduleIds: 'deterministic',
-      // concatenateModules: true, // REMOVE AFTER OPTIMIZATION? IF true, WE WANT THE DEFAULT
-      // flagIncludedChunks: true, // REMOVE AFTER OPTIMIZATION? IF true, WE WANT THE DEFAULT
+      moduleIds: 'named',
       removeAvailableModules: true, // TESTING
       splitChunks: {
         chunks: 'all',
         minChunks: 2,
-        // minSize: 200000,`
-        // maxSize: 1000000,
-        // maxAsyncSize: 1,
         cacheGroups: {
           vendors: {
-            test: /[\\/]node_modules[\\/](jquery|handlebars)[\\/]/,
+            test: /[\\/]node_modules[\\/](jquery)[\\/]/,
             name: 'vendors',
             enforce: true,
             priority: 100
-          },
-        //   defaultVendors: {
-        //     test: /[\\/]node_modules[\\/]/,
-        //     priority: -10,
-        //     reuseExistingChunk: true,
-        //   },
-        //   default: {
-        //     minChunks: 2,
-        //     priority: -20,
-        //     reuseExistingChunk: true,
-        //   }
+          }
         }
       }
     },
@@ -117,12 +116,7 @@ module.exports = [
       ]
     },
     resolve: {
-      // fallback: {
-      //   path: require.resolve('path-browserify')
-      // },
       extensions: ['.js'],
-      // fullySpecified: false,
-      // modules: [path.join(__dirname, '../node_modules')],
       alias: {
         // bloodhound: path.join(__dirname, '../node_modules/corejs-typeahead/dist/typeahead.jquery.min.js'),
         // typeahead: path.join(__dirname, '../node_modules/corejs-typeahead/dist/bloodhound.min.js'),
@@ -142,13 +136,7 @@ module.exports = [
         underscore: path.join(__dirname, '../node_modules/underscore/underscore-umd.js')
       }
     },
-    // // webpackChunkName: 'human-friendly'
     plugins: [
-      new WebpackManifestPlugin({
-        fileName: 'rev-manifest-js.json',
-        basePath: '/static/js/',
-        publicPath: '/static/js/'
-      }),
       new webpack.DefinePlugin({
         context: {}
       }),
@@ -156,14 +144,21 @@ module.exports = [
         $: 'jquery',
         jQuery: 'jquery'
       }),
-      // new BundleAnalyzerPlugin() // This will open an instance of BundleAnalyzerPlugin in a browser window
+      new WebpackManifestPlugin({
+        fileName: 'rev-manifest-js.json',
+        basePath: '/static/js/',
+        publicPath: '/static/js/',
+        generate: (seed, files, entries) => {
+          let toReturn = {};
+          for (let entry in entries) {
+            toReturn[`/static/js/${entry}.js`] = entries[entry];
+          }
+          return toReturn;
+        }
+      })
     ],
     output: {
-      // Clean applies to localhost and repeat builds.
-      // Don't touch 'legal' or 'draftail' files while bundling these entries
-      clean: {
-        keep: /(legal)|(draftail)/
-      },
+      // clean: // Only run clean on the last module.exports
       // [fullhash] change any content for any file, and all files get a single new hash
       // [chunkhash] change any content, and all chunks of that file shares a new hash (other files are untouched)
       // [contenthash] change content, and any changed chunk will get a new hash
@@ -179,13 +174,7 @@ module.exports = [
       'legal-app': './fec/static/js/legal/LegalApp.cjs'
     },
     output: {
-      // Clean applies to localhost and repeat builds.
-      // Don't clean any file whose name doesn't contain 'legal' (while bundling this entry)
-      clean: {
-        keep(asset) {
-          return asset.indexOf('legal') < 0;
-        }
-      },
+      // clean: // Only run clean on the last module.exports
       filename: '[name]-[contenthash].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
     },
@@ -232,13 +221,7 @@ module.exports = [
     name: 'draftail',
     entry: { draftail: './fec/static/js/draftail/App.js' },
     output: {
-      // Clean applies to localhost and repeat builds.
-      // Don't clean any file whose name doesn't contain 'draftail' (while bundling this entry)
-      clean: {
-        keep(asset) {
-          return asset.indexOf('draftail') < 0;
-        }
-      },
+      clean: true,
       filename: '[name]-[contenthash].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
     },

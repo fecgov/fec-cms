@@ -30,7 +30,7 @@ module.exports = function(config) {
       '**/node_modules/*'
     ],
 
-    frameworks: ['browserify', 'mocha', 'chai-sinon'],
+    frameworks: ['browserify', 'mocha', 'chai-sinon', 'webpack'],
 
     preprocessors: {
       'fec/fec/tests/js/*.js': ['webpack', 'babel'],
