@@ -6,7 +6,7 @@ const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
-// const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const js = './fec/static/js';
 const sharedManifestSeed = {};
 const sharedManifestPlugin = new WebpackManifestPlugin({
   fileName: 'rev-manifest-js.json',
@@ -26,10 +26,12 @@ const sharedManifestPlugin = new WebpackManifestPlugin({
  * Queue up the files for the entries for the homepage and the data pages
  */
 const homeAndDataEntries = {
-  global: './fec/static/js/global.js',
+  global: `${js}/global.js`,
   home: {
     dependOn: 'global',
-    import: './fec/static/js/pages/home.js'
+    import: `${js}/pages/home.js`
+  'candidate-single': `${js}/pages/candidate-single.js`,
+  'committee-single': `${js}/pages/committee-single.js`,
   },
   init: './fec/static/js/init.js',
   'data-init': './fec/static/js/data-init.js',
@@ -37,8 +39,6 @@ const homeAndDataEntries = {
   'calc-admin-fines': './fec/static/js/modules/calc-admin-fines.js',
   'data-elections': './fec/static/js/pages/elections.js',
   'data-landing': './fec/static/js/pages/data-landing.js',
-  'candidate-single': './fec/static/js/pages/candidate-single.js',
-  'committee-single': './fec/static/js/pages/committee-single.js',
   // 'aggregate-totals': './fec/static/js/widgets/aggregate-totals.js',
   'aggregate-totals-box': {
     import: './fec/static/js/widgets/aggregate-totals-box.js',
@@ -48,14 +48,14 @@ const homeAndDataEntries = {
   // 'contributions-by-state':
     // './fec/static/js/widgets/contributions-by-state.js',
   'contributions-by-state-box': {
-    import: './fec/static/js/widgets/contributions-by-state-box.js',
     filename: 'widgets/contributions-by-state-box.js',
     // publicPath: '/widgets/contributions-by-state-box.js'
+    import: `${js}/widgets/contributions-by-state-box.js`,
   },
   'pres-finance-map-box': {
-    import: './fec/static/js/widgets/pres-finance-map-box.js',
     filename: 'widgets/pres-finance-map-box.js',
     // publicPath: '/widgets/contributions-by-state-box.js'
+    import: `${js}/widgets/pres-finance-map-box.js`,
   },
 };
 
@@ -67,7 +67,7 @@ const datatablePages = [];
 /**
  * For every .js file in fec/static/js/pages,
  */
-fs.readdirSync('./fec/static/js/pages').forEach(function(f) {
+fs.readdirSync(`${js}/pages`).forEach(function(f) {
   // Skip non-js files
   if (f.search('.js') < 0) {
     return;
@@ -75,10 +75,10 @@ fs.readdirSync('./fec/static/js/pages').forEach(function(f) {
   // Grab the name (the filename before the first .)
   const name = f.split('.js')[0];
   // Set the path to be fec/static/js/pages/ plus its filename
-  const p = path.join('./fec/static/js/pages', f);
   // If the file name isn't 'home', create an entry for this filename and point it to this file
   if (name != 'home')
     homeAndDataEntries[name] = './' + p;
+  const p = path.join(`${js}/pages`, f);
   // // Note all datatable pages for getting the common chunk
 // // if (['bythenumbers', 'dataviz-common', 'election-lookup'].includes(name))
   // if it's a datatable page, queue it into datatablePages
@@ -174,7 +174,7 @@ module.exports = [
     // LEGAL ENTRIES
     name: 'legal',
     entry: {
-      'legal-app': './fec/static/js/legal/LegalApp.cjs'
+      'legal-app': `${js}/legal/LegalApp.cjs`
     },
     output: {
       // clean: // Only run clean on the last module.exports
@@ -218,7 +218,7 @@ module.exports = [
   {
     // DRAFTAIL ENTRY
     name: 'draftail',
-    entry: { draftail: './fec/static/js/draftail/App.js' },
+    entry: { draftail: `${js}/draftail/App.js` },
     output: {
       clean: true,
       filename: '[name]-[contenthash].js',
