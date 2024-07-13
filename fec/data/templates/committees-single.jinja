@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{{ asset_for_css('entity.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ path_for_css('entity.css') }}" />
 {% endblock %}
 
 {% set breadcrumbs=[('', 'Committee profiles')] %}
@@ -227,5 +227,5 @@
   window.context.showIndependentExpenditures = true;
 {% endif %}
 </script>
-<script src="{{ asset_for_js('committee-single.js') }}"></script>
+{{ tags_for_js_chunks('committee-single.js')|safe }}
 {% endblock %}

@@ -10,7 +10,7 @@
     {% include 'partials/google-tag-manager-script.html' %}
 
     {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% asset_for_css 'base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% path_for_css 'base.css' %}">
     {% endblock %}
   </head>
 
@@ -59,17 +59,15 @@
       window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
       window.API_LOCATION = '{{ settings.FEC_API_URL }}';
     </script>
-
     {# Global javascript #}
-    <script type="text/javascript" src="{% asset_for_js 'vendors.js' %}"></script>
-    <script type="text/javascript" src="{% asset_for_js 'global.js' %}"></script>
-    <script type="text/javascript" src="{% asset_for_js 'init.js' %}"></script>
+    {% tags_for_js_chunks 'global.js' %}
+    {% tags_for_js_chunks 'init.js' %}
     <script>
       var canSkipPolyfills = ('fetch' in window && 'assign' in Object);
       if (!canSkipPolyfills) {
         var pfScriptElem = document.createElement('script');
         pfScriptElem.async = false;
-        pfScriptElem.src = "{% asset_for_js 'polyfills.js' %}";
+        pfScriptElem.src = "{% path_for_js 'polyfills.js' %}";
         document.head.appendChild(pfScriptElem);
       }
     </script>

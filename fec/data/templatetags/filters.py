@@ -7,6 +7,7 @@ from dateutil.parser import parse as parse_date
 
 from django.conf import settings
 from django_jinja import library
+from django.utils.html import format_html
 
 from data import constants
 
@@ -155,7 +156,7 @@ def filesize(value):
 
 
 @library.global_function
-def asset_for_css(key):
+def path_for_css(key):
     """Looks up the hashed asset key in rev-manifest-css.json
     If the key doesn't exist there, then just return the key to the static file
     without a hash"""
@@ -169,14 +170,34 @@ def asset_for_css(key):
 
 
 @library.global_function
-def asset_for_js(path):
+def path_for_js(path):
     """Looks up the hashed asset path in rev-manifest.json
     If the path doesn't exist there, then just return the path to the static file
     without a hash"""
     key = '/static/js/{}'.format(path)
     assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-manifest-js.json'))
-    assets.update(json.load(open(settings.DIST_DIR + '/fec/static/js/rev-legal-manifest-js.json')))
     return assets[key] if key in assets else key
+
+
+@library.global_function
+def tags_for_js_chunks(path):
+    """Looks up the hashed assets paths in rev-manifest-js.json and returns script tags for them.
+    If the asset is a list, returns several script tags.
+    If the asset is a string, returns the single script tag.
+    If the paths don't exist there, then just return the path to the static file without a hash"""
+    key = '/static/js/{}'.format(path)
+    assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-manifest-js.json'))
+    if key in assets:
+        file_paths = assets[key]
+        to_return = ''
+        if isinstance(file_paths, list):
+            for file_path in file_paths:
+                to_return = to_return + '<script type="module" src="/static/js/{}"></script>'.format(file_path)
+        else:
+            to_return = '<script type="module" src="/static/js/{}"></script>'.format(file_paths)
+        return format_html(to_return)
+    else:
+        return key
 
 
 @library.global_function

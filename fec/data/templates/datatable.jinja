@@ -7,7 +7,7 @@
 {% block title %}Browse {{ title }}{% endblock %}
 
 {% block css -%}
-<link rel="stylesheet" type="text/css" href="{{ asset_for_css('datatables.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ path_for_css('datatables.css') }}" />
 {%- endblock %}
 
 {% block body %}
@@ -69,6 +69,5 @@
   window.context = {{ table_context|to_json|safe }};
 </script>
 {% endif %}
-
-<script src="{{ asset_for_js('datatable-' + slug + '.js') }}"></script>
+{{ tags_for_js_chunks('datatable-' + slug + '.js')|safe }}
 {% endblock %}

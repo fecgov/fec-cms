@@ -6,7 +6,7 @@
 {% block title %}U.S. {{ office|title }} elections {% endblock %}
 
 {% block css %}
-  <link rel="stylesheet" type="text/css" href="{{ asset_for_css('elections.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ path_for_css('elections.css') }}" />
   <link rel="stylesheet" type="text/css" href="/static/css/widgets/party-money-bars.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/widgets/house-senate-overview.css" />
 {% endblock %}
@@ -61,11 +61,11 @@
 <script>
   window.context = {{ context_vars | to_json | safe }};
 </script>
-<script src="{{ asset_for_js('house-senate-overview-across-time.js') }}"></script>
+{{ tags_for_js_chunks('house-senate-overview-across-time.js')|safe }}
 {%- if FEATURES.house_senate_overview_summary -%}
-<script src="{{ asset_for_js('house-senate-overview-summary.js') }}"></script>
+{{ tags_for_js_chunks('house-senate-overview-summary.js')|safe }}
 {%- endif -%}
 {%- if FEATURES.house_senate_overview_totals -%}
-<script src="{{ asset_for_js('house-senate-overview-totals.js') }}"></script>
+{{ tags_for_js_chunks('house-senate-overview-totals.js')|safe }}
 {%- endif -%}
 {% endblock %}

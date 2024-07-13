@@ -5,8 +5,8 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{{ asset_for_css('base.css') }}" />
-<link rel="stylesheet" type="text/css" href="{{ asset_for_css(page_specific_css) }}" />
+<link rel="stylesheet" type="text/css" href="{{ path_for_css('base.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ path_for_css(page_specific_css) }}" />
 {% endblock %}
 
 {% block body %}

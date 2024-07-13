@@ -13,7 +13,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block css %}
-  <link rel="stylesheet" type="text/css" href="{{ asset_for_css('elections.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ path_for_css('elections.css') }}" />
 {% endblock %}
 {% block body %}
   {{ header.header(title, crumb) }}
@@ -62,5 +62,5 @@
   };
 
 </script>
-<script src="{{ asset_for_js('elections.js') }}"></script>
+{{ tags_for_js_chunks('elections.js')|safe }}
 {% endblock %}

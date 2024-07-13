@@ -183,6 +183,6 @@ if ( window.history.replaceState ) {
   window.history.replaceState( null, null, window.location.href );
 }
 </script>
-<script type="text/javascript" src="{% asset_for_js 'contact-form.js' %}"></script>
+{% tags_for_js_chunks 'contact-form.js' %}
 
 {% endblock %}

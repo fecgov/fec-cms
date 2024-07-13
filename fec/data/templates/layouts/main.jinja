@@ -11,7 +11,7 @@
   {%- endif %}
 
   {% block css %}
-  <link rel="stylesheet" type="text/css" href="{{ asset_for_css('base.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ path_for_css('base.css') }}" />
   {% endblock css %}
 
   {% block head_js -%}
@@ -21,6 +21,7 @@
       var pfScriptElem = document.createElement('script');
       pfScriptElem.async = false;
       pfScriptElem.src = '{{ asset_for_js('polyfills.js') }}';
+      pfScriptElem.src = '{{ path_for_js('polyfills.js') }}';
       document.head.appendChild(pfScriptElem);
     }
   </script>
@@ -152,9 +153,8 @@
 {% block modals %}{% endblock %}
   <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script> -->
   <script type="text/javascript" src="{{ asset_for_js('vendors.js') }}"></script>
-  <script type="text/javascript" src="{{ asset_for_js('global.js') }}"></script>
-
-  <script type="text/javascript" src="{{ asset_for_js('data-init.js') }}"></script>
+{# {{ tags_for_js_chunks('global.js')|safe }} #}
+{# {{ tags_for_js_chunks('data-init.js')|safe }} #}
 {% block scripts %}
 {% endblock %}
 

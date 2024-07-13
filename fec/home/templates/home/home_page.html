@@ -105,13 +105,13 @@
   if (!canSkipPolyfills) {
     var pfScriptElem = document.createElement('script');
     pfScriptElem.async = false;
-    pfScriptElem.src = "{% asset_for_js 'polyfills.js' %}";
+    pfScriptElem.src = "{% path_for_js 'polyfills.js' %}";
     document.head.appendChild(pfScriptElem);
   }
 </script>
-<script src="{% asset_for_js 'home.js' %}"></script>
-<!-- <script src="{% asset_for_js 'bythenumbers.js' %}"></script> -->
-<script src="{% asset_for_js 'election-lookup.js' %}"></script> -->
+
+{% tags_for_js_chunks 'global.js' %}
+
 <script>
   // Remove competing/confusing query strings on homepage
   document.addEventListener('DOMContentLoaded', () => {

@@ -4,7 +4,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{{ asset_for_css('data-landing.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ path_for_css('data-landing.css') }}" />
 {% endblock %}
 
 {% block body %}
@@ -301,5 +301,5 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src="{{ asset_for_js('data-landing.js') }}"></script>
+  {{ tags_for_js_chunks('data-landing.js')|safe }}
 {% endblock %}

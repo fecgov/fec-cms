@@ -56,7 +56,6 @@
 
 {% block extra_js %}
   <script> window.BASE_PATH = '/data' </script>
-  <script type="text/javascript" src="{% asset_for_js 'data-init.js' %}"></script>
-  <script type="text/javascript" src="{% asset_for_js 'reporting-dates-tables.js' %}"></script>
+  {% tags_for_js_chunks 'data-init.js' %}
+  {% tags_for_js_chunks 'reporting-dates-tables.js' %}
 {% endblock %}
-

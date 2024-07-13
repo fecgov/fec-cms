@@ -109,7 +109,7 @@ def get_meta_description(content_section):
 
 
 @register.simple_tag
-def asset_for_js(path):
+def path_for_js(path):
     """Looks up the hashed asset path in rev-manifest-js.json
     If the path doesn't exist there, then just return the path to the static file
     without a hash"""
@@ -121,7 +121,28 @@ def asset_for_js(path):
 
 
 @register.simple_tag
-def asset_for_css(key):
+def tags_for_js_chunks(path):
+    """Looks up the hashed assets paths in rev-manifest-js.json and returns script tags for them.
+    If the asset is a list, returns several script tags.
+    If the asset is a string, returns the single script tag.
+    If the paths don't exist there, then just return the path to the static file without a hash"""
+    key = '/static/js/{}'.format(path)
+    assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-manifest-js.json'))
+    if key in assets:
+        file_paths = assets[key]
+        to_return = ''
+        if isinstance(file_paths, list):
+            for file_path in file_paths:
+                to_return = to_return + '<script src="/static/js/{}"></script>'.format(file_path)
+        else:
+            to_return = '<script src="/static/js/{}"></script>'.format(file_paths)
+        return format_html(to_return)
+    else:
+        return key
+
+
+@register.simple_tag
+def path_for_css(key):
     """Looks up the hashed asset key in rev-manifest-css.json
     If the key doesn't exist there, then just return the key to the static file
     without a hash"""
@@ -146,7 +167,7 @@ def remove_word(str, words):
 @register.filter(name='dot_or_not')
 def dot_or_not(str):
     """
-    Puts dot-after, only if string represemts a number
+    Puts dot-after, only if string represents a number
     Specifically for footnote lists on ReportingDatesTables
     """
     try:
