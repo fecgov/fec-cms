@@ -7,6 +7,20 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 // const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const sharedManifestSeed = {};
+const sharedManifestPlugin = new WebpackManifestPlugin({
+  fileName: 'rev-manifest-js.json',
+  basePath: '/static/js/',
+  publicPath: '/static/js/',
+  seed: sharedManifestSeed,
+  generate: (seed, files, entries) => {
+    let toReturn = {};
+    for (let entry in entries) {
+      toReturn[`/static/js/${entry}.js`] = entries[entry].length === 1 ? entries[entry][0] : entries[entry];
+    }
+    return toReturn;
+  }
+});
 
 /**
  * Queue up the files for the entries for the homepage and the data pages
@@ -144,18 +158,7 @@ module.exports = [
         $: 'jquery',
         jQuery: 'jquery'
       }),
-      new WebpackManifestPlugin({
-        fileName: 'rev-manifest-js.json',
-        basePath: '/static/js/',
-        publicPath: '/static/js/',
-        generate: (seed, files, entries) => {
-          let toReturn = {};
-          for (let entry in entries) {
-            toReturn[`/static/js/${entry}.js`] = entries[entry];
-          }
-          return toReturn;
-        }
-      })
+      sharedManifestPlugin
     ],
     output: {
       // clean: // Only run clean on the last module.exports
@@ -180,18 +183,14 @@ module.exports = [
     },
     devtool: mode == 'production' ? undefined : sourceMapType,
     plugins: [
-      new WebpackManifestPlugin({
-        fileName: 'rev-legal-manifest-js.json',
-        basePath: '/static/js/',
-        publicPath: '/static/js/'
-      }),
       new webpack.DefinePlugin({
         context: {}
       }),
       new webpack.ProvidePlugin({
         $: 'jquery',
         jQuery: 'jquery'
-      })
+      }),
+      sharedManifestPlugin
     ],
     module: {
       rules: [
