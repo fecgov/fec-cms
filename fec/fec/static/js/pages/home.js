@@ -1,5 +1,7 @@
+/**
+ * 
+ */
 import { customEvent } from '../modules/analytics.js';
-// var homepageEvents = require('../modules/home-events');
 import HomepageEvents from '../modules/home-events.js';
 import { TopEntities } from '../modules/top-entities.js';
 

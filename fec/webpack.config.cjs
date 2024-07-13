@@ -119,7 +119,8 @@ module.exports = [
             test: /[\\/]node_modules[\\/](jquery)[\\/]/,
             name: 'vendors',
             enforce: true,
-            priority: 100
+            priority: 100,
+            chunks: 'all'
           }
         }
       }
