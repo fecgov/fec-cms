@@ -7,18 +7,25 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 const js = './fec/static/js';
-const sharedManifestSeed = {};
+// This is the shared seed object for the manifest plugin but multiple entries is unreliable,
+// So we'll push all entries here, and have this returned for every entry
+let sharedManifestObject = {};
+
 const sharedManifestPlugin = new WebpackManifestPlugin({
   fileName: 'rev-manifest-js.json',
   basePath: '/static/js/',
   publicPath: '/static/js/',
-  seed: sharedManifestSeed,
+  seed: sharedManifestObject,
   generate: (seed, files, entries) => {
-    let toReturn = {};
     for (let entry in entries) {
-      toReturn[`/static/js/${entry}.js`] = entries[entry].length === 1 ? entries[entry][0] : entries[entry];
+      // We need to put the /static/js/ path in front of each of the file names
+      const entryChunks = entries[entry];
+      for(let i = 0; i < entryChunks.length; i++) {
+        entryChunks[i] = `/static/js/${entryChunks[i]}`;
+      }
+      sharedManifestObject[`/static/js/${entry}.js`] = entryChunks.length === 1 ? entryChunks[0] : entryChunks;
     }
-    return toReturn;
+    return sharedManifestObject;
   }
 });
 
@@ -227,14 +234,15 @@ module.exports = [
     },
     devtool: mode == 'production' ? undefined : sourceMapType,
     plugins: [
-      new WebpackManifestPlugin({
-        fileName: 'rev-draftail-manifest-js.json',
-        basePath: '/static/js/'
-      }),
       new webpack.ProvidePlugin({
         $: 'jquery',
         jQuery: 'jquery'
-      })
+      }),
+      sharedManifestPlugin
+      // new WebpackManifestPlugin({
+      //   fileName: 'rev-draftail-manifest-js.json',
+      //   basePath: '/static/js/'
+      // })
     ],
     module: {
       rules: [
