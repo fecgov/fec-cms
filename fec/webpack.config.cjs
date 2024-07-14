@@ -35,36 +35,64 @@ const sharedManifestPlugin = new WebpackManifestPlugin({
 const homeAndDataEntries = {
   global: `${js}/global.js`,
   home: {
-    dependOn: 'global',
-    import: `${js}/pages/home.js`
-  'candidate-single': `${js}/pages/candidate-single.js`,
-  'committee-single': `${js}/pages/committee-single.js`,
+    import: `${js}/pages/home.js`,
+    dependOn: 'global'
   },
-  init: './fec/static/js/init.js',
-  'data-init': './fec/static/js/data-init.js',
-  'calc-admin-fines-modal': './fec/static/js/modules/calc-admin-fines-modal.js', // Used inside base.html
-  'calc-admin-fines': './fec/static/js/modules/calc-admin-fines.js',
-  'data-elections': './fec/static/js/pages/elections.js',
-  'data-landing': './fec/static/js/pages/data-landing.js',
-  // 'aggregate-totals': './fec/static/js/widgets/aggregate-totals.js',
-  'aggregate-totals-box': {
-    import: './fec/static/js/widgets/aggregate-totals-box.js',
+  init: {
+    import: `${js}/init.js`,
+    dependOn: 'global'
+  },
+  'data-init': {
+    import: `${js}/data-init.js`,
+    dependOn: 'global'
+    // NOTE: because data-init depends on global, any entry that depends on data-init will also inherit global
+  },
+  'calc-admin-fines-modal': `${js}/modules/calc-admin-fines-modal.js`, // Used inside base.html
+  'calc-admin-fines': `${js}/modules/calc-admin-fines.js`,
+  'widgets/aggregate-totals-box': {
+    import: `${js}/widgets/aggregate-totals-box.js`,
     filename: 'widgets/aggregate-totals-box.js',
-    // publicPath: '/widgets/aggregate-totals-box.js'
+    dependOn: 'bythenumbers'
+    // publicPath: '/widgets/aggregate-totals-box.js`
   },
-  // 'contributions-by-state':
-    // './fec/static/js/widgets/contributions-by-state.js',
-  'contributions-by-state-box': {
-    filename: 'widgets/contributions-by-state-box.js',
-    // publicPath: '/widgets/contributions-by-state-box.js'
+  // 'aggregate-totals': {
+  //   import: `${js}/widgets/aggregate-totals.js`,
+  //   // filename: 'widgets/aggregate-totals.js',
+  //   // dependOn: 'aggregate-totals-box'
+  // },
+  // 'contributions-by-state': {
+  //   import: `${js}/widgets/contributions-by-state.js`,
+  //   dependOn: 'bythenumbers'
+  // },
+  'widgets/contributions-by-state-box': {
     import: `${js}/widgets/contributions-by-state-box.js`,
+    filename: 'widgets/contributions-by-state-box.js',
+    dependOn: 'bythenumbers'
+    // publicPath: '/widgets/contributions-by-state-box.js`
   },
-  'pres-finance-map-box': {
-    filename: 'widgets/pres-finance-map-box.js',
-    // publicPath: '/widgets/contributions-by-state-box.js'
+  'widgets/pres-finance-map-box': {
     import: `${js}/widgets/pres-finance-map-box.js`,
+    filename: 'widgets/pres-finance-map-box.js',
+    dependOn: 'data-init'
+    // publicPath: '/widgets/contributions-by-state-box.js`
   },
+  analytics: {
+    import: `${js}/modules/analytics.js`,
+    dependOn: 'global'
+  }
 };
+
+/**
+ * These are the pages/entries that depend on the data-init entry (which relies on global)
+ */
+const pagesThatDependOnInit = ['contact-form'];
+
+/**
+ * These are the pages/entries that depend on the data-init entry (which relies on global)
+ */
+const pagesThatDependOnDataInit = [
+  'bythenumbers', 'candidate-single', 'committee-single', 'data-landing',
+  'data-browse-data', 'data-map', 'election-lookup', 'elections'];
 
 /**
  * Start the list of datatable pages
@@ -82,10 +110,32 @@ fs.readdirSync(`${js}/pages`).forEach(function(f) {
   // Grab the name (the filename before the first .)
   const name = f.split('.js')[0];
   // Set the path to be fec/static/js/pages/ plus its filename
-  // If the file name isn't 'home', create an entry for this filename and point it to this file
-  if (name != 'home')
-    homeAndDataEntries[name] = './' + p;
   const p = path.join(`${js}/pages`, f);
+  // If the file name isn't already queued as an entry,
+  if (!homeAndDataEntries[name]) {
+
+    // If it's a datatable page, or a data page that requires data-init,
+    if (name.indexOf('datatable-') >= 0 || pagesThatDependOnDataInit.includes(name)) {
+      // add it so it depends on data-init (and inherits global)
+      homeAndDataEntries[name] = {
+        import: `./${p}`,
+        dependOn: 'data-init'
+      }
+    // If it's a page that requires init,
+    } else if (name.indexOf('datatable-') >= 0 || pagesThatDependOnInit.includes(name)) {
+      // add it so it depends on init (and inherits global)
+      homeAndDataEntries[name] = {
+        import: `./${p}`,
+        dependOn: 'init'
+      }
+    } else {
+      // else add it so it depends on global
+      homeAndDataEntries[name] = {
+        import: `./${p}`,
+        dependOn: 'global'
+      }
+    }
+  }
   // // Note all datatable pages for getting the common chunk
 // // if (['bythenumbers', 'dataviz-common', 'election-lookup'].includes(name))
   // if it's a datatable page, queue it into datatablePages
@@ -97,8 +147,8 @@ fs.readdirSync(`${js}/pages`).forEach(function(f) {
 /**
  * Which source map type should devtool use?
  */
-const sourceMapType = 'source-map'; // separate files
-// const sourceMapType = 'eval-source-map';
+// const sourceMapType = 'source-map'; // separate files
+const sourceMapType = 'eval-source-map';
 const mode = process.argv[process.argv.indexOf('--mode') + 1] || 'development';
 
 module.exports = [
@@ -111,6 +161,7 @@ module.exports = [
       emitOnErrors: true,
       innerGraph: true,
       moduleIds: 'named',
+      // chunkIds: 'named',
       removeAvailableModules: true, // TESTING
       splitChunks: {
         chunks: 'all',
@@ -135,18 +186,20 @@ module.exports = [
       extensions: ['.js'],
       alias: {
         // bloodhound: path.join(__dirname, '../node_modules/corejs-typeahead/dist/typeahead.jquery.min.js'),
-        // typeahead: path.join(__dirname, '../node_modules/corejs-typeahead/dist/bloodhound.min.js'),
+        typeahead: path.join(__dirname, '../node_modules/corejs-typeahead/dist/bloodhound.min.js'),
         // These were 18F but have been archived so we've moved them to our own */modules/*
         // 'aria-accordion': path.join(__dirname, 'fec/static/js/modules/aria-accordion/src/accordion.js'),
         // 'component-sticky': path.join(__dirname, 'fec/static/js/modules/component-sticky/index.js'),
         // 'glossary-panel': path.join(__dirname, 'fec/static/js/modules/glossary-panel/src/glossary.js'),
         // jQuery aliases
+        jquery: require.resolve(path.join(__dirname, '../node_modules/jquery/dist/jquery.js'))
         // inputmask: path.join(__dirname, '../node_modules/inputmask/dist/inputmask.es6.js'),
         // 'inputmask.date.extensions': path.join(__dirname, '../node_modules/inputmask/lib/extensions/inputmask.date.extensions.js'),
         // 'inputmask.dependencyLib': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.dependencyLib.js'),
         // inputmask: path.join(__dirname, '../node_modules/inputmask/dist/jquery.inputmask.js'),
         // 'inputmask.date.extensions': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.date.extensions.js'),
-        underscore: path.join(__dirname, '../node_modules/underscore/underscore-umd.js')
+        // underscore: path.join(__dirname, '../node_modules/underscore/underscore-esm.js')
+        // underscore: path.join(__dirname, '../node_modules/underscore/')
       }
     },
     plugins: [
@@ -156,6 +209,7 @@ module.exports = [
       new webpack.ProvidePlugin({
         $: 'jquery',
         jQuery: 'jquery'
+        // underscore: 'underscore'
       }),
       sharedManifestPlugin
     ],
@@ -203,6 +257,7 @@ module.exports = [
           }
       }
       ]
+    }
     // resolve: {
     //   extensions: ['*', '.js', 'jsx']
     // }
@@ -218,10 +273,11 @@ module.exports = [
     name: 'draftail',
     entry: { draftail: `${js}/draftail/App.js` },
     output: {
-      clean: true,
+      // clean: mode === 'production' ? true : undefined,
       filename: '[name]-[contenthash].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
     },
+    devtool: mode === 'production' ? undefined : sourceMapType,
     plugins: [
       new webpack.ProvidePlugin({
         $: 'jquery',
@@ -244,6 +300,7 @@ module.exports = [
           }
         }
       ]
+    }
     // stats: {
     //   assetsSort: 'field',
     //   modules: false,
