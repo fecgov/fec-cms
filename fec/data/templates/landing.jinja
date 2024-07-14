@@ -301,5 +301,6 @@
 {% endblock %}
 
 {% block scripts %}
+  {{ tags_for_js_chunks('global.js', '')|safe }}
   {{ tags_for_js_chunks('data-landing.js', '')|safe }}
 {% endblock %}
