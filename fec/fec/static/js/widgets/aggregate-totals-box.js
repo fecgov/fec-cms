@@ -729,5 +729,4 @@ function logUsage(officeAbbrev, electionYear) {
   });
 }
 
-
 new AggregateTotalsBox();

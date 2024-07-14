@@ -7,7 +7,11 @@
 // TODO
 // TODO
 
-import { default as _chain } from 'underscore/modules/chain.js';
+// import { default as _chain } from 'underscore/modules/chain.js';
+// For some reason, test-single doesn't like _.pairs() if we only include chain and pairs
+// so, for analytics, we'll import all of underscore.
+// TODO: revert back to 'import {default as _chain}' if we remove sortQuey from test-single
+import _ from 'underscore';
 import { default as _map } from 'underscore/modules/map.js';
 
 let dataLayer = window.dataLayer;
@@ -53,7 +57,7 @@ export const pageView = () => {
  * @param {*} query
  */
 export function sortQuery(query) {
-  return _chain(query)
+  return _.chain(query)
     .pairs()
     .map(function(pair) {
       return [pair[0], Array.isArray(pair[1]) ? pair[1] : [pair[1]]];
