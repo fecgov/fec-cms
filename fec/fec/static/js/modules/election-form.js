@@ -1,4 +1,7 @@
-import { chain as _chain, extend as _extend, range as _range, unique as _unique } from 'underscore';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as _range } from 'underscore/modules/range.js';
+import { default as _unique } from 'underscore/modules/uniq.js';
 
 import { encodeDistrict } from './election-utils.js';
 import { buildUrl, filterNull } from './helpers.js';

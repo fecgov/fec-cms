@@ -2,7 +2,7 @@
  * pagingType documentation: https://datatables.net/reference/option/pagingType
  */
 
-import { extend as _extend } from 'underscore';
+import { default as _extend } from 'underscore/modules/extend.js';
 import { default as URI } from 'urijs';
 
 import { buildEntityLink, buildTotalLink, getColumns, getSizeParams, sizeInfo } from '../modules/column-helpers.js';

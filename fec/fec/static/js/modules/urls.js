@@ -1,11 +1,9 @@
-import {
-  each as _each,
-  extend as _extend,
-  find as _find,
-  isEqual as _isEqual,
-  keys as _keys,
-  union as _union
-} from 'underscore';
+import { default as _each } from 'underscore/modules/each.js';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as _find } from 'underscore/modules/find.js';
+import { default as _isEqual } from 'underscore/modules/isEqual.js';
+import { default as _keys } from 'underscore/modules/keys.js';
+import { default as _union } from 'underscore/modules/union.js';
 import { default as URI } from 'urijs';
 
 import { pageView } from './analytics.js';

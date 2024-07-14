@@ -4,7 +4,10 @@
  * Not to be confused with election-lookup.js, which is used on /data/elections/
  */
 import { default as moment } from 'moment';
-import { extend as _extend, filter as _filter, isEmpty as _isEmpty, isEqual as _isEqual } from 'underscore';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as _filter } from 'underscore/modules/filter.js';
+import { default as _isEmpty } from 'underscore/modules/isEmpty.js';
+import { default as _isEqual } from 'underscore/modules/isEqual.js';
 import { default as URI } from 'urijs';
 
 import { pageView } from './analytics.js';

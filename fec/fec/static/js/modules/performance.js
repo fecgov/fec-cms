@@ -4,7 +4,8 @@
  * fec/data/templates/layouts/main.jinja and fec/data/templates/layouts/widgets.jinja
 */
 /*
-import { chain as _chain, max as _max } from 'underscore';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _max } from 'underscore/modules/max.js';
 import 'perfbar/build/perfbar';
 
 var performanceBudgets = {

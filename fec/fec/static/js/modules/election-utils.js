@@ -1,6 +1,7 @@
 import { sprintf } from 'sprintf-js';
 import { feature } from 'topojson-client/dist/topojson-client.js';
-import { filter as _filter, find as _find } from 'underscore';
+import { default as _filter } from 'underscore/modules/filter.js';
+import { default as _find } from 'underscore/modules/find.js';
 
 import { fipsByCode, fipsByState } from './fips.js';
 // var fips = require('./fips');

@@ -1,6 +1,6 @@
 /* global API_LOCATION, API_VERSION, API_KEY_PUBLIC */
 
-import { escape as _escape } from 'underscore';
+import { default as _escape } from 'underscore/modules/escape.js';
 import { default as URI } from 'urijs';
 
 import { sanitizeValue } from '../helpers.js';

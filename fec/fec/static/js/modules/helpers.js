@@ -4,7 +4,8 @@ import DOMPurify from 'dompurify';
 import * as Handlebars from 'handlebars/runtime';
 import { default as moment } from 'moment';
 import { default as numeral } from 'numeral';
-import { chain, extend } from 'underscore';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _extend } from 'underscore/modules/extend.js';
 import { default as URI } from 'urijs';
 
 import {
@@ -347,7 +348,7 @@ export function ensureArray(value) {
 }
 
 export function filterNull(params) {
-  return chain(params)
+  return _chain(params)
     .pairs()
     .filter(function(pair) {
       return pair[1] !== '';
@@ -382,7 +383,7 @@ export function buildUrl(path, query) {
 }
 
 export function buildTableQuery(context, params = { per_page: 100 }) {
-  let query = chain(context)
+  let query = _chain(context)
     .pairs()
     .filter(function(pair) {
       return pair[1];
@@ -395,7 +396,7 @@ export function buildTableQuery(context, params = { per_page: 100 }) {
     delete query.duration;
   }
 
-  return extend(query, {
+  return _extend(query, {
     per_page: params.per_page,
     sort_hide_null: true
   });
@@ -492,7 +493,7 @@ export function amendmentVersionDescription(row) {
 
   // Original termination reports always start with their own filing ID
   // in the amendment chain, which caused original reports to show up as an amendment
-  // This checks for terminatino reports and if the amendment number is greater
+  // This checks for termination reports and if the amendment number is greater
   // than 0 or the amendment chain is longer than 1, it is an amendment
   else if (row.amendment_indicator === API.amendment_indicator_terminated) {
     if (row.amendment_chain != null && row.amendment_chain.length > 1) {

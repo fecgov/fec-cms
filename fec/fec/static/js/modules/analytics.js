@@ -7,7 +7,8 @@
 // TODO
 // TODO
 
-import { chain as _chain, map as _map } from 'underscore';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _map } from 'underscore/modules/map.js';
 
 let dataLayer = window.dataLayer;
 

@@ -1,6 +1,6 @@
 
 import { default as scrollMonitor } from 'scrollmonitor';
-import { each as _each } from 'underscore';
+import { default as _each } from 'underscore/modules/each.js';
 
 /**
  * Table of Contents widget

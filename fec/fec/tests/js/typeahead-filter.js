@@ -6,7 +6,7 @@ import { spy } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
-import { extend as _extend } from 'underscore';
+import { default as _extend } from 'underscore/modules/extend.js';
 import 'corejs-typeahead/dist/typeahead.jquery.js';
 
 import $ from 'jquery';

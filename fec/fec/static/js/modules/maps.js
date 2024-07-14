@@ -2,18 +2,16 @@ import { default as chroma } from 'chroma-js';
 import d3 from 'd3';
 import { default as L } from 'leaflet';
 import { feature } from 'topojson-client/dist/topojson-client.js';
-import _, {
-  chain as _chain,
-  each as _each,
-  find as _find,
-  keys as _keys,
-  last as _last,
-  max as _max,
-  min as _min,
-  pluck as _pluck,
-  reduce as _reduce,
-  values as _values
-} from 'underscore';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _each } from 'underscore/modules/each.js';
+import { default as _find } from 'underscore/modules/find.js';
+import { default as _keys } from 'underscore/modules/keys.js';
+import { default as _last } from 'underscore/modules/last.js';
+import { default as _max } from 'underscore/modules/max.js';
+import { default as _min } from 'underscore/modules/min.js';
+import { default as _pluck } from 'underscore/modules/pluck.js';
+import { default as _reduce } from 'underscore/modules/reduce.js';
+import { default as _values } from 'underscore/modules/values.js';
 import 'leaflet-providers';
 
 import { encodeDistrict, findDistrict } from './election-utils.js';
@@ -23,7 +21,7 @@ import { default as states } from '../data/us-states-10m.json' assert { type: 'j
 import { default as candidateStateMapTemplate } from '../templates/candidateStateMap.hbs';
 
 const stateFeatures = feature(states, states.objects.states).features;
-const stateFeatureMap = _.chain(stateFeatures)
+const stateFeatureMap = _chain(stateFeatures)
   .map(function(feature) {
     return [feature.id, feature];
   })

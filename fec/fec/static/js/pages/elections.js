@@ -1,5 +1,5 @@
 
-import { chain as _chain } from 'underscore';
+import { default as _chain } from 'underscore/modules/chain.js';
 
 import ElectionForm from '../modules/election-form.js';
 import { getStateElectionOffices } from '../modules/election-utils.js';

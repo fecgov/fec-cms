@@ -6,7 +6,8 @@
 import 'corejs-typeahead/dist/typeahead.jquery.js';
 import { default as Bloodhound } from 'corejs-typeahead/dist/bloodhound.js';
 import { compile as compileHBS } from 'handlebars';
-import { extend as _extend, map as _map } from 'underscore';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as _map } from 'underscore/modules/map.js';
 import { default as URI } from 'urijs';
 
 import initEvents from './events.js';

@@ -1,4 +1,5 @@
-import { chain as _chain, reduce as _reduce } from 'underscore';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _reduce } from 'underscore/modules/reduce.js';
 
 import { buildUrl, currency } from '../modules/helpers.js';
 

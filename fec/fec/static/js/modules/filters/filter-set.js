@@ -1,11 +1,8 @@
-
-import {
-  chain as _chain,
-  each as _each,
-  extend as _extend,
-  isEmpty as _isEmpty,
-  reduce as _reduce
-} from 'underscore';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _each } from 'underscore/modules/each.js';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as _isEmpty } from 'underscore/modules/isEmpty.js';
+import { default as _reduce } from 'underscore/modules/reduce.js';
 import { default as URI } from 'urijs';
 
 import { default as CheckboxFilter } from './checkbox-filter.js';

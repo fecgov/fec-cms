@@ -1,5 +1,6 @@
 import { default as moment } from 'moment';
-import { extend as _extend, isEmpty as _isEmpty } from 'underscore';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as _isEmpty } from 'underscore/modules/isEmpty.js';
 import { default as URI } from 'urijs';
 
 import { default as hbs_container } from '../templates/download/container.hbs';

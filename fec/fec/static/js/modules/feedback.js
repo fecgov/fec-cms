@@ -1,4 +1,5 @@
-import { chain as _chain, each as _each } from 'underscore';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _each } from 'underscore/modules/each.js';
 
 import { removeTabindex, restoreTabindex } from './accessibility.js';
 import { loadRecaptcha } from './load-recaptcha.js';

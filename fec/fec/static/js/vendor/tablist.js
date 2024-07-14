@@ -3,7 +3,8 @@
 -----------------------------------------------------------------------------------------
 */
 
-import { extend as _extend, object as _object } from 'underscore';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as _object } from 'underscore/modules/object.js';
 import URI from 'urijs';
 import initEvents from '../modules/events.js';
 const events = initEvents();

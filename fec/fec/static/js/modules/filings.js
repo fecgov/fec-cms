@@ -1,4 +1,4 @@
-import { extend as _extend } from 'underscore';
+import { default as _extend } from 'underscore/modules/extend.js';
 
 import { MODAL_TRIGGER_CLASS, modalRenderFactory } from './tables.js';
 import { amendmentVersion, amendmentVersionDescription, buildUrl } from '../modules/helpers.js';

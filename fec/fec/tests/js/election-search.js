@@ -7,7 +7,7 @@ use(sinonChai);
 // (end common)
 
 import { default as URI } from 'urijs';
-import { extend as _extend } from 'underscore';
+import { default as _extend } from 'underscore/modules/extend.js';
 
 _extend(window, {
   context: {

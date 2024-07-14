@@ -1,4 +1,4 @@
-import { extend as _extend } from 'underscore';
+import { default as _extend } from 'underscore/modules/extend.js';
 import { default as URI } from 'urijs';
 
 import { buildUrl, getTimePeriod } from './helpers.js';

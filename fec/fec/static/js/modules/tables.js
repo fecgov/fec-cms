@@ -1,23 +1,16 @@
-/**
- * pagingType documentation: https://datatables.net/reference/option/pagingType
- */
-
-// import DataTable from 'datatables.net-dt';
-import {
-  chain as _chain,
-  clone as _clone,
-  debounce as _debounce,
-  each as _each,
-  extend as _extend,
-  intersection as _intersection,
-  isEmpty as _isEmpty,
-  isEqual as _isEqual,
-  map as _map,
-  max as _max,
-  object as _object,
-  pairs as _pairs,
-  pluck as _pluck
-} from 'underscore';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _clone } from 'underscore/modules/clone.js';
+import { default as _debounce } from 'underscore/modules/debounce.js';
+import { default as _each } from 'underscore/modules/each.js';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as _intersection } from 'underscore/modules/intersection.js';
+import { default as _isEmpty } from 'underscore/modules/isEmpty.js';
+import { default as _isEqual } from 'underscore/modules/isEqual.js';
+import { default as _map } from 'underscore/modules/map.js';
+import { default as _max } from 'underscore/modules/max.js';
+import { default as _object } from 'underscore/modules/object.js';
+import { default as _pairs } from 'underscore/modules/pairs.js';
+import { default as _pluck } from 'underscore/modules/pluck.js';
 import 'datatables.net-responsive-dt';
 
 import { removeTabindex, restoreTabindex } from './accessibility.js';

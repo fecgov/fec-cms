@@ -3,7 +3,10 @@
  */
 import $ from 'jquery';
 import { default as moment } from 'moment';
-import { chain as _chain, each as _each, pairs as _pairs, reduce as _reduce } from 'underscore';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _each } from 'underscore/modules/each.js';
+import { default as _pairs } from 'underscore/modules/pairs.js';
+import { default as _reduce } from 'underscore/modules/reduce.js';
 import 'fullcalendar';
 
 import Dropdown from './dropdowns.js';

@@ -1,5 +1,8 @@
 import { default as moment } from 'moment';
-import { contains as _contains, extend as _extend, first as _first, last as _last } from 'underscore';
+import { default as _contains } from 'underscore/modules/contains.js';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as _first } from 'underscore/modules/first.js';
+import { default as _last } from 'underscore/modules/last.js';
 
 import { barColumn, buildEntityLink, formattedColumn, urlColumn } from './column-helpers.js';
 import { supportOppose } from './decoders.js';

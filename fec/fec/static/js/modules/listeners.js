@@ -1,4 +1,4 @@
-import { toArray as _toArray } from 'underscore';
+import { default as _toArray } from 'underscore/modules/toArray.js';
 
 export default function Listeners() {
   this.listeners = [];

@@ -1,4 +1,5 @@
-import { map as _map, range as _range } from 'underscore';
+import { default as _map } from 'underscore/modules/map.js';
+import { default as _range } from 'underscore/modules/range.js';
 
 // window.$ = window.jQuery = $;
 

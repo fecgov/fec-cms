@@ -4,7 +4,8 @@
 import { default as Handlebars } from 'hbsfy/runtime.js';
 import $ from 'jquery';
 import moment from 'moment';
-import { extend as _extend, isEqual as _isEqual } from 'underscore';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as _isEqual } from 'underscore/modules/isEqual.js';
 import { default as URI } from 'urijs';
 
 import 'fullcalendar';

@@ -2,7 +2,10 @@
 
 import * as d3 from 'd3';
 import * as numeral from 'numeral';
-import { chain as _chain, each as _each, max as _max, sortBy as _sortBy } from 'underscore';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _each } from 'underscore/modules/each.js';
+import { default as _max } from 'underscore/modules/max.js';
+import { default as _sortBy } from 'underscore/modules/sortBy.js';
 
 import { buildUrl, currency, isMediumScreen, utcDate, zeroPad } from './helpers.js';
 

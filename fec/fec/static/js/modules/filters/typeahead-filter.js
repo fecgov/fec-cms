@@ -1,4 +1,4 @@
-import { escape as _escape } from 'underscore';
+import { default as _escape } from 'underscore/modules/escape.js';
 
 import Filter, { ensureArray } from './filter-base.js';
 import FilterTypeahead from './filter-typeahead.js';

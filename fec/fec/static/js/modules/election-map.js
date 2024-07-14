@@ -1,7 +1,12 @@
 import { Set1 } from 'colorbrewer';
 import { default as L } from 'leaflet';
 import { feature } from 'topojson-client/dist/topojson-client.js';
-import { chain as _chain, extend as _extend, filter as _filter, find as _find, map as _map, max as _max } from 'underscore';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as _filter } from 'underscore/modules/filter.js';
+import { default as _find } from 'underscore/modules/find.js';
+import { default as _map } from 'underscore/modules/map.js';
+import { default as _max } from 'underscore/modules/max.js';
 
 import { decodeDistrict, decodeState, districtFeatures, findDistricts } from './election-utils.js';
 import { default as states } from '../data/us-states-10m.json' assert { type: 'json' };

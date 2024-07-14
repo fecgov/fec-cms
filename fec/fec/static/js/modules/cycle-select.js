@@ -1,4 +1,7 @@
-import { filter as _filter, map as _map, range as _range, toArray as _toArray } from 'underscore';
+import { default as _filter } from 'underscore/modules/filter.js';
+import { default as _map } from 'underscore/modules/map.js';
+import { default as _range } from 'underscore/modules/range.js';
+import { default as _toArray } from 'underscore/modules/toArray.js';
 import { default as URI } from 'urijs';
 
 import { default as cycleTemplate } from '../templates/electionCycle.hbs';

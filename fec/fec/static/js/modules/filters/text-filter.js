@@ -1,5 +1,5 @@
 import Inputmask from 'inputmask';
-import { escape as _escape } from 'underscore';
+import { default as _escape } from 'underscore/modules/escape.js';
 
 import { default as CheckboxFilter } from './checkbox-filter.js';
 import { default as Filter, ensureArray } from './filter-base.js';
