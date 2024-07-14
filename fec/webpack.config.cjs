@@ -3,7 +3,7 @@ const path = require('path');
 // const fileURLToPath = require('url');
 
 const webpack = require('webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 const js = './fec/static/js';
@@ -94,12 +94,6 @@ fs.readdirSync(`${js}/pages`).forEach(function(f) {
   }
 });
 
-// Create a single datatable-common entry for all of the datatablePages queued
-// TODO: is this still necessary
-// TODO: i.e. do we still need a -common file if the individual datatable pages have their own file
-// TODO: and share webpack chunks?
-homeAndDataEntries['datatable-common'] = datatablePages;
-
 /**
  * Which source map type should devtool use?
  */
@@ -147,14 +141,11 @@ module.exports = [
         // 'component-sticky': path.join(__dirname, 'fec/static/js/modules/component-sticky/index.js'),
         // 'glossary-panel': path.join(__dirname, 'fec/static/js/modules/glossary-panel/src/glossary.js'),
         // jQuery aliases
-        jquery: require.resolve(path.join(__dirname, '../node_modules/jquery/dist/jquery.js')),
         // inputmask: path.join(__dirname, '../node_modules/inputmask/dist/inputmask.es6.js'),
         // 'inputmask.date.extensions': path.join(__dirname, '../node_modules/inputmask/lib/extensions/inputmask.date.extensions.js'),
         // 'inputmask.dependencyLib': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.dependencyLib.js'),
         // inputmask: path.join(__dirname, '../node_modules/inputmask/dist/jquery.inputmask.js'),
         // 'inputmask.date.extensions': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.date.extensions.js'),
-        //
-        'abortcontroller-polyfill': path.join(__dirname, '../node_modules/abortcontroller-polyfill/dist/polyfill-patch-fetch.js'),
         underscore: path.join(__dirname, '../node_modules/underscore/underscore-umd.js')
       }
     },
@@ -212,7 +203,6 @@ module.exports = [
           }
       }
       ]
-    },
     // resolve: {
     //   extensions: ['*', '.js', 'jsx']
     // }
@@ -232,7 +222,6 @@ module.exports = [
       filename: '[name]-[contenthash].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
     },
-    devtool: mode == 'production' ? undefined : sourceMapType,
     plugins: [
       new webpack.ProvidePlugin({
         $: 'jquery',
@@ -255,7 +244,6 @@ module.exports = [
           }
         }
       ]
-    },
     // stats: {
     //   assetsSort: 'field',
     //   modules: false,
