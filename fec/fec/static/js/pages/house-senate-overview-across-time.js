@@ -250,8 +250,8 @@ AcrossTime.prototype.buildSelects = function() {
  * @param {Object} query - The data object for the query, {@see baseQuery}
  * @param {Array} yearsRangeArray - An array of two values: the min and max years (or max and min)
  */
-AcrossTime.prototype.loadData = function(query, yearsRangeArray) {
-  let instance = this;
+AcrossTime.prototype.loadData = function(query, yearsRangeArray = [window.DEFAULT_ELECTION_YEAR, window.DEFAULT_ELECTION_YEAR - 4]) {
+  const instance = this;
 
   // yearsRangeArray is two values but could be any order, so let's just look at the smallest and largest
   const minYear = Math.min(...yearsRangeArray);
