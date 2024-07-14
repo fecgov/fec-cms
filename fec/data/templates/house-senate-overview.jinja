@@ -61,11 +61,11 @@
 <script>
   window.context = {{ context_vars | to_json | safe }};
 </script>
-{{ tags_for_js_chunks('house-senate-overview-across-time.js')|safe }}
+{{ tags_for_js_chunks('house-senate-overview-across-time.js', '')|safe }}
 {%- if FEATURES.house_senate_overview_summary -%}
-{{ tags_for_js_chunks('house-senate-overview-summary.js')|safe }}
+{{ tags_for_js_chunks('house-senate-overview-summary.js', '')|safe }}
 {%- endif -%}
 {%- if FEATURES.house_senate_overview_totals -%}
-{{ tags_for_js_chunks('house-senate-overview-totals.js')|safe }}
+{{ tags_for_js_chunks('house-senate-overview-totals.js', '')|safe }}
 {%- endif -%}
 {% endblock %}

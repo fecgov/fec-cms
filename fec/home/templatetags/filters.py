@@ -121,11 +121,12 @@ def path_for_js(path):
 
 
 @register.simple_tag
-def tags_for_js_chunks(path):
+def tags_for_js_chunks(path, attribs_for_final_tag):
     """Looks up the hashed assets paths in rev-manifest-js.json and returns script tags for them.
     If the asset is a list, returns several script tags.
     If the asset is a string, returns the single script tag.
-    If the paths don't exist there, then just return the path to the static file without a hash"""
+    If the paths don't exist there, then just return the path to the static file without a hash.
+    While adding the last tag (the one that isn't dependencies), add the tag attributes"""
     key = '/static/js/{}'.format(path)
     assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-manifest-js.json'))
     if key in assets:
@@ -133,9 +134,12 @@ def tags_for_js_chunks(path):
         to_return = ''
         if isinstance(file_paths, list):
             for file_path in file_paths:
-                to_return = to_return + '<script src="/static/js/{}"></script>'.format(file_path)
+                if file_path == file_paths[-1]:
+                    to_return = to_return + '<script src="{}" {}></script>'.format(file_path, attribs_for_final_tag)
+                else:
+                    to_return = to_return + '<script src="{}"></script>'.format(file_path)
         else:
-            to_return = '<script src="/static/js/{}"></script>'.format(file_paths)
+            to_return = '<script src="{}" {}></script>'.format(file_paths, attribs_for_final_tag)
         return format_html(to_return)
     else:
         return key

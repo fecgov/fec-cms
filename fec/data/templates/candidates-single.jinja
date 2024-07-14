@@ -156,5 +156,5 @@
 <script>
   window.context = {{ context_vars|to_json|safe }};
 </script>
-{{ tags_for_js_chunks('candidate-single.js')|safe }}
+{{ tags_for_js_chunks('candidate-single.js', '')|safe }}
 {% endblock %}

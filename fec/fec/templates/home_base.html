@@ -153,9 +153,9 @@
       window.CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}'
     </script>
 
-    {% tags_for_js_chunks 'home.js' %}
+    {% tags_for_js_chunks 'home.js' '' %}
 
-    <!-- {% tags_for_js_chunks 'init.js' %} -->
+    <!-- { % tags_for_js_chunks 'init.js' '' % } -->
 
     {% block extra_js %}
     {% endblock %}

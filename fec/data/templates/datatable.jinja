@@ -69,5 +69,5 @@
   window.context = {{ table_context|to_json|safe }};
 </script>
 {% endif %}
-{{ tags_for_js_chunks('datatable-' + slug + '.js')|safe }}
+{{ tags_for_js_chunks('datatable-' + slug + '.js', '')|safe }}
 {% endblock %}
