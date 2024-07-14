@@ -59,9 +59,8 @@
       window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
       window.API_LOCATION = '{{ settings.FEC_API_URL }}';
     </script>
-    {# Global javascript #}
-    {% tags_for_js_chunks 'global.js' %}
-    {% tags_for_js_chunks 'init.js' %}
+    {% tags_for_js_chunks 'global.js' '' %}
+    {% tags_for_js_chunks 'init.js' '' %}
     <script>
       var canSkipPolyfills = ('fetch' in window && 'assign' in Object);
       if (!canSkipPolyfills) {
