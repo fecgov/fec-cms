@@ -26,15 +26,12 @@ function show($target, push) {
   $target.attr({
     'aria-selected': 'true'
   });
-
   // Toggle panels
   $($container + ' [role="tabpanel"]').attr('aria-hidden', 'true');
   const $panel = $('#' + $target.attr('href').substring(1));
   $panel.attr('aria-hidden', null);
-
   const name = $target.closest('[role="tablist"]').attr('data-name');
   const value = $target.attr('data-name');
-
   if (push) {
     const query = _extend(
       URI.parseQuery(window.location.search),

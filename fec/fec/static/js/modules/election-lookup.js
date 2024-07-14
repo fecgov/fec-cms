@@ -1,6 +1,7 @@
 /**
  * URLs: /data/
  * Templates: /fec/fec/data/templates/landing.jinja
+ * Imported into /fec/fec/static/js/pages/data-landing.js
  * Not to be confused with election-search.js, which is used on the homepage and /data/elections/
  */
 import ElectionForm from './election-form.js';

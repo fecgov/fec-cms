@@ -1,3 +1,7 @@
+/**
+ * data-init is used to initialize the parts of the pages that only appear in data pages
+ * i.e. not the homepage and not legal
+ */
 // Implementing a polyfill for js native WeakMap
 // in order to patch functionality in an included library
 // require('es6-weak-map/implement');
@@ -11,9 +15,6 @@ import Dropdown from './modules/dropdowns.js';
 import Search from './modules/search.js';
 import { default as initToggles } from './modules/toggle.js';
 import { init as initTablist } from './vendor/tablist.js';
-
-// Hack: Append jQuery to `window` for use by legacy libraries
-// window.$ = window.jQuery = $;
 
 initTablist();
 
@@ -38,7 +39,6 @@ $(function() {
   $('#version-methodology-modal_processed, #version-methodology-modal_raw')
     .detach()
     .appendTo('body');
-
 
   // Initialize new accordions
   $('.js-accordion').each(function() {
@@ -71,10 +71,10 @@ $(function() {
 
   $('.js-modal').each(function() {
     new A11yDialog(this);
-    this.addEventListener('dialog:show', function(e) {
+    this.addEventListener('dialog:show', function() {
       $('body').css('overflow', 'hidden');
     });
-    this.addEventListener('dialog:hide', function(e) {
+    this.addEventListener('dialog:hide', function() {
       $('body').css('overflow', 'scroll');
     });
   });

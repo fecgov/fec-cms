@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 import { customEvent } from '../modules/analytics.js';
 import HomepageEvents from '../modules/home-events.js';

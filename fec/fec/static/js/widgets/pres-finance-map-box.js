@@ -64,12 +64,9 @@ const selector_mapLegend = '.legend-container';
 const selector_candidateListDisclaimer = '.js-cand-list-note';
 
 // Imports, etc
-import 'abortcontroller-polyfill';
-
 import { customEvent } from '../modules/analytics.js';
 import DataMap from '../modules/data-map.js';
 import { buildUrl, passiveListenerIfSupported } from '../modules/helpers.js';
-const AbortController = window.AbortController;
 
 /**
  * Formats the given value and puts it into the dom element.

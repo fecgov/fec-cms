@@ -22,9 +22,6 @@ import { customEvent } from '../modules/analytics.js';
 import DataMap from '../modules/data-map.js';
 import { buildUrl, passiveListenerIfSupported } from '../modules/helpers.js';
 import Typeahead from '../modules/typeahead.js';
-import 'abortcontroller-polyfill';
-
-const AbortController = window.AbortController;
 
 /**
  * Formats the given value and puts it into the dom element.

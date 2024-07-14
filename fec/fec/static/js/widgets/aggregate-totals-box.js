@@ -271,7 +271,7 @@ AggregateTotalsBox.prototype.init = function() {
     // If we only have the buttons/pills/radios
     this.element.classList.add('controls-office-only');
   } else if (
-    // Else if we explictly have no controls,
+    // Else if we explicitly have no controls,
     // or both controls are external/outside this.element
     (this.yearControl == 'none' && this.officeControl == 'none') ||
     (!this.element.contains(this.officeControl) &&
@@ -728,5 +728,6 @@ function logUsage(officeAbbrev, electionYear) {
     eventLabel: officeAbbrev + ',' + electionYear
   });
 }
+
 
 new AggregateTotalsBox();

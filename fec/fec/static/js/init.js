@@ -6,17 +6,7 @@ import FormNav from './modules/form-nav.js';
 import { isLargeScreen } from './modules/helpers.js';
 import { init as tablistInit } from './vendor/tablist.js';
 
-// Hack: Append jQuery to `window` for use by legacy libraries
-// window.$ = window.jQuery = $;
-
 tablistInit();
-
-// initialize a feedbackWidget which will be set after document is loaded.
-let feedbackWidget = null;
-// expose a global function for Recaptcha to invoke after the challenge is complete.
-window.submitFeedback = function(token) {
-  feedbackWidget.submit(token);
-};
 
 $(function() {
   // Initialize new accordions
