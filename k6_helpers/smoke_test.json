@@ -3,7 +3,7 @@
     "scenarios": {
        "paginateDatables": {
          "executor": "constant-vus",
-         "vus": 2,
+         "vus": 1,
          "duration": "30s",
          "exec": "paginateDatables",
          "options": {
@@ -14,9 +14,20 @@
        },
        "browseWebpages": {
         "executor": "constant-vus",
-        "vus": 2,
+        "vus": 1,
         "duration": "30s",
         "exec": "browseWebpages",
+        "options": {
+          "browser": {
+            "type": "chromium"
+          }
+        }
+      },
+      "searchWebsite": {
+        "executor": "constant-vus",
+        "vus": 1,
+        "duration": "30s",
+        "exec": "searchWebsite",
         "options": {
           "browser": {
             "type": "chromium"
