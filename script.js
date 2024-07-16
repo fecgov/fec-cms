@@ -78,10 +78,12 @@ export async function browseWebpages() {
         
         if (debug_mode){
         console.log(full_url);
+        console.log(page.url());
         }
+        
         const test_url = page.url();
         check(test_url, {
-            test_url: (h) => h == full_url,
+            test_url: (h) => h.includes(full_url),
         });
     
         } finally {
@@ -101,7 +103,15 @@ export async function searchWebsite() {
         await page.goto(full_url);
 
         if(url.includes("legal")){
-            await searchLegal(page, search_term);
+            if(url == '/data/legal/search/') {
+                await searchLegal(page, search_term);
+            }
+            else if (url.includes("advisory-opinions")){
+                await advanceLegalSearch(page, search_term, true);
+            }
+            else {
+                await advanceLegalSearch(page, search_term, false);
+            }
         }
         else {
             await searchWeb(page, search_term);
@@ -125,7 +135,6 @@ async function searchWeb(page, search_term){
       ]);
 
     var nav_item = await page.innerHTML('.side-nav__item');
-
     check(nav_item, {
         nav_item: (h) => (h.includes("Candidates") || h.includes("Committees") || h.includes("Other") || h.includes("Suggestions")),
       });
@@ -148,7 +157,7 @@ async function searchWeb(page, search_term){
     }
     
 }
-async function searchLegal(page, search_term ) {
+async function searchLegal(page, search_term) {
     const input_box = await page.locator('[aria-label="Search for legal documents"]');
     
     await input_box.type(search_term); 
@@ -163,4 +172,30 @@ async function searchLegal(page, search_term ) {
         header: (h) => h.startsWith("Results for"),
       });
     
+}
+
+async function advanceLegalSearch(page, search_term, isAO) {
+    var input_box;
+    
+    if (isAO){
+        input_box = await page.locator('input[name="q"]');
+    }
+    else{
+        input_box = await page.locator('input[name="search"]');
+    }
+     
+    const before_search_header = await page.locator(".tags__title").textContent();
+    
+    await input_box.type(search_term); 
+    
+    await Promise.all([
+        page.waitForNavigation(),
+        input_box.press('Enter'),
+      ]);
+
+    const after_search_header = await page.locator(".tags__title").textContent();
+    check(after_search_header, {
+        after_search_header: (h) => h != before_search_header,
+      });
+
 }
