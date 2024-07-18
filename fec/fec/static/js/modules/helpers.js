@@ -566,17 +566,14 @@ function sanitizeValue(value) {
       for (var i = 0; i < value.length; i++) {
         if (value[i] !== null && value[i] !== undefined) {
           value[i] = DOMPurify.sanitize(value[i])
-            .replace('"', `&quot;`)
             .replace(validCharactersRegEx, '');
         }
       }
     } else {
       value = DOMPurify.sanitize(value)
-        .replace('"', `&quot;`)
         .replace(validCharactersRegEx, '');
     }
   }
-
   return value;
 }
 

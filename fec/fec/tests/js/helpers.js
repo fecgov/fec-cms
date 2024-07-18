@@ -124,6 +124,11 @@ describe('helpers', function() {
           ['X0YZ12345quotgt', null]
       );
     });
+
+    it('removes all double quotes', function() {
+      var value = '"committee name"';
+      expect(helpers.sanitizeValue(value)).to.equal('committee name');
+    });
   });
 
   describe('sanitizeQueryParams', function() {
