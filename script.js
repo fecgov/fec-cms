@@ -1,7 +1,9 @@
 import { browser } from 'k6/browser';
 import { check } from 'k6';
-import {data_table_pages, web_pages, home_page_buttons, search_pages, search_terms} from './k6_helpers/urls.js';
+import {data_table_pages, web_pages, home_page_buttons, search_pages, search_terms, data_table_date_search} from './k6_helpers/urls.js';
 import { randomItem } from 'https://jslib.k6.io/k6-utils/1.4.0/index.js';
+import faker from 'https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.min.js'
+faker.locale = "en_US";
 
 const debug_mode = true;
 const base_url = __ENV.HOSTNAME;
@@ -14,24 +16,38 @@ const base_url = __ENV.HOSTNAME;
 // https://grafana.com/blog/2024/01/30/smoke-testing/ 
 // under 5 VUs, short duration (30s to 2m) duration 
 
-
 export async function paginateDatables() {
     
-    const page = await browser.newPage();
-    const url = randomItem(data_table_pages);
+    const context = await browser.newContext({
+        bypassCSP: true,
+    });
+    const page = await context.newPage();
+    const url = await randomItem(data_table_pages);
     const full_url = base_url.concat(url);
 
     try {
+
     await page.goto(full_url);
-    
+
+   // const loading_animation = page.locator('.overlay.is-loading');
+  // const results_table = page.locator('[aria-describedby="results_info"]');
+
+    await page.waitForTimeout(500);
+
     if (debug_mode){
     console.log(full_url);
     }
-    
+   results_table.waitFor({
+        state: 'visible',
+    });
+
+    await loading_animation.waitFor({
+        state: 'hidden',
+      });   
+
     const button = page.locator('//a[text()="Next"]');   
     await button.click();
     
-    const loading_animation = page.locator('.overlay.is-loading');
    
     await loading_animation.waitFor({
         state: 'hidden',
@@ -43,11 +59,32 @@ export async function paginateDatables() {
         result_info: (h) => h.startsWith("Showing 31"),
     });
 
+    if(data_table_date_search[url] !== undefined){  
+        let currentDate = new Date().toJSON().slice(0, 10);
+        var random_date = faker.date.between('1979-01-01', currentDate); 
+        var input_locator = "#{}";
+        
+        input_locator = input_locator.replace("{}", data_table_date_search[url]);
+
+        var input_box = page.locator(input_locator);
+
+        await input_box.type(random_date.toLocaleDateString()); 
+
+        await input_box.press('Enter');
+          
+        await loading_animation.waitFor({
+            state: 'hidden',
+        });    
+     
+    }
+ 
     } finally {
         if (debug_mode) {
             await page.screenshot({ path: 'k6_helpers/screenshots/datatablePagination.png' });
         }
         await page.close();
+        await browser.close();
+
     }
 
 }
@@ -91,6 +128,8 @@ export async function browseWebpages() {
                 await page.screenshot({ path: 'k6_helpers/screenshots/browse_webpage_2.png' });
             }
             await page.close();
+            
+
         }
 }
 
@@ -122,6 +161,8 @@ export async function searchWebsite() {
             await page.screenshot({ path: 'k6_helpers/screenshots/searchWebsite.png' });
         }
         await page.close();
+        
+
     }
 }
 

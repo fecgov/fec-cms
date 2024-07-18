@@ -1,41 +1,29 @@
-
 {
-    "scenarios": {
-       "paginateDatables": {
-         "executor": "constant-vus",
-         "vus": 1,
-         "duration": "30s",
-         "exec": "paginateDatables",
-         "options": {
-           "browser": {
-             "type": "chromium"
-           }
-         }
-       },
-       "browseWebpages": {
-        "executor": "constant-vus",
-        "vus": 1,
-        "duration": "30s",
-        "exec": "browseWebpages",
-        "options": {
-          "browser": {
-            "type": "chromium"
-          }
+  "scenarios": {
+    "startHere": {
+      "executor": "ramping-vus",
+      "startVUs": 0,
+      "stages": [
+        {
+          "duration": "20s",
+          "target": 40
+        },
+        {
+          "duration": "10s",
+          "target": 0
         }
-      },
-      "searchWebsite": {
-        "executor": "constant-vus",
-        "vus": 1,
-        "duration": "30s",
-        "exec": "searchWebsite",
-        "options": {
-          "browser": {
-            "type": "chromium"
-          }
+      ],
+      "exec": "startHere",
+      "options": {
+        "browser": {
+          "type": "chromium"
         }
       }
-     },
-     "thresholds": {
-       "checks": ["rate>0.95"]
-     }
+    }
+  },
+  "thresholds": {
+    "checks": [
+      "rate==1.0"
+    ]
+  }
 }

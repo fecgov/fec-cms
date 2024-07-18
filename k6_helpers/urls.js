@@ -1,3 +1,4 @@
+
 export const search_pages = [
     "/search/?type=candidates&type=committees&type=site",
     "/data/search/",
@@ -8,6 +9,18 @@ export const search_pages = [
     "/data/legal/search/enforcement/",
 ]
 
+export const data_table_date_search = {
+    "/data/receipts/individual-contributions/":  "min_date",
+    "/data/national-party-account-receipts/": "min_contribution_receipt_date",
+    "/data/national-party-account-disbursements/": "min_disbursement_date",
+    "/data/receipts/": "min_date",
+    "/data/disbursements/": "min_date",
+    "/data/filings/": "min_receipt_date",
+    "/data/individual-contributions/": "min_date",
+    "/data/debts/": "min_coverage_end_date",
+    "/data/allocated-federal-nonfederal-disbursements/": "min_date",
+    "/data/loans/": "min_incurred_date_raw",
+}
 
 export const data_table_pages = [
     "/data/receipts/individual-contributions/",
@@ -34,21 +47,6 @@ export const data_table_pages = [
     "/data/communication-costs/",
     "/data/candidates/senate/",
 ];
-
-export const data_table_date_search = {
-    "/data/receipts/individual-contributions/":  "min_date",
-    "/data/national-party-account-receipts/": "min_contribution_receipt_date",
-    "/data/national-party-account-disbursements/": "min_disbursement_date",
-    "/data/receipts/": "min_date",
-    "/data/disbursements/": "min_date",
-    "/data/filings/": "min_receipt_date",
-    "/data/individual-contributions/": "min_date",
-    "/data/debts/": "min_coverage_end_date",
-    "/data/allocated-federal-nonfederal-disbursements/": "min_date",
-    "/data/loans/": "min_incurred_date",
-    "/data/electioneering-communications/": "min_date",
-    "/data/communication-costs/": "min_date",
-}
 
 export const home_page_buttons = [
     "All news",
