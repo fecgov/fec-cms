@@ -121,15 +121,20 @@ describe('helpers', function() {
       ];
 
       expect(helpers.sanitizeValue(value)).to.deep.equal(
-          ['X0YZ12345quotgt', null]
+          ['X0YZ12345gt', null]
       );
+    });
+
+    it('removes all double quotes', function() {
+      var value = '"committee name"';
+      expect(helpers.sanitizeValue(value)).to.equal('committee name');
     });
   });
 
   describe('sanitizeQueryParams', function() {
     it('sanitizes a collection of parameters', function() {
       var query = {
-        candidate_id: 'H4GA06087"><sCrIPt>alert(document.cookie)</ScRiPt>',
+        candidate_id: 'H4GA06087><sCrIPt>alert(document.cookie)</ScRiPt>',
         committee_id: 'C00509893',
         max_date: '12-31-2016',
         min_date: '01-01-2015',
@@ -139,7 +144,7 @@ describe('helpers', function() {
       };
 
       expect(helpers.sanitizeQueryParams(query)).to.deep.equal({
-        candidate_id: 'H4GA06087quotgt',
+        candidate_id: 'H4GA06087gt',
         committee_id: 'C00509893',
         max_date: '12-31-2016',
         min_date: '01-01-2015',
