@@ -204,9 +204,7 @@ var individualDataset = {
   templates: {
     suggestion: function(datum) {
       return (
-        '<span><strong>Search individual contributions from: &ldquo;</strong>' +
-        datum.id +
-        '<strong>&rdquo;</strong></span>'
+        `<span><strong>Search individual contributions from: &ldquo;</strong>${datum.id}<strong>&rdquo;</strong></span>`
       );
     }
   }
