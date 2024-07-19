@@ -204,9 +204,9 @@ var individualDataset = {
   templates: {
     suggestion: function(datum) {
       return (
-        '<span><strong>Search individual contributions from:</strong> "' +
+        '<span><strong>Search individual contributions from: &ldquo;</strong>' +
         datum.id +
-        '"</span>'
+        '<strong>&rdquo;</strong></span>'
       );
     }
   }
@@ -228,7 +228,7 @@ var siteDataset = {
   templates: {
     suggestion: function(datum) {
       return (
-        '<span><strong>Search other pages:</strong> "' + datum.id + '"</span>'
+        '<span><strong>Search other pages: &ldquo;</strong>' + datum.id + '<strong>&rdquo;</strong></span>'
       );
     }
   }
@@ -248,7 +248,7 @@ var legalDataset = {
   templates: {
     suggestion: function(datum) {
       return (
-        '<span><strong>Search legal resources:</strong> "' + datum.id + '"</span>'
+        '<span><strong>Search legal resources: &ldquo;</strong>' + datum.id + '<strong>&rdquo;</strong></span>'
       );
     }
   }
