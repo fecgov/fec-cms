@@ -215,7 +215,7 @@ AcrossTime.prototype.handleYearChange = function(e) {
   this.baseQuery.office = window.context.office_code;
 
   // Load data based on baseQuery
-  this.loadData(this.baseQuery);
+  // this.loadData(this.baseQuery);
 
   // Load data based on baseQuery and the two years
   this.loadData(this.baseQuery, [beginning, ending]);
