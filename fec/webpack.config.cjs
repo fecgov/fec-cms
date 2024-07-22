@@ -53,32 +53,16 @@ const homeAndDataEntries = {
     import: `${js}/widgets/aggregate-totals-box.js`,
     filename: 'widgets/aggregate-totals-box.js',
     dependOn: 'bythenumbers'
-    // publicPath: '/widgets/aggregate-totals-box.js`
   },
-  // 'aggregate-totals': {
-  //   import: `${js}/widgets/aggregate-totals.js`,
-  //   // filename: 'widgets/aggregate-totals.js',
-  //   // dependOn: 'aggregate-totals-box'
-  // },
-  // 'contributions-by-state': {
-  //   import: `${js}/widgets/contributions-by-state.js`,
-  //   dependOn: 'bythenumbers'
-  // },
   'widgets/contributions-by-state-box': {
     import: `${js}/widgets/contributions-by-state-box.js`,
     filename: 'widgets/contributions-by-state-box.js',
     dependOn: 'bythenumbers'
-    // publicPath: '/widgets/contributions-by-state-box.js`
   },
   'widgets/pres-finance-map-box': {
     import: `${js}/widgets/pres-finance-map-box.js`,
     filename: 'widgets/pres-finance-map-box.js',
     dependOn: 'data-init'
-    // publicPath: '/widgets/contributions-by-state-box.js`
-  },
-  analytics: {
-    import: `${js}/modules/analytics.js`,
-    dependOn: 'global'
   }
 };
 
@@ -209,12 +193,10 @@ module.exports = [
       new webpack.ProvidePlugin({
         $: 'jquery',
         jQuery: 'jquery'
-        // underscore: 'underscore'
       }),
       sharedManifestPlugin
     ],
     output: {
-      // clean: // Only run clean on the last module.exports
       // [fullhash] change any content for any file, and all files get a single new hash
       // [chunkhash] change any content, and all chunks of that file shares a new hash (other files are untouched)
       // [contenthash] change content, and any changed chunk will get a new hash
@@ -230,7 +212,6 @@ module.exports = [
       'legal-app': `${js}/legal/LegalApp.cjs`
     },
     output: {
-      // clean: // Only run clean on the last module.exports
       filename: '[name]-[contenthash].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
     },
@@ -252,21 +233,11 @@ module.exports = [
           exclude: /node_modules/,
           loader: 'babel-loader',
           options: {
-            // presets: ['es2015', 'react']
             presets: ['@babel/preset-env', '@babel/preset-react']
           }
       }
       ]
     }
-    // resolve: {
-    //   extensions: ['*', '.js', 'jsx']
-    // }
-    //     stats: {
-    //       assetsSort: 'field',
-    //       modules: false,
-    //       warnings: false
-    //     }
-    //   },
   },
   {
     // DRAFTAIL ENTRY
@@ -284,10 +255,6 @@ module.exports = [
         jQuery: 'jquery'
       }),
       sharedManifestPlugin
-      // new WebpackManifestPlugin({
-      //   fileName: 'rev-draftail-manifest-js.json',
-      //   basePath: '/static/js/'
-      // })
     ],
     module: {
       rules: [

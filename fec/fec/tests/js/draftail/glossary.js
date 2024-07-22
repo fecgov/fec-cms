@@ -19,7 +19,7 @@ describe('draftail - Glossary Block Component', function() {
     var Decorator = Glossary.decorator;
     var element = shallow(<Decorator>test</Decorator>);
     expect(element.childAt(0).text()).to.equal('test');
-    expect(element.type()).to.equal('b') // TODO: jQuery deprecation (.type())
+    expect(element.type()).to.equal('b'); // TODO: jQuery deprecation (.type())
   });
 
   it('the Glossary source should build a select with all the term options', function() {
