@@ -1,16 +1,39 @@
 const fs = require('fs');
 const path = require('path');
-// const fileURLToPath = require('url');
 
 const webpack = require('webpack');
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
+
+// mode comes from the package.json's definition for `npm run build…` but defaults to 'development'
+// Some our settings change based on mode and some Webpack internals change automatically (like whether to minify)
+// Expect values are `development` or `production`
+const mode = process.argv[process.argv.indexOf('--mode') + 1] || 'development';
+
+/**
+ * Which source map type should devtool use?
+ * @tutorial https://webpack.js.org/configuration/devtool/
+ * @prop {undefined}         - Fastest option, no SourceMaps
+ * @prop {'source-map'}      - Separate, high quality SourceMaps
+ * @prop {'eval-source-map'} - Development builds with high quality SourceMaps
+ */
+const sourceMapType = 'eval-source-map';
+const sourceMapType_prod = undefined; // For when mode == 'production'
+
+// Should we analyze the bundles?
+// Pauses the Webpack bundling near the end and opens a browser window with an interactive graph of the bundles.
+// (Will need to control-c the terminal to do anything else after running this)
+const analyzerBundlesDuringDevelopment = false;
+
+// Abbreviation for use throughout this file
 const js = './fec/static/js';
-// This is the shared seed object for the manifest plugin but multiple entries is unreliable,
-// So we'll push all entries here, and have this returned for every entry
+
+// This is the shared seed object for the manifest plugin but multiple configurations is unreliable,
+// so we'll push all entries here, and have this returned for every configuration
 let sharedManifestObject = {};
 
+// The plugin settings that will be shared for every configuration
 const sharedManifestPlugin = new WebpackManifestPlugin({
   fileName: 'rev-manifest-js.json',
   basePath: '/static/js/',
@@ -19,6 +42,7 @@ const sharedManifestPlugin = new WebpackManifestPlugin({
   generate: (seed, files, entries) => {
     for (let entry in entries) {
       // We need to put the /static/js/ path in front of each of the file names
+      // because path_for_js, etc will default to returning `/static/js/${requested filename}`
       const entryChunks = entries[entry];
       for(let i = 0; i < entryChunks.length; i++) {
         entryChunks[i] = `/static/js/${entryChunks[i]}`;
@@ -29,9 +53,7 @@ const sharedManifestPlugin = new WebpackManifestPlugin({
   }
 });
 
-/**
- * Queue up the files for the entries for the homepage and the data pages
- */
+// Queue up the files for the entries for the homepage and the data pages
 const homeAndDataEntries = {
   global: `${js}/global.js`,
   home: {
@@ -66,26 +88,21 @@ const homeAndDataEntries = {
   }
 };
 
-/**
- * These are the pages/entries that depend on the data-init entry (which relies on global)
- */
+// These are the pages/entries that depend on the init entry (which relies on global)
 const pagesThatDependOnInit = ['contact-form'];
 
-/**
- * These are the pages/entries that depend on the data-init entry (which relies on global)
- */
+// These are the pages/entries that depend on the data-init entry (which relies on global)
 const pagesThatDependOnDataInit = [
   'bythenumbers', 'candidate-single', 'committee-single', 'data-landing',
   'data-browse-data', 'data-map', 'election-lookup', 'elections'];
 
-/**
- * Start the list of datatable pages
- */
+// Start the list of datatable pages
 const datatablePages = [];
 
 /**
- * For every .js file in fec/static/js/pages,
+ * Scans the js/pages directory and creates entries as needed
  */
+// For every file in fec/static/js/pages,
 fs.readdirSync(`${js}/pages`).forEach(function(f) {
   // Skip non-js files
   if (f.search('.js') < 0) {
@@ -95,58 +112,55 @@ fs.readdirSync(`${js}/pages`).forEach(function(f) {
   const name = f.split('.js')[0];
   // Set the path to be fec/static/js/pages/ plus its filename
   const p = path.join(`${js}/pages`, f);
-  // If the file name isn't already queued as an entry,
+  // If the file name isn't already queued as its own entry,
   if (!homeAndDataEntries[name]) {
 
     // If it's a datatable page, or a data page that requires data-init,
     if (name.indexOf('datatable-') >= 0 || pagesThatDependOnDataInit.includes(name)) {
-      // add it so it depends on data-init (and inherits global)
+      // add it, marking that it depends on data-init (and inherits global)
       homeAndDataEntries[name] = {
         import: `./${p}`,
         dependOn: 'data-init'
       }
     // If it's a page that requires init,
     } else if (name.indexOf('datatable-') >= 0 || pagesThatDependOnInit.includes(name)) {
-      // add it so it depends on init (and inherits global)
+      // add it, marking that it depends on init (and inherits global)
       homeAndDataEntries[name] = {
         import: `./${p}`,
         dependOn: 'init'
       }
     } else {
-      // else add it so it depends on global
+      // else add it, marking that it depends on global
       homeAndDataEntries[name] = {
         import: `./${p}`,
         dependOn: 'global'
       }
     }
   }
-  // // Note all datatable pages for getting the common chunk
-// // if (['bythenumbers', 'dataviz-common', 'election-lookup'].includes(name))
-  // if it's a datatable page, queue it into datatablePages
+  // If it's a datatable page, queue it into datatablePages
   if (name.search('datatable-') > -1) {
     datatablePages.push(`./fec/static/js/pages/${name}`);
   }
 });
 
 /**
- * Which source map type should devtool use?
+ * Do the thing!
+ * The configurations for the various 'sites' (Draftail, Legal, and everything else)
  */
-// const sourceMapType = 'source-map'; // separate files
-const sourceMapType = 'eval-source-map';
-const mode = process.argv[process.argv.indexOf('--mode') + 1] || 'development';
-
 module.exports = [
   {
-    // Data and Home
+    // DATA AND HOME ENTRIES configuration
+    // Everything that isn't Legal or Draftail, which are the next configurations in this array
     name: 'data_and_home',
     entry: homeAndDataEntries,
-    devtool: mode == 'production' ? undefined : sourceMapType,
+    devtool: mode == 'production' ? sourceMapType_prod : sourceMapType,
     optimization: {
       emitOnErrors: true,
       innerGraph: true,
       moduleIds: 'named',
-      // chunkIds: 'named',
-      removeAvailableModules: true, // TESTING
+      // chunkIds: 'named', // shared chunks default to numbered names. 'named' makes it easier to debug
+      removeAvailableModules: true,
+      runtimeChunk: 'single',
       splitChunks: {
         chunks: 'all',
         minChunks: 2,
@@ -171,10 +185,6 @@ module.exports = [
       alias: {
         // bloodhound: path.join(__dirname, '../node_modules/corejs-typeahead/dist/typeahead.jquery.min.js'),
         typeahead: path.join(__dirname, '../node_modules/corejs-typeahead/dist/bloodhound.min.js'),
-        // These were 18F but have been archived so we've moved them to our own */modules/*
-        // 'aria-accordion': path.join(__dirname, 'fec/static/js/modules/aria-accordion/src/accordion.js'),
-        // 'component-sticky': path.join(__dirname, 'fec/static/js/modules/component-sticky/index.js'),
-        // 'glossary-panel': path.join(__dirname, 'fec/static/js/modules/glossary-panel/src/glossary.js'),
         // jQuery aliases
         jquery: require.resolve(path.join(__dirname, '../node_modules/jquery/dist/jquery.js'))
         // inputmask: path.join(__dirname, '../node_modules/inputmask/dist/inputmask.es6.js'),
@@ -182,8 +192,6 @@ module.exports = [
         // 'inputmask.dependencyLib': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.dependencyLib.js'),
         // inputmask: path.join(__dirname, '../node_modules/inputmask/dist/jquery.inputmask.js'),
         // 'inputmask.date.extensions': path.join(__dirname, '../node_modules/jquery.inputmask/dist/inputmask/inputmask.date.extensions.js'),
-        // underscore: path.join(__dirname, '../node_modules/underscore/underscore-esm.js')
-        // underscore: path.join(__dirname, '../node_modules/underscore/')
       }
     },
     plugins: [
@@ -194,7 +202,8 @@ module.exports = [
         $: 'jquery',
         jQuery: 'jquery'
       }),
-      sharedManifestPlugin
+      sharedManifestPlugin,
+      analyzerBundlesDuringDevelopment ? new BundleAnalyzerPlugin() : undefined,
     ],
     output: {
       // [fullhash] change any content for any file, and all files get a single new hash
@@ -206,7 +215,7 @@ module.exports = [
     }
   },
   {
-    // LEGAL ENTRIES
+    // LEGAL ENTRIES configuration
     name: 'legal',
     entry: {
       'legal-app': `${js}/legal/LegalApp.cjs`
@@ -215,7 +224,7 @@ module.exports = [
       filename: '[name]-[contenthash].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
     },
-    devtool: mode == 'production' ? undefined : sourceMapType,
+    devtool: mode == 'production' ? sourceMapType_prod : sourceMapType,
     plugins: [
       new webpack.DefinePlugin({
         context: {}
@@ -240,15 +249,15 @@ module.exports = [
     }
   },
   {
-    // DRAFTAIL ENTRY
+    // DRAFTAIL ENTRY configuration
     name: 'draftail',
     entry: { draftail: `${js}/draftail/App.js` },
     output: {
-      // clean: mode === 'production' ? true : undefined,
+      // clean: mode === 'production' ? true : undefined, // Deploying to Prod doesn't need this at all
       filename: '[name]-[contenthash].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
     },
-    devtool: mode === 'production' ? undefined : sourceMapType,
+    devtool: mode === 'production' ? sourceMapType_prod : sourceMapType,
     plugins: [
       new webpack.ProvidePlugin({
         $: 'jquery',
