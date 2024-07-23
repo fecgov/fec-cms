@@ -1,18 +1,15 @@
-'use strict';
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import { spy, stub } from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+import { default as URI } from 'urijs';
+import { default as _extend } from 'underscore/modules/extend.js';
 
-var $ = require('jquery');
-var URI = require('urijs');
-var _ = require('underscore');
-
-require('./setup')();
-
-_.extend(window, {
+_extend(window, {
   context: {
     districts: {
       NJ: { state: 'New Jersey', districts: 12 },
@@ -21,8 +18,8 @@ _.extend(window, {
   }
 });
 
-var search = require('../../static/js/modules/election-search');
-var map = require('../../static/js/modules/election-map');
+import ElectionSearch from '../../static/js/modules/election-search.js';
+import ElectionMap from '../../static/js/modules/election-map.js';
 
 describe('election search', function() {
   before(function() {
@@ -31,8 +28,8 @@ describe('election search', function() {
   });
 
   before(function() {
-    sinon.stub(map.ElectionMap.prototype, 'init');
-    sinon.stub(map.ElectionMap.prototype, 'drawDistricts');
+    stub(ElectionMap.prototype, 'init');
+    stub(ElectionMap.prototype, 'drawDistricts');
   });
 
   beforeEach(function() {
@@ -55,7 +52,7 @@ describe('election search', function() {
           '</div>'
       );
     window.history.pushState({}, null, '/');
-    this.el = new search.ElectionSearch('#election-lookup');
+    this.el = new ElectionSearch('#election-lookup');
   });
 
   it('should memorize its selector', function() {
@@ -70,22 +67,22 @@ describe('election search', function() {
   });
 
   it('should disable the district select when state is not set', function() {
-    this.el.$state.val('').change();
+    this.el.$state.val('').change(); // TODO: jQuery deprecation
     expect(this.el.$district.prop('disabled')).to.be.true;
   });
 
   it('should disable the district select when state is set and the state does not have districts', function() {
-    this.el.$state.val('AS').change();
+    this.el.$state.val('AS').change(); // TODO: jQuery deprecation
     expect(this.el.$district.prop('disabled')).to.be.true;
   });
 
   it('should enable the district select when state is set and the state has districts', function() {
-    this.el.$state.val('VA').change();
+    this.el.$state.val('VA').change(); // TODO: jQuery deprecation
     expect(this.el.$district.prop('disabled')).to.be.false;
   });
 
   it('should clear the state select and disable the district select when the zip select is set', function() {
-    this.el.$zip.val('19041').change();
+    this.el.$zip.val('19041').change(); // TODO: jQuery deprecation
     expect(this.el.$state.val()).to.equal('');
     expect(this.el.$district.prop('disabled')).to.be.true;
   });
@@ -96,7 +93,7 @@ describe('election search', function() {
   });
 
   it('should serialize state and district inputs', function() {
-    this.el.$state.val('VA').change();
+    this.el.$state.val('VA').change(); // TODO: jQuery deprecation
     this.el.$district.val('01');
     expect(this.el.serialize()).to.deep.equal({
       cycle: '2016',
@@ -107,7 +104,7 @@ describe('election search', function() {
 
   describe('drawing search results', function() {
     beforeEach(function() {
-      this.drawItem = sinon.spy(search.ElectionSearch.prototype, 'drawResult');
+      this.drawItem = spy(ElectionSearch.prototype, 'drawResult');
       this.results = [
         { cycle: 2016, office: 'P', state: 'US' },
         { cycle: 2016, office: 'S', state: 'NJ' },
@@ -130,7 +127,7 @@ describe('election search', function() {
     this.el.serialized = { cycle: '2016', zip: '19041' };
     this.el.draw([]);
     expect(this.el.$resultsItems.text()).to.contain(
-      "We can't find any results for this ZIP code"
+      `We can't find any results for this ZIP code`
     );
     expect(this.el.$resultsTitle.text()).to.equal('');
   });
@@ -139,7 +136,7 @@ describe('election search', function() {
     this.el.serialized = { cycle: '2016', state: 'VI' };
     this.el.draw([]);
     expect(this.el.$resultsItems.text()).to.contain(
-      "We can't find any results for this location"
+      `We can't find any results for this location`
     );
     expect(this.el.$resultsTitle.text()).to.equal('');
   });
@@ -154,7 +151,7 @@ describe('election search', function() {
         ]
       };
       this.deferred = $.Deferred();
-      sinon.stub($, 'ajax').returns(this.deferred);
+      stub($, 'ajax').returns(this.deferred);
       this.deferred.resolve(this.response);
     });
 
@@ -163,7 +160,7 @@ describe('election search', function() {
     });
 
     it('should fetch search results', function() {
-      sinon.stub(this.el, 'draw');
+      stub(this.el, 'draw');
       this.el.$zip.val('19041');
       this.el.search();
       expect($.ajax).to.have.been.called;
@@ -184,7 +181,7 @@ describe('election search', function() {
     });
 
     it('should update form and search on popstate', function() {
-      sinon.stub(this.el, 'draw');
+      stub(this.el, 'draw');
       window.history.pushState({}, null, '?cycle=2016&zip=19041');
       this.el.handlePopState();
       expect(this.el.$zip.val()).to.equal('19041');
@@ -201,7 +198,7 @@ describe('election search', function() {
     });
 
     it('should skip search if missing params', function() {
-      sinon.stub(this.el, 'draw');
+      stub(this.el, 'draw');
       this.el.search();
       expect($.ajax).not.to.have.been.called;
       expect(this.el.draw).not.to.have.been.called;

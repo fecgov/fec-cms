@@ -1,14 +1,12 @@
-'use strict';
+// Common for all/most tests
+// import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import { spy, stub } from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
-
-var $ = require('jquery');
-
-var Feedback = require('../../static/js/modules/feedback').Feedback;
+import Feedback from '../../static/js/modules/feedback.js';
 
 describe('feedback', function() {
   beforeEach(function() {
@@ -48,7 +46,7 @@ describe('feedback', function() {
 
   describe('callbacks', function() {
     beforeEach(function() {
-      this.message = sinon.spy(this.feedback, 'message');
+      this.message = spy(this.feedback, 'message');
     });
 
     afterEach(function() {
@@ -56,7 +54,7 @@ describe('feedback', function() {
     });
 
     it('clears text on success', function() {
-      this.feedback.handleSuccess({html_url: 'https://github.com/fecgov/FEC/issue/1'});
+      this.feedback.handleSuccess({ html_url: 'https://github.com/fecgov/FEC/issue/1' });
       expect(this.feedback.$box.find('textarea').val()).to.equal('');
       expect(this.feedback.message).to.have.been.called;
     });
@@ -83,18 +81,18 @@ describe('feedback', function() {
 
   describe('submission', function() {
     beforeEach(function() {
-      this.ajaxStub = sinon.stub($, 'ajax');
-      sinon.stub(this.feedback, 'handleSuccess');
-      sinon.stub(this.feedback, 'handleError');
-      this.event = {preventDefault: sinon.spy()};
-      this.token = "fake-token";
+      this.ajaxStub = stub($, 'ajax');
+      stub(this.feedback, 'handleSuccess');
+      stub(this.feedback, 'handleError');
+      this.event = { preventDefault: spy() };
+      this.token = 'fake-token';
       this.feedback.$box.find('textarea').val('awesome site good job');
-      var grecaptchaMock = sinon.stub({
-            render: function (options) { },
-            reset: function (id) { },
-            getResponse: function (id) { },
-            execute: function() { }
-        })
+      var grecaptchaMock = stub({
+            render: function (options) { }, // eslint-disable-line no-unused-vars, no-empty-function
+            reset: function (id) { }, // eslint-disable-line no-unused-vars, no-empty-function
+            getResponse: function (id) { }, // eslint-disable-line no-unused-vars, no-empty-function
+            execute: function() { } // eslint-disable-line no-empty-function
+        });
        window.grecaptcha = grecaptchaMock;
     });
 
@@ -105,7 +103,7 @@ describe('feedback', function() {
     });
 
     it('skips submit on empty inputs', function() {
-      var message = sinon.spy(this.feedback, 'message');
+      var message = spy(this.feedback, 'message');
       this.feedback.$box.find('#feedback-1').val('');
       this.feedback.submit(this.token);
       expect(message).to.have.been.called;

@@ -1,40 +1,31 @@
-'use strict';
-
 /**
- * audit datatable page
- * ---------------------
- * inital show all audit case.
- *
+ * Data and initialization for audit datatable page {@link /legal-resources/enforcement/audit-search/}
  */
+import { auditCategorySubcategory, showSubCategory } from '../modules/audit-category-sub-category.js';
+import auditTags from '../modules/audit_tags.js';
+import { audit as cols_audit } from '../modules/columns.js';
+import { DataTable_FEC, modalRenderRow } from '../modules/tables.js';
 
-var $ = require('jquery');
-
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-
-var auditCategorySubcategory = require('../modules/audit-category-sub-category');
-var auditTags = require('../modules/audit_tags');
-//for sub category filter-tag and results
-
-$(document).bind(
+// for sub category filter-tag and results
+$(document).bind( // TODO: jQuery deprecation
   'ready ajaxComplete',
   '#sub_category_id',
-  auditCategorySubcategory.showSubCategory
+  showSubCategory
 );
 
-$(document).ready(function() {
-  auditCategorySubcategory.auditCategorySubcategory();
+$(function() {
+  auditCategorySubcategory();
   auditTags();
-  var $table = $('#results');
-  new tables.DataTable($table, {
+  const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Audit Reports',
     path: ['audit-case'],
-    columns: columns.audit,
+    columns: cols_audit,
     order: [1, 'desc'],
     useFilters: true,
     useExport: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
       //     afterRender: tablePanels.renderauditPanel(false)
     }

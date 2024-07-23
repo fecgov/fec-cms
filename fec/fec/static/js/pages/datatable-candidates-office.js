@@ -1,21 +1,23 @@
-'use strict';
+/**
+ * Data and initialization for
+ * {@link /data/candidates/house/}
+ * {@link /data/candidates/president/}
+ * {@link /data/candidates/senate/}
+ */
+import { getColumns } from '../modules/column-helpers.js';
+import { candidateOffice as cols_candidateOffice } from '../modules/columns.js';
+import { renderCandidatePanel } from '../modules/table-panels.js';
+import { DataTable_FEC, modalRenderRow } from '../modules/tables.js';
 
-var $ = require('jquery');
-
-var tables = require('../modules/tables');
-var columnHelpers = require('../modules/column-helpers');
-var columns = require('../modules/columns');
-var tablePanels = require('../modules/table-panels');
-
-var columnGroups = {
-  president: columnHelpers.getColumns(columns.candidateOffice, [
+const columnGroups = {
+  president: getColumns(cols_candidateOffice, [
     'name',
     'party',
     'receipts',
     'disbursements',
     'trigger'
   ]),
-  senate: columnHelpers.getColumns(columns.candidateOffice, [
+  senate: getColumns(cols_candidateOffice, [
     'name',
     'party',
     'state',
@@ -23,7 +25,7 @@ var columnGroups = {
     'disbursements',
     'trigger'
   ]),
-  house: columnHelpers.getColumns(columns.candidateOffice, [
+  house: getColumns(cols_candidateOffice, [
     'name',
     'party',
     'state',
@@ -34,32 +36,32 @@ var columnGroups = {
   ])
 };
 
-var defaultSort = {
+const defaultSort = {
   president: 2,
   senate: 3,
   house: 4
 };
 
-var officeTitleMap = {
+const officeTitleMap = {
   president: 'president',
   senate: 'Senate',
   house: 'House of Representatives'
 };
 
-$(document).ready(function() {
-  var $table = $('#results');
-  new tables.DataTable($table, {
+$(function() {
+  const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
-    title: 'Candidates for ' + officeTitleMap[context.office],
+    title: 'Candidates for ' + officeTitleMap[window.context.office],
     path: ['candidates', 'totals'],
-    query: { office: context.office.slice(0, 1).toUpperCase() },
-    columns: columnGroups[context.office],
-    order: [[defaultSort[context.office], 'desc']],
+    query: { office: window.context.office.slice(0, 1).toUpperCase() },
+    columns: columnGroups[window.context.office],
+    order: [[defaultSort[window.context.office], 'desc']],
     useFilters: true,
     useExport: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: tablePanels.renderCandidatePanel(true)
+      afterRender: renderCandidatePanel(true)
     }
   });
 });

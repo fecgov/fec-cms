@@ -1,33 +1,25 @@
-'use strict';
-
 /**
- * Loans datatable page
+ * Loans datatable page {@link /data/loans/}
  * ---------------------
- * Schedule C shows loans to
- * the committee that are required to be disclosed.
- *
+ * Schedule C shows loans to the committee that are required to be disclosed.
  */
+import { loans as cols_loans } from '../modules/columns.js';
+import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+import { default as loansTemplate } from '../templates/loans.hbs';
 
-var $ = require('jquery');
-
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-
-var loansTemplate = require('../templates/loans.hbs');
-
-$(document).ready(function() {
-  var $table = $('#results');
-  new tables.DataTable($table, {
+$(function() {
+  const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Loans',
     path: ['schedules', 'schedule_c'],
-    columns: columns.loans,
+    columns: cols_loans,
     order: [[2, 'desc']],
     useFilters: true,
     useExport: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: tables.modalRenderFactory(loansTemplate)
+      afterRender: modalRenderFactory(loansTemplate)
     }
   });
 });

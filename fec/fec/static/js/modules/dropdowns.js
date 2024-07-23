@@ -1,15 +1,15 @@
-'use strict';
+/**
+ *
+ */
+import PerfectScrollbar from 'perfect-scrollbar';
 
-var $ = require('jquery');
-require('perfect-scrollbar/jquery')($);
-const accessibility = require('./accessibility');
+import { removeTabindex, restoreTabindex } from './accessibility.js';
+import Listeners from './listeners.js';
 
-var listeners = require('./listeners');
+const KEYCODE_ESC = 27;
+const KEYCODE_ENTER = 13;
 
-var KEYCODE_ESC = 27;
-var KEYCODE_ENTER = 13;
-
-var defaultOpts = {
+const defaultOpts = {
   checkboxes: true
 };
 
@@ -17,9 +17,9 @@ var defaultOpts = {
  * Dropdown toggles
  * @constructor
  * @param {string} selector - CSS selector for the fieldset that contains everything
- * @param {object} opts - Options
+ * @param {Object} opts - Options
  */
-function Dropdown(selector, opts) {
+export default function Dropdown(selector, opts) {
   this.opts = $.extend({}, defaultOpts, opts);
 
   this.isOpen = false;
@@ -66,7 +66,7 @@ function Dropdown(selector, opts) {
 
   this.$button.on('click', this.toggle.bind(this));
 
-  this.events = new listeners.Listeners();
+  this.events = new Listeners();
   this.events.on(document.body, 'click', this.handleClickAway.bind(this));
   this.events.on(document.body, 'focusin', this.handleFocusAway.bind(this));
   this.events.on(document.body, 'keyup', this.handleKeyup.bind(this));
@@ -78,37 +78,37 @@ function Dropdown(selector, opts) {
 
 Dropdown.prototype.toggle = function(e) {
   e.preventDefault();
-  var method = this.isOpen ? this.hide : this.show;
+  const method = this.isOpen ? this.hide : this.show;
   method.apply(this);
 
   return false;
 };
 
 Dropdown.prototype.show = function() {
-  accessibility.restoreTabindex(this.$panel);
+  restoreTabindex(this.$panel);
   this.$panel.attr('aria-hidden', 'false');
-  this.$panel.perfectScrollbar({ suppressScrollX: true });
-  this.$panel.find('input[type="checkbox"]:first').focus();
+  new PerfectScrollbar(this.$panel.get(0), { suppressScrollX: true });
+  this.$panel.find('input[type="checkbox"]:first').focus(); // TODO: jQuery deprecation (:first and .focus)
   this.$button.addClass('is-active');
   this.isOpen = true;
 };
 
 Dropdown.prototype.hide = function() {
-  accessibility.removeTabindex(this.$panel);
+  removeTabindex(this.$panel);
   this.$panel.attr('aria-hidden', 'true');
   this.$button.removeClass('is-active');
   this.isOpen = false;
 };
 
 Dropdown.prototype.handleClickAway = function(e) {
-  var $target = $(e.target);
+  const $target = $(e.target);
   if (!this.$body.has($target).length) {
     this.hide();
   }
 };
 
 Dropdown.prototype.handleFocusAway = function(e) {
-  var $target = $(e.target);
+  const $target = $(e.target);
   if (
     this.isOpen &&
     !this.$panel.has($target).length &&
@@ -123,7 +123,7 @@ Dropdown.prototype.handleKeyup = function(e) {
   if (e.keyCode === KEYCODE_ESC) {
     if (this.isOpen) {
       this.hide();
-      this.$button.focus();
+      this.$button.focus(); // TODO: jQuery deprecation
     }
   }
 };
@@ -132,36 +132,36 @@ Dropdown.prototype.handleCheckKeyup = function(e) {
   if (e.keyCode === KEYCODE_ENTER) {
     $(e.target)
       .prop('checked', true)
-      .change();
+      .change(); // TODO: jQuery deprecation
   }
 };
 
 Dropdown.prototype.handleCheck = function(e) {
-  var $input = $(e.target);
+  const $input = $(e.target);
   if ($input.is(':checked')) {
     this.selectItem($input);
   }
 };
 
 Dropdown.prototype.handleDropdownItemClick = function(e) {
-  var $button = $(e.target);
-  var $input = this.$selected.find('#' + $button.data('label'));
+  const $button = $(e.target);
+  const $input = this.$selected.find('#' + $button.data('label'));
 
   if (!$button.hasClass('is-checked')) {
-    $input.click();
+    $input.click(); // TODO: jQuery deprecation
   }
 };
 
 Dropdown.prototype.handleSelectedInputClick = function(e) {
-  var $button = this.$panel.find('button[data-label=' + e.target.id + ']');
+  const $button = this.$panel.find('button[data-label=' + e.target.id + ']');
 
   $button.toggleClass('is-checked');
 };
 
 Dropdown.prototype.handleCheckboxRemoval = function($input) {
-  var $item = $input.parent();
-  var $label = $input.parent().find('label');
-  var $button = this.$panel.find(
+  const $item = $input.parent();
+  const $label = $input.parent().find('label');
+  const $button = this.$panel.find(
     'button[data-label="' + $input.attr('id') + '"]'
   );
 
@@ -175,7 +175,7 @@ Dropdown.prototype.handleCheckboxRemoval = function($input) {
 };
 
 Dropdown.prototype.handleRemoveClick = function(e, opts) {
-  var $input = $(e.target)
+  let $input = $(e.target)
     .parent()
     .find('input');
 
@@ -189,7 +189,7 @@ Dropdown.prototype.handleRemoveClick = function(e, opts) {
 
 // "Clear all filters" will remove unchecked dropdown checkboxes
 Dropdown.prototype.handleClearFilters = function() {
-  var self = this;
+  const self = this;
   if (this.$selected) {
     this.$selected.find('input:checkbox:not(:checked)').each(function() {
       self.handleCheckboxRemoval($(this));
@@ -198,10 +198,10 @@ Dropdown.prototype.handleClearFilters = function() {
 };
 
 Dropdown.prototype.selectItem = function($input) {
-  var $item = $input.parent('.dropdown__item');
-  var $label = $item.find('label');
-  var prev = $item.prevAll('.dropdown__item');
-  var next = $item.nextAll('.dropdown__item');
+  const $item = $input.parent('.dropdown__item');
+  const $label = $item.find('label');
+  const prev = $item.prevAll('.dropdown__item');
+  const next = $item.nextAll('.dropdown__item');
 
   $item.after(
     '<li class="dropdown__item">' +
@@ -224,14 +224,14 @@ Dropdown.prototype.selectItem = function($input) {
     if (next.length) {
       $(next[0])
         .find('input[type="checkbox"]')
-        .focus();
+        .focus(); // TODO: jQuery deprecation
     } else if (prev.length) {
       $(prev[0])
         .find('input[type="checkbox"]')
-        .focus();
+        .focus(); // TODO: jQuery deprecation
     }
   } else {
-    this.$selected.find('input[type="checkbox"]').focus();
+    this.$selected.find('input[type="checkbox"]').focus(); // TODO: jQuery deprecation
   }
 };
 
@@ -247,5 +247,3 @@ Dropdown.prototype.isEmpty = function() {
 Dropdown.prototype.destroy = function() {
   this.events.clear();
 };
-
-module.exports = { Dropdown: Dropdown };

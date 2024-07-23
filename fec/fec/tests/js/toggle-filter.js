@@ -1,27 +1,24 @@
-'use strict';
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import { spy } from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+import ToggleFilter from '../../static/js/modules/filters/toggle-filter.js';
 
-var $ = require('jquery');
-
-require('./setup')();
-
-var ToggleFilter = require('../../static/js/modules/filters/toggle-filter').ToggleFilter;
-var DOM = '<fieldset class="js-filter" data-filter-ignore-count="true">' +
-            '<legend class="label">Data type</legend>' +
-            '<label for="processed">' +
-              '<input type="radio" value="processed" id="processed" checked name="data_type" data-prefix="Data type:" data-tag-value="processed">' +
-              '<span>Processed data</span>' +
-            '</label>' +
-            '<label for="efiling">' +
-              '<input type="radio" value="efiling" id="efiling" name="data_type" data-prefix="Data type:" data-tag-value="electronic filings">' +
-              '<span>Electronic filings</span>' +
-            '</label>' +
-          '</fieldset>';
+const DOM = '<fieldset class="js-filter" data-filter-ignore-count="true">' +
+  '<legend class="label">Data type</legend>' +
+  '<label for="processed">' +
+    '<input type="radio" value="processed" id="processed" checked name="data_type" data-prefix="Data type:" data-tag-value="processed">' +
+    '<span>Processed data</span>' +
+  '</label>' +
+  '<label for="efiling">' +
+    '<input type="radio" value="efiling" id="efiling" name="data_type" data-prefix="Data type:" data-tag-value="electronic filings">' +
+    '<span>Electronic filings</span>' +
+  '</label>' +
+'</fieldset>';
 
 describe('toggle filters', function() {
   before(function() {
@@ -31,7 +28,7 @@ describe('toggle filters', function() {
 
   beforeEach(function() {
     this.$fixture.empty().append(DOM);
-    this.handleChange = sinon.spy(ToggleFilter.prototype, 'handleChange');
+    this.handleChange = spy(ToggleFilter.prototype, 'handleChange');
     this.filter = new ToggleFilter(this.$fixture.find('.js-filter'));
   });
 
@@ -63,13 +60,13 @@ describe('toggle filters', function() {
   });
 
   it('calls handleChange() on change', function() {
-    this.filter.$elm.find('#efiling').prop('checked', true).change();
+    this.filter.$elm.find('#efiling').prop('checked', true).change(); // TODO: jQuery deprecation
     expect(this.handleChange).to.have.been.called;
   });
 
   describe('handleChange()', function() {
     beforeEach(function() {
-      this.trigger = sinon.spy($.prototype, 'trigger');
+      this.trigger = spy($.prototype, 'trigger');
       this.$fixture.empty().append(DOM);
       this.filter = new ToggleFilter(this.$fixture.find('.js-filter'));
     });
@@ -97,7 +94,7 @@ describe('toggle filters', function() {
     });
 
     it('triggers rename event on changing the toggle', function() {
-      this.$fixture.find('#efiling').prop('checked', true).change();
+      this.$fixture.find('#efiling').prop('checked', true).change(); // TODO: jQuery deprecation
       expect(this.trigger).to.have.been.calledWith('filter:renamed', [
         {
           key: 'data_type-toggle',

@@ -2,7 +2,7 @@
 {% import "macros/bythenumbers.jinja" as breakdowns %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{{ asset_for_css('data-landing.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ path_for_css('data-landing.css') }}" />
 {% endblock %}
 
 {% block page_title %}
@@ -26,7 +26,7 @@
 {% if FEATURES.aggregatetotals %}
 <section id="spending-summary" class="aggregate-totals-section">
   <h2>Spending summary</h2>
-  <script defer id="gov_fec_agg_tots_script" data-theme="dark" data-office="{{ office }}" data-year="{{ election_year }}" data-action="spending" src="{{ asset_for_js('widgets/aggregate-totals-box.js') }}"></script>
+  <script defer id="gov_fec_agg_tots_script" data-theme="dark" data-office="{{ office }}" data-year="{{ election_year }}" data-action="spending" src="{{ path_for_js('widgets/aggregate-totals-box.js') }}" type="module"></script>
 </section>
 {% endif %}
 <section id="spending-breakdown" class="option">
@@ -60,9 +60,9 @@
 
 {% block scripts %}
   <script type="text/javascript">
-  var context = {
-    type: 'disbursements'
-  }
+    window.context = {
+      type: 'disbursements'
+    }
   </script>
-  <script src="{{ asset_for_js('bythenumbers.js') }}"></script>
+  {{ tags_for_js_chunks('bythenumbers.js', '')|safe }}
 {% endblock %}

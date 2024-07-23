@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css"  href="{{ asset_for_css('legal.css') }}" />
+<link rel="stylesheet" type="text/css"  href="{{ path_for_css('legal.css') }}" />
 {% endblock %}
 
 {% block header %}
@@ -86,7 +86,7 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src="{{ asset_for_js('legal.js') }}"></script>
+  <script src="{{ path_for_js('legal.js') }}"></script>
   <script>
     // Add the script for removing tags
     document.addEventListener("DOMContentLoaded", function() {

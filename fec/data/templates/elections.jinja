@@ -13,7 +13,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block css %}
-  <link rel="stylesheet" type="text/css" href="{{ asset_for_css('elections.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ path_for_css('elections.css') }}" />
 {% endblock %}
 {% block body %}
   {{ header.header(title, crumb) }}
@@ -49,20 +49,18 @@
 {% endblock %}
 {% block scripts %}
 <script>
-var context = {
-  election: {
-    cycle: '{{ cycle }}',
-    election_full: true,
-    duration: '{{ election_duration }}',
-    office: '{{ office }}',
-    state: '{{ state or '' }}',
-    stateFull: '{{ state_full or '' }}',
-    district: '{{ district or '' }}'
-  }
-};
+  window.context = {
+    election: {
+      cycle: '{{ cycle }}',
+      election_full: true,
+      duration: '{{ election_duration }}',
+      office: '{{ office }}',
+      state: '{{ state or '' }}',
+      stateFull: '{{ state_full or '' }}',
+      district: '{{ district or '' }}'
+    }
+  };
 
 </script>
-<script src="{{ asset_for_js('dataviz-common.js') }}"></script>
-<script src="{{ asset_for_js('elections.js') }}"></script>
+{{ tags_for_js_chunks('elections.js', '')|safe }}
 {% endblock %}
-

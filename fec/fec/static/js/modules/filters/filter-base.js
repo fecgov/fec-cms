@@ -1,19 +1,16 @@
-'use strict';
+import { default as _escape } from 'underscore/modules/escape.js';
 
-var $ = require('jquery');
-var _ = require('underscore');
+import { default as FilterControl } from './filter-control.js';
 
-var FilterControl = require('./filter-control').FilterControl;
-
-function ensureArray(value) {
-  return _.isArray(value) ? value : [value];
+export function ensureArray(value) {
+  return Array.isArray(value) ? value : [value];
 }
 
-function prepareValue($elm, value) {
+export function prepareValue($elm, value) {
   return $elm.attr('type') === 'checkbox' ? ensureArray(value) : value;
 }
 
-function Filter(elm) {
+export default function Filter(elm) {
   this.$elm = $(elm);
   this.$input = this.$elm.find('input:not([name^="_"])');
   this.$filterLabel = this.$elm.closest('.accordion__content').prev();
@@ -49,17 +46,17 @@ Filter.prototype.fromQuery = function(query) {
 };
 
 Filter.prototype.setValue = function(value) {
-  var $input = this.$input.data('temp')
+  const $input = this.$input.data('temp')
     ? this.$elm.find('#' + this.$input.data('temp'))
     : this.$input;
-  $input.val(prepareValue($input, value)).change();
+  $input.val(prepareValue($input, value)).change(); // TODO: jQuery deprecation
   return this;
 };
 
 Filter.prototype.formatValue = function($input, value) {
-  var prefix = _.escape($input.data('prefix'));
-  var suffix = _.escape($input.data('suffix'));
-  var escapedValue = _.escape(value);
+  let prefix = _escape($input.data('prefix'));
+  const suffix = _escape($input.data('suffix'));
+  let escapedValue = _escape(value);
   if (prefix) {
     prefix = prefix === '$' ? prefix : prefix + ' ';
     escapedValue = '<span class="prefix">' + prefix + '</span>' + escapedValue;
@@ -80,7 +77,7 @@ Filter.prototype.handleAddEvent = function(e, opts) {
   // passes that value through via the event options.
   // Subfilters don't add listeners that trigger this handler, so it will only
   // be called by the MultiFilter.
-  var $filterLabel = opts.filterLabel || this.$filterLabel;
+  const $filterLabel = opts.filterLabel || this.$filterLabel;
   this.increment($filterLabel);
   this.setLastAction(e, opts);
 };
@@ -90,13 +87,13 @@ Filter.prototype.handleRemoveEvent = function(e, opts) {
   if (opts.name !== this.name || opts.loadedOnce !== true) {
     return;
   }
-  var $filterLabel = opts.filterLabel || this.$filterLabel;
+  const $filterLabel = opts.filterLabel || this.$filterLabel;
   this.decrement($filterLabel);
   this.setLastAction(e, opts);
 };
 
 Filter.prototype.increment = function($filterLabel) {
-  var filterCount = $filterLabel.find('.filter-count');
+  const filterCount = $filterLabel.find('.filter-count');
   if (filterCount.html()) {
     filterCount.html(parseInt(filterCount.html(), 10) + 1);
   } else {
@@ -105,7 +102,7 @@ Filter.prototype.increment = function($filterLabel) {
 };
 
 Filter.prototype.decrement = function($filterLabel) {
-  var filterCount = $filterLabel.find('.filter-count');
+  const filterCount = $filterLabel.find('.filter-count');
   if (filterCount.html() === '1') {
     filterCount.remove();
   } else {
@@ -129,7 +126,7 @@ Filter.prototype.setLastAction = function(e, opts) {
 
 Filter.prototype.disable = function() {
   this.$elm.find('input, label, button, .label').each(function() {
-    var $this = $(this);
+    const $this = $(this);
     $this.addClass('is-disabled').prop('disabled', true);
     // Disable the tag if it's checked
     if ($this.is(':checked') || $this.val()) {
@@ -143,17 +140,11 @@ Filter.prototype.disable = function() {
 
 Filter.prototype.enable = function() {
   this.$elm.find('input, label, button, .label').each(function() {
-    var $this = $(this);
+    const $this = $(this);
     $this.removeClass('is-disabled').prop('disabled', false);
     $this.trigger('filter:enabled', {
       key: $this.attr('id')
     });
   });
   this.isEnabled = true;
-};
-
-module.exports = {
-  Filter: Filter,
-  ensureArray: ensureArray,
-  prepareValue: prepareValue
 };

@@ -1,10 +1,20 @@
-'use strict';
+import { expect } from 'chai';
 
-var chai = require('chai');
-var expect = chai.expect;
-var columnHelpers = require('../../static/js/modules/column-helpers');
-var context = require('../fixtures/context');
-var houseResults = require('../fixtures/house-results');
+import {
+  barColumn as colHelp_barColumn,
+  buildAggregateUrl,
+  buildEntityLink,
+  buildTotalLink as colHelp_buildTotalLink,
+  formattedColumn as colHelp_formattedColumn,
+  getColumns,
+  getSizeParams,
+  sizeColumns,
+  sizeInfo,
+  stateColumns,
+  urlColumn
+} from '../../static/js/modules/column-helpers.js';
+import { default as context } from '../fixtures/context.js';
+import { default as houseResults } from '../fixtures/house-results.js';
 
 function stringToElement(str) {
   var div = document.createElement('div');
@@ -16,19 +26,19 @@ function stringToElement(str) {
 describe('column helpers', function() {
   var data = '100';
   var type = 'test';
-  var row = {committee_id: 1, cycle: 2018};
-  var meta = {row: '1'};
+  var row = { committee_id: 1, cycle: 2018 };
+  var meta = { row: '1' };
 
   describe('barColumn', function() {
     it('should return a default formatted object', function() {
-      var barColumn = columnHelpers.barColumn();
+      var barColumn = colHelp_barColumn();
       var results = barColumn({});
       expect(results).to.be.an('object');
       expect(results).to.have.all.keys('render','orderSequence');
     });
 
     it('should render an element', function() {
-      var barColumn = columnHelpers.barColumn();
+      var barColumn = colHelp_barColumn();
       var results = barColumn({});
       var renderResults = results.render(data, type, row, meta);
       var element = stringToElement(renderResults);
@@ -39,7 +49,7 @@ describe('column helpers', function() {
 
   describe('buildAggregateUrl', function() {
     it('should return min and max cycle date', function() {
-      var results = columnHelpers.buildAggregateUrl(2018);
+      var results = buildAggregateUrl(2018);
       expect(results).to.be.an('object');
       expect(results).to.have.all.keys('min_date', 'max_date');
       expect(results.min_date).to.equal('01-01-2017');
@@ -47,14 +57,14 @@ describe('column helpers', function() {
     });
 
     it('should return two year transaction period', function() {
-      var results = columnHelpers.buildAggregateUrl(2018, true);
+      var results = buildAggregateUrl(2018, true);
       expect(results).to.be.an('object');
       expect(results).to.have.all.keys('two_year_transaction_period');
       expect(results.two_year_transaction_period).to.equal(2018);
     });
 
     it('should return multiple two year transaction periods when duration > 2', function() {
-      var results = columnHelpers.buildAggregateUrl(2018, true, 4);
+      var results = buildAggregateUrl(2018, true, 4);
       expect(results).to.be.an('object');
       expect(results).to.have.all.keys('two_year_transaction_period');
       expect(results.two_year_transaction_period).to.eql([2018, 2016]); //deep equal
@@ -68,7 +78,7 @@ describe('column helpers', function() {
     var category = 'test';
 
     it('should return default entity link', function() {
-      var results = columnHelpers.buildEntityLink(input, url, category, {});
+      var results = buildEntityLink(input, url, category, {});
       var element = stringToElement(results);
       expect(results).to.be.a('string');
       expect(element.getAttribute('href')).to.equal(url);
@@ -77,13 +87,13 @@ describe('column helpers', function() {
     });
 
     it('should return entity link with is-incumbent class', function() {
-      var results = columnHelpers.buildEntityLink(input, url, category, {isIncumbent: true});
+      var results = buildEntityLink(input, url, category, { isIncumbent: true });
       var element = stringToElement(results);
       expect(results).to.be.a('string');
       expect(element.getAttribute('href')).to.equal(url);
       expect(element.getAttribute('title')).to.equal(input);
       expect(element.getAttribute('data-category')).to.equal(category);
-      expect(element.getAttribute('class')).to.equal('is-incumbent')
+      expect(element.getAttribute('class')).to.equal('is-incumbent');
     });
   });
 
@@ -109,7 +119,7 @@ describe('column helpers', function() {
     var context = '$'+data+'.00';
 
     it('should return default total link with no params', function() {
-      var buildTotalLink = columnHelpers.buildTotalLink(path, getNoParams);
+      var buildTotalLink = colHelp_buildTotalLink(path, getNoParams);
       var results = buildTotalLink(data, type, row, meta);
       var element = stringToElement(results);
       expect(results).to.be.a('string');
@@ -118,7 +128,7 @@ describe('column helpers', function() {
     });
 
     it('should return default total link with params', function() {
-      var buildTotalLink = columnHelpers.buildTotalLink(path, getParams);
+      var buildTotalLink = colHelp_buildTotalLink(path, getParams);
       var results = buildTotalLink(data, type, row, meta);
       var element = stringToElement(results);
       var a = element.firstChild;
@@ -131,7 +141,7 @@ describe('column helpers', function() {
     });
 
     it('should return receipts total link with params', function() {
-      var buildTotalLink = columnHelpers.buildTotalLink(pathReceipts, getParams);
+      var buildTotalLink = colHelp_buildTotalLink(pathReceipts, getParams);
       var results = buildTotalLink(data, type, row, meta);
       var element = stringToElement(results);
       var a = element.firstChild;
@@ -148,7 +158,7 @@ describe('column helpers', function() {
     }
 
     it('should return a default formatting object', function() {
-      var formattedColumn = columnHelpers.formattedColumn(function(){});
+      var formattedColumn = colHelp_formattedColumn(function(){}); // eslint-disable-line no-empty-function
       var results = formattedColumn({});
       expect(results).to.be.an('object');
       expect(results).to.have.all.keys('render');
@@ -156,7 +166,7 @@ describe('column helpers', function() {
     });
 
     it('should render a formatting function', function() {
-      var formattedColumn = columnHelpers.formattedColumn(format);
+      var formattedColumn = colHelp_formattedColumn(format);
       var results = formattedColumn();
       var renderResults = results.render(data, type, row, meta);
       expect(renderResults).to.be.an('object');
@@ -175,15 +185,15 @@ describe('column helpers', function() {
       var columns = {
         a: {
           name: 'a',
-          'type': 'int'
+          type: 'int'
         },
         b: {
           name: 'b',
-          'type': 'int'
+          type: 'int'
         }
       };
 
-      var results = columnHelpers.getColumns(columns, keys);
+      var results = getColumns(columns, keys);
       expect(results).to.be.an('array');
       expect(results).to.have.length(3);
     });
@@ -191,33 +201,33 @@ describe('column helpers', function() {
 
   describe('getSizeParams', function() {
     it('should return an object with min and max', function() {
-      var results = columnHelpers.getSizeParams(0);
+      var results = getSizeParams(0);
       expect(results).to.have.all.keys('min_amount', 'max_amount');
     });
 
     it('should return an object with min', function() {
-      var results = columnHelpers.getSizeParams(2000);
+      var results = getSizeParams(2000);
       expect(results).to.have.all.keys('min_amount');
     });
   });
 
   describe('sizeColumns', function() {
     it('should build a sizeColumns from context', function() {
-      var results = columnHelpers.sizeColumns(context);
+      var results = sizeColumns(context);
       expect(results).to.be.an('array');
     });
   });
 
   describe('sizeInfo', function() {
     it('should be a constants object', function() {
-      var results = columnHelpers.sizeInfo;
+      var results = sizeInfo;
       expect(results).to.be.an('object');
     });
   });
 
   describe('stateColumns', function() {
     it('should build a stateColumns from context and results', function() {
-      var results = columnHelpers.stateColumns($(houseResults), context);
+      var results = stateColumns($(houseResults), context);
       expect(results).to.be.an('array');
       expect(results.length).to.equal(houseResults.length + 1);
     });
@@ -225,14 +235,14 @@ describe('column helpers', function() {
 
   describe('urlColumn', function() {
     it('should return a default object', function() {
-      var results = columnHelpers.urlColumn('test');
+      var results = urlColumn('test');
       expect(results).to.be.an('object');
       expect(results).to.have.all.keys('render');
       expect(results.render).to.be.a('function');
     });
 
     it('should have render an element', function() {
-      var results = columnHelpers.urlColumn('committee_id');
+      var results = urlColumn('committee_id');
       var renderResults = results.render(data, type, row, meta);
       var element = stringToElement(renderResults);
       expect(renderResults).to.be.a('string');
@@ -240,7 +250,7 @@ describe('column helpers', function() {
     });
 
     it('should have render data', function() {
-      var results = columnHelpers.urlColumn('test');
+      var results = urlColumn('test');
       var renderResults = results.render(data, type, row, meta);
       expect(renderResults).to.equal(data);
     });

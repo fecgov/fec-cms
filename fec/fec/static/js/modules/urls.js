@@ -1,12 +1,15 @@
-'use strict';
+import { default as _each } from 'underscore/modules/each.js';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as _find } from 'underscore/modules/find.js';
+import { default as _isEqual } from 'underscore/modules/isEqual.js';
+import { default as _keys } from 'underscore/modules/keys.js';
+import { default as _union } from 'underscore/modules/union.js';
+import { default as URI } from 'urijs';
 
-var _ = require('underscore');
-var URI = require('urijs');
+import { pageView } from './analytics.js';
+import { sanitizeQueryParams } from './helpers.js';
 
-var analytics = require('./analytics');
-var helpers = require('./helpers');
-
-function updateQuery(params, fields) {
+export function updateQuery(params, fields) {
   var queryString = nextUrl(params, fields);
   if (queryString !== null) {
     window.history.replaceState(
@@ -14,11 +17,11 @@ function updateQuery(params, fields) {
       queryString,
       queryString || window.location.pathname
     );
-    analytics.pageView();
+    pageView();
   }
 }
 
-function pushQuery(params, fields) {
+export function pushQuery(params, fields) {
   var queryString = nextUrl(params, fields);
   if (queryString !== null) {
     window.history.pushState(
@@ -26,20 +29,20 @@ function pushQuery(params, fields) {
       queryString,
       queryString || window.location.pathname
     );
-    analytics.pageView();
+    pageView();
   }
 }
 
-function nextUrl(params, fields) {
-  var query = helpers.sanitizeQueryParams(
+export function nextUrl(params, fields) {
+  var query = sanitizeQueryParams(
     URI.parseQuery(window.location.search)
   );
   if (!compareQuery(query, params, fields)) {
     // Clear and update filter fields
-    _.each(fields, function(field) {
+    _each(fields, function(field) {
       delete query[field];
     });
-    params = _.extend(query, params);
+    params = _extend(query, params);
     return URI('')
       .query(params)
       .toString();
@@ -48,10 +51,10 @@ function nextUrl(params, fields) {
   }
 }
 
-function compareQuery(first, second, keys) {
-  keys = keys || _.union(_.keys(first), _.keys(second));
-  var different = _.find(keys, function(key) {
-    return !_.isEqual(
+export function compareQuery(first, second, keys) {
+  keys = keys || _union(_keys(first), _keys(second));
+  var different = _find(keys, function(key) {
+    return !_isEqual(
       ensureArray(first[key]).sort(),
       ensureArray(second[key]).sort()
     );
@@ -59,14 +62,6 @@ function compareQuery(first, second, keys) {
   return !different;
 }
 
-function ensureArray(value) {
-  return _.isArray(value) ? value : [value];
+export function ensureArray(value) {
+  return Array.isArray(value) ? value : [value];
 }
-
-module.exports = {
-  compareQuery: compareQuery,
-  ensureArray: ensureArray,
-  nextUrl: nextUrl,
-  pushQuery: pushQuery,
-  updateQuery: updateQuery
-};

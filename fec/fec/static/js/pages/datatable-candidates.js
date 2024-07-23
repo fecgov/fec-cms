@@ -1,24 +1,23 @@
-'use strict';
+/**
+ * Data and initialization for {@link /data/candidates/}
+ */
+import { candidates as cols_candidates } from '../modules/columns.js';
+import { renderCandidatePanel } from '../modules/table-panels.js';
+import { DataTable_FEC, modalRenderRow } from '../modules/tables.js';
 
-var $ = require('jquery');
-
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-var tablePanels = require('../modules/table-panels');
-
-$(document).ready(function() {
-  var $table = $('#results');
-  new tables.DataTable($table, {
+$(function() {
+  const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Candidates',
     path: ['candidates'],
-    columns: columns.candidates,
+    columns: cols_candidates,
     order: [[6, 'desc']],
     useFilters: true,
     useExport: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: tablePanels.renderCandidatePanel(false)
+      afterRender: renderCandidatePanel(false)
     }
   });
 });

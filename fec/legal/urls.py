@@ -5,14 +5,14 @@ from legal import views
 
 urlpatterns = [
     re_path(r'^data/legal/advisory-opinions/(?P<ao_no>[\w-]+)/$',
-        views.advisory_opinion_page),
+            views.advisory_opinion_page),
     re_path(r'^data/legal/advisory-opinions/$', views.advisory_opinions_landing),
     re_path(r'^data/legal/matter-under-review/(?P<mur_no>[\w-]+)/$',
-        views.mur_page),
+            views.mur_page),
     re_path(r'^data/legal/alternative-dispute-resolution/(?P<adr_no>[\w-]+)/$',
-        views.adr_page),
+            views.adr_page),
     re_path(r'^data/legal/administrative-fine/(?P<admin_fine_no>[\w-]+)/$',
-        views.admin_fine_page),
+            views.admin_fine_page),
     re_path(r'^data/legal/statutes/$', views.statutes_landing),
     # Legal search results
     re_path(r'^data/legal/search/$', views.legal_search),
@@ -21,7 +21,7 @@ urlpatterns = [
     re_path(r'^data/legal/search/enforcement/$', views.legal_doc_search_mur),
     re_path(r'^data/legal/search/murs/$', views.legal_doc_search_mur),
     re_path(r'^data/legal/search/regulations/$',
-        views.legal_doc_search_regulations),
+            views.legal_doc_search_regulations),
     re_path(r'^data/legal/search/statutes/$', views.legal_doc_search_statutes),
 ]
 

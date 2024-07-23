@@ -1,23 +1,26 @@
-'use strict';
+/**
+ *
+ */
+import $ from 'jquery';
+import { default as moment } from 'moment';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _each } from 'underscore/modules/each.js';
+import { default as _pairs } from 'underscore/modules/pairs.js';
+import { default as _reduce } from 'underscore/modules/reduce.js';
+import 'fullcalendar';
 
-var $ = require('jquery');
-var _ = require('underscore');
-var moment = require('moment');
-require('fullcalendar');
+import Dropdown from './dropdowns.js';
+import { default as eventTemplate } from '../templates/calendar/events.hbs';
 
-var dropdown = require('./dropdowns');
-
-var eventTemplate = require('../templates/calendar/events.hbs');
-
-var FC = $.fullCalendar;
-var View = FC.View;
+const FC = $.fullCalendar;
+const View = FC.View;
 
 // 'Sort by: Category' view
 // Property name is the category
 // Then followed by a list of the types of events under that category
 // List items are the first token of the event category parameter from the API
 // example: 'ie' for 'IE Periods'
-var categories = {
+const categories = {
   Elections: ['election'],
   'Filing deadlines': ['reporting', 'pre'],
   'Reporting and compliance periods': ['ie', 'ec', 'fea'],
@@ -27,12 +30,12 @@ var categories = {
   Other: ['other']
 };
 
-var categoriesInverse = _.reduce(
-  _.pairs(categories),
+const categoriesInverse = _reduce(
+  _pairs(categories),
   function(memo, pair) {
-    var key = pair[0];
-    var values = pair[1];
-    _.each(values, function(value) {
+    const key = pair[0];
+    const values = pair[1];
+    _each(values, function(value) {
       memo[value] = key;
     });
     return memo;
@@ -40,14 +43,14 @@ var categoriesInverse = _.reduce(
   {}
 );
 
-var categoryGroups = function(events, start, end) {
-  return _.chain(events)
+const categoryGroups = function(events, start, end) {
+  return _chain(events)
     .filter(function(event) {
       return start <= event.start && event.start < end;
     })
     .sortBy('start')
     .groupBy(function(event) {
-      var category = event.category
+      const category = event.category
         ? event.category.split(/[ -]+/)[0].toLowerCase()
         : null;
       return categoriesInverse[category];
@@ -64,8 +67,8 @@ var categoryGroups = function(events, start, end) {
     .value();
 };
 
-var chronologicalGroups = function(events, start, end) {
-  events = _.chain(events)
+const chronologicalGroups = function(events, start, end) {
+  events = _chain(events)
     .filter(function(event) {
       return start <= event.start && event.start < end;
     })
@@ -88,17 +91,17 @@ var chronologicalGroups = function(events, start, end) {
   return events;
 };
 
-var ListView = View.extend({
+const ListView = View.extend({
   setDate: function(date) {
-    var intervalUnit = this.options.duration.intervalUnit || this.intervalUnit;
+    const intervalUnit = this.options.duration.intervalUnit || this.intervalUnit;
     View.prototype.setDate.call(this, date.startOf(intervalUnit));
   },
 
   renderEvents: function(events) {
-    var groups = this.options.categories
+    const groups = this.options.categories
       ? categoryGroups(events, this.start, this.end)
       : chronologicalGroups(events, this.start, this.end);
-    var settings = {
+    const settings = {
       duration: this.options.duration.intervalUnit,
       sortBy: this.options.sortBy
     };
@@ -107,7 +110,7 @@ var ListView = View.extend({
     this.dropdowns = $(this.el.html)
       .find('.dropdown')
       .map(function(idx, elm) {
-        return new dropdown.Dropdown($(elm), { checkboxes: false });
+        return new Dropdown($(elm), { checkboxes: false });
       });
   },
 

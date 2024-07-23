@@ -1,27 +1,27 @@
-'use strict';
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import { spy, stub } from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+import { default as URI } from 'urijs';
+import { default as _extend } from 'underscore/modules/extend.js';
 
-var $ = require('jquery');
-var URI = require('urijs');
-var _ = require('underscore');
+// require('datatables.net')();
+// require('datatables.net-responsive')();
 
-require('./setup')();
-require('datatables.net')();
-require('datatables.net-responsive')();
+import { candidateColumn, committeeColumn, supportOpposeColumn } from '../../static/js/modules/columns.js';
+import { buildTotalLink } from '../../static/js/modules/column-helpers.js';
+import { buildUrl } from '../../static/js/modules/helpers.js';
 
-var columns = require('../../static/js/modules/columns');
-var columnHelpers = require('../../static/js/modules/column-helpers');
-var helpers = require('../../static/js/modules/helpers');
-var tables = require('../../static/js/modules/tables');
-var tablist = require('../../static/js/vendor/tablist');
-var context = require('../fixtures/context');
-var houseResults = require('../fixtures/house-results');
-var DataTable = tables.DataTable;
+import { DataTable_FEC, drawComparison, getCycle, initSpendingTables, mapResponse, mapSort, yearRange } from '../../static/js/modules/tables.js';
+import { init as initTablist } from '../../static/js/vendor/tablist.js';
+
+import { default as context } from '../fixtures/context.js';
+import { default as houseResults } from '../fixtures/house-results.js';
+// const DataTable = DataTable_FEC;
 
 describe('data table', function() {
   before(function() {
@@ -29,11 +29,11 @@ describe('data table', function() {
     $('body')
       .empty()
       .append(this.$fixture);
-    sinon.spy(DataTable.prototype, 'export');
+    spy(DataTable_FEC.prototype, 'export');
   });
 
   after(function() {
-    DataTable.prototype.export.restore();
+    DataTable_FEC.prototype.export.restore();
   });
 
   beforeEach(function() {
@@ -52,8 +52,8 @@ describe('data table', function() {
           '</table>'
       );
     this.deferred = $.Deferred();
-    sinon.stub($, 'ajax').returns(this.deferred);
-    this.table = new DataTable('table', {
+    stub($, 'ajax').returns(this.deferred);
+    this.table = new DataTable_FEC('table', {
       columns: [{ data: 'name' }, { data: 'office' }, { data: 'party' }],
       useExport: true
     });
@@ -70,7 +70,7 @@ describe('data table', function() {
     });
 
     it('adds self to registry', function() {
-      expect(DataTable.registry.table).to.equal(this.table);
+      expect(DataTable_FEC.registry.table).to.equal(this.table);
     });
 
     it('adds hidden loading widget', function() {
@@ -106,8 +106,8 @@ describe('data table', function() {
     });
 
     it('does nothing on click', function() {
-      this.table.$exportButton.click();
-      expect(DataTable.prototype.export).not.to.have.been.called;
+      this.table.$exportButton.click(); // TODO: jQuery deprecation
+      expect(DataTable_FEC.prototype.export).not.to.have.been.called;
     });
   });
 
@@ -122,7 +122,7 @@ describe('data table', function() {
 
     it('adds starts an export when clicked', function() {
       this.table.$exportButton.trigger('click');
-      expect(DataTable.prototype.export).to.have.been.called;
+      expect(DataTable_FEC.prototype.export).to.have.been.called;
     });
 
     it('does not show the message', function() {
@@ -136,7 +136,7 @@ describe('data table', function() {
     });
 
     it('builds URLs', function() {
-      _.extend(this.table.opts, {
+      _extend(this.table.opts, {
         path: ['path', 'to', 'endpoint'],
         query: { extra: 'true' }
       });
@@ -147,7 +147,7 @@ describe('data table', function() {
         order: [{ column: 1, dir: 'desc' }]
       };
       var url = this.table.buildUrl(data);
-      var expected = helpers.buildUrl(['path', 'to', 'endpoint'], {
+      var expected = buildUrl(['path', 'to', 'endpoint'], {
         sort_hide_null: 'false',
         sort_nulls_last: 'true',
         party: 'DFL',
@@ -160,19 +160,19 @@ describe('data table', function() {
     });
 
     it('renders data', function() {
-      var callback = sinon.stub();
+      var callback = stub();
       var resp = {
         results: [{ name: 'Jed Bartlet', office: 'President', party: 'DEM' }],
         pagination: { count: 42 }
       };
       this.table.fetch({}, callback);
       this.deferred.resolve(resp);
-      expect(callback).to.have.been.calledWith(tables.mapResponse(resp));
+      expect(callback).to.have.been.calledWith(mapResponse(resp));
     });
 
     it('hides table on empty results', function() {
       this.table.opts.hideEmpty = true;
-      var callback = sinon.stub();
+      var callback = stub();
       var resp = {
         results: [],
         pagination: { count: 0 }
@@ -185,8 +185,8 @@ describe('data table', function() {
 
     describe('post-fetch', function() {
       beforeEach(function() {
-        sinon.spy(this.table, 'disableExport');
-        sinon.spy(this.table, 'enableExport');
+        spy(this.table, 'disableExport');
+        spy(this.table, 'enableExport');
       });
 
       afterEach(function() {
@@ -226,7 +226,7 @@ describe('data table', function() {
     });
 
     it('terminates ongoing ajax requests', function() {
-      var xhr = (this.table.xhr = { abort: sinon.stub() });
+      var xhr = (this.table.xhr = { abort: stub() });
       this.table.fetch({}, function() {});
       expect(xhr.abort).to.have.been.called;
     });
@@ -234,7 +234,7 @@ describe('data table', function() {
 
   describe('listens to window state', function() {
     beforeEach(function() {
-      sinon.stub(this.table.api.ajax, 'reload');
+      stub(this.table.api.ajax, 'reload');
     });
 
     afterEach(function() {
@@ -302,7 +302,7 @@ describe('data table', function() {
             '<thead><tr></tr></thead>' +
             '</table>'
         );
-      tables.drawComparison(houseResults, context);
+      drawComparison(houseResults, context);
       done();
     });
 
@@ -331,15 +331,15 @@ describe('data table', function() {
         .append(this.$fixture);
 
       this.independentExpenditureColumns = [
-        columns.committeeColumn({ data: 'committee', className: 'all' }),
-        columns.supportOpposeColumn,
-        columns.candidateColumn({ data: 'candidate', className: 'all' }),
+        committeeColumn({ data: 'committee', className: 'all' }),
+        supportOpposeColumn,
+        candidateColumn({ data: 'candidate', className: 'all' }),
         {
           data: 'total',
           className: 'all column--number t-mono',
           orderable: true,
           orderSequence: ['desc', 'asc'],
-          render: columnHelpers.buildTotalLink(
+          render: buildTotalLink(
             ['independent-expenditures'],
             function(data, type, row, meta) {
               return {
@@ -394,7 +394,7 @@ describe('data table', function() {
             '</section>' +
             '</div>'
         );
-      tablist.init();
+      initTablist();
       done();
     });
 
@@ -404,7 +404,7 @@ describe('data table', function() {
     });
 
     it('should add and init the tables', function() {
-      tables.initSpendingTables('.data-table', context, this.tableOpts);
+      initSpendingTables('.data-table', context, this.tableOpts);
       $('[role="tab"]').trigger($.Event('click'));
       var toggle = $('.js-panel-toggle');
       expect(toggle.length).to.equal(1);
@@ -413,7 +413,7 @@ describe('data table', function() {
 
   describe('getCycle', function() {
     before(function(done) {
-      this.spy = sinon.spy(tables.getCycle);
+      this.spy = spy(getCycle);
       done();
     });
 
@@ -431,12 +431,12 @@ describe('data table', function() {
 
   describe('yearRange', function() {
     it('should return a single year when same', function() {
-      var results = tables.yearRange('2018', '2018');
+      var results = yearRange('2018', '2018');
       expect(results).to.equal('2018');
     });
 
     it('should return a year range with hyphen', function() {
-      var results = tables.yearRange('2018', '2020');
+      var results = yearRange('2018', '2020');
       expect(results).to.equal('2018 - 2020');
     });
   });
@@ -446,7 +446,7 @@ describe('data table', function() {
       var order = [{ column: 'test' }];
       var columns = { test: { data: 'hello' } };
       var expected = ['hello'];
-      var results = tables.mapSort(order, columns);
+      var results = mapSort(order, columns);
       expect(results).to.deep.equal(expected);
     });
 
@@ -454,7 +454,7 @@ describe('data table', function() {
       var order = [{ column: 'test', dir: 'desc' }];
       var columns = { test: { data: 'hello' } };
       var expected = ['-hello'];
-      var results = tables.mapSort(order, columns);
+      var results = mapSort(order, columns);
       expect(results).to.deep.equal(expected);
     });
   });
@@ -467,7 +467,7 @@ describe('data table', function() {
         recordsFiltered: 501,
         data: 'test'
       };
-      var results = tables.mapResponse(response);
+      var results = mapResponse(response);
       expect(results).to.deep.equal(expected);
     });
 
@@ -478,7 +478,7 @@ describe('data table', function() {
         recordsFiltered: 512000,
         data: 'test'
       };
-      var results = tables.mapResponse(response);
+      var results = mapResponse(response);
       expect(results).to.deep.equal(expected);
     });
   });
@@ -531,7 +531,7 @@ describe('data table', function() {
         ]
       };
       this.table.filterSet.isValid = true;
-      var callback = sinon.stub();
+      var callback = stub();
       this.table.fetch({}, callback);
       expect(this.table.filters).to.deep.equal(serialized);
       var self = this;
@@ -569,7 +569,7 @@ describe('data table', function() {
         fields: ['committee_id', 'recipient_name', 'recipient_city']
       };
       this.table.filterSet.isValid = true;
-      var callback = sinon.stub();
+      var callback = stub();
       this.table.fetch({}, callback);
       expect(this.table.filters).to.deep.equal(serialized);
       expect(this.table.filters.data_type, 'Expected raw data type').to.equal('raw');
@@ -611,7 +611,7 @@ describe('data table', function() {
         fields: ['is_notice', 'filing_form']
       };
       this.table.filterSet.isValid = true;
-      var callback = sinon.stub();
+      var callback = stub();
       this.table.fetch({}, callback);
       expect(this.table.filters).to.deep.equal(serialized);
       expect(

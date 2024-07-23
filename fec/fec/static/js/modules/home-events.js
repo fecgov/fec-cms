@@ -1,21 +1,18 @@
-'use strict';
+import { default as moment } from 'moment';
 
-var $ = require('jquery');
-var calendarHelpers = require('./calendar-helpers');
-var moment = require('moment');
+import { getUrl } from './calendar-helpers.js';
+import { default as eventsTemplate } from '../templates/homepage/events-and-deadlines.hbs';
 
-var today = new Date();
-var day = today.getDate();
-var month = today.getMonth() + 1;
-var year = today.getFullYear();
-var todaysDate = year + '-' + month + '-' + day;
-
-var eventsTemplate = require('../templates/homepage/events-and-deadlines.hbs');
+const today = new Date();
+const day = today.getDate();
+const month = today.getMonth() + 1;
+const year = today.getFullYear();
+const todaysDate = year + '-' + month + '-' + day;
 
 // These values come from constants.py
 // and need to match API parameter `calendar_category_id`
 
-var updates = {
+const updates = {
   '.js-next-commission-meeting': ['32', '40'],
   '.js-next-filing-deadline': ['21', '25', '26', '27'],
   '.js-next-training-or-conference': ['33', '34'],
@@ -23,25 +20,25 @@ var updates = {
 };
 
 // Home Page: Events and deadlines
-function HomepageEvents() {
+export default function HomepageEvents() {
   $.each(updates, function(eventClass, eventCategories) {
-    var url = calendarHelpers.getUrl('calendar-dates', {
+    const url = getUrl('calendar-dates', {
       sort: 'start_date',
       min_start_date: todaysDate,
       calendar_category_id: eventCategories
     });
 
     $.getJSON(url).done(function(events) {
-      var event = events.results[0];
-      var startDate = '';
+      let event = events.results[0];
+      let startDate = '';
 
       if (events.results.length > 1) {
         event = events.results[0];
-        var min_date = event.start_date;
+        const min_date = event.start_date;
 
         // Filters events by location 'FEC'
         // and checks if the minimum date is equal to the returned start date
-        var filtered = events.results.filter(function(event) {
+        const filtered = events.results.filter(function(event) {
           return event.location == 'FEC' && event.start_date == min_date;
         });
 
@@ -68,7 +65,3 @@ function HomepageEvents() {
     });
   });
 }
-
-module.exports = {
-  HomepageEvents: HomepageEvents
-};
