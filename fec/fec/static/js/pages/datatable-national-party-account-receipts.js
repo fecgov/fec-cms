@@ -1,9 +1,9 @@
 /**
  * National party account receipts datatable page
  */
-import { nationalPartyDisbursements as cols_natPartyAcctReceipts } from '../modules/columns.js';
+import { nationalPartyReceipts as cols_natPartyAcctReceipts } from '../modules/columns.js';
 import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
-import { default as natPartyDisburseTemplate } from '../templates/national-party-account-receipts.hbs';
+import { default as natPartyReceiptsTemplate } from '../templates/national-party-account-receipts.hbs';
 
 $(function() {
   var $table = $('#results');
@@ -17,7 +17,7 @@ $(function() {
     useExport: true,
     rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: modalRenderFactory(natPartyDisburseTemplate)
+      afterRender: modalRenderFactory(natPartyReceiptsTemplate)
     }
   });
 });
