@@ -570,18 +570,15 @@ export function sanitizeValue(value) {
     if (Array.isArray(value)) {
       for (let i = 0; i < value.length; i++) {
         if (value[i] !== null && value[i] !== undefined) {
-          value[i] = DOMPurify.sanitize(value[i])
-            .replace('"', `&quot;`)
+          value[i] = DOMPurify.sanitize(value[i], { ALLOWED_TAGS: [] })
             .replace(validCharactersRegEx, '');
         }
       }
     } else {
-      value = DOMPurify.sanitize(value)
-        .replace('"', `&quot;`)
+      value = DOMPurify.sanitize(value, { ALLOWED_TAGS: [] })
         .replace(validCharactersRegEx, '');
     }
   }
-
   return value;
 }
 
