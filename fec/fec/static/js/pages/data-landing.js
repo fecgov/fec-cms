@@ -2,7 +2,7 @@ import { customEvent } from '../modules/analytics.js';
 import ElectionLookup from '../modules/election-lookup.js';
 
 $(function() {
-  new ElectionLookup('#election-lookup', false);
+  if (!window.electionLookup) window.electionLookup = new ElectionLookup('#election-lookup', false);
 });
 
 $('.js-ga-event').each(function() {
