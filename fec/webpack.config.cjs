@@ -5,7 +5,6 @@ const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
-
 // mode comes from the package.json's definition for `npm run build…` but defaults to 'development'
 // Some our settings change based on mode and some Webpack internals change automatically (like whether to minify)
 // Expect values are `development` or `production`
@@ -121,20 +120,20 @@ fs.readdirSync(`${js}/pages`).forEach(function(f) {
       homeAndDataEntries[name] = {
         import: `./${p}`,
         dependOn: 'data-init'
-      }
+      };
     // If it's a page that requires init,
     } else if (name.indexOf('datatable-') >= 0 || pagesThatDependOnInit.includes(name)) {
       // add it, marking that it depends on init (and inherits global)
       homeAndDataEntries[name] = {
         import: `./${p}`,
         dependOn: 'init'
-      }
+      };
     } else {
       // else add it, marking that it depends on global
       homeAndDataEntries[name] = {
         import: `./${p}`,
         dependOn: 'global'
-      }
+      };
     }
   }
   // If it's a datatable page, queue it into datatablePages
@@ -203,7 +202,7 @@ module.exports = [
         jQuery: 'jquery'
       }),
       sharedManifestPlugin,
-      analyzerBundlesDuringDevelopment ? new BundleAnalyzerPlugin() : undefined,
+      analyzerBundlesDuringDevelopment ? new BundleAnalyzerPlugin() : undefined
     ],
     output: {
       // [fullhash] change any content for any file, and all files get a single new hash
