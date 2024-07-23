@@ -13,9 +13,7 @@ import { default as A11yDialog } from 'a11y-dialog';
  * it actually submits the form to whichever URL it's directed to
  */
 function KeywordModal() {
-  console.log('fec/fec/static/js/legal.js KeywordModal()');
   this.elm = document.querySelector('.js-keyword-modal');
-  console.log('  this.elm: ', this.elm);
   this.$elm = $(this.elm);
   this.$form = this.$elm.find('form');
   this.$fields = this.$elm.find(

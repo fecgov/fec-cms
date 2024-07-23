@@ -59,10 +59,6 @@ function formatAuditCandidate(result) {
 }
 
 function getUrl(resource) {
-  // console.debug('typeahead.js');
-  // console.debug('  getURL(resource): ', resource);
-  // console.debug('  global.location: ', global.API_LOCATION);
-  // console.debug('  window.location: ', window.API_LOCATION);
   return URI(window.API_LOCATION)
     .path([window.API_VERSION, 'names', resource, ''].join('/'))
     .query({

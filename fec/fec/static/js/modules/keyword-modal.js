@@ -13,7 +13,6 @@ import { customEvent } from './analytics.js';
  * to the window.location.search which forces a page refresh.
  */
 export default function KeywordModal() {
-  // console.log('fec/fec/static/js/modules/KeywordModal()');
   this.elm = document.querySelector('.js-keyword-modal');
   this.$elm = $(this.elm);
   this.$form = this.$elm.find('form');

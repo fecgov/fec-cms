@@ -121,9 +121,6 @@ describe('FilterTypeahead', function() {
     var enableButton = spy(this.FilterTypeahead, 'enableButton');
     var disableButton = spy(this.FilterTypeahead, 'disableButton');
 
-    console.debug('this: ', this);
-    console.debug('this.FilterTypeahead: ', this.FilterTypeahead);
-    console.debug('this.FilterTypeahead.$field: ', this.FilterTypeahead.$field);
     // this.FilterTypeahead.$field.typeahead('val', 'FAKE CANDIDATE').change(); // TODO: jQuery deprecation
     // expect(enableButton).to.have.been.called;
 
