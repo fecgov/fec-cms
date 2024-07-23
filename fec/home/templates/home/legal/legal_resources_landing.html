@@ -8,7 +8,7 @@
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block extra_js %}
-  <script type="text/javascript" src="{% path_for_js 'legal.js' %}"></script>
+  {% tags_for_js_chunks 'legal.js' '' %}
 {% endblock extra_js %}
 
 {% block content %}
@@ -30,8 +30,7 @@
                <option value="regulations">Regulations</option>
                <option value="statutes">Statutes</option>
             </select>
-            <input type="text" name="search" class="combo__input js-search-input"
-            aria-label="Search">
+            <input type="text" name="search" class="combo__input" aria-label="Search">
             <button type="submit" class="button--standard button--search combo__button">
               <span class="u-visually-hidden">Search</span>
             </button>
