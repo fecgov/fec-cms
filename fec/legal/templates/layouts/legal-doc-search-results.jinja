@@ -86,7 +86,7 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src="{{ path_for_js('legal.js') }}"></script>
+  {{ tags_for_js_chunks('legal.js', '')|safe }}
   <script>
     // Add the script for removing tags
     document.addEventListener("DOMContentLoaded", function() {
