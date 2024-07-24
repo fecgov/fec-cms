@@ -3,3 +3,6 @@ blockquote
 bythenumbers
 draftail
 Draftail
+labelledby
+wagtailcore
+wagtailimages

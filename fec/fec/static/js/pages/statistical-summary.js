@@ -48,7 +48,7 @@ StatisticalSummary.prototype.handlePopState = function(e) {
   this.showTable();
 };
 
-//Parse paremeters out of querystring
+//Parse parameters out of querystring
 StatisticalSummary.prototype.getUrlVars = function() {
   var vars = [],
     hash;
@@ -86,7 +86,7 @@ StatisticalSummary.prototype.zebraStripeVisible = function(table) {
   }
 };
 
-//Deternine which time-period select options are not yet available for current year and disable them.
+//Determine which time-period select options are not yet available for current year and disable them.
 StatisticalSummary.prototype.handleLatestAvailableOption = function() {
   let latestAvailable;
   let latestAvailableOption;
@@ -233,7 +233,7 @@ StatisticalSummary.prototype.showTable = function() {
           break;
         case this.chosenYear <= 2010 && this.chosenYear >= 2004:
           liveTable = document.getElementById('type_3');
-          //Hide rows at thise index for type_3 for this time period
+          //Hide rows at this index for type_3 for this time period
           [5].map(x => (liveTable.rows[x].style.display = 'none'));
           break;
         case this.chosenYear <= 2002 && this.chosenYear >= 1992:
@@ -345,7 +345,7 @@ StatisticalSummary.prototype.showTable = function() {
     }
   }
 
-  //zebra strip rows after everyting else is done
+  //zebra stripe rows after everything else is done
   this.zebraStripeVisible(liveTable);
 }; //END showTable()
 

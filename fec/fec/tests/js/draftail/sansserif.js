@@ -18,7 +18,7 @@ describe('draftail - SansSerif Block Component', function() {
     var Decorator = SansSerif.decorator;
     var element = shallow(<Decorator>test</Decorator>);
     expect(element.childAt(0).text()).to.equal('test');
-    expect(element.type()).to.equal('span') // TODO: jQuery deprecation (.type())
+    expect(element.type()).to.equal('span');
   });
 
   it('the SansSerif source should make selected font sans serif', function(done) {

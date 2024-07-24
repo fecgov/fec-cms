@@ -1,3 +1,4 @@
+{#- extended by most fec/home/templates/*.html -#}
 {% load static compress wagtailuserbar %}
 {% load filters %}
 <!DOCTYPE html>
@@ -154,9 +155,14 @@
       window.CALENDAR_DOWNLOAD_PUBLIC_API_KEY = '{{ settings.FEC_CAL_DOWNLOAD_API_KEY }}';
       window.CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}'
     </script>
-
-    {# Global javascript #}
+    <script>
+      window.calcAdminFineJsPath = '{% path_for_js "calc-admin-fines.js" %}';
+    </script>
+  
+    {#- chunks required for every page -#}
     {% tags_for_js_chunks 'global.js' '' %}
+
+    {#- chunks required for most pages -#}
     {% tags_for_js_chunks 'init.js' '' %}
 
     <script>
@@ -168,10 +174,6 @@
         document.head.appendChild(pfScriptElem);
       }
     </script>
-    <script>
-      var calcAdminFineJsPath = '{% path_for_js "calc-admin-fines.js" %}';
-    </script>
-    {% tags_for_js_chunks 'calc-admin-fines-modal.js' '' %}
 
     {% block extra_js %}
     {# Override this in templates to add extra javascript #}

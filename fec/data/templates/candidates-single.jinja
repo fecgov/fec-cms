@@ -156,5 +156,6 @@
 <script>
   window.context = {{ context_vars|to_json|safe }};
 </script>
+{#- data-init and global chunks are loaded by main.jinja -#}
 {{ tags_for_js_chunks('candidate-single.js', '')|safe }}
 {% endblock %}

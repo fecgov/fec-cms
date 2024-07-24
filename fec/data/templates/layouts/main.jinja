@@ -150,9 +150,9 @@
 {% csrf_token %}
 
 {% block modals %}{% endblock %}
-<!-- fec/data/templates/layouts/main.jinja global -->
+{#- Chunks required for every page -#}
 {{ tags_for_js_chunks('global.js', '')|safe }}
-<!-- fec/data/templates/layouts/main.jinja data-init -->
+{#- Chunks required for every data -#}
 {{ tags_for_js_chunks('data-init.js', '')|safe }}
 {% block scripts %}
 {% endblock %}

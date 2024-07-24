@@ -145,5 +145,6 @@
 {% endblock %}
 
 {% block extra_js %}
+  {#- The chunks for 'global' and 'init' are included by base.html -#}
   {% tags_for_js_chunks 'calendar-page.js' '' %}
 {% endblock %}
