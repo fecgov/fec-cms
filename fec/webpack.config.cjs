@@ -250,8 +250,7 @@ module.exports = [
     name: 'draftail',
     entry: { draftail: `${js}/draftail/App.js` },
     output: {
-      // clean: mode === 'production' ? true : undefined, // Deploying to Prod doesn't need this at all
-      clean: true,
+      clean: mode === 'development' ? true : undefined, // Deploying to Prod doesn't need this at all
       filename: '[name]-[contenthash].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
     },
