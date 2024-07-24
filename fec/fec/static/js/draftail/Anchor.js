@@ -81,8 +81,10 @@ Anchor.propTypes = {
   ])
 };
 
-export default {
+const anchor = {
   type: 'ANCHOR',
   source: AnchorSource,
   decorator: Anchor
 };
+
+export default anchor;

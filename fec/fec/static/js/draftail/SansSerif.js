@@ -71,8 +71,10 @@ Sansserif.propTypes = {
   ])
 };
 
-export default {
+const sansserif = {
   type: 'SANSSERIF',
   source: SansserifSource,
   decorator: Sansserif
 };
+
+export default sansserif;

@@ -139,8 +139,10 @@ Glossary.propTypes = {
   ])
 };
 
-export default {
+const glossary = {
   type: 'GLOSSARY',
   source: GlossarySource,
   decorator: Glossary
 };
+
+export default glossary;
