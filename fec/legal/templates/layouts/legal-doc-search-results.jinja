@@ -86,6 +86,7 @@
 {% endblock %}
 
 {% block scripts %}
+  {#- data-init and global chunks are loaded by main.jinja -#}
   {{ tags_for_js_chunks('legal.js', '')|safe }}
   <script>
     // Add the script for removing tags

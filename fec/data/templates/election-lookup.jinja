@@ -1,3 +1,4 @@
+{#- Used at /data/elections/ #}
 {% extends 'layouts/main.jinja' %}
 {% import 'macros/cycle-select.jinja' as select %}
 {% import 'macros/page-header.jinja' as header %}
@@ -127,5 +128,6 @@
     }
   };
 </script>
+{#- data-init and global chunks are loaded by main.jinja -#}
 {{ tags_for_js_chunks('election-lookup.js', '')|safe }}
 {% endblock %}

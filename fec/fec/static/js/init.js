@@ -1,3 +1,8 @@
+/**
+ * Initializes things common to many pages, but not universal (the truly universal are inside global.js)
+ * If present, this file initializes…
+ * .js-accordion, .js-dropdown, .js-form-nav, .js-post-content, .js-scroll, .js-sticky-side
+ */
 import { Accordion } from 'aria-accordion/src/accordion.js';
 import { default as Sticky } from 'component-sticky/index.js';
 

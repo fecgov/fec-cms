@@ -57,7 +57,7 @@ const homeAndDataEntries = {
   global: `${js}/global.js`,
   home: {
     import: `${js}/pages/home.js`,
-    dependOn: 'global'
+    dependOn: 'global' // Any chunks for home will also expect global's chunks to exist
   },
   init: {
     import: `${js}/init.js`,
@@ -65,10 +65,9 @@ const homeAndDataEntries = {
   },
   'data-init': {
     import: `${js}/data-init.js`,
-    dependOn: 'global'
-    // NOTE: because data-init depends on global, any entry that depends on data-init will also inherit global
+    dependOn: 'global' // Any chunks for data-init will also expect global's chunks to exist
   },
-  'calc-admin-fines-modal': `${js}/modules/calc-admin-fines-modal.js`, // Pulled into init.js
+  // 'calc-admin-fines-modal': `${js}/modules/calc-admin-fines-modal.js`, // Pulled into init.js
   'calc-admin-fines': `${js}/modules/calc-admin-fines.js`,
   'widgets/aggregate-totals-box': {
     import: `${js}/widgets/aggregate-totals-box.js`,
@@ -83,7 +82,7 @@ const homeAndDataEntries = {
   'widgets/pres-finance-map-box': {
     import: `${js}/widgets/pres-finance-map-box.js`,
     filename: 'widgets/pres-finance-map-box.js',
-    dependOn: 'data-init'
+    dependOn: ['data-init', 'global']
   }
 };
 
@@ -116,17 +115,17 @@ fs.readdirSync(`${js}/pages`).forEach(function(f) {
 
     // If it's a datatable page, or a data page that requires data-init,
     if (name.indexOf('datatable-') >= 0 || pagesThatDependOnDataInit.includes(name)) {
-      // add it, marking that it depends on data-init (and inherits global)
+      // add it, marking that it depends on data-init (which depends on global)
       homeAndDataEntries[name] = {
         import: `./${p}`,
-        dependOn: 'data-init'
+        dependOn: ['data-init', 'global']
       };
     // If it's a page that requires init,
     } else if (name.indexOf('datatable-') >= 0 || pagesThatDependOnInit.includes(name)) {
-      // add it, marking that it depends on init (and inherits global)
+      // add it, marking that it depends on init (which depends on global)
       homeAndDataEntries[name] = {
         import: `./${p}`,
-        dependOn: 'init'
+        dependOn: ['init', 'global']
       };
     } else {
       // else add it, marking that it depends on global
@@ -158,8 +157,7 @@ module.exports = [
       innerGraph: true,
       moduleIds: 'named',
       // chunkIds: 'named', // shared chunks default to numbered names. 'named' makes it easier to debug
-      removeAvailableModules: true,
-      runtimeChunk: 'single',
+      // removeAvailableModules: true,
       splitChunks: {
         chunks: 'all',
         minChunks: 2,
@@ -253,6 +251,7 @@ module.exports = [
     entry: { draftail: `${js}/draftail/App.js` },
     output: {
       // clean: mode === 'production' ? true : undefined, // Deploying to Prod doesn't need this at all
+      clean: true,
       filename: '[name]-[contenthash].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
     },

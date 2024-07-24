@@ -152,10 +152,7 @@
       window.CALENDAR_DOWNLOAD_PUBLIC_API_KEY = '{{ settings.FEC_CAL_DOWNLOAD_API_KEY }}';
       window.CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}'
     </script>
-
-    {% tags_for_js_chunks 'home.js' '' %}
-
-    <!-- { % tags_for_js_chunks 'init.js' '' % } -->
+    {% tags_for_js_chunks 'global.js' '' %}
 
     {% block extra_js %}
     {% endblock %}
