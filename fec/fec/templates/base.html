@@ -154,8 +154,11 @@
       window.CALENDAR_DOWNLOAD_PUBLIC_API_KEY = '{{ settings.FEC_CAL_DOWNLOAD_API_KEY }}';
       window.CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}'
     </script>
-
     {# Global javascript #}
+    <script>
+      window.calcAdminFineJsPath = '{% path_for_js "calc-admin-fines.js" %}';
+    </script>
+  
     {% tags_for_js_chunks 'global.js' '' %}
     {% tags_for_js_chunks 'init.js' '' %}
 
@@ -168,10 +171,6 @@
         document.head.appendChild(pfScriptElem);
       }
     </script>
-    <script>
-      var calcAdminFineJsPath = '{% path_for_js "calc-admin-fines.js" %}';
-    </script>
-    {% tags_for_js_chunks 'calc-admin-fines-modal.js' '' %}
 
     {% block extra_js %}
     {# Override this in templates to add extra javascript #}

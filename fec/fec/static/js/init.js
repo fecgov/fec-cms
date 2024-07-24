@@ -6,6 +6,8 @@ import FormNav from './modules/form-nav.js';
 import { isLargeScreen } from './modules/helpers.js';
 import { init as tablistInit } from './vendor/tablist.js';
 
+import './modules/calc-admin-fines-modal.js';
+
 tablistInit();
 
 $(function() {

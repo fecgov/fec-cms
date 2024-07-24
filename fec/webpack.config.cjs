@@ -68,7 +68,7 @@ const homeAndDataEntries = {
     dependOn: 'global'
     // NOTE: because data-init depends on global, any entry that depends on data-init will also inherit global
   },
-  'calc-admin-fines-modal': `${js}/modules/calc-admin-fines-modal.js`, // Used inside base.html
+  'calc-admin-fines-modal': `${js}/modules/calc-admin-fines-modal.js`, // Pulled into init.js
   'calc-admin-fines': `${js}/modules/calc-admin-fines.js`,
   'widgets/aggregate-totals-box': {
     import: `${js}/widgets/aggregate-totals-box.js`,
