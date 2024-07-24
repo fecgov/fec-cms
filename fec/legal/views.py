@@ -15,7 +15,7 @@ def advisory_opinions_landing(request):
     recent_aos = api_caller.load_legal_search_results(
         query='',
         query_type='advisory_opinions',
-        ao_category=['F', 'W'],
+        ao_category=['F', 'W'],  # TODO: this is erring, expecting a string
         ao_min_issue_date=ao_min_date
     )
 
@@ -189,20 +189,18 @@ def legal_search(request):
 
     # Only hit the API if there's an actual query
     if query:
-        results = api_caller.load_legal_search_results(query, result_type,
-                                                        limit=3)
-        
+        results = api_caller.load_legal_search_results(query, result_type, limit=3)
+
         # Only search regulations if result type is all or regulations
-        if result_type == 'all' or result_type == 'regulations':                                           
-            ecfr_results = ecfr_caller.fetch_ecfr_data(Updated_ecfr_query_string,
-                                                       limit=3, page=1)
+        if result_type == 'all' or result_type == 'regulations':
+            ecfr_results = ecfr_caller.fetch_ecfr_data(Updated_ecfr_query_string, limit=3, page=1)
             if 'results' in ecfr_results:
 
                 regulations = [{
                             "doc_id": None,
                             "document_highlights": {},
                             "highlights": [obj['headings']['part'],
-                                        obj['full_text_excerpt']],
+                                           obj['full_text_excerpt']],
                             "name": obj['headings']['section'],
                             "no": obj['hierarchy']['section'],
                             "type": None,
@@ -216,7 +214,8 @@ def legal_search(request):
                 results['regulations'] = regulations
                 results["total_regulations"] = ecfr_results.get('meta', {}).get(
                                                                 'total_count', 0)
-                results["regulations_returned"] =  '3' if results["total_regulations"] > 3 else results["total_regulations"]
+                results["regulations_returned"] = ('3' if results["total_regulations"] > 3
+                                                   else results["total_regulations"])
 
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
@@ -463,15 +462,16 @@ def legal_doc_search_statutes(request):
         'social_image_identifier': 'legal',
     })
 
+
 def get_legal_category_order(results, result_type):
     """ Return categories in pre-defined order, moving categories with empty
         results to the end. Move chosen category(result_type) to top when not searching 'all'
     """
     categories = ["admin_fines", "advisory_opinions", "adrs", "murs", "regulations", "statutes"]
-    category_order = [x for x in categories if results.get("total_" + x, 0) > 0]  +\
+    category_order = [x for x in categories if results.get("total_" + x, 0) > 0] +\
         [x for x in categories if results.get("total_" + x, 0) == 0]
-    
-    # Default to 'admin_fines' first if result_type is 'all', because we dont want 'all' in category_order 
+
+    # Default to 'admin_fines' first if result_type is 'all', because we dont want 'all' in category_order
     result_type = "admin_fines" if result_type == 'all' else result_type
     # Move chosen search type to the top if not searching 'all'
     category_order.insert(0, category_order.pop(category_order.index(result_type)))

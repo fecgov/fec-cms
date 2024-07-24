@@ -1,6 +1,4 @@
-'use strict';
+// TODO: is this still necessary?
+import StatisticalSummaryArchive from '../modules/statistical-summary-archive.js';
 
-var statisticalSummaryArchive = require('../modules/statistical-summary-archive')
-  .StatisticalSummaryArchive;
-
-new statisticalSummaryArchive();
+new StatisticalSummaryArchive();

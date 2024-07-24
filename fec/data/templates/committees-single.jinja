@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{{ asset_for_css('entity.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ path_for_css('entity.css') }}" />
 {% endblock %}
 
 {% set breadcrumbs=[('', 'Committee profiles')] %}
@@ -222,11 +222,11 @@
 
 {% block scripts %}
 <script>
-var context = {{ context_vars | to_json | safe }};
+  window.context = {{ context_vars|to_json|safe }};
 {% if committee_type not in ['P', 'H', 'S', 'Z', 'C', 'E', 'D'] %}
-  context.showIndependentExpenditures = true;
+  window.context.showIndependentExpenditures = true;
 {% endif %}
 </script>
-<script src="{{ asset_for_js('dataviz-common.js') }}"></script>
-<script src="{{ asset_for_js('committee-single.js') }}"></script>
+{#- data-init and global chunks are loaded by main.jinja -#}
+{{ tags_for_js_chunks('committee-single.js', '')|safe }}
 {% endblock %}

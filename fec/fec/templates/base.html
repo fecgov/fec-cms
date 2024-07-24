@@ -1,3 +1,4 @@
+{#- extended by most fec/home/templates/*.html -#}
 {% load static compress wagtailuserbar %}
 {% load filters %}
 <!DOCTYPE html>
@@ -13,9 +14,8 @@
     {% include 'partials/google-tag-manager-script.html' %}
 
     {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% asset_for_css 'base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% path_for_css 'base.css' %}">
     {% endblock %}
-    <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?flags=gated&features=Object.assign"></script>
   </head>
 
   <body class="{% block body_class %}{% endblock %}">
@@ -155,10 +155,17 @@
       window.CALENDAR_DOWNLOAD_PUBLIC_API_KEY = '{{ settings.FEC_CAL_DOWNLOAD_API_KEY }}';
       window.CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}'
     </script>
+    <script>
+      window.calcAdminFineJsPath = '{% path_for_js "calc-admin-fines.js" %}';
+    </script>
+  
+    {#- chunks required for every page -#}
+    {% tags_for_js_chunks 'global.js' '' %}
+
+    {#- chunks required for most pages -#}
+    {% tags_for_js_chunks 'init.js' '' %}
 
     {# Global javascript #}
-    <script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
-    <script type="text/javascript" src="{% asset_for_js 'init.js' %}"></script>
     <script>{# Currently checking for window.fetch and Object.assign #}
       var browserIsCapable = ('fetch' in window && 'assign' in Object);
       if (!browserIsCapable) {
@@ -166,10 +173,6 @@
         browserWarningElement.style.display = 'block';
       }
     </script>
-    <script>
-      var calcAdminFineJsPath = '{% asset_for_js "calc-admin-fines.js" %}';
-    </script>
-    <script type="text/javascript" src="{% asset_for_js 'calc-admin-fines-modal.js' %}"></script>
 
     {% block extra_js %}
     {# Override this in templates to add extra javascript #}

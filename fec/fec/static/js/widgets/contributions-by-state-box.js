@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * @fileoverview Controls all functionality inside the Where Contributions Come From widget
  * in cooperation with data-map
@@ -20,19 +18,16 @@ const breakpointToXL = 860;
 const rootPathToIndividualContributions =
   '/data/receipts/individual-contributions/';
 
-import { buildUrl, passiveListener } from '../modules/helpers';
-import typeahead from '../modules/typeahead';
-import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
-import analytics from '../modules/analytics';
-
-const DataMap = require('../modules/data-map').DataMap;
-const AbortController = window.AbortController;
+import { customEvent } from '../modules/analytics.js';
+import DataMap from '../modules/data-map.js';
+import { buildUrl, passiveListenerIfSupported } from '../modules/helpers.js';
+import Typeahead from '../modules/typeahead.js';
 
 /**
  * Formats the given value and puts it into the dom element.
- * @param {Number} passedValue The number to format and plug into the element
- * @param {Boolean} roundToWhole Should we round the cents or no?
- * @returns {String} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
+ * @param {number} passedValue The number to format and plug into the element
+ * @param {boolean} roundToWhole Should we round the cents or no?
+ * @returns {string} A string of the given value formatted with a dollar sign, commas, and (if roundToWhole === false) decimal
  */
 function formatAsCurrency(passedValue, roundToWhole = true) {
   return (
@@ -45,11 +40,11 @@ function formatAsCurrency(passedValue, roundToWhole = true) {
 
 /**
  * Builds the link/url to a filtered Individual Contributions page/list
- * @param {Number} cycle The candidate's election year
- * @param {String} office 'H', 'P', or 'S'
+ * @param {number} cycle The candidate's election year
+ * @param {string} office 'H', 'P', or 'S'
  * @param {Array} committeeIDs An array of strings of the candidate's committees
- * @param {String} stateID Optional. A null value will not filter for any state but show entries for the entire country
- * @returns {String} URL or empty string depending on
+ * @param {string} stateID Optional. A null value will not filter for any state but show entries for the entire country
+ * @returns {string} URL or empty string depending on
  */
 function buildIndividualContributionsUrl(
   cycle,
@@ -61,7 +56,7 @@ function buildIndividualContributionsUrl(
   // If we're missing required params, just return '' and be done
   if (!cycle || !office || !committeeIDs) return '';
 
-  let transactionPeriodsString = 'two_year_transaction_period=' + cycle;
+  let transactionPeriodsString = `two_year_transaction_period=${cycle}`;
   // TODO: Do we need maxDate and minDate?
   // let maxDate = `12-13-${this.baseStatesQuery.cycle}`;
   // let minDate = `01-01-${this.baseStatesQuery.cycle - 1}`;
@@ -73,20 +68,20 @@ function buildIndividualContributionsUrl(
   // Also, Puerto Rico's House elections are for four years so we'll need to
   // add the previous two-year period to the query string for House candidates from Puerto Rico
   if (office == 'P' || (office == 'H' && candidateState == 'PR')) {
-    transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 2);
+    transactionPeriodsString += `&two_year_transaction_period=${(cycle - 2)}`;
     // and the two earlier two-year periods for Senate races
   } else if (office == 'S') {
-    transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 2);
-    transactionPeriodsString += '&two_year_transaction_period=' + (cycle - 4);
+    transactionPeriodsString += `&two_year_transaction_period=${(cycle - 2)}`;
+    transactionPeriodsString += `&two_year_transaction_period=${(cycle - 4)}`;
   }
 
   for (let i = 0; i < committeeIDs.length; i++) {
     committeesString += '&committee_id=' + committeeIDs[i];
   }
 
-  let stateString = stateID ? '&contributor_state=' + stateID : '';
+  const stateString = stateID ? '&contributor_state=' + stateID : '';
 
-  let toReturn =
+  const toReturn =
     rootPathToIndividualContributions +
     '?' +
     transactionPeriodsString +
@@ -197,15 +192,15 @@ function ContributionsByState() {
  */
 ContributionsByState.prototype.init = function() {
   // Add the stylesheet to the document <head>
-  let head = document.head;
-  let linkElement = document.createElement('link');
+  const head = document.querySelector('head');
+  const linkElement = document.createElement('link');
   linkElement.type = 'text/css';
   linkElement.rel = 'stylesheet';
   linkElement.href = stylesheetPath;
   head.appendChild(linkElement);
 
   // Init the typeahead
-  this.typeahead = new typeahead.Typeahead(
+  this.typeahead = new Typeahead(
     '#contribs-by-state-cand',
     'candidates'
   );
@@ -219,7 +214,7 @@ ContributionsByState.prototype.init = function() {
 
   // Find the HTML element on the page (not the jQuery typeahead element),
   // and add the focus/tap and blur listeners
-  let theTypeaheadElement = this.element.querySelector(
+  const theTypeaheadElement = this.element.querySelector(
     '#contribs-by-state-cand'
   );
   theTypeaheadElement.addEventListener(
@@ -229,12 +224,12 @@ ContributionsByState.prototype.init = function() {
   theTypeaheadElement.addEventListener(
     'mousedown',
     this.handleTypeaheadFocus.bind(this),
-    passiveListener()
+    passiveListenerIfSupported()
   );
   theTypeaheadElement.addEventListener(
     'touchstart',
     this.handleTypeaheadFocus.bind(this),
-    passiveListener()
+    passiveListenerIfSupported()
   );
 
   // Listen for any field updates, looking for errors
@@ -292,9 +287,9 @@ ContributionsByState.prototype.init = function() {
 
   // Internet Explorer doesn't like flex display
   // so we're going to keep the states table from switching to flex.
-  let userAgent = window.navigator.userAgent;
+  const userAgent = window.navigator.userAgent;
   // Test for IE and IE 11
-  let is_ie =
+  var is_ie =
     userAgent.indexOf('MSIE ') > 0 || userAgent.indexOf('Trident/7.0') > 0;
 
   // Initialize the remote table header
@@ -303,13 +298,13 @@ ContributionsByState.prototype.init = function() {
     '.js-remote-table-header'
   );
   // Save its <thead> for a few lines
-  let theRemoteTableHead = this.remoteTableHeader.querySelector('thead');
+  const theRemoteTableHead = this.remoteTableHeader.querySelector('thead');
   // Look at the data-for attribute of remoteTableHeader and save that element
   this.remoteTable = this.element.querySelector(
     '#' + this.remoteTableHeader.getAttribute('data-for')
   );
   // Remember the <thead> in remoteTable for few lines
-  let theRemotedTableHead = this.remoteTable.querySelector('thead');
+  const theRemotedTableHead = this.remoteTable.querySelector('thead');
   // If we have both <thead> elements, we're ready to manipulate them
   if (theRemoteTableHead && theRemotedTableHead) {
     this.remoteTableHeader.style.display = 'table';
@@ -336,9 +331,9 @@ ContributionsByState.prototype.init = function() {
  * Similar to {@see loadCandidateDetails() }
  */
 ContributionsByState.prototype.loadInitialData = function() {
-  let instance = this;
+  const instance = this;
 
-  let highestRaisingQuery = Object.assign({}, this.baseStatesQuery, {
+  const highestRaisingQuery = Object.assign({}, this.baseStatesQuery, {
     sort: '-individual_itemized_contributions',
     per_page: 1,
     sort_hide_null: true
@@ -374,10 +369,10 @@ ContributionsByState.prototype.loadInitialData = function() {
  * Retrieves full candidate details when the typeahead is used
  * Called from {@see handleTypeaheadSelect() }
  * Similar to {@see loadInitialData() }
- * @param {String} cand_id Comes from the typeahead
+ * @param {string} cand_id Comes from the typeahead
  */
 ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
-  let instance = this;
+  const instance = this;
 
   this.basePath_candidatePath[1] = cand_id;
 
@@ -412,10 +407,10 @@ ContributionsByState.prototype.loadCandidateDetails = function(cand_id) {
  * Called by {@see displayUpdatedData_candidate() } and {@see displayUpdatedData_states() }
  */
 ContributionsByState.prototype.loadCandidateCoverageDates = function() {
-  let instance = this;
+  const instance = this;
   this.basePath_candidateCoverageDatesPath[1] = this.candidateDetails.candidate_id;
 
-  let coverageDatesQuery = Object.assign(
+  const coverageDatesQuery = Object.assign(
     {},
     {
       per_page: 100,
@@ -428,7 +423,7 @@ ContributionsByState.prototype.loadCandidateCoverageDates = function() {
    * Format the dates into MM/DD/YYYY format.
    * Pads single digits with leading 0.
    */
-  var formatDate = function(date) {
+  const formatDate = function(date) {
     // Adds one since js month uses zero based index
     let month = date.getMonth() + 1;
     if (month < 10) {
@@ -441,7 +436,7 @@ ContributionsByState.prototype.loadCandidateCoverageDates = function() {
     return month + '/' + day + '/' + date.getFullYear();
   };
 
-  let theFetchUrl = buildUrl(
+  const theFetchUrl = buildUrl(
     instance.basePath_candidateCoverageDatesPath,
     coverageDatesQuery
   );
@@ -459,18 +454,18 @@ ContributionsByState.prototype.loadCandidateCoverageDates = function() {
             .removeAttribute('style');
           // Parse coverage date from API that is formatted like this: 2019-06-30T00:00:00+00:00
           // into a string without timezone
-          let coverage_start_date = new Date(
+          const coverage_start_date = new Date(
             data.results[0].coverage_start_date.substring(0, 19)
           );
-          let coverage_end_date = new Date(
+          const coverage_end_date = new Date(
             data.results[0].transaction_coverage_date.substring(0, 19)
           );
 
           // Remember the in-page elements
-          let theStartTimeElement = document.querySelector(
+          const theStartTimeElement = document.querySelector(
             '.js-cycle-start-time'
           );
-          let theEndTimeElement = document.querySelector('.js-cycle-end-time');
+          const theEndTimeElement = document.querySelector('.js-cycle-end-time');
           // Format the date and put it into the start time
           theStartTimeElement.innerText = formatDate(coverage_start_date);
           // Format the date and put it into the end time
@@ -491,14 +486,14 @@ ContributionsByState.prototype.loadCandidateCoverageDates = function() {
  * Called by {@see displayUpdatedData_candidate() }
  */
 ContributionsByState.prototype.loadCandidateCommitteeDetails = function() {
-  let instance = this;
+  const instance = this;
 
   // Before we fetch, make sure the query path has the current candidate id
   this.basePath_candidateCommitteesPath[1] = this.candidateDetails.candidate_id;
   // and the current election year/cycle
   this.basePath_candidateCommitteesPath[4] = this.baseStatesQuery.cycle;
 
-  let committeesQuery = Object.assign(
+  const committeesQuery = Object.assign(
     {},
     {
       per_page: 100,
@@ -539,9 +534,9 @@ ContributionsByState.prototype.loadCandidateCommitteeDetails = function() {
  * Starts the fetch to go get the big batch of states data, called by {@see init() }
  */
 ContributionsByState.prototype.loadStatesData = function() {
-  let instance = this;
+  const instance = this;
 
-  let baseStatesQueryWithCandidate = Object.assign({}, this.baseStatesQuery, {
+  const baseStatesQueryWithCandidate = Object.assign({}, this.baseStatesQuery, {
     candidate_id: this.candidateDetails.candidate_id
   });
 
@@ -601,26 +596,26 @@ ContributionsByState.prototype.loadStatesData = function() {
  */
 ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   // If this is the first load, the typeahead won't have a value; let's set it
-  let theTypeahead = document.querySelector('#contribs-by-state-cand');
+  const theTypeahead = document.querySelector('#contribs-by-state-cand');
   if (!theTypeahead.value) theTypeahead.value = this.candidateDetails.name;
 
   // …their desired office during this election…
-  let candidateOfficeHolder = this.candidateDetailsHolder.querySelector('h2');
-  let theOfficeName = this.candidateDetails.office_full;
+  const candidateOfficeHolder = this.candidateDetailsHolder.querySelector('h2');
+  const theOfficeName = this.candidateDetails.office_full;
   candidateOfficeHolder.innerText = `Candidate for ${
     theOfficeName == 'President' ? theOfficeName.toLowerCase() : theOfficeName
   }`;
 
   // …and their candidate ID for this office
-  let candidateIdHolder = this.candidateDetailsHolder.querySelector('h3');
+  const candidateIdHolder = this.candidateDetailsHolder.querySelector('h3');
   candidateIdHolder.innerText = 'ID: ' + this.candidateDetails.candidate_id;
 
   // Update the <select>
   // TODO: handle if there are no years
   // TODO: handle if there is only one year (hide select? disable it? Not awful if it's exactly one option)
   // Grab election_years from the candidate details
-  let candidateElectionYears = this.candidateDetails.election_years;
-  let evenElectionYears = candidateElectionYears.map(electionYear => {
+  const candidateElectionYears = this.candidateDetails.election_years;
+  const evenElectionYears = candidateElectionYears.map(electionYear => {
     if (electionYear % 2 === 0) {
       return electionYear;
     } else {
@@ -630,11 +625,11 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
   });
   // Take the new even election years set and make it distinct
   // eslint-disable-next-line no-undef
-  let validElectionYears = [...new Set(evenElectionYears)];
+  const validElectionYears = [...new Set(evenElectionYears)];
   // Sort them so the most recent is first so it'll be on top of the <select>
   validElectionYears.sort((a, b) => b - a);
   // Remember what year's election we're currently showing (will help if we were switching between candidates of the same year)
-  let previousElectionYear = this.yearControl.value;
+  const previousElectionYear = this.yearControl.value;
   // Otherwise we'll show the most recent election of these options
   let nextElectionYear = validElectionYears[0];
 
@@ -683,9 +678,9 @@ ContributionsByState.prototype.displayUpdatedData_candidate = function() {
  * TODO: This will eventually be replaced by the datatables functionality
  */
 ContributionsByState.prototype.displayUpdatedData_states = function() {
-  let theData = this.data_states;
-  let theResults = theData.results;
-  let theTableBody = this.table.querySelector('tbody');
+  const theData = this.data_states;
+  const theResults = theData.results;
+  const theTableBody = this.table.querySelector('tbody');
   let theTbodyString = '';
 
   if (theResults.length === 0) {
@@ -695,7 +690,7 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
     // If there ARE results to show
 
     // We're going to need the committee IDs for the totals link
-    let theCommitteeIDs = [];
+    const theCommitteeIDs = [];
     for (let i = 0; i < this.data_candidateCommittees.results.length; i++) {
       theCommitteeIDs.push(
         this.data_candidateCommittees.results[i].committee_id
@@ -703,7 +698,7 @@ ContributionsByState.prototype.displayUpdatedData_states = function() {
     }
 
     for (let i = 0; i < theResults.length; i++) {
-      let theStateTotalUrl = buildIndividualContributionsUrl(
+      const theStateTotalUrl = buildIndividualContributionsUrl(
         this.baseStatesQuery.cycle,
         this.baseStatesQuery.office,
         theCommitteeIDs,
@@ -758,7 +753,7 @@ ContributionsByState.prototype.displayUpdatedData_total = function(data) {
         ))
       : '';
 
-  let statesHolder = this.element.querySelector('.states-total');
+  const statesHolder = this.element.querySelector('.states-total');
   if (data.results.length > 0) statesHolder.setAttribute('style', '');
   else statesHolder.setAttribute('style', 'opacity: 0;');
 };
@@ -797,10 +792,10 @@ ContributionsByState.prototype.handleTypeaheadRender = function(
 
 /**
  * Shows and hides the Typeahead error message
- * @param {Boolean} isError - Whether or not to display the message
+ * @param {boolean} isError - Whether or not to display the message
  */
 ContributionsByState.prototype.showTypeaheadError = function(isError) {
-  let theElement = document.querySelector('#contribs-by-state-cand-field');
+  const theElement = document.querySelector('#contribs-by-state-cand-field');
   if (isError) theElement.classList.add('is-error');
   else theElement.classList.remove('is-error');
 };
@@ -810,7 +805,7 @@ ContributionsByState.prototype.showTypeaheadError = function(isError) {
  */
 ContributionsByState.prototype.handleTypeaheadBlur = function() {
   // If the user has left the field without making a choice (i.e., typeahead_revertValue hasn't been nullified),
-  let theTypeahead = document.querySelector('#contribs-by-state-cand');
+  const theTypeahead = document.querySelector('#contribs-by-state-cand');
   if (this.typeahead_revertValue != '') {
     // revert the value and reset the var
     theTypeahead.value = this.typeahead_revertValue;
@@ -825,7 +820,7 @@ ContributionsByState.prototype.handleTypeaheadBlur = function() {
  */
 ContributionsByState.prototype.handleTypeaheadFocus = function() {
   // Save the current value, in case the user leaves the field without making a selection
-  let theTypeahead = document.querySelector('#contribs-by-state-cand');
+  const theTypeahead = document.querySelector('#contribs-by-state-cand');
   this.typeahead_revertValue = theTypeahead.value;
 };
 
@@ -836,7 +831,7 @@ ContributionsByState.prototype.setCandidateName = function(
   party,
   cycle
 ) {
-  let candidateNameElement = this.candidateDetailsHolder.querySelector('h1');
+  const candidateNameElement = this.candidateDetailsHolder.querySelector('h1');
   candidateNameElement.innerHTML = `<a href="/data/candidate/${id}/?cycle=${cycle}&election_full=true">${candidateName}</a> [${party}]`;
 };
 
@@ -863,12 +858,12 @@ ContributionsByState.prototype.handleElectionYearChange = function(e) {
 
 /**
  * Called from throughout the widget
- * @param {String} errorCode
+ * @param {string} errorCode
  */
 ContributionsByState.prototype.handleErrorState = function(errorCode) {
   if (errorCode == 'NO_RESULTS_TO_DISPLAY') {
     // Empty the states list and update the date range
-    let theStatesTableBody = this.table.querySelector('tbody');
+    const theStatesTableBody = this.table.querySelector('tbody');
     let theDateRange = this.baseStatesQuery.cycle;
     if (this.baseStatesQuery.office == 'P')
       theDateRange = theDateRange - 3 + '-' + theDateRange;
@@ -876,7 +871,7 @@ ContributionsByState.prototype.handleErrorState = function(errorCode) {
       theDateRange = theDateRange - 5 + '-' + theDateRange;
     else theDateRange = theDateRange - 1 + '-' + theDateRange;
 
-    let theErrorMessageHTML = `<tr><td colspan="3" class="error-msg">We don&apos;t have itemized individual contributions for this candidate for ${theDateRange}.</td></tr>`;
+    const theErrorMessageHTML = `<tr><td colspan="3" class="error-msg">We don&apos;t have itemized individual contributions for this candidate for ${theDateRange}.</td></tr>`;
     theStatesTableBody.innerHTML = theErrorMessageHTML;
   }
 };
@@ -887,13 +882,13 @@ ContributionsByState.prototype.handleErrorState = function(errorCode) {
 ContributionsByState.prototype.updateBrowseIndivContribsButton = function() {
   // We need to go through the committee results and build an array of the committee IDs
   // to send to {@see buildIndividualContributionsUrl() }
-  let theCommittees = this.data_candidateCommittees.results;
-  let theCommitteeIDs = [];
+  const theCommittees = this.data_candidateCommittees.results;
+  const theCommitteeIDs = [];
   for (let i = 0; i < theCommittees.length; i++) {
     theCommitteeIDs.push(theCommittees[i].committee_id);
   }
 
-  let theButton = this.element.querySelector(
+  const theButton = this.element.querySelector(
     '.js-browse-indiv-contribs-by-state'
   );
   theButton.setAttribute(
@@ -913,7 +908,7 @@ ContributionsByState.prototype.updateBrowseIndivContribsButton = function() {
 ContributionsByState.prototype.handleResize = function(e = null) {
   if (e) e.preventDefault();
 
-  let newWidth = this.element.offsetWidth;
+  const newWidth = this.element.offsetWidth;
 
   if (newWidth < breakpointToSmall) {
     // It's XS
@@ -954,15 +949,15 @@ ContributionsByState.prototype.handleResize = function(e = null) {
  * Called by {@see handleResize() }, to re-position the "loading" overlay
  */
 ContributionsByState.prototype.refreshOverlay = function() {
-  let timeStampHeight = 25;
-  let theMap = this.element.querySelector('.map-wrapper');
-  let theOverlay = this.element.querySelector('.overlay__container');
+  const timeStampHeight = 25;
+  const theMap = this.element.querySelector('.map-wrapper');
+  const theOverlay = this.element.querySelector('.overlay__container');
 
-  let theTopPos =
+  const theTopPos =
     this.element.querySelector('.state-list-wrapper').offsetTop +
     timeStampHeight;
-  let theBottomPos = theMap.offsetTop + theMap.offsetHeight;
-  let theHeight = theBottomPos - theTopPos;
+  const theBottomPos = theMap.offsetTop + theMap.offsetHeight;
+  const theHeight = theBottomPos - theTopPos;
 
   theOverlay.style.top = `${theTopPos}px`;
   theOverlay.style.height = `${theHeight}px`;
@@ -971,7 +966,7 @@ ContributionsByState.prototype.refreshOverlay = function() {
 /**
  * Controls class names and functionality of the widget.
  * Called when we both start and complete (@see loadStatesData() )
- * @param {Boolean} newState
+ * @param {boolean} newState
  */
 ContributionsByState.prototype.setLoadingState = function(newState) {
   if (newState === false) {
@@ -998,11 +993,11 @@ ContributionsByState.prototype.setLoadingState = function(newState) {
 /**
  * Handles the usage analytics for this module
  * @TODO: Decide how to gather usage insights while embedded
- * @param {String} candID - The candidate ID
+ * @param {string} candID - The candidate ID
  * @param {*} electionYear - String or Number, the user-selected election year
  */
 function logUsage(candID, electionYear) {
-  analytics.customEvent({
+  customEvent({
     event: 'Widget Interaction',
     eventName: `widgetInteraction`,
     eventCategory: 'Widget-ContribsByState',

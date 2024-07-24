@@ -1,20 +1,21 @@
-const _ = require('underscore');
-
-const gulp = require('gulp');
+/**
+ *
+ */
 const fs = require('graceful-fs');
-
-const consolidate = require('gulp-consolidate');
-const rename = require('gulp-rename');
-const svgmin = require('gulp-svgmin');
-const urlencode = require('gulp-css-urlencode-inline-svgs');
-const sass = require('gulp-sass')(require('sass'));
+const gulp = require('gulp');
 // minifies css
-const csso = require('gulp-csso');
 // Clears contents of directory
 const clean = require('gulp-clean');
-const rev = require('gulp-rev');
+const consolidate = require('gulp-consolidate');
+const urlencode = require('gulp-css-urlencode-inline-svgs');
+const csso = require('gulp-csso');
 //var sourcemaps = require('gulp-sourcemaps');
 const purgecss = require('gulp-purgecss');
+const rename = require('gulp-rename');
+const rev = require('gulp-rev');
+const sass = require('gulp-sass')(require('sass'));
+const svgmin = require('gulp-svgmin');
+const _ = require('underscore');
 
 // Consider using gulp-rev-delete-original later
 gulp.task('clear-css-dir', function() {
@@ -95,7 +96,9 @@ gulp.task(
 
 // clear icons output folder to clean old icons
 gulp.task('clean-output-icons', function() {
-  return gulp.src('./fec/static/icons/output', { read: false }).pipe(clean());
+  // TODO: bring back read:false
+  // return gulp.src('./fec/static/icons/output', { read: false, allowEmpty: true }).pipe(clean());
+  return gulp.src('./fec/static/icons/output', { read: true, allowEmpty: true }).pipe(clean());
 });
 
 gulp.task(
@@ -105,16 +108,20 @@ gulp.task(
       .src('./fec/static/icons/input/*.svg')
       .pipe(
         svgmin({
+          multipass: true,
           plugins: [
             {
-              removeAttrs: { attrs: '(fill|fill-rule)' }
+              name: 'removeViewBox',
+              active: false
             },
             {
-              removeStyleElement: true
+              name: 'removeAttrs',
+              params: {
+                attrs: '(fill|fill-rule)'
+              }
             },
-            {
-              removeTitle: true
-            }
+            'removeStyleElement',
+            'removeTitle'
           ]
         })
       )

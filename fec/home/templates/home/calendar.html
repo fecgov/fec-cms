@@ -6,7 +6,7 @@
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{% asset_for_css 'calendar.css' %}">
+<link rel="stylesheet" type="text/css" href="{% path_for_css 'calendar.css' %}">
 {% endblock %}
 
 {% block head_js %}
@@ -144,5 +144,6 @@
 {% endblock %}
 
 {% block extra_js %}
-  <script type="text/javascript" src="{% asset_for_js 'calendar-page.js' %}"></script>
+  {#- The chunks for 'global' and 'init' are included by base.html -#}
+  {% tags_for_js_chunks 'calendar-page.js' '' %}
 {% endblock %}

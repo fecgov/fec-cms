@@ -1,7 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
-
 /**
  * Skip nav link
  * @constructor
@@ -9,7 +5,7 @@ var $ = require('jquery');
  * @param {string} targetBody - CSS selector for the main content area to look for a focusable element in
  */
 
-function Skipnav(anchor, targetBody) {
+export default function Skipnav(anchor, targetBody) {
   this.anchor = anchor;
   this.$targetBody = $(targetBody);
   this.$target = $(this.findTarget());
@@ -32,8 +28,6 @@ Skipnav.prototype.focusOnTarget = function(e) {
 
   if (e.keyCode === 13 || e.type === 'click') {
     this.$target.attr('tabindex', '0');
-    this.$target.focus();
+    this.$target.focus(); // TODO: jQuery deprecation
   }
 };
-
-module.exports = { Skipnav: Skipnav };

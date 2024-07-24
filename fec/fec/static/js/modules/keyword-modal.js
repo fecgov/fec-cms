@@ -1,9 +1,7 @@
-'use strict';
+import { default as A11yDialog } from 'a11y-dialog';
+import { default as URI } from 'urijs';
 
-var $ = require('jquery');
-var URI = require('urijs');
-var A11yDialog = require('a11y-dialog');
-var analytics = require('./analytics');
+import { customEvent } from './analytics.js';
 
 /**
  * KeywordModal
@@ -14,7 +12,7 @@ var analytics = require('./analytics');
  * In the web app, it loads results by simply adding the new search query
  * to the window.location.search which forces a page refresh.
  */
-function KeywordModal() {
+export default function KeywordModal() {
   this.elm = document.querySelector('.js-keyword-modal');
   this.$elm = $(this.elm);
   this.$form = this.$elm.find('form');
@@ -110,16 +108,14 @@ KeywordModal.prototype.parseValue = function($input) {
 
 /**
  * Fire an event to GTM
- * @param {String} actionLabel - Name of the action to register with GA
+ * @param {string} actionLabel - Name of the action to register with GA
  */
 KeywordModal.prototype.fireEvent = function(actionLabel) {
   // Updating this to use DataLayer for GTM
-  analytics.customEvent({
+  customEvent({
     eventName: 'fecCustomEvent',
     eventCategory: 'Legal interactions',
     eventAction: actionLabel,
     eventValue: 1
   });
 };
-
-module.exports = { KeywordModal: KeywordModal };

@@ -28,12 +28,14 @@
     API_VERSION = 'v1';
     API_KEY_PUBLIC = '{{ API_KEY_PUBLIC }}';
     DEFAULT_TIME_PERIOD = '{{ DEFAULT_TIME_PERIOD }}';{# see note #}
-    DEFAULT_PRESIDENTIAL_YEAR = '{{ DEFAULT_PRESIDENTIAL_YEAR }}';{# see note #}
-    DEFAULT_ELECTION_YEAR = '{{ DEFAULT_ELECTION_YEAR }}';{# see note #}
-    START_YEAR = '{{ START_YEAR }}';{# see note #}
-    END_YEAR = '{{ END_YEAR }}';{# see note #}
+    DEFAULT_PRESIDENTIAL_YEAR = {{ DEFAULT_PRESIDENTIAL_YEAR }};{# see note #}
+    DEFAULT_ELECTION_YEAR = {{ DEFAULT_ELECTION_YEAR }};{# see note #}
+    START_YEAR = {{ START_YEAR }};{# see note #}
+    END_YEAR = {{ END_YEAR }};{# see note #}
     {# note: these are set through fec/data/views.py and come from /data/constants.py #}
 
+    {#
+      Removing trackMetric since nobody has looking at it or performance.js
     function trackMetric(name, imagesSelector) {
       if (imagesSelector) {
         var images = document.querySelectorAll(imagesSelector);
@@ -46,7 +48,7 @@
         }
       }
       window.performance.mark(name);
-    }
+    } #}
   </script>
 </head>
 <body>

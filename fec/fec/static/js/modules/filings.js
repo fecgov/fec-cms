@@ -1,16 +1,12 @@
-'use strict';
+import { default as _extend } from 'underscore/modules/extend.js';
 
-var $ = require('jquery');
-var _ = require('underscore');
+import { MODAL_TRIGGER_CLASS, modalRenderFactory } from './tables.js';
+import { amendmentVersion, amendmentVersionDescription, buildUrl } from '../modules/helpers.js';
+import { default as candidateTemplate } from '../templates/reports/candidate.hbs';
+import { default as ieTemplate } from '../templates/reports/ie-only.hbs';
+import { default as pacTemplate } from '../templates/reports/pac.hbs';
 
-var tables = require('./tables');
-var helpers = require('../modules/helpers');
-
-var candidateTemplate = require('../templates/reports/candidate.hbs');
-var pacTemplate = require('../templates/reports/pac.hbs');
-var ieTemplate = require('../templates/reports/ie-only.hbs');
-
-var templates = {
+const templates = {
   F3: candidateTemplate,
   F3P: candidateTemplate,
   F3X: pacTemplate,
@@ -21,35 +17,29 @@ function resolveTemplate(row) {
   return templates[row.form_type](row);
 }
 
-function fetchReportDetails(row) {
-  var url = helpers.buildUrl(['committee', row.committee_id, 'reports'], {
+export function fetchReportDetails(row) {
+  const url = buildUrl(['committee', row.committee_id, 'reports'], {
     beginning_image_number: row.beginning_image_number
   });
   return $.getJSON(url).then(function(response) {
-    var result = response.results.length ? response.results[0] : {};
+    const result = response.results.length ? response.results[0] : {};
 
-    result.amendment_version = helpers.amendmentVersion(result.most_recent);
-    result.amendment_version_description = helpers.amendmentVersionDescription(
+    result.amendment_version = amendmentVersion(result.most_recent);
+    result.amendment_version_description = amendmentVersionDescription(
       row
     );
 
-    return _.extend({}, row, result);
+    return _extend({}, row, result);
   });
 }
 
-var renderModal = tables.modalRenderFactory(
+export const renderModal = modalRenderFactory(
   resolveTemplate,
   fetchReportDetails
 );
 
-function renderRow(row, data) {
+export function renderRow(row, data) {
   if (data.form_type && data.form_type.match(/^F[35][XP]?$/)) {
-    row.classList.add(tables.MODAL_TRIGGER_CLASS, 'row--has-panel');
+    row.classList.add(MODAL_TRIGGER_CLASS, 'row--has-panel');
   }
 }
-
-module.exports = {
-  renderModal: renderModal,
-  renderRow: renderRow,
-  fetchReportDetails: fetchReportDetails
-};

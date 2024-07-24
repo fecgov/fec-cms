@@ -1,10 +1,5 @@
-'use strict';
-
-var $ = require('jquery');
-
-var LineChartCommittees = require('../modules/line-chart-committees')
-  .LineChartCommittees;
-var tabs = require('../vendor/tablist');
+import LineChartCommittees from '../modules/line-chart-committees.js';
+import { onShow as onTabShow } from '../vendor/tablist.js';
 
 function PlotChart(selector, type, index) {
   this.selector = selector;
@@ -28,12 +23,12 @@ PlotChart.prototype.init = function() {
   this.initialized = true;
 };
 
-$(document).ready(function() {
-  tabs.onShow($('#raising'), function() {
+$(function() {
+  onTabShow($('#raising'), function() {
     new PlotChart('.js-raised-overview', 'raised', 1).init();
   });
 
-  tabs.onShow($('#spending'), function() {
+  onTabShow($('#spending'), function() {
     new PlotChart('.js-spent-overview', 'spent', 2).init();
   });
 });

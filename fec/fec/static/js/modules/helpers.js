@@ -1,33 +1,40 @@
-'use strict';
-
-/* global BASE_PATH, API_LOCATION, API_VERSION, API_KEY_PUBLIC */
+/* global API_LOCATION, API_VERSION, API_KEY_PUBLIC */
 
 import DOMPurify from 'dompurify';
+import * as Handlebars from 'handlebars/runtime';
+import { default as moment } from 'moment';
+import { default as numeral } from 'numeral';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as URI } from 'urijs';
 
-var URI = require('urijs');
-var $ = require('jquery');
-var _ = require('underscore');
-var moment = require('moment');
-var decoders = require('./decoders');
-var Handlebars = require('hbsfy/runtime');
-var numeral = require('numeral');
+import {
+  amendments as decoders_amendments,
+  forms as decoders_forms,
+  means as decoders_means,
+  office as decoders_office,
+  parties as decoders_parties,
+  reports as decoders_reports,
+  supportOppose as decoders_supportOppose,
+  states as decoders_states
+} from './decoders.js';
 
 // set parameters from the API
-var API = {
+export const API = {
   amendment_indicator_new: 'N',
   amendment_indicator_terminated: 'T',
   means_filed_e_file: 'e-file'
 };
 
-var BREAKPOINTS = {
+export const BREAKPOINTS = {
   MEDIUM: 640,
   LARGE: 860
 };
 
-var LOADING_DELAY = 1500;
-var SUCCESS_DELAY = 5000;
+export const LOADING_DELAY = 1500;
+export const SUCCESS_DELAY = 5000;
 
-var formatMap = {
+export const formatMap = {
   default: 'MM/DD/YYYY',
   pretty: 'MMMM D, YYYY',
   time: 'h:mma',
@@ -36,12 +43,12 @@ var formatMap = {
   fullDayOfWeek: 'dddd'
 };
 
-function anchorify(attr) {
+export function anchorify(attr) {
   // Attach anchor <a> links to any tag with a given attribute
   $('[' + attr + ']').each(function(idx, item) {
-    var elt = $(item);
-    var link = $('<a></a>');
-    var href = '#' + elt.attr('id');
+    const elt = $(item);
+    const link = $('<a></a>');
+    const href = '#' + elt.attr('id');
     link.attr('href', href);
     link.html(elt.html());
     elt.html('');
@@ -49,7 +56,7 @@ function anchorify(attr) {
   });
 }
 
-function scrollAnchor(ms) {
+export function scrollAnchor(ms) {
   ms = ms || 1000;
   if (window.location.hash) {
     setTimeout(function() {
@@ -60,13 +67,13 @@ function scrollAnchor(ms) {
   }
 }
 
-function getWindowWidth() {
+export function getWindowWidth() {
   // window.innerWidth accounts for scrollbars and should match the width used
   // for media queries.
   return window.innerWidth;
 }
 
-function isLargeScreen() {
+export function isLargeScreen() {
   if (window.innerWidth >= BREAKPOINTS.LARGE) {
     return true;
   } else {
@@ -74,7 +81,7 @@ function isLargeScreen() {
   }
 }
 
-function isMediumScreen() {
+export function isMediumScreen() {
   if (window.innerWidth >= BREAKPOINTS.MEDIUM) {
     return true;
   } else {
@@ -82,10 +89,10 @@ function isMediumScreen() {
   }
 }
 
-function datetime(value, options) {
-  var hash = options.hash || {};
-  var format = formatMap[hash.format || 'default'];
-  var parsed = moment(value, 'YYYY-MM-DDTHH:mm:ss');
+export function datetime(value, options) {
+  const hash = options.hash || {};
+  const format = formatMap[hash.format || 'default'];
+  const parsed = moment(value, 'YYYY-MM-DDTHH:mm:ss');
   return parsed.isValid() ? parsed.format(format) : null;
 }
 
@@ -110,7 +117,7 @@ Handlebars.registerHelper('stringsMatch', stringsMatch);
  * @param {boolean} roundToWhole - Any number to be converted to US Dollars
  * @returns {string} String from the value and rounding argument
  */
-var currencyFormatter = function(value, roundToWhole) {
+export const currencyFormatter = function(value, roundToWhole) {
   return numeral(value).format(roundToWhole === true ? '$0,0' : '$0,0.00');
 };
 
@@ -119,7 +126,7 @@ var currencyFormatter = function(value, roundToWhole) {
  * @param {boolean} roundToWhole - Any number to be converted to US Dollars. Passed to currencyFormatter()
  * @returns {string} String from the value else '--'
  */
-function currency(value, roundToWhole) {
+export function currency(value, roundToWhole) {
   if (!isNaN(parseInt(value))) {
     return currencyFormatter(value, roundToWhole);
   } else {
@@ -128,11 +135,11 @@ function currency(value, roundToWhole) {
 }
 Handlebars.registerHelper('currency', currencyFormatter);
 
-var dollarFormatter = function(number) {
+export const dollarFormatter = function(number) {
   return numeral(number).format('$0,0');
 };
 
-function dollar(value) {
+export function dollar(value) {
   if (!isNaN(parseInt(value))) {
     return dollarFormatter(value);
   } else {
@@ -140,16 +147,21 @@ function dollar(value) {
   }
 }
 
-var numberFormatter = function(number) {
+export const numberFormatter = function(number) {
   return numeral(number).format('0,0');
 };
 
 Handlebars.registerHelper('formatNumber', numberFormatter);
 
+export function eq(v1, v2) {
+  return v1 === v2;
+}
+export function toUpperCase(value) {
+  return value.substr(0, 1).toUpperCase() + value.substr(1);
+}
+
 Handlebars.registerHelper({
-  eq: function(v1, v2) {
-    return v1 === v2;
-  },
+  eq: eq,
   // less than
   lt: function(v1, v2) {
     return v1 < v2;
@@ -166,12 +178,10 @@ Handlebars.registerHelper({
   gte: function(v1, v2) {
     return v1 >= v2;
   },
-  toUpperCase: function(value) {
-    return value.substr(0, 1).toUpperCase() + value.substr(1);
-  }
+  toUpperCase: toUpperCase
 });
 
-var globals = {
+export const globals = {
   EARMARKED_CODES: ['15E', '24I', '24T']
 };
 
@@ -184,35 +194,35 @@ Handlebars.registerHelper('isEarmarked', function(receipt_type) {
 });
 
 Handlebars.registerHelper('decodeAmendment', function(value) {
-  return decoders.amendments[value];
+  return decoders_amendments[value];
 });
 
 Handlebars.registerHelper('decodeOffice', function(value) {
-  return decoders.office[value];
+  return decoders_office[value];
 });
 
 Handlebars.registerHelper('decodeSupportOppose', function(value) {
-  return decoders.supportOppose[value] || 'Unknown';
+  return decoders_supportOppose[value] || 'Unknown';
 });
 
 Handlebars.registerHelper('decodeForm', function(value) {
-  return decoders.forms[value] || value;
+  return decoders_forms[value] || value;
 });
 
 Handlebars.registerHelper('decodeReport', function(value) {
-  return decoders.reports[value] || value;
+  return decoders_reports[value] || value;
 });
 
 Handlebars.registerHelper('decodeState', function(value) {
-  return decoders.states[value] || value;
+  return decoders_states[value] || value;
 });
 
 Handlebars.registerHelper('decodeParty', function(value) {
-  return decoders.parties[value] || value;
+  return decoders_parties[value] || value;
 });
 
 Handlebars.registerHelper('decodeMeans', function(value) {
-  return decoders.means[value] || value;
+  return decoders_means[value] || value;
 });
 
 Handlebars.registerHelper('formNumber', function(value) {
@@ -221,22 +231,18 @@ Handlebars.registerHelper('formNumber', function(value) {
 });
 
 Handlebars.registerHelper('formatSentence', function(value) {
-  var str = value.fn(this);
+  let str = value.fn(this);
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 });
 
-Handlebars.registerHelper('basePath', BASE_PATH);
+Handlebars.registerHelper('basePath', global.BASE_PATH);
 
 Handlebars.registerHelper('panelRow', function(label, options) {
   return new Handlebars.SafeString(
-    '<tr>' +
-      '<td class="panel__term">' +
-      label +
-      '</td>' +
-      '<td class="panel__data">' +
-      options.fn(this) +
-      '</td>' +
-      '</tr>'
+    `<tr>` +
+      `<td class="panel__term">${label}</td>` +
+      `<td class="panel__data">${options.fn(this)}</td>` +
+    '</tr>'
   );
 });
 
@@ -251,7 +257,7 @@ Handlebars.registerHelper('panelRow', function(label, options) {
  * @returns A sterilized URL string from buildAppUrl()
  */
 Handlebars.registerHelper('entityUrl', function(entity, options) {
-  var query, id, url;
+  let query, id, url;
   if (options.hash.query) {
     query = {
       cycle: options.hash.query.cycle || null,
@@ -264,8 +270,8 @@ Handlebars.registerHelper('entityUrl', function(entity, options) {
 });
 
 Handlebars.registerHelper('electionUrl', function(year, options) {
-  var url;
-  var candidate = options.hash.parentContext;
+  let url;
+  const candidate = options.hash.parentContext;
 
   if (candidate.office === 'P') {
     url = buildAppUrl(['elections', 'president', year]);
@@ -273,7 +279,7 @@ Handlebars.registerHelper('electionUrl', function(year, options) {
     url = buildAppUrl(['elections', 'senate', candidate.state, year]);
   } else if (candidate.office === 'H') {
     // Match election years with the election district
-    var district = candidate.election_districts[options.hash.index];
+    let district = candidate.election_districts[options.hash.index];
     url = buildAppUrl(['elections', 'house', candidate.state, district, year]);
   }
   return new Handlebars.SafeString(url);
@@ -288,7 +294,7 @@ Handlebars.registerHelper('convertBoolean', function(bool) {
 });
 
 Handlebars.registerHelper('format_range', function(year) {
-  var firstYear = Number(year) - 1;
+  let firstYear = Number(year) - 1;
   return new Handlebars.SafeString(
     firstYear.toString() + '–' + year.toString()
   );
@@ -305,23 +311,23 @@ Handlebars.registerHelper('zipCode', function(value) {
   Formats a cycle range based on a year and a duration.
   If no year is provided, return null;
 **/
-function formatCycleRange(year, duration) {
+export function formatCycleRange(year, duration) {
   // Year and duration is requred, if not provided return null
   if (year == null || duration == null) {
     return null;
   }
-  var firstYear = Number(year) - duration + 1;
+  const firstYear = Number(year) - duration + 1;
   return firstYear + '–' + year;
 }
 
-function cycleDates(year, duration) {
+export function cycleDates(year, duration) {
   return {
     min: '01-01-' + (year - duration + 1),
     max: '12-31-' + year
   };
 }
 
-function multiCycles(cycle, duration, label = 'two_year_transaction_period') {
+export function multiCycles(cycle, duration, label = 'two_year_transaction_period') {
   if (duration == 6) {
     return {
       [label]: [cycle, cycle - 2, cycle - 4]
@@ -337,12 +343,12 @@ function multiCycles(cycle, duration, label = 'two_year_transaction_period') {
   }
 }
 
-function ensureArray(value) {
+export function ensureArray(value) {
   return Array.isArray(value) ? value : [value];
 }
 
-function filterNull(params) {
-  return _.chain(params)
+export function filterNull(params) {
+  return _chain(params)
     .pairs()
     .filter(function(pair) {
       return pair[1] !== '';
@@ -357,15 +363,15 @@ function filterNull(params) {
  * @param {*} query - Used by URI.addQuery() to create query parameters
  * @returns A string in the form of `/data/{path}?{query}
  */
-function buildAppUrl(path, query) {
+export function buildAppUrl(path, query) {
   return URI('')
-    .path(Array.prototype.concat(BASE_PATH, path || [], '').join('/'))
+    .path(Array.prototype.concat(global.BASE_PATH, path || [], '').join('/'))
     .addQuery(query || {})
     .toString();
 }
 
-function buildUrl(path, query) {
-  var uri = URI(API_LOCATION)
+export function buildUrl(path, query) {
+  let uri = URI(API_LOCATION)
     .path(Array.prototype.concat(API_VERSION, path, '').join('/'))
     .addQuery({ api_key: API_KEY_PUBLIC });
 
@@ -376,8 +382,8 @@ function buildUrl(path, query) {
   return uri.addQuery(query).toString();
 }
 
-function buildTableQuery(context, params = { per_page: 100 }) {
-  var query = _.chain(context)
+export function buildTableQuery(context, params = { per_page: 100 }) {
+  let query = _chain(context)
     .pairs()
     .filter(function(pair) {
       return pair[1];
@@ -390,19 +396,19 @@ function buildTableQuery(context, params = { per_page: 100 }) {
     delete query.duration;
   }
 
-  return _.extend(query, {
+  return _extend(query, {
     per_page: params.per_page,
     sort_hide_null: true
   });
 }
 
-function getTimePeriod(electionYear, cycle, electionFull, office) {
-  var durations = {
+export function getTimePeriod(electionYear, cycle, electionFull, office) {
+  const durations = {
     P: 3,
     S: 5,
     H: 1
   };
-  var min,
+  let min,
     max,
     duration = durations[office];
 
@@ -417,7 +423,7 @@ function getTimePeriod(electionYear, cycle, electionFull, office) {
   return min + '–' + max;
 }
 
-/*
+/**
  * zeroPad: used to add decimals to numbers in order to right-align them
  * It does so by getting the width of a container element, measuring the length
  * of an item, and then appending decimals until the item is as long as the container
@@ -426,22 +432,21 @@ function getTimePeriod(electionYear, cycle, electionFull, office) {
  * @param item: a selector for the items whose width we will equalize
  * @param appendee (optional): what to append the decimal to
  */
-
-function zeroPad(container, item, appendee) {
+export function zeroPad(container, item, appendee) {
   // Subtract 2 so if it's close we don't go over
-  var maxWidth = $(container).width() - 6;
+  const maxWidth = $(container).width() - 6;
   $(container)
     .find(appendee)
     .empty();
   $(container)
     .find(item)
     .each(function() {
-      var itemWidth = $(this).width();
+      let itemWidth = $(this).width();
       // $appendee is where the period will be appended to
       // You can pass either a child element of item or else it will be appended
       // to item itself
-      var $appendee = appendee ? $(this).find(appendee) : $(this);
-      var value = $appendee.text();
+      let $appendee = appendee ? $(this).find(appendee) : $(this);
+      let value = $appendee.text();
       while (itemWidth < maxWidth) {
         value = '.' + value;
         $appendee.text(value);
@@ -450,7 +455,7 @@ function zeroPad(container, item, appendee) {
     });
 }
 
-function amendmentVersion(most_recent) {
+export function amendmentVersion(most_recent) {
   if (most_recent === true) {
     return '<i class="icon-circle--check-outline--inline--left"></i>Current version';
   } else if (most_recent === false) {
@@ -460,12 +465,12 @@ function amendmentVersion(most_recent) {
   }
 }
 
-function amendmentVersionDescription(row) {
+export function amendmentVersionDescription(row) {
   // Helper function for labeling filings as either an "original" or
   // a numbered amendment (e.g. "amendment 1" or "amendment 2")
   // Different filings are coded slightly differently, which makes for some tricky logic
-  var description = '';
-  var amendment_num = 1;
+  let description = '';
+  let amendment_num = 1;
 
   // because of messy data, do not show if not e-filing or null amendment indicator
   if (
@@ -488,7 +493,7 @@ function amendmentVersionDescription(row) {
 
   // Original termination reports always start with their own filing ID
   // in the amendment chain, which caused original reports to show up as an amendment
-  // This checks for terminatino reports and if the amendment number is greater
+  // This checks for termination reports and if the amendment number is greater
   // than 0 or the amendment chain is longer than 1, it is an amendment
   else if (row.amendment_indicator === API.amendment_indicator_terminated) {
     if (row.amendment_chain != null && row.amendment_chain.length > 1) {
@@ -515,18 +520,18 @@ function amendmentVersionDescription(row) {
   return description;
 }
 
-function utcDate(dateString) {
-  var originalDate = new Date(dateString);
-  var date = originalDate.getUTCDate();
-  var month = originalDate.getUTCMonth();
-  var year = originalDate.getUTCFullYear();
+export function utcDate(dateString) {
+  let originalDate = new Date(dateString);
+  let date = originalDate.getUTCDate();
+  let month = originalDate.getUTCMonth();
+  let year = originalDate.getUTCFullYear();
   return new Date(year, month, date);
 }
 
-function missingDataReason(dataType) {
+export function missingDataReason(dataType) {
   // Returns a string explaining why data may not be showing
   // which is then used by the noData.hbs message
-  var reasons = {
+  let reasons = {
     contributions:
       'The committee has not received any contributions over $200.',
     disbursements: 'The committee has not made any disbursements.',
@@ -547,8 +552,8 @@ function missingDataReason(dataType) {
  * @param {jQuery} $elm - the element to check
  * @return {bool} - If the element is in the viewport
  */
-function isInViewport($elm) {
-  var top = $elm.offset().top;
+export function isInViewport($elm) {
+  let top = $elm.offset().top;
   if (window.innerHeight + window.scrollY >= top) {
     return true;
   } else {
@@ -558,31 +563,28 @@ function isInViewport($elm) {
 
 // Sanitizes a single value by removing HTML tags and whitelisting valid
 // characters.
-function sanitizeValue(value) {
-  var validCharactersRegEx = /[^a-z0-9-',.()\s]/gi;
+export function sanitizeValue(value) {
+  let validCharactersRegEx = /[^a-z0-9-',.()\s]/gi;
 
   if (value !== null && value !== undefined) {
     if (Array.isArray(value)) {
-      for (var i = 0; i < value.length; i++) {
+      for (let i = 0; i < value.length; i++) {
         if (value[i] !== null && value[i] !== undefined) {
-          value[i] = DOMPurify.sanitize(value[i])
-            .replace('"', `&quot;`)
+          value[i] = DOMPurify.sanitize(value[i], { ALLOWED_TAGS: [] })
             .replace(validCharactersRegEx, '');
         }
       }
     } else {
-      value = DOMPurify.sanitize(value)
-        .replace('"', `&quot;`)
+      value = DOMPurify.sanitize(value, { ALLOWED_TAGS: [] })
         .replace(validCharactersRegEx, '');
     }
   }
-
   return value;
 }
 
 // Sanitizes all parameters retrieved from the query string in the URL.
-function sanitizeQueryParams(query) {
-  var param;
+export function sanitizeQueryParams(query) {
+  let param;
 
   for (param in query) {
     // eslint-disable-next-line no-prototype-builtins
@@ -594,12 +596,12 @@ function sanitizeQueryParams(query) {
   return query;
 }
 
-function getCookie(name) {
-  var cookieValue = null;
+export function getCookie(name) {
+  let cookieValue = null;
   if (document.cookie && document.cookie != '') {
-    var cookies = document.cookie.split(';');
-    for (var i = 0; i < cookies.length; i++) {
-      var cookie = $.trim(cookies[i]);
+    let cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      let cookie = $.trim(cookies[i]); // TODO: remove jQuery.trim as it's been deprecated
       // Does this cookie string begin with the name we want?
       if (cookie.substring(0, name.length + 1) == name + '=') {
         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
@@ -617,13 +619,13 @@ function getCookie(name) {
  * or will return null if the browser doesn't support `passive()`
  * @returns Object or false depending on whether the browser supports passive listeners
  */
-function passiveListenerIfSupported() {
-  var supported = false;
+export function passiveListenerIfSupported() {
+  let supported = false;
   /**
    * Let's check whether the browser supports passive event listeners
    */
   try {
-    let options = {
+    const options = {
       get passive() {
         supported = true;
         return false;
@@ -643,47 +645,11 @@ function passiveListenerIfSupported() {
  * @param {string|number} value - The string or number to be formatted as a ZIP Code
  * @returns {string} The provided value unless it's exactly nine numbers long, then returns a 9-letter ZIP Code format with the dash
  */
-function formatZipCode(value) {
-  var value_string = String(value);
-  var value_int = parseInt(value);
+export function formatZipCode(value) {
+  let value_string = String(value);
+  let value_int = parseInt(value);
   if (isNaN(value_int) || value_int < 100000000 || value_int > 999999999 || value_string.substring(0,1) === '0')
     return value;
   else
     return `${value_string.substring(0,5)}-${value_string.substring(5)}`;
 }
-
-module.exports = {
-  amendmentVersion: amendmentVersion,
-  amendmentVersionDescription: amendmentVersionDescription,
-  anchorify: anchorify,
-  buildAppUrl: buildAppUrl,
-  buildTableQuery: buildTableQuery,
-  buildUrl: buildUrl,
-  currency: currency,
-  cycleDates: cycleDates,
-  datetime: datetime,
-  dollar: dollar,
-  ensureArray: ensureArray,
-  filterNull: filterNull,
-  formatCycleRange: formatCycleRange,
-  formatNumber: numberFormatter,
-  formatZipCode: formatZipCode,
-  getCookie: getCookie,
-  getTimePeriod: getTimePeriod,
-  getWindowWidth: getWindowWidth,
-  globals: globals,
-  isInViewport: isInViewport,
-  isLargeScreen: isLargeScreen,
-  isMediumScreen: isMediumScreen,
-  missingDataReason: missingDataReason,
-  multiCycles: multiCycles,
-  passiveListener: passiveListenerIfSupported,
-  sanitizeQueryParams: sanitizeQueryParams,
-  sanitizeValue: sanitizeValue,
-  scrollAnchor: scrollAnchor,
-  utcDate: utcDate,
-  zeroPad: zeroPad,
-  BREAKPOINTS: BREAKPOINTS,
-  LOADING_DELAY: LOADING_DELAY,
-  SUCCESS_DELAY: SUCCESS_DELAY
-};

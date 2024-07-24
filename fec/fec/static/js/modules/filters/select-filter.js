@@ -1,10 +1,6 @@
-'use strict';
+import { default as Filter } from './filter-base.js';
 
-var $ = require('jquery');
-
-var Filter = require('./filter-base.js').Filter;
-
-function SelectFilter(elm) {
+export default function SelectFilter(elm) {
   Filter.call(this, elm);
   this.$input = this.$elm.find('select');
   this.name = this.$input.attr('name');
@@ -33,7 +29,7 @@ SelectFilter.prototype.fromQuery = function(query) {
 SelectFilter.prototype.setValue = function(value) {
   this.$input.find('option[selected]').prop('selected', false);
   this.$input.find('option[value="' + value + '"]').prop('selected', true);
-  this.$input.change();
+  this.$input.change(); // TODO: jQuery deprecation
 };
 
 SelectFilter.prototype.handleChange = function(e) {
@@ -78,5 +74,3 @@ SelectFilter.prototype.handleChange = function(e) {
    }
   }
 };
-
-module.exports = { SelectFilter: SelectFilter };

@@ -1,20 +1,19 @@
-'use strict';
+/**
+ *
+ */
+import Dropdown from './dropdowns.js';
+import Listeners from './listeners.js';
 
-var $ = require('jquery');
-
-var dropdown = require('./dropdowns');
-var listeners = require('./listeners');
-
-function CalendarTooltip(content, $container) {
+export function CalendarTooltip(content, $container) {
   this.$content = $(content);
   this.$container = $container;
   this.$close = this.$content.find('.js-close');
   this.$dropdown = this.$content.find('.dropdown');
-  this.exportDropdown = new dropdown.Dropdown(this.$dropdown, {
+  this.exportDropdown = new Dropdown(this.$dropdown, {
     checkboxes: false
   });
 
-  this.events = new listeners.Listeners();
+  this.events = new Listeners();
   this.events.on(this.$close, 'click', this.close.bind(this));
   this.events.on($(document.body), 'click', this.handleClickAway.bind(this));
 
@@ -22,7 +21,7 @@ function CalendarTooltip(content, $container) {
 }
 
 CalendarTooltip.prototype.handleClickAway = function(e) {
-  var $target = $(e.target);
+  const $target = $(e.target);
   if (
     !this.$content.has($target).length &&
     !this.$container.has($target).length
@@ -35,8 +34,6 @@ CalendarTooltip.prototype.close = function() {
   this.$content.remove();
   this.exportDropdown.destroy();
   this.$container.removeClass('is-active');
-  this.$container.focus();
+  this.$container.focus(); // TODO: jQuery deprecation
   this.events.clear();
 };
-
-module.exports = { CalendarTooltip: CalendarTooltip };

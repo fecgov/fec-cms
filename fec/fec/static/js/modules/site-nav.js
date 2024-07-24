@@ -1,22 +1,19 @@
-'use strict';
-
-var $ = require('jquery');
-var helpers = require('./helpers');
-const accessibility = require('./accessibility');
+import { removeTabindex, restoreTabindex } from './accessibility.js';
+import { BREAKPOINTS, getWindowWidth } from './helpers.js';
 
 window.$ = window.jQuery = $;
 
-require('accessible-mega-menu');
+import 'accessible-mega-menu/js/jquery-accessibleMegaMenu.js';
 
 /** SiteNav module
  * On mobile: Controls the visibility of the the hamburger menu and sublists
  * On desktop: Controls the visibility of dropdown sublists on hover and focus
  * @constructor
- * @param {object} selector - CSS selector for the nav component
- * @param {object} opts - Options, including base URLs
+ * @param {Object} selector - CSS selector for the nav component
+ * @param {Object} opts - Options, including base URLs
  */
 
-function SiteNav(selector) {
+export default function SiteNav(selector) {
   this.$body = $('body');
   this.$element = $(selector);
   this.$menu = this.$element.find('#site-menu');
@@ -38,7 +35,7 @@ function SiteNav(selector) {
   // call listener function explicitly at run time
   this.mediaQueryResponse(mql);
   // attach listener function to listen for change in mediaQuery list
-  mql.addListener(this.mediaQueryResponse);
+  mql.addListener(this.mediaQueryResponse); // TODO: .addListener() has been deprecated
 }
 
 SiteNav.prototype.initMenu = function() {
@@ -56,7 +53,8 @@ SiteNav.prototype.initMegaMenu = function() {
       });
   });
 
-  this.$menu.accessibleMegaMenu({
+  this.$menu.accessibleMegaMenu(
+    {
     uuidPrefix: 'mega-menu',
     menuClass: 'site-nav__panel--main',
     topNavItemClass: 'site-nav__item',
@@ -75,17 +73,17 @@ SiteNav.prototype.initMegaMenu = function() {
 
 SiteNav.prototype.assignAria = function() {
   this.$menu.attr('aria-label', 'Site-wide navigation');
-  if (helpers.getWindowWidth() < helpers.BREAKPOINTS.LARGE) {
+  if (getWindowWidth() < BREAKPOINTS.LARGE) {
     this.$toggle.attr('aria-haspopup', true);
     this.$menu.attr('aria-hidden', true);
-    accessibility.removeTabindex(this.$menu);
+    removeTabindex(this.$menu);
   }
 };
 
 /**
  * Append searchbox to correct location upon user screen resize
  * @param {Object} mql
- * @param {Boolean} mql.matches - true if large; false if less than large
+ * @param {boolean} mql.matches - true if large; false if less than large
  */
 SiteNav.prototype.mediaQueryResponse = function(mql) {
   //If large
@@ -104,15 +102,15 @@ SiteNav.prototype.mediaQueryResponse = function(mql) {
       .find('.utility-nav__search')
       .prependTo('.site-nav__panel');
     if ($('.js-site-nav').hasClass('is-open')) {
-      accessibility.restoreTabindex($('.utility-nav__search'));
+      restoreTabindex($('.utility-nav__search'));
     } else {
-      accessibility.removeTabindex($('.utility-nav__search'));
+      removeTabindex($('.utility-nav__search'));
     }
   }
 };
 
 SiteNav.prototype.toggleMenu = function() {
-  var method = this.isOpen ? this.hideMenu : this.showMenu;
+  const method = this.isOpen ? this.hideMenu : this.showMenu;
   method.apply(this);
 };
 
@@ -125,7 +123,7 @@ SiteNav.prototype.showMenu = function() {
   this.$menu.attr('aria-hidden', false);
   //append search to mobile menu upon opening
   $('.site-nav__panel').prepend(this.$searchbox);
-  accessibility.restoreTabindex(this.$menu);
+  restoreTabindex(this.$menu);
 
   this.isOpen = true;
 };
@@ -139,14 +137,10 @@ SiteNav.prototype.hideMenu = function() {
   this.$menu.attr('aria-hidden', true);
   //append search to header
   $('.utility-nav.list--flat').prepend(this.$searchbox);
-  accessibility.removeTabindex(this.$menu);
+  removeTabindex(this.$menu);
 
   this.isOpen = false;
   if (this.isMobile) {
     this.$element.find('[aria-hidden=false]').attr('aria-hidden', true);
   }
-};
-
-module.exports = {
-  SiteNav: SiteNav
 };

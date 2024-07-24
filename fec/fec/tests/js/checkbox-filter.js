@@ -1,16 +1,12 @@
-'use strict';
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import { spy } from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
-
-var $ = require('jquery');
-
-require('./setup')();
-
-var CheckboxFilter = require('../../static/js/modules/filters/checkbox-filter').CheckboxFilter;
+import CheckboxFilter from '../../static/js/modules/filters/checkbox-filter.js';
 
 describe('checkbox filters', function() {
   before(function() {
@@ -52,7 +48,7 @@ describe('checkbox filters', function() {
   });
 
   it('pulls values from the query', function() {
-    var query = {'office': ['p', 's']};
+    var query = { office: ['p', 's'] };
     this.filter.fromQuery(query);
     expect(this.filter.$elm.find('#president').is(':checked')).to.be.true;
     expect(this.filter.$elm.find('#senate').is(':checked')).to.be.true;
@@ -72,7 +68,7 @@ describe('checkbox filters', function() {
 
   describe('handleChange()', function() {
     beforeEach(function() {
-      this.trigger = sinon.spy($.prototype, 'trigger');
+      this.trigger = spy($.prototype, 'trigger');
       this.$input = this.$fixture.find('#president');
       this.$label = this.filter.$elm.find('label[for="' + this.$input.attr('id') + '"]');
     });
@@ -83,32 +79,32 @@ describe('checkbox filters', function() {
     });
 
     it('sets loaded-once on the input after loading', function() {
-      this.$input.prop('checked', true).change();
+      this.$input.prop('checked', true).change(); // TODO: jQuery deprecation
       expect(this.$input.data('loaded-once')).to.be.true;
       expect(this.$label.attr('class')).to.not.equal('is-loading');
     });
 
     it('adds the loading class if it has loaded once', function() {
-      this.$input.prop('checked', true).change();
-      this.$input.prop('checked', false).change();
+      this.$input.prop('checked', true).change(); // TODO: jQuery deprecation
+      this.$input.prop('checked', false).change(); // TODO: jQuery deprecation
       expect(this.$label.attr('class')).to.equal('is-loading');
     });
 
     it('triggers the add event on checking a checkbox', function() {
-      this.$input.prop('checked', true).change();
+      this.$input.prop('checked', true).change(); // TODO: jQuery deprecation
       expect(this.trigger).to.have.been.calledWith('filter:added', [
         {
           key: 'president',
           value: 'President',
           loadedOnce: false,
           filterLabel: this.filter.$filterLabel,
-          name: 'office',
+          name: 'office'
         }
       ]);
     });
 
     it('triggers remove event on unchecking a checkbox', function() {
-      this.$input.prop('checked', false).change();
+      this.$input.prop('checked', false).change(); // TODO: jQuery deprecation
       expect(this.trigger).to.have.been.calledWith('filter:removed', [
         {
           key: 'president',
@@ -140,7 +136,7 @@ describe('checkbox filters', function() {
     });
 
     it('removes checkbox on clicking the button', function() {
-      this.filter.$elm.find('.js-remove').click();
+      this.filter.$elm.find('.js-remove').click(); // TODO: jQuery deprecation
       expect(this.filter.$elm.find('li').length).to.equal(0);
     });
 

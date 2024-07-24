@@ -1,14 +1,15 @@
-//
-
-import { PartyMoneyBars } from '../modules/party-money-bars';
-import { FECContainerQuery } from '../modules/container-queries';
+/**
+ *
+ */
+import FECContainerQuery from '../modules/container-queries.js';
+import PartyMoneyBars from '../modules/party-money-bars.js';
 
 /**
  * Runs the Summary tab at /data/elections/house/ and /data/elections/senate/
  * @class
  * @property {HTMLInputElement} cycleSelector - the <input>
  */
-function HSOverviewSummary() {
+export default function HSOverviewSummary() {
   this.tabPanel = document.querySelector('#election-summary');
   this.cycleSelector = document.querySelector('#election-summary .js-period-select');
 
@@ -87,7 +88,7 @@ HSOverviewSummary.prototype.init = function() {
 /**
  * Removes functionality from the input/select assigned to this.cycleSelector
  */
-HSOverviewSummary.prototype.deactivateInput = function () {
+HSOverviewSummary.prototype.deactivateInput = function() {
   this.cycleSelector.setAttribute('aria-disabled', 'true');
   this.cycleSelector.setAttribute('disabled', 'true');
 };
@@ -95,7 +96,7 @@ HSOverviewSummary.prototype.deactivateInput = function () {
 /**
  * Restores functionality from the input/select assigned to this.cycleSelector
  */
-HSOverviewSummary.prototype.reactivateInput = function () {
+HSOverviewSummary.prototype.reactivateInput = function() {
   this.cycleSelector.removeAttribute('aria-disabled');
   this.cycleSelector.removeAttribute('disabled');
 };
@@ -112,7 +113,7 @@ HSOverviewSummary.prototype.handleCycleChange = function (e) {
 /**
  * Takes the results, parses them from parties divisions to type combinations, then reactivates cycleSelect.
  * (Takes [{dem numbers}, {rep numbers}, {other numbers}] and converts to [{receipts: {total, dem numbers, rep numbers, other numbers}}])
- * @param {object} results - response.results from the api
+ * @param {Object} results - response.results from the api
  */
 HSOverviewSummary.prototype.handleDataLoaded = function(results) {
   const usefulResults = {
@@ -158,5 +159,3 @@ HSOverviewSummary.prototype.handleDataLoaded = function(results) {
 window.addEventListener('load', () => {
   new HSOverviewSummary();
 });
-
-module.exports = { HSOverviewSummary };

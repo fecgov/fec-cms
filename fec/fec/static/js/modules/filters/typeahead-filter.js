@@ -1,18 +1,19 @@
-'use strict';
+import { default as _escape } from 'underscore/modules/escape.js';
 
-var $ = require('jquery');
-var _ = require('underscore');
+import Filter, { ensureArray } from './filter-base.js';
+import FilterTypeahead from './filter-typeahead.js';
+import { datasets } from '../typeahead.js';
 
-var Filter = require('./filter-base.js');
-var typeahead = require('../typeahead');
-var FilterTypeahead = require('./filter-typeahead').FilterTypeahead;
+/**
+ *
+ * @param {jQuery.Object} elm
+ */
+export default function TypeaheadFilter(elm) {
+  Filter.call(this, elm);
 
-function TypeaheadFilter(elm) {
-  Filter.Filter.call(this, elm);
-
-  var key = this.$elm.data('dataset');
-  var allowText = this.$elm.data('allow-text') !== undefined;
-  var dataset = key ? typeahead.datasets[key] : null;
+  const key = this.$elm.data('dataset');
+  const allowText = this.$elm.data('allow-text') !== undefined;
+  const dataset = key ? datasets[key] : null;
   this.typeaheadFilter = new FilterTypeahead(this.$elm, dataset, allowText);
   this.typeaheadFilter.$elm.on(
     'change',
@@ -21,30 +22,39 @@ function TypeaheadFilter(elm) {
   );
 }
 
-TypeaheadFilter.prototype = Object.create(Filter.Filter.prototype);
+TypeaheadFilter.prototype = Object.create(Filter.prototype);
 TypeaheadFilter.constructor = TypeaheadFilter;
 
+/**
+ *
+ * @param {Object} query
+ * @param {string} query.data_type - "processed"
+ * @param {string} query.max_date - "12312024"
+ * @param {string} query.min_date - "01012023"
+ * @param {string} query.two_year_transaction_period - "2024"
+ * @returns
+ */
 TypeaheadFilter.prototype.fromQuery = function(query) {
-  var values = query[this.name] ? Filter.ensureArray(query[this.name]) : [];
+  const values = query[this.name] ? ensureArray(query[this.name]) : [];
   this.typeaheadFilter.getFilters(values);
   this.typeaheadFilter.$elm.find('input[type="checkbox"]').val(values);
   return this;
 };
 
 // Ignore changes on typeahead input
-TypeaheadFilter.prototype.handleChange = function() {};
+TypeaheadFilter.prototype.handleChange = function() {}; // eslint-disable-line no-empty-function
 
 TypeaheadFilter.prototype.handleNestedChange = function(e) {
-  var $input = $(e.target);
-  var id = $input.attr('id');
-  var $label = this.$elm.find('[for="' + id + '"]');
+  const $input = $(e.target);
+  const id = $input.attr('id');
+  const $label = this.$elm.find('[for="' + id + '"]');
 
-  var eventName = $input.is(':checked') ? 'filter:added' : 'filter:removed';
+  const eventName = $input.is(':checked') ? 'filter:added' : 'filter:removed';
 
   $input.trigger(eventName, [
     {
       key: id,
-      value: _.escape($label.text()),
+      value: _escape($label.text()),
       name: $input.attr('name'),
       loadedOnce: true
     }
@@ -74,5 +84,3 @@ TypeaheadFilter.prototype.enable = function() {
     });
   });
 };
-
-module.exports = { TypeaheadFilter: TypeaheadFilter };

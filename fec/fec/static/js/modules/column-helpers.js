@@ -1,9 +1,6 @@
-'use strict';
+import { buildAppUrl, currency, cycleDates, multiCycles } from './helpers.js';
 
-// var _ = require('underscore');
-var helpers = require('./helpers');
-
-var sizeInfo = {
+export const sizeInfo = {
   0: { limits: [0, 200], label: '$200 and under' }, // eslint-disable-line quote-props
   200: { limits: [200.01, 499.99], label: '$200.01—$499' }, // eslint-disable-line quote-props
   500: { limits: [500, 999.99], label: '$500—$999' }, // eslint-disable-line quote-props
@@ -11,25 +8,25 @@ var sizeInfo = {
   2000: { limits: [2000, null], label: '$2,000 and over' } // eslint-disable-line quote-props
 };
 
-function getSizeParams(size) {
+export function getSizeParams(size) {
   var limits = sizeInfo[size].limits;
   var params = {};
   if (limits[0] !== null) {
-    params.min_amount = helpers.currency(limits[0]);
+    params.min_amount = currency(limits[0]);
   }
   if (limits[1] !== null) {
-    params.max_amount = helpers.currency(limits[1]);
+    params.max_amount = currency(limits[1]);
   }
   return params;
 }
 
-function getColumns(columns, keys) {
+export function getColumns(columns, keys) {
   return keys.map(function(key) {
     return columns[key];
   });
 }
 
-function formattedColumn(formatter, defaultOpts) {
+export function formattedColumn(formatter, defaultOpts) {
   defaultOpts = defaultOpts || {};
   return function(opts) {
     return Object.assign(
@@ -45,7 +42,7 @@ function formattedColumn(formatter, defaultOpts) {
   };
 }
 
-function barColumn(formatter) {
+export function barColumn(formatter) {
   formatter =
     formatter ||
     function(value) {
@@ -68,7 +65,7 @@ function barColumn(formatter) {
   };
 }
 
-function urlColumn(attr, opts) {
+export function urlColumn(attr, opts) {
   return Object.assign(
     {
       render: function(data, type, row) {
@@ -95,7 +92,7 @@ function urlColumn(attr, opts) {
  * @param {boolean} [opts.isIncumbent] - If true, the returned element string will include `class="is-incumbent"`
  * @returns String in the format of `<a href="{url}" title="{data}" data-category="{category}">{data}</a>`
  */
-function buildEntityLink(data, url, category, opts) {
+export function buildEntityLink(data, url, category, opts) {
   opts = opts || {};
   var anchor = document.createElement('a');
   anchor.textContent = data;
@@ -110,10 +107,10 @@ function buildEntityLink(data, url, category, opts) {
   return anchor.outerHTML;
 }
 
-function buildAggregateUrl(cycle, includeTransactionPeriod, duration = 2) {
-  var dates = helpers.cycleDates(cycle, duration);
+export function buildAggregateUrl(cycle, includeTransactionPeriod, duration = 2) {
+  var dates = cycleDates(cycle, duration);
   if (includeTransactionPeriod) {
-    return helpers.multiCycles(cycle, duration);
+    return multiCycles(cycle, duration);
   } else {
     return {
       min_date: dates.min,
@@ -125,7 +122,7 @@ function buildAggregateUrl(cycle, includeTransactionPeriod, duration = 2) {
 // Used for election profile page "other spending" tables
 // As well as candidate/committee profile "Individual contributions"
 // by state and by size
-function buildTotalLink(path, getParams) {
+export function buildTotalLink(path, getParams) {
   return function(data, type, row, meta) {
     data = data || 0;
     var params = getParams(data, type, row, meta);
@@ -136,15 +133,15 @@ function buildTotalLink(path, getParams) {
     span.setAttribute('data-row', meta.row);
     if (params) {
       var link = document.createElement('a');
-      link.textContent = helpers.currency(data);
+      link.textContent = currency(data);
       link.setAttribute('title', 'Show individual transactions');
       if (path.indexOf('receipts') > -1 || path.indexOf('disbursements') > -1) {
         includeTransactionPeriod = true;
       }
-      if (context.election) {
-        electionDuration = context.election.duration;
+      if (window.context.election) {
+        electionDuration = window.context.election.duration;
       }
-      var uri = helpers.buildAppUrl(
+      var uri = buildAppUrl(
         path,
         Object.assign(
           { committee_id: row.committee_id },
@@ -160,10 +157,10 @@ function buildTotalLink(path, getParams) {
       span.appendChild(link);
       // Temporarily disable "other" state aggs
       if (params.contributor_state == 'OT') {
-        span.textContent = helpers.currency(data);
+        span.textContent = currency(data);
       }
     } else {
-      span.textContent = helpers.currency(data);
+      span.textContent = currency(data);
     }
     return span.outerHTML;
   };
@@ -190,7 +187,7 @@ function makeCommitteeColumn(opts, context, factory) {
             committee_id: (context.candidates[row.candidate_id] || {})
               .committee_ids
           },
-          helpers.multiCycles(row.cycle, row.duration),
+          multiCycles(row.cycle, row.duration),
           factory(data, type, row, meta, column)
         );
       })
@@ -199,7 +196,7 @@ function makeCommitteeColumn(opts, context, factory) {
   );
 }
 
-function sizeColumns(context) {
+export function sizeColumns(context) {
   var factory = function(data, type, row, meta, column) {
     return getSizeParams(column);
   };
@@ -212,7 +209,7 @@ function sizeColumns(context) {
       render: function(data, type, row) {
         return buildEntityLink(
           data,
-          helpers.buildAppUrl(['candidate', row.candidate_id]),
+          buildAppUrl(['candidate', row.candidate_id]),
           'candidate'
         );
       }
@@ -225,7 +222,7 @@ function sizeColumns(context) {
   ];
 }
 
-function stateColumns(results, context) {
+export function stateColumns(results, context) {
   var stateColumn = { data: 'state' };
   var columns = results.toArray().map(function(result) {
     return makeCommitteeColumn({ data: result.candidate_id }, context, function(
@@ -245,17 +242,3 @@ function stateColumns(results, context) {
 
   return [stateColumn].concat(columns);
 }
-
-module.exports = {
-  barColumn: barColumn,
-  buildAggregateUrl: buildAggregateUrl,
-  buildEntityLink: buildEntityLink,
-  buildTotalLink: buildTotalLink,
-  formattedColumn: formattedColumn,
-  getColumns: getColumns,
-  getSizeParams: getSizeParams,
-  sizeInfo: sizeInfo,
-  urlColumn: urlColumn,
-  sizeColumns: sizeColumns,
-  stateColumns: stateColumns
-};

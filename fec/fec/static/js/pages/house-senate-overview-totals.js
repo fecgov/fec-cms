@@ -1,14 +1,15 @@
-//
-
-import { download } from '../modules/download';
-import { buildUrl } from '../modules/helpers';
+/**
+ *
+ */
+import { download } from '../modules/download.js';
+import { buildUrl } from '../modules/helpers.js';
 
 /**
  * Runs the Totals tab at /data/elections/house/ and /data/elections/senate/
  * @class
  * @property {HTMLInputElement} exportButton - the export <button>
  */
-function HSOverviewTotalsTable() {
+export function HSOverviewTotalsTable() {
   this.exportButton = document.querySelector('#election-totals .js-export');
   this.init();
 }
@@ -51,5 +52,3 @@ HSOverviewTotalsTable.prototype.handleExportClick = function() {
 window.addEventListener('load', () => {
   new HSOverviewTotalsTable();
 });
-
-module.exports = { HSOverviewTotalsTable };

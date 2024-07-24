@@ -1,7 +1,4 @@
-/* global process */
-
 const istanbul = require('browserify-istanbul');
-process.env.CHROME_BIN = require('puppeteer').executablePath();
 
 module.exports = function(config) {
   const browserify = {
@@ -21,18 +18,30 @@ module.exports = function(config) {
   }
 
   config.set({
-    frameworks: ['browserify', 'mocha', 'chai-sinon'],
-
     files: [
+      'node_modules/jquery/dist/jquery.min.js',
       'node_modules/babel-polyfill/dist/polyfill.js',
       'fec/fec/tests/js/**/*.js'
     ],
 
-    exclude: ['**/hallo-edit-html.js', 'fec/fec/static/js/init.js'],
+    exclude: [
+      '**/hallo-edit-html.js',
+      'fec/fec/static/js/init.js',
+      '**/node_modules/*'
+    ],
+
+    frameworks: ['browserify', 'mocha', 'chai-sinon', 'webpack'],
 
     preprocessors: {
-      'fec/fec/tests/js/*.js': ['browserify'],
+      'fec/fec/tests/js/*.js': ['webpack', 'babel'],
       'fec/fec/tests/js/draftail/**/*.js': ['webpack']
+    },
+
+    babelPreprocessor: {
+      options: {
+        presets: ['@babel/preset-env', '@babel/preset-react'],
+        sourceMap: 'inline'
+      }
     },
 
     browserify: browserify,
@@ -50,24 +59,36 @@ module.exports = function(config) {
     webpack: {
       devtool: 'inline-source-map',
       module: {
-        loaders: [
+        rules: [
+          { test: /\.hbs/, use: ['handlebars-loader'] },
           {
-            test: /\.js$/,
+            test: /\.(?:js|mjs|cjs)$/,
             exclude: /node_modules/,
             loader: 'babel-loader',
             options: {
-              presets: ['latest', 'react']
+              // presets: ['es2015', 'react']
+              presets: ['@babel/preset-env', '@babel/preset-react'],
+              plugins: [
+                ['@babel/plugin-syntax-import-attributes', {
+                  deprecatedAssertSyntax: true
+                }]
+              ]
             }
           },
-          {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: 'istanbul-instrumenter-loader',
-            query: {
-              esModules: true
-            }
-          }
+          // {
+          //   test: /\.js$/,
+          //   exclude: /node_modules/,
+          //   loader: 'istanbul-instrumenter-loader',
+          //   // query: {
+          //   //   esModules: true
+          //   // }
+          // }
         ]
+      },
+      resolve: {
+        fallback: {
+          stream: require.resolve('stream-browserify')
+        }
       }
     },
 

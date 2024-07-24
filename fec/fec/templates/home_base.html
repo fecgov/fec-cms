@@ -5,7 +5,7 @@
   <head>
     {% include 'partials/meta-tags.html' %}
     {% include 'partials/meta-tags-preloads.html' %}
-    <link rel="preload" as="style" href="{% asset_for_css 'home.css' %}">
+    <link rel="preload" as="style" href="{% path_for_css 'home.css' %}">
     {% if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION' %}
     {% include 'partials/meta-tags-preconnects.html' %}
     {% endif %}
@@ -14,7 +14,7 @@
 
     {% include 'partials/google-tag-manager-script.html' %}
     {% block css %}
-    <link defer rel="stylesheet" type="text/css" href="{% asset_for_css 'home.css' %}">
+    <link defer rel="stylesheet" type="text/css" href="{% path_for_css 'home.css' %}">
     {% endblock %}
   </head>
 
@@ -152,11 +152,7 @@
       window.CALENDAR_DOWNLOAD_PUBLIC_API_KEY = '{{ settings.FEC_CAL_DOWNLOAD_API_KEY }}';
       window.CANONICAL_BASE = '{{ settings.CANONICAL_BASE }}'
     </script>
-
-    {# Global javascript #}
-    <script type="text/javascript" src="{% asset_for_js 'vendor.js' %}"></script>
-    <script type="text/javascript" src="{% asset_for_js 'init.js' %}"></script>
-
+    {% tags_for_js_chunks 'global.js' '' %}
 
     {% block extra_js %}
     {% endblock %}

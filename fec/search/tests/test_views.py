@@ -5,7 +5,7 @@ import search.views as views
 from django.conf import settings
 from django.test import Client, TestCase, RequestFactory
 from unittest import mock
-from search.views import (
+from search.views import (  # noqa: F401
     search_candidates,
     search_committees,
     search_site,
@@ -72,7 +72,7 @@ class TestViews(TestCase):
     def test_process_site_results(self, m):
         results = {
             'web': {
-                'results': [{'url': '/help', 'url': '/home'}],  # noqa F601
+                'results': [{'url': '/help', 'url': '/home'}],  # noqa: F601
                 'total': 2,
                 'next_offset': 20
             },
@@ -147,9 +147,9 @@ class TestViews(TestCase):
         request = self.factory.get('/search?query=abe&type=candidates')
         search(request)
         search_site.assert_not_called()
-        
+
     @mock.patch.object(views, 'policy_guidance_search_site')
-    def test_site_policy_guidance_search_site(self, m, policy_guidance_search_site):
+    def test_site_policy_guidance_search_site(self, m, policy_guidance_search_site):  # noqa: F811
         policy_guidance_search_site.return_value = []
         request = self.factory.get('/search?query=help&type=site')
         response = policy_guidance_search(request)

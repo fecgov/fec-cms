@@ -1,6 +1,7 @@
-'use strict';
-
-function StatisticalSummaryArchive() {
+/**
+ *
+ */
+export default function StatisticalSummaryArchive() {
   this.chooseYear = document.getElementById('year');
 
   this.chooseFiler = document.getElementById('filer');
@@ -48,7 +49,7 @@ StatisticalSummaryArchive.prototype.handleArchivePopState = function() {
   this.showTable();
 };
 
-//Parse paremeters out of querystring
+//Parse parameters out of querystring
 StatisticalSummaryArchive.prototype.getUrlVars = function() {
   let vars = [],
     hash;
@@ -109,7 +110,7 @@ StatisticalSummaryArchive.prototype.showTable = function() {
   //Iterate all tables to start with display of none
   Array.from(tables).forEach(table => {
     table.style.display = 'none';
-    //set 'data-summary' attr on all tables so existinng CSS can be used
+    //set 'data-summary' attr on all tables so existing CSS can be used
     table.setAttribute('data-summary', 'archive');
   });
 
@@ -145,11 +146,7 @@ StatisticalSummaryArchive.prototype.showTable = function() {
   //find all tables with 'chosenYearFilerClass' (expenditures has two for some years)
   for (let liveTable of document.querySelectorAll(chosenYearFilerClass)) {
     liveTable.style.display = 'block';
-    //zebra stripe  liveTable  rows after everyting else is done
+    //zebra stripe  liveTable  rows after everything else is done
     this.zebraStripeVisible(liveTable);
   }
 }; //end showTable()
-
-module.exports = {
-  StatisticalSummaryArchive: StatisticalSummaryArchive
-};

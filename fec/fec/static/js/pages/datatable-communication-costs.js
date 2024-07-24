@@ -1,25 +1,23 @@
-'use strict';
+/**
+ * Data and initialization for {@link /data/communication-costs/}
+ */
+import { communicationCosts as col_commCosts } from '../modules/columns.js';
+import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+import { default as electioneeringTemplate } from '../templates/communication-costs.hbs';
 
-var $ = require('jquery');
-
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-
-var electioneeringTemplate = require('../templates/communication-costs.hbs');
-
-$(document).ready(function() {
-  var $table = $('#results');
-  new tables.DataTable($table, {
+$(function() {
+  const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Communication costs',
     path: ['communication_costs'],
-    columns: columns.communicationCosts,
-    rowCallback: tables.modalRenderRow,
+    columns: col_commCosts,
+    rowCallback: modalRenderRow,
     useExport: true,
     order: [[4, 'desc']],
     useFilters: true,
     callbacks: {
-      afterRender: tables.modalRenderFactory(electioneeringTemplate)
+      afterRender: modalRenderFactory(electioneeringTemplate)
     }
   });
 });

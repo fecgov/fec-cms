@@ -1,13 +1,11 @@
-'use strict';
+import Inputmask from 'inputmask';
+import { default as _escape } from 'underscore/modules/escape.js';
 
-var $ = require('jquery');
-var _ = require('underscore');
+import { default as CheckboxFilter } from './checkbox-filter.js';
+import { default as Filter, ensureArray } from './filter-base.js';
 
-var Filter = require('./filter-base');
-var CheckboxFilter = require('./checkbox-filter').CheckboxFilter;
-
-function TextFilter(elm) {
-  Filter.Filter.call(this, elm);
+export default function TextFilter(elm) {
+  Filter.call(this, elm);
 
   this.id = this.$input.attr('id');
 
@@ -18,18 +16,21 @@ function TextFilter(elm) {
   this.$input.on('blur', this.handleBlur.bind(this));
 
   if (this.$input.data('inputmask')) {
-    this.$input.inputmask();
+    // this.$input.inputmask();
+    Inputmask({
+      mask: this.$input.data('inputmask')
+    }).mask(this.$input);
   }
 
   this.checkboxIndex = 1;
 }
 
-TextFilter.prototype = Object.create(Filter.Filter.prototype);
 TextFilter.constructor = TextFilter;
+TextFilter.prototype = Object.create(Filter.prototype);
 
 TextFilter.prototype.fromQuery = function(query) {
-  var self = this;
-  var values = query[this.name] ? Filter.ensureArray(query[this.name]) : [];
+  const self = this;
+  let values = query[this.name] ? ensureArray(query[this.name]) : [];
   values = values.reverse();
   values.forEach(function(value) {
     self.appendCheckbox(value);
@@ -38,14 +39,14 @@ TextFilter.prototype.fromQuery = function(query) {
 };
 
 TextFilter.prototype.handleChange = function() {
-  var value = this.$input.val();
-  var loadedOnce = this.$input.data('loaded-once') || false;
-  var button = this.$submit;
+  const value = this.$input.val();
+  const loadedOnce = this.$input.data('loaded-once') || false;
+  const button = this.$submit;
 
   // set the button focus within a timeout
   // to prevent change event from firing twice
   setTimeout(function() {
-    button.focus();
+    button.focus(); // TODO: jQuery deprecation
   }, 0);
 
   if (value.length > 0) {
@@ -88,7 +89,6 @@ const template_checkbox = value => `
   </li>
 `;
 
-
 // Remove the event handlers for adding and removing tags
 // So the filter count doesn't count double for the text filter and checkbox
 TextFilter.prototype.handleAddEvent = function() {};
@@ -98,12 +98,12 @@ TextFilter.prototype.appendCheckbox = function(value) {
   if (!this.checkboxList) {
     this.appendCheckboxList();
   }
-  var opts = {
+  const opts = {
     id: this.id + this.checkboxIndex.toString(),
     name: this.name,
-    value: _.escape(value.replace(/["]+/g, ''))
+    value: _escape(value.replace(/["]+/g, ''))
   };
-  var checkbox = $(template_checkbox(opts));
+  const checkbox = $(template_checkbox(opts));
   checkbox.appendTo(this.checkboxList.$elm);
   checkbox.find('input').change();
   this.$input.val('');
@@ -111,12 +111,10 @@ TextFilter.prototype.appendCheckbox = function(value) {
 };
 
 TextFilter.prototype.appendCheckboxList = function() {
-  var $checkboxes = $(
+  const $checkboxes = $(
     '<ul class="js-filter dropdown__selected" data-filter="checkbox" data-removable="true"></ul>'
   );
   this.$elm.find('label').after($checkboxes);
   this.checkboxList = new CheckboxFilter($checkboxes);
   this.checkboxList.name = this.name;
 };
-
-module.exports = { TextFilter: TextFilter };

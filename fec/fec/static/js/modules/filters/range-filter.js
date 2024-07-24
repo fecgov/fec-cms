@@ -1,10 +1,9 @@
-'use strict';
+import Inputmask from 'inputmask';
 
-var $ = require('jquery');
-var Filter = require('./filter-base');
+import { default as Filter } from './filter-base.js';
 
-function RangeFilter(elm) {
-  Filter.Filter.call(this, elm);
+export default function RangeFilter(elm) {
+  Filter.call(this, elm);
   this.id = this.$input.attr('id');
   this.$submit = this.$elm.parent().find('button');
 
@@ -12,20 +11,22 @@ function RangeFilter(elm) {
   this.$input.on('keyup', this.handleKeyup.bind(this));
 
   if (this.$input.data('inputmask')) {
-    this.$input.inputmask();
+    Inputmask({
+      mask: this.$input.data('inputmask')
+    }).mask(this.$input);
   }
 }
 
-RangeFilter.prototype = Object.create(Filter.Filter.prototype);
+RangeFilter.prototype = Object.create(Filter.prototype);
 RangeFilter.constructor = RangeFilter;
 
 RangeFilter.prototype.handleChange = function(e) {
-  var $input = $(e.target);
-  var value = $input.val();
-  var loadedOnce = $input.data('loaded-once') || false;
-  var range = $input.data('range') || 'false';
-  var eventName;
-  var rangeNameForTag = this.name.split('_')[1]; // (initial functionality)
+  const $input = $(e.target);
+  const value = $input.val();
+  const loadedOnce = $input.data('loaded-once') || false;
+  const range = $input.data('range') || 'false';
+  let eventName;
+  let rangeNameForTag = this.name.split('_')[1]; // (initial functionality)
   // If the name has more than two underscores, use all of the name after the second _.
   // Why?
   // Because longer field names that were similar to each other were being combined
@@ -34,7 +35,7 @@ RangeFilter.prototype.handleChange = function(e) {
   //
   if ((this.name.match(/_/g) || []).length > 2) {
     // split the name on every _
-    var rangeSplit = this.name.split('_');
+    const rangeSplit = this.name.split('_');
     // use all of the name after the second _ (not just the parts between the second and third _)
     rangeNameForTag = this.name.substr(rangeSplit[0].length + 1);
   }
@@ -76,5 +77,3 @@ RangeFilter.prototype.handleChange = function(e) {
 RangeFilter.prototype.handleKeyup = function() {
   this.$submit.removeClass('is-disabled');
 };
-
-module.exports = { RangeFilter: RangeFilter };

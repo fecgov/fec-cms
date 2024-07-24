@@ -71,7 +71,7 @@
 
 </article>
 
-{% comment %} USe "json_script" filter to create two JSON-ecasped script objects to iterate in JS. {% endcomment %}
+{% comment %} USe "json_script" filter to create two JSON-escaped script objects to iterate in JS. {% endcomment %}
 
 {% for raw in self.footnotes.raw_data %}
   {% if raw.value.title == 'Footnotes' %}
@@ -87,8 +87,8 @@
 
 {% block extra_js %}
 
- <script> window.BASE_PATH = '/data' </script>
- <script type="text/javascript" src="{% asset_for_js 'data-init.js' %}"></script>
- <script type="text/javascript" src="{% asset_for_js 'election-reporting-dates-tables.js' %}"></script>
+  <script> window.BASE_PATH = '/data' </script>
+  {#- init and global chunks are loaded by base.html -#}
+  {% tags_for_js_chunks 'election-reporting-dates-tables.js' '' %}
 
 {% endblock %}

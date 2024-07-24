@@ -6,8 +6,8 @@
 {% endblock %}
 
 {% block css %}
-  <link rel="stylesheet" type="text/css" href="{{ asset_for_css('common.css') }}" />
-  <link rel="stylesheet" type="text/css" href="{{ asset_for_css('data-landing.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ path_for_css('common.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ path_for_css('data-landing.css') }}" />
 {% endblock %}
 
 {% block body %}
@@ -130,7 +130,7 @@
         <h2>More ways to explore data</h2>
         <div class="grid grid--4-wide">
           <div class="grid__item">
-            <a href="/data/elections">
+            <a href="/data/elections/">
               <aside class="card card--horizontal card--primary">
                 <div class="card__image__container">
                   <span class="card__icon i-elections"><span class="u-visually-hidden">Icon representing elections</span></span>
@@ -142,7 +142,7 @@
             </a>
           </div>
           <div class="grid__item">
-            <a href="/data">
+            <a href="/data/">
               <aside class="card card--horizontal card--primary">
                 <div class="card__image__container">
                   <span class="card__icon i-profile"><span class="u-visually-hidden">Icon representing profiles</span></span>
@@ -180,6 +180,6 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src="{{ asset_for_js('dataviz-common.js') }}"></script>
-  <script src="{{ asset_for_js('data-browse-data.js') }}"></script>
-{% endblock %}
+  {#- data-init and global chunks are loaded by main.jinja -#}
+  {{ tags_for_js_chunks('data-browse-data.js', '')|safe }}
+ {% endblock %}

@@ -1,11 +1,13 @@
-'use strict';
-
 /* global DEFAULT_TIME_PERIOD */
-var $ = require('jquery');
-var _ = require('underscore');
-var d3 = require('d3');
-var numeral = require('numeral');
-var helpers = require('./helpers');
+
+import * as d3 from 'd3';
+import * as numeral from 'numeral';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _each } from 'underscore/modules/each.js';
+import { default as _max } from 'underscore/modules/max.js';
+import { default as _sortBy } from 'underscore/modules/sortBy.js';
+
+import { buildUrl, currency, isMediumScreen, utcDate, zeroPad } from './helpers.js';
 
 var parseM = d3.time.format('%b');
 var parseMY = d3.time.format('%b %Y');
@@ -16,10 +18,10 @@ var bisectDate = d3.bisector(function(d) {
   return d.date;
 }).left;
 
-var currentYear = new Date().getFullYear();
-var MIN_CYCLE = 2008;
-var MAX_CYCLE = currentYear % 2 === 0 ? currentYear : currentYear + 1;
-var MAX_RANGE = 4000000000; // Set the max y-axis to 4 billion
+const currentYear = new Date().getFullYear();
+const MIN_CYCLE = 2008;
+const MAX_CYCLE = currentYear % 2 === 0 ? currentYear : currentYear + 1;
+const MAX_RANGE = 4000000000; // Set the max y-axis to 4 billion
 
 /**
  * Line Chart
@@ -27,14 +29,14 @@ var MAX_RANGE = 4000000000; // Set the max y-axis to 4 billion
  *
  * Creates an SVG line chart for total raising and spending
  *
- * @param {String} selector - Selector of the parent element
- * @param {String} snapshot - Selector to use for the snapshot,
+ * @param {string} selector - Selector of the parent element
+ * @param {string} snapshot - Selector to use for the snapshot,
  *   which is the set of numbers that is updated when moving the cursor
- * @param {String} dataType - The type of data the chart is showing ('raised' or 'spent')
+ * @param {string} dataType - The type of data the chart is showing ('raised' or 'spent')
  *
  */
 
-function LineChart(selector, snapshot, dataType) {
+export default function LineChart(selector, snapshot, dataType) {
   this.element = d3.select(selector);
   this.dataType = dataType;
   this.cycle = Number(DEFAULT_TIME_PERIOD);
@@ -55,7 +57,7 @@ function LineChart(selector, snapshot, dataType) {
   this.fetch(this.cycle);
 
   // Set the snapshot height if we're in a medium-sized screen
-  if (helpers.isMediumScreen()) {
+  if (isMediumScreen()) {
     this.$snapshot.height(this.baseHeight - this.margin.bottom);
   }
 
@@ -66,7 +68,7 @@ function LineChart(selector, snapshot, dataType) {
 }
 
 LineChart.prototype.fetch = function(cycle) {
-  var entityTotalsURL = helpers.buildUrl(['totals', 'by_entity'], {
+  const entityTotalsURL = buildUrl(['totals', 'by_entity'], {
     cycle: cycle,
     per_page: '100'
   });
@@ -86,12 +88,12 @@ LineChart.prototype.groupDataByType = function(results) {
   // Takes the results of the response and groups it into data for the chart
   // Stores an array of objects for each month,
   // with either raising or spending totals depending on the dataType of the chart
-  var formattedData = [];
-  var dataType = this.dataType;
-  var today = new Date();
-  _.each(results, function(item) {
-    var datum;
-    var date = helpers.utcDate(item.end_date);
+  const formattedData = [];
+  const dataType = this.dataType;
+  const today = new Date();
+  _each(results, function(item) {
+    let datum;
+    const date = utcDate(item.end_date);
     // If the data is in the future, it's probably wrong, so ignore it
     if (date > today) {
       return;
@@ -115,14 +117,14 @@ LineChart.prototype.groupDataByType = function(results) {
     formattedData.push(datum);
   });
 
-  this.chartData = _.sortBy(formattedData, 'date');
+  this.chartData = _sortBy(formattedData, 'date');
 };
 
 LineChart.prototype.groupEntityTotals = function() {
   // Create separate arrays of data for each entity type
   // These will be used to draw the lines on the chart
-  var chartData = this.chartData;
-  var entityTotals = {};
+  const chartData = this.chartData;
+  let entityTotals = {};
   this.entityNames.forEach(function(type) {
     var totals = chartData.map(function(d) {
       return {
@@ -136,10 +138,10 @@ LineChart.prototype.groupEntityTotals = function() {
 };
 
 LineChart.prototype.getMaxAmount = function(entityTotals) {
-  var max = 0;
+  let max = 0;
 
-  _.each(entityTotals, function(element) {
-    var entityMax = _.max(element, function(item) {
+  _each(entityTotals, function(element) {
+    var entityMax = _max(element, function(item) {
       return item.amount;
     });
     max = max >= entityMax.amount ? max : entityMax.amount;
@@ -150,7 +152,7 @@ LineChart.prototype.getMaxAmount = function(entityTotals) {
 
 LineChart.prototype.setXScale = function() {
   // Set the x-scale to be from the first of the first year to the last day of the cycle
-  var x = d3.time
+  let x = d3.time
     .scale()
     .domain([
       new Date('01/01/' + String(this.cycle - 1)),
@@ -166,7 +168,7 @@ LineChart.prototype.setYScale = function(amount) {
   // Set the y-axis from 0 to the MAX_RANGE ($4 billion)
   amount = amount || MAX_RANGE;
 
-  var y = d3.scale
+  let y = d3.scale
     .linear()
     .domain([0, Math.ceil(amount / 100000000) * 100000000])
     .range([this.height, 0]);
@@ -175,7 +177,7 @@ LineChart.prototype.setYScale = function(amount) {
 
 LineChart.prototype.appendSVG = function() {
   // Adds a basic SVG container with all the right dimensions
-  var svg = this.element
+  let svg = this.element
     .append('svg')
     .attr('class', 'bar-chart')
     .attr('width', '100%')
@@ -189,17 +191,17 @@ LineChart.prototype.appendSVG = function() {
 };
 
 LineChart.prototype.drawChart = function() {
-  var entityTotals = this.groupEntityTotals();
-  var maxY = this.getMaxAmount(entityTotals);
-  var x = this.setXScale();
-  var y = this.setYScale(maxY);
-  var xAxis = d3.svg
+  const entityTotals = this.groupEntityTotals();
+  const maxY = this.getMaxAmount(entityTotals);
+  const x = this.setXScale();
+  const y = this.setYScale(maxY);
+  let xAxis = d3.svg
     .axis()
     .scale(x)
     .ticks(d3.time.month)
     .tickFormat(this.xAxisFormatter())
     .orient('bottom');
-  var yAxis = d3.svg
+  let yAxis = d3.svg
     .axis()
     .scale(y)
     .orient('right')
@@ -209,7 +211,7 @@ LineChart.prototype.drawChart = function() {
     });
 
   // Create the base SVG
-  var svg = this.appendSVG();
+  let svg = this.appendSVG();
 
   // Add the xAxis
   svg
@@ -229,7 +231,7 @@ LineChart.prototype.drawChart = function() {
     .attr('dy', '.71em')
     .style('text-anchor', 'end');
 
-  var lineBuilder = d3.svg
+  let lineBuilder = d3.svg
     .line()
     .x(function(d) {
       var myDate = new Date(parsePlotPoints(d.date));
@@ -241,8 +243,8 @@ LineChart.prototype.drawChart = function() {
 
   // Draw a line and populate data for each entity type
   this.entityNames.forEach(function(entity) {
-    var line = svg.append('g').attr('class', 'line--' + entity);
-    var points = line.append('g').attr('class', 'line__points');
+    let line = svg.append('g').attr('class', 'line--' + entity);
+    let points = line.append('g').attr('class', 'line__points');
 
     line
       .append('path')
@@ -283,8 +285,8 @@ LineChart.prototype.drawCursor = function(svg) {
 
 LineChart.prototype.xAxisFormatter = function() {
   // Draw tick marks for the x-axis at different intervals depending on screen size
-  var formatter;
-  if (helpers.isMediumScreen()) {
+  let formatter;
+  if (isMediumScreen()) {
     formatter = function(d) {
       if (d.getMonth() === 0) {
         return parseMY(d);
@@ -310,17 +312,17 @@ LineChart.prototype.xAxisFormatter = function() {
 };
 
 LineChart.prototype.handleMouseMove = function() {
-  var svg = this.element.select('svg')[0][0];
-  var x0 = this.x.invert(d3.mouse(svg)[0]);
-  var i = bisectDate(this.chartData, x0, 1);
-  var d = this.chartData[i - 1];
+  const svg = this.element.select('svg')[0][0];
+  const x0 = this.x.invert(d3.mouse(svg)[0]);
+  const i = bisectDate(this.chartData, x0, 1);
+  const d = this.chartData[i - 1];
   this.moveCursor(d);
 };
 
 LineChart.prototype.moveCursor = function(datum) {
-  var target = datum ? datum : this.getCursorStartPosition();
-  var i = this.chartData.indexOf(target);
-  var myDate = new Date(parsePlotPoints(target.date));
+  const target = datum ? datum : this.getCursorStartPosition();
+  const i = this.chartData.indexOf(target);
+  const myDate = new Date(parsePlotPoints(target.date));
   this.cursor.attr('x1', this.x(myDate)).attr('x2', this.x(myDate));
   this.nextDatum = this.chartData[i + 1] || false;
   this.prevDatum = this.chartData[i - 1] || false;
@@ -347,8 +349,8 @@ LineChart.prototype.getCursorStartPosition = function() {
 
 LineChart.prototype.setupSnapshot = function(cycle) {
   // Change the header of the snapshot to show the correct dates when a new cycle is set
-  var firstYear = cycle - 1;
-  var firstOfCycle = new Date('01/01/' + firstYear);
+  const firstYear = cycle - 1;
+  const firstOfCycle = new Date('01/01/' + firstYear);
   this.$snapshot.find('.js-min-date').html(parseMDY(firstOfCycle));
 };
 
@@ -357,7 +359,7 @@ LineChart.prototype.populateSnapshot = function(datum) {
   this.snapshotSubtotals(datum);
   this.snapshotTotal(datum);
   this.$snapshot.find('.js-max-date').html(parseMDY(datum.date));
-  helpers.zeroPad(
+  zeroPad(
     this.$snapshot,
     '.snapshot__item-number',
     '.figure__decimals'
@@ -367,22 +369,22 @@ LineChart.prototype.populateSnapshot = function(datum) {
 LineChart.prototype.snapshotSubtotals = function(datum) {
   // Update the snapshot with the values for each category
   this.$snapshot.find('[data-total-for]').each(function() {
-    var category = $(this).data('total-for');
-    var value = helpers.currency(datum[category]);
+    const category = $(this).data('total-for');
+    const value = currency(datum[category]);
     $(this).html(value);
   });
 };
 
 LineChart.prototype.snapshotTotal = function(datum) {
   // Total all the categories and show it as the total total
-  var total = _.chain(datum)
+  let total = _chain(datum)
     .omit('date')
     .values()
     .reduce(function(a, b) {
       return a + b;
     })
     .value();
-  this.$snapshot.find('[data-total-for="all"]').html(helpers.currency(total));
+  this.$snapshot.find('[data-total-for="all"]').html(currency(total));
 };
 
 LineChart.prototype.goToNextMonth = function() {
@@ -417,8 +419,4 @@ LineChart.prototype.nextCycle = function() {
   this.removeSVG();
   this.cycle = this.cycle + 2;
   this.fetch(this.cycle);
-};
-
-module.exports = {
-  LineChart: LineChart
 };

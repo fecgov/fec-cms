@@ -174,7 +174,7 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
 
 ROOT_URLCONF = 'fec.urls'
 
-from data import constants # noqa E402
+from data import constants  # noqa: E402
 
 
 TEMPLATES = [
@@ -285,7 +285,7 @@ WAGTAIL_SITE_NAME = "fec"
 WAGTAILEMBEDS_RESPONSIVE_HTML = True
 
 # Custom settings
-from fec import constants # noqa E402
+from fec import constants  # noqa: E402
 
 CONSTANTS = constants
 

@@ -128,6 +128,6 @@
 
 {% block extra_js %}
 {% if self.conditional_js %}
-<script type="text/javascript" src="{% asset_for_js self.get_conditional_js_display %}"></script>
+<script type="text/javascript" src="{% path_for_js self.get_conditional_js_display %}"></script>
 {% endif %}
 {% endblock %}

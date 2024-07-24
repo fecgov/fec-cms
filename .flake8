@@ -1,0 +1,3 @@
+[flake8]
+exclude = .git,__pycache__,dist,node_modules,fec/home/migrations
+max-line-length = 120

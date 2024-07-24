@@ -1,18 +1,14 @@
-'use strict';
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import { spy } from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+import { default as Tablefilter } from '../../static/js/modules/statistical-summary-archive.js';
 
-var $ = require('jquery');
-
-require('./setup')();
-
-var Tablefilter = require('../../static/js/modules/statistical-summary-archive').StatisticalSummaryArchive;
-
-var dom =
+const dom =
     '<div class="filter-controls">' +
     '<div class="filter_year">' +
     '<label for="year" class="label">Two-year period</label>' +
@@ -58,7 +54,7 @@ describe('Tablefilter', function() {
 
         this.tableTitle = this.$fixture.find(".js-table-title");
 
-        this.showTable = sinon.spy(Tablefilter.prototype, 'showTable');
+        this.showTable = spy(Tablefilter.prototype, 'showTable');
 
         this.filter = new Tablefilter();
 
@@ -86,9 +82,9 @@ describe('Tablefilter', function() {
 
     describe('disableNonPresYears', function() {
         beforeEach(function() {
-            this.disableNonPresYears = sinon.spy(Tablefilter.prototype, 'disableNonPresYears');
-            this.chooseYear.val('1982').change();
-            this.chooseFiler.val('presidential').change();
+            this.disableNonPresYears = spy(Tablefilter.prototype, 'disableNonPresYears');
+            this.chooseYear.val('1982').change(); // TODO: jQuery deprecation
+            this.chooseFiler.val('presidential').change(); // TODO: jQuery deprecation
             this.filter.showTable();
 
         });

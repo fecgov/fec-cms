@@ -57,7 +57,6 @@ def register_anchor_feature(features):
         'draftail', feature_name, draftail_features.EntityFeature(
             control,
             js=[
-                # polyfills_js(),
                 '/static/wagtailadmin/js/draftail.js',
                 draftail_js(),
             ]
@@ -130,7 +129,7 @@ def draftail_js():
     If the path doesn't exist there, then just return the path to the static file
     without a hash"""
     key = '/static/js/draftail.js'
-    assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-draftail-manifest-js.json'))
+    assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-manifest-js.json'))
     return assets[key] if key in assets else key
 
 
