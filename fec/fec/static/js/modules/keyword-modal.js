@@ -69,14 +69,14 @@ KeywordModal.prototype.combineFields = function() {
   this.$fields.each(function() {
     var $input = $(this);
     if ($input.val() && query) {
-      query = query + ' OR ' + '(' + self.parseValue($input) + ')';
+      query = query + ' | ' + '(' + self.parseValue($input) + ')';
     } else if ($input.val()) {
       query = '(' + self.parseValue($input) + ')';
     }
   });
 
   if (this.$excludeField.val() && query) {
-    query = '(' + query + ') AND (' + self.parseValue(this.$excludeField) + ')';
+    query = '(' + query + ') + (' + self.parseValue(this.$excludeField) + ')';
   } else if (this.$excludeField.val()) {
     query = self.parseValue(this.$excludeField);
   }
@@ -96,13 +96,14 @@ KeywordModal.prototype.parseValue = function($input) {
     .split(' ');
   var operator = $input.data('operator');
   if (operator === 'and') {
-    return words.join(' AND ');
+    return words.join(' + ');
   } else if (operator === 'or') {
-    return words.join(' OR ');
+    return words.join(' | ');
   } else if (operator === 'exact') {
     return '"' + $input.val().replace(/"/g, '') + '"';
   } else if (operator === 'exclude') {
-    return '-' + words.join(' -');
+    // Remove first dash, replace subsequent dashes with +
+    return $input.val().replace(/-/, '').replace(/-/g, '+'); 
   }
 };
 

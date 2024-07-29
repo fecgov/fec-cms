@@ -67,14 +67,14 @@ KeywordModal.prototype.combineFields = function() {
   this.$fields.each(function() {
     var $input = $(this);
     if ($input.val() && query) {
-      query = query + ' OR ' + '(' + self.parseValue($input) + ')';
+      query = query + '|' + '(' + self.parseValue($input) + ')';
     } else if ($input.val()) {
       query = '(' + self.parseValue($input) + ')';
     }
   });
 
   if (this.$excludeField.val() && query) {
-    query = '(' + query + ') & (' + self.parseValue(this.$excludeField) + ')';
+    query = '(' + query + ')+(' + self.parseValue(this.$excludeField) + ')';
   } else if (this.$excludeField.val()) {
     query = self.parseValue(this.$excludeField);
   }
@@ -91,13 +91,13 @@ KeywordModal.prototype.parseValue = function($input) {
   var words = $input.val().split(' ');
   var operator = $input.data('operator');
   if (operator === 'and') {
-    return words.join(' & ');
+    return words.join('+');
   } else if (operator === 'or') {
-    return words.join(' OR ');
+    return words.join('|');
   } else if (operator === 'exact') {
     return '"' + $input.val() + '"';
   } else if (operator === 'exclude') {
-    return '-' + words.join(' -');
+    return '-' + words.join('%2B');
   }
 };
 
