@@ -1,12 +1,10 @@
-'use strict';
+/**
+ * TODO: IS THIS FILE BEING USED?
+ */
+import Inputmask from 'inputmask';
+import * as moment from 'moment';
 
-var $ = require('jquery');
-var moment = require('moment');
-
-var Filter = require('./filter-base');
-
-require('jquery.inputmask');
-require('jquery.inputmask/dist/inputmask/inputmask.date.extensions');
+import Filter from './filter-base.js';
 
 /**
  * ValidateDateFilter
@@ -14,20 +12,30 @@ require('jquery.inputmask/dist/inputmask/inputmask.date.extensions');
  * Special date filter for the 6-year date range inputs that need to validate that
  * the dates entered are within a period of time
  */
-function ValidateDateFilter(elm) {
-  Filter.Filter.call(this, elm);
+export default function ValidateDateFilter(elm) {
+  Filter.call(this, elm);
   this.duration = this.$elm.data('duration');
   this.$range = this.$elm.find('.js-date-range');
   this.$minDate = this.$elm.find('.js-min-date');
   this.$maxDate = this.$elm.find('.js-max-date');
   this.$submit = this.$elm.find('button');
 
-  this.$minDate.inputmask('mm/dd/yyyy', {
+  Inputmask({
+    mask: this.$input.data('mm/dd/yyyy'),
     oncomplete: this.validate.bind(this)
-  });
-  this.$maxDate.inputmask('mm/dd/yyyy', {
+  }).mask(this.$minDate);
+
+  Inputmask({
+    mask: this.$maxDate.data('mm/dd/yyyy'),
     oncomplete: this.validate.bind(this)
-  });
+  }).mask(this.$input);
+
+  // this.$minDate.inputmask('mm/dd/yyyy', {
+  //   oncomplete: this.validate.bind(this)
+  // });
+  // this.$maxDate.inputmask('mm/dd/yyyy', {
+  //   oncomplete: this.validate.bind(this)
+  // });
 
   this.$input.on('change', this.handleInputChange.bind(this));
 
@@ -36,7 +44,7 @@ function ValidateDateFilter(elm) {
   $(document.body).on('tag:removeAll', this.handleRemoveAll.bind(this));
 }
 
-ValidateDateFilter.prototype = Object.create(Filter.Filter.prototype);
+ValidateDateFilter.prototype = Object.create(Filter.prototype);
 ValidateDateFilter.constructor = ValidateDateFilter;
 
 ValidateDateFilter.prototype.handleInputChange = function(e) {
@@ -113,8 +121,8 @@ ValidateDateFilter.prototype.fromQuery = function(query) {
     ? query['min_' + this.name]
     : defaultStart;
   var maxDate = query['max_' + this.name] ? query['max_' + this.name] : now;
-  this.$minDate.val(minDate).change();
-  this.$maxDate.val(maxDate).change();
+  this.$minDate.val(minDate).change(); // TODO: jQuery deprecation
+  this.$maxDate.val(maxDate).change(); // TODO: jQuery deprecation
   return this;
 };
 
@@ -153,5 +161,3 @@ ValidateDateFilter.prototype.hideWarning = function() {
     this.showingWarning = false;
   }
 };
-
-module.exports = { ValidateDateFilter: ValidateDateFilter };

@@ -4,7 +4,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{{ asset_for_css('data-landing.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ path_for_css('data-landing.css') }}" />
 {% endblock %}
 
 {% block body %}
@@ -23,7 +23,7 @@
         <h2>Compare candidates</h2>
         <div id="election-lookup" class="search--election-mini">
           <div class="usa-width-one-half">
-            <form action="/data/elections" class="content__section">
+            <form action="/data/elections/" class="content__section">
               <div class="search-controls__state">
                 <label for="state" class="label">State</label>
                 <select id="state" name="state" aria-label="Select a state">
@@ -34,7 +34,7 @@
                 </select>
               </div>
               <div class="search-controls__district">
-                <label for="District" class="label">District <span class="label__optional">(optional)</span></label>
+                <label for="district" class="label">District <span class="label__optional">(optional)</span></label>
                 <select id="district" name="district" aria-label="Select a district" class="select--alt">
                   <option value="">Select district</option>
                   <option value="S">Senate</option>
@@ -60,7 +60,7 @@
         <div class="grid grid--2-wide">  
           <div class="grid__item">
             <div class="card card--neutral">
-              <a href="/data/raising-bythenumbers" title="Raising: by the numbers">
+              <a href="/data/raising-bythenumbers/" title="Raising: by the numbers">
                 <div class="card__image__container">
                   <span class="card__icon i-graph-horizontal-ordered"><span class="u-visually-hidden">Icon of a graph</span></span>
                 </div>
@@ -73,7 +73,7 @@
           </div>
           <div class="grid__item">
             <div class="card card--neutral">
-              <a href="/data/spending-bythenumbers" title="Spending: by the numbers">
+              <a href="/data/spending-bythenumbers/" title="Spending: by the numbers">
                 <div class="card__image__container">
                   <span class="card__icon i-graph-horizontal-ordered"><span class="u-visually-hidden">Icon of a graph</span></span>
                 </div>
@@ -92,7 +92,7 @@
   <section class="content__section">
     <div class="grid--2-wide grid--flex">
       <div class="grid__item card t-left-aligned">
-        <h2>Look up candidate and <br> committee profiles</h2>
+        <h2>Look up candidate and committee&nbsp;profiles</h2>
         <div class="content__section">
           {{ search.search('hero', button_color="button--standard") }}
           <span class="t-note t-sans search__example">Examples: Obama for America; C00431445; Bush, George W.; P00003335; or enter an image number for a filing.</span>
@@ -107,7 +107,7 @@
         </div>
       </div>
       <div class="grid__item card t-left-aligned">
-        <h2>Find contributions from <br> specific individuals</h2>
+        <h2>Find contributions from specific&nbsp;individuals</h2>
         <form action="/data/receipts/individual-contributions/" autocomplete="off" class="search__container content__section">
           <div class="combo combo--search combo--search--medium">
             <label for="contributor-search" class="label">Individual contributor name</label>
@@ -301,6 +301,6 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src="{{ asset_for_js('dataviz-common.js') }}"></script>
-  <script src="{{ asset_for_js('data-landing.js') }}"></script>
+  {#- data-init and global chunks are loaded by main.jinja -#}
+  {{ tags_for_js_chunks('data-landing.js', '')|safe }}
 {% endblock %}

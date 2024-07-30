@@ -1,8 +1,8 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const URI = require('urijs');
-const $ = require('jquery');
-const Checkbox = require('./Checkbox');
+
+const Checkbox = require('./Checkbox.cjs');
 
 class CitationFilter extends React.Component {
   constructor(props) {

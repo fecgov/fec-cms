@@ -378,7 +378,7 @@ def index_meetings(request):
             Perform text search on agenda field for newer open meetings and imported_html field for older
             open meetings where html cannot be searched by the wagtail.search.backends.database (<= 2017-04-27)
             """
-            text_search_meetings = list(open_meetings.filter(Q(agenda__icontains=meetings_query) | Q(imported_html__icontains=meetings_query)))
+            text_search_meetings = list(open_meetings.filter(Q(agenda__icontains=meetings_query) | Q(imported_html__icontains=meetings_query)))  # noqa: E501
             # Also use wagtail.search.backends.database (Postgres) to search open meeting pages
             open_meetings = list(open_meetings.search(meetings_query))
             # Combine the results, removing any duplicates
@@ -392,7 +392,7 @@ def index_meetings(request):
             Perform text search on agenda field for newer hearings and imported_html field for older
             hearings where html cannot be searched by the wagtail.search.backends.database (<= 2016-12-06)
             """
-            text_search_hearings = list(hearings.filter(Q(agenda__icontains=hearings_query) | Q(imported_html__icontains=hearings_query)))
+            text_search_hearings = list(hearings.filter(Q(agenda__icontains=hearings_query) | Q(imported_html__icontains=hearings_query)))  # noqa: E501
             # Also Use wagtail.search.backends.database (Postgres) to search hearing pages
             hearings = list(hearings.search(hearings_query))
             # Combine the results, removing any duplicates

@@ -1,33 +1,42 @@
-'use strict';
+/**
+ *
+ */
+import { default as Handlebars } from 'hbsfy/runtime.js';
+import $ from 'jquery';
+import moment from 'moment';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as _isEqual } from 'underscore/modules/isEqual.js';
+import { default as URI } from 'urijs';
 
-var $ = require('jquery');
-var URI = require('urijs');
-var _ = require('underscore');
-var moment = require('moment');
-require('fullcalendar');
+import 'fullcalendar';
 
-var urls = require('./urls');
-var dropdown = require('./dropdowns');
-var Handlebars = require('hbsfy/runtime');
-var helpers = require('./helpers');
+import { checkStartTime, className, getGoogleUrl, mapCategoryDescription } from './calendar-helpers.js';
+import { CalendarTooltip } from './calendar-tooltip.js';
+import Dropdown from './dropdowns.js';
+import { LOADING_DELAY, SUCCESS_DELAY, datetime, eq, isLargeScreen, toUpperCase } from './helpers.js';
+import { pushQuery, updateQuery } from './urls.js';
+import './calendar-list-view.js';
+import { default as template_details } from '../templates/calendar/details.hbs';
+import { default as template_download } from '../templates/calendar/download.hbs';
+import { default as template_listToggles } from '../templates/calendar/listToggles.hbs';
+import { default as template_subscribe } from '../templates/calendar/subscribe.hbs';
 
-var calendarTooltip = require('./calendar-tooltip');
-var calendarHelpers = require('./calendar-helpers');
-require('./calendar-list-view');
+// TODO: do we need to registerHelper?
+Handlebars.registerHelper('eq', eq);
+Handlebars.registerHelper('datetime', datetime);
+Handlebars.registerHelper('toUpperCase', toUpperCase);
 
-Handlebars.registerHelper(helpers.helpers);
-
-var templates = {
-  details: require('../templates/calendar/details.hbs'),
-  download: require('../templates/calendar/download.hbs'),
-  subscribe: require('../templates/calendar/subscribe.hbs'),
-  listToggles: require('../templates/calendar/listToggles.hbs')
+const templates = {
+  details: template_details,
+  download: template_download,
+  subscribe: template_subscribe,
+  listToggles: template_listToggles
 };
 
-var LIST_VIEWS = ['monthTime', 'monthCategory'];
+const LIST_VIEWS = ['monthTime', 'monthCategory'];
 
-var FC = $.fullCalendar;
-var Grid = FC.Grid;
+const FC = $.fullCalendar;
+const Grid = FC.Grid;
 
 // Globally override event sorting to order all-day events last
 // TODO: Convince fullcalendar.io support this behavior without monkey-patching
@@ -40,7 +49,7 @@ Grid.prototype.compareEventSegs = function(seg1, seg2) {
   );
 };
 
-function Calendar(opts) {
+export default function Calendar(opts) {
   this.opts = $.extend({}, this.defaultOpts(), opts);
 
   this.$calendar = $(this.opts.selector);
@@ -73,18 +82,18 @@ function Calendar(opts) {
   this.filterPanel.$form.on('change', this.filter.bind(this));
   $(window).on('popstate', this.filter.bind(this));
 
-  urls.updateQuery(this.filterSet.serialize(), this.filterSet.fields);
+  updateQuery(this.filterSet.serialize(), this.filterSet.fields);
 
   this.filter();
   this.styleButtons();
 
-  if (!helpers.isLargeScreen()) {
+  if (!isLargeScreen()) {
     this.$head.after($('#filters'));
   }
 }
 
 Calendar.prototype.toggleListView = function(e) {
-  var newView = $(e.target).data('trigger-view');
+  const newView = $(e.target).data('trigger-view');
   this.$calendar.fullCalendar('changeView', newView);
 };
 
@@ -143,15 +152,15 @@ Calendar.prototype.defaultOpts = function() {
 };
 
 Calendar.prototype.filter = function() {
-  var params = this.filterSet.serialize();
-  if (_.isEqual(params, this.params)) {
+  const params = this.filterSet.serialize();
+  if (_isEqual(params, this.params)) {
     return;
   }
-  var url = this.url
+  const url = this.url
     .clone()
     .addQuery(params || {})
     .toString();
-  urls.pushQuery(this.filterSet.serialize(), this.filterSet.fields);
+  pushQuery(this.filterSet.serialize(), this.filterSet.fields);
   this.$calendar.fullCalendar('removeEventSource', this.sources);
   this.sources = $.extend({}, this.opts.sourceOpts, { url: url });
   this.$calendar.fullCalendar('addEventSource', this.sources);
@@ -160,20 +169,20 @@ Calendar.prototype.filter = function() {
 };
 
 Calendar.prototype.success = function(response) {
-  var self = this;
+  const self = this;
 
   setTimeout(function() {
     $('.is-loading')
       .removeClass('is-loading')
       .addClass('is-successful');
-  }, helpers.LOADING_DELAY);
+  }, LOADING_DELAY);
 
   setTimeout(function() {
     $('.is-successful').removeClass('is-successful');
-  }, helpers.SUCCESS_DELAY);
+  }, SUCCESS_DELAY);
 
   return response.results.map(function(event) {
-    var processed = {
+    let processed = {
       category: event.category,
       location: event.location,
       title: event.summary || 'Event title',
@@ -181,15 +190,15 @@ Calendar.prototype.success = function(response) {
       description: event.description || 'Event description',
       state: event.state ? event.state.join(', ') : null,
       start: event.start_date ? moment(event.start_date) : null,
-      hasStartTime: calendarHelpers.checkStartTime(event),
+      hasStartTime: checkStartTime(event),
       end: event.end_date ? moment(event.end_date) : null,
-      className: calendarHelpers.className(event),
-      tooltipContent: calendarHelpers.mapCategoryDescription(event.category),
+      className: className(event),
+      tooltipContent: mapCategoryDescription(event.category),
       allDay: event.all_day,
       detailUrl: event.url
     };
-    _.extend(processed, {
-      google: calendarHelpers.getGoogleUrl(processed),
+    _extend(processed, {
+      google: getGoogleUrl(processed),
       download: self.subscribeUrl
         .clone()
         .addQuery({ event_id: event.event_id })
@@ -200,9 +209,9 @@ Calendar.prototype.success = function(response) {
 };
 
 Calendar.prototype.updateLinks = function(params) {
-  var url = this.exportUrl.clone().addQuery(params || {});
-  var subscribeURL = this.subscribeUrl.clone().addQuery(params || {});
-  var urls = {
+  const url = this.exportUrl.clone().addQuery(params || {});
+  const subscribeURL = this.subscribeUrl.clone().addQuery(params || {});
+  const urls = {
     ics: url.toString(),
     csv: url
       .clone()
@@ -241,16 +250,16 @@ Calendar.prototype.updateLinks = function(params) {
     this.subscribeButton.destroy();
   }
 
-  this.downloadButton = new dropdown.Dropdown(this.$download, {
+  this.downloadButton = new Dropdown(this.$download, {
     checkboxes: false
   });
-  this.subscribeButton = new dropdown.Dropdown(this.$subscribe, {
+  this.subscribeButton = new Dropdown(this.$subscribe, {
     checkboxes: false
   });
 };
 
 Calendar.prototype.styleButtons = function() {
-  var baseClasses = 'button';
+  const baseClasses = 'button';
   this.$calendar.find('.fc-button').addClass(baseClasses);
   this.$calendar.find('.fc-today-button').addClass('button--alt');
   this.$calendar
@@ -295,7 +304,7 @@ Calendar.prototype.manageListToggles = function(view) {
 };
 
 Calendar.prototype.handleEventRender = function(event, element) {
-  var eventLabel =
+  const eventLabel =
     event.title +
     ' ' +
     event.start.format('dddd MMMM D, YYYY') +
@@ -315,11 +324,11 @@ Calendar.prototype.handleDayRender = function(date, cell) {
 };
 
 Calendar.prototype.handleEventClick = function(calEvent, jsEvent) {
-  var $target = $(jsEvent.target);
+  const $target = $(jsEvent.target);
   if (!$target.closest('.tooltip').length) {
-    var $eventContainer = $target.closest('.fc-event');
-    var tooltip = new calendarTooltip.CalendarTooltip(
-      templates.details(_.extend({}, calEvent, { detailsId: this.detailsId })),
+    const $eventContainer = $target.closest('.fc-event');
+    const tooltip = new CalendarTooltip(
+      templates.details(_extend({}, calEvent, { detailsId: this.detailsId })),
 
       $eventContainer
     );
@@ -330,21 +339,19 @@ Calendar.prototype.handleEventClick = function(calEvent, jsEvent) {
 // Simulate clicks when hitting enter on certain full-calendar elements
 Calendar.prototype.simulateClick = function(e) {
   if (e.keyCode === 13) {
-    $(e.target).click();
+    $(e.target).click(); // TODO: jQuery deprecation
   }
 };
 
 Calendar.prototype.managePopoverControl = function(e) {
-  var $target = $(e.target);
-  var $popover = this.$calendar.find('.fc-popover');
+  const $target = $(e.target);
+  const $popover = this.$calendar.find('.fc-popover');
   $popover.attr('id', this.popoverId).attr('role', 'tooltip');
   $popover
     .find('.fc-close')
     .attr('tabindex', '0')
-    .focus()
+    .focus() // TODO: jQuery deprecation
     .on('click', function() {
-      $target.focus();
+      $target.focus(); // TODO: jQuery deprecation
     });
 };
-
-module.exports = { Calendar: Calendar };

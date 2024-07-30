@@ -1,19 +1,15 @@
-'use strict';
+// Common for all/most tests
+import './setup.js';
+import * as chaiJQ from 'chai-jquery';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import { spy } from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+use(chaiJQ);
+// (end common)
 
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-var moment = require('moment');
-
-chai.use(sinonChai);
-
-var $ = require('jquery');
-
-require('./setup')();
-
-var DateFilter = require('../../static/js/modules/filters/date-filter')
-  .DateFilter;
+import { default as moment } from 'moment';
+import DateFilter from '../../static/js/modules/filters/date-filter.js';
 
 describe('date filter', function() {
   before(function() {
@@ -118,7 +114,7 @@ describe('date filter', function() {
 
   describe('handleInputChange()', function() {
     beforeEach(function() {
-      this.trigger = sinon.spy($.prototype, 'trigger');
+      this.trigger = spy($.prototype, 'trigger');
     });
 
     afterEach(function() {
@@ -126,7 +122,7 @@ describe('date filter', function() {
     });
 
     it('triggers an add event with all the right properties', function() {
-      this.filter.$minDate.val('01/01/2015').change();
+      this.filter.$minDate.val('01/01/2015').change(); // TODO: jQuery deprecation
       expect(this.trigger).to.have.been.calledWith('filter:added', [
         {
           key: 'min_date',
@@ -143,20 +139,20 @@ describe('date filter', function() {
 
     it('triggers a remove event if the field has no value', function() {
       this.filter.$minDate.val('01/01/2015');
-      this.filter.$minDate.val('').change();
+      this.filter.$minDate.val('').change(); // TODO: jQuery deprecation
       expect(this.trigger).to.have.been.calledWith('filter:removed');
     });
 
     it('triggers a rename event if the field had a value', function() {
       this.filter.$minDate.val('01/01/2015');
       this.filter.$minDate.data('had-value', true);
-      this.filter.$minDate.val('02/01/2015').change();
+      this.filter.$minDate.val('02/01/2015').change(); // TODO: jQuery deprecation
       expect(this.trigger).to.have.been.calledWith('filter:renamed');
       expect(this.filter.$minDate.data('loaded-once')).to.be.true;
     });
 
     it('sets up the date grid', function() {
-      sinon.spy(DateFilter.prototype, 'setupDateGrid');
+      spy(DateFilter.prototype, 'setupDateGrid');
       this.filter.handleInputChange({ target: this.filter.$minDate });
       expect(this.filter.setupDateGrid).to.have.been.called;
       DateFilter.prototype.setupDateGrid.restore();
@@ -206,9 +202,9 @@ describe('date filter', function() {
 
   describe('validate()', function() {
     beforeEach(function() {
-      this.trigger = sinon.spy($.prototype, 'trigger');
-      this.hideWarning = sinon.spy(DateFilter.prototype, 'hideWarning');
-      this.showWarning = sinon.spy(DateFilter.prototype, 'showWarning');
+      this.trigger = spy($.prototype, 'trigger');
+      this.hideWarning = spy(DateFilter.prototype, 'hideWarning');
+      this.showWarning = spy(DateFilter.prototype, 'showWarning');
     });
 
     afterEach(function() {
@@ -310,7 +306,6 @@ describe('date filter', function() {
       );
     });
   });
-
   describe('handleMaxDateSelect()', function() {
     beforeEach(function() {
       this.filter.minYear = 2013;
@@ -333,7 +328,6 @@ describe('date filter', function() {
       );
     });
   });
-
   describe('handleGridItemSelect()', function() {
     beforeEach(function() {
       this.filter.minYear = 2013;

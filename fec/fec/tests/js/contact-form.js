@@ -1,16 +1,12 @@
-'use strict';
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
-chai.use(sinonChai);
+// Common for all/most tests
+import './setup.js';
+import * as sinonChai from 'sinon-chai';
+import { expect, use } from 'chai';
+import { spy } from 'sinon/pkg/sinon-esm';
+use(sinonChai);
+// (end common)
 
-var $ = require('jquery');
-
-require('./setup')();
- 
-
-var ContactForm = require('../../static/js/pages/contact-form').ContactForm;
+import { ContactForm } from '../../static/js/pages/contact-form.js';
 
 describe('Contact form', function() {
     before(function() {
@@ -33,7 +29,7 @@ describe('Contact form', function() {
         '<button class="js-cancel">Cancel</button>' +
       '</form>'
     );
-    this.initTypeahead = sinon.spy(ContactForm.prototype, 'initTypeahead');
+    this.initTypeahead = spy(ContactForm.prototype, 'initTypeahead');
     this.form = new ContactForm($('#form'));
   });
 
@@ -73,12 +69,12 @@ describe('Contact form', function() {
   });
 
   it('shows the other reason box when other is selected', function() {
-    this.form.category.val('other').change();
+    this.form.category.val('other').change(); // TODO: jQuery deprecation
     expect(this.form.otherReason.is(':visible')).to.be.true;
   });
 
   it('hides the other reason box when another value is selected', function() {
-    this.form.category.val('option-1').change();
+    this.form.category.val('option-1').change(); // TODO: jQuery deprecation
     expect(this.form.otherReason.is(':visible')).to.be.false;
   });
 
@@ -86,12 +82,12 @@ describe('Contact form', function() {
     $('#id_u_committee').val('12345');
     $('#id_u_other_reason').val('Some other reason');
     $('select').val('other');
-    this.form.$cancel.click();
+    this.form.$cancel.click(); // TODO: jQuery deprecation
     expect(this.form.committeeId.val()).to.equal('');
     expect($('select').val()).to.equal(null);
     expect($('#id_u_other_reason').val()).to.equal('');
   });
-  
+
   it('clears the ID on keyup of comm typahead field', function() {
     $('#id_u_committee').val('12345');
     //$('#id_committee_name').val('ACTBLUE')

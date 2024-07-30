@@ -1,5 +1,3 @@
-'use strict';
-
 // TODO - Polish the resize functionality
 /**
  * @fileoverview This file runs the show for the embedded Where Contributions Come From widget
@@ -35,7 +33,7 @@ function ContributionsByStateFrame() {
  * Sets values that will be needed by and/or transferred into the <iframe>
  */
 ContributionsByStateFrame.prototype.init = function() {
-  this.scriptElement = document.currentScript; // The <script> on the page
+  this.scriptElement = document.querySelector('#js-script-contribs-by-state');//document.currentScript; // The <script> on the page
 
   // Build the element
   this.element = buildElement(this.scriptElement);

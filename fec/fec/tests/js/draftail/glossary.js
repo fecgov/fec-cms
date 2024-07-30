@@ -1,16 +1,12 @@
-'use strict';
+import React from 'react';
+import { expect } from 'chai';
+import { EditorState } from 'draft-js';
 
-var React = require('react');
-var chai = require('chai');
-var draftjs = require('draft-js');
-var Enzyme = require('./setup');
+import './setup.js';
+import { mount, shallow } from 'enzyme';
 
-var mount = Enzyme.mount;
-var shallow = Enzyme.shallow;
-var expect = chai.expect;
-var EditorState = draftjs.EditorState;
-var Glossary = require('../../../static/js/draftail/Glossary');
-var terms = require('../../../static/js/data/terms.json');
+import { default as Glossary } from '../../../static/js/draftail/Glossary.js';
+import { default as terms } from '../../../static/js/data/terms.json' assert { type: 'json' };
 
 describe('draftail - Glossary Block Component', function() {
   it('should build a Glossary object for Draftail to Consume', function() {
@@ -23,7 +19,7 @@ describe('draftail - Glossary Block Component', function() {
     var Decorator = Glossary.decorator;
     var element = shallow(<Decorator>test</Decorator>);
     expect(element.childAt(0).text()).to.equal('test');
-    expect(element.type()).to.equal('b')
+    expect(element.type()).to.equal('b');
   });
 
   it('the Glossary source should build a select with all the term options', function() {

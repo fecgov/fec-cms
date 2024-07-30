@@ -1,33 +1,40 @@
-'use strict';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _clone } from 'underscore/modules/clone.js';
+import { default as _debounce } from 'underscore/modules/debounce.js';
+import { default as _each } from 'underscore/modules/each.js';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as _intersection } from 'underscore/modules/intersection.js';
+import { default as _isEmpty } from 'underscore/modules/isEmpty.js';
+import { default as _isEqual } from 'underscore/modules/isEqual.js';
+import { default as _map } from 'underscore/modules/map.js';
+import { default as _max } from 'underscore/modules/max.js';
+import { default as _object } from 'underscore/modules/object.js';
+import { default as _pairs } from 'underscore/modules/pairs.js';
+import { default as _pluck } from 'underscore/modules/pluck.js';
+import 'datatables.net-responsive-dt';
 
-/**
- * pagingType documentation: https://datatables.net/reference/option/pagingType
- */
+import { removeTabindex, restoreTabindex } from './accessibility.js';
+import { sizeColumns, stateColumns } from './column-helpers.js';
+import { download, isPending, pendingCount } from './download.js';
+import Dropdown from './dropdowns.js';
+import {
+  buildUrl,
+  filterNull,
+  isLargeScreen,
+  numberFormatter as formatNumber,
+  LOADING_DELAY,
+  SUCCESS_DELAY
+} from './helpers.js';
+import { updateQuery } from './urls.js';
+import { default as FilterPanel } from '../modules/filters/filter-panel.js';
+import { default as TagList } from '../modules/filters/filter-tags.js';
+import comparisonTemplate from '../templates/comparison.hbs';
+import exportWidgetTemplate from '../templates/tables/exportWidget.hbs';
+import missingTemplate from '../templates/tables/noData.hbs';
+import { onShow as tabsOnShow } from '../vendor/tablist.js';
 
-var $ = require('jquery');
-var _ = require('underscore');
-
-require('datatables.net');
-require('datatables.net-responsive');
-
-var accessibility = require('./accessibility');
-var columnHelpers = require('./column-helpers');
-var download = require('./download');
-var dropdown = require('./dropdowns');
-var helpers = require('./helpers');
-var tabs = require('../vendor/tablist');
-var urls = require('./urls');
-
-// Widgets
-var filterTags = require('../modules/filters/filter-tags');
-var FilterPanel = require('../modules/filters/filter-panel').FilterPanel;
-
-var comparisonTemplate = require('../templates/comparison.hbs');
-var exportWidgetTemplate = require('../templates/tables/exportWidget.hbs');
-var missingTemplate = require('../templates/tables/noData.hbs');
-
-var simpleDOM = 't<"results-info"lpi>';
-var browseDOM = '<"panel__main"t>' + '<"results-info"lpi>';
+export const simpleDOM = 't<"results-info"lpi>';
+export const browseDOM = '<"panel__main"t>' + '<"results-info"lpi>';
 // Source documentation for these two ^ :
 // https://datatables.net/reference/option/dom
 
@@ -35,10 +42,10 @@ var browseDOM = '<"panel__main"t>' + '<"results-info"lpi>';
 // $.fn.DataTable.ext.pager.numbers_length = 5;
 // Must be an odd number
 
-var DOWNLOAD_CAP = 500000;
-var downloadCapFormatted = helpers.formatNumber(DOWNLOAD_CAP);
-var MAX_DOWNLOADS = 5;
-var DOWNLOAD_MESSAGES = {
+export const DOWNLOAD_CAP = 500000;
+export const downloadCapFormatted = formatNumber(DOWNLOAD_CAP);
+export const MAX_DOWNLOADS = 5;
+export const DOWNLOAD_MESSAGES = {
   recordCap:
     'Use <a href="' +
     window.BASE_PATH +
@@ -55,11 +62,14 @@ var DOWNLOAD_MESSAGES = {
   pending: 'You\'re already exporting this data set.'
 };
 
-var DATA_WIDGETS = '.js-data-widgets';
+/**
+ * The selector string for data widgets
+ */
+export const DATA_WIDGETS = '.js-data-widgets';
 
 // id for the last changed element on form for status update
-var updateChangedEl;
-var messageTimer;
+let updateChangedEl;
+let messageTimer;
 
 // Only show table after draw
 $(document.body).on('draw.dt', function() {
@@ -67,7 +77,13 @@ $(document.body).on('draw.dt', function() {
   $('.dataTable tbody td:first-child').attr('scope', 'row');
 });
 
-function yearRange(first, last) {
+/**
+ *
+ * @param {number} first - The beginning year of the range
+ * @param {number} last - The ending year of the range
+ * @returns {string} Formatted as `${first} - ${last}`
+ */
+ export function yearRange(first, last) {
   if (first === last) {
     return first;
   } else {
@@ -75,26 +91,38 @@ function yearRange(first, last) {
   }
 }
 
-function getCycle(value, meta) {
-  var dataTable = DataTable.registry[meta.settings.sTableId];
-  var filters = dataTable && dataTable.filters;
+/**
+ *
+ * @param {*} value
+ * @param {*} meta
+ * @returns {Object} Either { cycles: {number} } or {}
+ */
+export function getCycle(value, meta) {
+  const dataTable = DataTable_FEC.registry[meta.settings.sTableId];
+  const filters = dataTable && dataTable.filters;
 
   if (filters && filters.cycle) {
-    var cycles = _.intersection(
-      _.map(filters.cycle, function(cycle) {
+    const cycles = _intersection(
+      _map(filters.cycle, function(cycle) {
         return parseInt(cycle);
       }),
       value
     );
-    return cycles.length ? { cycle: _.max(cycles) } : {};
+    return cycles.length ? { cycle: _max(cycles) } : {};
   } else {
     return {};
   }
 }
 
-function mapSort(order, column) {
-  return _.map(order, function(item) {
-    var name = column[item.column].data;
+/**
+ *
+ * @param {*} order
+ * @param {*} column
+ * @returns
+ */
+export function mapSort(order, column) {
+  return _map(order, function(item) {
+    let name = column[item.column].data;
     if (item.dir === 'desc') {
       name = '-' + name;
     }
@@ -103,7 +131,7 @@ function mapSort(order, column) {
 }
 
 function getCount(response) {
-  var pagination_count = response.pagination.count; // eslint-disable-line camelcase
+  let pagination_count = response.pagination.count; // eslint-disable-line camelcase
 
   if (response.pagination.count > 500000) {
     pagination_count = Math.round(response.pagination.count / 1000) * 1000; // eslint-disable-line camelcase
@@ -112,8 +140,13 @@ function getCount(response) {
   return pagination_count; // eslint-disable-line camelcase
 }
 
-function mapResponse(response) {
-  var pagination_count = getCount(response); // eslint-disable-line camelcase
+/**
+ *
+ * @param {*} response
+ * @returns An object with values for `recordsTotal`, `recordsFiltered`, and `data` (response.results)
+ */
+export function mapResponse(response) {
+  const pagination_count = getCount(response); // eslint-disable-line camelcase
 
   return {
     recordsTotal: pagination_count, // eslint-disable-line camelcase
@@ -126,24 +159,32 @@ function identity(value) {
   return value;
 }
 
-var MODAL_TRIGGER_CLASS = 'js-panel-trigger';
-var MODAL_TRIGGER_HTML =
+export const MODAL_TRIGGER_CLASS = 'js-panel-trigger';
+export const MODAL_TRIGGER_HTML =
   '<button class="js-panel-button button--panel">' +
   '<span class="u-visually-hidden">Toggle details</span>' +
   '</button>';
 
-function modalRenderRow(row) {
+/**
+ * @param {HTMLTableRowElement} row
+ */
+export function modalRenderRow(row) {
   row.classList.add(MODAL_TRIGGER_CLASS, 'row--has-panel');
 }
 
-function modalRenderFactory(template, fetch) {
-  var callback;
+/**
+ * @param {Function} template - Is this a function?
+ * @param {*} fetch
+ * @returns Function
+ */
+export function modalRenderFactory(template, fetch) {
+  let callback;
   fetch = fetch || identity;
 
   return function(api, data, response) {
-    var $table = $(api.table().node());
-    var $modal = $('#datatable-modal');
-    var $main = $table.closest('.panel__main');
+    const $table = $(api.table().node());
+    const $modal = $('#datatable-modal');
+    const $main = $table.closest('.panel__main');
     // Move the modal to the results div.
     $modal.appendTo($main);
     $modal.css('display', 'block');
@@ -160,21 +201,21 @@ function modalRenderFactory(template, fetch) {
       if (e.which === 13 || e.type === 'click') {
         // Note: Use `currentTarget` to get parent row, since the target column
         // may have been moved since the triggering event
-        var $row = $(e.currentTarget);
-        var $target = $(e.target);
+        const $row = $(e.currentTarget);
+        const $target = $(e.target);
         if ($target.is('a')) {
           return true;
         }
         if (!$target.closest('td').hasClass('dataTables_empty')) {
-          var index = api.row($row).index();
+          const index = api.row($row).index();
           $.when(fetch(response.results[index])).done(function(fetched) {
             $modal.find('.js-panel-content').html(template(fetched));
             $modal.attr('aria-hidden', 'false');
             $row.siblings().toggleClass('row-active', false);
             $row.toggleClass('row-active', true);
             $('body').toggleClass('panel-active', true);
-            accessibility.restoreTabindex($modal);
-            var hideColumns = api.columns('.hide-panel');
+            restoreTabindex($modal);
+            const hideColumns = api.columns('.hide-panel');
             hideColumns.visible(false);
 
             // Populate the pdf button if there is one
@@ -183,9 +224,8 @@ function modalRenderFactory(template, fetch) {
             } else {
               $modal.find('.js-pdf_url').remove();
             }
-
             // Set focus on the close button
-            $('.js-hide').focus();
+            $('.js-hide').focus(); // TODO: jQuery deprecation
 
             // When under $large-screen
             // TODO figure way to share these values with CSS.
@@ -210,7 +250,7 @@ function modalRenderFactory(template, fetch) {
 }
 
 function hidePanel(api, $modal) {
-  $('.row-active .js-panel-button').focus();
+  $('.row-active .js-panel-button').focus(); // TODO: jQuery deprecation
   $('.js-panel-toggle tr').toggleClass('row-active', false);
   $('body').toggleClass('panel-active', false);
   $modal.attr('aria-hidden', 'true');
@@ -224,28 +264,32 @@ function hidePanel(api, $modal) {
     api.columns('.hide-panel').visible(true);
   }
 
-  accessibility.removeTabindex($modal);
+  removeTabindex($modal);
 }
-
-function barsAfterRender(template, api) {
-  var $table = $(api.table().node());
-  var $cols = $table.find('div[data-value]');
+/**
+ *
+ * @param {?string} template
+ * @param {object} api
+ */
+export function barsAfterRender(template, api) {
+  const $table = $(api.table().node());
+  const $cols = $table.find('div[data-value]');
 
   // Store the initial max value on the table element just once
   // Set widths of bars relative to the global max,
   // rather than the max of each draw
   if (!$table.data('max')) {
-    var values = $cols.map(function(idx, each) {
+    const values = $cols.map(function(idx, each) {
       return parseFloat(each.getAttribute('data-value'));
     });
-    var max = _.max(values);
+    const max = _max(values);
     $table.data('max', max);
   }
 
-  var tableMax = $table.data('max');
+  const tableMax = $table.data('max');
   $cols.after(function() {
-    var value = $(this).attr('data-value');
-    var width = (100 * parseFloat(value)) / tableMax;
+    const value = $(this).attr('data-value');
+    const width = (100 * parseFloat(value)) / tableMax;
     if ($(this).next('.bar-container').length > 0) {
       return;
     } else {
@@ -268,7 +312,7 @@ function updateOnChange($form, api) {
 
     updateChangedEl = e.target;
   }
-  $form.on('change', 'input,select', _.debounce(onChange, 250));
+  $form.on('change', 'input,select', _debounce(onChange, 250));
 }
 
 function filterSuccessUpdates(changeCount) {
@@ -278,13 +322,13 @@ function filterSuccessUpdates(changeCount) {
 
   // check if there is a changed form element
   if (updateChangedEl) {
-    var $label;
-    var $elm = $(updateChangedEl);
-    var type = $elm.attr('type');
-    var message = '';
-    var filterAction = '';
-    var filterResult = '';
-    var $filterMessage = $('.filter__message');
+    let $label;
+    const $elm = $(updateChangedEl);
+    const type = $elm.attr('type');
+    let message = '';
+    let filterAction = '';
+    let filterResult = '';
+    const $filterMessage = $('.filter__message');
 
     $('.is-successful').removeClass('is-successful');
     $('.is-unsuccessful').removeClass('is-unsuccessful');
@@ -383,12 +427,21 @@ function filterSuccessUpdates(changeCount) {
       });
       $('.is-successful').removeClass('is-successful');
       $('.date-range-grid').fadeOut();
-    }, helpers.SUCCESS_DELAY);
+    }, SUCCESS_DELAY);
   }
 }
 
-function OffsetPaginator() {} //eslint-disable-line no-empty-function
+/**
+ * The OffsetPaginator class
+ * @function mapQuery
+ * @function handleResponse
+ */
+export function OffsetPaginator() {/* */}
 
+/**
+ * @param {*} data
+ * @returns Object with number values for `per_page` and `page`
+ */
 OffsetPaginator.prototype.mapQuery = function(data) {
   return {
     per_page: data.length, // eslint-disable-line camelcase
@@ -398,7 +451,10 @@ OffsetPaginator.prototype.mapQuery = function(data) {
 
 OffsetPaginator.prototype.handleResponse = function() {}; //eslint-disable-line no-empty-function
 
-function SeekPaginator() {
+/**
+ * The SeekPaginator class
+ */
+export function SeekPaginator() {
   this.indexes = {};
   this.query = null;
 }
@@ -417,14 +473,14 @@ SeekPaginator.prototype.clearIndexes = function() {
 };
 
 SeekPaginator.prototype.mapQuery = function(data, query) {
-  if (!_.isEqual(query, this.query)) {
-    this.query = _.clone(query);
+  if (!_isEqual(query, this.query)) {
+    this.query = _clone(query);
     this.clearIndexes();
   }
-  var indexes = this.getIndexes(data.length, data.start);
-  return _.extend(
+  const indexes = this.getIndexes(data.length, data.start);
+  return _extend(
     { per_page: data.length }, // eslint-disable-line camelcase
-    _.chain(Object.keys(indexes))
+    _chain(Object.keys(indexes))
       .filter(function(key) {
         return indexes[key];
       })
@@ -444,7 +500,7 @@ SeekPaginator.prototype.handleResponse = function(data, response) {
   );
 };
 
-var defaultOpts = {
+const defaultOpts = {
   serverSide: true,
   searching: false,
   lengthMenu: [30, 50, 100],
@@ -461,15 +517,22 @@ var defaultOpts = {
     '<button class="js-filter-feedback">let us know</button>'
 };
 
-var defaultCallbacks = {
+const defaultCallbacks = {
   afterRender: function() {} //eslint-disable-line no-empty-function
 };
 
-function DataTable(selector, opts) {
+/**
+ * The FEC's class of DataTable (the `_FEC` suffix is to differentiate between
+ * datatables v1's '.Datatable' jQuery plugin and
+ * datatables v2's official DataTable object.
+ * @param {*} selector
+ * @param {*} opts
+ */
+export function DataTable_FEC(selector, opts) {
   opts = opts || {};
   this.$body = $(selector);
-  this.opts = _.extend({}, defaultOpts, { ajax: this.fetch.bind(this) }, opts);
-  this.callbacks = _.extend({}, defaultCallbacks, opts.callbacks);
+  this.opts = _extend({}, defaultOpts, { ajax: this.fetch.bind(this) }, opts);
+  this.callbacks = _extend({}, defaultCallbacks, opts.callbacks);
   this.xhr = null;
   this.fetchContext = null;
   this.hasWidgets = null;
@@ -477,7 +540,7 @@ function DataTable(selector, opts) {
   this.$widgets = $(DATA_WIDGETS);
   this.initFilters();
 
-  var Paginator = this.opts.paginator || OffsetPaginator;
+  const Paginator = this.opts.paginator || OffsetPaginator;
   this.paginator = new Paginator();
 
   if (!this.opts.tableSwitcher) {
@@ -491,13 +554,13 @@ function DataTable(selector, opts) {
   $(document.body).on('table:switch', this.handleSwitch.bind(this));
 }
 
-DataTable.prototype.initTable = function() {
+DataTable_FEC.prototype.initTable = function() {
   this.api = this.$body.DataTable(this.opts);
-  DataTable.registry[this.$body.attr('id')] = this;
+  DataTable_FEC.registry[this.$body.attr('id')] = this;
 
-  if (!_.isEmpty(this.filterPanel)) {
+  if (!_isEmpty(this.filterPanel)) {
     updateOnChange(this.filterSet.$body, this.api);
-    urls.updateQuery(this.filterSet.serialize(), this.filterSet.fields);
+    updateQuery(this.filterSet.serialize(), this.filterSet.fields);
   }
 
   this.$body.css('width', '100%');
@@ -510,14 +573,13 @@ DataTable.prototype.initTable = function() {
 };
 
 // Get the full querystring on-load
-DataTable.prototype.getVars = function () {
-
-  var initialParams = window.location.search;
+DataTable_FEC.prototype.getVars = function() {
+  const initialParams = window.location.search;
   return initialParams.toString();
 };
 
 // Parse querystring's parameters and return an object
-DataTable.prototype.parseParams = function(querystring){
+DataTable_FEC.prototype.parseParams = function(querystring){
     // Parse query string
     const params = new URLSearchParams(querystring);
     const obj = {};
@@ -532,18 +594,18 @@ DataTable.prototype.parseParams = function(querystring){
     return obj;
 };
 
-// Activate checkbox filter fields that filterSet.js cannot find to activate (see commitee_types.jinja)
-DataTable.prototype.checkFromQuery = function(){
-    // Create a variable representing the querysring key/vals as an object
-    var queryFields = this.parseParams(this.getVars());
+// Activate checkbox filter fields that filterSet.js cannot find to activate (see committee_types.jinja)
+DataTable_FEC.prototype.checkFromQuery = function(){
+    // Create a variable representing the querystring key/vals as an object
+    const queryFields = this.parseParams(this.getVars());
     // Create an array to hold checkbox html elements
-      var queryBoxes = [];
+    const queryBoxes = [];
     // Iterate the key/vals of queryFields
     $.each(queryFields, function(key, val){
       // Create a variable for matching checkbox
       let queryBox;
       // Handle val as array
-      if ($.isArray(val)){
+      if (Array.isArray(val)) {
           // iterate the val array
           val.forEach(i => {
             // Find matching checkboxes
@@ -569,7 +631,7 @@ DataTable.prototype.checkFromQuery = function(){
       // ...if they are not already checked
       for (let box of queryBoxes) {
         if (!($(box).is(':checked'))) {
-              $(box).prop('checked', true).change();
+              $(box).prop('checked', true).change(); // TODO: jQuery deprecation
         }
        }
       }, 0);
@@ -581,7 +643,7 @@ DataTable.prototype.checkFromQuery = function(){
       // ...if they are not already checked
       for (let box of queryBoxes) {
         if (!($(box).is(':checked'))) {
-              $(box).prop('checked', true).change();
+              $(box).prop('checked', true).change(); // TODO: jQuery deprecation
         }
        }
       }
@@ -590,11 +652,11 @@ DataTable.prototype.checkFromQuery = function(){
   $('button.is-loading, label.is-loading').removeClass('is-loading');
 };
 
-DataTable.prototype.initFilters = function() {
+DataTable_FEC.prototype.initFilters = function() {
   // Set `this.filterSet` before instantiating the nested `DataTable` so that
   // filters are available on fetching initial data
   if (this.opts.useFilters) {
-    var tagList = new filterTags.TagList({
+    const tagList = new TagList({
       resultType: 'results',
       showResultCount: true,
       tableTitle: this.opts.title
@@ -613,16 +675,16 @@ DataTable.prototype.initFilters = function() {
   }
 };
 
-DataTable.prototype.refreshExport = function() {
+DataTable_FEC.prototype.refreshExport = function() {
   if (this.opts.useExport && !this.opts.disableExport) {
-    var numRows = this.api.context[0].fnRecordsTotal();
+    const numRows = this.api.context[0].fnRecordsTotal();
     if (numRows > DOWNLOAD_CAP) {
       this.disableExport({ message: DOWNLOAD_MESSAGES.recordCap });
     } else if (numRows === 0) {
       this.disableExport({ message: DOWNLOAD_MESSAGES.empty });
     } else if (this.isPending()) {
       this.disableExport({ message: DOWNLOAD_MESSAGES.pending });
-    } else if (download.pendingCount() >= MAX_DOWNLOADS) {
+    } else if (pendingCount() >= MAX_DOWNLOADS) {
       this.disableExport({ message: DOWNLOAD_MESSAGES.downloadCap });
     } else {
       this.enableExport();
@@ -635,20 +697,20 @@ DataTable.prototype.refreshExport = function() {
   }
 };
 
-DataTable.prototype.destroy = function() {
+DataTable_FEC.prototype.destroy = function() {
   this.api.destroy();
-  delete DataTable.registry[this.$body.attr('id')];
+  delete DataTable_FEC.registry[this.$body.attr('id')];
 };
 
-DataTable.prototype.handlePopState = function() {
+DataTable_FEC.prototype.handlePopState = function() {
   this.filterSet.activateAll();
-  var filters = this.filterSet.serialize();
-  if (!_.isEqual(filters, this.filters)) {
+  const filters = this.filterSet.serialize();
+  if (!_isEqual(filters, this.filters)) {
     this.api.ajax.reload();
   }
 };
 
-DataTable.prototype.ensureWidgets = function() {
+DataTable_FEC.prototype.ensureWidgets = function() {
   if (this.hasWidgets) {
     return;
   }
@@ -661,7 +723,7 @@ DataTable.prototype.ensureWidgets = function() {
     this.$exportButton = $('.js-export');
     this.$exportMessage = $('.js-export-message');
 
-    if (!helpers.isLargeScreen() && this.filterPanel) {
+    if (!isLargeScreen() && this.filterPanel) {
       this.$exportWidget.after(this.filterPanel.$body);
     }
   }
@@ -685,7 +747,7 @@ DataTable.prototype.ensureWidgets = function() {
   this.hasWidgets = true;
 };
 
-DataTable.prototype.disableExport = function(opts) {
+DataTable_FEC.prototype.disableExport = function(opts) {
   this.$exportButton.addClass('is-disabled');
   this.$exportButton.off('click');
 
@@ -695,7 +757,7 @@ DataTable.prototype.disableExport = function(opts) {
   }
 };
 
-DataTable.prototype.enableExport = function() {
+DataTable_FEC.prototype.enableExport = function() {
   this.$exportButton.off('click');
   this.$exportButton.removeClass('is-disabled');
   this.$exportButton.on('click', this.export.bind(this));
@@ -704,18 +766,18 @@ DataTable.prototype.enableExport = function() {
   }
 };
 
-DataTable.prototype.fetch = function(data, callback) {
-  var self = this;
+DataTable_FEC.prototype.fetch = function(data, callback) {
+  const self = this;
   self.ensureWidgets();
 
   if (self.filterSet && !self.filterSet.isValid) {
     return;
   } else if (self.filterSet && self.filterSet.isValid) {
-    urls.updateQuery(self.filterSet.serialize(), self.filterSet.fields);
+    updateQuery(self.filterSet.serialize(), self.filterSet.fields);
     self.filters = self.filterSet.serialize();
     // Only limit for processed data in specific datatables
     // Individual contributions does not contain data_type and therefore has a separate check
-    var limitOnPage =
+    const limitOnPage =
       (self.filters.data_type == 'processed' &&
         ['Receipts', 'Disbursements', 'Independent expenditures'].indexOf(
           self.opts.title
@@ -725,7 +787,7 @@ DataTable.prototype.fetch = function(data, callback) {
     // Number of allowed filters per field that is limited
     const MAX_FILTERS = 10;
     // Fields to limit
-    var limitFields = {
+    const limitFields = {
       committee_id: `You&#39;re trying to search more than ${MAX_FILTERS} committees. Narrow your search to ${MAX_FILTERS} or fewer committees.`,
       candidate_id: `You&#39;re trying to search more than ${MAX_FILTERS} candidates. Narrow your search to ${MAX_FILTERS} or fewer candidates.`,
       contributor_name: `You&#39;re trying to search more than ${MAX_FILTERS} contributors. Narrow your search to ${MAX_FILTERS} or fewer contributors.`,
@@ -737,13 +799,13 @@ DataTable.prototype.fetch = function(data, callback) {
       contributor_occupation: `You&#39;re trying to search more than ${MAX_FILTERS} occupations. Narrow your search to ${MAX_FILTERS} or fewer occupations.`
     };
     // By default, filter limit is not hit
-    var hitFilterLimit = false;
-    var limitFieldKeys = Object.keys(limitFields);
+    let hitFilterLimit = false;
+    const limitFieldKeys = Object.keys(limitFields);
     // By default, remove all errors icons on labels
     $('ul.dropdown__selected li label').removeClass('is-unsuccessful');
     limitFieldKeys.forEach(function(limitFieldKey) {
       // Assign unique id to each field's error messages
-      var error_id = 'exceeded_' + limitFieldKey + '_limit';
+      const error_id = 'exceeded_' + limitFieldKey + '_limit';
       // Ensure fields are not disabled and all errors removed
       $('#' + limitFieldKey).removeClass('is-disabled-filter');
       var errorDiv = $('#' + error_id);
@@ -803,7 +865,7 @@ DataTable.prototype.fetch = function(data, callback) {
     // Otherwise, it's a regularly scheduled report, keep the filing
     // form as F3X
     if (self.filters && self.filters.filing_form) {
-      var F3X_index = self.filters.filing_form.indexOf('F3X');
+      const F3X_index = self.filters.filing_form.indexOf('F3X');
       if (self.filters.is_notice == 'true' && F3X_index > -1) {
         self.filters.filing_form[F3X_index] = 'F24';
       }
@@ -835,7 +897,7 @@ DataTable.prototype.fetch = function(data, callback) {
     }
   }
 
-  var url = self.buildUrl(data);
+  const url = self.buildUrl(data);
   self.$processing.show();
   if (self.xhr) {
     self.xhr.abort();
@@ -853,19 +915,19 @@ DataTable.prototype.fetch = function(data, callback) {
   });
 };
 
-DataTable.prototype.export = function() {
-  var url = this.buildUrl(this.api.ajax.params(), false, true);
-  download.download(url, false, true);
+DataTable_FEC.prototype.export = function() {
+  const url = this.buildUrl(this.api.ajax.params(), false, true);
+  download(url, false, true);
   this.disableExport({ message: DOWNLOAD_MESSAGES.pending });
 };
 
-DataTable.prototype.isPending = function() {
-  var url = this.buildUrl(this.api.ajax.params(), false);
-  return download.isPending(url);
+DataTable_FEC.prototype.isPending = function() {
+  const url = this.buildUrl(this.api.ajax.params(), false);
+  return isPending(url);
 };
 
-DataTable.prototype.buildUrl = function(data, paginate, download) {
-  var query = _.extend(
+DataTable_FEC.prototype.buildUrl = function(data, paginate, download) {
+  let query = _extend(
     { sort_hide_null: false, sort_nulls_last: true }, // eslint-disable-line camelcase
     this.filters || {}
   );
@@ -873,30 +935,30 @@ DataTable.prototype.buildUrl = function(data, paginate, download) {
   query.sort = mapSort(data.order, this.opts.columns);
 
   if (paginate) {
-    query = _.extend(query, this.paginator.mapQuery(data, query));
+    query = _extend(query, this.paginator.mapQuery(data, query));
   }
   if (download) {
-    query = _.extend(query, {
+    query = _extend(query, {
       api_key: window.DOWNLOAD_API_KEY
     });
   }
 
-  return helpers.buildUrl(
+  return buildUrl(
     this.opts.path,
-    _.extend({}, query, this.opts.query || {})
+    _extend({}, query, this.opts.query || {})
   );
 };
 
-DataTable.prototype.fetchSuccess = function(resp) {
+DataTable_FEC.prototype.fetchSuccess = function(resp) {
   this.paginator.handleResponse(this.fetchContext.data, resp);
   this.fetchContext.callback(mapResponse(resp));
   this.callbacks.afterRender(this.api, this.fetchContext.data, resp);
   this.newCount = getCount(resp);
   this.refreshExport();
 
-  var changeCount = this.newCount - this.currentCount;
+  const changeCount = this.newCount - this.currentCount;
 
-  var countHTML =
+  const countHTML =
     this.newCount > 0 && this.newCount <= 500000
       ? '<span class="tags__count">' +
         this.newCount.toLocaleString('en-US') +
@@ -922,10 +984,10 @@ DataTable.prototype.fetchSuccess = function(resp) {
   }
 };
 
-DataTable.prototype.fetchError = function(jqXHR, textStatus) {
-  var self = this;
+DataTable_FEC.prototype.fetchError = function(jqXHR, textStatus) {
+  const self = this;
   // Default error message that occurs most likely due to timeout
-  var errorMessage =
+  let errorMessage =
     '<div id="two_year_filter_error" class="message filter__message message--error">' +
     self.opts.error400Message +
     '</div>';
@@ -984,7 +1046,7 @@ DataTable.prototype.fetchError = function(jqXHR, textStatus) {
  * be used with unfiltered tables, else tables may be destroyed on restrictive
  * filtering.
  */
-DataTable.prototype.hideEmpty = function(response) {
+DataTable_FEC.prototype.hideEmpty = function(response) {
   if (!response.pagination.count) {
     this.destroy();
     this.$body.before(missingTemplate(this.opts.hideEmptyOpts));
@@ -992,15 +1054,15 @@ DataTable.prototype.hideEmpty = function(response) {
   }
 };
 
-DataTable.registry = {};
+DataTable_FEC.registry = {};
 
-DataTable.defer = function($table, opts) {
-  tabs.onShow($table, function() {
-    new DataTable($table, opts);
+DataTable_FEC.defer = function($table, opts) {
+  tabsOnShow($table, function() {
+    new DataTable_FEC($table, opts);
   });
 };
 
-DataTable.prototype.handleSwitch = function(e, opts) {
+DataTable_FEC.prototype.handleSwitch = function(e, opts) {
   this.opts.hideColumns = opts.hideColumns;
   this.opts.disableExport = opts.disableExport;
   this.opts.path = opts.path;
@@ -1018,16 +1080,28 @@ DataTable.prototype.handleSwitch = function(e, opts) {
   this.refreshExport();
 };
 
-function initSpendingTables(className, context, options) {
+/**
+ * Used for…
+ * @param {string} className - Selector text, including the leading period (ex: `.data-table` instead of `data-table`)
+ * @param {Object} pageContext - The window.context data object
+ * @param {string} pageContext.candidateID
+ * @param {number} pageContext.cycle
+ * @param {number[]} pageContext.cycles
+ * @param {boolean} pageContext.electionFull
+ * @param {string} pageContext.name - Candidate name LAST, FIRST
+ * @param {string} pageContext.timePeriod - In the format of `2023-2024`
+ * @param {Object} options - spendingTableOpts from {@link /fec/fec/static/js/pages/elections.js}
+ */
+export function initSpendingTables(className, pageContext, options) {
   $(className).each(function(index, table) {
-    var $table = $(table);
-    var dataType = $table.attr('data-type');
-    var opts = options[dataType];
+    const $table = $(table);
+    const dataType = $table.attr('data-type');
+    const opts = options[dataType];
     if (opts) {
-      DataTable.defer($table, {
+      DataTable_FEC.defer($table, {
         autoWidth: false,
         path: opts.path,
-        query: helpers.filterNull(context.election),
+        query: filterNull(pageContext.election),
         columns: opts.columns,
         order: opts.order,
         dom: simpleDOM,
@@ -1041,19 +1115,19 @@ function initSpendingTables(className, context, options) {
         hideEmptyOpts: {
           dataType: opts.title,
           name: 'this election',
-          timePeriod: context.timePeriod
+          timePeriod: pageContext.timePeriod
         }
       });
     }
   });
 }
 
-function refreshTables(e, context) {
-  var $comparison = $('#comparison');
-  var selected = $comparison
+function refreshTables(e, pageContext) {
+  const $comparison = $('#comparison');
+  const selected = $comparison
     .find('input[type="checkbox"]:checked')
     .map(function(_, input) {
-      var $input = $(input);
+      const $input = $(input);
       return {
         candidate_id: $input.attr('data-id'), // eslint-disable-line camelcase
         candidate_name: $input.attr('data-name') // eslint-disable-line camelcase
@@ -1061,8 +1135,8 @@ function refreshTables(e, context) {
     });
 
   if (selected.length > 0) {
-    drawContributionsBySizeTable(selected, context);
-    drawContributionsByStateTable(selected, context);
+    drawContributionsBySizeTable(selected, pageContext);
+    drawContributionsByStateTable(selected, pageContext);
   }
 
   if (e) {
@@ -1075,19 +1149,19 @@ function refreshTables(e, context) {
         .find('.is-loading')
         .removeClass('is-loading')
         .addClass('is-successful');
-    }, helpers.LOADING_DELAY);
+    }, LOADING_DELAY);
 
     setTimeout(function() {
       $comparison.find('.is-successful').removeClass('is-successful');
-    }, helpers.SUCCESS_DELAY);
+    }, SUCCESS_DELAY);
   }
 }
 
-function drawComparison(results, pageContext) {
-  var $comparison = $('#comparison');
-  var context = { selected: results.slice(0, 10), options: results.slice(10) };
+export function drawComparison(results, pageContext) {
+  let $comparison = $('#comparison');
+  const context = { selected: results.slice(0, 10), options: results.slice(10) };
   $comparison.prepend(comparisonTemplate(context));
-  new dropdown.Dropdown($comparison.find('.js-dropdown'));
+  new Dropdown($comparison.find('.js-dropdown'));
   $comparison.on('change', 'input[type="checkbox"]', function(e) {
     refreshTables(e, pageContext);
   });
@@ -1095,13 +1169,13 @@ function drawComparison(results, pageContext) {
 }
 
 function mapSize(response, primary) {
-  var groups = {};
-  _.each(response.results, function(result) {
+  let groups = {};
+  _each(response.results, function(result) {
     groups[result.candidate_id] = groups[result.candidate_id] || {};
     groups[result.candidate_id][result.size] = result.total;
   });
-  return _.map(_.pairs(groups), function(pair) {
-    return _.extend(pair[1], {
+  return _map(_pairs(groups), function(pair) {
+    return _extend(pair[1], {
       candidate_id: pair[0], // eslint-disable-line camelcase
       candidate_name: primary[pair[0]].candidate_name // eslint-disable-line camelcase
     });
@@ -1109,27 +1183,27 @@ function mapSize(response, primary) {
 }
 
 function mapState(response) {
-  var groups = {};
-  _.each(response.results, function(result) {
+  let groups = {};
+  _each(response.results, function(result) {
     groups[result.state] = groups[result.state] || {};
     groups[result.state][result.candidate_id] = result.total;
     groups[result.state].state_full = result.state_full; // eslint-disable-line camelcase
   });
-  return _.map(_.pairs(groups), function(pair) {
-    return _.extend(pair[1], { state: pair[0] });
+  return _map(_pairs(groups), function(pair) {
+    return _extend(pair[1], { state: pair[0] });
   });
 }
 
 function destroyTable($table) {
   if ($.fn.dataTable.isDataTable($table)) {
-    var api = $table.DataTable();
+    let api = $table.DataTable();
     api.clear();
     api.destroy();
     $table.data('max', null);
   }
 }
 
-var drawTableOpts = {
+const drawTableOpts = {
   autoWidth: false,
   destroy: true,
   searching: false,
@@ -1145,34 +1219,34 @@ var drawTableOpts = {
 };
 
 // For election profile page "Individual contributions to candidates"
-function drawContributionsBySizeTable(selected, context) {
-  var $table = $('table[data-type="by-size"]');
-  var primary = _.object(
-    _.map(selected, function(result) {
+function drawContributionsBySizeTable(selected, pageContext) {
+  const $table = $('table[data-type="by-size"]');
+  const primary = _object(
+    _map(selected, function(result) {
       return [result.candidate_id, result];
     })
   );
   // There are 5 "size" categories. No per_page cap on endpoint
-  var perPage = 5 * selected.length;
-  var query = {
-    cycle: context.election.cycle,
-    candidate_id: _.pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
+  const perPage = 5 * selected.length;
+  const query = {
+    cycle: pageContext.election.cycle,
+    candidate_id: _pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
     per_page: perPage, // eslint-disable-line camelcase
     election_full: true // eslint-disable-line camelcase
   };
-  var url = helpers.buildUrl(
+  const url = buildUrl(
     ['schedules', 'schedule_a', 'by_size', 'by_candidate'],
     query
   );
   $.getJSON(url).done(function(response) {
-    var data = mapSize(response, primary);
+    const data = mapSize(response, primary);
     destroyTable($table);
     $table.dataTable(
-      _.extend(
+      _extend(
         {
           autoWidth: false,
           data: data,
-          columns: columnHelpers.sizeColumns(context),
+          columns: sizeColumns(pageContext),
           order: [[1, 'desc']]
         },
         drawTableOpts
@@ -1184,44 +1258,44 @@ function drawContributionsBySizeTable(selected, context) {
 }
 
 // For election profile page "Individual contributions to candidates"
-function drawContributionsByStateTable(selected, context) {
-  var $table = $('table[data-type="by-state"]');
-  var primary = _.object(
-    _.map(selected, function(result) {
+function drawContributionsByStateTable(selected, pageContext) {
+  const $table = $('table[data-type="by-state"]');
+  const primary = _object(
+    _map(selected, function(result) {
       return [result.candidate_id, result];
     })
   );
   // There are 61 "state" options. No per_page cap on endpoint
-  var perPage = 61 * selected.length;
-  var query = {
-    cycle: context.election.cycle,
-    candidate_id: _.pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
+  const perPage = 61;// * selected.length;
+  const query = {
+    cycle: pageContext.election.cycle,
+    candidate_id: _pluck(selected, 'candidate_id'), // eslint-disable-line camelcase
     per_page: perPage, // eslint-disable-line camelcase
     election_full: true // eslint-disable-line camelcase
   };
-  var url = helpers.buildUrl(
+  const url = buildUrl(
     ['schedules', 'schedule_a', 'by_state', 'by_candidate'],
     query
   );
   $.getJSON(url).done(function(response) {
-    var data = mapState(response, primary);
+    const data = mapState(response, primary);
     // Populate headers with correct text
-    var headerLabels = ['State'].concat(_.pluck(selected, 'candidate_name'));
+    const headerLabels = ['State'].concat(_pluck(selected, 'candidate_name'));
     destroyTable($table);
     $table
       .find('thead tr')
       .empty()
       .append(
-        _.map(headerLabels, function(label) {
+        _map(headerLabels, function(label) {
           return $('<th>').text(label);
         })
       );
     $table.dataTable(
-      _.extend(
+      _extend(
         {
           autoWidth: false,
           data: data,
-          columns: columnHelpers.stateColumns(selected, context),
+          columns: stateColumns(selected, pageContext),
           order: [[1, 'desc']],
           drawCallback: function() {
             barsAfterRender(null, this.api());
@@ -1232,22 +1306,3 @@ function drawContributionsByStateTable(selected, context) {
     );
   });
 }
-
-module.exports = {
-  simpleDOM: simpleDOM,
-  browseDOM: browseDOM,
-  yearRange: yearRange,
-  getCycle: getCycle,
-  barsAfterRender: barsAfterRender,
-  modalRenderRow: modalRenderRow,
-  modalRenderFactory: modalRenderFactory,
-  MODAL_TRIGGER_CLASS: MODAL_TRIGGER_CLASS,
-  MODAL_TRIGGER_HTML: MODAL_TRIGGER_HTML,
-  mapSort: mapSort,
-  mapResponse: mapResponse,
-  DataTable: DataTable,
-  OffsetPaginator: OffsetPaginator,
-  SeekPaginator: SeekPaginator,
-  drawComparison: drawComparison,
-  initSpendingTables: initSpendingTables
-};

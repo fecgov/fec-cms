@@ -1,0 +1,8 @@
+# Custom Dictionary Words
+blockquote
+bythenumbers
+draftail
+Draftail
+labelledby
+wagtailcore
+wagtailimages

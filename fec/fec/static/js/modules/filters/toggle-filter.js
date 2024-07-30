@@ -1,12 +1,7 @@
-'use strict';
-
-var $ = require('jquery');
-window.$ = window.jQuery = $;
-
-var Filter = require('./filter-base.js').Filter;
+import Filter from './filter-base.js';
 
 /* ToggleFilter that has to fire a custom event */
-function ToggleFilter(elm) {
+export default function ToggleFilter(elm) {
   Filter.call(this, elm);
   this.removeOnSwitch = this.$elm.data('remove-on-switch') || false;
   this.ignoreCount = this.$elm.data('filter-ignore-count') || false;
@@ -21,7 +16,7 @@ ToggleFilter.prototype.fromQuery = function(query) {
   this.$elm
     .find('input[value="' + query[this.name] + '"]')
     .prop('checked', true)
-    .change();
+    .change(); // TODO: jQuery deprecation
 };
 
 ToggleFilter.prototype.handleChange = function(e) {
@@ -50,5 +45,3 @@ ToggleFilter.prototype.setInitialValue = function() {
     this.handleChange({ target: $checked });
   }
 };
-
-module.exports = { ToggleFilter: ToggleFilter };

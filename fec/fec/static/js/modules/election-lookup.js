@@ -1,14 +1,12 @@
 /**
  * URLs: /data/
  * Templates: /fec/fec/data/templates/landing.jinja
+ * Imported into /fec/fec/static/js/pages/data-landing.js
  * Not to be confused with election-search.js, which is used on the homepage and /data/elections/
  */
-'use strict';
-
-var $ = require('jquery');
-var helpers = require('./helpers');
-var ElectionForm = require('./election-form').ElectionForm;
-var ElectionMap = require('./election-map').ElectionMap;
+import ElectionForm from './election-form.js';
+import ElectionMap from './election-map.js';
+import { isInViewport } from './helpers.js';
 
 /**
  * ElectionLookup
@@ -18,7 +16,7 @@ var ElectionMap = require('./election-map').ElectionMap;
  * Inherits from the ElectionForm class
  */
 
-function ElectionLookup(selector) {
+export default function ElectionLookup(selector) {
   this.$elm = $(selector);
   this.$form = this.$elm.find('form');
   this.$state = this.$form.find('[name="state"]');
@@ -26,7 +24,7 @@ function ElectionLookup(selector) {
   this.$submit = this.$form.find('[type="submit"]');
 
   this.districts = 0;
-  if (helpers.isInViewport(this.$elm)) {
+  if (this.$elm.length && isInViewport(this.$elm)) {
     this.init();
   } else {
     $(window).on('scroll', this.init.bind(this));
@@ -51,10 +49,10 @@ ElectionLookup.prototype.init = function() {
   this.initialized = false;
   this.dormantMap = document.querySelector('.election-map.dormant');
 
-  if (this.dormantMap) {
+  if (this.$map.length && this.dormantMap) {
     this.dormantMap.addEventListener('click', this.wakeTheMap.bind(this));
     document.addEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap.bind(this));
-  } else {
+  } else if (this.$map.length) {
     this.initInteractiveMap();
   }
 };
@@ -66,9 +64,8 @@ ElectionLookup.prototype.init = function() {
  * element of the election search form
  */
 ElectionLookup.prototype.wakeTheMap = function() {
-  // console.log('wakeTheMap()');
   if (this.initialized === false) {
-    this.dormantMap.removeEventListener('click', this.wakeTheMap);
+    if (this.dormantMap) this.dormantMap.removeEventListener('click', this.wakeTheMap);
     document.removeEventListener('FEC-ElectionSearchInteraction', this.wakeTheMap);
     this.initInteractiveMap();
   }
@@ -138,11 +135,7 @@ ElectionLookup.prototype.search = function(e) {
   var self = this;
   this.xhr = $.getJSON(self.getUrl(this.serialize())).done(function(response) {
     // Note: Update district color map before rendering results
-    var encodedDistricts = self.encodeDistricts(response.results);
+    const encodedDistricts = self.encodeDistricts(response.results);
     self.map.drawDistricts(encodedDistricts);
   });
-};
-
-module.exports = {
-  ElectionLookup: ElectionLookup
 };

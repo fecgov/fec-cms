@@ -1,15 +1,15 @@
-'use strict';
+import Inputmask from 'inputmask';
+import { default as moment } from 'moment';
 
-var $ = require('jquery');
-var moment = require('moment');
+import { default as Filter, ensureArray } from './filter-base.js';
 
-var Filter = require('./filter-base');
-
-require('jquery.inputmask');
-require('jquery.inputmask/dist/inputmask/inputmask.date.extensions');
-
-function DateFilter(elm) {
-  Filter.Filter.call(this, elm);
+/**
+ *
+ * @param {jQuery.Object} elm
+ * @property
+ */
+export default function DateFilter(elm) {
+  Filter.call(this, elm);
   this.validateInput = this.$elm.data('validate') || false;
   this.$range = this.$elm.find('.js-date-range');
   this.$grid = this.$elm.find('.js-date-grid');
@@ -17,12 +17,17 @@ function DateFilter(elm) {
   this.$maxDate = this.$elm.find('.js-max-date');
   this.$submit = this.$elm.find('button');
 
-  this.$minDate.inputmask('mm/dd/yyyy', {
+  Inputmask({
+    inputFormat: 'mm/dd/yyyy',
+    alias: 'datetime',
     oncomplete: this.validate.bind(this)
-  });
-  this.$maxDate.inputmask('mm/dd/yyyy', {
+  }).mask(this.$minDate);
+
+  Inputmask({
+    inputFormat: 'mm/dd/yyyy',
+    alias: 'datetime',
     oncomplete: this.validate.bind(this)
-  });
+  }).mask(this.$maxDate);
 
   this.$input.on('change', this.handleInputChange.bind(this));
 
@@ -41,7 +46,7 @@ function DateFilter(elm) {
   $(document.body).on('tag:removeAll', this.handleRemoveAll.bind(this));
 }
 
-DateFilter.prototype = Object.create(Filter.Filter.prototype);
+DateFilter.prototype = Object.create(Filter.prototype);
 DateFilter.constructor = DateFilter;
 
 DateFilter.prototype.handleInputChange = function(e) {
@@ -130,9 +135,9 @@ DateFilter.prototype.fromQuery = function(query) {
 };
 
 DateFilter.prototype.setValue = function(value) {
-  value = Filter.ensureArray(value);
-  this.$minDate.val(value[0]).change();
-  this.$maxDate.val(value[1]).change();
+  value = ensureArray(value);
+  this.$minDate.val(value[0]).change(); // TODO: jQuery deprecation
+  this.$maxDate.val(value[1]).change(); // TODO: jQuery deprecation
 };
 
 DateFilter.prototype.handleModifyEvent = function(e, opts) {
@@ -141,12 +146,12 @@ DateFilter.prototype.handleModifyEvent = function(e, opts) {
   if (opts.filterName === this.name) {
     this.maxYear = parseInt(opts.filterValue);
     this.minYear = this.maxYear - 1;
-    this.$minDate.val('01/01/' + this.minYear.toString()).change();
+    this.$minDate.val('01/01/' + this.minYear.toString()).change(); // TODO: jQuery deprecation
     if (this.maxYear === today.getFullYear()) {
       today = moment(today).format('MM/DD/YYYY');
-      this.$maxDate.val(today).change();
+      this.$maxDate.val(today).change(); // TODO: jQuery deprecation
     } else {
-      this.$maxDate.val('12/31/' + this.maxYear.toString()).change();
+      this.$maxDate.val('12/31/' + this.maxYear.toString()).change(); // TODO: jQuery deprecation
     }
     this.validate();
   }
@@ -234,7 +239,7 @@ DateFilter.prototype.handleMinDateSelect = function() {
   this.$grid.find('.is-active').removeClass('is-active');
   $dateBegin.addClass('is-active');
 
-  this.$grid.find('li').hover(
+  this.$grid.find('li').hover( // TODO: jQuery deprecation
     function() {
       var dateBeginNum = parseInt(
         $(this)
@@ -271,7 +276,7 @@ DateFilter.prototype.handleMaxDateSelect = function() {
   this.$grid.find('.is-active').removeClass('is-active');
   $dateEnd.addClass('is-active');
 
-  this.$grid.find('li').hover(
+  this.$grid.find('li').hover( // TODO: jQuery deprecation
     function() {
       // turn dates to numbers for comparsion
       // to make sure hover date range is valid
@@ -326,10 +331,10 @@ DateFilter.prototype.handleGridItemSelect = function(e) {
       ? this.$maxDate
       : this.$submit;
     this.$grid.removeClass('pick-min pick-max');
-    this.$grid.find('li').unbind('mouseenter mouseleave');
+    this.$grid.find('li').unbind('mouseenter mouseleave'); // TODO: jQuery deprecation (.unbind())
     this.setValue(value);
     this.$grid.addClass('is-invalid');
-    $nextItem.focus();
+    $nextItem.focus(); // TODO: jQuery deprecation
   }
 };
 
@@ -337,7 +342,7 @@ DateFilter.prototype.showWarning = function() {
   if (!this.showingWarning) {
     var warning =
       '<div class="message message--error message--small">' +
-      "You entered a date that's outside the two-year time period. " +
+      'You entered a date that&apos;s outside the two-year time period. ' +
       'Please enter a receipt date from ' +
       '<strong>' +
       this.minYear +
@@ -357,5 +362,3 @@ DateFilter.prototype.hideWarning = function() {
     this.showingWarning = false;
   }
 };
-
-module.exports = { DateFilter: DateFilter };

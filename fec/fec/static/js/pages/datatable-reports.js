@@ -1,19 +1,21 @@
-'use strict';
+/**
+ * Data and initialization for
+ * {@link /data/reports/house-senate/}
+ * {@link /data/reports/ie-only/}
+ * {@link /data/reports/pac-party/}
+ * {@link /data/reports/presidential/}
+ */
+import { getColumns } from '../modules/column-helpers.js';
+import { reports as cols_reports } from '../modules/columns.js';
+import Dropdown from '../modules/dropdowns.js';
+import { fetchReportDetails } from '../modules/filings.js';
+import TableSwitcher from '../modules/table-switcher.js';
+import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+import candidateTemplate from '../templates/reports/candidate.hbs';
+import ieOnlyTemplate from '../templates/reports/ie-only.hbs';
+import pacPartyTemplate from '../templates/reports/pac.hbs';
 
-var $ = require('jquery');
-
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-var filings = require('../modules/filings');
-var columnHelpers = require('../modules/column-helpers');
-var TableSwitcher = require('../modules/table-switcher').TableSwitcher;
-var dropdown = require('../modules/dropdowns');
-
-var candidateTemplate = require('../templates/reports/candidate.hbs');
-var pacPartyTemplate = require('../templates/reports/pac.hbs');
-var ieOnlyTemplate = require('../templates/reports/ie-only.hbs');
-
-var pageTitle,
+let pageTitle,
   pageTemplate,
   pageColumns,
   columnKeys = [
@@ -24,15 +26,15 @@ var pageTitle,
     'coverage_end_date'
   ];
 
-if (context.form_type === 'presidential') {
+if (window.context.form_type === 'presidential') {
   pageTitle = 'Presidential committee reports';
   pageTemplate = candidateTemplate;
   columnKeys.push('receipts', 'disbursements', 'trigger');
-} else if (context.form_type === 'house-senate') {
+} else if (window.context.form_type === 'house-senate') {
   pageTitle = 'House and Senate committee reports';
   pageTemplate = candidateTemplate;
   columnKeys.push('receipts', 'disbursements', 'trigger');
-} else if (context.form_type === 'pac-party') {
+} else if (window.context.form_type === 'pac-party') {
   pageTitle = 'PAC and party committee reports';
   pageTemplate = pacPartyTemplate;
   columnKeys.push(
@@ -41,36 +43,36 @@ if (context.form_type === 'presidential') {
     'independentExpenditures',
     'trigger'
   );
-} else if (context.form_type === 'ie-only') {
+} else if (window.context.form_type === 'ie-only') {
   pageTitle = 'Independent expenditure only committee reports';
   pageTemplate = ieOnlyTemplate;
   columnKeys.push('contributions', 'independentExpenditures', 'trigger');
 }
 
-pageColumns = columnHelpers.getColumns(columns.reports, columnKeys);
+pageColumns = getColumns(cols_reports, columnKeys);
 
-$(document).ready(function() {
-  var $table = $('#results');
-  new tables.DataTable($table, {
+$(function() {
+  const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     tableSwitcher: true,
     title: pageTitle,
-    path: ['reports', context.form_type],
+    path: ['reports', window.context.form_type],
     columns: pageColumns,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     // Order by coverage date descending
     order: [[3, 'desc']],
     useFilters: true,
     useExport: true,
     callbacks: {
-      afterRender: tables.modalRenderFactory(
+      afterRender: modalRenderFactory(
         pageTemplate,
-        filings.fetchReportDetails
+        fetchReportDetails
       )
     },
     drawCallback: function() {
-      this.dropdowns = $table.find('.dropdown').map(function(idx, elm) {
-        return new dropdown.Dropdown($(elm), { checkboxes: false });
+      this.dropdowns = $table.find('.dropdown').map(function (idx, elm) {
+        return new Dropdown($(elm), { checkboxes: false });
       });
     }
   });
@@ -80,11 +82,11 @@ $(document).ready(function() {
   new TableSwitcher('.js-table-switcher', {
     efiling: {
       dataType: 'efiling',
-      path: ['efile', 'reports', context.form_type]
+      path: ['efile', 'reports', window.context.form_type]
     },
     processed: {
       dataType: 'processed',
-      path: ['reports', context.form_type]
+      path: ['reports', window.context.form_type]
     }
   }).init();
 });

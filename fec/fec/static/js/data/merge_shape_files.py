@@ -21,12 +21,12 @@ def GetStateShpFiles():
             else:
                 TempFileName = FILE_NAME.format(state_number)
 
-            # get zipped files 
+            # get zipped files
             with urlopen(URL + TempFileName + '.zip') as zipresp, NamedTemporaryFile() as tfile:
                 tfile.write(zipresp.read())
                 tfile.seek(0)
 
-                #unzip files
+                # unzip files
                 shutil.unpack_archive(tfile.name, '/tmp', format='zip')
 
                 CD = gpd.read_file('/tmp/' + TempFileName + '.shp')
@@ -64,4 +64,3 @@ if __name__ == "__main__":
     print(subprocess.run(["./create_districts_topo.sh"], shell=True))
 
     shutil.rmtree("src/")
-

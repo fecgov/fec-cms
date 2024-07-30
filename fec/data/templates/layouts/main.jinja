@@ -11,7 +11,7 @@
   {%- endif %}
 
   {% block css %}
-  <link rel="stylesheet" type="text/css" href="{{ asset_for_css('base.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ path_for_css('base.css') }}" />
   {% endblock css %}
 
   {% block head_js -%}
@@ -20,7 +20,7 @@
     if (!canSkipPolyfills) {
       var pfScriptElem = document.createElement('script');
       pfScriptElem.async = false;
-      pfScriptElem.src = '{{ asset_for_js('polyfills.js') }}';
+      pfScriptElem.src = '{{ path_for_js('polyfills.js') }}';
       document.head.appendChild(pfScriptElem);
     }
   </script>
@@ -37,17 +37,19 @@
     CALENDAR_DOWNLOAD_PUBLIC_API_KEY = '{{ FEC_CAL_DOWNLOAD_API_KEY }}';
     DOWNLOAD_API_KEY = '{{ FEC_DOWNLOAD_API_KEY }}';
     DEFAULT_TIME_PERIOD = '{{ constants.DEFAULT_TIME_PERIOD }}';
-    DEFAULT_PRESIDENTIAL_YEAR = '{{ constants.DEFAULT_PRESIDENTIAL_YEAR }}';
-    DEFAULT_ELECTION_YEAR = '{{ constants.DEFAULT_ELECTION_YEAR }}';
-    START_YEAR = '{{ constants.START_YEAR }}';
-    END_YEAR = '{{ constants.END_YEAR }}';
+    DEFAULT_PRESIDENTIAL_YEAR = {{ constants.DEFAULT_PRESIDENTIAL_YEAR }};
+    DEFAULT_ELECTION_YEAR = {{ constants.DEFAULT_ELECTION_YEAR }};
+    START_YEAR = {{ constants.START_YEAR }};
+    END_YEAR = {{ constants.END_YEAR }};
     DISTRICT_MAP_CUTOFF = '{{ constants.DISTRICT_MAP_CUTOFF }}';
     WEBMANAGER_EMAIL = '{{ WEBMANAGER_EMAIL }}';
     CANONICAL_BASE = '{{ CANONICAL_BASE }}';
     TRANSITION_URL = '{{ TRANSITION_URL }}';
     {% if election_year %}ELECTION_YEAR = '{{ election_year }}';{% endif %}
 
-    function trackMetric(name, imagesSelector) {
+    {#
+      Removing trackMetric since nobody has looking at it or performance.js
+      function trackMetric(name, imagesSelector) {
       if (imagesSelector) {
         var images = document.querySelectorAll(imagesSelector);
         if (images && images.length) {
@@ -59,7 +61,7 @@
         }
       }
       window.performance.mark(name);
-    }
+    } #}
   </script>
 </head>
 <body>
@@ -148,8 +150,10 @@
 {% csrf_token %}
 
 {% block modals %}{% endblock %}
-  <script src="{{ asset_for_js('vendor.js') }}"></script>
-  <script src="{{ asset_for_js('data-init.js') }}"></script>
+{#- Chunks required for every page -#}
+{{ tags_for_js_chunks('global.js', '')|safe }}
+{#- Chunks required for every data -#}
+{{ tags_for_js_chunks('data-init.js', '')|safe }}
 {% block scripts %}
 {% endblock %}
 

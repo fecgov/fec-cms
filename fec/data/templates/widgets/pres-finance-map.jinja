@@ -140,4 +140,5 @@
        </div>
     </div>
 </div>
-<script defer src="{{ asset_for_js('widgets/pres-finance-map-box.js') }}" data-standalone="true"></script>
+{#- data-init and global chunks are loaded through parent templates -#}
+{{ tags_for_js_chunks('widgets/pres-finance-map-box.js', 'defer data-standalone="true"')}}

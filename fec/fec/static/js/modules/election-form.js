@@ -1,11 +1,12 @@
-'use strict';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _extend } from 'underscore/modules/extend.js';
+import { default as _range } from 'underscore/modules/range.js';
+import { default as _unique } from 'underscore/modules/uniq.js';
 
-var $ = require('jquery');
-var _ = require('underscore');
-var helpers = require('./helpers');
-var utils = require('./election-utils');
-var districts = require('../data/stateDistricts.json');
-var districtTemplate = require('../templates/districts.hbs');
+import { encodeDistrict } from './election-utils.js';
+import { buildUrl, filterNull } from './helpers.js';
+import { default as districts } from '../data/stateDistricts.json' assert { type: 'json' };
+import { default as districtTemplate } from '../templates/districts.hbs';
 
 /**
  * Base class for all election lookup tools
@@ -14,7 +15,7 @@ var districtTemplate = require('../templates/districts.hbs');
  * Both the ElectionSearch and ElectionLookup inherit from this class
  * It handles all logic around showing districts for the district select
  */
-function ElectionForm(elm) {
+export default function ElectionForm(elm) {
   this.$elm = $(elm);
   this.$state = this.$elm.find('[name="state"]');
   this.$district = this.$elm.find('[name="district"]').prop('disabled', true);
@@ -25,9 +26,9 @@ function ElectionForm(elm) {
 
 /**
  * Identify if a select has an option matching a particular value
- * @param {jQuery.object} $select - jQuery.object selector of a <select>
+ * @param {jQuery.Object} $select - jQuery.Object selector of a <select>
  * @param {string} value - The value to check for
- * @return {Boolean} Whether or not the select has the value
+ * @return {boolean} Whether or not the select has the value
  */
 ElectionForm.prototype.hasOption = function($select, value) {
   return $select.find('option[value="' + value + '"]').length > 0;
@@ -39,7 +40,7 @@ ElectionForm.prototype.hasOption = function($select, value) {
  * If there's a zip field, it clears that.
  */
 ElectionForm.prototype.handleStateChange = function() {
-  var state = this.$state.val();
+  const state = this.$state.val();
   this.updateDistricts(state);
   if (state && this.$zip) {
     this.$zip.val('');
@@ -62,7 +63,7 @@ ElectionForm.prototype.updateDistricts = function(state) {
     this.$district
       .html(
         districtTemplate({
-          districts: _.range(1, this.districts + 1),
+          districts: _range(1, this.districts + 1),
           senate: this.showSenateOption
         })
       )
@@ -90,15 +91,15 @@ ElectionForm.prototype.updateDistricts = function(state) {
 
 /**
  * Convenience method for building an API URL to call for a query
- * @param {object} query - The query to pass to the URL
+ * @param {Object} query - The query to pass to the URL
  * @param {string} query.state - Two-letter state abbreviation
  * @param {string} query.district - District number as a string
  * @returns {string} API URL `/elections/search/?state=${query.state}&district=${query.district}`
  */
 ElectionForm.prototype.getUrl = function(query) {
-  var params = _.extend({}, { per_page: 100 }, query);
+  const params = _extend({}, { per_page: 100 }, query);
   document.dispatchEvent(new Event('FEC-ElectionSearchInteraction'));
-  return helpers.buildUrl(['elections', 'search'], params);
+  return buildUrl(['elections', 'search'], params);
 };
 
 /**
@@ -106,13 +107,13 @@ ElectionForm.prototype.getUrl = function(query) {
  * @returns {Object} In the format of `{state: 'TX'}`
  */
 ElectionForm.prototype.serialize = function() {
-  var params = _.chain(this.$form.serializeArray())
+  const params = _chain(this.$form.serializeArray())
     .map(function(obj) {
       return [obj.name, obj.value];
     })
     .object()
     .value();
-  return _.extend(helpers.filterNull(params));
+  return _extend(filterNull(params));
 };
 
 /**
@@ -122,22 +123,18 @@ ElectionForm.prototype.serialize = function() {
  * @returns {Array} An array of the unique district identifiers, e.g. `[4801, 4802, 4800]`
  */
 ElectionForm.prototype.encodeDistricts = function(results) {
-  var encoded = _.chain(results)
+  let encoded = _chain(results)
     .filter(function(result) {
       return result.office === 'H';
     })
     .map(function(result) {
-      return utils.encodeDistrict(result.state, result.district);
+      return encodeDistrict(result.state, result.district);
     })
     .value();
-  var state = this.$state.val();
-  var district = this.$district.val();
+  const state = this.$state.val();
+  const district = this.$district.val();
   if (state) {
-    encoded.push(utils.encodeDistrict(state, district));
+    encoded.push(encodeDistrict(state, district));
   }
-  return _.unique(encoded);
-};
-
-module.exports = {
-  ElectionForm: ElectionForm
+  return _unique(encoded);
 };

@@ -7,7 +7,7 @@
 {% block title %}{{ display_name | capitalize }}{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{{ asset_for_css('legal.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ path_for_css('legal.css') }}" />
 {% endblock %}
 
 {% block body %}
@@ -23,5 +23,6 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ asset_for_js('legal.js') }}"></script>
+{#- data-init and global chunks are loaded by main.jinja -#}
+{{ tags_for_js_chunks('legal.js', '')|safe }}
 {% endblock %}

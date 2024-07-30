@@ -1,27 +1,23 @@
 /**
  * National party account receipts datatable page
  */
-
-var $ = require('jquery');
-
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-
-var detailsPanelTemplate = require('../templates/national-party-account-receipts.hbs');
+import { nationalPartyReceipts as cols_natPartyAcctReceipts } from '../modules/columns.js';
+import { DataTable_FEC, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+import { default as natPartyReceiptsTemplate } from '../templates/national-party-account-receipts.hbs';
 
 $(function() {
   var $table = $('#results');
-  new tables.DataTable($table, {
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'National party account receipts',
     path: ['national_party', 'schedule_a'],
-    columns: columns.nationalPartyReceipts,
+    columns: cols_natPartyAcctReceipts,
     order: [[3, 'desc']],
     useFilters: true,
     useExport: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: tables.modalRenderFactory(detailsPanelTemplate)
+      afterRender: modalRenderFactory(natPartyReceiptsTemplate)
     }
   });
 });

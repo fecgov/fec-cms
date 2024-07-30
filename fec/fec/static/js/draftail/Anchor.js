@@ -1,7 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { EditorState, Modifier } from 'draft-js';
-import { slugify } from './utils';
+import PropTypes from 'prop-types';
+
+import { slugify } from './utils.js';
 
 // Creates the entities as soon as it is rendered.
 class AnchorSource extends React.Component {
@@ -79,8 +81,10 @@ Anchor.propTypes = {
   ])
 };
 
-module.exports = {
+const anchor = {
   type: 'ANCHOR',
   source: AnchorSource,
   decorator: Anchor
 };
+
+export default anchor;

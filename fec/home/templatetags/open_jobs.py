@@ -10,7 +10,8 @@ from fec.constants import USAJOBS_CODE_LIST as CODE_LIST
 JOB_URL = "https://data.usajobs.gov/api/Search"
 CODES_URL = "https://data.usajobs.gov/api/codelist/hiringpaths"
 USAJOB_SEARCH_ERROR = """
-USAJOBS is unavailable. We are temporarily unable to post open FEC positions. Please visit <a href="https://www.usajobs.gov/">usajobs.gov</a> for more information.
+USAJOBS is unavailable. We are temporarily unable to post open FEC positions. \
+    Please visit <a href="https://www.usajobs.gov/">usajobs.gov</a> for more information.
 """
 register = template.Library()
 
@@ -41,7 +42,7 @@ def get_jobs():
         response = requests.get(JOB_URL, headers=headers, params=querystring)
     except ConnectionError as ex:
         return {'error': USAJOB_SEARCH_ERROR + '(' + ex.__class__.__name__ + ')'}
-    
+
     # Catch any non-200 responses
     if response.status_code != 200:
         return {"error": USAJOB_SEARCH_ERROR}
@@ -55,7 +56,7 @@ def get_jobs():
 
     # Query the codelist/hiringpaths endpoint for mapping map hiring-path code(s) to description(s)
     codes_response = requests.get(CODES_URL, headers=headers)
-         
+
     # Catch any non-200 response on the codelists endpoint and load the alternative CODE_LIST constant
     if codes_response.status_code != 200:
         codes_responses = json.loads(CODE_LIST)

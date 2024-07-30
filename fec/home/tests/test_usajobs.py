@@ -142,11 +142,11 @@ class USAJobTestCase(unittest.TestCase):
     def test_get_job4(self, mock_get):
         job_data = get_jobs()
         self.assertEqual(job_data["jobData"][0]["open_to"], "some new code")
-    
+
     # 5th test case: test exceptions if bad data is returned
     def mocked_requests_get5(*args, **kwargs):
         if args[0] == JOB_URL:
-            return MockResponse(json.loads(''), 200) # json.decoder.JSONDecodeError
+            return MockResponse(json.loads(''), 200)  # json.decoder.JSONDecodeError
         elif args[0] == CODES_URL:
             return MockResponse(json.loads(USAJOBS_CODE_LIST), 200)
         return MockResponse(None, 404)
@@ -155,5 +155,5 @@ class USAJobTestCase(unittest.TestCase):
     def test_get_job5(self, mock_get):
 
         with pytest.raises(Exception) as exc_info:
-            job_data = get_jobs()
+            job_data = get_jobs()  # noqa: F841
         self.assertEqual(exc_info.type, json.decoder.JSONDecodeError)

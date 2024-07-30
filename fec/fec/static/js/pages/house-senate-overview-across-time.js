@@ -1,10 +1,7 @@
-'use strict';
-
-import { buildUrl, buildAppUrl, dollar } from '../modules/helpers';
-var $ = require('jquery');
-var tables = require('../modules/tables');
-var columns = require('../modules/columns');
-var decoders = require('../modules/decoders');
+import { currencyColumn } from '../modules/columns.js';
+import { states as decode_states } from '../modules/decoders.js';
+import { buildUrl, buildAppUrl, dollar } from '../modules/helpers.js';
+import { DataTable_FEC } from '../modules/tables.js';
 
 function AcrossTime() {
   this.element; // The HTML element of this feature
@@ -14,7 +11,9 @@ function AcrossTime() {
   // Where to find the totals:
   this.basePath_officeTotal = ['candidates', 'totals', 'aggregates'];
   this.baseQuery = {
-    office: context.office_code,
+    office: window.context.office_code,
+    min_election_cycle: window.DEFAULT_ELECTION_YEAR - 4 ,
+    max_election_cycle: window.DEFAULT_ELECTION_YEAR,
     is_active_candidate: true,
     per_page: 20,
     sort_null_only: false,
@@ -70,7 +69,7 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
     total_other_political_committee_contributions: 'F3-11C'
   };
 
-  // create arrays to hold adjusteddValues and meterElements for use later
+  // create arrays to hold adjustedValues and meterElements for use later
   let adjustedTotalArray = [];
   let meterElements = [];
 
@@ -108,18 +107,18 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
       let subConcat = `${sub}thorized_committee`;
       let splitString= dataTotalType.toString().split(subConcat).join('');
 
-      // Use the concatenated string  if transers is in dataTotalType
+      // Use the concatenated string if transfers is in dataTotalType
       let line = dataTotalType.indexOf('transfers') !== -1 ? splitString : dataTotalType;
 
       // Create object for creating querystring for the link for each value
       let searchFilters = {
         data_type: 'processed',
         two_year_transaction_period: electionYear,
-        recipient_committee_type: context.office_code,
+        recipient_committee_type: window.context.office_code,
         line_number: lineNumbers[line]
       };
 
-      // Generate the querystring for link from the searcFilters object
+      // Generate the querystring for link from the searchFilters object
       // Could be done more efficiently with URLSearchParams(), but since MS Edge-legacy does not support, we'll do this for now
       let queryString = Object.keys(searchFilters).map(function(key) {
         return key + '=' + searchFilters[key];
@@ -128,7 +127,7 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
       //  Build the link for each value on displayed on page
       let totalUrl = buildAppUrl(['receipts']) + `?${queryString}`;
 
-      //Put stripes on meter to denote in-proress contribution totsl for current cycle
+      //Put stripes on meter to denote in-progress contribution total for current cycle
       const stripeClass = electionYear == window.DEFAULT_ELECTION_YEAR ? `diagonal_stripe` : '';
 
       // HTML for each result row
@@ -164,15 +163,15 @@ AcrossTime.prototype.displayUpdatedData = function(queryResponse) {
   // Iterate each meter element and animate the value from 0
   for (let j = 0; j < meterElements.length; j++) {
 
-    // Self-invoking setTimeout that starts animationn and stops calling itself when total is reached
-    // (setInterval and requestAnimationFromen also work but this was simplest and makes all animations end at the same time)
+    // Self-invoking setTimeout that starts animation and stops calling itself when total is reached
+    // (setInterval and requestAnimationFrom also work but this was simplest and makes all animations end at the same time)
     let animVar = 0;
     (function loop(){
       setTimeout(function() {
         if (animVar < adjustedTotalArray[j]) {
           meterElements[j].item(0).value = animVar;
           //animVar = animVar + 10000000.00
-          animVar = animVar + adjustedTotalArray[j]/200; //This is an arbirtary value that seemed to get the desired speed. But could be changed to something else.
+          animVar = animVar + adjustedTotalArray[j]/200; //This is an arbitrary value that seemed to get the desired speed. But could be changed to something else.
           loop();
         }
         else {
@@ -201,14 +200,22 @@ AcrossTime.prototype.handleYearChange = function(e) {
   e.preventDefault();
 
   // Set action ('min' or 'max') based on which select was changed.
-  let action = e.target.dataset.period;
+  const action = e.target.dataset.period;
 
   // Determines which select was changed
-  let beginning = action == 'min' ? e.target.value : this.minYearControl.value;
-  let ending = action == 'max' ? e.target.value : this.maxYearControl.value;
+  const beginning = action == 'min' ? e.target.value : this.minYearControl.value;
+  const ending = action == 'max' ? e.target.value : this.maxYearControl.value;
 
-  // Get the  office from the URL passed from view
-  this.baseQuery.office = context.office_code;
+  // Transpose min/max in call to data if value of min select is > value of max select
+  // API will not return data is `min_election_cycle is > than max_election_cycle
+  this.baseQuery.min_election_cycle = Math.min(beginning, ending);
+  this.baseQuery.max_election_cycle = Math.max(beginning, ending);
+
+  // Get the office from the URL passed from view
+  this.baseQuery.office = window.context.office_code;
+
+  // Load data based on baseQuery
+  // this.loadData(this.baseQuery);
 
   // Load data based on baseQuery and the two years
   this.loadData(this.baseQuery, [beginning, ending]);
@@ -243,8 +250,8 @@ AcrossTime.prototype.buildSelects = function() {
  * @param {Object} query - The data object for the query, {@see baseQuery}
  * @param {Array} yearsRangeArray - An array of two values: the min and max years (or max and min)
  */
-AcrossTime.prototype.loadData = function(query, yearsRangeArray) {
-  let instance = this;
+AcrossTime.prototype.loadData = function(query, yearsRangeArray = [window.DEFAULT_ELECTION_YEAR, window.DEFAULT_ELECTION_YEAR - 4]) {
+  const instance = this;
 
   // yearsRangeArray is two values but could be any order, so let's just look at the smallest and largest
   const minYear = Math.min(...yearsRangeArray);
@@ -286,26 +293,26 @@ AcrossTime.prototype.loadData = function(query, yearsRangeArray) {
 var election_house_totals = [
   { data: 'state', render: function(data, type, row) {
     // Concatenate the state full state name and the district number together for display.
-    return (decoders.states[row.state] + ' DISTRICT ' + row.district).toUpperCase();
+    return (decode_states[row.state] + ' DISTRICT ' + row.district).toUpperCase();
     },
   orderable: true, className: 'column-state' },
-  columns.currencyColumn({ data: 'total_receipts', orderable: true, className: 'column--number t-mono' }),
-  columns.currencyColumn({ data: 'total_disbursements', orderable: true, className: 'column--number t-mono' }),
-  columns.currencyColumn({ data: 'total_cash_on_hand_end_period', orderable: true, className: 'column--number t-mono' }),
-  columns.currencyColumn({ data: 'total_debts_owed_by_committee', orderable: true, className: 'column--number t-mono' })
+  currencyColumn({ data: 'total_receipts', orderable: true, className: 'column--number t-mono' }),
+  currencyColumn({ data: 'total_disbursements', orderable: true, className: 'column--number t-mono' }),
+  currencyColumn({ data: 'total_cash_on_hand_end_period', orderable: true, className: 'column--number t-mono' }),
+  currencyColumn({ data: 'total_debts_owed_by_committee', orderable: true, className: 'column--number t-mono' })
 ];
 
 // election senate totals for election overview pages
 var election_senate_totals = [
   { data: 'state', render: function(data, type, row) {
     // Display full state name in upper case
-    return decoders.states[row.state].toUpperCase();
+    return decode_states[row.state].toUpperCase();
     },
   orderable: true, className: 'column--state' },
-  columns.currencyColumn({ data: 'total_receipts', orderable: true, className: 'column--number t-mono' }),
-  columns.currencyColumn({ data: 'total_disbursements', orderable: true, className: 'column--number t-mono' }),
-  columns.currencyColumn({ data: 'total_cash_on_hand_end_period', orderable: true, className: 'column--number t-mono' }),
-  columns.currencyColumn({ data: 'total_debts_owed_by_committee', orderable: true, className: 'column--number t-mono' })
+  currencyColumn({ data: 'total_receipts', orderable: true, className: 'column--number t-mono' }),
+  currencyColumn({ data: 'total_disbursements', orderable: true, className: 'column--number t-mono' }),
+  currencyColumn({ data: 'total_cash_on_hand_end_period', orderable: true, className: 'column--number t-mono' }),
+  currencyColumn({ data: 'total_debts_owed_by_committee', orderable: true, className: 'column--number t-mono' })
 ];
 
 function initElectionTotalTable(election_year) {
@@ -313,7 +320,7 @@ function initElectionTotalTable(election_year) {
   var column_definitions = null;
   var aggregate_by = null;
 
-  if(context.office_code ==='H') {
+  if(window.context.office_code ==='H') {
     // set house specific query attributes
     column_definitions = election_house_totals;
     aggregate_by = 'office-state-district';
@@ -323,13 +330,13 @@ function initElectionTotalTable(election_year) {
     aggregate_by = 'office-state';
   }
 
-  new tables.DataTable($table, {
+  new DataTable_FEC($table, {
     autoWidth: true,
     path: ['candidates', 'totals', 'aggregates'],
     query: {
       aggregate_by: aggregate_by,
       election_year: election_year,
-      office: context.office_code,
+      office: window.context.office_code,
       election_full: true,
       is_active_candidate: true
     },

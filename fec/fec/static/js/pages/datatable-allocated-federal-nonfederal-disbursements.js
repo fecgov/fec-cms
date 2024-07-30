@@ -1,29 +1,27 @@
-'use strict';
+/**
+ * Data and initialization for {@link /data/allocated-federal-nonfederal-disbursements/}
+ */
+import { allocatedFederalNonfederalDisbursements as cols_allocatedFederalNonfederalDisbursements } from '../modules/columns.js';
+import { lineNumberFilters } from '../modules/filters-event.js';
+import TableSwitcher from '../modules/table-switcher.js';
+import { DataTable_FEC, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+import { default as allocatedFederalNonfederalDisbursementsTemplate } from '../templates/allocated-federal-nonfederal-disbursements.hbs';
 
-var $ = require('jquery');
-
-var tables = require('../modules/tables');
-var TableSwitcher = require('../modules/table-switcher').TableSwitcher;
-var columns = require('../modules/columns');
-var filtersEvent = require('../modules/filters-event');
-
-var allocatedFederalNonfederalDisbursementsTemplate = require('../templates/allocated-federal-nonfederal-disbursements.hbs');
-
-$(document).ready(function() {
-  var $table = $('#results');
-  new tables.DataTable($table, {
+$(function() {
+  const $table = $('#results');
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Allocated federal/nonfederal disbursements',
     path: ['schedules', 'schedule_h4'],
-    columns: columns.allocatedFederalNonfederalDisbursements,
+    columns: cols_allocatedFederalNonfederalDisbursements,
     query: { sort_nulls_last: true },
-    paginator: tables.SeekPaginator,
+    paginator: SeekPaginator,
     order: [[6, 'desc']],
     useFilters: true,
     useExport: true,
-    rowCallback: tables.modalRenderRow,
+    rowCallback: modalRenderRow,
     callbacks: {
-      afterRender: tables.modalRenderFactory(allocatedFederalNonfederalDisbursementsTemplate)
+      afterRender: modalRenderFactory(allocatedFederalNonfederalDisbursementsTemplate)
     }
   });
 
@@ -32,15 +30,15 @@ $(document).ready(function() {
       path: ['schedules', 'schedule_h4', 'efile'],
       dataType: 'efiling',
       hideColumns: '.hide-efiling',
-      paginator: tables.OffsetPaginator
+      paginator: OffsetPaginator
     },
     processed: {
       path: ['schedules', 'schedule_h4'],
       dataType: 'processed',
       hideColumns: '.hide-processed',
-      paginator: tables.SeekPaginator
+      paginator: SeekPaginator
     }
   }).init();
 
-  filtersEvent.lineNumberFilters();
+  lineNumberFilters();
 });

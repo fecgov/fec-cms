@@ -1,13 +1,13 @@
-'use strict';
+import { default as _filter } from 'underscore/modules/filter.js';
+import { default as _map } from 'underscore/modules/map.js';
+import { default as _range } from 'underscore/modules/range.js';
+import { default as _toArray } from 'underscore/modules/toArray.js';
+import { default as URI } from 'urijs';
 
-var $ = require('jquery');
-var _ = require('underscore');
-var URI = require('urijs');
+import { default as cycleTemplate } from '../templates/electionCycle.hbs';
+import { default as cyclesTemplate } from '../templates/electionCycles.hbs';
 
-var cycleTemplate = require('../templates/electionCycle.hbs');
-var cyclesTemplate = require('../templates/electionCycles.hbs');
-
-function CycleSelect(elm) {
+export default function CycleSelect(elm) {
   this.$elm = $(elm);
   this.duration = this.$elm.data('duration');
   this.cycleId = this.$elm.attr('id');
@@ -30,12 +30,12 @@ CycleSelect.prototype.initCycles = function() {
 };
 
 CycleSelect.prototype.initCyclesMulti = function(selected) {
-  var cycles = _.range(selected - this.duration + 2, selected + 2, 2);
+  var cycles = _range(selected - this.duration + 2, selected + 2, 2);
   var params = this.getParams();
   var selectedCycle;
   var cycleId = this.cycleId;
 
-  var bins = _.map(cycles, function(cycle) {
+  var bins = _map(cycles, function(cycle) {
     return {
       min: cycle - 1,
       max: cycle,
@@ -43,8 +43,8 @@ CycleSelect.prototype.initCyclesMulti = function(selected) {
       cycleId: cycleId,
       // Two year period buttons are only active if there are fec_cycles_in_election
       active:
-        typeof context !== 'undefined' && context.cycles
-          ? context.cycles.indexOf(cycle) !== -1
+        typeof context !== 'undefined' && window.context.cycles
+          ? window.context.cycles.indexOf(cycle) !== -1
           : false,
       checked:
         cycle.toString() === params.cycle && params.electionFull === 'false'
@@ -61,7 +61,7 @@ CycleSelect.prototype.initCyclesMulti = function(selected) {
   this.$cycles.html(cyclesTemplate(bins));
   this.$cycles.on('change', this.handleChange.bind(this));
 
-  selectedCycle = _.filter(bins, function(bin) {
+  selectedCycle = _filter(bins, function(bin) {
     return bin.checked === true;
   });
 
@@ -84,7 +84,7 @@ CycleSelect.prototype.initCyclesSingle = function(selected) {
 CycleSelect.prototype.setTimePeriod = function(min, max) {
   // Defines a timePeriod property on the global context object in order
   // to easily get a time period string without having to calculate it every time
-  context.timePeriod = min.toString() + '–' + max.toString();
+  window.context.timePeriod = min.toString() + '–' + max.toString();
 };
 
 CycleSelect.build = function($elm) {
@@ -111,7 +111,7 @@ CycleSelect.prototype.setUrl = function(url) {
 };
 
 function QueryCycleSelect() {
-  CycleSelect.apply(this, _.toArray(arguments));
+  CycleSelect.apply(this, _toArray(arguments));
 }
 
 QueryCycleSelect.prototype = Object.create(CycleSelect.prototype);
@@ -136,7 +136,7 @@ QueryCycleSelect.prototype.nextUrl = function(cycle, electionFull) {
 };
 
 function PathCycleSelect() {
-  CycleSelect.apply(this, _.toArray(arguments));
+  CycleSelect.apply(this, _toArray(arguments));
 }
 
 PathCycleSelect.prototype = Object.create(CycleSelect.prototype);
@@ -168,5 +168,3 @@ PathCycleSelect.prototype.nextUrl = function(cycle, electionFull) {
     .search({ election_full: electionFull })
     .toString();
 };
-
-module.exports = { CycleSelect: CycleSelect };

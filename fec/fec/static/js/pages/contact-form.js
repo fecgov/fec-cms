@@ -1,18 +1,14 @@
-'use strict';
+import { default as URI } from 'urijs';
 
-var $ = require('jquery');
-var Typeahead = require('../modules/typeahead').Typeahead;
-var URI = require('urijs');
-
-const loadRecaptcha = require('../modules/load-recaptcha').loadRecaptcha;
-
-const analytics = require('../modules/analytics');
+import { customEvent } from '../modules/analytics.js';
+import { loadRecaptcha } from '../modules/load-recaptcha.js';
+import Typeahead from '../modules/typeahead.js';
 
 /**
  * ServiceNow contact form
  * @param {*} $elm
  */
-function ContactForm($elm) {
+export function ContactForm($elm) {
   this.$elm = $elm;
   this.committeeId = $elm.find('#id_u_committee');
   this.committeeName = $elm.find('#id_committee_name');
@@ -39,7 +35,7 @@ function ContactForm($elm) {
  * This will set the value of a hidden input when selecting a value from typeahead
  */
 ContactForm.prototype.initTypeahead = function() {
-  var self = this;
+  const self = this;
   this.typeahead.$element.css({ height: 'auto' });
   this.typeahead.$input.off('typeahead:select');
   this.typeahead.$input.on('typeahead:select', function(e, opts) {
@@ -47,8 +43,8 @@ ContactForm.prototype.initTypeahead = function() {
     //focus away to prompt removal of error state, if present. Could only focus into...
     //...another field, Attempts to focusout, or focus onto body, did not work.
     $('#id_u_contact_title')
-      .focus()
-      .blur();
+      .focus() // TODO: jQuery deprecation
+      .blur(); // TODO: jQuery deprecation
   });
 };
 
@@ -94,7 +90,7 @@ ContactForm.prototype.clearForm = function(e) {
  * Analyst lookup tool
  * @param {JQuery.$element} $elm
  */
-function AnalystLookup($elm) {
+export function AnalystLookup($elm) {
   this.$elm = $elm;
   this.$input = this.$elm.find('input');
   this.$name = this.$elm.find('.js-analyst-name');
@@ -127,7 +123,7 @@ AnalystLookup.prototype.initTypeahead = function() {
  * @param {Object} opts
  */
 AnalystLookup.prototype.fetchAnalyst = function(e, opts) {
-  var url = URI(window.API_LOCATION)
+  const url = URI(window.API_LOCATION)
     .path(Array.prototype.concat(window.API_VERSION, 'rad-analyst').join('/'))
     .addQuery({
       api_key: window.API_KEY_PUBLIC,
@@ -143,11 +139,11 @@ AnalystLookup.prototype.fetchAnalyst = function(e, opts) {
  * @param {JQueryCallback} response
  */
 AnalystLookup.prototype.showAnalyst = function(response) {
-  var hasResults = response.results.length > 0;
+  const hasResults = response.results.length > 0;
   if (hasResults) {
-    var name =
+    const name =
       response.results[0].first_name + ' ' + response.results[0].last_name;
-    var ext = response.results[0].telephone_ext;
+    const ext = response.results[0].telephone_ext;
     this.$name.html(name);
     this.$ext.html(ext);
   }
@@ -181,9 +177,9 @@ AnalystLookup.prototype.handleChange = function(e) {
 
 /**
  *
- * @param {String} radformSelector - The value used to find the element with document.querySelector()
+ * @param {string} radformSelector - The value used to find the element with document.querySelector()
  */
-function RadFormValidate(radformSelector) {
+export function RadFormValidate(radformSelector) {
   this.messages = {
     id_u_contact_first_name: 'Please provide your first name',
     id_u_contact_last_name: 'Please provide your last name',
@@ -367,11 +363,11 @@ RadFormValidate.prototype.clearError = function(req) {
 
 /**
  * Runs if submit is prevented due to invalid fields, otherwise recaptcha gets validated server-side
- * @returns {Boolean}
+ * @returns {boolean}
  */
 RadFormValidate.prototype.validateRecaptcha = function() {
   if (grecaptcha.getResponse() == '') {
-    analytics.customEvent({
+    customEvent({
       event: 'fecCustomEvent',
       eventCategory: 'Error',
       eventAction: 'RAD form validation',
@@ -416,7 +412,7 @@ RadFormValidate.prototype.showError = function(req) {
     }
     req_fieldError.textContent = '';
   }
-  analytics.customEvent({
+  customEvent({
     event: 'fecCustomEvent',
     eventCategory: 'Error',
     eventAction: 'RAD form validation',
@@ -427,10 +423,3 @@ RadFormValidate.prototype.showError = function(req) {
 new ContactForm($('.js-contact-form'));
 new AnalystLookup($('.js-analyst-lookup'));
 new RadFormValidate('#id_contact_form');
-
-// Even though we initialize above, export so it can be tested
-module.exports = {
-  AnalystLookup: AnalystLookup,
-  ContactForm: ContactForm,
-  RadFormValidate: RadFormValidate
-};

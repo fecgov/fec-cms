@@ -1,73 +1,78 @@
-'use strict';
 
-var $ = require('jquery');
-var _ = require('underscore');
+import { default as _chain } from 'underscore/modules/chain.js';
 
-var maps = require('../modules/maps');
-var tables = require('../modules/tables');
-var electionUtils = require('../modules/election-utils');
-var helpers = require('../modules/helpers');
-var ElectionForm = require('../modules/election-form').ElectionForm;
-var tableColumns = require('../modules/table-columns');
+import ElectionForm from '../modules/election-form.js';
+import { getStateElectionOffices } from '../modules/election-utils.js';
+import { buildTableQuery, buildUrl, scrollAnchor } from '../modules/helpers.js';
+import { DistrictMap, initStateMaps } from '../modules/maps.js';
+import {
+  candidateInformationColumns,
+  communicationCostColumns,
+  createElectionColumns,
+  electioneeringColumns,
+  independentExpenditureColumns
+} from '../modules/table-columns.js';
+import { drawComparison, initSpendingTables } from '../modules/tables.js';
 
-$(document).ready(function() {
-  var spendingTableOpts = {
+$(function() {
+  const spendingTableOpts = {
     'independent-expenditures': {
       path: ['schedules', 'schedule_e', 'by_candidate'],
-      columns: tableColumns.independentExpenditureColumns,
+      columns: independentExpenditureColumns,
       title: 'independent expenditures',
       order: [[3, 'desc']]
     },
     'communication-costs': {
       path: ['communication_costs', 'by_candidate'],
-      columns: tableColumns.communicationCostColumns,
+      columns: communicationCostColumns,
       title: 'communication costs',
       order: [[3, 'desc']]
     },
     electioneering: {
       path: ['electioneering', 'by_candidate'],
-      columns: tableColumns.electioneeringColumns,
+      columns: electioneeringColumns,
       title: 'electioneering communications',
       order: [[2, 'desc']]
     },
     'candidate-financial-totals': {
       path: ['elections'],
-      columns: tableColumns.createElectionColumns(context),
+      columns: createElectionColumns(window.context),
       title: 'candidate financial total',
       order: [[2, 'desc']]
     },
     'candidate-information': {
       path: ['elections'],
-      columns: tableColumns.candidateInformationColumns,
+      columns: candidateInformationColumns,
       title: 'candidate information',
       order: [[3, 'desc']]
     }
   };
-  var query = helpers.buildTableQuery(context.election);
-  var url = helpers.buildUrl(['elections'], query);
+  const query = buildTableQuery(window.context.election);
+  const url = buildUrl(['elections'], query);
 
   $.getJSON(url).done(function(response) {
-    context.candidates = _.chain(response.results)
+    window.context.candidates = _chain(response.results)
       .map(function(candidate) {
         return [candidate.candidate_id, candidate];
       })
       .object()
       .value();
 
-    tables.drawComparison(response.results, context);
-    maps.initStateMaps(response.results);
-    helpers.scrollAnchor();
+    drawComparison(response.results, window.context);
+    initStateMaps(response.results);
+    scrollAnchor();
   });
 
-  electionUtils.getStateElectionOffices(context.election.state);
-  tables.initSpendingTables('.data-table', context, spendingTableOpts);
+  if (window.context && window.context.election && window.context.election.state)
+    getStateElectionOffices(window.context.election.state);
+  initSpendingTables('.data-table', window.context, spendingTableOpts);
 
   new ElectionForm('#election-nav');
 
   if ($('#election-map').length) {
-    var districtMap = new maps.DistrictMap($('#election-map').get(0), {
+    const districtMap = new DistrictMap($('#election-map').get(0), {
       color: '#36BDBB'
     });
-    districtMap.load(context.election);
+    districtMap.load(window.context.election);
   }
 });

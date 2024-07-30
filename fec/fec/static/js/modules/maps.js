@@ -1,34 +1,37 @@
-'use strict';
+import { default as chroma } from 'chroma-js';
+import d3 from 'd3';
+import { default as L } from 'leaflet';
+import { feature } from 'topojson-client/dist/topojson-client.js';
+import { default as _chain } from 'underscore/modules/chain.js';
+import { default as _each } from 'underscore/modules/each.js';
+import { default as _find } from 'underscore/modules/find.js';
+import { default as _keys } from 'underscore/modules/keys.js';
+import { default as _last } from 'underscore/modules/last.js';
+import { default as _max } from 'underscore/modules/max.js';
+import { default as _min } from 'underscore/modules/min.js';
+import { default as _pluck } from 'underscore/modules/pluck.js';
+import { default as _reduce } from 'underscore/modules/reduce.js';
+import { default as _values } from 'underscore/modules/values.js';
+import 'leaflet-providers';
 
-var d3 = require('d3');
-var $ = require('jquery');
-var _ = require('underscore');
-var chroma = require('chroma-js');
-var topojson = require('topojson-client');
+import { encodeDistrict, findDistrict } from './election-utils.js';
+import { fipsByCode, fipsByState } from './fips.js';
+import { buildUrl, currency } from './helpers.js';
+import { default as states } from '../data/us-states-10m.json' assert { type: 'json' };
+import { default as candidateStateMapTemplate } from '../templates/candidateStateMap.hbs';
 
-var L = require('leaflet');
-require('leaflet-providers');
-
-var fips = require('./fips');
-var helpers = require('./helpers');
-var utils = require('./election-utils');
-
-var states = require('../data/us-states-10m.json');
-
-var candidateStateMapTemplate = require('../templates/candidateStateMap.hbs');
-
-var stateFeatures = topojson.feature(states, states.objects.states).features;
-var stateFeatureMap = _.chain(stateFeatures)
+const stateFeatures = feature(states, states.objects.states).features;
+const stateFeatureMap = _chain(stateFeatures)
   .map(function(feature) {
     return [feature.id, feature];
   })
   .object()
   .value();
 
-var colorZero = '#ffffff';
-var colorScale = ['#e2ffff', '#278887'];
-var compactRules = [['B', 9], ['M', 6], ['k', 3], ['', 0]];
-var MAX_MAPS = 2;
+export const colorZero = '#ffffff';
+export const colorScale = ['#e2ffff', '#278887'];
+const compactRules = [['B', 9], ['M', 6], ['k', 3], ['', 0]];
+const MAX_MAPS = 2;
 
 const template_tooltip = value => `
   <div class="tooltip__title">${value.name}</div>
@@ -36,49 +39,49 @@ const template_tooltip = value => `
 `;
 
 function chooseRule(value) {
-  return _.find(compactRules, function(rule) {
+  return _find(compactRules, function(rule) {
     return value >= Math.pow(10, rule[1]);
   });
 }
 
 function compactNumber(value, rule) {
-  var divisor = Math.pow(10, rule[1]);
+  const divisor = Math.pow(10, rule[1]);
   return d3.round(value / divisor, 1).toString() + rule[0];
 }
 
-function stateMap($elm, data, width, height, min, max, addLegend, addTooltips) {
-  var svg = d3
+export function stateMap($elm, data, width, height, min, max, addLegend, addTooltips) {
+  const svg = d3
     .select($elm[0])
     .append('svg')
     .attr('width', width)
     .attr('height', height);
-  var projection = d3.geo
+    const projection = d3.geo
     .albersUsa()
     .scale(450)
     .translate([220, 150]);
-  var path = d3.geo.path().projection(projection);
+  const path = d3.geo.path().projection(projection);
 
-  var results = _.reduce(
+  const results = _reduce(
     data.results,
     function(acc, val) {
-      var row = fips.fipsByState[val.state] || {};
-      var code = row.STATE ? parseInt(row.STATE) : null;
+      const row = fipsByState[val.state] || {};
+      const code = row.STATE ? parseInt(row.STATE) : null;
       acc[code] = val.total;
       return acc;
     },
     {}
   );
-  var quantiles = 4;
-  var totals = _.chain(data.results)
+  const quantiles = 4;
+  const totals = _chain(data.results)
     .pluck('total')
     .filter(function(value) {
       return !!value;
     })
     .value();
-  min = min || _.min(totals);
-  max = max || _.max(totals);
-  var scale = chroma.scale(colorScale).domain([min, max]);
-  var quantize = d3.scale.linear().domain([min, max]);
+  min = min || _min(totals);
+  max = max || _max(totals);
+  const scale = chroma.scale(colorScale).domain([min, max]);
+  const quantize = d3.scale.linear().domain([min, max]);
   svg
     .append('g')
     .selectAll('path')
@@ -89,7 +92,7 @@ function stateMap($elm, data, width, height, min, max, addLegend, addTooltips) {
       return results[d.id] ? scale(results[d.id]) : colorZero;
     })
     .attr('data-state', function(d) {
-      return fips.fipsByCode[d.id].STATE_NAME;
+      return fipsByCode[d.id].STATE_NAME;
     })
     .attr('class', 'shape')
     .attr('d', path)
@@ -101,7 +104,7 @@ function stateMap($elm, data, width, height, min, max, addLegend, addTooltips) {
     });
 
   if (addLegend || typeof addLegend === 'undefined') {
-    var legendSVG = d3.select('.legend-container svg');
+    const legendSVG = d3.select('.legend-container svg');
     stateLegend(legendSVG, scale, quantize, quantiles);
   }
 
@@ -110,12 +113,12 @@ function stateMap($elm, data, width, height, min, max, addLegend, addTooltips) {
   }
 }
 
-function stateLegend(svg, scale, quantize, quantiles) {
+export function stateLegend(svg, scale, quantize, quantiles) {
   // Add legend swatches
-  var legendWidth = 40;
-  var legendBar = 35;
-  var ticks = quantize.ticks(quantiles);
-  var legend = svg
+  const legendWidth = 40;
+  const legendBar = 35;
+  const ticks = quantize.ticks(quantiles);
+  const legend = svg
     .selectAll('g.legend')
     .data(ticks)
     .enter()
@@ -134,7 +137,7 @@ function stateLegend(svg, scale, quantize, quantiles) {
     });
 
   // Add legend text
-  var compactRule = chooseRule(ticks[Math.ceil(ticks.length / 2)]);
+  const compactRule = chooseRule(ticks[Math.ceil(ticks.length / 2)]);
   legend
     .append('text')
     .attr('x', function(d, i) {
@@ -151,7 +154,7 @@ function stateLegend(svg, scale, quantize, quantiles) {
 }
 
 function stateTooltips(svg, path, results) {
-  var tooltip = d3
+  const tooltip = d3
     .select('body')
     .append('div')
     .attr('id', 'map-tooltip')
@@ -163,9 +166,9 @@ function stateTooltips(svg, path, results) {
     .selectAll('path')
     .on('mouseover', function(d) {
       this.parentNode.appendChild(this);
-      var html = template_tooltip({
-        name: fips.fipsByCode[d.id].STATE_NAME,
-        total: helpers.currency(results[d.id] || 0)
+      const html = template_tooltip({
+        name: fipsByCode[d.id].STATE_NAME,
+        total: currency(results[d.id] || 0)
       });
       tooltip.style('visibility', 'visible').html(html);
       moveTooltip(tooltip);
@@ -179,12 +182,12 @@ function stateTooltips(svg, path, results) {
 }
 
 function moveTooltip(tooltip) {
-  var x = d3.event.pageX - tooltip[0][0].offsetWidth / 2;
-  var y = d3.event.pageY - tooltip[0][0].offsetHeight;
+  const x = d3.event.pageX - tooltip[0][0].offsetWidth / 2;
+  const y = d3.event.pageY - tooltip[0][0].offsetHeight;
 
-  var bottomPointerHeight = '.8rem';
+  const bottomPointerHeight = '.8rem';
 
-  var contentHeight = $('#map-tooltip .tooltip__title').innerHeight();
+  let contentHeight = $('#map-tooltip .tooltip__title').innerHeight();
   contentHeight += $('#map-tooltip .tooltip__value').innerHeight();
   contentHeight += 30; // (padding)
 
@@ -194,18 +197,18 @@ function moveTooltip(tooltip) {
     .style('height', contentHeight + 'px');
 }
 
-function highlightState($parent, state) {
-  var rule = '[data-state="' + state + '"]';
+export function highlightState($parent, state) {
+  const rule = '[data-state="' + state + '"]';
   $parent.find('path:not(' + rule + ')').each(function(idx, elm) {
     elm.classList.remove('active');
   });
-  var $path = $parent.find('path' + rule);
+  const $path = $parent.find('path' + rule);
   if ($path.length) {
     $path[0].classList.add('active');
   }
 }
 
-function DistrictMap(elm, style) {
+export function DistrictMap(elm, style) {
   this.elm = elm;
   this.style = style;
   this.map = null;
@@ -213,12 +216,12 @@ function DistrictMap(elm, style) {
 }
 
 DistrictMap.prototype.load = function(election) {
-  var feature;
+  let feature;
   if (election.district) {
-    var encoded = utils.encodeDistrict(election.state, election.district);
-    feature = utils.findDistrict(encoded);
+    const encoded = encodeDistrict(election.state, election.district);
+    feature = findDistrict(encoded);
   } else if (election.state) {
-    var state = fips.fipsByState[election.state.toUpperCase()];
+    const state = fipsByState[election.state.toUpperCase()];
     if (state) {
       feature = stateFeatureMap[state.STATE];
     }
@@ -235,9 +238,9 @@ DistrictMap.prototype.render = function(data) {
 };
 
 function mapMin(cached) {
-  return _.chain(cached)
+  return _chain(cached)
     .map(function(value) {
-      return _.chain(value)
+      return _chain(value)
         .values()
         .filter(function(value) {
           return !!value;
@@ -250,9 +253,9 @@ function mapMin(cached) {
 }
 
 function mapMax(cached) {
-  return _.chain(cached)
+  return _chain(cached)
     .map(function(value) {
-      return _.max(_.values(value));
+      return _max(_values(value));
     })
     .max()
     .value();
@@ -260,24 +263,24 @@ function mapMax(cached) {
 
 function updateColorScale($container, cached) {
   $container = $container.closest('#state-maps');
-  var displayed = $container
+  const displayed = $container
     .find('.state-map select')
     .map(function(_, select) {
       return $(select).val();
     })
     .get();
-  _.each(_.keys(cached), function(key) {
+  _each(_keys(cached), function(key) {
     if (displayed.indexOf(key) === -1) {
       delete cached[key];
     }
   });
-  var min = mapMin(cached);
-  var max = mapMax(cached);
-  var scale = chroma.scale(colorScale).domain([min, max]);
-  var quantize = d3.scale.linear().domain([min, max]);
+  const min = mapMin(cached);
+  const max = mapMax(cached);
+  const scale = chroma.scale(colorScale).domain([min, max]);
+  const quantize = d3.scale.linear().domain([min, max]);
   $container.find('.state-map').each(function(_, elm) {
-    var $elm = $(elm);
-    var results = cached[$elm.find('select').val()];
+    const $elm = $(elm);
+    const results = cached[$elm.find('select').val()];
     d3.select($elm.find('g')[0])
       .selectAll('path')
       .attr('fill', function(d) {
@@ -285,34 +288,34 @@ function updateColorScale($container, cached) {
       });
   });
   $container.find('.legend-container svg g').remove();
-  var svg = d3.select($container.get(0)).select('.legend-container svg');
+  const svg = d3.select($container.get(0)).select('.legend-container svg');
   if (isFinite(max)) {
     stateLegend(svg, scale, quantize, 4);
   }
 }
 
 function updateButtonsDisplay($parent) {
-  var $maps = $parent.find('.state-map');
-  var showAdd = $maps.length < MAX_MAPS ? 'block' : 'none';
-  var showRemove = $maps.length > 1 ? 'block' : 'none';
+  const $maps = $parent.find('.state-map');
+  const showAdd = $maps.length < MAX_MAPS ? 'block' : 'none';
+  const showRemove = $maps.length > 1 ? 'block' : 'none';
   $parent.find('.js-add-map').css('display', showAdd);
   $parent.find('.js-remove-map').css('display', showRemove);
 }
 
 function appendStateMap($parent, results, cached) {
-  var ids = _.pluck(results, 'candidate_id');
-  var displayed = $parent
+  const ids = _pluck(results, 'candidate_id');
+  const displayed = $parent
     .find('.candidate-select')
     .map(function(_, select) {
       return $(select).val();
     })
     .get();
-  var value =
-    _.find(ids, function(each) {
+    const value =
+    _find(ids, function(each) {
       return displayed.indexOf(each) === -1;
-    }) || _.last(ids);
+    }) || _last(ids);
   $parent.append(candidateStateMapTemplate(results));
-  var $select = $parent.find('.state-map:last select');
+  const $select = $parent.find('.state-map:last select'); // TODO: jQuery deprecation (:last)
   $select.val(value);
   $select.trigger('change');
   updateButtonsDisplay($parent);
@@ -320,24 +323,24 @@ function appendStateMap($parent, results, cached) {
 }
 
 function drawStateMap($container, candidateId, cached) {
-  var url = helpers.buildUrl(
+  const url = buildUrl(
     ['schedules', 'schedule_a', 'by_state', 'by_candidate'],
     {
-      cycle: context.election.cycle,
+      cycle: window.context.election.cycle,
       candidate_id: candidateId,
       per_page: 99,
       election_full: true
     }
   );
-  var $map = $container.find('.state-map-choropleth');
+  const $map = $container.find('.state-map-choropleth');
   $map.html('');
   $.getJSON(url).done(function(data) {
-    var results = _.reduce(
+    const results = _reduce(
       data.results,
       function(acc, val) {
-        var state = val.state ? val.state.toUpperCase() : val.state;
-        var row = fips.fipsByState[state] || {};
-        var code = row.STATE ? parseInt(row.STATE) : null;
+        const state = val.state ? val.state.toUpperCase() : val.state;
+        const row = fipsByState[state] || {};
+        const code = row.STATE ? parseInt(row.STATE) : null;
         acc[code] = val.total;
         return acc;
       },
@@ -345,21 +348,21 @@ function drawStateMap($container, candidateId, cached) {
     );
     cached[candidateId] = results;
     updateColorScale($container, cached);
-    var min = mapMin(cached);
-    var max = mapMax(cached);
+    const min = mapMin(cached);
+    const max = mapMax(cached);
     stateMap($map, data, 400, 300, min, max, false, true);
   });
 }
 
-function initStateMaps(results) {
-  var cached = {};
-  var $stateMaps = $('#state-maps');
-  var $choropleths = $stateMaps.find('.choropleths');
+export function initStateMaps(results) {
+  const cached = {};
+  const $stateMaps = $('#state-maps');
+  const $choropleths = $stateMaps.find('.choropleths');
   appendStateMap($choropleths, results, cached);
 
   $choropleths.on('change', 'select', function(e) {
-    var $target = $(e.target);
-    var $parent = $target.closest('.state-map');
+    const $target = $(e.target);
+    const $parent = $target.closest('.state-map');
     drawStateMap($parent, $target.val(), cached);
   });
 
@@ -368,9 +371,9 @@ function initStateMaps(results) {
   });
 
   $choropleths.on('click', '.js-remove-map', function(e) {
-    var $target = $(e.target);
-    var $parent = $target.closest('.state-map');
-    var $container = $parent.closest('#state-maps');
+    const $target = $(e.target);
+    const $parent = $target.closest('.state-map');
+    const $container = $parent.closest('#state-maps');
     $parent.remove();
     updateButtonsDisplay($container);
     updateColorScale($container, cached);
@@ -378,13 +381,3 @@ function initStateMaps(results) {
   $choropleths.find('.state-map').remove();
   appendStateMap($choropleths, results, cached);
 }
-
-module.exports = {
-  stateMap: stateMap,
-  colorZero: colorZero,
-  colorScale: colorScale,
-  stateLegend: stateLegend,
-  highlightState: highlightState,
-  DistrictMap: DistrictMap,
-  initStateMaps: initStateMaps
-};

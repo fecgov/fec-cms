@@ -1,35 +1,33 @@
-'use strict';
+import { sprintf } from 'sprintf-js';
+import { feature } from 'topojson-client/dist/topojson-client.js';
+import { default as _filter } from 'underscore/modules/filter.js';
+import { default as _find } from 'underscore/modules/find.js';
 
-var $ = require('jquery');
-var _ = require('underscore');
-var fips = require('./fips');
-var helpers = require('./helpers');
-var topojson = require('topojson-client');
+import { fipsByCode, fipsByState } from './fips.js';
+// var fips = require('./fips');
+import { buildUrl } from './helpers.js';
+import { default as districts } from '../data/districts.json' assert { type: 'json' };
+import { default as electionOfficesTemplate } from '../templates/electionOffices.hbs';
 
-var sprintf = require('sprintf-js').sprintf;
+export const districtFeatures = feature(districts, districts.objects.districts);
 
-var electionOfficesTemplate = require('../templates/electionOffices.hbs');
-
-var districts = require('../data/districts.json');
-var districtFeatures = topojson.feature(districts, districts.objects.districts);
-
-function encodeDistrict(state, district) {
+export function encodeDistrict(state, district) {
   return (
-    fips.fipsByState[state.toUpperCase()].STATE * 100 +
+    fipsByState[state.toUpperCase()].STATE * 100 +
     (parseInt(district) || 0)
   );
 }
 
-function decodeDistrict(district) {
+export function decodeDistrict(district) {
   district = sprintf('%04d', district);
   return {
-    state: fips.fipsByCode[parseInt(district.substring(0, 2))].STUSAB,
+    state: fipsByCode[parseInt(district.substring(0, 2))].STUSAB,
     district: parseInt(district.substring(2, 4))
   };
 }
 
-function decodeState(state) {
-  return fips.fipsByCode[parseInt(state)].STUSAB;
+export function decodeState(state) {
+  return fipsByCode[parseInt(state)].STUSAB;
 }
 
 function truncate(value, digits) {
@@ -43,8 +41,8 @@ function truncate(value, digits) {
  *  districts that are exact matches, as well as district that match after
  *  rounding to the nearest 100.
  */
-function findDistrict(district) {
-  return _.find(districtFeatures.features, function(feature) {
+export function findDistrict(district) {
+  return _find(districtFeatures.features, function(feature) {
     return feature.id === district || truncate(feature.id, 2) === district;
   });
 }
@@ -55,8 +53,8 @@ function findDistrict(district) {
  *  districts that are exact matches, as well as district that match after
  *  rounding to the nearest 100.
  */
-function findDistricts(districts) {
-  return _.filter(districtFeatures.features, function(feature) {
+export function findDistricts(districts) {
+  return _filter(districtFeatures.features, function(feature) {
     return (
       districts.indexOf(feature.id) !== -1 ||
       districts.indexOf(truncate(feature.id, 2)) !== -1
@@ -64,24 +62,14 @@ function findDistricts(districts) {
   });
 }
 
-function getStateElectionOffices(state) {
+export function getStateElectionOffices(state) {
   var query = {
     state: state
   };
-  var url = helpers.buildUrl(['state-election-office'], query);
+  var url = buildUrl(['state-election-office'], query);
   $.getJSON(url).done(function(response) {
     var $offices_list = $('#election-offices');
     var offices = response.results;
     $offices_list.html(electionOfficesTemplate(offices));
   });
 }
-
-module.exports = {
-  districtFeatures: districtFeatures,
-  decodeDistrict: decodeDistrict,
-  decodeState: decodeState,
-  encodeDistrict: encodeDistrict,
-  findDistrict: findDistrict,
-  findDistricts: findDistricts,
-  getStateElectionOffices: getStateElectionOffices
-};

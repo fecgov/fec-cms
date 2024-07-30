@@ -1,6 +1,3 @@
-'use strict';
-
-var $ = require('jquery');
 
 const template_body = value => `
 <div>
@@ -29,7 +26,7 @@ const template_nonremoveableTag = value => `<div data-id="${value.key}" data-rem
  * @param {*} opts.showResultCount
  * @param {*} opts.tableTitle
  */
-function TagList(opts) {
+export default function TagList(opts) {
   this.opts = opts;
 
   // Resetting filters will re-apply two-year limitations, like when users first land on the page.
@@ -321,5 +318,3 @@ TagList.prototype.enableTag = function(e, opts) {
   var $tag = this.$list.find('[data-id="' + opts.key + '"]');
   $tag.closest('.tag__category').show();
 };
-
-module.exports = { TagList: TagList };
