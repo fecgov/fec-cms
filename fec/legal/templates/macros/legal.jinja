@@ -1,4 +1,4 @@
-{% macro keyword_search(result_type, query) %}
+{% macro keyword_search(result_type, query, query_exclude) %}
 <div class="filter">
   <label class="label t-inline-block" for="search-input">Search keywords</label>
   <div class="tooltip__container">
@@ -8,7 +8,7 @@
    </div>
   </div>
   <div class="combo combo--search--mini no-mar-b">
-    <input id="search-input" type="text" name="search" class="combo__input"{% if query %} value="{{ query }}"{% endif %}>
+    <input id="search-input" type="text" name="search" class="combo__input"{% if query or query_exclude %} value="{{ query }}{% if query and query_exclude %} + {% endif %}{% if query_exclude %}({{ query_exclude }}){% endif %}"{% endif %}>
     <button class="combo__button button--search button--standard" type="submit">
       <span class="u-visually-hidden">Search</span>
     </button>
@@ -82,7 +82,7 @@
   </fieldset>
 {% endmacro %}
 
-{% macro search(location, result_type, query, button_color="button--standard", select_class="select--alt-primary") %}
+{% macro search(location, result_type, query, query_exclude, button_color="button--standard", select_class="select--alt-primary") %}
 {% if location == 'hero' %}
   {% set size = 'combo--search--large' %}
 {% endif %}
@@ -106,7 +106,7 @@
 </form>
 {% endmacro %}
 
-{% macro no_results(display_name, result_type, query, search, fec_resources=None) %}
+{% macro no_results(display_name, result_type, query, query_exclude, search, fec_resources=None) %}
 <div class="message message--no-icon">
   <h2 class="message__title">No results</h2>
   {% if search == result_type or search == 'all' %}
@@ -115,8 +115,8 @@
   <div class="message--alert__bottom">
     <p>Think this was a mistake?</p>
     <ul class="list--buttons">
-      {% if query %}
-       <li><a class="button button--standard" href="/search/?query={{ query }}">Try FEC.gov</a></li>
+      {% if query or query_exclude %}
+       <li><a class="button button--standard" href="/search/?query={{ query }}&query_exclude={{ query_exclude }}">Try FEC.gov</a></li>
       {% endif %}
       <li><a class="button button--standard" href="mailto:{{ WEBMANAGER_EMAIL }}">Email our team</a></li>
       <li><a class="button button--standard" href="https://github.com/fecgov/fec/issues">File an issue</a></li>

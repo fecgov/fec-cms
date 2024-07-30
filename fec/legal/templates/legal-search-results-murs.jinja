@@ -11,7 +11,7 @@
 {% block filters %}
   <input id="sort" type="hidden" name="sort" value="{{ sort }}">
   <div class="filters__inner">
-    {{ legal.keyword_search(result_type, query) }}
+    {{ legal.keyword_search(result_type, query, query_exclude) }}
     <div class="filter">
       <label class="label" for="case_no">MUR number</label>
       <input id="case_no" name="case_no" type="text" value="{{ case_no }}">
@@ -70,9 +70,9 @@
   </div>
   <div class="js-filter-tags data-container__tags u-no-padding-left">
     <ul class="tags">
-      {% if query %}
+      {% if query or query_exclude %}
         <li data-tag-category="query" class="tag__category">
-          <div data-removable="true" class="tag__item">{{ query }}<button class="button js-close tag__remove" data-tag="query"><span class="u-visually-hidden">Remove</span></button></div>
+          <div data-removable="true" class="tag__item">{{ query }} {% if query and query_exclude %} + {% endif %}{% if query_exclude %}({{ query_exclude }}){% endif %}<button class="button js-close tag__remove" data-tag="query"><span class="u-visually-hidden">Remove</span></button></div>
         </li>
       {% endif %}
       {% if case_no %}

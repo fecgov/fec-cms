@@ -65,7 +65,7 @@ def load_search_results(query, query_type=None):
         }
 
 
-def load_legal_search_results(query, query_type="all", offset=0, limit=20, **kwargs):
+def load_legal_search_results(query, query_exclude, query_type="all", offset=0, limit=20, **kwargs):
     filters = dict((key, value) for key, value in kwargs.items() if value)
 
     # Apply type filter if only looking for one type
@@ -75,6 +75,8 @@ def load_legal_search_results(query, query_type="all", offset=0, limit=20, **kwa
     filters["hits_returned"] = limit
     filters["from_hit"] = offset
     filters["q"] = query
+    filters["q_exclude"] = query_exclude
+
     results = _call_api("legal", "search", **filters)
     results["limit"] = limit
     results["offset"] = offset

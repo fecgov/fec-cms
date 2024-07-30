@@ -74,7 +74,7 @@ KeywordModal.prototype.combineFields = function() {
   });
 
   if (this.$excludeField.val() && query) {
-    query = '(' + query + ')+(' + self.parseValue(this.$excludeField) + ')';
+    query = '(' + query + ') + (' + self.parseValue(this.$excludeField) + ')';
   } else if (this.$excludeField.val()) {
     query = self.parseValue(this.$excludeField);
   }

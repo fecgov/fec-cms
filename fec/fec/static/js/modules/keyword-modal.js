@@ -8,7 +8,7 @@ import { customEvent } from './analytics.js';
  * @class
  * Creates a pop-up modal for advanced keyword searches
  * and processes the values of the various inputs to form a single search string
- * with all the proper boolean operators
+ * with all the proper boolean operators.
  * In the web app, it loads results by simply adding the new search query
  * to the window.location.search which forces a page refresh.
  */
@@ -42,59 +42,59 @@ export default function KeywordModal() {
  * Handle a click event on the submit button
  * prevents the form from being submitted at first in order to create the search string
  * and then replaces the existing search param in the window.
- * Hides the modal after executed.
+ * Hides the modal after execution.
  */
 KeywordModal.prototype.handleSubmit = function(e) {
   e.preventDefault();
-  var combinedValue = this.combineFields();
-  var query = URI(window.location.search)
+  const { combinedQuery, excludeQuery } = this.combineFields();
+  let query = URI(window.location.search)
     .removeSearch('search')
-    .addSearch('search', combinedValue);
+    .addSearch('search', combinedQuery)
+    .removeSearch('search_exclude')
+    .addSearch('search_exclude', excludeQuery);
+
   this.dialog.hide();
-  this.fireEvent('Keyword modal query: ' + combinedValue);
+  // Event record for GTM
+  this.fireEvent('Keyword modal query: ' + combinedQuery + 'Exclude: ' + excludeQuery);
   window.location = this.$form.attr('action') + query.toString();
 };
 
 /**
- * Combine the values of all the inputs into a single formatted string
- * It first goes through the first three inputs and joins them with "or" operators
- * If there's an exclude value, it wraps the previous query in parens
- * and adds the exclude value with an ampersand
- * @return {string} The combined query
+ * Combine the values of all the inputs into separate formatted strings for the main query and the exclude query.
+ * @return {Object} The combined query object containing main and exclude queries
  */
 KeywordModal.prototype.combineFields = function() {
-  var query = '';
-  var self = this;
+  let combinedQuery = '';
+  let excludeQuery = '';
+  const self = this;
 
   this.$fields.each(function() {
-    var $input = $(this);
-    if ($input.val() && query) {
-      query = query + ' | ' + '(' + self.parseValue($input) + ')';
+    const $input = $(this);
+    if ($input.val() && combinedQuery) {
+      combinedQuery = combinedQuery + '|' + '(' + self.parseValue($input) + ')';
     } else if ($input.val()) {
-      query = '(' + self.parseValue($input) + ')';
+      combinedQuery = '(' + self.parseValue($input) + ')';
     }
   });
 
-  if (this.$excludeField.val() && query) {
-    query = '(' + query + ') + (' + self.parseValue(this.$excludeField) + ')';
-  } else if (this.$excludeField.val()) {
-    query = self.parseValue(this.$excludeField);
+  if (this.$excludeField.val()) {
+    excludeQuery = self.parseValue(this.$excludeField);
   }
 
-  return query;
+  return { combinedQuery, excludeQuery };
 };
 
 /**
  * Parses the values of the individual input, combining the words with
- * whichever operator the input requires, as determined by its data-operator attr
+ * whichever operator the input requires, as determined by its data-operator attribute.
  * @returns {string} The various words joined together with the correct operator
  */
 KeywordModal.prototype.parseValue = function($input) {
-  var words = $input
+  const words = $input
     .val()
     .replace(/"/g, '')
     .split(' ');
-  var operator = $input.data('operator');
+  const operator = $input.data('operator');
   if (operator === 'and') {
     return words.join(' + ');
   } else if (operator === 'or') {
@@ -102,8 +102,13 @@ KeywordModal.prototype.parseValue = function($input) {
   } else if (operator === 'exact') {
     return '"' + $input.val().replace(/"/g, '') + '"';
   } else if (operator === 'exclude') {
-    // Remove first dash, replace subsequent dashes with +
-    return $input.val().replace(/-/, '').replace(/-/g, '+'); 
+    // Remove all dashes and replace with single dash, 
+    // Add + between words
+    return $input
+      .val()
+      .replace(/-/g, '-')
+      .split(' ')
+      .join(' + ');
   }
 };
 
