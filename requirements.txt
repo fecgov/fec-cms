@@ -1,12 +1,12 @@
-Django==4.2.10
+Django==4.2.14
 cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
 gunicorn==22.0.0
 gevent==23.9.1
 psycopg==3.1.8
-requests==2.31.0
-urllib3==1.26.18
+requests==2.32.2
+urllib3==1.26.19
 slacker==0.8.6
 whitenoise==5.2.0
 wagtail==5.2
@@ -45,3 +45,5 @@ Faker==0.8.6
 pytest-django==3.10.0
 pytest-cov==4.1.0
 pre-commit==2.21.0 #client-side hook triggered by operations like git commit
+sqlparse>=0.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
