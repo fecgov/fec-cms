@@ -1,11 +1,10 @@
-/* global calcAdminFineJsPath */
+/**
+ * If the page has a link to the admin fines calculator in it, load the modal
+ * @TODO add a fallback to handle this with a notice if !window.calcAdminFineJsPath
+ */
+const elementsWithAdminFinesCalcClass = document.querySelectorAll('.js-admin-fines-calc-modal');
 
-// {# If the page has a link to the admin fines calculator in it, load its JS #}
-let elementsWithAdminFinesCalcClass = document.querySelectorAll(
-  '.js-admin-fines-calc-modal'
-);
 if (elementsWithAdminFinesCalcClass.length > 0) {
-  // TEMP
   // Add the modal to the page
 
   const calcElementID = 'gov-fec-calc-af';
@@ -24,35 +23,42 @@ if (elementsWithAdminFinesCalcClass.length > 0) {
     </div>`;
   document.body.appendChild(newModal);
 
-  // Add the admin fines script to the page
-  if (calcAdminFineJsPath) {
+  // If we can't find the calculator, deactivate the button as an indicator that something's wrong, and stop here
+  if (!window.calcAdminFineJsPath || window.calcAdminFineJsPath.indexOf('[') >= 0) {
+    elementsWithAdminFinesCalcClass.forEach(el => {
+      el.classList.add('is-disabled');
+      el.setAttribute('title', 'The administrative fines calculator is currently unavailable');
+      el.removeAttribute('href');
+    });
+  } else {
+    // Otherwise, add the admin fines script tag to the page and continue
     const calcAFScriptElem = document.createElement('script');
     calcAFScriptElem.async = false;
-    calcAFScriptElem.src = calcAdminFineJsPath;
+    calcAFScriptElem.src = window.calcAdminFineJsPath;
     document.head.appendChild(calcAFScriptElem);
-  }
 
-  // Set the link(s) to open the modal
-  const theLinkElements = document.getElementsByClassName(
-    'js-admin-fines-calc-modal'
-  );
-  for (let i = 0; i < theLinkElements.length; i++) {
-    theLinkElements[i].setAttribute('aria-controls', `modal-${calcElementID}`);
-    theLinkElements[i].setAttribute(
-      'data-a11y-dialog-show',
-      `modal-${calcElementID}`
+    // Set the link(s) to open the modal
+    const theLinkElements = document.getElementsByClassName(
+      'js-admin-fines-calc-modal'
     );
-    theLinkElements[i].addEventListener('click', handleFinesCalcOpenClick);
-  }
-  // Set the temp modal's close functionality
-  newModal
-    .getElementsByClassName('modal__close')[0]
-    .addEventListener('click', handleFinesCalcCloseClick);
-  newModal
-    .getElementsByClassName('modal__overlay')[0]
-    .addEventListener('click', handleFinesCalcCloseClick);
+    for (let i = 0; i < theLinkElements.length; i++) {
+      theLinkElements[i].setAttribute('aria-controls', `modal-${calcElementID}`);
+      theLinkElements[i].setAttribute(
+        'data-a11y-dialog-show',
+        `modal-${calcElementID}`
+      );
+      theLinkElements[i].addEventListener('click', handleFinesCalcOpenClick);
+    }
+    // Set the temp modal's close functionality
+    newModal
+      .getElementsByClassName('modal__close')[0]
+      .addEventListener('click', handleFinesCalcCloseClick);
+    newModal
+      .getElementsByClassName('modal__overlay')[0]
+      .addEventListener('click', handleFinesCalcCloseClick);
 
-  document.addEventListener('CLOSE_MODAL', handleFinesCalcCloseClick);
+    document.addEventListener('CLOSE_MODAL', handleFinesCalcCloseClick);
+  }
 
   // eslint-disable-next-line no-inner-declarations
   function handleFinesCalcOpenClick(e) {
@@ -68,7 +74,7 @@ if (elementsWithAdminFinesCalcClass.length > 0) {
   function handleFinesCalcCloseClick(e) {
     e.preventDefault();
     // If it's a custom event (inside the modal content), use the modal div id from e.detail.
-    // othewise, use the attribute from the html element that was clicked
+    // otherwise, use the attribute from the html element that was clicked
     let theModal;
     if (e.type == 'CLOSE_MODAL')
       theModal = document.querySelector('.js-modal:not([aria-hidden="true"])');
@@ -84,5 +90,4 @@ if (elementsWithAdminFinesCalcClass.length > 0) {
     // Release the page to scroll now that the modal is gone
     document.querySelector('body').classList.remove('scroll-locked-for-modal');
   }
-  // END TEMP
 }

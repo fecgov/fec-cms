@@ -75,5 +75,6 @@
   <script type="text/javascript">
     window.context = Object.assign({}, { type: 'receipts' });
   </script>
+  {#- data-init and global chunks are loaded by main.jinja through sidebarpage.jinja -#}
   {{ tags_for_js_chunks('bythenumbers.js', '')|safe }}
 {% endblock %}

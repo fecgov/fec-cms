@@ -61,6 +61,7 @@
 <script>
   window.context = {{ context_vars | to_json | safe }};
 </script>
+{#- data-init and global chunks are loaded by main.jinja -#}
 {{ tags_for_js_chunks('house-senate-overview-across-time.js', '')|safe }}
 {%- if FEATURES.house_senate_overview_summary -%}
 {{ tags_for_js_chunks('house-senate-overview-summary.js', '')|safe }}
