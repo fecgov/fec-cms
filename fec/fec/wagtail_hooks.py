@@ -133,15 +133,6 @@ def draftail_js():
     return assets[key] if key in assets else key
 
 
-# def polyfills_js():
-#     """Looks up the hashed asset path in rev-draftail-manifest-js.json
-#     If the path doesn't exist there, then just return the path to the static file
-#     without a hash"""
-#     key = '/static/js/polyfills.js'
-#     assets = json.load(open(settings.DIST_DIR + '/fec/static/js/rev-legal-manifest-js.json'))
-#     return assets[key] if key in assets else key
-
-
 @hooks.register('insert_editor_css')
 def editor_css():
     return format_html(
