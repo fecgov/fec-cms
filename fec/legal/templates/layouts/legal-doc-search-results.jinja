@@ -6,7 +6,7 @@
 {% set result_entities = results.get(result_type, []) %}
 
 {% block title %}
-  {% if query or query_exclude %}
+  {% if query %}
   Searching {{ document_type_display_name }} for &ldquo;{{ query }}&rdquo;
   {% else %}
   Search {{ document_type_display_name }}
@@ -60,12 +60,12 @@
     <div class="u-padding--left u-padding--right">
       <div class="message message--no-icon">
         <h2 class="message__title">No results</h2>
-        <p>Sorry, we didn&rsquo;t find any documents matching {% if query or query_exclude %}<span class="t-bold">{{ query }}{{ query_exclude }}</span>{% else %}your search{% endif %}.</p>
+        <p>Sorry, we didn&rsquo;t find any documents matching {% if query %}<span class="t-bold">{{ query }}</span>{% else %}your search{% endif %}.</p>
         <div class="message--alert__bottom">
           <p>Think this was a mistake?</p>
           <ul class="list--buttons">
             {% if query %}
-            <li><a class="button button--standard" href="/search/?query={{ query }}&query_exclude={{ query_exclude }}">Try FEC.gov</a></li>
+            <li><a class="button button--standard" href="/search/?query={{ query }}">Try FEC.gov</a></li>
             {% endif %}
             <li><a class="button button--standard" href="mailto:{{ WEBMANAGER_EMAIL }}">Email our team</a></li>
             <li><a class="button button--standard" href="https://github.com/fecgov/fec/issues">File an issue</a></li>

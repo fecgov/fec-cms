@@ -46,42 +46,40 @@ export default function KeywordModal() {
  */
 KeywordModal.prototype.handleSubmit = function(e) {
   e.preventDefault();
-  const { combinedQuery, excludeQuery } = this.combineFields();
+  const searchQuery = this.generateQueryString();
   let query = URI(window.location.search)
     .removeSearch('search')
-    .addSearch('search', combinedQuery)
-    .removeSearch('search_exclude')
-    .addSearch('search_exclude', excludeQuery);
+    .addSearch('search', searchQuery)
 
   this.dialog.hide();
   // Event record for GTM
-  this.fireEvent('Keyword modal query: ' + combinedQuery + 'Exclude: ' + excludeQuery);
+  this.fireEvent('Keyword modal query: ' + searchQuery);
   window.location = this.$form.attr('action') + query.toString();
 };
 
 /**
- * Combine the values of all the inputs into separate formatted strings for the main query and the exclude query.
- * @return {Object} The combined query object containing main and exclude queries
+ * Converts the keyword modal value into a formatted search query string
+ * @return {String} formatted search query string
  */
-KeywordModal.prototype.combineFields = function() {
-  let combinedQuery = '';
+KeywordModal.prototype.generateQueryString = function() {
+  let includeQuery = '';
   let excludeQuery = '';
   const self = this;
 
   this.$fields.each(function() {
     const $input = $(this);
-    if ($input.val() && combinedQuery) {
-      combinedQuery = combinedQuery + '|' + '(' + self.parseValue($input) + ')';
+    if ($input.val() && includeQuery) {
+      includeQuery = includeQuery + '|' + '(' + self.parseValue($input) + ')';
     } else if ($input.val()) {
-      combinedQuery = '(' + self.parseValue($input) + ')';
+      includeQuery = '(' + self.parseValue($input) + ')';
     }
   });
 
   if (this.$excludeField.val()) {
     excludeQuery = self.parseValue(this.$excludeField);
   }
-
-  return { combinedQuery, excludeQuery };
+  var queryString =  includeQuery + excludeQuery;
+  return queryString;
 };
 
 /**
@@ -102,13 +100,13 @@ KeywordModal.prototype.parseValue = function($input) {
   } else if (operator === 'exact') {
     return '"' + $input.val().replace(/"/g, '') + '"';
   } else if (operator === 'exclude') {
-    // Remove all dashes and replace with single dash, 
-    // Add + between words
     return $input
       .val()
-      .replace(/-/g, '-')
       .split(' ')
-      .join(' + ');
+      .map(function(word) {
+        return ' -' + word;
+      })
+      .join(' ');
   }
 };
 

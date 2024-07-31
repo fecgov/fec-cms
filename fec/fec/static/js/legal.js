@@ -44,42 +44,34 @@ function KeywordModal() {
  */
 KeywordModal.prototype.handleSubmit = function(e) {
   e.preventDefault();
-  var combinedValue = this.combineFields();
-  this.$hiddenField.val(combinedValue);
-  this.$fields.each(function() {
-    $(this).val();
-  });
-  this.$excludeField.val();
+  var queryString = this.generateQueryString();
+  this.$hiddenField.val(queryString);
   this.$form.submit(); // TODO: jQuery deprecation? (.submit() )
 };
 
 /**
- * Combine the values of all the inputs into a single formatted string
- * It first goes through the first three inputs and joins them with "or" operators
- * If there's an exclude value, it wraps the previous query in parens
- * and adds the exclude value with an ampersand
- * @return {string} The combined query
+ * Converts the keyword modal value into a formatted search query string
+ * @return {String} formatted search query string
  */
-KeywordModal.prototype.combineFields = function() {
-  var query = '';
-  var self = this;
+KeywordModal.prototype.generateQueryString = function() {
+  let includeQuery = '';
+  let excludeQuery = '';
+  const self = this;
 
   this.$fields.each(function() {
-    var $input = $(this);
-    if ($input.val() && query) {
-      query = query + '|' + '(' + self.parseValue($input) + ')';
+    const $input = $(this);
+    if ($input.val() && includeQuery) {
+      includeQuery = includeQuery + '|' + '(' + self.parseValue($input) + ')';
     } else if ($input.val()) {
-      query = '(' + self.parseValue($input) + ')';
+      includeQuery = '(' + self.parseValue($input) + ')';
     }
   });
 
-  if (this.$excludeField.val() && query) {
-    query = '(' + query + ') + (' + self.parseValue(this.$excludeField) + ')';
-  } else if (this.$excludeField.val()) {
-    query = self.parseValue(this.$excludeField);
+  if (this.$excludeField.val()) {
+    excludeQuery = self.parseValue(this.$excludeField);
   }
-
-  return query;
+  var queryString =  includeQuery + excludeQuery;
+  return queryString;
 };
 
 /**
@@ -88,16 +80,25 @@ KeywordModal.prototype.combineFields = function() {
  * @returns {string} The various words joined together with the correct operator
  */
 KeywordModal.prototype.parseValue = function($input) {
-  var words = $input.val().split(' ');
-  var operator = $input.data('operator');
+  const words = $input
+    .val()
+    .replace(/"/g, '')
+    .split(' ');
+  const operator = $input.data('operator');
   if (operator === 'and') {
-    return words.join('+');
+    return words.join(' + ');
   } else if (operator === 'or') {
-    return words.join('|');
+    return words.join(' | ');
   } else if (operator === 'exact') {
-    return '"' + $input.val() + '"';
+    return '"' + $input.val().replace(/"/g, '') + '"';
   } else if (operator === 'exclude') {
-    return '-' + words.join('%2B');
+    return $input
+      .val()
+      .split(' ')
+      .map(function(word) {
+        return ' -' + word;
+      })
+      .join(' ');
   }
 };
 
