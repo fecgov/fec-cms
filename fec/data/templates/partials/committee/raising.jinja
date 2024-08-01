@@ -197,5 +197,60 @@
       </div>
     </div>
     {% endif %}
+
+    {% if FEATURES.nat_party_acct_rec_single %}
+    <div id="national-party-account-raising" class="entity__figure row">
+      <div class="content__section">
+        <div class="heading--section heading--with-action">
+          <h3 class="heading__left">National party headquarters, recounts and convention accounts</h3>
+          {#- only offer to filter the data / link to the datatable if that flag is on, too -#}
+          {% if FEATURES.nat_party_acct_receipts %}
+          <a
+            class="heading__right button--alt button--browse"
+            href="/data/national-party-account-receipts/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}"
+            >Filter this data
+          </a>
+          {% endif %}
+        </div>
+        <div class="content__section--narrow">
+          <div class="row u-margin-bottom">
+            <div class="usa-width-one-half">
+              <span class="t-big-data">{{ totals.receipts|currency }}</span>
+            </div>
+          </div>
+          <div class="row u-margin-bottom">
+            <div class="usa-width-one-half t-block t-sans">raised by this committee from <strong><time>{{totals.coverage_start_date|date_full}}</time> to <time>{{totals.coverage_end_date|date_full}}</time>.</strong></div>
+            <div class="usa-width-one-half">
+              <span class="t-block t-sans">See the <a href="?tab=summary">financial summary</a> for a breakdown of each type of account.</span>
+            </div>
+          </div>
+        </div>
+        <div class="content__section--ruled">
+          <div class="row">
+            <div class="results-info results-info--simple">
+              <div class="u-float-left tag__category">
+                <div class="tag__item">Coverage dates: <time>{{totals.coverage_start_date|date}}</time> to <time>{{transaction_end|date}}</time></div>
+              </div>
+              <div class="u-float-right">
+                <div class="message message--info message--mini t-left-aligned data-container__message" data-export-message-for="national-party-account-raising" aria-hidden="true">
+                </div>
+                <button type="button" class="js-export button button--cta button--export" data-export-for="national-party-account-raising">Export</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <table class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="national-party-account-raising" data-committee="{{ committee_id }}" data-cycle="{{ cycle }}">
+        <thead>
+          <tr>
+            <th scope="col">Source name</th>
+            <th scope="col">Party account</th>
+            <th scope="col">Receipt date</th>
+            <th scope="col">Amount</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+    {% endif %}{#- /NATIONAL PARTY -#}
   </div>
 </section>
