@@ -53,7 +53,7 @@
     }
 
     @else if contains-display-value($query) and $table == false {
-      margin-#{$direction}: 0;
+      & { margin-#{$direction}: 0; }
     }
 
     @else {

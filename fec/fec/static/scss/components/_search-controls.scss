@@ -8,9 +8,9 @@
 @use 'sass:math';
 
 .search-controls__row {
-  @include clearfix();
   border-bottom: 1px solid $gray;
   padding: u(1rem 0);
+  @include clearfix();
 
   &:first-of-type {
     padding-top: 0;
@@ -70,8 +70,8 @@
 }
 
 .search-controls__state {
-  @include span-columns(6);
   margin-bottom: u(1rem);
+  @include span-columns(6);
 
   select {
     width: 100%;
@@ -99,21 +99,21 @@
     overflow: hidden;
 
     &:first-child {
-    height: auto;
-    margin-bottom: u(2rem);
+      height: auto;
+      margin-bottom: u(2rem);
     }
   }
   .search-controls__cycle {
-    @include span-columns(4.5 of 5.5);
     margin: u(.5rem 2rem);
+    @include span-columns(4.5 of 5.5);
 
     .cycle-select{
-      width:95%;
+      width: 95%;
     }
   }
   .search-controls__zip {
-    @include span-columns(4.5 of 5.5);
     margin-left: u(2rem);
+    @include span-columns(4.5 of 5.5);
   }
 
   .search-controls__either:first-child {
@@ -130,21 +130,20 @@
 //For home-page embedded election map form fields
 .election-search-home {
   .search-controls__zip {
-  @include span-columns(6);
-  margin-bottom: u(1rem);
+    margin-bottom: u(1rem);
+    @include span-columns(6);
 
-  input {
-    width: 100%;
+    input {
+      width: 100%;
+    }
   }
-}
-
 }
 
 .raising-spending-controls {
   .office-select {
     @include span-columns(10);
     select {
-     width:100%;
+     width: 100%;
    }
   }
   .cycle-select {
@@ -155,16 +154,16 @@
  //for keyword-options modals on AO, MUR, Statues searches
 .keyword-modal{
   .modal__tips, .modal__form {
-    display:table-row;
-    width:100%;
+    display: table-row;
+    width: 100%;
   }
   .modal__tips {
-    margin-left:0;
+    margin-left: 0;
   }
 
   .search-controls__or--vertical {
-  width: 100%;
-  display:inline-grid;
+    width: 100%;
+    display: inline-grid;
   }
 }
 
@@ -186,15 +185,15 @@
     @include span-columns(3.5 of 5.5);
 
     .button--search {
-    background-size: u(1.5rem);
-    background-position: 45%;
+      background-size: u(1.5rem);
+      background-position: 45%;
     }
   }
 
   .search-controls__or--vertical {
-    @include span-columns(1);
     margin: u(5.5rem 0);
     text-align: center;
+    @include span-columns(1);
 
     &::before,
     &::after {
@@ -223,8 +222,8 @@
       @include span-columns(7.3);
 
       .search-controls__submit {
-        @include span-columns(7.3 of 7.3);
         margin-top: u(0rem);
+        @include span-columns(7.3 of 7.3);
 
         button {
           width: 94%;
@@ -238,8 +237,8 @@
     }
 
     .search-controls__cycle {
-      @include span-columns(4.5 of 5.5);
       margin: u(.5rem 2rem);
+      @include span-columns(4.5 of 5.5);
     }
 
     .search-controls__zip {
@@ -306,8 +305,8 @@
     //for keyword-options modals on AO, MUR, Statues searches
   .keyword-modal{
     .modal__tips, .modal__form {
-      display:table-cell;
-      width:44%;
+      display: table-cell;
+      width: 44%;
     }
     .modal__tips {
       margin-left: u(1rem);
@@ -316,7 +315,7 @@
     .search-controls__or--vertical {
       margin: u(22.5rem 0);
       width: u(3.5rem);
-      display:table-cell;
+      display: table-cell;
 
       &::before,
       &::after {
@@ -354,31 +353,31 @@
       @include span-columns(1.90 of 5.5);
     }
     .search-controls__zip {
-      @include span-columns(4.5 of 5.5);
       margin-left: u(3rem);
       position: relative;
       top: u(0rem);
+      @include span-columns(4.5 of 5.5);
     }
 
     .search-controls__cycle {
-    margin: u(.5rem 2.5rem);
+      margin: u(.5rem 2.5rem);
     }
 
     .search-controls__either:first-child {
-      @include span-columns(3.5);
       margin: u(.5rem 0)!important;
+      @include span-columns(3.5);
     }
 
     .search-controls__either:last-child {
-      @include span-columns(8);
       margin: u(.5rem 0)!important;
+      @include span-columns(8);
 
       fieldset{
         margin-left: u(1rem);
       }
       .search-controls__submit {
-        @include span-columns(1.5 of 5.5);
         margin-top: u(0rem);
+        @include span-columns(1.5 of 5.5);
       }
     }
 
@@ -391,10 +390,10 @@
 
     .search-controls__either {
       @include span-columns(5.5);
-      }
+    }
 
     .search-controls__or--vertical {
-      margin:u(4rem 0 4rem 0);
+      margin: u(4rem 0 4rem 0);
     }
   }
 

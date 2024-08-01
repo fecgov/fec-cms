@@ -85,20 +85,20 @@ h3 + .simple-table {
     }
 
     &.sorting {
-      @include u-icon-bg($dash, $gray);
       background-size: u(1rem);
+      @include u-icon-bg($dash, $gray);
     }
 
     &.sorting_asc {
-      @include u-icon-bg($arrow-up-border, $primary);
       background-size: u(1rem);
       background-color: $gray-lightest;
+      @include u-icon-bg($arrow-up-border, $primary);
     }
 
     &.sorting_desc {
-      @include u-icon-bg($arrow-down-border, $primary);
       background-size: u(1rem);
       background-color: $gray-lightest;
+      @include u-icon-bg($arrow-down-border, $primary);
     }
 
   }

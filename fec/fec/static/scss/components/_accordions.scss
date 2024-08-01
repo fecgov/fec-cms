@@ -28,7 +28,6 @@
 //
 
 .accordion__button {
-  @include u-icon-bg($plus-circle, $primary);
   background-size: u(2rem);
   background-position: 95% 50%;
   border-bottom: 1px solid $base;
@@ -41,13 +40,17 @@
   text-align: left;
   width: 100%;
 
+  @include u-icon-bg($plus-circle, $primary);
+
   &[aria-expanded='true'] {
-    @include u-icon-bg($minus-circle, $primary);
     border-bottom: none;
+
+    @include u-icon-bg($minus-circle, $primary);
   }
 
   &.email__button {
     padding: u(1rem 4rem 1rem 1rem);
+
     &::before {
       content:'';
       @extend .button--envelope;
@@ -64,10 +67,11 @@
 }
 
 .accordion__content {
-  @include clearfix();
   border-bottom: 1px solid $base;
   padding: u(2rem);
   font-family: $sans-serif;
+
+  @include clearfix();
 
   &.results__content {
     border-top: 1px solid $base;
@@ -111,10 +115,11 @@
 
 .accordion--inverse {
   .accordion__button {
-    @include u-icon-bg($plus-circle, $inverse);
     background-position: 100% 50%;
     border-color: $inverse;
     color: $inverse;
+
+    @include u-icon-bg($plus-circle, $inverse);
 
     &[aria-expanded='true'] {
       @include u-icon-bg($minus-circle, $inverse);
@@ -122,7 +127,8 @@
   }
 
   .accordion__content {
-    @include u-font-color($inverse);
     border-color: $inverse;
+
+    @include u-font-color($inverse);
   }
 }

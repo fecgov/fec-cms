@@ -65,10 +65,10 @@
     }
 
     .legal-mur__archive-icon {
-      @include u-icon($file-box, $base, 1.5rem, 1.5rem, 100%);
       display: inline-block;
       margin-right: u(0.7rem);
       vertical-align: top;
+      @include u-icon($file-box, $base, 1.5rem, 1.5rem, 100%);
     }
   }
 
@@ -95,13 +95,13 @@
   border-bottom: none;
 
   &::before {
-    @include u-icon-bg($arrow-up-circle, $gray);
     content: '';
     display: inline-block;
     height: 2rem;
     margin-right: 0.5rem;
     vertical-align: top;
     width: 2rem;
+    @include u-icon-bg($arrow-up-circle, $gray);
   }
 
   @include media($med) {
@@ -110,10 +110,10 @@
 }
 
 .pending-ao__title {
-  @include u-icon-bg($timer, $base);
   display: inline-block;
   padding-right: u(2.5rem);
   background-position: 100% 50%;
+  @include u-icon-bg($timer, $base);
 }
 
 .pending-ao__icon {

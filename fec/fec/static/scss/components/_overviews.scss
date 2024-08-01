@@ -4,8 +4,8 @@
 //
 
 .overview {
-  @include clearfix();
   padding-bottom: u(2rem);
+  @include clearfix();
 }
 
 .overview__chart {
@@ -28,9 +28,9 @@
 }
 
 .breakdown-link {
-  @include heading(h4);
   display: inline-block;
   margin: 0 0 2rem 0;
+  @include heading(h4);
 }
 
 .top-list {

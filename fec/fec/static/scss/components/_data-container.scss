@@ -5,9 +5,9 @@
 //
 
 .data-container {
-  @include clearfix();
   position: relative;
   width: 100%;
+  @include clearfix();
 }
 
 .is-showing-filters {
@@ -15,14 +15,14 @@
 }
 
 .data-container__widgets {
-  @include clearfix();
   border-bottom: 2px solid $primary;
   font-family: $sans-serif;
+  @include clearfix();
 }
 
 .data-container__action {
-  @include clearfix();
   float: right;
+  @include clearfix();
 }
 
 .data-container__share {
@@ -43,9 +43,9 @@
 }
 
 .data-container__head {
-  @include clearfix();
   border-bottom: 1px solid $gray;
   padding: u(1rem);
+  @include clearfix();
 }
 
 .data-container__title {
@@ -61,8 +61,8 @@
 }
 
 .data-container__tags {
-  @include clearfix();
   padding: u(1rem);
+  @include clearfix();
 }
 
 .data-container__message {
@@ -74,9 +74,9 @@
 }
 
 .panel__controls {
-  @include clearfix();
   clear: both;
   padding-top: u(.5rem);
+  @include clearfix();
 }
 
 // BREAKPOINT: LARGE
@@ -117,17 +117,17 @@
   }
 
   .data-container__action {
-    @include span-columns(5);
     float: right;
     text-align: right;
+    @include span-columns(5);
   }
 
   .data-container__share {
-    @include u-icon-button($share, right);
     padding-left: u(2rem);
     text-indent: 0;
     width: auto;
     margin-right: u(1rem);
+    @include u-icon-button($share, right);
   }
 
   .data-container__export {

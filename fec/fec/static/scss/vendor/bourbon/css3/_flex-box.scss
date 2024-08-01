@@ -23,19 +23,19 @@
 @mixin box-pack($pack: start) {
 // start|end|center|justify
   @include prefixer(box-pack, $pack, webkit moz spec);
-  -ms-flex-pack: $pack; // IE 10
+  & { -ms-flex-pack: $pack; } // IE 10
 }
 
 @mixin box-align($align: stretch) {
 // start|end|center|baseline|stretch
   @include prefixer(box-align, $align, webkit moz spec);
-  -ms-flex-align: $align; // IE 10
+  & { -ms-flex-align: $align; } // IE 10
 }
 
 @mixin box-direction($direction: normal) {
 // normal|reverse|inherit
   @include prefixer(box-direction, $direction, webkit moz spec);
-  -ms-flex-direction: $direction; // IE 10
+  & { -ms-flex-direction: $direction; } // IE 10
 }
 
 @mixin box-lines($lines: single) {
@@ -45,12 +45,12 @@
 
 @mixin box-ordinal-group($int: 1) {
   @include prefixer(box-ordinal-group, $int, webkit moz spec);
-  -ms-flex-order: $int; // IE 10
+  & { -ms-flex-order: $int; } // IE 10
 }
 
 @mixin box-flex($value: 0) {
   @include prefixer(box-flex, $value, webkit moz spec);
-  -ms-flex: $value; // IE 10
+  & { -ms-flex: $value; } // IE 10
 }
 
 @mixin box-flex-group($int: 1) {
@@ -136,7 +136,7 @@
   @include prefixer(flex-direction, $value, webkit moz spec);
 
   // 2011 (IE 10)
-  -ms-flex-direction: $value;
+  & { -ms-flex-direction: $value; }
 }
 
 // 2009 - box-lines (single | multiple)
@@ -175,25 +175,25 @@
   @include prefixer(order, $int, webkit moz spec);
 
   // 2011 (IE 10)
-  -ms-flex-order: $int;
+  & { -ms-flex-order: $int; }
 }
 
 // 2012 - flex-grow (number)
 @mixin flex-grow($number: 0) {
   @include prefixer(flex-grow, $number, webkit moz spec);
-  -ms-flex-positive: $number;
+  & { -ms-flex-positive: $number; }
 }
 
 // 2012 - flex-shrink (number)
 @mixin flex-shrink($number: 1) {
   @include prefixer(flex-shrink, $number, webkit moz spec);
-  -ms-flex-negative: $number;
+  & { -ms-flex-negative: $number; }
 }
 
 // 2012 - flex-basis (number)
 @mixin flex-basis($width: auto) {
   @include prefixer(flex-basis, $width, webkit moz spec);
-  -ms-flex-preferred-size: $width;
+  & { -ms-flex-preferred-size: $width; }
 }
 
 // 2009 - box-pack (start | end | center | justify)
@@ -220,7 +220,7 @@
   @include prefixer(justify-content, $value, webkit moz ms o spec);
 
   // 2011 (IE 10)
-  -ms-flex-pack: $alt-value;
+  & { -ms-flex-pack: $alt-value; }
 }
 
 // 2009 - box-align (start | end | center | baseline | stretch)
@@ -243,7 +243,7 @@
   @include prefixer(align-items, $value, webkit moz ms o spec);
 
   // 2011 (IE 10)
-  -ms-flex-align: $alt-value;
+  & { -ms-flex-align: $alt-value; }
 }
 
 // 2011 - flex-item-align (auto | start | end | center | baseline | stretch)
@@ -261,7 +261,7 @@
   @include prefixer(align-self, $value, webkit moz spec);
 
   // 2011 (IE 10)
-  -ms-flex-item-align: $value-2011;
+  & { -ms-flex-item-align: $value-2011; }
 }
 
 // 2011 - flex-line-pack (start | end | center | justify | distribute | stretch)
@@ -283,5 +283,5 @@
   @include prefixer(align-content, $value, webkit moz spec);
 
   // 2011 (IE 10)
-  -ms-flex-line-pack: $value-2011;
+  & { -ms-flex-line-pack: $value-2011; }
 }

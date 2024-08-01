@@ -14,12 +14,13 @@ html {
 }
 
 body {
-  @include font-feature-settings("kern", "liga", "pnum");
   // -webkit-font-smoothing: antialiased;
   color: $base;
   font-family: $base-font-family;
   font-size: u(1.4rem);
   line-height: 1.8;
+
+  @include font-feature-settings("kern", "liga", "pnum");
 }
 
 h1 {

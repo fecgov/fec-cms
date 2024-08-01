@@ -27,14 +27,14 @@
 
 // Controls
 .fc-toolbar {
-  @include clearfix();
   padding: u(1rem);
+  @include clearfix();
 }
 
 .calendar__head {
-  @include clearfix();
   border-bottom: 1px solid $neutral;
   padding: u(1rem);
+  @include clearfix();
 
   .data-container__action {
     margin-top: u(1rem);
@@ -49,9 +49,9 @@
 }
 
 .fc-view-controls {
-  @include clearfix();
   padding: u(2rem);
   width: 100%;
+  @include clearfix();
 }
 
 .fc-left {
@@ -183,7 +183,6 @@
   }
 
   &::after {
-    @include linear-gradient(90deg, rgba($gray-lightest, 0), $gray-lightest);
     content: '';
     display: block;
     position: absolute;
@@ -191,6 +190,7 @@
     bottom: 0;
     right: 0;
     width: u(3rem);
+    @include linear-gradient(90deg, rgba($gray-lightest, 0), $gray-lightest);
   }
 }
 
@@ -254,10 +254,10 @@
   white-space: initial;
 
   &::before {
-    @include triangle(2rem, $primary, up);
     background-image: none;
     left: 20%;
     top: u(-2rem) !important;
+    @include triangle(2rem, $primary, up);
   }
 
   .button--close--primary {
@@ -432,9 +432,9 @@
 }
 
 .cal-list__event {
-  @include clearfix();
   border-bottom: 1px solid $neutral;
   padding: u(2rem 0);
+  @include clearfix();
 
   &:last-child {
     border-bottom: none;
@@ -443,8 +443,8 @@
 }
 
 .cal-list__details {
-  @include span-columns(8);
   margin-bottom: u(1rem);
+  @include span-columns(8);
 }
 
 .cal-list__add {
@@ -463,8 +463,8 @@
 }
 
 .cal-list__date {
-  @include span-columns(4 of 8);
   font-weight: bold;
+  @include span-columns(4 of 8);
 }
 
 .cal-list__time {
@@ -473,8 +473,8 @@
 }
 
 .cal-list__info {
-  @include span-columns(8 of 8);
   padding-top: u(2rem);
+  @include span-columns(8 of 8);
 
   p {
     font-size: u(1.4rem);
@@ -486,13 +486,13 @@
 }
 
 .cal-list__category-title {
-  @include clearfix();
   display: table;
   border: 1px solid;
   border-color: $primary;
   font-size: u(1.4rem);
   padding: u(.5rem);
   border-radius: 3px;
+  @include clearfix();
 
   .tooltip__trigger-text {
     border-right: 1px solid $primary;
@@ -529,9 +529,9 @@
   width: u(22rem);
 
   .fc-header {
-    @include clearfix();
     background: $neutral;
     padding: u(3px .5rem);
+    @include clearfix();
 
     .fc-title {
       font-weight: bold;
@@ -542,9 +542,9 @@
   }
 
   .fc-close {
-    @include u-icon($x, $primary, 2rem, 2rem, 100%);
     cursor: pointer;
     float: right;
+    @include u-icon($x, $primary, 2rem, 2rem, 100%);
   }
 
   .fc-event-container {
@@ -625,23 +625,23 @@
   }
 
   .cal-list__event {
-    @include clearfix();
     padding: u(2rem);
+    @include clearfix();
   }
 
   .cal-list__details {
-    @include span-columns(10);
     margin-bottom: 0;
+    @include span-columns(10);
   }
 
   .cal-list__add {
-    @include span-columns(2);
     font-size: u(1.4rem);
+    @include span-columns(2);
   }
 
   .cal-list__date {
-    @include span-columns(2 of 10);
     font-weight: bold;
+    @include span-columns(2 of 10);
   }
 
   .cal-list__time {
@@ -649,8 +649,8 @@
   }
 
   .cal-list__info {
-    @include span-columns(6 of 10);
     padding-top: 0;
+    @include span-columns(6 of 10);
   }
 
   .cal-list__category {

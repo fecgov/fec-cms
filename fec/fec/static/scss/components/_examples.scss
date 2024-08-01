@@ -71,9 +71,9 @@
 }
 
 .example__image {
-  @include span-columns(8);
   border: 2px solid $gray-lightest;
   height: auto;
+  @include span-columns(8);
 }
 
 
@@ -87,8 +87,7 @@
   margin-top: u(2rem);
   
   @include media($med) {
-    @include span-columns(4);
     margin-top: 0;
-
+    @include span-columns(4);
   }
 }

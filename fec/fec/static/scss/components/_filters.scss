@@ -25,9 +25,9 @@ $filter-button-width: u(4.6rem);
 
 // by default show filters offscreen
 .filters {
-  @include clearfix();
   background: $neutral;
   display: block;
+  @include clearfix();
 
   &.is-open {
     .filters__content {
@@ -44,8 +44,8 @@ $filter-button-width: u(4.6rem);
 
     .filters__toggle {
       &::after {
-        @include u-icon($arrow-left-border, $primary, $icon-size, $icon-size);
         background-size: 65%;
+        @include u-icon($arrow-left-border, $primary, $icon-size, $icon-size);
       }
     }
   }
@@ -89,11 +89,11 @@ $filter-button-width: u(4.6rem);
       position: relative;
 
       &::after {
-        @include animation(fadeIn .8s ease-out);
         background: url('../img/loading-ellipsis-gray.gif') no-repeat;
         background-size: u(2rem);
         right: u(-3rem);
         opacity: 1;
+        @include animation(fadeIn .8s ease-out);
       }
     }
 
@@ -101,9 +101,9 @@ $filter-button-width: u(4.6rem);
       position: relative;
 
       &::after {
-        @include u-icon-bg($check, $green-light);
         background-position: 50%;
         right: u(-3rem);
+        @include u-icon-bg($check, $green-light);
       }
     }
 
@@ -111,17 +111,15 @@ $filter-button-width: u(4.6rem);
       position: relative;
 
       &::after {
-        @include u-icon-bg($x, $error);
         background-position: 50%;
         right: u(-3rem);
+        @include u-icon-bg($x, $error);
       }
     }
   }
 }
 
 .filters__content {
-  @include transition(left .2s ease-in-out);
-  @include u-bg--neutral();
   position: absolute;
   bottom: 0;
   height: auto;
@@ -129,6 +127,8 @@ $filter-button-width: u(4.6rem);
   width: 100%;
   overflow: visible;
   left: -800px;
+  @include transition(left .2s ease-in-out);
+  @include u-bg--neutral();
 
   &[aria-hidden=true] {
     display: block !important;
@@ -140,8 +140,6 @@ $filter-button-width: u(4.6rem);
 }
 
 .filters__header {
-  @include clearfix();
-  @include heading(h2);
   background-color: $neutral;
   border-bottom: 1px solid $gray;
   border-top: 2px solid $primary;
@@ -151,24 +149,26 @@ $filter-button-width: u(4.6rem);
   padding: u(1rem);
   text-align: left;
   width: 100%;
+  @include clearfix();
+  @include heading(h2);
 }
 
 .filters__toggle {
   &::before {
-    @include u-icon-circle($filter, $primary, $inverse, $icon-size);
     background-position: 50% 45%;
     background-size: 70%;
     content: '';
     float: left;
     margin-right: 1rem;
+    @include u-icon-circle($filter, $primary, $inverse, $icon-size);
   }
 
   &::after {
-    @include u-icon($arrow-right-border, $primary, $icon-size, $icon-size);
     content: '';
     background-size: 65%;
     clear: none;
     float: right;
+    @include u-icon($arrow-right-border, $primary, $icon-size, $icon-size);
   }
 }
 
@@ -217,9 +217,9 @@ $filter-button-width: u(4.6rem);
       width: u(4.6rem);
 
       &.is-successful {
-        @include u-icon-button($check);
         background-size: u(2.2rem);
         background-position: 50%;
+        @include u-icon-button($check);
       }
     }
 
@@ -361,10 +361,10 @@ $filter-button-width: u(4.6rem);
   }
 
   .filters__content {
-    @include transition(unset);
     position: relative;
     top: 0;
     overflow: visible;
+    @include transition(unset);
 
     &[aria-hidden="true"] {
       display: none !important;

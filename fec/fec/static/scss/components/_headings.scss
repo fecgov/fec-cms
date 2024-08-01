@@ -16,9 +16,9 @@
 
 // %heading is a placeholder selector that provides base styles extended by the base classes
 %heading {
-  @include clearfix();
   border-bottom: 2px solid $base;
   padding-bottom: u(1rem);
+  @include clearfix();
 
   h1,
   h2,
@@ -138,9 +138,9 @@
   }
 
   .heading__image {
-    @include span-columns(1);
     border-radius: 100%;
     height: auto;
+    @include span-columns(1);
   }
 }
 

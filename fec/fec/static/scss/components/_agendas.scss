@@ -32,12 +32,12 @@
     position: relative;
 
     &::before {
-      @include heading(h3);
       position: absolute;
       left: 0;
       top: 0;
       counter-increment: agenda;
       content: counters(agenda, '') '.';
+      @include heading(h3);
     }
   }
 
@@ -45,12 +45,12 @@
     margin-left: u(6rem);
 
     &::before {
-      @include u-icon($document, $base, 3rem, 3rem, 50%);
       background-position: 0 50%;
       content: '';
       display: inline-block;
       margin-left: u(-3rem);
       vertical-align: middle;
+      @include u-icon($document, $base, 3rem, 3rem, 50%);
     }
   }
 
@@ -83,12 +83,12 @@
   margin-left: u(3rem);
 
   &::before {
-    @include u-icon($document, $base, 3rem, 3rem, 50%);
     background-position: 0 50%;
     content: '';
     display: inline-block;
     margin-left: u(-3rem);
     vertical-align: middle;
+    @include u-icon($document, $base, 3rem, 3rem, 50%);
   }
 }
 
@@ -110,5 +110,3 @@
     height:100%;
   }
 }
-
-

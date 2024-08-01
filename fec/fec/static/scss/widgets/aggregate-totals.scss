@@ -53,12 +53,6 @@ section.aggregate-totals-section {
 
 // The aggregate totals aside
 aside.aggr-totals[id^='gov_fec_at_'] {
-  &,
-  & * {
-    // THESE ARE PASSED DOWN TO CHILDREN
-    box-sizing: border-box;
-  }
-
   background-color: $colorBgLight;
   border-radius: 4px;
   box-shadow: 0 0 0 2px $colorTextOnLight inset;
@@ -68,6 +62,12 @@ aside.aggr-totals[id^='gov_fec_at_'] {
   font-size: $fontSizeBase;
   margin: 0 0 ($fontSizeBase * 2);
   padding: ($fontSizeBase * 2);
+
+  &,
+  & * {
+    // THESE ARE PASSED DOWN TO CHILDREN
+    box-sizing: border-box;
+  }
 
   .controls-wrapper {
     font-family: $fontFamilySansSerif;

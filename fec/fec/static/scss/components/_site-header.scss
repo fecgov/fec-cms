@@ -27,7 +27,6 @@
 
 // Skip nav
 .skip-nav {
-  @include transition(top, .2s);
   background-color: $primary;
   border: 2px solid $primary-contrast;
   color: $inverse;
@@ -37,6 +36,7 @@
   position: absolute;
   top: u(-10rem);
   z-index: $z4;
+  @include transition(top, .2s);
 
   &:focus {
     border-bottom-color: $primary-contrast;
@@ -55,7 +55,6 @@
 //
 
 .disclaimer {
-  @include clearfix();
   border-bottom: 1px solid $neutral;
   color: $gray-dark;
   font-family: $sans-serif;
@@ -63,6 +62,7 @@
   line-height: 1;
   padding: 5px u(2rem);
   text-align: center;
+  @include clearfix();
 }
 
 .disclaimer__right {
@@ -130,13 +130,13 @@
 .usa-banner-header {
 
   &.accordion__button {
-  background-image: none;
-  border:none !important;
-  padding: u(.75rem 1rem);
-
-   &[aria-expanded=true] {
     background-image: none;
-   }
+    border:none !important;
+    padding: u(.75rem 1rem);
+
+    &[aria-expanded=true] {
+      background-image: none;
+    }
   }
 }
 
@@ -396,7 +396,6 @@
 
 .site-nav {
   .site-title {
-    @include u-background-image('wordmark', 0% 50%);
     background-size: contain;
     display: block;
     height: u(3rem);
@@ -404,6 +403,7 @@
     margin: u(.75rem 1rem .25rem);
     width: calc(100% - 15rem);
     max-width: u(40rem);
+    @include u-background-image('wordmark', 0% 50%);
   }
 }
 
@@ -424,20 +424,20 @@
   }
 
   .masthead {
-    @include u-background-image('seal--cropped', 0% 100%);
     border-bottom: 2px solid $neutral;
     display: block;
     background-size: u(11rem);
+    @include u-background-image('seal--cropped', 0% 100%);
   }
 
   .site-title {
-    @include u-background-image('wordmark', u(12rem) 50%);
     background-size: contain;
     display: block;
     margin: u(1rem 0 .7rem 0);
     padding-left: u(12rem);
     height: u(3.4rem);
     width: 100%;
+    @include u-background-image('wordmark', u(12rem) 50%);
   }
 
   // Mobile site title is included in the .site-nav nav element

@@ -65,18 +65,18 @@ $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2
 }
 
 aside.contribs-by-state {
-  &,
-  & * {
-    // THESE ARE PASSED DOWN TO CHILDREN
-    box-sizing: border-box;
-  }
-
   font-family: $fontFamilySansSerif;
   font-feature-settings: 'kern', 'liga', 'pnum';
   font-size: $fontSizeBase * 1.4;
   margin: 0 0 ($fontSizeBase * 2);
   position: relative;
   width: 100%;
+
+  &,
+  & * {
+    // THESE ARE PASSED DOWN TO CHILDREN
+    box-sizing: border-box;
+  }
 
   // .error-msg {
   //   color: $error;
@@ -169,9 +169,9 @@ aside.contribs-by-state {
         }
     
         button.is-successful {
-          @include u-icon-button($check);
-          background-size: 2.8rem;
           background-position: 50%;
+          background-size: 2.8rem;
+          @include u-icon-button($check);
         }
       }
       #contribs-by-state-typeahead-error {

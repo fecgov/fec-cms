@@ -2,11 +2,11 @@
 //
 
 table {
-  @include font-feature-settings("kern", "liga", "tnum");
   border-collapse: collapse;
   margin: 0;
   table-layout: fixed;
   width: 100%;
+  @include font-feature-settings("kern", "liga", "tnum");
 }
 
 th {

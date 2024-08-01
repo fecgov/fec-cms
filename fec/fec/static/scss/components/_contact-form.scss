@@ -23,8 +23,8 @@
   }
 
   .tt-input {
-    @include u-icon-bg($magnifying-glass-arrow, $gray-dark);
     background-position: right 10px top 50%;
+    @include u-icon-bg($magnifying-glass-arrow, $gray-dark);
   }
 
   .contact-form__reset {

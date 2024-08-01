@@ -12,8 +12,8 @@
 //
 
 .icon-heading {
-  @include clearfix();
   margin-top:0;
+  @include clearfix();
 
   @include media($med) {
     margin-top: u(1rem);
@@ -21,13 +21,13 @@
 }
 
 .icon-heading__image {
-  @include span-columns(1);
   height: auto;
+  @include span-columns(1);
 }
 
 .icon-heading__content {
-  @include span-columns(11);
   max-width: 75%;
+  @include span-columns(11);
 
   p {
     margin: 0;
@@ -41,13 +41,13 @@
 .grid--2-wide,
 .grid--3-wide {
   .icon-heading__image {
-    @include span-columns(3);
     height: auto;
+    @include span-columns(3);
   }
 
   .icon-heading__content {
-    @include span-columns(8);
     padding-left: u(.5rem);
+    @include span-columns(8);
   }
 }
 
@@ -72,50 +72,50 @@
 .icon-heading--raising-circle {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($piggy-bank, $primary, $inverse, $size);
     content: '';
     float: left;
     margin-right: u(1rem);
+    @include u-icon-circle($piggy-bank, $primary, $inverse, $size);
   }
 }
 
 .icon-heading--spending-circle {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($disbursement, $primary, $inverse, $size);
     content: '';
     float: left;
     margin-right: u(1rem);
+    @include u-icon-circle($disbursement, $primary, $inverse, $size);
   }
 }
 
 .icon-heading--calendar-circle-primary {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($calendar, $primary, $inverse, $size);
     content: '';
     float: left;
     margin-right: u(1rem);
+    @include u-icon-circle($calendar, $primary, $inverse, $size);
   }
 }
 
 .icon-heading--data-flag-circle--primary {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($data-flag, $inverse, $primary-contrast, $size);
     background-size: 50%;
     content: '';
     float: left;
+    @include u-icon-circle($data-flag, $inverse, $primary-contrast, $size);
   }
 }
 
 .icon-heading--data-flag-circle--secondary {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($data-flag, $inverse, $secondary-contrast, $size);
     background-size: 50%;
     content: '';
     float: left;
+    @include u-icon-circle($data-flag, $inverse, $secondary-contrast, $size);
   }
 }
 
@@ -123,143 +123,143 @@
 .icon-heading--checklist-circle {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($checklist, $inverse, $secondary-contrast, $size);
     background-size: 70%;
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($checklist, $inverse, $secondary-contrast, $size);
   }
 }
 
 .icon-heading--question-bubble-circle {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($question-bubble, $inverse, $secondary-contrast, $size);
     background-size: 70%;
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($question-bubble, $inverse, $secondary-contrast, $size);
   }
 }
 
 .icon-heading--calendar-circle {
   &::before {
-    @include u-icon-circle($calendar, $inverse, $secondary-contrast, 4.5rem);
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($calendar, $inverse, $secondary-contrast, 4.5rem);
   }
 }
 
 .icon-heading--training-circle {
   &::before {
-    @include u-icon-circle($training, $inverse, $secondary-contrast, 4.5rem);
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($training, $inverse, $secondary-contrast, 4.5rem);
   }
 }
 
 .icon-heading--document-circle {
   &::before {
-    @include u-icon-circle($document, $inverse, $secondary-contrast, 4.5rem);
     background-size: u(2.5rem);
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($document, $inverse, $secondary-contrast, 4.5rem);
   }
 }
 
 .icon-heading--election-circle {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($election, $inverse, $secondary-contrast, $size);
     background-size: 70%;
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($election, $inverse, $secondary-contrast, $size);
   }
 }
 
 // icons for homepage - legal resources (on primary [blue] slab)
 .icon-heading--mallet-circle {
   &::before {
-    @include u-icon-circle($mallet, $inverse, $primary-contrast, 4.5rem);
     background-size: u(4rem);
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($mallet, $inverse, $primary-contrast, 4.5rem);
   }
 }
 
 .icon-heading--subsection-doc-circle {
   &::before {
-    @include u-icon-circle($subsection-doc, $inverse, $primary-contrast, 4.5rem);
     background-size: u(4rem);
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($subsection-doc, $inverse, $primary-contrast, 4.5rem);
   }
 }
 
 .icon-heading--direction-sign-circle {
   &::before {
-    @include u-icon-circle($direction-sign, $inverse, $primary-contrast, 4.5rem);
     background-size: u(4rem);
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($direction-sign, $inverse, $primary-contrast, 4.5rem);
   }
 
   &.primary{
     &::before {
-      @include u-icon-circle($direction-sign, $primary, $inverse, 4.5rem);
       background-size: u(4rem);
-      }
+      @include u-icon-circle($direction-sign, $primary, $inverse, 4.5rem);
+    }
   }
 
 }
 
 .icon-heading--shield-circle {
   &::before {
-    @include u-icon-circle($shield, $inverse, $primary-contrast, 4.5rem);
     background-size: u(4rem);
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($shield, $inverse, $primary-contrast, 4.5rem);
   }
 }
 
 .icon-heading--person-location-circle {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($person-location, $inverse, $primary-contrast, $size);
     background-size: 50%;
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($person-location, $inverse, $primary-contrast, $size);
   }
 }
 
 .icon-heading--individual-contributions-circle {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($individual-contributions, $inverse, $primary-contrast, $size);
     background-size: 50%;
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($individual-contributions, $inverse, $primary-contrast, $size);
   }
 }
 
 .icon-heading--magnifying-glass-circle {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($magnifying-glass, $inverse, $primary-contrast, $size);
     background-size: 50%;
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($magnifying-glass, $inverse, $primary-contrast, $size);
   }
 }
 
@@ -267,16 +267,16 @@
 .icon-heading--graph-circle {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($graph-horizontal-ordered, $primary, $inverse, $size);
     background-size: u(1.8rem);
+    @include u-icon-circle($graph-horizontal-ordered, $primary, $inverse, $size);
   }
 }
 
 .icon-heading--graph-unordered-circle {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($graph-horizontal-unordered, $primary, $inverse, $size);
     background-size: u(1.8rem);
+    @include u-icon-circle($graph-horizontal-unordered, $primary, $inverse, $size);
   }
 }
 
@@ -290,54 +290,54 @@
 .icon-heading--election-circle {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($election, $inverse, $secondary-contrast, $size);
     background-size: 50%;
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($election, $inverse, $secondary-contrast, $size);
   }
 
   &.primary{
     &::before {
-      @include u-icon-circle($election, $primary, $inverse, 4.5rem);
       background-size: 40%;
-      }
+      @include u-icon-circle($election, $primary, $inverse, 4.5rem);
+    }
   }
 }
 
 .icon-heading--example-document {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($example-document, $inverse, $secondary-contrast, $size);
     background-size: 100%;
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($example-document, $inverse, $secondary-contrast, $size);
   }
 
   &.primary{
     &::before {
-      @include u-icon-circle($example-document, $primary, $inverse, 4.5rem);
       background-size: 40%;
-      }
+      @include u-icon-circle($example-document, $primary, $inverse, 4.5rem);
+    }
   }
 }
 
 .icon-heading--financial-document {
   &::before {
     $size: u(4rem);
-    @include u-icon-circle($financial-document, $inverse, $secondary-contrast, $size);
     background-size: 50%;
     content: '';
     float: left;
     margin-right: u(1.5rem);
+    @include u-icon-circle($financial-document, $inverse, $secondary-contrast, $size);
   }
 
   &.primary{
     &::before {
-      @include u-icon-circle($financial-document, $primary, $inverse, 4.5rem);
       background-size: 40%;
-      }
+      @include u-icon-circle($financial-document, $primary, $inverse, 4.5rem);
+    }
   }
 }
 

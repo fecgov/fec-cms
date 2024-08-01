@@ -108,7 +108,7 @@
   }
 
   .read_next__image__container {
-    @include span-columns(3);
     display: block;
+    @include span-columns(3);
   }
 }

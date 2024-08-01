@@ -296,10 +296,10 @@ $search-button-width: u(5.6rem);
 // Just testing things out. Refactor to use non-js class if we use it
 .typeahead-filter {
   .button--search {
-    @include u-icon-button($magnifying-glass-arrow);
     background-size: u(2.8rem);
     background-position: 50%;
     padding: 0;
+    @include u-icon-button($magnifying-glass-arrow);
   }
 
   &[data-allow-text] {
@@ -308,10 +308,10 @@ $search-button-width: u(5.6rem);
     }
 
     .button--search {
-      @include u-icon-button($magnifying-glass);
       background-size: u(2.2rem);
       background-position: 50%;
       padding: 0;
+      @include u-icon-button($magnifying-glass);
     }
 
     button.is-loading {
@@ -319,9 +319,9 @@ $search-button-width: u(5.6rem);
     }
 
     button.is-successful {
-      @include u-icon-button($check);
       background-size: u(2.8rem);
       background-position: 50%;
+      @include u-icon-button($check);
     }
   }
 }

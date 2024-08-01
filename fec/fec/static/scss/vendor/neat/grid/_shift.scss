@@ -16,7 +16,7 @@
 ///   }
 
 @mixin shift($n-columns: 1) {
-  @include shift-in-context($n-columns);
+  & { @include shift-in-context($n-columns); }
 }
 
 /// Translates an element horizontally by a number of columns, in a specific nesting context.

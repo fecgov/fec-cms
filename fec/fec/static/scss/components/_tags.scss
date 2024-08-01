@@ -151,18 +151,18 @@
 }
 
 .tag__remove {
-  @include u-icon-bg($x, $primary);
   background-size: u(1.4rem);
   background-position: 100% 45%;
   border: none;
   padding: u(1rem);
+  @include u-icon-bg($x, $primary);
 }
 
 .tags__clear {
-  @include u-icon-bg($x, $primary);
   background-size: u(1.4rem);
   background-position: 95% 50%;
   padding-right: u(2.3rem);
+  @include u-icon-bg($x, $primary);
 
   @include media($med) {
     float: right;

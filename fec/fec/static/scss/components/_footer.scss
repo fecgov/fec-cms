@@ -59,10 +59,11 @@
 }
 
 .footer {
-  @include u-bg--primary();
-  @include u-font-color($neutral);
   padding: u(5rem 0);
   position: relative;
+
+  @include u-bg--primary();
+  @include u-font-color($neutral);
 
   .address__title {
     font-size: u(2.2rem);
@@ -116,9 +117,9 @@
     }
 
     .address {
-      @include span-columns(3);
       margin-right: 0;
       float: right;
+      @include span-columns(3);
     }
   }
 }

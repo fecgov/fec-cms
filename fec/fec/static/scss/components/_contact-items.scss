@@ -15,9 +15,9 @@
 //
 
 .contact-item {
-  @include clearfix();
   display: table;
   margin-bottom: u(4rem);
+  @include clearfix();
 
   &:not(.contact-item--half) {
     &::before {
@@ -92,24 +92,24 @@
 
 .contact-item--question-bubble {
   &::before {
-    @include u-icon-circle($question-bubble, $primary, $inverse, 3.4rem);
     background-size:75% !important;
+    @include u-icon-circle($question-bubble, $primary, $inverse, 3.4rem);
   }
 }
 
 .contact-item--hand {
   &.contact-item::before {
-    @include u-icon-circle($hand-envelope, $primary, $inverse, 3.4rem);
     background-position: 100% 50%;
     background-size: 100%;
+    @include u-icon-circle($hand-envelope, $primary, $inverse, 3.4rem);
   }
 }
 
 .contact-item--map-pin {
   &.contact-item::before {
-    @include u-icon-circle($map-pin, $primary, $inverse, 3.4rem);
     background-position: 50%;
     background-size: 60%;
+    @include u-icon-circle($map-pin, $primary, $inverse, 3.4rem);
   }
 }
 
@@ -134,15 +134,15 @@
   .contact-item:not(.contact-item--half)::before{
     display: block;
     margin-bottom: u(1.5rem);
-   }
+  }
   
   .contact-item__content {
     display: block;
   }
 
- .contact-item__label {
-  text-transform: uppercase;
-  font-size: u(1.8rem);
-  font-family: Karla,sans-serif;
+  .contact-item__label {
+    text-transform: uppercase;
+    font-size: u(1.8rem);
+    font-family: Karla,sans-serif;
   }
 }

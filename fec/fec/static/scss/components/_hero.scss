@@ -223,9 +223,10 @@
 @media print {
   .hero--primary,
   .hero--secondary {
-    @include u-font-color($base);
     background: $inverse;
     border-bottom: 1px solid $base;
+
+    @include u-font-color($base);
   }
 
   .hero__image {

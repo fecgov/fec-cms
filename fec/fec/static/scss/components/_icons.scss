@@ -118,8 +118,8 @@
   display: block;
 
   &::before {
-    @include u-icon-circle($calendar, $secondary, $inverse, 3.4rem);
     content: '';
+    @include u-icon-circle($calendar, $secondary, $inverse, 3.4rem);
   }
 }
 
@@ -127,8 +127,8 @@
   display: block;
 
   &::before {
-    @include u-icon-circle($updates, $secondary, $inverse, 3.4rem);
     content: '';
+    @include u-icon-circle($updates, $secondary, $inverse, 3.4rem);
   }
 }
 
@@ -136,10 +136,10 @@
   display: block;
 
   &::before {
-    @include u-icon-circle($calculator, $primary, $inverse, 3.4rem);
     background-size: 70%;
     background-position: 50% 45%;
     content: '';
+    @include u-icon-circle($calculator, $primary, $inverse, 3.4rem);
   }
 }
 
@@ -148,8 +148,8 @@
   margin-right: u(1.5rem);
 
   &::before {
-    @include u-icon-circle($updates, $secondary, $inverse, 3rem);
     content: '';
+    @include u-icon-circle($updates, $secondary, $inverse, 3rem);
   }
 }
 
@@ -158,8 +158,8 @@
   margin-right: u(1.5rem);
 
   &::before {
-    @include u-icon-circle($calendar, $secondary, $inverse, 3rem);
     content: '';
+    @include u-icon-circle($calendar, $secondary, $inverse, 3rem);
   }
 }
 
@@ -169,9 +169,9 @@
   vertical-align: middle;
 
   &::before {
-    @include u-icon-circle($check-circle-outline, $inverse, $aqua, 1.5rem);
     content: '';
     background-size: 100%;
+    @include u-icon-circle($check-circle-outline, $inverse, $aqua, 1.5rem);
   }
 }
 
@@ -181,9 +181,9 @@
   vertical-align: middle;
 
   &::before {
-    @include u-icon-circle($clock-reverse, $inverse, $primary, 1.7rem);
     content: '';
     background-size: 100%;
+    @include u-icon-circle($clock-reverse, $inverse, $primary, 1.7rem);
   }
 }
 
@@ -191,8 +191,8 @@
   display: block;
 
   &::before {
-    @include u-icon-circle($magnifying-glass, $primary, $inverse, 3.4rem);
     content: '';
+    @include u-icon-circle($magnifying-glass, $primary, $inverse, 3.4rem);
   }
 }
 
@@ -200,9 +200,9 @@
   display: block;
 
   &::before {
-    @include u-icon-circle($checklist, $secondary, $inverse, 3.4rem);
     content: '';
     background-size: 80%;
+    @include u-icon-circle($checklist, $secondary, $inverse, 3.4rem);
   }
 }
 
@@ -210,10 +210,10 @@
   display: block;
 
   &::before {
-    @include u-icon-circle($candidate, $primary, $inverse, 3.4rem);
     content: '';
     background-position: 60% 50%;
     background-size: 50%;
+    @include u-icon-circle($candidate, $primary, $inverse, 3.4rem);
   }
 }
 
@@ -221,8 +221,8 @@
   display: block;
 
   &::before {
-    @include u-icon-circle($committee, $primary, $inverse, 3.4rem);
     content: '';
+    @include u-icon-circle($committee, $primary, $inverse, 3.4rem);
   }
 }
 
@@ -230,8 +230,8 @@
   display: block;
 
   &::before {
-    @include u-icon-circle($piggy-bank, $primary, $inverse, 3.4rem);
     content: '';
+    @include u-icon-circle($piggy-bank, $primary, $inverse, 3.4rem);
   }
 }
 
@@ -239,8 +239,8 @@
   display: block;
 
   &::before {
-    @include u-icon-circle($disbursement, $primary, $inverse, 3.4rem);
     content: '';
+    @include u-icon-circle($disbursement, $primary, $inverse, 3.4rem);
   }
 }
 
@@ -250,12 +250,12 @@
   vertical-align: middle;
 
   &::before {
-    @include u-icon-bg($arrow-up-border, $inverse);
     content: '';
     background-size: 75%;
     display: block;
     width: u(1.5rem);
     height: u(1.5rem);
+    @include u-icon-bg($arrow-up-border, $inverse);
   }
 }
 
@@ -265,12 +265,12 @@
   vertical-align: middle;
 
   &::before {
-    @include u-icon-bg($arrow-down-border, $inverse);
     content: '';
     background-size: 75%;
     display: block;
     width: u(1.5rem);
     height: u(1.5rem);
+    @include u-icon-bg($arrow-down-border, $inverse);
   }
 }
 
@@ -279,12 +279,12 @@
   vertical-align: middle;
 
   &::before {
-    @include u-icon-bg($document, $primary);
     content: '';
     background-size: 75%;
     display: block;
     width: u(1.5rem);
     height: u(1.5rem);
+    @include u-icon-bg($document, $primary);
   }
 }
 
@@ -293,20 +293,20 @@
   vertical-align: middle;
 
   &::before {
-    @include u-icon-bg($download, $primary);
     content: '';
     float: left;
     padding: u(1.5rem);
+    @include u-icon-bg($download, $primary);
   }
 }
 
 .icon-star {
-  @include u-icon-bg($star, $orange);
   width: u(1.5rem);
   height: u(1.5rem);
   margin-bottom: 2px;
   display: inline-block;
   vertical-align: middle;
+  @include u-icon-bg($star, $orange);
 }
 
 .icon-x {

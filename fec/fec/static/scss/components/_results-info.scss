@@ -4,10 +4,10 @@
 //
 
 .results-info {
-  @include clearfix();
   border-top: 2px solid $primary;
   border-bottom: 2px solid $primary;
   padding: u(1rem);
+  @include clearfix();
 
   .button--export {
     float: right;
@@ -15,8 +15,8 @@
 }
 
 .results-info__left {
-  @include clearfix();
   margin-bottom: u(1rem);
+  @include clearfix();
 }
 
 .results-info__right {

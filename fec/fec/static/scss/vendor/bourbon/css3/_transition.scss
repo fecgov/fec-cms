@@ -52,9 +52,11 @@
 }
 
 @mixin transition-property($properties...) {
-  -webkit-transition-property: transition-property-names($properties, "webkit");
+  & {
+    -webkit-transition-property: transition-property-names($properties, "webkit");
      -moz-transition-property: transition-property-names($properties, "moz");
           transition-property: transition-property-names($properties, false);
+  }
 }
 
 @mixin transition-duration($times...) {

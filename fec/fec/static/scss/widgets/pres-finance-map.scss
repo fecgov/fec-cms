@@ -22,18 +22,18 @@ $fontWeightBold: 700;
 $sizeTableScroller: 10px;
 
 #gov-fec-pres-finance {
-  &,
-  & * {
-    // THESE ARE PASSED DOWN TO CHILDREN
-    box-sizing: border-box;
-  }
-
   font-family: $fontFamilySansSerif;
   font-feature-settings: 'kern', 'liga', 'pnum';
   font-size: $fontSizeBase * 1.4;
   margin: 0 0 ($fontSizeBase * 2);
   position: relative;
   width: 100%;
+
+  &,
+  & * {
+    // THESE ARE PASSED DOWN TO CHILDREN
+    box-sizing: border-box;
+  }
 
   // Overrides for the filters
   .filters {
@@ -259,6 +259,7 @@ $sizeTableScroller: 10px;
         circle {
           opacity: 1;
           pointer-events: initial;
+          transition: .5s;
           z-index: 100;
 
           &.blur {
@@ -266,7 +267,6 @@ $sizeTableScroller: 10px;
             pointer-events: initial;
           }
 
-          transition: .5s;
         }
       }
       path.zero-value, circle.zero-value {

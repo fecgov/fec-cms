@@ -71,7 +71,6 @@
   }
 
   @include media($lg) {
-    @include transition(top .5s);
     height: 95vh;
     left: auto;
     overflow: auto;
@@ -79,6 +78,7 @@
     right: u(4rem);
     top: 5vh;
     width: u(52rem);
+    @include transition(top .5s);
 
     &[aria-hidden='true'] {
       display: block !important;
@@ -106,8 +106,8 @@
 }
 
 .feedback__title {
-  @include heading(h2);
   margin-bottom: u(.5rem);
+  @include heading(h2);
 }
 
 .feedback__toggle {

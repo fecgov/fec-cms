@@ -99,8 +99,10 @@
 //
 
 @mixin u-icon-bg($icon, $color) {
-  background-image: url('#{svg-fill($icon, $color)}');
-  background-repeat: no-repeat;
+  & {
+    background-image: url('#{svg-fill($icon, $color)}');
+    background-repeat: no-repeat;
+  }
 }
 
 // u-icon-circle()
@@ -110,7 +112,6 @@
 //
 
 @mixin u-icon-circle($icon, $circlecolor, $iconcolor, $size) {
-  @include u-icon-bg($icon, $iconcolor);
   background-position: 50% 50%;
   background-size: 60%;
   background-color: $circlecolor;
@@ -118,6 +119,8 @@
   display: block;
   height: $size;
   width: $size;
+
+  @include u-icon-bg($icon, $iconcolor);
 }
 
 // u-font-color()
@@ -128,7 +131,10 @@
 //
 
 @mixin u-font-color($color) {
-  color: $color;
+  
+  & {
+    color: $color;
+  }
 
   h1,
   h2,
@@ -151,8 +157,7 @@
   h1,
   .h1,
   h6,
-  .h6
-  a {
+  .h6 a {
     border-color: $color;
   }
 
@@ -184,14 +189,15 @@
   }
 
   [type="checkbox"]:checked + label::before {
-    @include u-icon-bg($check, $base);
     background-color: $inverse;
+    @include u-icon-bg($check, $base);
   }
 
   select {
-    @include u-icon-bg($arrow-down, $inverse);
     border: 2px solid $inverse;
     color: $inverse;
+
+    @include u-icon-bg($arrow-down, $inverse);
 
     &:hover:not(.is-disabled):not([disabled]) {
       border-color: $gray-medium;
@@ -219,10 +225,11 @@
 //
 
 @mixin u-bg--primary() {
-  @include u-form--inverse();
-  @include u-font-color($gray-lightest);
   background-color: $primary;
 
+  @include u-form--inverse();
+  @include u-font-color($gray-lightest);
+ 
   a {
     border-bottom-color: $gray-lightest;
 
@@ -246,9 +253,9 @@
 //
 
 @mixin u-bg--secondary() {
+  background-color: $secondary;
   @include u-form--inverse();
   @include u-font-color($gray-lightest);
-  background-color: $secondary;
 
   a {
     border-bottom-color: $gray-lightest;
@@ -273,9 +280,9 @@
 }
 
 @mixin u-bg--neutral() {
+  background-color: $gray-lightest;
   @include u-font-color($base);
   @include u-form-color($inverse, $primary, $primary-contrast, 'neutral', $primary);
-  background-color: $gray-lightest;
 
   a {
     &:hover {
@@ -290,9 +297,10 @@
 //
 
 @mixin u-bg--dark() {
+  background-color: $gray-dark;
+
   @include u-form--inverse();
   @include u-font-color($gray-lightest);
-  background-color: $gray-dark;
 
   a {
     border-bottom-color: $gray-lightest;
@@ -304,8 +312,9 @@
 }
 
 @mixin u-bg--neutral() {
+  & { background-color: $gray-lightest; }
+
   @include u-font-color($base);
-  background-color: $gray-lightest;
 
   a {
     &:hover {

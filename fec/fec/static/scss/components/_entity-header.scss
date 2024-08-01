@@ -67,13 +67,13 @@
 }
 
 .entity__info {
-  @include clearfix();
   border-bottom: 2px solid;
   border-top: 2px solid;
   font-family: $sans-serif;
   letter-spacing: -.3px;
   padding: u(1rem 0);
   width: 100%;
+  @include clearfix();
 
   @include media($med) {
     display: table;
@@ -81,9 +81,9 @@
 }
 
 .entity__term {
-  @include clearfix();
   width: 100%;
   margin-bottom: u(1rem);
+  @include clearfix();
 
   &:last-child {
     margin-bottom: 0;
@@ -110,9 +110,9 @@
 }
 
 .entity__term__label {
-  @include span-columns(6);
   font-family: $sans-serif;
   font-weight: bold;
+  @include span-columns(6);
 
   @include media($med) {
     float: none;
@@ -155,8 +155,8 @@
 }
 
 .entity__header--primary {
-  @include u-bg--primary();
   border-top: 1px solid $primary-contrast;
+  @include u-bg--primary();
 
   .entity__info,
   .entity__type {
@@ -188,8 +188,8 @@
   }
 
   .entity__election {
-    @include span-columns(4);
     clear: none;
     padding-top: 0;
+    @include span-columns(4);
   }
 }

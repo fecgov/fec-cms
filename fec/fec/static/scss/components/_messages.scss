@@ -4,7 +4,6 @@
 //
 
 .message {
-  @include clearfix();
   background-size: u(2rem);
   background-position: u(2rem 2rem);
   background-color: $neutral;
@@ -13,6 +12,7 @@
   border-width: 0 0 0 3px;
   margin: u(2rem 0);
   padding: u(5rem 2rem 2rem 2rem);
+  @include clearfix();
 
   p:last-child {
     margin-bottom: 0;
@@ -29,13 +29,13 @@
 }
 
 .message--success {
-  @include u-icon-bg($check-circle, $primary);
   border-color: $primary-contrast;
+  @include u-icon-bg($check-circle, $primary);
 }
 
 .message--error {
-  @include u-icon-bg($x-circle, $primary);
   border-color: $secondary-contrast;
+  @include u-icon-bg($x-circle, $primary);
 }
 
 .message--alert {
@@ -129,13 +129,13 @@ p {
   border-color: $inverse;
 
   &.message--success {
-    @include u-icon-bg($check-circle, $inverse);
     border-color: $primary-contrast;
+    @include u-icon-bg($check-circle, $inverse);
   }
 
   &.message--error {
-    @include u-icon-bg($x-circle, $inverse);
     border-color: $secondary-contrast;
+    @include u-icon-bg($x-circle, $inverse);
   }
 
   &.message--alert {

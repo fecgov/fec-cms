@@ -58,24 +58,27 @@ select {
 }
 
 select {
+  // & {
+    width: auto;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: right u(2rem) top 50%;
+    background-size: 12px;
+    color: $base;
+    border: 2px solid $gray;
+    padding: u(.6rem 3em .6rem 1rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  // }
+
   @include appearance(none);
   @include u-icon-bg($arrow-down, $primary);
-  width: auto;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-position: right u(2rem) top 50%;
-  background-size: 12px;
-  color: $base;
-  border: 2px solid $gray;
-  padding: u(.6rem 3em .6rem 1rem);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
+  
   &::-ms-expand {
     display: none;
   }
-
+  
   &:hover:not([disabled]) {
     background-color: $gray-medium;
   }
@@ -189,11 +192,11 @@ input[type="file"] {
 }
 
 [type="checkbox"]:checked + label::before {
-  @include u-icon-bg($check, $inverse);
   background-position: 50%;
   background-size: 12px;
   background-repeat: no-repeat;
   border: 1px solid $gray-dark;
+  @include u-icon-bg($check, $inverse);
 }
 
 [type="checkbox"]:focus + label,
@@ -215,7 +218,6 @@ input[type="file"] {
 [type="reset"],
 [type="button"],
 button {
-  @include appearance(none);
   background: none;
   border: none;
   border-radius: 0;
@@ -225,6 +227,7 @@ button {
   line-height: 1;
   text-decoration: none;
   user-select: none;
+  @include appearance(none);
 
   &:hover,
   &:focus {

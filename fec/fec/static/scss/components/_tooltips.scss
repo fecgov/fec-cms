@@ -90,21 +90,21 @@
   bottom: calc(100% + #{$bottom});
 
   &::before {
-    @include triangle(2rem, $primary, down);
     bottom: u(-1rem);
     content: '';
     display: block;
     left: calc(50% - 1rem);
     position: absolute;
+    @include triangle(2rem, $primary, down);
   }
 
   &::after {
-    @include triangle(1.6rem, $inverse, down);
     content: '';
     display: block;
     position: absolute;
     left: calc(50% - .8rem);
     bottom: u(-.7rem);
+    @include triangle(1.6rem, $inverse, down);
   }
 
   &.tooltip--left {
@@ -232,7 +232,6 @@
 }
 
 .tooltip__trigger {
-  @include u-icon-bg($info-circle-outline, $primary);
   background-position: 50% 50%;
   background-size: contain;
   cursor: pointer;
@@ -241,6 +240,7 @@
   vertical-align: middle;
   width: u(1.8rem);
   margin: u(0 0 .5rem .3rem);
+  @include u-icon-bg($info-circle-outline, $primary);
 
   &:hover + .tooltip,
   &:focus + .tooltip {
@@ -255,13 +255,13 @@
   }
 
   .tooltip__heading {
-    @include clearfix();
     background: $primary;
     color: $inverse;
     display: flex;
     align-items: center;
     justify-content: space-between;
-
+    @include clearfix();
+    
     .tooltip__title {
       flex-grow: 2;
       text-align: left;

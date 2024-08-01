@@ -54,14 +54,14 @@
 // Sortable headers
 
 .data-table {
-  @include transform(translateX(0%));
-  @include transition-property(transform);
-  @include transition-duration(0.5s);
   height: 100%;
   font-family: $sans-serif;
   position: relative;
   table-layout: auto;
   z-index: $z1;
+  @include transform(translateX(0%));
+  @include transition-property(transform);
+  @include transition-duration(0.5s);
 
   th {
     line-height: u(1.4rem);
@@ -79,20 +79,20 @@
     }
 
     &.sorting {
-      @include u-icon-bg($dash, $gray);
       background-size: u(1rem);
+      @include u-icon-bg($dash, $gray);
     }
 
     &.sorting_asc {
-      @include u-icon-bg($arrow-up-border, $primary);
       background-size: u(1rem);
       background-color: $gray-lightest;
+      @include u-icon-bg($arrow-up-border, $primary);
     }
 
     &.sorting_desc {
-      @include u-icon-bg($arrow-down-border, $primary);
       background-size: u(1rem);
       background-color: $gray-lightest;
+      @include u-icon-bg($arrow-down-border, $primary);
     }
 
     &:first-child {
@@ -126,7 +126,9 @@
   }
 
   td {
+    border-left: 1px solid $neutral;
     max-width: max(9em, 20vw);
+    padding: u(1rem);
     word-wrap: break-word;
 
     @include media($med) {
@@ -138,8 +140,6 @@
     }
 
     @include transition(padding-left, 0.2s);
-    padding: u(1rem);
-    border-left: 1px solid $neutral;
 
     &.column--number {
       text-align: right;
@@ -230,8 +230,8 @@
 
 // Special styles for rows that trigger panels
 .row--has-panel {
-  @include transition(border-left-width, 0.2s);
   cursor: pointer;
+  @include transition(border-left-width, 0.2s);
 }
 
 .row-active {

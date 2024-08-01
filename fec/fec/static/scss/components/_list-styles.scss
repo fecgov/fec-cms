@@ -104,8 +104,8 @@
 }
 
 .list--flat {
-  @include clearfix();
   padding: 0;
+  @include clearfix();
 
   li {
     float: left;
@@ -118,8 +118,8 @@
 }
 
 .list--flat-bordered {
-  @extend .list--flat;
   padding-bottom: u(.5rem);
+  @extend .list--flat;
 
   li {
     &::after {
@@ -222,11 +222,11 @@
 
 .list--checks {
   li {
-    @include u-icon-bg($check, $primary);
     background-size: u(2rem);
     background-position: u(0 1.4rem);
     padding: u(1rem 0 1rem 2.5rem);
     position: relative;
+    @include u-icon-bg($check, $primary);
   }
 
   &.list--checks--secondary {
@@ -249,8 +249,8 @@
 //
 
 .list--buttons {
-  @include clearfix();
   padding: 0;
+  @include clearfix();
 
   li {
     display: inline-block;

@@ -2,12 +2,12 @@
 //
 
 .panel__main {
-  @include clearfix();
   left: 0;
   clear: both;
   position: relative;
   width: 200%;
   z-index: $z1;
+  @include clearfix();
 
   .data-table {
     float: left;
@@ -22,13 +22,13 @@
 
 // modal
 .panel__overlay {
-  @include transition(opacity .2s);
   background-color: $inverse;
   overflow: hidden;
   padding: u(1rem);
   float: right;
   width: 50%;
   opacity: 0;
+  @include transition(opacity .2s);
 }
 
 // Open panel
@@ -118,10 +118,10 @@
 // .panel__close  - Closes the panel. Shows up as a back arrow on the left on mobile and an x on the right on desktop
 
 .panel__navigation {
-  @include clearfix();
   border-bottom: 1px solid $gray-lightest;
   padding: u(0 0 1rem 0);
   text-align: right;
+  @include clearfix();
 }
 
 .panel__link {
@@ -129,7 +129,6 @@
 }
 
 .panel__close {
-  @include u-icon-bg($arrow-left-border, $primary);
   background-position: 0 50%;
   background-size: u(1.5rem);
   background-repeat: no-repeat;
@@ -137,6 +136,7 @@
   cursor: pointer;
   float: left;
   padding-left: u(3rem);
+  @include u-icon-bg($arrow-left-border, $primary);
 
   &::after {
     content: "Show all";
@@ -202,11 +202,11 @@
   }
 
   .panel__close {
-    @include u-icon($x, $primary);
     background-size: u(2rem);
     position: absolute;
     right: 0;
     top: 0;
+    @include u-icon($x, $primary);
 
     &::after {
       content: '';
@@ -229,8 +229,8 @@
     }
 
     .data-table {
-      @include transform(translateX(0));
       width: 50% !important;
+      @include transform(translateX(0));
     }
 
     .dataTables_wrapper {

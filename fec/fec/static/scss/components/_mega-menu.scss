@@ -58,11 +58,11 @@
 }
 
 .mega__page-link {
-  @include heading(h3);
   border-bottom: 1px solid $inverse;
   display: block;
   margin: 0;
   padding: u(1rem 0 1rem 1rem);
+  @include heading(h3);
 
   // scss-lint:disable ImportantRule
   &:hover {
@@ -120,23 +120,24 @@
 }
 
 @include media($med) {
-.icon-heading--data-flag-circle--secondary::before, .icon-heading--data-flag-circle--primary::before{
-  margin-right: u(1rem);
-  margin-left: u(.2rem);
- }
+  .icon-heading--data-flag-circle--secondary::before, .icon-heading--data-flag-circle--primary::before {
+    margin-right: u(1rem);
+    margin-left: u(.2rem);
+  }
 }
 
 // scss-lint:disable ImportantRule
 @include media($lg) {
   .mega-container {
-    @include u-font-color($inverse);
-    @include clearfix();
     display: block !important; // Important to override [aria-hidden] styles
     overflow: hidden;
     position: absolute;
     left: 0;
     right: 0;
     visibility: hidden;
+
+    @include u-font-color($inverse);
+    @include clearfix();
 
     &.is-open {
       top: u(4rem);
@@ -145,10 +146,10 @@
       z-index: $z-navigation;
 
       .mega {
-        @include transition(all .4s ease-out);
-        @include transform(translateY(0));
         box-shadow: 0 6px 8px 2px rgba(0, 0, 0, .3);
         transform: translateY(0);
+        @include transition(all .4s ease-out);
+        @include transform(translateY(0));
       }
     }
 
@@ -158,13 +159,13 @@
   }
 
   .mega {
-    @include clearfix();
-    @include transition(all .4s ease-out);
-    @include transform(translateY(-100%));
     background-color: $primary;
     font-size: u(1.4rem);
     color: $inverse;
     padding: u(1rem 4rem 2rem 4rem);
+    @include clearfix();
+    @include transition(all .4s ease-out);
+    @include transform(translateY(-100%));
 
     .button--standard {
       color: $base;

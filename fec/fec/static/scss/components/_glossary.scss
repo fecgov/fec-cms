@@ -2,7 +2,6 @@
 //
 
 .glossary {
-  @include transition(right, .3s);
   background-color: $base;
   bottom: 0;
   color: $inverse;
@@ -13,6 +12,7 @@
   top: 0;
   width: 75%;
   z-index: $z-glossary;
+  @include transition(right, .3s);
 
   &[aria-hidden='true'] {
     display: block !important;
@@ -20,8 +20,8 @@
   }
 
   &[aria-hidden='false'] {
-    @include transition(right, .3s);
     right: 0;
+    @include transition(right, .3s);
   }
 
   .button--close--inverse {
@@ -48,8 +48,8 @@
   letter-spacing: -.3px;
 
   ol {
-    @extend .list--numbered;
     margin-left: 0;
+    @extend .list--numbered;
 
     li {
       font-size: u(1.4rem);
@@ -57,8 +57,8 @@
   }
 
   ul {
-    @extend .list--bulleted;
     margin-left: 0;
+    @extend .list--bulleted;
 
     li {
       font-size: u(1.4rem);
@@ -72,10 +72,10 @@
 }
 
 .glossary__toggle {
-  @include u-icon-bg($book, $base);
   background-position: 0% 50%;
   background-size: 1em;
   padding-left: u(2.5rem);
+  @include u-icon-bg($book, $base);
 }
 
 // Term classes
@@ -84,8 +84,6 @@
 
 // standard class, adds the book icon
 .term {
-  @include u-icon-bg($book, $primary);
-  @include transition(background-color, .2s, box-shadow, .2s, color, .2s);
   background-size: .6em;
   background-position: 99% 50%;
   background-color: transparent;
@@ -94,6 +92,8 @@
   cursor: pointer;
   margin-right: 2px;
   padding-right: .9em;
+  @include u-icon-bg($book, $primary);
+  @include transition(background-color, .2s, box-shadow, .2s, color, .2s);
 
   &:focus,
   &:hover {

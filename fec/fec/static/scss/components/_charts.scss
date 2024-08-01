@@ -163,12 +163,12 @@
 }
 
 .snapshot__controls {
-  @include clearfix();
   border-width: 2px 0;
   border-style: solid;
   border-color: $primary;
   padding: 2px 0;
   text-align: center;
+  @include clearfix();
 
   h5 {
     display: inline-block;
@@ -191,13 +191,13 @@
 }
 
 .snapshot__line-controls {
-  @include clearfix();
   border-width: 2px 0;
   border-style: solid;
   border-color: $primary;
   padding: 2px 0;
   text-align: center;
   margin: 1rem 0rem 1rem 0rem;
+  @include clearfix();
 
   h5 {
     display: inline-block;

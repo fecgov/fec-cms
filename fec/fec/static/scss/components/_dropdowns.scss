@@ -28,7 +28,6 @@
   width: 100%;
 
   &::after {
-    @include u-icon-bg($arrow-down, $primary);
     background-repeat: no-repeat;
     background-position: 90% 50%;
     background-size: 12px;
@@ -39,6 +38,7 @@
     position: absolute;
     right: u(1.5rem);
     top: u(.5rem);
+    @include u-icon-bg($arrow-down, $primary);
   }
 
   &.is-active::after {
@@ -56,18 +56,18 @@
 
   &.is-successful {
     &::after {
-      @include u-icon-button($check);
       background-position: u(1.25rem) 50%;
       background-size: 18px;
       padding-left: u(2.5rem);
       right: 0;
+      @include u-icon-button($check);
     }
   }
 
   &.button--alt-primary::after,
   &.button--alt-secondary::after {
-    @include u-icon-bg($arrow-down, $inverse);
     border-left: 1px solid $inverse;
+    @include u-icon-bg($arrow-down, $inverse);
   }
 }
 
@@ -130,11 +130,11 @@
       }
 
       &.is-checked {
-        @include u-icon-bg($check, $gray);
         background-color: $gray-light;
         background-position: right u(.5rem) top 50%;
         padding-right: u(1.5rem);
         cursor: default;
+        @include u-icon-bg($check, $gray);
       }
     }
 
@@ -176,8 +176,8 @@
   margin: u(.5rem 0);
 
   li {
-    @include animation(fadeIn .2s ease-in);
     position: relative;
+    @include animation(fadeIn .2s ease-in);
 
     &:hover {
       input[type="checkbox"]:not(:checked) + label:not(.is-loading) + .dropdown__remove {
@@ -200,7 +200,6 @@
   }
 
   .dropdown__remove {
-    @include u-icon-button($x, $gray-dark);
     background-position: u(.75rem) 50%;
     background-size: 18px;
     display: none;
@@ -208,6 +207,7 @@
     bottom: u(1rem);
     position: absolute;
     z-index: $z1;
+    @include u-icon-button($x, $gray-dark);
   }
 
   @include media($med) {

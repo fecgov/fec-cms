@@ -26,10 +26,10 @@
 //
 
 .callout {
-  @include clearfix();
   padding: u(1rem 1.5rem);
   margin-bottom: u(2rem);
   border-radius: 4px;
+  @include clearfix();
 }
 
 .callout--primary {
@@ -70,9 +70,9 @@
   }
 
   .callout__action {
-    @include span-columns(2 of 6);
     border-left: 1px solid;
     padding-left: u(1rem);
     padding-top: 0;
+    @include span-columns(2 of 6);
   }
 }
