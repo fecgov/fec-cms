@@ -173,7 +173,7 @@ def admin_fine_page(request, admin_fine_no):
 
 # Transform boolean queries for eCFR API
 # Query string:
-# ((coordinated OR communications) OR (in-kind AND contributions) OR
+# ((coordinated | communications) | (in-kind AND contributions) |
 # ("independent expenditure")) AND (-authorization)
 # eCFR query string transformation:
 # (coordinated | communications) | (in-kind contributions) |
@@ -183,7 +183,7 @@ def transform_ecfr_query_string(query_string):
 
     # Define the replacements for eCFR query string
     replacements = [
-        (r'\((-[^)]*)\)', r'\1'),  # Removes parentheses around on statement
+        (r' \+', ''),  # Replace space+ with empty string
     ]
 
     # Apply replacements sequentially
@@ -474,7 +474,7 @@ def legal_doc_search_statutes(request):
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
 
-    results = api_caller.load_legal_search_results(query, None, 'statutes',
+    results = api_caller.load_legal_search_results(query, '', 'statutes',
                                                    offset=offset)
 
     return render(request, 'legal-search-results-statutes.jinja', {

@@ -82,7 +82,7 @@
   </fieldset>
 {% endmacro %}
 
-{% macro search(location, result_type, query, query_exclude, button_color="button--standard", select_class="select--alt-primary") %}
+{% macro search(location, result_type, query, button_color="button--standard", select_class="select--alt-primary") %}
 {% if location == 'hero' %}
   {% set size = 'combo--search--large' %}
 {% endif %}

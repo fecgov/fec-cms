@@ -53,7 +53,7 @@ class TestLegalSearch(TestCase):
         )
         assert response.status_code == 200
         load_legal_search_results.assert_called_once_with(
-            'in kind donation', 'all', limit=3
+            'in kind donation', '', 'all', limit=3
         )
 
     # Test4 : This test is checking against the static data on
@@ -81,14 +81,13 @@ class TestLegalSearch(TestCase):
     def test_transform_ecfr_query_string(self):
         # Define input query string
         input_query_string = (
-            '((coordinated OR communications) OR (in-kind AND' +
-            ' contributions) OR ("independent expenditure")) AND (-travel)'
+            '(coordinated | communications)|(in-kind + contributions)|("independent expenditure") -travel'
         )
 
         # Expected output after transformation
         expected_output = (
-            '((coordinated | communications) | (in-kind' +
-            ' contributions) | ("independent expenditure")) -travel'
+            '(coordinated | communications)|(in-kind' +
+            ' contributions)|("independent expenditure") -travel'
         )
 
         # Apply transformation
@@ -110,7 +109,8 @@ class TestLegalSearch(TestCase):
             data={'search': 'in kind donation', 'search_type': 'statutes'}
         )
         assert response.status_code == 200
-        load_legal_search_results.assert_called_once_with('in kind donation',
+
+        load_legal_search_results.assert_called_once_with('in kind donation', '',
                                                           'statutes', offset=0)
 
     # # Test 6: OK
@@ -139,12 +139,14 @@ class TestLegalSearch(TestCase):
         calls = [
             mock.call(
                 query='',
+                query_exclude='',
                 query_type='advisory_opinions',
                 ao_min_issue_date=ao_min_date,
                 ao_category=['F', 'W']
             ),
             mock.call(
                 query='',
+                query_exclude='',
                 query_type='advisory_opinions',
                 ao_status='Pending',
                 ao_category='R'

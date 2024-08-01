@@ -49,7 +49,7 @@ KeywordModal.prototype.handleSubmit = function(e) {
   const searchQuery = this.generateQueryString();
   let query = URI(window.location.search)
     .removeSearch('search')
-    .addSearch('search', searchQuery)
+    .addSearch('search', searchQuery);
 
   this.dialog.hide();
   // Event record for GTM
@@ -78,7 +78,7 @@ KeywordModal.prototype.generateQueryString = function() {
   if (this.$excludeField.val()) {
     excludeQuery = self.parseValue(this.$excludeField);
   }
-  var queryString =  includeQuery + excludeQuery;
+  var queryString = includeQuery + excludeQuery;
   return queryString;
 };
 
