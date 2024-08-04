@@ -40,7 +40,7 @@
   &.commissioner-height {
     min-height: u(10rem);
   }
-  
+
   &.text-centered {
     text-align: center;
   }
@@ -89,24 +89,24 @@
     object-fit: contain;
     padding: u(2rem);
     width: 100%;
+  }
+
+  &.icon--large {
+    img {
+      height: u(20rem);
     }
 
-    &.icon--large {
-      img {
-      height: u(20rem);
-      }
-
-      h2 {
+    h2 {
       width: 75%;
       margin: 1rem auto;
-      }
+    }
 
-      p {
+    p {
       width: 85%;
       margin: 1rem auto 2rem;
-      }
     }
   }
+}
 
 .grid__icon--deep-red {
   img {
@@ -119,7 +119,7 @@
     background-color: $navy;
   }
 }
-  .grid__icon--white {
+.grid__icon--white {
   img {
     background-color: $inverse;
   }
@@ -129,7 +129,9 @@
 // This is based on $large-screen, but we have to convert to px so that we can
 // subtract a pixel. Otherwise, the breakpoints will overlap at 860px (the
 // large breakpoint).
-@include media(min-width $medium-screen max-width (strip-units($large-screen) * $em-base - 1)) {
+@include media(
+  min-width $medium-screen max-width (strip-units($large-screen) * $em-base - 1)
+) {
   .grid--2-wide,
   .grid--3-wide,
   .grid--4-wide,

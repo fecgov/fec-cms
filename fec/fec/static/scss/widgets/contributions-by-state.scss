@@ -18,48 +18,52 @@ $check: 'data:image/svg+xml;charset=utf8, %3Csvg%20width%3D%2220%22%20height%3D%
 $info-circle: 'data:image/svg+xml;charset=utf8, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20d%3D%22M10%200a10%2010%200%201%200%2010%2010A10%2010%200%200%200%2010%200zm1.2%2016.1a15.69%2015.69%200%200%201-2.4.3q-.9%200-.9-.6a9.32%209.32%200%200%201%20.2-1.4l.8-4.7a3.08%203.08%200%200%200%20.1-.9c0-.3-.4-.4-1.2-.4l.1-.5a14.22%2014.22%200%200%201%202.5-.3.61.61%200%200%201%20.7.6%2011.48%2011.48%200%200%201-.2%201.4l-.8%204.8a2.25%202.25%200%200%200-.1.7c0%20.4.2.5%201.2.5v.5zm-.5-10a1.15%201.15%200%200%201-1.2-1.2%201.35%201.35%200%200%201%201.3-1.4A1.22%201.22%200%200%201%2012%204.7a1.42%201.42%200%200%201-1.3%201.4z%22%2F%3E%3C%2Fsvg%3E';
 
 // $inverse for u-button, $gray-dark
-@import "../variables";
+@import '../variables';
 // prefix-for-webkit for keyframes
-@import "../vendor/bourbon/settings/prefixer";
+@import '../vendor/bourbon/settings/prefixer';
 // disable-prefix-for-all for keyframes
-@import "../vendor/bourbon/addons/prefixer";
+@import '../vendor/bourbon/addons/prefixer';
 // keyframes for u-button
-@import "../vendor/bourbon/css3/keyframes";
+@import '../vendor/bourbon/css3/keyframes';
 // animation for u-button
-@import "../vendor/bourbon/css3/animation";
+@import '../vendor/bourbon/css3/animation';
 // u-button:
-@import "../mixins/_utilities";
+@import '../mixins/_utilities';
 // triangle for tooltips:
-@import "../vendor/bourbon/addons/triangle";
+@import '../vendor/bourbon/addons/triangle';
 // overlay for loading states
-@import "../components/overlay";
+@import '../components/overlay';
 
 @font-face {
   font-family: gandhi;
   font-style: normal;
   font-weight: normal;
-  src: url('/static/fonts/gandhiserif-regular.woff2') format('woff2'),
+  src:
+    url('/static/fonts/gandhiserif-regular.woff2') format('woff2'),
     url('/static/fonts/gandhiserif-regular.woff') format('woff');
 }
 @font-face {
   font-family: karla;
   font-style: normal;
   font-weight: normal;
-  src: url('/static/fonts/karla-regular.woff2') format('woff2'),
+  src:
+    url('/static/fonts/karla-regular.woff2') format('woff2'),
     url('/static/fonts/karla-regular.woff') format('woff');
 }
 @font-face {
   font-family: karla;
-  src: url('/static/fonts/karla-bold.woff2') format('woff2'),
+  src:
+    url('/static/fonts/karla-bold.woff2') format('woff2'),
     url('/static/fonts/karla-bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
 @font-face {
-  font-family: "fec_currency_mono";
+  font-family: 'fec_currency_mono';
   font-style: normal;
   font-weight: normal;
-  src: url('/static/fonts/fec-currencymono-regular.woff2') format('woff2'),
+  src:
+    url('/static/fonts/fec-currencymono-regular.woff2') format('woff2'),
     url('/static/fonts/fec-currencymono-regular.woff') format('woff'),
     url('/static/fonts/fec-currencymono-regular.ttf') format('truetype');
 }
@@ -158,16 +162,16 @@ aside.contribs-by-state {
         background-position: 50%;
         padding: 0;
       }
-    
+
       &[data-allow-text] {
         .tt-suggestion__missing {
           display: none;
         }
-    
+
         button.is-loading {
           background-image: url('../../img/loading-ellipsis-gray.gif');
         }
-    
+
         button.is-successful {
           background-position: 50%;
           background-size: 2.8rem;
@@ -188,7 +192,7 @@ aside.contribs-by-state {
         position: absolute;
         right: auto;
         top: 75px;
-        transition: opacity .5s .5s;
+        transition: opacity 0.5s 0.5s;
         width: 0;
       }
       &.is-error {
@@ -196,7 +200,7 @@ aside.contribs-by-state {
           height: 65px;
           max-width: 300px;
           opacity: 1;
-          transition: opacity .5s .5s;
+          transition: opacity 0.5s 0.5s;
           width: 100%;
         }
       }
@@ -205,7 +209,8 @@ aside.contribs-by-state {
       display: none; // hide it until it's moved into .typeahead-filter
     }
   }
-  .message, .message[aria-hidden="true"] {
+  .message,
+  .message[aria-hidden='true'] {
     // .message, etc are copied from components/_messages.scss
     background-color: $neutral;
     border-color: $gray;
@@ -218,7 +223,8 @@ aside.contribs-by-state {
     transition: all 0.5s;
     width: 100%;
 
-    &.has-error, &[aria-hidden="false"] {
+    &.has-error,
+    &[aria-hidden='false'] {
       margin: 2rem 0;
       max-height: 150px;
       padding: 2rem;
@@ -280,7 +286,7 @@ aside.contribs-by-state {
       min-height: 41px;
 
       div {
-        padding: $fontSizeBase * .75;
+        padding: $fontSizeBase * 0.75;
 
         &:first-child {
           font-weight: $fontWeightBold;
@@ -310,12 +316,13 @@ aside.contribs-by-state {
       justify-content: space-between;
       width: 100%;
     }
-    td, th {
+    td,
+    th {
       flex-grow: 1;
       flex-shrink: 1;
       line-height: 1.25em;
-      padding: #{$fontSizeBase * .5};
-      
+      padding: #{$fontSizeBase * 0.5};
+
       &:first-child {
         flex-grow: 0;
         flex-shrink: 0;
@@ -332,7 +339,7 @@ aside.contribs-by-state {
     }
     th {
       font-weight: $fontWeightSemibold;
-      
+
       &:last-child {
         flex-grow: 1;
         flex-shrink: 1;
@@ -370,18 +377,19 @@ aside.contribs-by-state {
         font-size: $fontSizeBase * 2;
         font-weight: $fontWeightRegular;
         line-height: 1.25em;
-        margin: 0 0 .25em;
+        margin: 0 0 0.25em;
 
         a {
           line-height: 1.25em;
         }
       }
-      h2, h3 {
+      h2,
+      h3 {
         font-family: $fontFamilySansSerif;
         font-size: $fontSizeBase * 1.4;
         font-weight: $fontWeightRegular;
         line-height: 1.25em;
-        margin: 0 0 .25em;
+        margin: 0 0 0.25em;
       }
     }
     .legend-container {
@@ -390,7 +398,7 @@ aside.contribs-by-state {
       span {
         text-align: right;
         line-height: 1.25em;
-        margin-bottom: .25em;
+        margin-bottom: 0.25em;
       }
     }
   }
@@ -399,7 +407,8 @@ aside.contribs-by-state {
     text-align: right;
     width: 100%;
 
-    a, button {
+    a,
+    button {
       margin: 0 0 1rem 1rem;
     }
   }
@@ -415,7 +424,7 @@ aside.contribs-by-state {
     }
     .overlay {
       display: none;
-      
+
       &.is-loading {
         background-image: url('../../img/loading.gif');
         display: block;
@@ -452,7 +461,7 @@ aside.contribs-by-state {
           float: left;
           height: 36px;
           line-height: 36px;
-          margin-right: .5em;
+          margin-right: 0.5em;
           position: relative;
         }
         .filter__typeahead {
@@ -483,14 +492,14 @@ aside.contribs-by-state {
       fieldset {
         display: inline-block;
         float: left;
-        
+
         &:first-child {
           margin-right: 7.5pt;
         }
       }
 
       label {
-        display: inline-block;// 
+        display: inline-block; //
       }
     }
     .state-list-wrapper {
@@ -499,7 +508,9 @@ aside.contribs-by-state {
 
       .remote-table-header {
         margin-bottom: 0.5px; // Make sure the border is visible above the scrollbar below it
-        width: calc(100% + 1px); // align the right side with the parent's right boundary
+        width: calc(
+          100% + 1px
+        ); // align the right side with the parent's right boundary
       }
       .table-scroller {
         height: 100%;
@@ -509,7 +520,8 @@ aside.contribs-by-state {
           min-height: 400px;
         }
       }
-      td, th {
+      td,
+      th {
         &:nth-child(2) {
           max-width: 90px;
         }
@@ -520,7 +532,7 @@ aside.contribs-by-state {
       margin-left: 1rem;
       width: calc(66.66% - 1rem);
 
-      .election-map {  
+      .election-map {
         svg {
           min-width: 445px;
           min-height: 285px;
@@ -528,8 +540,9 @@ aside.contribs-by-state {
       }
     }
     .map-details {
-      .more-info-wrapper {    
-        a, button {
+      .more-info-wrapper {
+        a,
+        button {
           margin: 0 0 1rem 1rem;
         }
       }
@@ -543,7 +556,7 @@ aside.contribs-by-state {
   // Some overrides for table.table-display *, which was added because IE doesn't like Flex
   table.table-display {
     display: table;
-    
+
     thead {
       display: table-header-group;
     }
@@ -553,7 +566,8 @@ aside.contribs-by-state {
     tr {
       display: table-row;
     }
-    td, th {
+    td,
+    th {
       display: table-cell;
     }
   }
@@ -570,13 +584,13 @@ aside.contribs-by-state {
   position: absolute;
   text-align: center;
   z-index: #{$z1 - 2};
-  
+
   .tooltip__title {
     border-bottom: 1px solid #112e51;
     text-transform: uppercase;
     font-weight: 700;
   }
-  
+
   &.tooltip--above {
     min-width: 12rem;
     left: -4rem;
@@ -595,10 +609,10 @@ aside.contribs-by-state {
   &::after {
     @include triangle(1.6rem, $inverse, down);
 
-    bottom: -.7rem;
+    bottom: -0.7rem;
     content: '';
     display: block;
-    left: calc(50% - .8rem);
+    left: calc(50% - 0.8rem);
     position: absolute;
   }
 }

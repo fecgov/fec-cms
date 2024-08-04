@@ -46,7 +46,7 @@
   }
 
   .icon-heading__content {
-    padding-left: u(.5rem);
+    padding-left: u(0.5rem);
     @include span-columns(8);
   }
 }
@@ -66,8 +66,6 @@
 @mixin u-icon-heading() {
   padding-left: u(3rem);
 }
-
-
 
 .icon-heading--raising-circle {
   &::before {
@@ -145,7 +143,12 @@
     content: '';
     float: left;
     margin-right: u(1.5rem);
-    @include u-icon-circle($question-bubble, $inverse, $secondary-contrast, $size);
+    @include u-icon-circle(
+      $question-bubble,
+      $inverse,
+      $secondary-contrast,
+      $size
+    );
   }
 }
 
@@ -206,7 +209,12 @@
     content: '';
     float: left;
     margin-right: u(1.5rem);
-    @include u-icon-circle($subsection-doc, $inverse, $primary-contrast, 4.5rem);
+    @include u-icon-circle(
+      $subsection-doc,
+      $inverse,
+      $primary-contrast,
+      4.5rem
+    );
   }
 }
 
@@ -216,16 +224,20 @@
     content: '';
     float: left;
     margin-right: u(1.5rem);
-    @include u-icon-circle($direction-sign, $inverse, $primary-contrast, 4.5rem);
+    @include u-icon-circle(
+      $direction-sign,
+      $inverse,
+      $primary-contrast,
+      4.5rem
+    );
   }
 
-  &.primary{
+  &.primary {
     &::before {
       background-size: u(4rem);
       @include u-icon-circle($direction-sign, $primary, $inverse, 4.5rem);
     }
   }
-
 }
 
 .icon-heading--shield-circle {
@@ -246,7 +258,12 @@
     content: '';
     float: left;
     margin-right: u(1.5rem);
-    @include u-icon-circle($person-location, $inverse, $primary-contrast, $size);
+    @include u-icon-circle(
+      $person-location,
+      $inverse,
+      $primary-contrast,
+      $size
+    );
   }
 }
 
@@ -258,7 +275,12 @@
     content: '';
     float: left;
     margin-right: u(1.5rem);
-    @include u-icon-circle($individual-contributions, $inverse, $primary-contrast, $size);
+    @include u-icon-circle(
+      $individual-contributions,
+      $inverse,
+      $primary-contrast,
+      $size
+    );
   }
 }
 
@@ -270,7 +292,12 @@
     content: '';
     float: left;
     margin-right: u(1.5rem);
-    @include u-icon-circle($magnifying-glass, $inverse, $primary-contrast, $size);
+    @include u-icon-circle(
+      $magnifying-glass,
+      $inverse,
+      $primary-contrast,
+      $size
+    );
   }
 }
 
@@ -280,7 +307,12 @@
     $size: u(4rem);
 
     background-size: u(1.8rem);
-    @include u-icon-circle($graph-horizontal-ordered, $primary, $inverse, $size);
+    @include u-icon-circle(
+      $graph-horizontal-ordered,
+      $primary,
+      $inverse,
+      $size
+    );
   }
 }
 
@@ -289,7 +321,12 @@
     $size: u(4rem);
 
     background-size: u(1.8rem);
-    @include u-icon-circle($graph-horizontal-unordered, $primary, $inverse, $size);
+    @include u-icon-circle(
+      $graph-horizontal-unordered,
+      $primary,
+      $inverse,
+      $size
+    );
   }
 }
 
@@ -311,7 +348,7 @@
     @include u-icon-circle($election, $inverse, $secondary-contrast, $size);
   }
 
-  &.primary{
+  &.primary {
     &::before {
       background-size: 40%;
       @include u-icon-circle($election, $primary, $inverse, 4.5rem);
@@ -327,10 +364,15 @@
     content: '';
     float: left;
     margin-right: u(1.5rem);
-    @include u-icon-circle($example-document, $inverse, $secondary-contrast, $size);
+    @include u-icon-circle(
+      $example-document,
+      $inverse,
+      $secondary-contrast,
+      $size
+    );
   }
 
-  &.primary{
+  &.primary {
     &::before {
       background-size: 40%;
       @include u-icon-circle($example-document, $primary, $inverse, 4.5rem);
@@ -346,10 +388,15 @@
     content: '';
     float: left;
     margin-right: u(1.5rem);
-    @include u-icon-circle($financial-document, $inverse, $secondary-contrast, $size);
+    @include u-icon-circle(
+      $financial-document,
+      $inverse,
+      $secondary-contrast,
+      $size
+    );
   }
 
-  &.primary{
+  &.primary {
     &::before {
       background-size: 40%;
       @include u-icon-circle($financial-document, $primary, $inverse, 4.5rem);
@@ -370,8 +417,7 @@
 .icon-heading--direction-sign-circle,
 .icon-heading--election-circle,
 .icon-heading--example-document,
-.icon-heading--financial-document
- {
+.icon-heading--financial-document {
   border-bottom: none;
   display: table;
   padding-bottom: u(1.3rem);
@@ -380,7 +426,7 @@
     line-height: 1.2;
     display: table-cell;
     vertical-align: middle;
-    color:inherit;
+    color: inherit;
   }
 
   &::before {

@@ -44,7 +44,6 @@
 }
 
 .legal-search-result__hit {
-
   em {
     @include t-highlight;
   }
@@ -122,7 +121,7 @@
 
 .ao-result__title {
   background-color: $gray-light;
-  border-left: .5rem solid $primary;
+  border-left: 0.5rem solid $primary;
   font-family: $sans-serif;
   letter-spacing: 0;
   margin: u(2rem 0 0 0);

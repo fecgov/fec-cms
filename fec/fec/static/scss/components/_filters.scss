@@ -93,7 +93,7 @@ $filter-button-width: u(4.6rem);
         background-size: u(2rem);
         right: u(-3rem);
         opacity: 1;
-        @include animation(fadeIn .8s ease-out);
+        @include animation(fadeIn 0.8s ease-out);
       }
     }
 
@@ -127,10 +127,10 @@ $filter-button-width: u(4.6rem);
   width: 100%;
   overflow: visible;
   left: -800px;
-  @include transition(left .2s ease-in-out);
+  @include transition(left 0.2s ease-in-out);
   @include u-bg--neutral;
 
-  &[aria-hidden="true"] {
+  &[aria-hidden='true'] {
     display: block !important;
   }
 }
@@ -187,7 +187,7 @@ $filter-button-width: u(4.6rem);
 .filter {
   border-bottom: 1px solid darken($neutral, 10%);
   margin-top: u(1.5rem);
-  padding-bottom: u(.5rem);
+  padding-bottom: u(0.5rem);
 
   &:first-child {
     margin-top: 0;
@@ -243,7 +243,7 @@ $filter-button-width: u(4.6rem);
     max-width: 26rem;
   }
 
-  [type="text"],
+  [type='text'],
   select,
   .dropdown__button {
     margin-bottom: u(1rem);
@@ -253,7 +253,8 @@ $filter-button-width: u(4.6rem);
     border-left: 3px solid $gray;
     padding-left: 5%;
 
-    select, input {
+    select,
+    input {
       width: 100%;
     }
   }
@@ -264,7 +265,7 @@ $filter-button-width: u(4.6rem);
   font-family: $sans-serif;
   font-size: u(1.2rem);
   line-height: 1;
-  padding: u(.5rem);
+  padding: u(0.5rem);
 }
 
 .filter__message {
@@ -342,7 +343,7 @@ $filter-button-width: u(4.6rem);
           display: block;
         }
       }
-      
+
       & + .content__section {
         width: calc(100% - 30rem);
       }
@@ -366,7 +367,7 @@ $filter-button-width: u(4.6rem);
     overflow: visible;
     @include transition(unset);
 
-    &[aria-hidden="true"] {
+    &[aria-hidden='true'] {
       display: none !important;
     }
   }
@@ -414,7 +415,7 @@ $filter-button-width: u(4.6rem);
     }
 
     .filter--wide {
-       max-width: 50%;
+      max-width: 50%;
     }
   }
 }
@@ -437,7 +438,7 @@ $filter-button-width: u(4.6rem);
   p {
     font-size: u(1.2rem);
     font-family: $sans-serif;
-    letter-spacing: -.3px;
+    letter-spacing: -0.3px;
     margin: 0;
   }
 }

@@ -17,7 +17,6 @@
 
 .results-info {
   position: relative;
-
 }
 
 // modal
@@ -28,7 +27,7 @@
   float: right;
   width: 50%;
   opacity: 0;
-  @include transition(opacity .2s);
+  @include transition(opacity 0.2s);
 }
 
 // Open panel
@@ -59,7 +58,7 @@
 }
 
 .panel {
-  background-color: rgba($gray-lightest, .3);
+  background-color: rgba($gray-lightest, 0.3);
   border: 1px solid $gray-lightest;
   font-family: $sans-serif;
   padding: u(1rem);
@@ -82,7 +81,7 @@
 
 .panel__title {
   font-weight: bold;
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
   margin-top: u(1rem);
 }
 
@@ -101,7 +100,7 @@
 
 .panel__term {
   font-weight: bold;
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
   line-height: 1.4em;
   padding-right: u(2rem);
   vertical-align: top;
@@ -139,7 +138,7 @@
   @include u-icon-bg($arrow-left-border, $primary);
 
   &::after {
-    content: "Show all";
+    content: 'Show all';
   }
 }
 
@@ -162,14 +161,14 @@
   }
 
   .panel__overlay {
-    background-color: rgba($gray-lightest, .3);
+    background-color: rgba($gray-lightest, 0.3);
     border-left: 1px solid $gray-lightest;
     min-height: 70vh;
     height: 100%;
     width: 50%;
     left: 100%;
 
-    &[aria-hidden="false"] {
+    &[aria-hidden='false'] {
       left: 50%;
     }
   }
@@ -192,7 +191,7 @@
   }
 
   .panel__navigation {
-    padding: u(.6rem 2rem);
+    padding: u(0.6rem 2rem);
     text-align: left;
     margin-bottom: 0;
   }
@@ -213,7 +212,7 @@
     }
   }
 
-// Open panel
+  // Open panel
 
   .panel-active {
     .panel__main {
@@ -261,7 +260,7 @@
 
   td {
     border-bottom: 0;
-    padding: u(.3rem 0);
+    padding: u(0.3rem 0);
     white-space: pre-wrap;
     overflow: visible;
 
@@ -279,7 +278,8 @@
       padding-left: 0 !important;
       vertical-align: bottom;
 
-      &.panel__term, &.panel__data {
+      &.panel__term,
+      &.panel__data {
         vertical-align: top;
       }
     }

@@ -105,7 +105,7 @@
   border-top: 1px solid $primary;
   margin-top: u(2rem);
   padding-top: u(2rem);
-  min-width:u(68rem);
+  min-width: u(68rem);
 
   &.content__section--extra {
     padding-top: u(4rem);
@@ -137,7 +137,7 @@
 }
 
 .u-padding--top--small {
-  padding-top: u(.5rem) !important;
+  padding-top: u(0.5rem) !important;
 }
 
 .u-padding--top--med {
@@ -149,7 +149,7 @@
 }
 
 .u-padding--bottom--small {
-  padding-bottom: u(.5rem) !important;
+  padding-bottom: u(0.5rem) !important;
 }
 
 .u-padding--left {
@@ -174,7 +174,7 @@
 }
 
 .u-margin--bottom--small {
-  margin-bottom: u(.5rem);
+  margin-bottom: u(0.5rem);
 }
 
 .u-margin--top {

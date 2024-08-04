@@ -21,28 +21,32 @@ $fontWeightBold: 700;
   font-family: gandhi;
   font-style: normal;
   font-weight: normal;
-  src: url('/static/fonts/gandhiserif-regular.woff2') format('woff2'),
+  src:
+    url('/static/fonts/gandhiserif-regular.woff2') format('woff2'),
     url('/static/fonts/gandhiserif-regular.woff') format('woff');
 }
 @font-face {
   font-family: karla;
   font-style: normal;
   font-weight: normal;
-  src: url('/static/fonts/karla-regular.woff2') format('woff2'),
+  src:
+    url('/static/fonts/karla-regular.woff2') format('woff2'),
     url('/static/fonts/karla-regular.woff') format('woff');
 }
 @font-face {
   font-family: karla;
-  src: url('/static/fonts/karla-bold.woff2') format('woff2'),
+  src:
+    url('/static/fonts/karla-bold.woff2') format('woff2'),
     url('/static/fonts/karla-bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
 @font-face {
-  font-family: "fec_currency_mono";
+  font-family: 'fec_currency_mono';
   font-style: normal;
   font-weight: normal;
-  src: url('/static/fonts/fec-currencymono-regular.woff2') format('woff2'),
+  src:
+    url('/static/fonts/fec-currencymono-regular.woff2') format('woff2'),
     url('/static/fonts/fec-currencymono-regular.woff') format('woff'),
     url('/static/fonts/fec-currencymono-regular.ttf') format('truetype');
 }
@@ -506,7 +510,7 @@ aside.aggr-totals[id^='gov_fec_at_'] {
 
   // Universals
   .t-mono-stacked-currency {
-    font-family: "fec_currency_mono";
+    font-family: 'fec_currency_mono';
     text-align: right;
   }
 

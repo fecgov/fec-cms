@@ -112,7 +112,7 @@
     font-family: $sans-serif;
     font-weight: normal;
     line-height: 1.2;
-    letter-spacing: -.3px;
+    letter-spacing: -0.3px;
     clear: both;
   }
 
@@ -184,7 +184,6 @@
   }
 
   @include media($lg) {
-
     .card__image__container {
       border-radius: 4px 0 0 4px;
       padding: u(3rem);
@@ -262,7 +261,6 @@
   &:focus {
     border: 2px solid $focus;
   }
-
 }
 
 // Stacked cards, when there's more than one in a vertical column
@@ -273,7 +271,7 @@
 
 // For lists of links, such as on data landing page cards
 .card__links {
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
   font-family: $sans-serif;
   font-weight: normal;
   margin-bottom: u(2rem);
@@ -316,7 +314,7 @@
 .card--primary {
   @include u-bg--primary;
   @include u-font-color($gray-lightest);
-  
+
   & {
     border: 2px solid transparent;
     font-weight: bold;
@@ -489,7 +487,7 @@
 
   @include u-bg--secondary;
   @include u-font-color($gray-lightest);
-  
+
   &:hover {
     background-color: $deep-red;
     border: 2px solid $orange;
@@ -564,7 +562,6 @@
   }
 }
 
-
 // Major cards
 // Style used when the cards are the primary feature of a layout,
 // such as the "Reports about the FEC" landing page.
@@ -575,7 +572,7 @@
   display: block;
   padding: u(2rem 1.5rem);
   position: relative;
-  transition: border-top-color .2s ease-out;
+  transition: border-top-color 0.2s ease-out;
 
   @include media($med) {
     min-height: u(20rem);

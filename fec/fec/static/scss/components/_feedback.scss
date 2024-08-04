@@ -5,15 +5,15 @@
 
 .feedback {
   background-color: $gray-lightest;
-  bottom: u(.5rem);
+  bottom: u(0.5rem);
   color: $base;
   display: block;
-  left: u(.5rem);
+  left: u(0.5rem);
   overflow-y: scroll;
-  padding: u(2rem .5rem 8rem .5rem);
+  padding: u(2rem 0.5rem 8rem 0.5rem);
   position: fixed;
-  right: u(.5rem);
-  top: u(.5rem);
+  right: u(0.5rem);
+  top: u(0.5rem);
   z-index: $z-feedback;
 
   legend {
@@ -22,7 +22,7 @@
 
   label {
     line-height: 1.2em;
-    
+
     & > .label--help {
       display: inline-block;
       font-weight: normal;
@@ -78,7 +78,7 @@
     right: u(4rem);
     top: 5vh;
     width: u(52rem);
-    @include transition(top .5s);
+    @include transition(top 0.5s);
 
     &[aria-hidden='true'] {
       display: block !important;
@@ -106,7 +106,7 @@
 }
 
 .feedback__title {
-  margin-bottom: u(.5rem);
+  margin-bottom: u(0.5rem);
   @include heading(h2);
 }
 

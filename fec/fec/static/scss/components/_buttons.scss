@@ -20,10 +20,10 @@
   padding: u(8px 2rem);
   text-align: center;
   vertical-align: middle;
-  @include transition(background-color, .1s, color, .1s, border-color, .1s);
+  @include transition(background-color, 0.1s, color, 0.1s, border-color, 0.1s);
 
   &.is-disabled {
-    opacity: .5;
+    opacity: 0.5;
     cursor: default;
   }
 
@@ -69,7 +69,7 @@
     color: $primary;
   }
   span {
-    color:$inverse;
+    color: $inverse;
   }
 }
 
@@ -121,7 +121,7 @@
 
   &:active:not(.is-disabled),
   &.is-active {
-    background-color: rgba($inverse, .3);
+    background-color: rgba($inverse, 0.3);
     border-color: $primary-contrast;
     color: $inverse;
   }
@@ -161,7 +161,7 @@
 
   &:active:not(.is-disabled),
   &.is-active {
-    background-color: rgba($inverse, .3);
+    background-color: rgba($inverse, 0.3);
     border-color: $secondary-contrast;
     color: $inverse;
   }
@@ -220,7 +220,7 @@
   border: none;
   display: none;
   height: u(4rem);
-  padding: u(.6rem);
+  padding: u(0.6rem);
   position: absolute;
   top: 0;
   right: 0;
@@ -228,7 +228,7 @@
   @include u-icon-bg($x, $primary);
 
   &:hover {
-    padding: u(.6rem);
+    padding: u(0.6rem);
     text-decoration: none;
   }
 
@@ -240,7 +240,7 @@
 .input--removable {
   position: relative;
 
-  input[type="text"] {
+  input[type='text'] {
     padding-right: u(5rem);
   }
 
@@ -261,7 +261,7 @@
 // Buttons: Calendar dropdown buttons
 
 .button--add-calendar {
-  background-position: u(1rem .7rem);
+  background-position: u(1rem 0.7rem);
   background-size: u(2rem);
   padding-left: u(4rem);
   padding-right: u(6rem);
@@ -269,7 +269,7 @@
 }
 
 .button--add-calendar--mini {
-  background-position: u(1rem .7rem);
+  background-position: u(1rem 0.7rem);
   background-size: u(2rem);
   max-width: u(7.4rem);
   padding-left: u(5rem);
@@ -279,7 +279,7 @@
 // Buttons: Download dropdown buttons
 
 .button--download--mini {
-  background-position: u(.75rem .5rem);
+  background-position: u(0.75rem 0.5rem);
   background-size: u(1.75rem);
   background-color: $gray-light;
   border-color: $gray;
@@ -289,7 +289,7 @@
   @include u-icon-bg($download, $base);
 
   &::after {
-    padding: u(.5rem .3rem 1rem 1.5rem) !important;
+    padding: u(0.5rem 0.3rem 1rem 1.5rem) !important;
     background-size: 10px !important;
   }
 
@@ -315,11 +315,11 @@
 }
 
 .button--map {
-  @include u-icon-button($map-pin, left)
+  @include u-icon-button($map-pin, left);
 }
 
 .button--table {
-  @include u-icon-button($table, right)
+  @include u-icon-button($table, right);
 }
 
 // toggle two-candidate view on map comparison
@@ -475,7 +475,7 @@
       background-size: contain;
       float: left;
       display: block;
-      margin-right: .5em;
+      margin-right: 0.5em;
       width: 1em;
       height: 1em;
     }
@@ -558,9 +558,9 @@
 }
 
 //For internal/external button widgets in Wagtail
-.block-internal_button .button--primary, .block-external_button .button--primary {
+.block-internal_button .button--primary,
+.block-external_button .button--primary {
   margin-bottom: u(2.4rem);
-
 }
 .button--open {
   background-size: u(2rem);
@@ -569,14 +569,14 @@
   color: $base;
   font-size: u(1.4rem);
   font-weight: bold;
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
   padding: u(1rem 4rem 1rem 2rem);
   text-align: left;
   width: 100%;
   border-bottom: none;
   @include u-icon-bg($plus-circle, $primary);
 
-   &.button--close {
+  &.button--close {
     @include u-icon-bg($minus-circle, $primary);
   }
 }

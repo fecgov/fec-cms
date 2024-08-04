@@ -26,7 +26,7 @@
 .toggles {
   @include clearfix;
 
-  input[type="radio"] {
+  input[type='radio'] {
     @include u-visually-hidden;
   }
 
@@ -44,7 +44,7 @@
     }
 
     & + .button--alt--primary {
-      background-color: rgba($inverse, .3);
+      background-color: rgba($inverse, 0.3);
       border-color: $primary-contrast;
       color: $inverse;
       font-weight: bold;
@@ -56,7 +56,7 @@
     }
 
     & + .button--alt--secondary {
-      background-color: rgba($inverse, .3);
+      background-color: rgba($inverse, 0.3);
       border-color: $secondary-contrast;
       color: $inverse;
       font-weight: bold;
@@ -75,7 +75,7 @@
   label:first-of-type {
     .button--alt,
     .button--alt-primary,
-    .button--alt-secondary  {
+    .button--alt-secondary {
       border-radius: 4px 4px 0 0;
     }
   }
@@ -99,25 +99,24 @@
     margin-bottom: -2px;
   }
 
-  &[data-toggle="home-barcharts"] {
-    .button--alt{
+  &[data-toggle='home-barcharts'] {
+    .button--alt {
       min-width: u(13.5rem);
     }
     label.toggle {
-        float:none;
-      }
+      float: none;
+    }
     @include media($med) {
       .button-first {
         border-radius: 4px 4px 0 0 !important;
       }
       .button-last {
-        border-radius: 0 0  4px 4px !important;
+        border-radius: 0 0 4px 4px !important;
       }
-
     }
     @include media($lg) {
-     label.toggle {
-        float:left;
+      label.toggle {
+        float: left;
       }
       .button-first {
         border-radius: 4px 0 0 4px !important;
@@ -150,7 +149,7 @@
 
   .label {
     float: left;
-    margin: u(.5rem 1rem 0 0);
+    margin: u(0.5rem 1rem 0 0);
   }
 
   .button--alt,

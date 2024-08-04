@@ -22,7 +22,9 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
@@ -34,18 +36,18 @@ body {
 }
 
 main {
-  &[aria-hidden="true"] {
+  &[aria-hidden='true'] {
     display: block !important;
   }
 }
 
-[aria-hidden="true"] {
+[aria-hidden='true'] {
   display: none !important;
 }
-.wagtail-userbar-icon[aria-hidden="true"] { // for the edit-page bug for editors
+.wagtail-userbar-icon[aria-hidden='true'] {
+  // for the edit-page bug for editors
   display: initial !important;
 }
-
 
 // Printer settings
 @media print {

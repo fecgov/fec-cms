@@ -49,7 +49,7 @@
 
     .dataTables_paginate {
       float: right;
-      padding: u(.5rem 0);
+      padding: u(0.5rem 0);
     }
 
     .dataTables_length {
@@ -93,12 +93,12 @@
       }
 
       .dataTables_paginate {
-        padding: u(.5rem 0 .5rem .5rem);
+        padding: u(0.5rem 0 0.5rem 0.5rem);
       }
 
       .dataTables_info {
         margin-left: 1.5em;
-        padding-top: u(.75rem);
+        padding-top: u(0.75rem);
         clear: none;
       }
     }
@@ -106,7 +106,6 @@
     .dataTables_length {
       padding: u(0 1rem 0 0);
     }
-
   }
 }
 

@@ -36,13 +36,17 @@
   $auto: belongs-to(auto, $query);
 
   @if $direction != default {
-    @include -neat-warn("The omega mixin will no longer take a $direction argument. To change the layout direction, use the direction(){...} mixin.");
+    @include -neat-warn(
+      'The omega mixin will no longer take a $direction argument. To change the layout direction, use the direction(){...} mixin.'
+    );
   } @else {
     $direction: get-direction($layout-direction, $default-layout-direction);
   }
 
   @if $table {
-    @include -neat-warn("The omega mixin no longer removes padding in table layouts.");
+    @include -neat-warn(
+      'The omega mixin no longer removes padding in table layouts.'
+    );
   }
 
   @if length($query) == 1 {
@@ -50,13 +54,11 @@
       &:last-child {
         margin-#{$direction}: 0;
       }
-    }
-
-    @else if contains-display-value($query) and $table == false {
-      & { margin-#{$direction}: 0; }
-    }
-
-    @else {
+    } @else if contains-display-value($query) and $table == false {
+      & {
+        margin-#{$direction}: 0;
+      }
+    } @else {
       @include nth-child($query, $direction);
     }
   } @else if length($query) == 2 {
@@ -68,7 +70,7 @@
       @include nth-child(nth($query, 1), $direction);
     }
   } @else {
-    @include -neat-warn("Too many arguments passed to the omega() mixin.");
+    @include -neat-warn('Too many arguments passed to the omega() mixin.');
   }
 }
 
@@ -79,8 +81,8 @@
     margin-#{$direction}: 0;
   }
 
-  @if type-of($query) == number and unit($query) == "n" {
-    &:nth-child(#{$query}+1) {
+  @if type-of($query) == number and unit($query) == 'n' {
+    &:nth-child(#{$query} + 1) {
       clear: $opposite-direction;
     }
   }

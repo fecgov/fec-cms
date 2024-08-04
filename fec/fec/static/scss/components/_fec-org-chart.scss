@@ -28,25 +28,25 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
     position: relative;
     width: 100%;
 
-    & + li { // all li after another li
+    & + li {
+      // all li after another li
       padding-top: $orgChart_gutterSize;
     }
     &::before {
       // top half of left-side line, including the horizontal line in the middle
       border-left: $orgChart_lineSolidDark;
       border-bottom: $orgChart_lineSolidDark;
-      content: "";
+      content: '';
       height: 50%;
       left: 0;
       position: absolute;
       top: 0;
       width: 10px;
-
     }
     &::after {
       // bottom half of left-side line
       border-left: $orgChart_lineSolidDark;
-      content: "";
+      content: '';
       height: 50%;
       left: 0;
       position: absolute;
@@ -73,13 +73,13 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
       padding: 1rem;
       position: relative;
       text-align: center;
-      transition: border-color .1s;
+      transition: border-color 0.1s;
 
       &:hover {
         border-color: $orgChart_colorGreyHover;
-        transition: border-color .25s;
+        transition: border-color 0.25s;
       }
-      &:not([href*="/"]) {
+      &:not([href*='/']) {
         // if the link doesn't contain a slash (e.g. if it's blank), let's remove its clicks/taps
         pointer-events: none;
       }
@@ -91,7 +91,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         &:first-child {
           font-size: 14px;
           font-weight: bold;
-          margin-bottom: .1em;
+          margin-bottom: 0.1em;
         }
         &:nth-child(2) {
           font-family: Karla, sans-serif;
@@ -106,7 +106,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
       padding-bottom: $orgChart_gutterSize * 2;
 
       &::before {
-        content: "";
+        content: '';
         border-bottom: none;
         border-left: $orgChart_lineSolidDark;
         border-right: none;
@@ -129,7 +129,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
     }
     // for links that are direct descendants of the li.team, these are the team leads
     &.team > a::before {
-      content: "";
+      content: '';
       position: absolute;
       left: calc(-#{$orgChart_gutterSize} - 1px);
       border-left: $orgChart_lineSolidDark;
@@ -149,7 +149,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
 
       &::before {
         border-left: $orgChart_lineSolidDark;
-        content: "";
+        content: '';
         display: block;
         height: 50%;
         position: absolute;
@@ -172,7 +172,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
       padding: 0 $orgChart_gutterSize #{$orgChart_gutterSize * 2};
 
       &::before {
-        content: "";
+        content: '';
         border-bottom: none;
         border-left: $orgChart_lineSolidDark;
         border-right: none;
@@ -188,7 +188,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         border-left: none;
         border-right: $orgChart_lineDashed;
         border-top: $orgChart_lineDashed;
-        content: "";
+        content: '';
         display: block;
         height: calc(50% + #{$orgChart_gutterSize + 1});
         left: auto;
@@ -206,7 +206,8 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
     }
     &.team-ig {
       float: right;
-      padding: $orgChart_gutterSize $orgChart_gutterSize #{$orgChart_gutterSize * 2} #{$orgChart_gutterSize * 2};
+      padding: $orgChart_gutterSize $orgChart_gutterSize #{$orgChart_gutterSize *
+        2} #{$orgChart_gutterSize * 2};
 
       &::before {
         border-bottom: none;
@@ -222,7 +223,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         border-right: $orgChart_lineDashed;
         border-top: none;
         bottom: 50%;
-        content: "";
+        content: '';
         height: calc(50% + #{$orgChart_gutterSize});
         position: absolute;
         left: auto;
@@ -263,8 +264,8 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
   #fec-orgchart {
     display: grid;
     grid-template-areas:
-      "comms comms comms comms ig"
-      "1fr 1fr 1fr 1fr ig";
+      'comms comms comms comms ig'
+      '1fr 1fr 1fr 1fr ig';
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: auto;
     grid-row-gap: 0;
@@ -313,7 +314,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         }
 
         &::before {
-          content: "";
+          content: '';
           border-bottom: none;
           border-right: $orgChart_lineSolid;
           border-left: none;
@@ -327,7 +328,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
         &::after {
           border-left: none;
           border-top: $orgChart_lineSolid;
-          content: "";
+          content: '';
           height: $orgChart_gutterSize;
           left: 50%;
           position: absolute;
@@ -342,7 +343,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
 
           &::before {
             // From comms to the teams
-            content: "";
+            content: '';
             border-bottom: none;
             border-right: $orgChart_lineSolid;
             border-left: none;
@@ -360,7 +361,7 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
             border-left: none;
             border-right: none;
             border-top: $orgChart_lineDashed;
-            content: "";
+            content: '';
             display: block;
             height: calc(50% - #{$orgChart_gutterSize});
             left: calc(100% - #{$orgChart_gutterSize});

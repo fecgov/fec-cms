@@ -49,7 +49,6 @@
   &::after {
     right: 0;
   }
-
 }
 
 .search-controls__submit {
@@ -93,7 +92,6 @@
 
 //For data/election search boxes
 .election-search {
-
   .search--container {
     position: relative;
     overflow: hidden;
@@ -104,10 +102,10 @@
     }
   }
   .search-controls__cycle {
-    margin: u(.5rem 2rem);
+    margin: u(0.5rem 2rem);
     @include span-columns(4.5 of 5.5);
 
-    .cycle-select{
+    .cycle-select {
       width: 95%;
     }
   }
@@ -117,11 +115,11 @@
   }
 
   .search-controls__either:first-child {
-    margin: u(.5rem 0)!important;
+    margin: u(0.5rem 0) !important;
   }
 
   .search-controls__either:last-child {
-    fieldset{
+    fieldset {
       margin-left: u(2rem);
     }
   }
@@ -143,17 +141,18 @@
   .office-select {
     @include span-columns(10);
     select {
-     width: 100%;
-   }
+      width: 100%;
+    }
   }
   .cycle-select {
     @include span-columns(6);
   }
 }
 
- //for keyword-options modals on AO, MUR, Statues searches
-.keyword-modal{
-  .modal__tips, .modal__form {
+//for keyword-options modals on AO, MUR, Statues searches
+.keyword-modal {
+  .modal__tips,
+  .modal__form {
     display: table-row;
     width: 100%;
   }
@@ -213,7 +212,6 @@
   }
 
   .election-search {
-
     .search-controls__either:first-child {
       @include span-columns(4);
     }
@@ -237,7 +235,7 @@
     }
 
     .search-controls__cycle {
-      margin: u(.5rem 2rem);
+      margin: u(0.5rem 2rem);
       @include span-columns(4.5 of 5.5);
     }
 
@@ -282,12 +280,13 @@
     .usa-width-one-half:last-child {
       width: 100%;
     }
-    
-    .search-controls__state, .search-controls__district {
+
+    .search-controls__state,
+    .search-controls__district {
       width: 100%;
     }
   }
-  
+
   .callout-holder {
     border: none;
     padding: 0;
@@ -302,9 +301,10 @@
     }
   }
 
-    //for keyword-options modals on AO, MUR, Statues searches
-  .keyword-modal{
-    .modal__tips, .modal__form {
+  //for keyword-options modals on AO, MUR, Statues searches
+  .keyword-modal {
+    .modal__tips,
+    .modal__form {
       display: table-cell;
       width: 44%;
     }
@@ -331,8 +331,7 @@
       }
     }
   }
-
-}/* end MED breakpoint */
+} /* end MED breakpoint */
 
 // All form elements go in rows
 @include media($lg) {
@@ -342,7 +341,6 @@
   }
 
   .election-search {
-
     .search--container:first-child {
       height: u(12.6rem);
       margin-bottom: 0;
@@ -350,7 +348,7 @@
 
     .search-controls__state,
     .search-controls__district {
-      @include span-columns(1.90 of 5.5);
+      @include span-columns(1.9 of 5.5);
     }
     .search-controls__zip {
       margin-left: u(3rem);
@@ -360,19 +358,19 @@
     }
 
     .search-controls__cycle {
-      margin: u(.5rem 2.5rem);
+      margin: u(0.5rem 2.5rem);
     }
 
     .search-controls__either:first-child {
-      margin: u(.5rem 0)!important;
+      margin: u(0.5rem 0) !important;
       @include span-columns(3.5);
     }
 
     .search-controls__either:last-child {
-      margin: u(.5rem 0)!important;
+      margin: u(0.5rem 0) !important;
       @include span-columns(8);
 
-      fieldset{
+      fieldset {
         margin-left: u(1rem);
       }
       .search-controls__submit {
@@ -387,7 +385,6 @@
   }
 
   .search--container {
-
     .search-controls__either {
       @include span-columns(5.5);
     }

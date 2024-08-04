@@ -26,7 +26,7 @@
 
 .is-disabled,
 [disabled] {
-  opacity: .5;
+  opacity: 0.5;
   cursor: default;
 }
 
@@ -86,10 +86,9 @@
 }
 
 .u-break-titles {
-
   li {
-  line-height: 1.4;
-  margin-bottom: u(1rem);
+    line-height: 1.4;
+    margin-bottom: u(1rem);
   }
 }
 
@@ -131,7 +130,6 @@
 //
 
 @mixin u-font-color($color) {
-  
   & {
     color: $color;
   }
@@ -176,19 +174,19 @@
     border-color: $inverse;
   }
 
-  [type="checkbox"] + label,
-  [type="radio"] + label,
-  [type="checkbox"] + label::before,
-  [type="radio"] + label::before {
+  [type='checkbox'] + label,
+  [type='radio'] + label,
+  [type='checkbox'] + label::before,
+  [type='radio'] + label::before {
     color: $base;
   }
 
-  [type="checkbox"]:checked + label,
-  [type="radio"]:checked + label {
+  [type='checkbox']:checked + label,
+  [type='radio']:checked + label {
     color: $inverse;
   }
 
-  [type="checkbox"]:checked + label::before {
+  [type='checkbox']:checked + label::before {
     background-color: $inverse;
     @include u-icon-bg($check, $base);
   }
@@ -207,7 +205,7 @@
     &:active:not(.is-disabled, [disabled]),
     &:focus,
     &.is-active {
-      background-color: rgba($inverse, .3);
+      background-color: rgba($inverse, 0.3);
       color: $inverse;
     }
   }
@@ -215,7 +213,7 @@
   option {
     background-color: $neutral;
     color: $base;
-    padding: u(.5rem);
+    padding: u(0.5rem);
   }
 }
 
@@ -229,7 +227,7 @@
 
   @include u-form--inverse;
   @include u-font-color($gray-lightest);
- 
+
   a {
     border-bottom-color: $gray-lightest;
 
@@ -282,7 +280,13 @@
 @mixin u-bg--neutral() {
   background-color: $gray-lightest;
   @include u-font-color($base);
-  @include u-form-color($inverse, $primary, $primary-contrast, 'neutral', $primary);
+  @include u-form-color(
+    $inverse,
+    $primary,
+    $primary-contrast,
+    'neutral',
+    $primary
+  );
 
   a {
     &:hover {
@@ -312,7 +316,9 @@
 }
 
 @mixin u-bg--neutral() {
-  & { background-color: $gray-lightest; }
+  & {
+    background-color: $gray-lightest;
+  }
 
   @include u-font-color($base);
 
@@ -357,7 +363,13 @@
 // $color:        - Color variable the icon should be
 //
 
-@mixin u-icon($icon, $color: $base, $width: 4rem, $height: 4rem, $background-size: 50%) {
+@mixin u-icon(
+  $icon,
+  $color: $base,
+  $width: 4rem,
+  $height: 4rem,
+  $background-size: 50%
+) {
   background-image: url('#{svg-fill($icon, $color)}');
   background-repeat: no-repeat;
   background-position: center center;
@@ -420,7 +432,7 @@
 }
 
 .u-fade-in {
-  @include animation(fadeIn .8s ease-out);
+  @include animation(fadeIn 0.8s ease-out);
 }
 
 // Printer style utitlity

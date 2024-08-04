@@ -17,7 +17,7 @@
 .example {
   border-left: 10px solid $gray-lightest;
   font-family: $sans-serif;
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
   padding: u(1rem 0 1rem 2rem);
   margin: u(0 0 2.6rem 2rem);
 
@@ -29,7 +29,7 @@
 .example__thumbnail {
   border-bottom: none;
   display: inline-block;
-  margin-bottom: u(.5rem);
+  margin-bottom: u(0.5rem);
 
   img {
     box-shadow: 0 0 8px rgb(0 0 0 / 20%);
@@ -76,16 +76,13 @@
   @include span-columns(8);
 }
 
-
-
-
 .example__caption {
   width: 100%;
   font-family: $serif;
   font-style: italic;
   display: inline-block;
   margin-top: u(2rem);
-  
+
   @include media($med) {
     margin-top: 0;
     @include span-columns(4);

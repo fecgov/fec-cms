@@ -17,7 +17,7 @@
 
   .fc-day {
     font-weight: bold;
-    padding: u(.7rem 1rem 0 2rem);
+    padding: u(0.7rem 1rem 0 2rem);
   }
 }
 
@@ -70,11 +70,11 @@
   .fc-next-button {
     margin-right: 1px;
     text-indent: -9999px;
-    padding: u(.8rem 1rem);
+    padding: u(0.8rem 1rem);
 
     &::after {
-      left: u(.5rem);
-      right: u(.5rem);
+      left: u(0.5rem);
+      right: u(0.5rem);
     }
   }
 }
@@ -108,7 +108,7 @@
 .fc-day-header {
   color: $primary;
   font-weight: normal;
-  padding-top: u(.5rem);
+  padding-top: u(0.5rem);
 }
 
 .fc-content-skeleton {
@@ -122,7 +122,7 @@
 .fc-other-month {
   &.fc-day-top,
   &.fc-day {
-    opacity: .5;
+    opacity: 0.5;
   }
 }
 
@@ -144,7 +144,7 @@
   border-bottom: none;
   color: $primary;
   font-weight: bold;
-  padding: u(.3rem 1rem);
+  padding: u(0.3rem 1rem);
 }
 
 .fc-day-number.fc-today {
@@ -174,10 +174,10 @@
   &::before {
     content: '';
     display: block;
-    width: u(.6rem);
-    height: u(.6rem);
+    width: u(0.6rem);
+    height: u(0.6rem);
     background-color: $primary;
-    border-radius: u(.8rem);
+    border-radius: u(0.8rem);
     float: left;
     margin: 5px 5px 5px 0;
   }
@@ -238,7 +238,7 @@
 
 .cal__category {
   border-radius: 3px;
-  padding: u(.5rem);
+  padding: u(0.5rem);
 }
 
 // Event details
@@ -296,14 +296,14 @@
 
 .cal-details__date {
   display: block;
-  padding-bottom: u(.5rem);
+  padding-bottom: u(0.5rem);
 }
 
 .cal-details__title {
   display: block;
   font-weight: bold;
   line-height: 1.4;
-  padding-bottom: u(.5rem);
+  padding-bottom: u(0.5rem);
 }
 
 .cal-details__summary {
@@ -316,13 +316,13 @@
 .cal-details__description {
   display: block;
   line-height: 1.2;
-  padding-bottom: u(.5rem);
+  padding-bottom: u(0.5rem);
 }
 
 .cal-details__location {
   display: block;
   line-height: 1.2;
-  padding-bottom: u(.5rem);
+  padding-bottom: u(0.5rem);
 }
 
 .cal-details__add {
@@ -387,11 +387,11 @@
 
 .fc-agenda-view {
   .fc-bg {
-    display: none;   // Temporary hack to remove mis-aligned background in agenda view
+    display: none; // Temporary hack to remove mis-aligned background in agenda view
   }
 
   .fc-axis {
-    padding: u(.5rem 1rem 0 1rem);
+    padding: u(0.5rem 1rem 0 1rem);
     text-align: right;
     vertical-align: middle;
     white-space: nowrap;
@@ -415,16 +415,16 @@
 .cal-list__toggles {
   float: left;
   font-family: $sans-serif;
-  padding-top: u(.5rem);
+  padding-top: u(0.5rem);
 }
 
 .cal-list {
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
 }
 
 .cal-list__title {
   background-color: $gray-light;
-  border-left: .5rem solid $primary;
+  border-left: 0.5rem solid $primary;
   font-family: $sans-serif;
   letter-spacing: 0;
   margin: u(2rem 0 0 0);
@@ -459,7 +459,7 @@
   display: block;
   font-weight: bold;
   line-height: 1.2;
-  margin: 0 0 .5rem;
+  margin: 0 0 0.5rem;
 }
 
 .cal-list__date {
@@ -490,14 +490,14 @@
   border: 1px solid;
   border-color: $primary;
   font-size: u(1.4rem);
-  padding: u(.5rem);
+  padding: u(0.5rem);
   border-radius: 3px;
   @include clearfix;
 
   .tooltip__trigger-text {
     border-right: 1px solid $primary;
     display: table-cell;
-    padding-right: .5rem;
+    padding-right: 0.5rem;
     line-height: 1.2;
     vertical-align: middle;
   }
@@ -505,7 +505,7 @@
   .tooltip__container {
     display: table-cell;
     vertical-align: middle;
-    padding-left: .5rem;
+    padding-left: 0.5rem;
   }
 
   .list--bulleted li:last-child {
@@ -530,7 +530,7 @@
 
   .fc-header {
     background: $neutral;
-    padding: u(3px .5rem);
+    padding: u(3px 0.5rem);
     @include clearfix;
 
     .fc-title {
@@ -548,11 +548,11 @@
   }
 
   .fc-event-container {
-    padding: u(.5rem);
+    padding: u(0.5rem);
   }
 
   .fc-content {
-    margin-bottom: u(.5rem);
+    margin-bottom: u(0.5rem);
   }
 }
 

@@ -1,4 +1,3 @@
 {
-	"singleQuote": true,
-	"jsxBracketSameLine": false
+  "singleQuote": true
 }

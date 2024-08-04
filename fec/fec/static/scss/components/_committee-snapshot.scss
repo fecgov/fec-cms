@@ -1,9 +1,9 @@
 #committee-snapshot {
-//   .tag__category {
-//     border-bottom-color: #112e51;
-//     border-bottom-style: solid;
-//     border-bottom-width: 2px 0;
-//   }
+  //   .tag__category {
+  //     border-bottom-color: #112e51;
+  //     border-bottom-style: solid;
+  //     border-bottom-width: 2px 0;
+  //   }
   .footer-methodology {
     border-top: 1px solid;
     padding-top: 1em;
@@ -13,7 +13,7 @@
     }
     p {
       margin-bottom: 1em;
-      
+
       @include media($med) {
         margin-bottom: 0;
       }
@@ -43,7 +43,7 @@
           border-right: 1px solid;
           margin-right: 10px;
           padding-right: 10px;
-        } 
+        }
       }
     }
     > span {
@@ -118,7 +118,7 @@
     line-height: 1.25em;
     text-align: left;
     width: 66.6%;
-    
+
     @include media($med) {
       margin-bottom: 1em;
       padding: 0 1em;
@@ -151,7 +151,7 @@
           margin-left: 0;
           margin-right: 0;
           width: 50%;
-          
+
           &:first-child {
             border-right: 1px solid $gray-light;
           }
@@ -159,7 +159,7 @@
       }
 
       &::after {
-        content: "";
+        content: '';
         display: block;
         position: absolute;
         background: $gray-light;
@@ -176,11 +176,11 @@
     height: 100%;
 
     @include media($med) {
-      width: 100%
+      width: 100%;
     }
 
     .center {
-      fill: $inverse
+      fill: $inverse;
     }
     .ring {
       fill: transparent;

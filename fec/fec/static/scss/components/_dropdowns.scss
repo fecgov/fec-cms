@@ -37,7 +37,7 @@
     padding: u(1rem 2rem 1rem 1rem);
     position: absolute;
     right: u(1.5rem);
-    top: u(.5rem);
+    top: u(0.5rem);
     @include u-icon-bg($arrow-down, $primary);
   }
 
@@ -73,8 +73,8 @@
 
 .dropdown__button--mini {
   &::after {
-    padding: u(1rem .5rem 1rem 1.5rem);
-    right: u(.5rem);
+    padding: u(1rem 0.5rem 1rem 1.5rem);
+    right: u(0.5rem);
   }
 
   & + .dropdown__panel {
@@ -102,7 +102,7 @@
     color: $base;
     display: block;
     margin: 0;
-    padding: u(.5rem 1rem .5rem 1.5rem);
+    padding: u(0.5rem 1rem 0.5rem 1.5rem);
     max-width: 100%;
     white-space: nowrap;
 
@@ -121,7 +121,7 @@
       border: 1px solid $gray;
       display: block;
       font-size: u(1.4rem);
-      padding: u(.5rem 1rem .5rem 1.5rem);
+      padding: u(0.5rem 1rem 0.5rem 1.5rem);
       text-align: left;
       width: 100%;
 
@@ -131,7 +131,7 @@
 
       &.is-checked {
         background-color: $gray-light;
-        background-position: right u(.5rem) top 50%;
+        background-position: right u(0.5rem) top 50%;
         padding-right: u(1.5rem);
         cursor: default;
         @include u-icon-bg($check, $gray);
@@ -151,7 +151,7 @@
     border-bottom: 1px solid $gray-dark;
     font-size: u(1.4rem);
     font-weight: bold;
-    padding-left: u(.75rem);
+    padding-left: u(0.75rem);
 
     &:hover {
       background-color: $inverse;
@@ -173,18 +173,22 @@
 }
 
 .dropdown__selected {
-  margin: u(.5rem 0);
+  margin: u(0.5rem 0);
 
   li {
     position: relative;
-    @include animation(fadeIn .2s ease-in);
+    @include animation(fadeIn 0.2s ease-in);
 
     &:hover {
-      input[type="checkbox"]:not(:checked) + label:not(.is-loading) + .dropdown__remove {
+      input[type='checkbox']:not(:checked)
+        + label:not(.is-loading)
+        + .dropdown__remove {
         display: inline-block;
       }
 
-      input[type="checkbox"]:not(:checked) + label.is-unsuccessful + .dropdown__remove {
+      input[type='checkbox']:not(:checked)
+        + label.is-unsuccessful
+        + .dropdown__remove {
         display: none;
       }
     }
@@ -194,13 +198,13 @@
     margin-left: 0;
   }
 
-  [type="checkbox"] + label {
+  [type='checkbox'] + label {
     max-width: min(18em, 90%);
     word-wrap: break-word;
   }
 
   .dropdown__remove {
-    background-position: u(.75rem) 50%;
+    background-position: u(0.75rem) 50%;
     background-size: 18px;
     display: none;
     top: 0;

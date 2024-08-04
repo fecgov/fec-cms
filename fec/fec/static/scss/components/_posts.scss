@@ -25,17 +25,17 @@
   }
 
   h3 {
-    margin-bottom: u(.4rem);
+    margin-bottom: u(0.4rem);
     word-wrap: break-word;
   }
 
   p {
     font-family: $sans-serif;
-    letter-spacing: -.3px;
+    letter-spacing: -0.3px;
     margin: u(0 0 1rem 0);
 
     &.t-serif {
-    font-family: $serif
+      font-family: $serif;
     }
   }
 
@@ -139,7 +139,7 @@
   }
 
   &:first-of-type {
-    margin-top: u(.5rem);
+    margin-top: u(0.5rem);
   }
 }
 
@@ -166,7 +166,6 @@
   ul {
     @extend .list--bulleted;
   }
-
 }
 
 // Post boilerplate

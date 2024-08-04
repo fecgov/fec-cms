@@ -8,13 +8,12 @@
 .block-html {
   ul {
     @extend .list--bulleted;
-   }
+  }
 
   ol {
     @extend .list--numbered;
   }
 }
-
 
 .rich-text,
 .block-table,
@@ -46,14 +45,20 @@
 
 .block-html {
   table {
-    @extend .simple-table-cms
+    @extend .simple-table-cms;
   }
 }
 
-.block-paragraph { 
-  h2, h3, h4, ol, li, blockquote, hr {
-    max-width: u(80rem) 
- }
+.block-paragraph {
+  h2,
+  h3,
+  h4,
+  ol,
+  li,
+  blockquote,
+  hr {
+    max-width: u(80rem);
+  }
 }
 
 @media print {

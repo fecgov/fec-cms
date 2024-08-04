@@ -59,7 +59,7 @@
   &:active:not(.is-disabled, [disabled]),
   &:focus,
   &.is-active {
-    background-color: rgba($inverse, .3);
+    background-color: rgba($inverse, 0.3);
     border-color: $primary-contrast;
     color: $inverse;
   }
@@ -67,7 +67,7 @@
   option {
     background-color: $neutral;
     color: $primary;
-    padding: u(.5rem);
+    padding: u(0.5rem);
   }
 }
 
@@ -84,7 +84,7 @@
   &:active:not(.is-disabled, [disabled]),
   &:focus,
   &.is-active {
-    background-color: rgba($inverse, .3);
+    background-color: rgba($inverse, 0.3);
     border-color: $secondary-contrast;
     color: $inverse;
   }
@@ -96,7 +96,7 @@
   option {
     background-color: $neutral;
     color: $primary;
-    padding: u(.5rem);
+    padding: u(0.5rem);
   }
 }
 
@@ -112,7 +112,7 @@
   font-family: $sans-serif;
   font-size: u(1.4rem);
   font-weight: bold;
-  margin-bottom: u(.5rem);
+  margin-bottom: u(0.5rem);
   padding: 0;
   text-transform: uppercase;
 
@@ -127,14 +127,14 @@
   display: block;
   font-family: $sans-serif;
   font-style: italic;
-  margin-bottom: u(.5rem);
+  margin-bottom: u(0.5rem);
 }
 
 .label--help--filter {
   display: block;
   font-family: $sans-serif;
-  margin-bottom: u(.5rem);
-  letter-spacing: -.3px;
+  margin-bottom: u(0.5rem);
+  letter-spacing: -0.3px;
   font-size: u(1.2rem);
   line-height: 1.8 !important;
 }
@@ -219,8 +219,8 @@
   padding-left: u(2.5rem);
 }
 
-[type="checkbox"]:checked + label,
-[type="radio"]:checked + label {
+[type='checkbox']:checked + label,
+[type='radio']:checked + label {
   &.is-successful {
     border: 1px solid $green-light;
   }
@@ -243,7 +243,7 @@
     height: u(3.6rem);
     background-position: right 50% top 50%;
     padding: u(1.25rem 1.5rem);
-    margin-left: u(.25rem);
+    margin-left: u(0.25rem);
     vertical-align: bottom;
 
     &.is-loading {
@@ -264,7 +264,7 @@
 
 .range--currency {
   .range__input {
-    input[type="text"] {
+    input[type='text'] {
       padding-left: u(2rem);
       text-align: right;
     }
@@ -287,21 +287,21 @@
   position: relative;
 
   label {
-    padding-bottom: u(.3rem);
+    padding-bottom: u(0.3rem);
   }
 
-  input[type="text"] {
+  input[type='text'] {
     margin-bottom: 0;
   }
 
-  input[type="text"],
+  input[type='text'],
   button {
     display: inline-block;
   }
 }
 
 .range__hyphen {
-  padding: u(0 .25rem 1rem .25rem);
+  padding: u(0 0.25rem 1rem 0.25rem);
   vertical-align: bottom;
   display: inline-block;
 }
@@ -322,6 +322,6 @@
 }
 
 .is-disabled-filter {
-  opacity: .5;
+  opacity: 0.5;
   pointer-events: none;
 }

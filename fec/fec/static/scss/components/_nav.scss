@@ -10,9 +10,9 @@
   &.is-open {
     .site-nav__container {
       @include transform(translateX(0));
-      
+
       & {
-        @include transition(transform, .2s, ease-out);
+        @include transition(transform, 0.2s, ease-out);
       }
     }
   }
@@ -30,7 +30,7 @@
   overflow-x: hidden;
   z-index: $z-navigation;
   @include transform(translateX(-100%));
-  @include transition(left, .2s, ease-out);
+  @include transition(left, 0.2s, ease-out);
 
   // scss-lint:disable ImportantRule
   &[aria-hidden='true'] {
@@ -62,7 +62,7 @@
   top: 0;
   bottom: 0;
   width: 100%;
-  @include transition(transform, .2s, ease-out);
+  @include transition(transform, 0.2s, ease-out);
 
   &.is-open {
     @include transform(translateX(0));
@@ -127,9 +127,9 @@
   border-bottom: none;
   width: 100%;
   text-align: left;
-  @include transition(background-color, .1s);
+  @include transition(background-color, 0.1s);
 
-  &[aria-expanded="true"] {
+  &[aria-expanded='true'] {
     @include u-icon-bg($minus-circle, $inverse);
   }
 }
@@ -213,7 +213,6 @@
 
   .site-nav__item--secondary {
     .site-nav__link {
-
       &.is-parent .site-nav__link__title {
         border-bottom-color: $deep-red;
       }
@@ -236,8 +235,8 @@
 
   .site-nav__link__title {
     display: inline-block;
-    border-bottom: u(.5rem) solid transparent;
-    padding-bottom: u(.5rem);
+    border-bottom: u(0.5rem) solid transparent;
+    padding-bottom: u(0.5rem);
   }
 
   .site-nav__link {
@@ -276,8 +275,8 @@
   /* width: u(30rem); */
   padding: 0 u(1rem);
 
-/*  display: block; */
- }
+  /*  display: block; */
+}
 
 /*
 @include media($lg) {
@@ -286,7 +285,6 @@
   }
 } */
 
-
 // Grid overhaul, using _grid.scss breakpoints but Bootstrap naming as inspiration,
 // making it pretty specific to avoid unintended side effects elsewhere
 .site-nav .mega-container .mega__inner .row {
@@ -294,7 +292,8 @@
   // e.g., if it's 1 column for med, it'll be 1 column for lg and xl, too.
   // if it's 1 column for med but 2 for lg, it'll be 2 for xl, too.
   // "columns" are 1/12 of the page width (a 12-column grid)
-  .col-lg-1 { // 1-column definitions probably aren't necessary, but including for the display/float/margin that comes with span-columns()
+  .col-lg-1 {
+    // 1-column definitions probably aren't necessary, but including for the display/float/margin that comes with span-columns()
     @include media($lg) {
       @include span-columns(1);
     }
@@ -334,5 +333,5 @@
     @include media($lg) {
       display: block;
     }
-  } 
+  }
 }

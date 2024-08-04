@@ -33,34 +33,44 @@
   @each $prefix in $prefixes {
     @if $prefix == webkit {
       @if $prefix-for-webkit {
-        & { -webkit-#{$property}: $value; }
+        & {
+          -webkit-#{$property}: $value;
+        }
       }
     } @else if $prefix == moz {
       @if $prefix-for-mozilla {
-        & { -moz-#{$property}: $value; }
+        & {
+          -moz-#{$property}: $value;
+        }
       }
     } @else if $prefix == ms {
       @if $prefix-for-microsoft {
-        &  { -ms-#{$property}: $value; }
+        & {
+          -ms-#{$property}: $value;
+        }
       }
     } @else if $prefix == o {
       @if $prefix-for-opera {
-        & { -o-#{$property}: $value; }
+        & {
+          -o-#{$property}: $value;
+        }
       }
     } @else if $prefix == spec {
       @if $prefix-for-spec {
-        & { #{$property}: $value; }
+        & {
+          #{$property}: $value;
+        }
       }
-    } @else  {
+    } @else {
       @warn "Unrecognized prefix: #{$prefix}";
     }
   }
 }
 
 @mixin disable-prefix-for-all() {
-  $prefix-for-webkit:    false !global;
-  $prefix-for-mozilla:   false !global;
+  $prefix-for-webkit: false !global;
+  $prefix-for-mozilla: false !global;
   $prefix-for-microsoft: false !global;
-  $prefix-for-opera:     false !global;
-  $prefix-for-spec:      false !global;
+  $prefix-for-opera: false !global;
+  $prefix-for-spec: false !global;
 }

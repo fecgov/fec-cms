@@ -16,7 +16,9 @@
 ///   }
 
 @mixin shift($n-columns: 1) {
-  & { @include shift-in-context($n-columns); }
+  & {
+    @include shift-in-context($n-columns);
+  }
 }
 
 /// Translates an element horizontally by a number of columns, in a specific nesting context.
@@ -43,7 +45,8 @@
   $direction: get-direction($layout-direction, $default-layout-direction);
   $opposite-direction: get-opposite-direction($direction);
 
-  margin-#{$opposite-direction}: $n-columns * flex-grid(1, $parent-columns) + $n-columns * flex-gutter($parent-columns);
+  margin-#{$opposite-direction}: $n-columns * flex-grid(1, $parent-columns) +
+    $n-columns * flex-gutter($parent-columns);
 
   // Reset nesting context
   $parent-columns: $grid-columns !global;

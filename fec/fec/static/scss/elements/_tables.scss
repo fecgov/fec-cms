@@ -6,7 +6,7 @@ table {
   margin: 0;
   table-layout: fixed;
   width: 100%;
-  @include font-feature-settings("kern", "liga", "tnum");
+  @include font-feature-settings('kern', 'liga', 'tnum');
 }
 
 th {
@@ -17,7 +17,6 @@ th {
 
 td {
   padding: 0;
-
 }
 
 tr,

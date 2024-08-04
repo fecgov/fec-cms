@@ -82,14 +82,14 @@
   }
 
   .side-nav__link {
-    padding: u(.85rem 1rem .85rem 1.8rem);
+    padding: u(0.85rem 1rem 0.85rem 1.8rem);
 
     &:hover,
     &.is-active:hover {
       background-color: $gray-lightest;
     }
 
-    &[aria-selected="true"] {
+    &[aria-selected='true'] {
       font-weight: bold;
       background-color: initial;
       border-left: 4px solid $base;
@@ -97,7 +97,7 @@
     }
   }
 
-  .side-nav__link[aria-selected="true"] + ul {
+  .side-nav__link[aria-selected='true'] + ul {
     margin: u(1rem 0 2rem 0);
     display: block;
 
@@ -119,13 +119,12 @@
     display: table-cell;
     width: 250px;
 
-    // All section siblings within .data-container__wrapper  
+    // All section siblings within .data-container__wrapper
     // will now get this width. These navs are using 250px widths.
     & ~ section {
       width: calc(100% - 250px);
     }
   }
-
 }
 
 @include media($med) {

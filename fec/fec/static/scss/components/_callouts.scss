@@ -46,7 +46,7 @@
 
 .callout__title {
   font-weight: bold;
-  margin: u(0 0 .5rem 0);
+  margin: u(0 0 0.5rem 0);
 }
 
 .callout__subtitle {
@@ -60,11 +60,11 @@
 
 .callout__sublinks {
   font-family: $sans-serif;
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
 }
 
 // BREAKPOINT: MEDIUM
-@include media($med){
+@include media($med) {
   .callout__content {
     @include span-columns(4 of 6);
   }

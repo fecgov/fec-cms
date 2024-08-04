@@ -29,7 +29,6 @@
   @include clearfix;
 
   &:not(.is-invalid) {
-
     &.pick-min li:hover div {
       border-top-left-radius: u(1.5rem);
       border-bottom-left-radius: u(1.5rem);
@@ -68,12 +67,12 @@
     width: 35px;
     font-size: u(1.2rem);
     text-align: center;
-    padding: u(0 0 .2rem .1rem);
+    padding: u(0 0 0.2rem 0.1rem);
     float: left;
 
     div {
       background-color: $gray;
-      padding: u(.75rem .5rem);
+      padding: u(0.75rem 0.5rem);
     }
 
     &.month--begin div {

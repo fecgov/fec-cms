@@ -69,7 +69,6 @@
   }
 
   @include media($lg) {
-
     h2 {
       margin-bottom: u(3rem);
     }
@@ -150,7 +149,6 @@
   }
 }
 
-
 // Hero panel for the press section.
 .hero--press {
   .hero__image {
@@ -185,13 +183,13 @@
   }
 
   .photo-credit {
-    background: rgba($gray-lightest, .6);
+    background: rgba($gray-lightest, 0.6);
     font-size: u(1rem);
     font-family: $sans-serif;
     position: absolute;
     right: 0;
     bottom: 0;
-    padding: u(.5rem);
+    padding: u(0.5rem);
   }
 
   @include media($lg) {

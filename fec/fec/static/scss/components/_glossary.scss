@@ -12,7 +12,7 @@
   top: 0;
   width: 75%;
   z-index: $z-glossary;
-  @include transition(right, .3s);
+  @include transition(right, 0.3s);
 
   &[aria-hidden='true'] {
     display: block !important;
@@ -21,7 +21,7 @@
 
   &[aria-hidden='false'] {
     right: 0;
-    @include transition(right, .3s);
+    @include transition(right, 0.3s);
   }
 
   .button--close--inverse {
@@ -45,7 +45,7 @@
 
 .glossary__definition {
   font-family: $sans-serif;
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
 
   ol {
     margin-left: 0;
@@ -68,7 +68,6 @@
   p {
     font-size: u(1.4rem);
   }
-
 }
 
 .glossary__toggle {
@@ -84,28 +83,28 @@
 
 // standard class, adds the book icon
 .term {
-  background-size: .6em;
+  background-size: 0.6em;
   background-position: 99% 50%;
   background-color: transparent;
   box-shadow: 0 0 0 4px transparent;
   border-bottom: none;
   cursor: pointer;
   margin-right: 2px;
-  padding-right: .9em;
+  padding-right: 0.9em;
   @include u-icon-bg($book, $primary);
-  @include transition(background-color, .2s, box-shadow, .2s, color, .2s);
+  @include transition(background-color, 0.2s, box-shadow, 0.2s, color, 0.2s);
 
   &:focus,
   &:hover {
-    box-shadow: 0 0 0 4px rgba($gray, .7);
-    background-color: rgba($gray, .7);
+    box-shadow: 0 0 0 4px rgba($gray, 0.7);
+    background-color: rgba($gray, 0.7);
     color: $primary;
   }
 }
 
 // Used when the term is in a body paragaraph of text, reduces padding and adds margin
 .term--p {
-  margin-right: u(.5rem);
+  margin-right: u(0.5rem);
   box-shadow: none;
 }
 

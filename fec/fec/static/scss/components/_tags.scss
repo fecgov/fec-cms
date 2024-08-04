@@ -27,13 +27,13 @@
   font-size: 1em;
   float: left;
   margin: 0;
-  padding: u(.5rem 1rem .5rem 0);
+  padding: u(0.5rem 1rem 0.5rem 0);
 }
 
 .tags__title__text {
   color: $primary;
   display: inline-block;
-  margin: u(4px .5rem);
+  margin: u(4px 0.5rem);
 }
 
 .tags {
@@ -47,9 +47,9 @@
   color: $primary;
   display: inline-block;
   font-family: $sans-serif;
-  letter-spacing: -.3px;
-  padding: u(0 .5rem 0 .75rem);
-  margin: u(.5rem 3rem 0 0);
+  letter-spacing: -0.3px;
+  padding: u(0 0.5rem 0 0.75rem);
+  margin: u(0.5rem 3rem 0 0);
 }
 
 .tag--primary {
@@ -66,8 +66,8 @@
   background-color: $gray-light;
   border-radius: 2px;
   display: inline-block;
-  padding: u(0 .75rem .5rem .7rem);
-  margin: u(.5rem .5rem 0 0);
+  padding: u(0 0.75rem 0.5rem 0.7rem);
+  margin: u(0.5rem 0.5rem 0 0);
 
   .tag__label {
     font-weight: bold;
@@ -78,7 +78,7 @@
     line-height: 1.25em;
     max-width: 15em;
     word-wrap: break-word;
-    
+
     @extend .tag;
 
     position: relative;

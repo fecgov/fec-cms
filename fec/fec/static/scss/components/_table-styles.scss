@@ -35,7 +35,7 @@
 
   .simple-table__header-cell,
   th {
-    padding: u(.5rem 0);
+    padding: u(0.5rem 0);
   }
 
   .simple-table__header-subtext {
@@ -74,7 +74,7 @@ h3 + .simple-table {
   .simple-table__header-cell {
     padding: u(0.5rem 1rem);
     line-height: u(2rem);
-    
+
     &.sorting,
     &.sorting_asc,
     &.sorting_desc {
@@ -100,7 +100,6 @@ h3 + .simple-table {
       background-color: $gray-lightest;
       @include u-icon-bg($arrow-down-border, $primary);
     }
-
   }
 
   .simple-table__cell {
@@ -116,7 +115,7 @@ h3 + .simple-table {
     padding: u(1rem);
 
     &:nth-child(even) {
-      background-color: rgba($gray-lightest, .5);
+      background-color: rgba($gray-lightest, 0.5);
     }
   }
 
@@ -168,8 +167,6 @@ h3 + .simple-table {
 
     .simple-table__header-cell {
       display: table-cell;
-      
-
     }
 
     .simple-table__row-group {
@@ -216,35 +213,34 @@ h3 + .simple-table {
   font-family: $sans-serif;
   margin: u(2rem 0);
 
-
   thead tr {
     border-bottom: 1px solid $primary;
     font-weight: 600;
     text-align: left;
   }
 
-    th {
-      font-weight: 600;
-      padding: u(1rem);
-      border-bottom: 1px solid $primary;
+  th {
+    font-weight: 600;
+    padding: u(1rem);
+    border-bottom: 1px solid $primary;
 
-      .simple-table-cms__header-subtext {
-        font-weight: normal;
-      }
+    .simple-table-cms__header-subtext {
+      font-weight: normal;
     }
+  }
 
   td {
     padding: u(1rem);
     vertical-align: top;
     border: 1px solid $gray-light;
 
-      &:first-child {
-        border-left: none;
-      }
+    &:first-child {
+      border-left: none;
+    }
 
-      &:last-child {
-        border-right: none;
-      }
+    &:last-child {
+      border-right: none;
+    }
   }
 
   tr {
@@ -264,49 +260,47 @@ h3 + .simple-table {
   }
 
   td {
-   .th_append {
-     display: none !important;
-   }
+    .th_append {
+      display: none !important;
+    }
   }
 
-
   tr:first-child {
-  border-top: 2.3px solid $primary;
-  border-bottom: 2.3px solid $primary;
-  font-weight: 600;
-  text-align: left;
+    border-top: 2.3px solid $primary;
+    border-bottom: 2.3px solid $primary;
+    font-weight: 600;
+    text-align: left;
   }
 
   th {
     padding: u(1rem);
-
   }
 
   a sup {
     border-bottom: 1px dotted #5b616b;
     display: inline-block;
     height: u(1.7rem);
-    margin-left: u(.2rem);
+    margin-left: u(0.2rem);
   }
 
-  td a[href^='#'], th a[href^='#'] {
+  td a[href^='#'],
+  th a[href^='#'] {
     border-bottom: none;
   }
 
   tr.footnote_row {
-
     td {
-      border:none !important;
+      border: none !important;
       padding-bottom: u(1rem);
       &:first-child {
         border-right: 1px solid $gray-light !important;
       }
       a {
-      border-bottom: 1px dotted $gray-dark;
+        border-bottom: 1px dotted $gray-dark;
       }
       span {
-       line-height: u(1.5rem);
-       font-weight: bold;
+        line-height: u(1.5rem);
+        font-weight: bold;
       }
     }
   }
@@ -316,15 +310,19 @@ h3 + .simple-table {
 
   /* as a necessity, we depart from mobile-first(min-width only MQs) here for these tables only */
   @media only screen and (width <= 650px),
-  (device-width >= 650px) and (device-width <= 1024px)  {
+    (device-width >= 650px) and (device-width <= 1024px) {
     /* Force table to not be like tables anymore */
-     table,  thead,  tbody,  th,  td,  tr {
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
       display: block;
-
     }
 
     /* Hide table headers (but not display: none;, for accessibility) */
-     thead tr {
+    thead tr {
       position: absolute;
       top: -9999px;
       left: -9999px;
@@ -332,24 +330,24 @@ h3 + .simple-table {
 
     tr {
       border: 1px solid $gray;
-       padding-top: 2px;
+      padding-top: 2px;
 
       &.row_display {
-      display: block !important;
+        display: block !important;
       }
       &.footnote_row {
         display: none !important;
       }
 
       /* Hide table headers (but not display: none;, for accessibility) */
-      &:first-child{
+      &:first-child {
         position: absolute;
         top: -9999px;
         left: -9999px;
       }
     }
 
-     td {
+    td {
       /* Behave  like a "row" */
       border: none;
       border-bottom: 1px solid $gray-light !important;
@@ -357,28 +355,25 @@ h3 + .simple-table {
       display: inline-block;
       width: 100%;
 
-
       .th_append {
         display: table-cell !important;
         font-weight: bold;
         min-width: u(16rem);
         float: left;
       }
-
     }
 
-
-     tr:nth-child(even) td {
-      border-bottom: 1px solid #aaa
-      }
+    tr:nth-child(even) td {
+      border-bottom: 1px solid #aaa;
+    }
 
     .ftnt_append {
-    display: block !important;
-    padding: u(0 3rem);
-    font-weight: normal;
+      display: block !important;
+      padding: u(0 3rem);
+      font-weight: normal;
       b {
         margin-left: u(-1.5rem);
-        padding-right: u(.1rem);
+        padding-right: u(0.1rem);
       }
 
       .ftnt-close {
@@ -389,10 +384,7 @@ h3 + .simple-table {
       }
     }
   }
-
 }
-
-
 
 #header_notes_modal li {
   margin-bottom: u(2rem);
@@ -403,33 +395,31 @@ h3 + .simple-table {
   margin-left: u(-2rem);
 }
 
-#header_notes_modal p  {
+#header_notes_modal p {
   margin-left: u(2rem);
-  display: inline;  
+  display: inline;
 }
 
 #static_notes {
   margin-top: u(2rem);
 
   ul {
-  list-style: none;
-  padding-left: u(2rem);
-  max-width: u(80rem);
-  width: 100%;
-  margin-bottom: u(2rem);
+    list-style: none;
+    padding-left: u(2rem);
+    max-width: u(80rem);
+    width: 100%;
+    margin-bottom: u(2rem);
   }
   li {
-  text-indent: u(-2rem);
-  list-style-type: none;
+    text-indent: u(-2rem);
+    list-style-type: none;
   }
 }
 
 #static_notes p,
 .footnote_row p {
-  display: inline
+  display: inline;
 }
-
-
 
 // Chart Table
 // Table style used on breakdown charts
@@ -457,12 +447,12 @@ h3 + .simple-table {
         border-bottom: 1px solid $gray-medium;
       }
       .simple-table__cell {
-        font-weight:bold;
+        font-weight: bold;
       }
 
       .simple-table__cell:nth-child(2) {
-      /* $amount cell $ */
-      font-weight:normal;
+        /* $amount cell $ */
+        font-weight: normal;
       }
 
       .t-right-aligned {
@@ -476,18 +466,19 @@ h3 + .simple-table {
   }
 
   .simple-table__cell {
-    padding: u(.5rem 0 0 0);
+    padding: u(0.5rem 0 0 0);
   }
 
   .value-bar {
     background-color: $gray-dark;
     height: u(2rem);
 
-    &[data-party="DEM"], &[data-party="DFL"] {
+    &[data-party='DEM'],
+    &[data-party='DFL'] {
       background-color: $blue-data;
     }
 
-    &[data-party="REP"] {
+    &[data-party='REP'] {
       background-color: $red-data;
     }
   }
@@ -509,13 +500,11 @@ h3 + .simple-table {
 
     // For homepage barcharts
     &.chart-table-home {
-
       .bar-container {
         margin-left: u(2rem);
       }
 
       .simple-table__row {
-
         &::after {
           display: none;
         }
@@ -528,7 +517,6 @@ h3 + .simple-table {
 
   @include media($lg) {
     &.chart-table-home {
-
       .bar-container {
         margin-left: 0;
       }
@@ -545,7 +533,7 @@ h3 + .simple-table {
   border-collapse: separate;
 
   td {
-    padding: u(.5rem);
+    padding: u(0.5rem);
   }
 
   td:last-child {
@@ -621,8 +609,6 @@ h3 + .simple-table {
     border-bottom: 1px solid $neutral;
   }
 
-
-
   // scss-lint:disable ImportantRule
   td {
     border-right: 1px solid $gray-medium;
@@ -634,7 +620,6 @@ h3 + .simple-table {
   th:last-child {
     border-right: none;
   }
-
 
   @include media($lg) {
     box-shadow: none;
@@ -664,10 +649,10 @@ h3 + .simple-table {
   @include media($lg) {
     box-shadow: none;
   }
-
 }
 
-.option__content .dense-table-container, .main__content .dense-table-container {
+.option__content .dense-table-container,
+.main__content .dense-table-container {
   box-shadow: -10px 0 20px -10px $gray-medium inset;
   overflow-x: scroll;
 }
@@ -684,22 +669,22 @@ h3 + .simple-table {
     border-right: 1px solid $gray-light;
     font-size: u(1.2rem);
     line-height: 1.2;
-    padding: u(.5rem);
+    padding: u(0.5rem);
     vertical-align: middle;
     word-wrap: break-word;
   }
 
   thead th {
     border-bottom: 1px solid $primary;
-    padding: u(.5rem);
+    padding: u(0.5rem);
   }
 
   tbody th {
     border-right: 1px solid $primary;
   }
 
-  th[scope="colgroup"],
-  th[scope="rowgroup"] {
+  th[scope='colgroup'],
+  th[scope='rowgroup'] {
     text-align: center;
     background-color: $primary;
     color: $inverse;
@@ -708,10 +693,9 @@ h3 + .simple-table {
   }
 }
 
-
 //for home barchart-full width on mobile
 .breakdowns-home {
-   width: 100%;
+  width: 100%;
 }
 
 //For data summary tables
@@ -733,23 +717,23 @@ h3 + .simple-table {
   }
 }
 
-table[data-summary]  {
+table[data-summary] {
   border-width: 0;
   margin: u(1rem) 0;
 
   .tableTitle {
-   margin-bottom: 0;
+    margin-bottom: 0;
   }
 
   td.brdr {
-  position:  relative;
-  border-right: 1px solid transparent;
+    position: relative;
+    border-right: 1px solid transparent;
   }
 
   thead td {
     border-width: 0;
     border-color: transparent !important;
-    line-height: 1.3
+    line-height: 1.3;
   }
 
   td.brdr::after {
@@ -758,11 +742,12 @@ table[data-summary]  {
     right: -2px;
   }
 
-  td.brdr, td.brdr + td {
+  td.brdr,
+  td.brdr + td {
     text-transform: uppercase;
   }
 
   tr.column-headers td:nth-child(3) strong {
-  margin-left: u(2.5rem)
+    margin-left: u(2.5rem);
   }
 }

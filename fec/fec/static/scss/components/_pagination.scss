@@ -28,7 +28,7 @@
 
   display: inline-block;
   height: auto;
-  margin-left: u(.5rem);
+  margin-left: u(0.5rem);
 
   &.previous,
   &.next {
@@ -48,7 +48,7 @@
   }
 
   &.disabled {
-    opacity: .5;
+    opacity: 0.5;
     pointer-events: none;
   }
 
@@ -63,7 +63,7 @@
   display: inline-block;
   height: 24px;
   line-height: 36px;
-  margin-left: .5rem;
+  margin-left: 0.5rem;
   padding: 0;
   vertical-align: bottom;
 }

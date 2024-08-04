@@ -4,7 +4,7 @@
 //
 
 .modal__overlay {
-  background-color: rgba($base, .5);
+  background-color: rgba($base, 0.5);
   bottom: 0;
   left: 0;
   right: 0;
@@ -55,7 +55,7 @@
 }
 
 .keyword-modal {
-  .simple-table{
+  .simple-table {
     border-width: 0;
   }
 }

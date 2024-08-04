@@ -1,10 +1,11 @@
 @font-face {
-  font-family: "fec_currency_mono";
+  font-family: 'fec_currency_mono';
   font-style: normal;
   font-weight: normal;
-  src: url("/static/fonts/fec-currencymono-regular.woff2") format("woff2"),
-    url("/static/fonts/fec-currencymono-regular.woff") format("woff"),
-    url("/static/fonts/fec-currencymono-regular.ttf") format("truetype");
+  src:
+    url('/static/fonts/fec-currencymono-regular.woff2') format('woff2'),
+    url('/static/fonts/fec-currencymono-regular.woff') format('woff'),
+    url('/static/fonts/fec-currencymono-regular.ttf') format('truetype');
 }
 
 #contributions-over-time {
@@ -28,7 +29,7 @@
 
   .simple-table--responsive .simple-table__row {
     margin-bottom: 1rem;
-    font-family: "fec_currency_mono";
+    font-family: 'fec_currency_mono';
     letter-spacing: -1px;
   }
 
@@ -71,12 +72,30 @@ meter {
 }
 
 .diagonal_stripe meter::-webkit-meter-optimum-value {
-  background-image: linear-gradient(125deg, #36bdbb 18.42%, #6ee6e6 18.42%, #6ee6e6 50%, #36bdbb 50%, #36bdbb 68.42%, #6ee6e6 68.42%, #6ee6e6 100%);
+  background-image: linear-gradient(
+    125deg,
+    #36bdbb 18.42%,
+    #6ee6e6 18.42%,
+    #6ee6e6 50%,
+    #36bdbb 50%,
+    #36bdbb 68.42%,
+    #6ee6e6 68.42%,
+    #6ee6e6 100%
+  );
   background-size: 20px 30px;
 }
 
 .diagonal_stripe meter:-moz-meter-optimum::-moz-meter-bar {
-  background-image: linear-gradient(125deg, #36bdbb 26.92%, #6ee6e6 26.92%, #6ee6e6 50%, #36bdbb 50%, #36bdbb 76.92%, #6ee6e6 76.92%, #6ee6e6 100%);
+  background-image: linear-gradient(
+    125deg,
+    #36bdbb 26.92%,
+    #6ee6e6 26.92%,
+    #6ee6e6 50%,
+    #36bdbb 50%,
+    #36bdbb 76.92%,
+    #6ee6e6 76.92%,
+    #6ee6e6 100%
+  );
   background-size: 15.87px 22.66px;
 }
 
@@ -90,7 +109,6 @@ meter::-webkit-meter-bar {
 
 meter::-webkit-meter-optimum-value {
   background: #36bdbb;
-
 }
 
 /* Firefox */
@@ -104,14 +122,14 @@ meter:-moz-meter-optimum::-moz-meter-bar {
 }
 
 .t-mono-stacked-currency {
-  font-family: "fec_currency_mono";
+  font-family: 'fec_currency_mono';
   text-align: right;
 }
 
 @media screen and (width <= 400px) {
   meter {
     display: block;
-    width: 80%
+    width: 80%;
   }
 
   .simple-table__cell {
@@ -121,12 +139,11 @@ meter:-moz-meter-optimum::-moz-meter-bar {
 
   .tooltip__container button {
     vertical-align: text-top;
-
   }
 
   .tooltip {
-      width: auto !important;
-    }
+    width: auto !important;
+  }
 }
 
 #election-summary {

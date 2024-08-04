@@ -52,7 +52,7 @@
 .heading__subtitle {
   font-family: $sans-serif;
   font-weight: bold;
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
   margin-bottom: u(1rem);
   text-transform: uppercase;
 }
@@ -79,7 +79,9 @@
   h2,
   h3,
   h4 {
-    line-height: u(3.4rem); // Setting explicit value to height of the action button for vertical alignment
+    line-height: u(
+      3.4rem
+    ); // Setting explicit value to height of the action button for vertical alignment
   }
 
   .data-disclaimer {

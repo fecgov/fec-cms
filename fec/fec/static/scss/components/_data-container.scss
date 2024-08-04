@@ -75,7 +75,7 @@
 
 .panel__controls {
   clear: both;
-  padding-top: u(.5rem);
+  padding-top: u(0.5rem);
   @include clearfix;
 }
 
@@ -170,15 +170,14 @@
   }
 }
 
-
 //Responsive behavior for datatables in tab pannels on profile pages (committee, candidate, election)
 @media screen and (width <= 940px) {
   .data-container__wrapper .main__content--right-full {
-    display: block
-   }
+    display: block;
+  }
 
   .data-container__wrapper .side-nav-alt {
     display: block;
-    width:auto;
+    width: auto;
   }
 }

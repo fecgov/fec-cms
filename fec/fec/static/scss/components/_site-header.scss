@@ -6,7 +6,7 @@
   background-color: $navy;
   color: $inverse;
   font-family: $sans-serif;
-  padding: u(.5rem 0);
+  padding: u(0.5rem 0);
   position: relative;
   text-align: center;
   width: 100%;
@@ -14,9 +14,8 @@
   p {
     color: $inverse;
     line-height: u(2rem);
-    margin: u(.3rem 0);
+    margin: u(0.3rem 0);
     max-width: 100%;
-
   }
 
   a {
@@ -36,7 +35,7 @@
   position: absolute;
   top: u(-10rem);
   z-index: $z4;
-  @include transition(top, .2s);
+  @include transition(top, 0.2s);
 
   &:focus {
     border-bottom-color: $primary-contrast;
@@ -74,7 +73,7 @@
 }
 
 .site-header--homepage .disclaimer {
-  padding: u(.75rem 2rem);
+  padding: u(0.75rem 2rem);
 
   .flag {
     margin-left: u(1rem);
@@ -83,7 +82,7 @@
 
 // US Bar 2.0 //
 .usa-banner {
- background-color: $gray-light;
+  background-color: $gray-light;
 }
 
 .usa-banner-content {
@@ -128,13 +127,12 @@
 }
 
 .usa-banner-header {
-
   &.accordion__button {
     background-image: none;
-    border:none !important;
-    padding: u(.75rem 1rem);
+    border: none !important;
+    padding: u(0.75rem 1rem);
 
-    &[aria-expanded="true"] {
+    &[aria-expanded='true'] {
       background-image: none;
     }
   }
@@ -151,8 +149,8 @@
   &.t-inline-block {
     width: auto;
     font-size: u(1.4rem);
-    font-family: karla,sans-serif;
-    letter-spacing: -.3px;
+    font-family: karla, sans-serif;
+    letter-spacing: -0.3px;
     padding-bottom: 1px;
   }
 }
@@ -173,38 +171,35 @@
   &.t-inline-block {
     width: auto;
     font-size: u(1.4rem);
-    font-family: karla,sans-serif;
-    letter-spacing: -.3px;
+    font-family: karla, sans-serif;
+    letter-spacing: -0.3px;
   }
 }
 
-.usa-banner-header[aria-expanded="false"] {
-
-    .usa-banner-button::after {
-    background-image: url("../img/angle-arrow-down-primary.svg");
+.usa-banner-header[aria-expanded='false'] {
+  .usa-banner-button::after {
+    background-image: url('../img/angle-arrow-down-primary.svg');
     background-size: 100%;
     content: '';
     display: inline-block;
     height: u(1rem);
     width: u(1rem);
     /* stylelint-disable block-closing-brace-newline-after, at-rule-empty-line-before */
-    margin-left: u(.3rem);
+    margin-left: u(0.3rem);
     /* stylelint-enable */
   }
-
 }
 
-    .usa-banner-header[aria-expanded="true"] {
-
-    .usa-banner-button::after {
-    background-image: url("../img/angle-arrow-up-primary.svg");
+.usa-banner-header[aria-expanded='true'] {
+  .usa-banner-button::after {
+    background-image: url('../img/angle-arrow-up-primary.svg');
     background-size: 100%;
     content: '';
     display: inline-block;
     height: u(1rem);
     width: u(1rem);
     /* stylelint-disable block-closing-brace-newline-after, at-rule-empty-line-before */
-    margin-left: u(.3rem);
+    margin-left: u(0.3rem);
     /* stylelint-enable */
   }
 }
@@ -219,11 +214,10 @@
 
 .usa-banner-header img {
   float: left;
-  margin: u(.2rem .7rem 0 1rem);
+  margin: u(0.2rem 0.7rem 0 1rem);
   width: 16px;
   height: 11px;
 }
-
 
 .usa-banner-button {
   background-color: transparent;
@@ -255,7 +249,7 @@
   .usa-banner-button {
     padding-top: 0;
     padding-left: 0;
-    // stylelint-disable declaration-block-no-ignored-properties 
+    // stylelint-disable declaration-block-no-ignored-properties
     display: inline;
     height: initial;
     margin-left: 3px;
@@ -263,7 +257,7 @@
     vertical-align: middle;
     width: initial;
     left: 0;
-    // stylelint-enable 
+    // stylelint-enable
   }
 }
 
@@ -295,10 +289,9 @@
   left: u(-999em);
 }
 
-.usa-accordion-content[aria-hidden="true"] {
+.usa-accordion-content[aria-hidden='true'] {
   display: none;
 }
-
 
 .usa-grid,
 .usa-grid-full {
@@ -310,7 +303,7 @@
 .usa-grid::after,
 .usa-grid-full::after {
   clear: both;
-  content: "";
+  content: '';
   display: block;
 }
 
@@ -338,7 +331,6 @@
 .usa-media_block-body {
   overflow: hidden;
 }
-
 
 // End US Bar 2.0
 
@@ -397,7 +389,7 @@
     display: block;
     height: u(3rem);
     // margin: u(.5rem 1rem);
-    margin: u(.75rem 1rem .25rem);
+    margin: u(0.75rem 1rem 0.25rem);
     width: calc(100% - 15rem);
     max-width: u(40rem);
     @include u-background-image('wordmark', 0% 50%);
@@ -405,7 +397,6 @@
 }
 
 @media (min-width: $medium-screen), print {
-
   .disclaimer {
     float: right;
     width: calc(100% - 9rem);
@@ -430,7 +421,7 @@
   .site-title {
     background-size: contain;
     display: block;
-    margin: u(1rem 0 .7rem 0);
+    margin: u(1rem 0 0.7rem 0);
     padding-left: u(12rem);
     height: u(3.4rem);
     width: 100%;
@@ -523,23 +514,23 @@
 }
 
 #ie_warning {
-  display:none;
+  display: none;
   background-color: #000;
   padding: 15px;
 }
 
 #ie_warning p {
-  color:#fff;
+  color: #fff;
   font-size: 16px;
 }
 
 #ie_warning h2 {
-  color:#fff;
+  color: #fff;
 }
 
 @media screen and (-ms-high-contrast: none) {
   #ie_warning {
-    display:block !important;
+    display: block !important;
   }
 }
 

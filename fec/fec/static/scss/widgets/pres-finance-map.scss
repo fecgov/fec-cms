@@ -62,7 +62,8 @@ $sizeTableScroller: 10px;
     }
   }
 
-  .message, .message[aria-hidden='true'] {
+  .message,
+  .message[aria-hidden='true'] {
     // .message, etc are copied from components/_messages.scss
     background-color: $neutral;
     border-color: $gray;
@@ -75,7 +76,8 @@ $sizeTableScroller: 10px;
     transition: all 0.5s;
     width: 100%;
 
-    &.has-error, &[aria-hidden='false'] {
+    &.has-error,
+    &[aria-hidden='false'] {
       margin: 2rem 0;
       max-height: 150px;
       padding: 2rem;
@@ -167,11 +169,12 @@ $sizeTableScroller: 10px;
         background-color: $colorTableTdBorder;
       }
     }
-    td, th {
+    td,
+    th {
       flex-grow: 1;
       flex-shrink: 1;
       line-height: 1.25em;
-      padding: #{$fontSizeBase * .5};
+      padding: #{$fontSizeBase * 0.5};
       pointer-events: none; // removing mouse events here in favor of the <tr> handling them
 
       &:last-child {
@@ -197,14 +200,14 @@ $sizeTableScroller: 10px;
     }
     .t-note {
       line-height: 1.5em;
-      margin: .5em 0;
+      margin: 0.5em 0;
       opacity: 1;
-      transition: opacity .5s;
+      transition: opacity 0.5s;
       user-select: none;
 
       &.hidden {
         opacity: 0;
-        transition: opacity .5s;
+        transition: opacity 0.5s;
       }
     }
   }
@@ -226,11 +229,13 @@ $sizeTableScroller: 10px;
       }
 
       path {
-        transition: fill 1s, opacity .5s;
+        transition:
+          fill 1s,
+          opacity 0.5s;
 
         &.blur {
-          opacity: .33;
-          transition: opacity .5s;
+          opacity: 0.33;
+          transition: opacity 0.5s;
         }
       }
 
@@ -239,7 +244,7 @@ $sizeTableScroller: 10px;
         opacity: 0;
         pointer-events: none;
         stroke: rgb(59 149 148);
-        transition: opacity .5s;
+        transition: opacity 0.5s;
       }
 
       &[data-map_type='bubble'] {
@@ -251,7 +256,9 @@ $sizeTableScroller: 10px;
             transition: fill 1s;
           }
 
-          &.zoomed, &.blur { // turn on pointer events for all paths when we're zoomed in, if they're featured or not
+          &.zoomed,
+          &.blur {
+            // turn on pointer events for all paths when we're zoomed in, if they're featured or not
             pointer-events: initial;
           }
         }
@@ -259,17 +266,17 @@ $sizeTableScroller: 10px;
         circle {
           opacity: 1;
           pointer-events: initial;
-          transition: .5s;
+          transition: 0.5s;
           z-index: 100;
 
           &.blur {
             opacity: 0;
             pointer-events: initial;
           }
-
         }
       }
-      path.zero-value, circle.zero-value {
+      path.zero-value,
+      circle.zero-value {
         pointer-events: none !important;
       }
     }
@@ -300,18 +307,19 @@ $sizeTableScroller: 10px;
         font-size: $fontSizeBase * 2;
         font-weight: $fontWeightRegular;
         line-height: 1.25em;
-        margin: 0 0 .25em;
+        margin: 0 0 0.25em;
 
         a {
           line-height: 1.25em;
         }
       }
-      h2, h3 {
+      h2,
+      h3 {
         font-family: $fontFamilySansSerif;
         font-size: $fontSizeBase * 1.4;
         font-weight: $fontWeightRegular;
         line-height: 1.25em;
-        margin: 0 0 .25em;
+        margin: 0 0 0.25em;
       }
     }
     .legend-container {
@@ -319,7 +327,7 @@ $sizeTableScroller: 10px;
 
       span {
         line-height: 1.25em;
-        margin-bottom: .25em;
+        margin-bottom: 0.25em;
         text-align: right;
       }
     }
@@ -334,7 +342,8 @@ $sizeTableScroller: 10px;
     text-align: left;
     width: 100%;
 
-    a, button {
+    a,
+    button {
       margin: 0 0 1rem;
     }
 
@@ -345,14 +354,14 @@ $sizeTableScroller: 10px;
 
       &[aria-expanded='true'] + .accordion__content {
         max-height: 700px;
-        transition: all .5s;
+        transition: all 0.5s;
       }
 
       &[aria-expanded='false'] + .accordion__content {
         display: block !important; // Check to see if this interferes with A11Y
         max-height: 0;
         padding-bottom: 0;
-        transition: all .5s;
+        transition: all 0.5s;
       }
     }
 
@@ -374,7 +383,7 @@ $sizeTableScroller: 10px;
         }
 
         &.indent {
-          padding-left: .75rem;
+          padding-left: 0.75rem;
         }
       }
 
@@ -383,11 +392,11 @@ $sizeTableScroller: 10px;
       }
 
       tr.close-b td {
-        padding-bottom: .75rem;
+        padding-bottom: 0.75rem;
       }
 
       tr.close-t td {
-        padding-top: .75rem;
+        padding-top: 0.75rem;
       }
 
       th {
@@ -448,19 +457,21 @@ $sizeTableScroller: 10px;
     }
 
     #filter-year {
-      margin-right: .5rem;
+      margin-right: 0.5rem;
       order: 5; // responsive
-      width: calc(100% - .5rem);//20rem;
+      width: calc(100% - 0.5rem); //20rem;
     }
 
     .candidate-list-wrapper {
-      margin-right: .5rem;
+      margin-right: 0.5rem;
       order: 15;
-      width: calc(33.33% - .5rem);
+      width: calc(33.33% - 0.5rem);
 
       .remote-table-header {
         margin-bottom: 0.5px; // Make sure the border is visible above the scrollbar below it
-        width: calc(100% + 1px); // align the right side with the parent's right boundary
+        width: calc(
+          100% + 1px
+        ); // align the right side with the parent's right boundary
       }
 
       .table-scroller {
@@ -472,14 +483,14 @@ $sizeTableScroller: 10px;
         }
       }
 
-      td, th {
+      td,
+      th {
         &:nth-child(2) {
           max-width: 100px;
         }
       }
 
       tr {
-
         &.selected {
           background: $colorTableTdBorder;
           font-weight: $fontWeightBold;
@@ -492,8 +503,8 @@ $sizeTableScroller: 10px;
     }
 
     .map-wrapper {
-      margin-left: .5rem;
-      margin-right: .5rem;
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
       width: calc(66.66% - 1rem);
 
       .election-map {
@@ -514,14 +525,15 @@ $sizeTableScroller: 10px;
     }
 
     #downloads-wrapper {
-      margin-right: .5rem;
+      margin-right: 0.5rem;
       order: 30;
-      width: calc(50% - .5rem);
+      width: calc(50% - 0.5rem);
     }
 
     .map-details {
       .more-info-wrapper {
-        a, button {
+        a,
+        button {
           margin: 0 0 1rem 1rem;
         }
       }
@@ -529,30 +541,28 @@ $sizeTableScroller: 10px;
   }
   // Large sizes
   &.w-l {
-
     @extend .w-m;
 
     #filter-year {
       display: inline-block; // for IE11;
-      margin-right: .5rem;
-      width: calc(50% - .5rem);
+      margin-right: 0.5rem;
+      width: calc(50% - 0.5rem);
 
       .js-table-switcher {
         display: block;
       }
     }
 
-
     .candidate-list-wrapper {
       order: 20;
-      width: calc(25% - .5rem);
+      width: calc(25% - 0.5rem);
     }
 
     .right-column-wrapper {
-      margin-left: .5rem;
+      margin-left: 0.5rem;
       max-height: 490px;
       order: 30;
-      width: calc(28% - .5rem);
+      width: calc(28% - 0.5rem);
     }
     .map-wrapper {
       order: 25;
@@ -566,13 +576,13 @@ $sizeTableScroller: 10px;
       }
     }
     .export-methodology-buttons-holder {
-      margin-left: .5rem;
+      margin-left: 0.5rem;
       order: 15;
       padding-top: 3rem;
-      width: calc(50% - .5rem);
+      width: calc(50% - 0.5rem);
     }
     #downloads-wrapper {
-      margin-left: calc(25% + .5rem);
+      margin-left: calc(25% + 0.5rem);
       order: 35;
       width: 75%;
     }
@@ -594,7 +604,8 @@ $sizeTableScroller: 10px;
       display: table-row;
     }
 
-    td, th {
+    td,
+    th {
       display: table-cell;
     }
   }
@@ -637,10 +648,10 @@ $sizeTableScroller: 10px;
   &::after {
     @include triangle(1.6rem, $inverse, down);
 
-    bottom: -.7rem;
+    bottom: -0.7rem;
     content: '';
     display: block;
-    left: calc(50% - .8rem);
+    left: calc(50% - 0.8rem);
     position: absolute;
   }
 }
@@ -693,20 +704,20 @@ $sizeTableScroller: 10px;
   }
 
   #downloads-links {
-    display:flex;
+    display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
 
-      a {
-        border: 1px solid $gray-light;
-        padding: 1rem;
-        text-align: center;
-        width: 9rem;
+    a {
+      border: 1px solid $gray-light;
+      padding: 1rem;
+      text-align: center;
+      width: 9rem;
 
-          &:hover {
-            background: $gray-lightest;
-          }
+      &:hover {
+        background: $gray-lightest;
       }
+    }
   }
 }
 
@@ -721,7 +732,8 @@ $sizeTableScroller: 10px;
   container: presmapcontainer / inline-size;
 
   @container presmapcontainer (max-width: 674px ) {
-    .candidate-list-wrapper, .map-wrapper {
+    .candidate-list-wrapper,
+    .map-wrapper {
       width: 100cqw;
     }
   }

@@ -47,14 +47,14 @@
 
   &.is-pending {
     background-image: url('../img/loading-ellipsis.gif');
-    background-position: u(0 .4rem);
+    background-position: u(0 0.4rem);
     background-repeat: no-repeat;
     background-size: u(2rem);
   }
 
   &.is-complete {
     background-size: u(2rem);
-    background-position: u(0 .5rem);
+    background-position: u(0 0.5rem);
     @include u-icon-bg($check, $primary);
   }
 }
@@ -62,12 +62,12 @@
 .download__name {
   display: block;
   font-weight: bold;
-  padding: u(.5rem 0);
+  padding: u(0.5rem 0);
   @include u-truncate;
 }
 
 .download__button {
-  padding: u(.5rem);
+  padding: u(0.5rem);
 }
 
 .download__cancel {
@@ -76,7 +76,7 @@
 }
 
 .download__message {
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
   font-size: u(1.4rem);
   margin: 0;
 }

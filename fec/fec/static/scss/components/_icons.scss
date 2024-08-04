@@ -59,8 +59,6 @@
   &.i-play {
     @include u-icon-bg($play-button, $base);
   }
-
-
 }
 
 .icon--small {
@@ -164,7 +162,7 @@
 }
 
 .icon-circle--check-outline--inline--left {
-  margin-right: u(.5rem);
+  margin-right: u(0.5rem);
   display: inline-block;
   vertical-align: middle;
 
@@ -176,7 +174,7 @@
 }
 
 .icon-circle--clock-reverse--inline--left {
-  margin-right: u(.5rem);
+  margin-right: u(0.5rem);
   display: inline-block;
   vertical-align: middle;
 

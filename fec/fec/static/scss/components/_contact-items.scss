@@ -42,7 +42,7 @@
 }
 
 .contact-item__title {
-  margin-bottom: u(.5rem);
+  margin-bottom: u(0.5rem);
   margin-top: 0;
 }
 
@@ -115,7 +115,7 @@
 
 .address span {
   display: block;
-  margin-bottom: u(.8rem);
+  margin-bottom: u(0.8rem);
 }
 
 .grid__item {
@@ -125,17 +125,14 @@
   }
 }
 
-
-
 // For FEC-Offices pages contact items where icon is stacked with other items and label is sans-serif
 
 .offices-contact {
-
-  .contact-item:not(.contact-item--half)::before{
+  .contact-item:not(.contact-item--half)::before {
     display: block;
     margin-bottom: u(1.5rem);
   }
-  
+
   .contact-item__content {
     display: block;
   }
@@ -143,6 +140,6 @@
   .contact-item__label {
     text-transform: uppercase;
     font-size: u(1.8rem);
-    font-family: Karla,sans-serif;
+    font-family: Karla, sans-serif;
   }
 }

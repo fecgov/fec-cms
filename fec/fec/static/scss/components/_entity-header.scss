@@ -44,7 +44,7 @@
 }
 
 .entity__header__top {
-  padding-bottom: u(.5rem);
+  padding-bottom: u(0.5rem);
 }
 
 .entity__header__bottom {
@@ -70,7 +70,7 @@
   border-bottom: 2px solid;
   border-top: 2px solid;
   font-family: $sans-serif;
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
   padding: u(1rem 0);
   width: 100%;
   @include clearfix;
@@ -147,7 +147,7 @@
   .entity__info,
   .entity__type {
     border-color: $primary;
-    
+
     &:last-of-type {
       border-right: none;
     }

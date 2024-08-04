@@ -25,7 +25,7 @@
   padding: u(1rem);
   margin: u(1rem 0 0 0);
 
-  .icon-heading::before{
+  .icon-heading::before {
     margin-right: u(1rem);
   }
 }
@@ -33,15 +33,14 @@
 .mega-heading__title {
   display: table-cell;
   margin-left: u(3rem);
-  font-family:sans-serif;
+  font-family: sans-serif;
   font-size: u(1.6rem);
   padding-top: u(1.11rem);
-
 
   a {
     border-bottom: 1px dotted $inverse !important;
   }
-  &::before{
+  &::before {
     content: '';
     margin-bottom: u(3rem);
     margin-right: u(1rem);
@@ -71,8 +70,6 @@
   }
 }
 
-
-
 .mega__list:last-of-type {
   li:last-of-type {
     .mega__page-link {
@@ -100,7 +97,7 @@
   a::after {
     // Adding the double right-angle quote (») here since it's only decorative and not actually a closing quote
     // (for accessibility and SEO)
-    content: "\00A0 »"; // \00A0 is a non-breaking space to prevent wraps
+    content: '\00A0 »'; // \00A0 is a non-breaking space to prevent wraps
     line-height: 1em;
     position: absolute;
   }
@@ -115,14 +112,15 @@
   }
 
   .card__content {
-    padding-top: u(.5rem);
+    padding-top: u(0.5rem);
   }
 }
 
 @include media($med) {
-  .icon-heading--data-flag-circle--secondary::before, .icon-heading--data-flag-circle--primary::before {
+  .icon-heading--data-flag-circle--secondary::before,
+  .icon-heading--data-flag-circle--primary::before {
     margin-right: u(1rem);
-    margin-left: u(.2rem);
+    margin-left: u(0.2rem);
   }
 }
 
@@ -148,7 +146,7 @@
       .mega {
         box-shadow: 0 6px 8px 2px rgb(0 0 0 / 30%);
         transform: translateY(0);
-        @include transition(all .4s ease-out);
+        @include transition(all 0.4s ease-out);
         @include transform(translateY(0));
       }
     }
@@ -164,7 +162,7 @@
     color: $inverse;
     padding: u(1rem 4rem 2rem 4rem);
     @include clearfix;
-    @include transition(all .4s ease-out);
+    @include transition(all 0.4s ease-out);
     @include transform(translateY(-100%));
 
     .button--standard {
@@ -172,10 +170,10 @@
       border: 1px solid $gray;
     }
   }
-  .mega__inner .icon-heading{
+  .mega__inner .icon-heading {
     margin-left: 0;
 
-    &::before{
+    &::before {
       margin-right: u(2rem);
     }
   }
@@ -187,7 +185,7 @@
   .mega-heading {
     display: block;
     border-bottom: 2px solid $inverse;
-    padding-bottom: u(.8rem);
+    padding-bottom: u(0.8rem);
     margin: u(1rem 0);
   }
 
@@ -195,21 +193,20 @@
     display: block;
     margin-bottom: 0;
     margin-left: u(-2rem);
-    font-family:serif;
+    font-family: serif;
     font-size: u(2.4rem);
 
-      a {
-        border-bottom: 1px dotted $inverse !important;
-      }
-
-      &::before {
-        height: u(5rem) !important;
-        width: u(5rem) !important;
-        content: ''!important;
-        margin-right: u(1.5rem);
-      }
-
+    a {
+      border-bottom: 1px dotted $inverse !important;
     }
+
+    &::before {
+      height: u(5rem) !important;
+      width: u(5rem) !important;
+      content: '' !important;
+      margin-right: u(1.5rem);
+    }
+  }
 
   .mega__page-link {
     padding-left: u(2rem);
@@ -224,16 +221,14 @@
   }
 }
 
-
-
-@media screen and (width <= 40em){
-  .mega-heading__title{
+@media screen and (width <= 40em) {
+  .mega-heading__title {
     margin-left: u(1rem);
     margin-top: u(1rem);
     margin-bottom: u(3rem);
 
     &::before {
-      margin-top: u(-.5rem);
+      margin-top: u(-0.5rem);
       margin-bottom: u(0);
     }
   }

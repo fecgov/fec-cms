@@ -35,7 +35,7 @@
   color: $base;
   font-size: u(1.4rem);
   font-weight: bold;
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
   padding: u(1rem 4rem 1rem 2rem);
   text-align: left;
   width: 100%;
@@ -52,7 +52,7 @@
     padding: u(1rem 4rem 1rem 1rem);
 
     &::before {
-      content:'';
+      content: '';
       @extend .button--envelope;
 
       padding: u(1rem 0 1rem 0);

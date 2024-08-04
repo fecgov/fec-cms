@@ -1,9 +1,9 @@
-// FEC Offices 
+// FEC Offices
 //
 // Employee block
 //
 //<div class="grid grid--2-wide office-employee--section">
-//  <div class="grid__item employee-photo">            
+//  <div class="grid__item employee-photo">
 //   <img src="{{ employee_image.url }}" alt="Headshot of {{ block.value.employee.employee_name }}" width="136" height="136">
 //  </div>
 //  <div class="grid__item employee-bio">
@@ -19,28 +19,29 @@
 
 //Mobile first
 .office-employee--section {
-   .grid__item.employee-bio {
-     width: 100%;
-   } 
+  .grid__item.employee-bio {
+    width: 100%;
+  }
 
   //Large Breakpoint
-  @include media($lg){
+  @include media($lg) {
     display: flex;
-  
+
     .grid__item.employee-photo {
-      flex-basis: 25%  ;
-    } 
+      flex-basis: 25%;
+    }
 
     .grid__item.employee-bio {
       flex-basis: 75%;
-    } 
+    }
   }
 }
 
-.employee_name, .employee_title  {
+.employee_name,
+.employee_title {
   font-size: 1.8rem;
-  font-family: Karla,sans-serif;
-  letter-spacing: -.3px;
+  font-family: Karla, sans-serif;
+  letter-spacing: -0.3px;
 }
 
 .employee_name {
@@ -53,6 +54,8 @@
 }
 
 //So if first office has its own h2, there is no double line
- header.heading--main.offices-heading--main + .main__content--full h2.office-title {
-  border-top: none
-  }
+header.heading--main.offices-heading--main
+  + .main__content--full
+  h2.office-title {
+  border-top: none;
+}

@@ -4,7 +4,6 @@
 // Applies site styles to wagtail StreamField.
 
 .body-blocks {
-
   .body-block {
     @extend .content__section;
   }
@@ -15,25 +14,21 @@
 
   .block-image {
     img {
-      height: auto;  // preserve ratio
+      height: auto; // preserve ratio
       border: 2px solid $gray-lightest;
       border-radius: 2px;
     }
   }
 
   .block-paragraph + .block-table {
-     margin-top: u(-4rem);
-    }
-
-}
-  .block-table {
-    table {
-      @extend .simple-table-cms;
-    }
+    margin-top: u(-4rem);
   }
-
-
-
+}
+.block-table {
+  table {
+    @extend .simple-table-cms;
+  }
+}
 
 // Author-list component
 // could be moved to fec-style/scss/components/_author-list.scss
@@ -62,8 +57,8 @@
 }
 
 .author-item__info {
-  white-space: nowrap;  // keep .author-item__info next to image
-  overflow: hidden;  // better than overlapping
+  white-space: nowrap; // keep .author-item__info next to image
+  overflow: hidden; // better than overlapping
 }
 
 .author-item__image {
@@ -73,17 +68,16 @@
 
 .author-item__details {
   display: inline-block;
-  white-space: normal;  // since .author-item is nowrap
+  white-space: normal; // since .author-item is nowrap
   vertical-align: top;
-  margin-left: 1rem;  // override default ul margin-left: 2rem
+  margin-left: 1rem; // override default ul margin-left: 2rem
 }
 
 .icon--email--author {
   @extend .icon--inline--right;
 
-  margin-left: u(.5rem);
+  margin-left: u(0.5rem);
   max-width: 20px;
-
 }
 
 // Read-next component

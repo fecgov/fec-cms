@@ -34,7 +34,7 @@ label {
 }
 
 input,
-select[multiple="multiple"],
+select[multiple='multiple'],
 textarea,
 select {
   background-color: $inverse;
@@ -59,26 +59,26 @@ select {
 
 select {
   // & {
-    width: auto;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-position: right u(2rem) top 50%;
-    background-size: 12px;
-    color: $base;
-    border: 2px solid $gray;
-    padding: u(.6rem 3em .6rem 1rem);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  width: auto;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: right u(2rem) top 50%;
+  background-size: 12px;
+  color: $base;
+  border: 2px solid $gray;
+  padding: u(0.6rem 3em 0.6rem 1rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   // }
 
   @include appearance(none);
   @include u-icon-bg($arrow-down, $primary);
-  
+
   &::-ms-expand {
     display: none;
   }
-  
+
   &:hover:not([disabled]) {
     background-color: $gray-medium;
   }
@@ -88,11 +88,11 @@ textarea {
   resize: vertical;
 }
 
-input[type="search"] {
+input[type='search'] {
   @include appearance(none);
 }
 
-input[type="file"] {
+input[type='file'] {
   padding-bottom: u(1rem);
   width: 100%;
 }
@@ -133,24 +133,24 @@ input[type="file"] {
 // </div>
 //
 
-[type="checkbox"],
-[type="radio"] {
+[type='checkbox'],
+[type='radio'] {
   @include u-visually-hidden;
 }
 
-[type="checkbox"] + label,
-[type="radio"] + label {
+[type='checkbox'] + label,
+[type='radio'] + label {
   border: 1px solid $gray;
   background-color: $gray;
   display: inline-block;
   cursor: pointer;
   line-height: u(2rem);
-  margin: u(0 0 1rem .25rem);
-  padding: u(.4rem .8rem .4rem 3rem);
+  margin: u(0 0 1rem 0.25rem);
+  padding: u(0.4rem 0.8rem 0.4rem 3rem);
 
   &:hover {
     background-color: $gray-medium;
-    border-color: $gray-medium
+    border-color: $gray-medium;
   }
 
   &::before {
@@ -160,21 +160,21 @@ input[type="file"] {
     content: '';
     display: inline-block;
     height: u(1.6rem);
-    margin-right: .6em;
+    margin-right: 0.6em;
     margin-left: u(-2.4rem);
-    text-indent: .15em;
+    text-indent: 0.15em;
     width: u(1.6rem);
     vertical-align: -4px;
   }
 }
 
-[type="radio"] + label::before {
+[type='radio'] + label::before {
   height: u(1.6rem);
   width: u(1.6rem);
   border-radius: u(1.6rem);
 }
 
-[type="checkbox"]:checked + label {
+[type='checkbox']:checked + label {
   background-color: transparent;
 
   &::before {
@@ -182,7 +182,7 @@ input[type="file"] {
   }
 }
 
-[type="radio"]:checked + label {
+[type='radio']:checked + label {
   background-color: transparent;
 
   &::before {
@@ -191,7 +191,7 @@ input[type="file"] {
   }
 }
 
-[type="checkbox"]:checked + label::before {
+[type='checkbox']:checked + label::before {
   background-position: 50%;
   background-size: 12px;
   background-repeat: no-repeat;
@@ -199,13 +199,13 @@ input[type="file"] {
   @include u-icon-bg($check, $inverse);
 }
 
-[type="checkbox"]:focus + label,
-[type="radio"]:focus + label {
+[type='checkbox']:focus + label,
+[type='radio']:focus + label {
   box-shadow: 0 0 2px 2px $focus;
 }
 
-[type="checkbox"]:disabled + label::before,
-[type="radio"]:disabled + label::before {
+[type='checkbox']:disabled + label::before,
+[type='radio']:disabled + label::before {
   cursor: not-allowed;
 }
 
@@ -214,9 +214,9 @@ input[type="file"] {
 // <button>Unstyled button</button>
 //
 
-[type="submit"],
-[type="reset"],
-[type="button"],
+[type='submit'],
+[type='reset'],
+[type='button'],
 button {
   background: none;
   border: none;
@@ -240,5 +240,5 @@ button {
 }
 
 .range__input input {
-  padding: u(0 .7rem)
+  padding: u(0 0.7rem);
 }

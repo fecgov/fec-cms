@@ -63,7 +63,7 @@
       font-size: u(1.8rem);
       font-weight: bold;
       line-height: 1.2;
-      letter-spacing: -.3px;
+      letter-spacing: -0.3px;
       margin: u(1.4rem 0 1rem 0);
     }
   }
@@ -73,7 +73,7 @@
       font-family: $serif;
       font-size: u(1.6rem);
       font-weight: bold;
-      margin: u(1.5rem 0 .75rem 0);
+      margin: u(1.5rem 0 0.75rem 0);
       line-height: 1.33;
     }
   }
@@ -91,7 +91,7 @@
 }
 
 @mixin t-highlight {
-  background-color: rgba($aqua, .15);
+  background-color: rgba($aqua, 0.15);
   font-weight: bold;
   padding: 0 0.3em;
 }

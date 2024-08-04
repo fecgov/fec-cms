@@ -41,7 +41,7 @@
     }
   }
 
-  a[href$=".pdf"] {
+  a[href$='.pdf'] {
     margin-left: u(6rem);
 
     &::before {
@@ -54,8 +54,7 @@
     }
   }
 
-  .list--flat-bordered li{
-
+  .list--flat-bordered li {
     &::after {
       content: '';
       padding-left: 0;
@@ -63,7 +62,6 @@
       @include media($med) {
         content: '|';
         padding-left: u(1rem);
-
       }
     }
 

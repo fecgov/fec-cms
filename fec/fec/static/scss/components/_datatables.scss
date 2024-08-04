@@ -134,7 +134,7 @@
     @include media($med) {
       max-width: max(9em, 30vw);
     }
-    
+
     @include media($lg) {
       max-width: max(13em, 20vw);
     }
@@ -293,10 +293,11 @@
   }
 }
 
-.is-active-status, .is-terminated-status {
+.is-active-status,
+.is-terminated-status {
   margin-left: u(1.5rem);
   position: relative;
-  
+
   &::before {
     border-radius: u(1rem);
     content: '';
@@ -310,10 +311,10 @@
   }
 }
 
-.is-active-status::before{
+.is-active-status::before {
   background-color: $green-light;
 }
-.is-terminated-status::before{
+.is-terminated-status::before {
   background-color: $gray;
 }
 

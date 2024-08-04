@@ -273,14 +273,14 @@ $search-button-width: u(5.6rem);
   color: $base;
   display: block;
   font-weight: bold;
-  padding: u(1rem .5rem);
+  padding: u(1rem 0.5rem);
 }
 
 .tt-suggestion__loading.tt-suggestion__loading {
   color: $primary;
   display: block;
   font-weight: bold;
-  padding: u(1rem .5rem);
+  padding: u(1rem 0.5rem);
 }
 
 .tt-dataset-0,
@@ -289,7 +289,7 @@ $search-button-width: u(5.6rem);
 }
 
 .tt-highlight {
-  background-color: rgba($aqua, .3);
+  background-color: rgba($aqua, 0.3);
 }
 
 // Specific styles for typeahead filters

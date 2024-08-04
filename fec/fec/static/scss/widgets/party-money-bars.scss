@@ -41,11 +41,12 @@ $fontWeightBold: 700;
       padding: 0 1em 3px 0;
     }
 
-    div, label {
+    div,
+    label {
       border-bottom: solid 1px $colorBorderBottom;
     }
   }
-    
+
   .total-wrapper {
     display: flexbox;
     display: flex;
@@ -127,7 +128,7 @@ $fontWeightBold: 700;
         transition: all 1s;
       }
       &::before {
-        content: "";
+        content: '';
         display: block;
         height: 20px;
         position: absolute;
@@ -396,7 +397,7 @@ $fontWeightBold: 700;
 
   // Universals
   .t-mono-stacked-currency {
-    font-family: "fec_currency_mono";
+    font-family: 'fec_currency_mono';
     text-align: right;
   }
 

@@ -24,7 +24,7 @@
   color: $gray;
   float: left;
   font-family: $sans-serif;
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
 }
 
 .breadcrumbs__item {
@@ -32,7 +32,7 @@
 
   float: left;
   max-width: u(20rem);
-  padding: u(.8rem 0);
+  padding: u(0.8rem 0);
 }
 
 .breadcrumbs__item--current {
@@ -44,7 +44,7 @@
 }
 
 .breadcrumbs__separator {
-  padding: u(.5rem .8rem);
+  padding: u(0.5rem 0.8rem);
 }
 
 @include media($lg) {

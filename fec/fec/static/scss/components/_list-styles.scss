@@ -23,7 +23,7 @@
 .list--bulleted--alt {
   li {
     margin-left: u(2rem);
-    padding: u(.5rem 0);
+    padding: u(0.5rem 0);
     font-size: u(1.6rem);
 
     &:last-child {
@@ -31,7 +31,8 @@
     }
   }
 
-  ul, ol {
+  ul,
+  ol {
     margin-left: u(1.5rem);
 
     li:last-of-type {
@@ -50,7 +51,6 @@
 }
 
 .list--numbered {
-
   & > li {
     list-style-type: decimal;
   }
@@ -118,7 +118,7 @@
 }
 
 .list--flat-bordered {
-  padding-bottom: u(.5rem);
+  padding-bottom: u(0.5rem);
   @extend .list--flat;
 
   li {
@@ -136,17 +136,17 @@
 
 .list--2-columns {
   @include media($lg) {
-    @include columns(2)
+    @include columns(2);
   }
 }
 
 .list--3-columns {
   @include media($med) {
-    @include columns(2)
+    @include columns(2);
   }
 
   @include media($lg) {
-    @include columns(3)
+    @include columns(3);
   }
 }
 
@@ -155,24 +155,24 @@
 // These 'columns' are css columns, not to be confused with a design's 12-column grid kind of columns
 .list--1-1-2-3-columns {
   @include media($lg) {
-    @include columns(2)
+    @include columns(2);
   }
 
   @include media($xl) {
-    @include columns(3)
+    @include columns(3);
   }
 }
 .list--1-2-2-2-columns {
   @include media($med) {
-    @include columns(2)
+    @include columns(2);
   }
 }
 .list--1-2-2-3-columns {
   @include media($med) {
-    @include columns(2)
+    @include columns(2);
   }
   @include media($xl) {
-    @include columns(3)
+    @include columns(3);
   }
 }
 
@@ -182,7 +182,7 @@
   }
 
   li {
-    padding: u(.75rem 0);
+    padding: u(0.75rem 0);
   }
 }
 
@@ -195,7 +195,7 @@
 .list--border {
   li {
     border-top: 1px solid $gray;
-    padding: u(.75rem 1rem);
+    padding: u(0.75rem 1rem);
 
     &:first-child {
       border-top: none;
@@ -207,7 +207,6 @@
     }
   }
 }
-
 
 // Checkbox Lists
 //
@@ -266,7 +265,7 @@
   .button--cta,
   .button--alt {
     display: block;
-    margin-bottom: u(.5rem);
+    margin-bottom: u(0.5rem);
     text-align: left;
     width: 100%;
   }

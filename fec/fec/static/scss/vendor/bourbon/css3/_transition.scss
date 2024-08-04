@@ -12,7 +12,7 @@
 
   // Create lists for vendor-prefixed transform
   @each $list in $properties {
-    @if nth($list, 1) == "transform" {
+    @if nth($list, 1) == 'transform' {
       $needs-prefixes: true;
       $list1: -webkit-transform;
       $list2: -moz-transform;
@@ -21,26 +21,26 @@
       @each $var in $list {
         $list3: join($list3, $var);
 
-        @if $var != "transform" {
+        @if $var != 'transform' {
           $list1: join($list1, $var);
           $list2: join($list2, $var);
         }
       }
 
       $webkit: append($webkit, $list1);
-      $moz:    append($moz,    $list2);
-      $spec:   append($spec,   $list3);
+      $moz: append($moz, $list2);
+      $spec: append($spec, $list3);
     } @else {
       $webkit: append($webkit, $list, comma);
-      $moz:    append($moz,    $list, comma);
-      $spec:   append($spec,   $list, comma);
+      $moz: append($moz, $list, comma);
+      $spec: append($spec, $list, comma);
     }
   }
 
   @if $needs-prefixes {
     -webkit-transition: $webkit;
-       -moz-transition: $moz;
-            transition: $spec;
+    -moz-transition: $moz;
+    transition: $spec;
   } @else {
     @if length($properties) >= 1 {
       @include prefixer(transition, $properties, webkit moz spec);
@@ -53,9 +53,12 @@
 
 @mixin transition-property($properties...) {
   & {
-    -webkit-transition-property: transition-property-names($properties, "webkit");
-     -moz-transition-property: transition-property-names($properties, "moz");
-          transition-property: transition-property-names($properties, false);
+    -webkit-transition-property: transition-property-names(
+      $properties,
+      'webkit'
+    );
+    -moz-transition-property: transition-property-names($properties, 'moz');
+    transition-property: transition-property-names($properties, false);
   }
 }
 

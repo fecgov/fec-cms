@@ -20,7 +20,7 @@ body {
   font-size: u(1.4rem);
   line-height: 1.8;
 
-  @include font-feature-settings("kern", "liga", "pnum");
+  @include font-feature-settings('kern', 'liga', 'pnum');
 }
 
 h1 {
