@@ -6,7 +6,7 @@
 .option {
   border-top: 2px solid $primary;
   padding: u(2rem 0);
-  @include clearfix();
+  @include clearfix;
 
   &.option--border-bottom {
     border-bottom: 1px solid $primary;

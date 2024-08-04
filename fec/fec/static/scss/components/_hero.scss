@@ -14,12 +14,12 @@
 }
 
 .hero--primary {
-  @include u-bg--primary();
+  @include u-bg--primary;
   @include u-font-color($gray-lightest);
 }
 
 .hero--secondary {
-  @include u-bg--secondary();
+  @include u-bg--secondary;
   @include u-font-color($gray-lightest);
 
   .hero__action {

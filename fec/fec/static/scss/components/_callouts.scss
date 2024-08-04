@@ -29,19 +29,19 @@
   padding: u(1rem 1.5rem);
   margin-bottom: u(2rem);
   border-radius: 4px;
-  @include clearfix();
+  @include clearfix;
 }
 
 .callout--primary {
-  @include u-bg--primary();
+  @include u-bg--primary;
 }
 
 .callout--secondary {
-  @include u-bg--secondary();
+  @include u-bg--secondary;
 }
 
 .callout--neutral {
-  @include u-bg--neutral();
+  @include u-bg--neutral;
 }
 
 .callout__title {

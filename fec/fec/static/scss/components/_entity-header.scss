@@ -73,7 +73,7 @@
   letter-spacing: -.3px;
   padding: u(1rem 0);
   width: 100%;
-  @include clearfix();
+  @include clearfix;
 
   @include media($med) {
     display: table;
@@ -83,7 +83,7 @@
 .entity__term {
   width: 100%;
   margin-bottom: u(1rem);
-  @include clearfix();
+  @include clearfix;
 
   &:last-child {
     margin-bottom: 0;
@@ -142,7 +142,7 @@
 
 // Color rules
 .entity__header--neutral {
-  @include u-bg--neutral();
+  @include u-bg--neutral;
 
   .entity__info,
   .entity__type {
@@ -156,7 +156,7 @@
 
 .entity__header--primary {
   border-top: 1px solid $primary-contrast;
-  @include u-bg--primary();
+  @include u-bg--primary;
 
   .entity__info,
   .entity__type {

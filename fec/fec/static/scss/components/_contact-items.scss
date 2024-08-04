@@ -9,7 +9,7 @@
 //   <div class="contact-item__content">
 //     <h5 class="contact-item__title">Toll free</h5>
 //     <span class="t-block">1-800-424-9530</span>
-//     <span class="t-block">8:30 a.m. to 5:30 p.m. Eastern Time</span>
+//     <span class="t-block">8: 30 a.m. to 5: 30 p.m. Eastern Time</span>
 //   </div>
 // </li>
 //
@@ -17,7 +17,7 @@
 .contact-item {
   display: table;
   margin-bottom: u(4rem);
-  @include clearfix();
+  @include clearfix;
 
   &:not(.contact-item--half) {
     &::before {
@@ -36,7 +36,7 @@
     @include span-columns(6);
 
     &:nth-child(even) {
-      @include omega();
+      @include omega;
     }
   }
 }
@@ -92,7 +92,7 @@
 
 .contact-item--question-bubble {
   &::before {
-    background-size:75% !important;
+    background-size: 75% !important;
     @include u-icon-circle($question-bubble, $primary, $inverse, 3.4rem);
   }
 }

@@ -13,7 +13,7 @@
   padding: u(2rem);
   text-align: center;
   width: 100%;
-  @include clearfix();
+  @include clearfix;
 }
 
 .card--secondary-contrast {
@@ -26,8 +26,9 @@
   @include u-font-color($base);
 
   .card__image__container {
-    @include clearfix();
-    /*background-color: $primary;*/
+    @include clearfix;
+
+    /* background-color: $primary; */
   }
   .card__icon {
     &.i-election {
@@ -145,7 +146,7 @@
     border-radius: 4px 4px 0 0;
     padding: u(1rem);
     text-align: center;
-    @include clearfix();
+    @include clearfix;
 
     .card__title {
       float: left;
@@ -313,7 +314,7 @@
 }
 
 .card--primary {
-  @include u-bg--primary();
+  @include u-bg--primary;
   @include u-font-color($gray-lightest);
   
   & {
@@ -486,7 +487,7 @@
   border: 2px solid transparent;
   font-weight: bold;
 
-  @include u-bg--secondary();
+  @include u-bg--secondary;
   @include u-font-color($gray-lightest);
   
   &:hover {
@@ -549,7 +550,7 @@
 
   .card__image__container {
     display: inline-block;
-    @include clearfix();
+    @include clearfix;
   }
   .card__icon {
     height: 5.8rem;

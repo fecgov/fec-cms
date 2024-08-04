@@ -5,7 +5,7 @@
 
 .overview {
   padding-bottom: u(2rem);
-  @include clearfix();
+  @include clearfix;
 }
 
 .overview__chart {
@@ -29,7 +29,7 @@
 
 .breakdown-link {
   display: inline-block;
-  margin: 0 0 2rem 0;
+  margin: 0 0 2rem;
   @include heading(h4);
 }
 
@@ -80,12 +80,12 @@
 @include media($med) {
   .overview__chart {
     @include span-columns(8);
-    @include omega();
+    @include omega;
   }
 
   .overview__chart-line {
     @include span-columns(12);
-    @include omega();
+    @include omega;
   }
 
   .overview__feedback {
@@ -117,7 +117,7 @@
 
   .overview__chart-line {
     @include span-columns(12);
-    @include omega();
+    @include omega;
   }
 
   .top-list {
@@ -143,7 +143,7 @@
 
 // Rules specifically for the top-raisers chart on the data landing page
 #top-raisers .chart-table .simple-table__row {
-  &:after {
+  &::after {
     content: '';
     display: block;
     height: 1rem;
@@ -154,7 +154,7 @@
     text-align: left;
   }
   @include media($med) {
-    &:after {
+    &::after {
       display: none;
     }
     .simple-table__cell {

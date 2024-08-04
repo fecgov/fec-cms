@@ -4,15 +4,15 @@
 //
 
 .message {
-  background-size: u(2rem);
-  background-position: u(2rem 2rem);
-  background-color: $neutral;
+  background-size:u(2rem);
+  background-position:u(2rem 2rem);
+  background-color:$neutral;
   border-color: $gray;
   border-style: solid;
   border-width: 0 0 0 3px;
   margin: u(2rem 0);
   padding: u(5rem 2rem 2rem 2rem);
-  @include clearfix();
+  @include clearfix;
 
   p:last-child {
     margin-bottom: 0;

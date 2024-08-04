@@ -5,7 +5,7 @@
     line {
       fill: none;
       stroke: $base;
-      shape-rendering: crispEdges;
+      shape-rendering: crispedges;
     }
   }
 
@@ -168,7 +168,7 @@
   border-color: $primary;
   padding: 2px 0;
   text-align: center;
-  @include clearfix();
+  @include clearfix;
 
   h5 {
     display: inline-block;
@@ -196,8 +196,8 @@
   border-color: $primary;
   padding: 2px 0;
   text-align: center;
-  margin: 1rem 0rem 1rem 0rem;
-  @include clearfix();
+  margin: 1rem 0;
+  @include clearfix;
 
   h5 {
     display: inline-block;

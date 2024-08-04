@@ -18,7 +18,7 @@
 %heading {
   border-bottom: 2px solid $base;
   padding-bottom: u(1rem);
-  @include clearfix();
+  @include clearfix;
 
   h1,
   h2,
@@ -32,6 +32,7 @@
 // h1 breaks onto multiple lines if it's long on large screens
 .heading--main {
   @extend %heading;
+
   margin-bottom: u(3rem);
 
   @include media($lg) {
@@ -44,6 +45,7 @@
 // Has smaller margin
 .heading--section {
   @extend %heading;
+
   margin-bottom: u(1rem);
 }
 

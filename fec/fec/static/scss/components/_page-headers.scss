@@ -43,7 +43,7 @@
   .page-header {
     display: block;
     padding: u(1rem 2rem);
-    @include clearfix();
+    @include clearfix;
 
     a,
     a:hover {
@@ -78,6 +78,6 @@
     background: $inverse;
     border-bottom: 1px solid $gray;
     color: $gray-dark;
-    @include clearfix();
+    @include clearfix;
   }
 }

@@ -10,7 +10,7 @@
 .search-controls__row {
   border-bottom: 1px solid $gray;
   padding: u(1rem 0);
-  @include clearfix();
+  @include clearfix;
 
   &:first-of-type {
     padding-top: 0;
@@ -222,7 +222,7 @@
       @include span-columns(7.3);
 
       .search-controls__submit {
-        margin-top: u(0rem);
+        margin-top: u(0);
         @include span-columns(7.3 of 7.3);
 
         button {
@@ -332,7 +332,7 @@
     }
   }
 
-}/*end MED breakpoint*/
+}/* end MED breakpoint */
 
 // All form elements go in rows
 @include media($lg) {
@@ -355,7 +355,7 @@
     .search-controls__zip {
       margin-left: u(3rem);
       position: relative;
-      top: u(0rem);
+      top: u(0);
       @include span-columns(4.5 of 5.5);
     }
 
@@ -376,7 +376,7 @@
         margin-left: u(1rem);
       }
       .search-controls__submit {
-        margin-top: u(0rem);
+        margin-top: u(0);
         @include span-columns(1.5 of 5.5);
       }
     }

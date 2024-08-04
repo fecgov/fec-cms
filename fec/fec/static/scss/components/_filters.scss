@@ -27,7 +27,7 @@ $filter-button-width: u(4.6rem);
 .filters {
   background: $neutral;
   display: block;
-  @include clearfix();
+  @include clearfix;
 
   &.is-open {
     .filters__content {
@@ -128,9 +128,9 @@ $filter-button-width: u(4.6rem);
   overflow: visible;
   left: -800px;
   @include transition(left .2s ease-in-out);
-  @include u-bg--neutral();
+  @include u-bg--neutral;
 
-  &[aria-hidden=true] {
+  &[aria-hidden="true"] {
     display: block !important;
   }
 }
@@ -149,7 +149,7 @@ $filter-button-width: u(4.6rem);
   padding: u(1rem);
   text-align: left;
   width: 100%;
-  @include clearfix();
+  @include clearfix;
   @include heading(h2);
 }
 

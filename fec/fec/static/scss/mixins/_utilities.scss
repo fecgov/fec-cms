@@ -13,7 +13,7 @@
 }
 
 .u-visually-hidden {
-  @include u-visually-hidden();
+  @include u-visually-hidden;
 }
 
 .u-float-left {
@@ -199,12 +199,12 @@
 
     @include u-icon-bg($arrow-down, $inverse);
 
-    &:hover:not(.is-disabled):not([disabled]) {
+    &:hover:not(.is-disabled, [disabled]) {
       border-color: $gray-medium;
       background-color: transparent;
     }
 
-    &:active:not(.is-disabled):not([disabled]),
+    &:active:not(.is-disabled, [disabled]),
     &:focus,
     &.is-active {
       background-color: rgba($inverse, .3);
@@ -227,7 +227,7 @@
 @mixin u-bg--primary() {
   background-color: $primary;
 
-  @include u-form--inverse();
+  @include u-form--inverse;
   @include u-font-color($gray-lightest);
  
   a {
@@ -254,7 +254,7 @@
 
 @mixin u-bg--secondary() {
   background-color: $secondary;
-  @include u-form--inverse();
+  @include u-form--inverse;
   @include u-font-color($gray-lightest);
 
   a {
@@ -299,7 +299,7 @@
 @mixin u-bg--dark() {
   background-color: $gray-dark;
 
-  @include u-form--inverse();
+  @include u-form--inverse;
   @include u-font-color($gray-lightest);
 
   a {

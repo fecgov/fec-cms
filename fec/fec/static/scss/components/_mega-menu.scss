@@ -54,7 +54,7 @@
 }
 
 .mega__intro {
-  padding: u(0rem 1rem 0 1rem);
+  padding: u(0 1rem 0 1rem);
 }
 
 .mega__page-link {
@@ -97,7 +97,7 @@
   position: relative;
   width: 100%;
 
-  a:after {
+  a::after {
     // Adding the double right-angle quote (») here since it's only decorative and not actually a closing quote
     // (for accessibility and SEO)
     content: "\00A0 »"; // \00A0 is a non-breaking space to prevent wraps
@@ -137,7 +137,7 @@
     visibility: hidden;
 
     @include u-font-color($inverse);
-    @include clearfix();
+    @include clearfix;
 
     &.is-open {
       top: u(4rem);
@@ -146,7 +146,7 @@
       z-index: $z-navigation;
 
       .mega {
-        box-shadow: 0 6px 8px 2px rgba(0, 0, 0, .3);
+        box-shadow: 0 6px 8px 2px rgb(0 0 0 / 30%);
         transform: translateY(0);
         @include transition(all .4s ease-out);
         @include transform(translateY(0));
@@ -163,7 +163,7 @@
     font-size: u(1.4rem);
     color: $inverse;
     padding: u(1rem 4rem 2rem 4rem);
-    @include clearfix();
+    @include clearfix;
     @include transition(all .4s ease-out);
     @include transform(translateY(-100%));
 
@@ -226,7 +226,7 @@
 
 
 
-@media screen and (max-width: 40em){
+@media screen and (width <= 40em){
   .mega-heading__title{
     margin-left: u(1rem);
     margin-top: u(1rem);
@@ -234,7 +234,7 @@
 
     &::before {
       margin-top: u(-.5rem);
-      margin-bottom: u(0rem);
+      margin-bottom: u(0);
     }
   }
 }

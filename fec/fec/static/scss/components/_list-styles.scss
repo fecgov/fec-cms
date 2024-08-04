@@ -105,7 +105,7 @@
 
 .list--flat {
   padding: 0;
-  @include clearfix();
+  @include clearfix;
 
   li {
     float: left;
@@ -250,7 +250,7 @@
 
 .list--buttons {
   padding: 0;
-  @include clearfix();
+  @include clearfix;
 
   li {
     display: inline-block;

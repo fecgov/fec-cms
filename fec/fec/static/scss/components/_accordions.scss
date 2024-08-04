@@ -31,7 +31,7 @@
   background-size: u(2rem);
   background-position: 95% 50%;
   border-bottom: 1px solid $base;
-  margin: 0 0 -1px 0;
+  margin: 0 0 -1px;
   color: $base;
   font-size: u(1.4rem);
   font-weight: bold;
@@ -54,7 +54,8 @@
     &::before {
       content:'';
       @extend .button--envelope;
-      padding: u(1rem 0rem 1rem 0);
+
+      padding: u(1rem 0 1rem 0);
     }
   }
 
@@ -71,7 +72,7 @@
   padding: u(2rem);
   font-family: $sans-serif;
 
-  @include clearfix();
+  @include clearfix;
 
   &.results__content {
     border-top: 1px solid $base;

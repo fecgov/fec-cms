@@ -7,7 +7,7 @@
   position: relative;
   width: 200%;
   z-index: $z1;
-  @include clearfix();
+  @include clearfix;
 
   .data-table {
     float: left;
@@ -121,7 +121,7 @@
   border-bottom: 1px solid $gray-lightest;
   padding: u(0 0 1rem 0);
   text-align: right;
-  @include clearfix();
+  @include clearfix;
 }
 
 .panel__link {

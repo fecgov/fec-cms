@@ -34,7 +34,7 @@ label {
 }
 
 input,
-select[multiple=multiple],
+select[multiple="multiple"],
 textarea,
 select {
   background-color: $inverse;
@@ -135,7 +135,7 @@ input[type="file"] {
 
 [type="checkbox"],
 [type="radio"] {
-  @include u-visually-hidden();
+  @include u-visually-hidden;
 }
 
 [type="checkbox"] + label,

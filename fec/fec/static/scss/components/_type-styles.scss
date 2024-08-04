@@ -24,7 +24,7 @@
   border-bottom: 1px solid $base;
   border-top: 1px solid $base;
   padding: u(1rem 0);
-  @include clearfix();
+  @include clearfix;
 }
 
 .t-ruled--bottom {

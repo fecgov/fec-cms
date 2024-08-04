@@ -7,7 +7,7 @@
 .data-container {
   position: relative;
   width: 100%;
-  @include clearfix();
+  @include clearfix;
 }
 
 .is-showing-filters {
@@ -17,12 +17,12 @@
 .data-container__widgets {
   border-bottom: 2px solid $primary;
   font-family: $sans-serif;
-  @include clearfix();
+  @include clearfix;
 }
 
 .data-container__action {
   float: right;
-  @include clearfix();
+  @include clearfix;
 }
 
 .data-container__share {
@@ -45,7 +45,7 @@
 .data-container__head {
   border-bottom: 1px solid $gray;
   padding: u(1rem);
-  @include clearfix();
+  @include clearfix;
 }
 
 .data-container__title {
@@ -62,7 +62,7 @@
 
 .data-container__tags {
   padding: u(1rem);
-  @include clearfix();
+  @include clearfix;
 }
 
 .data-container__message {
@@ -76,7 +76,7 @@
 .panel__controls {
   clear: both;
   padding-top: u(.5rem);
-  @include clearfix();
+  @include clearfix;
 }
 
 // BREAKPOINT: LARGE
@@ -172,7 +172,7 @@
 
 
 //Responsive behavior for datatables in tab pannels on profile pages (committee, candidate, election)
-@media screen and (max-width: 940px) {
+@media screen and (width <= 940px) {
   .data-container__wrapper .main__content--right-full {
     display: block
    }

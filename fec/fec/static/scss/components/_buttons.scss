@@ -38,7 +38,7 @@
   color: $base;
   @extend .button;
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     background-color: $gray-medium;
     border-color: $gray-medium;
   }
@@ -57,7 +57,7 @@
   color: $inverse !important;
   @extend .button;
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     background-color: $navy;
     border-color: $navy;
   }
@@ -79,7 +79,7 @@
   color: $base;
   @extend .button;
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     border-color: $gray-medium;
   }
 
@@ -97,7 +97,7 @@
   color: $primary;
   @extend .button;
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     background-color: lighten($primary-contrast, 5%);
     border-color: lighten($primary-contrast, 5%);
   }
@@ -115,7 +115,7 @@
   color: $inverse;
   @extend .button;
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     border-color: $gray-medium;
   }
 
@@ -137,7 +137,7 @@
   color: $secondary;
   @extend .button;
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     background-color: lighten($secondary-contrast, 5%);
     border-color: lighten($secondary-contrast, 5%);
   }
@@ -155,7 +155,7 @@
   color: $inverse;
   @extend .button;
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     border-color: $gray-medium;
   }
 
@@ -293,7 +293,7 @@
     background-size: 10px !important;
   }
 
-  &:hover:not(.is-disabled):not(.is-active) {
+  &:hover:not(.is-disabled, .is-active) {
     background-color: $gray;
     border-color: $gray-dark;
     color: $base;
@@ -565,8 +565,7 @@
 .button--open {
   background-size: u(2rem);
   background-position: 95% 50%;
-  border-bottom: 1px solid $base;
-  margin: -21px 0 -1px 0;
+  margin: -21px 0 -1px;
   color: $base;
   font-size: u(1.4rem);
   font-weight: bold;

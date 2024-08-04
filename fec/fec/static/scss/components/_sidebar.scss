@@ -24,7 +24,7 @@
 .sidebar-container {
   position: relative;
   min-height: 1px;
-  @include clearfix();
+  @include clearfix;
 
   @include media($med) {
     @include span-columns(3);
@@ -71,7 +71,7 @@
 .sidebar__content {
   background-color: $neutral;
   padding: u(2rem);
-  @include clearfix();
+  @include clearfix;
   
   p {
     font-size: u(1.4rem);
@@ -87,7 +87,7 @@
 
 .sidebar--primary {
   .sidebar__title {
-    @include u-bg--primary();
+    @include u-bg--primary;
   }
 
   .sidebar__section {
@@ -97,7 +97,7 @@
 
 .sidebar--secondary {
   .sidebar__title {
-    @include u-bg--secondary();
+    @include u-bg--secondary;
   }
 
   .sidebar__section {
@@ -112,7 +112,7 @@
 
 .sidebar--neutral {
   border-top: 4px solid $primary;
-  @include u-bg--neutral();
+  @include u-bg--neutral;
   @include u-font-color($base);
 }
 

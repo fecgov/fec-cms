@@ -85,7 +85,9 @@
 // When the tooltip is above the content. Puts the arrow at the bottom center of the tooltip
 .tooltip--above {
   min-width: u(12rem);
+
   $bottom: u(1.5rem);
+
   left: u(-4rem);
   bottom: calc(100% + #{$bottom});
 
@@ -139,6 +141,7 @@
 
 .tooltip--under {
   $top: u(1.5rem);
+
   left: u(-14rem);
   top: calc(100% + #{$top});
 
@@ -180,7 +183,9 @@
 // When the tooltip is above the content. Puts the arrow at the bottom center of the tooltip
 .tooltip--above {
   min-width: u(12rem);
+
   $bottom: u(1.5rem);
+
   left: u(-4rem);
   bottom: calc(100% + #{$bottom});
 
@@ -260,7 +265,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    @include clearfix();
+    @include clearfix;
     
     .tooltip__title {
       flex-grow: 2;

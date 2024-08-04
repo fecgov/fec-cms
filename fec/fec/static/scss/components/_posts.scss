@@ -91,7 +91,7 @@
   color: $gray-dark;
   font-family: $sans-serif;
   padding-bottom: 5px;
-  @include clearfix();
+  @include clearfix;
 }
 
 .post__doc {

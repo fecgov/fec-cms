@@ -33,12 +33,12 @@
   border: 2px solid $gray;
   color: $base;
 
-  &:hover:not(.is-disabled):not([disabled]) {
+  &:hover:not(.is-disabled, [disabled]) {
     border-color: $gray-medium;
     background-color: transparent;
   }
 
-  &:active:not(.is-disabled):not([disabled]),
+  &:active:not(.is-disabled, [disabled]),
   &.is-active {
     background-color: $gray-medium;
     border-color: $gray-dark;
@@ -51,12 +51,12 @@
   color: $inverse;
   @include u-icon-bg($arrow-down, $inverse);
 
-  &:hover:not(.is-disabled):not([disabled]) {
+  &:hover:not(.is-disabled, [disabled]) {
     border-color: $gray-medium;
     background-color: transparent;
   }
 
-  &:active:not(.is-disabled):not([disabled]),
+  &:active:not(.is-disabled, [disabled]),
   &:focus,
   &.is-active {
     background-color: rgba($inverse, .3);
@@ -76,12 +76,12 @@
   color: $inverse;
   @include u-icon-bg($arrow-down, $inverse);
 
-  &:hover:not(.is-disabled):not([disabled]) {
+  &:hover:not(.is-disabled, [disabled]) {
     border-color: $gray-medium;
     background-color: transparent;
   }
 
-  &:active:not(.is-disabled):not([disabled]),
+  &:active:not(.is-disabled, [disabled]),
   &:focus,
   &.is-active {
     background-color: rgba($inverse, .3);
@@ -155,7 +155,7 @@
 //
 
 .combo {
-  @include clearfix();
+  @include clearfix;
 
   .combo__input {
     height: u(3.6rem);

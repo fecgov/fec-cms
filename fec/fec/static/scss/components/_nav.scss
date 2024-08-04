@@ -5,7 +5,7 @@
 
 // The outer nav element
 .site-nav {
-  @include clearfix();
+  @include clearfix;
 
   &.is-open {
     .site-nav__container {
@@ -21,6 +21,7 @@
 // div that contains the ul and all panels
 .site-nav__container {
   $top: u(6.3rem);
+
   height: calc(100vh - #{$top});
   position: absolute;
   left: 0;
@@ -40,6 +41,7 @@
 // If we have the dev banner, we'll need to adjust #site-menu
 .banner-dev + .usa-banner + .site-header .site-nav .site-nav__container {
   $devBannerTop: 4rem;
+
   height: calc(100vh - 12rem);
   top: 4rem;
 
@@ -106,7 +108,7 @@
 // li element
 .site-nav__item {
   border-bottom: 1px solid $inverse;
-  @include clearfix();
+  @include clearfix;
 
   &:last-child .site-nav__link {
     border-bottom: 0;
@@ -156,6 +158,7 @@
 @include media($med) {
   .site-nav__container {
     $top: u(11.6rem);
+
     height: calc(100vh - #{$top});
     top: $top;
   }
@@ -181,7 +184,7 @@
     position: relative;
     top: 0;
     width: 100%;
-    @include clearfix();
+    @include clearfix;
     @include transform(translateX(0));
   }
 
@@ -270,9 +273,10 @@
 }
 
 .utility-nav__search {
-  /*width: u(30rem);*/
+  /* width: u(30rem); */
   padding: 0 u(1rem);
-/*  display: block;*/
+
+/*  display: block; */
  }
 
 /*
@@ -280,7 +284,7 @@
   .mobile-search.utility-nav__search {
     display: none;
   }
-}*/
+} */
 
 
 // Grid overhaul, using _grid.scss breakpoints but Bootstrap naming as inspiration,

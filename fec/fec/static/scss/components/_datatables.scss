@@ -310,10 +310,10 @@
   }
 }
 
-.is-active-status:before{
+.is-active-status::before{
   background-color: $green-light;
 }
-.is-terminated-status:before{
+.is-terminated-status::before{
   background-color: $gray;
 }
 

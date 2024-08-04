@@ -80,6 +80,7 @@
     word-wrap: break-word;
     
     @extend .tag;
+
     position: relative;
 
     &::after {

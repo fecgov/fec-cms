@@ -62,7 +62,7 @@
   padding: u(5rem 0);
   position: relative;
 
-  @include u-bg--primary();
+  @include u-bg--primary;
   @include u-font-color($neutral);
 
   .address__title {

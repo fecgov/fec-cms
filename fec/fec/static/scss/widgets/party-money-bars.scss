@@ -47,7 +47,7 @@ $fontWeightBold: 700;
   }
     
   .total-wrapper {
-    display: -ms-flexbox;
+    display: flexbox;
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
@@ -126,7 +126,7 @@ $fontWeightBold: 700;
         background: $colorBarDef;
         transition: all 1s;
       }
-      &:before {
+      &::before {
         content: "";
         display: block;
         height: 20px;
@@ -144,7 +144,7 @@ $fontWeightBold: 700;
           background: $colorBarDem;
           transition: all 1s;
         }
-        &:before {
+        &::before {
           border-right-color: $colorBarDem;
         }
       }
@@ -159,7 +159,7 @@ $fontWeightBold: 700;
           background: $colorBarRep;
           transition: all 1s;
         }
-        &:before {
+        &::before {
           border-right-color: $colorBarRep;
         }
       }
@@ -180,7 +180,7 @@ $fontWeightBold: 700;
   footer {
     -ms-flex-align: baseline;
     align-items: baseline;
-    display: -ms-flexbox;
+    display: flexbox;
     display: flex;
     -ms-flex-pack: justify;
     justify-content: space-between;
@@ -228,9 +228,10 @@ $fontWeightBold: 700;
   // Medium sizes for the light theme, which is the default
   &.w-m {
     @extend .w-s;
+
     -ms-flex-align: center;
     align-items: center;
-    display: -ms-flexbox;
+    display: flexbox;
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
@@ -353,7 +354,7 @@ $fontWeightBold: 700;
     // Medium sizes of the dark theme
     &.w-m {
       .main-content-wrapper {
-        display: -ms-flexbox;
+        display: flexbox;
         display: flex;
         -ms-flex-pack: justify;
         justify-content: space-between;
@@ -395,7 +396,7 @@ $fontWeightBold: 700;
 
   // Universals
   .t-mono-stacked-currency {
-    font-family: fec_currency_mono;
+    font-family: "fec_currency_mono";
     text-align: right;
   }
 
