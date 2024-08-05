@@ -91,7 +91,7 @@ describe('Contact form', function() {
   it('clears the ID on keyup of comm typahead field', function() {
     $('#id_u_committee').val('12345');
     //$('#id_committee_name').val('ACTBLUE')
-    $(this.form.typeahead.$input).keyup();
+    $(this.form.typeahead.$input).trigger('keyup');
     expect(this.form.committeeId.val()).to.equal('');
   });
 

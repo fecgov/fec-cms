@@ -173,9 +173,9 @@ describe('dropdown', function() {
       expect(isClosed(this.dropdown)).to.be.true;
     });
 
-    it('hides on ESC', function(){
+    it('hides on ESC', function() {
       this.dropdown.show();
-      this.dropdown.handleKeyup({ keyCode: 27 });
+      this.dropdown.handleKeyup({ which: 27 });
       expect(isClosed(this.dropdown)).to.be.true;
     });
   });

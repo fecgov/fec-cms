@@ -112,8 +112,8 @@ describe('FilterTypeahead', function() {
 
   it('should submit on enter', function() {
     var handleSubmit = spy(this.FilterTypeahead, 'handleSubmit');
-    this.FilterTypeahead.handleKeypress({ keyCode: 13 });
-    expect(handleSubmit).to.have.been.calledWith({ keyCode: 13 });
+    this.FilterTypeahead.handleKeypress({ which: 13 });
+    expect(handleSubmit).to.have.been.calledWith({ which: 13 });
     this.FilterTypeahead.handleSubmit.restore();
   });
 
@@ -121,14 +121,14 @@ describe('FilterTypeahead', function() {
     var enableButton = spy(this.FilterTypeahead, 'enableButton');
     var disableButton = spy(this.FilterTypeahead, 'disableButton');
 
-    // this.FilterTypeahead.$field.typeahead('val', 'FAKE CANDIDATE').trigger('change');
-    // expect(enableButton).to.have.been.called;
+    this.FilterTypeahead.$field.typeahead('val', 'FAKE CANDIDATE').trigger('change');
+    expect(enableButton).to.have.been.called;
 
-    // this.FilterTypeahead.$field.typeahead('val', '').trigger('change');
-    // expect(disableButton).to.have.been.called;
+    this.FilterTypeahead.$field.typeahead('val', '').trigger('change');
+    expect(disableButton).to.have.been.called;
 
-    // this.FilterTypeahead.enableButton.restore();
-    // this.FilterTypeahead.disableButton.restore();
+    this.FilterTypeahead.enableButton.restore();
+    this.FilterTypeahead.disableButton.restore();
   });
 
   it('should clear input', function() {
