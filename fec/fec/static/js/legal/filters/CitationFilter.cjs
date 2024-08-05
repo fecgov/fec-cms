@@ -101,7 +101,7 @@ class CitationFilter extends React.Component {
 
     if (this.state.dropdownVisible) {
       // down arrow or tab
-      if (e.keyCode === 40 || e.keyCode === 9) {
+      if (e.which === 40 || e.which === 9) {
         e.preventDefault();
         if (highlightCitation < this.state.citations.length - 1) {
           this.setState({ highlightCitation: highlightCitation + 1 });
@@ -111,7 +111,7 @@ class CitationFilter extends React.Component {
       }
 
       // up arrow
-      if (e.keyCode === 38) {
+      if (e.which === 38) {
         if (highlightCitation > 0) {
           this.setState({ highlightCitation: highlightCitation - 1 });
         } else {
@@ -120,7 +120,7 @@ class CitationFilter extends React.Component {
       }
 
       // enter
-      if (e.keyCode === 13) {
+      if (e.which === 13) {
         this.setSelection(
           this.state.citations[this.state.highlightCitation].citation_text
         );

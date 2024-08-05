@@ -1,11 +1,12 @@
 const React = require('react');
+
 const PropTypes = require('prop-types');
 
 const TooltipHelp = require('./TooltipHelp.cjs');
 
 function TextFilter(props) {
   function handleKeydown(e) {
-    if (e.keyCode === 13) {
+    if (e.which === 13) {
       props.getResults();
     }
   }

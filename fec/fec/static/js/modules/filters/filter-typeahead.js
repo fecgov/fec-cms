@@ -147,7 +147,7 @@ FilterTypeahead.prototype.handleKeypress = function(e) {
     this.$field.attr('aria-expanded', 'false');
   }
 
-  if (e.keyCode === 13) {
+  if (e.which === 13) {
     this.handleSubmit(e);
   }
 };
