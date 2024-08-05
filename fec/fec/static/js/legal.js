@@ -50,7 +50,7 @@ KeywordModal.prototype.handleSubmit = function(e) {
     $(this).val();
   });
   this.$excludeField.val();
-  this.$form.submit(); // TODO: jQuery deprecation? (.submit() )
+  this.$form.trigger('submit');
 };
 
 /**
