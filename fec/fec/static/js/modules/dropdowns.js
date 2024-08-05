@@ -132,7 +132,7 @@ Dropdown.prototype.handleCheckKeyup = function(e) {
   if (e.which === KEYCODE_ENTER) {
     $(e.target)
       .prop('checked', true)
-      .change(); // TODO: jQuery deprecation
+      .trigger('change');
   }
 };
 

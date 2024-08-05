@@ -6,7 +6,7 @@ import { default as auditCategoryTemplate } from '../templates/audit_tags.hbs';
 export default function auditTags() {
   $('.data-container__tags').prepend(auditCategoryTemplate);
   $('.tag__category.sub').css('visibility', 'hidden');
-  $('#primary_category_id').change(function() { // TODO: jQuery deprecation
+  $('#primary_category_id').on('change', function() {
     const current_category = $('#primary_category_id option:selected').text();
     $('.tag__category.sub').css('visibility', 'hidden');
     $('.tag__item.primary').contents()[0].nodeValue = `Findings and issue category: ${current_category}`;
@@ -15,7 +15,7 @@ export default function auditTags() {
       : $('.tag__item.primary button').show();
   });
 
-  $('#sub_category_id').change(function() { // TODO: jQuery deprecation
+  $('#sub_category_id').on('change', function() {
     const current_sub = $('#sub_category_id option:selected').text();
     $('.tag__item.sub').contents()[0].nodeValue = `Sub Category: ${current_sub}`;
   });

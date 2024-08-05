@@ -16,7 +16,7 @@ ToggleFilter.prototype.fromQuery = function(query) {
   this.$elm
     .find('input[value="' + query[this.name] + '"]')
     .prop('checked', true)
-    .change(); // TODO: jQuery deprecation
+    .trigger('change');
 };
 
 ToggleFilter.prototype.handleChange = function(e) {

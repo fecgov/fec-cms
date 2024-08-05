@@ -211,7 +211,7 @@ FilterTypeahead.prototype.handleSubmit = function(e) {
 };
 
 FilterTypeahead.prototype.clearInput = function() {
-  this.$field.typeahead('val', null).change(); // TODO: jQuery deprecation
+  this.$field.typeahead('val', null).trigger('change');
   this.disableButton();
 };
 
@@ -239,7 +239,7 @@ FilterTypeahead.prototype.appendCheckbox = function(opts) {
   }
   var checkbox = $(template_checkbox(data));
   checkbox.appendTo(this.$selected);
-  checkbox.find('input').change(); // TODO: jQuery deprecation
+  checkbox.find('input').trigger('change');
   this.clearInput();
 };
 

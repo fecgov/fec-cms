@@ -631,7 +631,7 @@ DataTable_FEC.prototype.checkFromQuery = function(){
       // ...if they are not already checked
       for (let box of queryBoxes) {
         if (!($(box).is(':checked'))) {
-              $(box).prop('checked', true).change(); // TODO: jQuery deprecation
+              $(box).prop('checked', true).trigger('change');
         }
        }
       }, 0);
@@ -643,7 +643,7 @@ DataTable_FEC.prototype.checkFromQuery = function(){
       // ...if they are not already checked
       for (let box of queryBoxes) {
         if (!($(box).is(':checked'))) {
-              $(box).prop('checked', true).change(); // TODO: jQuery deprecation
+              $(box).prop('checked', true).trigger('change');
         }
        }
       }

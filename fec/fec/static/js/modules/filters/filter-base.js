@@ -49,7 +49,7 @@ Filter.prototype.setValue = function(value) {
   const $input = this.$input.data('temp')
     ? this.$elm.find('#' + this.$input.data('temp'))
     : this.$input;
-  $input.val(prepareValue($input, value)).change(); // TODO: jQuery deprecation
+  $input.val(prepareValue($input, value)).trigger('change');
   return this;
 };
 
