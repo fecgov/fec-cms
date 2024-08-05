@@ -12,7 +12,7 @@ const ID_PATTERN = /^\w{9}$/;
 
 function slugify(value) {
   return value
-    .trim() // TODO: jQuery deprecation
+    .trim()
     .replace(/\s+/g, '-')
     .replace(/[^a-z0-9:._-]/gi, '');
 }

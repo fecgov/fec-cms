@@ -1,4 +1,5 @@
 const React = require('react');
+
 const PropTypes = require('prop-types');
 const URI = require('urijs');
 
@@ -63,7 +64,7 @@ class CitationFilter extends React.Component {
     return this.state.dropdownVisible ? 'block' : 'none';
   }
 
-  hideDropdown(e) {
+  hideDropdown() {
     this.setState({ dropdownVisible: false });
   }
 
@@ -91,7 +92,7 @@ class CitationFilter extends React.Component {
   }
 
   handleMouseOver(index) {
-    return e => {
+    return () => {
       this.setState({ highlightCitation: index });
     };
   }

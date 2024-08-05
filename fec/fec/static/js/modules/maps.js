@@ -315,7 +315,7 @@ function appendStateMap($parent, results, cached) {
       return displayed.indexOf(each) === -1;
     }) || _last(ids);
   $parent.append(candidateStateMapTemplate(results));
-  const $select = $parent.find('.state-map:last select'); // TODO: jQuery deprecation (:last)
+  const $select = $parent.find('.state-map').last().find('select');
   $select.val(value);
   $select.trigger('change');
   updateButtonsDisplay($parent);
