@@ -239,29 +239,32 @@ DateFilter.prototype.handleMinDateSelect = function() {
   this.$grid.find('.is-active').removeClass('is-active');
   $dateBegin.addClass('is-active');
 
-  this.$grid.find('li').hover( // TODO: jQuery deprecation
-    function() {
-      var dateBeginNum = parseInt(
-        $(this)
-          .parent()
-          .attr('data-year') + $(this).attr('data-month')
-      );
-      var dateEndNum = parseInt(
-        $dateEnd.parent().attr('data-year') + $dateEnd.attr('data-month')
-      );
+  this.$grid.find('li')
+    .on('mouseenter',
+      function() {
+        var dateBeginNum = parseInt(
+          $(this)
+            .parent()
+            .attr('data-year') + $(this).attr('data-month')
+        );
+        var dateEndNum = parseInt(
+          $dateEnd.parent().attr('data-year') + $dateEnd.attr('data-month')
+        );
 
-      if (dateBeginNum <= dateEndNum) {
-        self.$grid.removeClass('is-invalid');
-        self.handleDateGridRange($(this), $dateEnd);
-      } else {
-        self.$grid.addClass('is-invalid');
+        if (dateBeginNum <= dateEndNum) {
+          self.$grid.removeClass('is-invalid');
+          self.handleDateGridRange($(this), $dateEnd);
+        } else {
+          self.$grid.addClass('is-invalid');
+        }
       }
-    },
-    function() {
-      self.handleDateGridRange($dateBegin, $dateEnd);
-      $dateBegin.addClass('is-active');
-    }
-  );
+    )
+    .on('mouseleave',
+      function() {
+        self.handleDateGridRange($dateBegin, $dateEnd);
+        $dateBegin.addClass('is-active');
+      }
+    );
 };
 
 DateFilter.prototype.handleMaxDateSelect = function() {
@@ -276,31 +279,34 @@ DateFilter.prototype.handleMaxDateSelect = function() {
   this.$grid.find('.is-active').removeClass('is-active');
   $dateEnd.addClass('is-active');
 
-  this.$grid.find('li').hover( // TODO: jQuery deprecation
-    function() {
-      // turn dates to numbers for comparsion
-      // to make sure hover date range is valid
-      var dateBeginNum = parseInt(
-        $dateBegin.parent().attr('data-year') + $dateBegin.attr('data-month')
-      );
-      var dateEndNum = parseInt(
-        $(this)
-          .parent()
-          .attr('data-year') + $(this).attr('data-month')
-      );
+  this.$grid.find('li')
+    .on('mouseenter',
+      function() {
+        // turn dates to numbers for comparsion
+        // to make sure hover date range is valid
+        var dateBeginNum = parseInt(
+          $dateBegin.parent().attr('data-year') + $dateBegin.attr('data-month')
+        );
+        var dateEndNum = parseInt(
+          $(this)
+            .parent()
+            .attr('data-year') + $(this).attr('data-month')
+        );
 
-      if (dateBeginNum <= dateEndNum) {
-        self.$grid.removeClass('is-invalid');
-        self.handleDateGridRange($dateBegin, $(this));
-      } else {
-        self.$grid.addClass('is-invalid');
+        if (dateBeginNum <= dateEndNum) {
+          self.$grid.removeClass('is-invalid');
+          self.handleDateGridRange($dateBegin, $(this));
+        } else {
+          self.$grid.addClass('is-invalid');
+        }
       }
-    },
-    function() {
-      self.handleDateGridRange($dateBegin, $dateEnd);
-      $dateEnd.addClass('is-active');
-    }
-  );
+    )
+    .on('mouseleave',
+      function() {
+        self.handleDateGridRange($dateBegin, $dateEnd);
+        $dateEnd.addClass('is-active');
+      }
+    );
 };
 
 DateFilter.prototype.handleGridItemSelect = function(e) {
