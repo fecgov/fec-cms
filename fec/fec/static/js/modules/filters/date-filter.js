@@ -337,7 +337,7 @@ DateFilter.prototype.handleGridItemSelect = function(e) {
       ? this.$maxDate
       : this.$submit;
     this.$grid.removeClass('pick-min pick-max');
-    this.$grid.find('li').unbind('mouseenter mouseleave'); // TODO: jQuery deprecation (.unbind())
+    this.$grid.find('li').off('mouseenter mouseleave');
     this.setValue(value);
     this.$grid.addClass('is-invalid');
     $nextItem.trigger('focus');
