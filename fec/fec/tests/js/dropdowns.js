@@ -65,15 +65,15 @@ describe('dropdown', function() {
     });
 
     it('toggles', function() {
-      this.dropdown.$button.click(); // TODO: jQuery deprecation
+      this.dropdown.$button.trigger('click');
       expect(isOpen(this.dropdown)).to.be.true;
-      this.dropdown.$button.click(); // TODO: jQuery deprecation
+      this.dropdown.$button.trigger('click');
       expect(isClosed(this.dropdown)).to.be.true;
     });
 
     it('handles a check', function() {
       var checkbox = this.dropdown.$panel.find('#A');
-      checkbox.click(); // TODO: jQuery deprecation
+      checkbox.trigger('click');
       expect(checkbox.is(':checked')).to.be.true;
     });
 
@@ -103,8 +103,8 @@ describe('dropdown', function() {
 
     it('unchecks an input', function() {
       var checkbox = this.dropdown.$panel.find('#B');
-      checkbox.click(); // TODO: jQuery deprecation
-      checkbox.click(); // TODO: jQuery deprecation
+      checkbox.trigger('click');
+      checkbox.trigger('click');
       var dropdownItem = this.dropdown.$panel.find('.dropdown__item--selected');
       expect(dropdownItem.hasClass('is-checked')).to.be.false;
     });
@@ -121,8 +121,8 @@ describe('dropdown', function() {
 
     it('removes an unchecked input', function() {
       var checkbox = this.dropdown.$panel.find('#B');
-      checkbox.click(); // TODO: jQuery deprecation
-      checkbox.click(); // TODO: jQuery deprecation
+      checkbox.trigger('click');
+      checkbox.trigger('click');
       expect(checkbox.is(':checked')).to.be.false;
       this.dropdown.handleCheckboxRemoval(checkbox);
       var selectedItems = this.dropdown.$selected.find('.dropdown__item');

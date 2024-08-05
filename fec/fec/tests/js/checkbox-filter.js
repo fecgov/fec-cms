@@ -136,7 +136,7 @@ describe('checkbox filters', function() {
     });
 
     it('removes checkbox on clicking the button', function() {
-      this.filter.$elm.find('.js-remove').click(); // TODO: jQuery deprecation
+      this.filter.$elm.find('.js-remove').trigger('click');
       expect(this.filter.$elm.find('li').length).to.equal(0);
     });
 

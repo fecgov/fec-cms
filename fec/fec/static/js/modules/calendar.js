@@ -338,8 +338,8 @@ Calendar.prototype.handleEventClick = function(calEvent, jsEvent) {
 
 // Simulate clicks when hitting enter on certain full-calendar elements
 Calendar.prototype.simulateClick = function(e) {
-    $(e.target).click(); // TODO: jQuery deprecation
   if (e.which === 13) {
+    $(e.target).trigger('click');
   }
 };
 
