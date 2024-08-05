@@ -14,7 +14,7 @@
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
     {{ select.committee_cycle_select(cycles, cycle, 'disbursements')}}
 
-    {% if totals and committee_type not in ['C', 'E', 'I'] %}
+  {% if totals and committee_type not in ['C', 'E', 'I'] %}
     <div id="total-disbursements" class="entity__figure row">
       <div class="content__section">
         <div class="heading--section heading--with-action">
@@ -341,8 +341,9 @@
         </table>
       </div>
     </div>
-    
-    {% if FEATURES.nat_party_acct_dis_single %}
+  {% endif %}
+
+  {% if totals_national_party and FEATURES.nat_party_acct_dis_single %}
     <div id="national-party-account-spending" class="entity__figure row">
       <div class="content__section">
         <div class="heading--section heading--with-action">
@@ -359,7 +360,7 @@
         <div class="content__section--narrow">
           <div class="row u-margin-bottom">
             <div class="usa-width-one-half">
-              <span class="t-big-data">{{ totals.disbursements|currency }}</span>
+              <span class="t-big-data">{{ totals_national_party.total_disbursements|currency }}</span>
             </div>
           </div>
           <div class="row u-margin-bottom">
@@ -390,12 +391,11 @@
             <th scope="col">Recipient name</th>
             <th scope="col">Party account</th>
             <th scope="col">Description</th>
-            <th scope="col">Receipt date</th>
+            <th scope="col">Disbursement date</th>
             <th scope="col">Amount</th>
           </tr>
         </thead>
       </table>
     </div>
-    {% endif %}{#- /NATIONAL PARTY -#}
-  {% endif %}
+  {% endif %}{#- /NATIONAL PARTY -#}
 </section>
