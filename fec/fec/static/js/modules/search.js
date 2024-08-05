@@ -31,8 +31,8 @@ export default function Search($el, opts) {
 
   $(document.body).on('keyup', function(e) {
     // Focus search on "/"
-      $input.first().focus(); // TODO: jQuery deprecation
     if (e.which === KEYCODE_SLASH) {
+      $input.first().trigger('focus');
     }
   });
 }

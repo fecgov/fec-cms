@@ -88,7 +88,7 @@ Dropdown.prototype.show = function() {
   restoreTabindex(this.$panel);
   this.$panel.attr('aria-hidden', 'false');
   new PerfectScrollbar(this.$panel.get(0), { suppressScrollX: true });
-  this.$panel.find('input[type="checkbox"]:first').focus(); // TODO: jQuery deprecation (:first and .focus)
+  this.$panel.find('input[type="checkbox"]').first().trigger('focus');
   this.$button.addClass('is-active');
   this.isOpen = true;
 };
@@ -119,15 +119,21 @@ Dropdown.prototype.handleFocusAway = function(e) {
   }
 };
 
+/**
+ * @param {JQuery.Event} e
+ */
 Dropdown.prototype.handleKeyup = function(e) {
   if (e.which === KEYCODE_ESC) {
     if (this.isOpen) {
       this.hide();
-      this.$button.focus(); // TODO: jQuery deprecation
+      this.$button.trigger('focus');
     }
   }
 };
 
+/**
+ * @param {JQuery.Event} e
+ */
 Dropdown.prototype.handleCheckKeyup = function(e) {
   if (e.which === KEYCODE_ENTER) {
     $(e.target)
@@ -224,14 +230,14 @@ Dropdown.prototype.selectItem = function($input) {
     if (next.length) {
       $(next[0])
         .find('input[type="checkbox"]')
-        .focus(); // TODO: jQuery deprecation
+        .trigger('focus');
     } else if (prev.length) {
       $(prev[0])
         .find('input[type="checkbox"]')
-        .focus(); // TODO: jQuery deprecation
+        .trigger('focus');
     }
   } else {
-    this.$selected.find('input[type="checkbox"]').focus(); // TODO: jQuery deprecation
+    this.$selected.find('input[type="checkbox"]').trigger('focus');
   }
 };
 

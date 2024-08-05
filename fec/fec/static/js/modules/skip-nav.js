@@ -23,11 +23,14 @@ Skipnav.prototype.findTarget = function() {
     .filter(':visible')[0];
 };
 
+/**
+ * @param {JQuery.Event} e
+ */
 Skipnav.prototype.focusOnTarget = function(e) {
   e.preventDefault();
 
   if (e.which === 13 || e.type === 'click') {
     this.$target.attr('tabindex', '0');
-    this.$target.focus(); // TODO: jQuery deprecation
+    this.$target.trigger('focus');
   }
 };

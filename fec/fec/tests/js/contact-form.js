@@ -69,12 +69,12 @@ describe('Contact form', function() {
   });
 
   it('shows the other reason box when other is selected', function() {
-    this.form.category.val('other').change(); // TODO: jQuery deprecation
+    this.form.category.val('other').trigger('change');
     expect(this.form.otherReason.is(':visible')).to.be.true;
   });
 
   it('hides the other reason box when another value is selected', function() {
-    this.form.category.val('option-1').change(); // TODO: jQuery deprecation
+    this.form.category.val('option-1').trigger('change');
     expect(this.form.otherReason.is(':visible')).to.be.false;
   });
 

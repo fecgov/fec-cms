@@ -334,7 +334,7 @@ DateFilter.prototype.handleGridItemSelect = function(e) {
     this.$grid.find('li').unbind('mouseenter mouseleave'); // TODO: jQuery deprecation (.unbind())
     this.setValue(value);
     this.$grid.addClass('is-invalid');
-    $nextItem.focus(); // TODO: jQuery deprecation
+    $nextItem.trigger('focus');
   }
 };
 
