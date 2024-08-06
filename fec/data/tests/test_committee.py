@@ -190,6 +190,7 @@ class TestCommittee(TestCase):
         load_reports_and_totals_mock.return_value = (
             self.STOCK_REPORTS,
             self.STOCK_TOTALS,
+            False
         )
         load_endpoint_results_mock.return_value = mock.MagicMock()
         load_committee_statement_of_organization_mock.return_value = {
@@ -257,6 +258,7 @@ class TestCommittee(TestCase):
                 "total_independent_contributions": 11000.0,
                 "total_independent_expenditures": 4262.0,
             },
+            False
         )
         template_variables = views.get_committee("C001", 2018)
 
@@ -282,6 +284,7 @@ class TestCommittee(TestCase):
         load_reports_and_totals_mock.return_value = (
             {"report_type_full": "POST INAUGURAL SUPPLEMENT", "report_type": "90S"},
             {"receipts": 85530042.0, "contribution_refunds": 966240.0},
+            False
         )
 
         committee = views.get_committee("C001", 2018)
@@ -364,6 +367,7 @@ class TestCommittee(TestCase):
                 "last_debts_owed_to_committee": 1000,
                 "total_exp_subject_limits": None,
             },
+            False
         )
 
         template_variables = views.get_committee("C001", 2018)
@@ -472,6 +476,7 @@ class TestCommittee(TestCase):
         load_reports_and_totals_mock.return_value = (
             self.STOCK_REPORTS,
             self.STOCK_TOTALS,
+            False
         )
 
         template_variables = views.get_committee("C001", 2018)
@@ -524,6 +529,7 @@ class TestCommittee(TestCase):
         load_reports_and_totals_mock.return_value = (
             self.STOCK_REPORTS,
             self.STOCK_TOTALS,
+            False
         )
         load_endpoint_results_mock.return_value = mock.MagicMock()
         load_committee_statement_of_organization_mock.return_value = {
