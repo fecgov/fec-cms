@@ -79,6 +79,8 @@ FEATURES = {
     'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
     'nat_party_acct_receipts': bool(env.get_credential('FEC_FEATURE_NAT_PARTY_ACCT_RECEIPTS', '')),
     'nat_party_acct_disbursements': bool(env.get_credential('FEC_FEATURE_NAT_PARTY_ACCT_DISBURSEMENTS', '')),
+    'nat_party_acct_rec_single': bool(env.get_credential('FEC_FEATURE_NAT_PARTY_ACCT_REC_SINGLE', '')),
+    'nat_party_acct_dis_single': bool(env.get_credential('FEC_FEATURE_NAT_PARTY_ACCT_DIS_SINGLE', '')),
     'pac_party': bool(env.get_credential('FEC_FEATURE_PAC_PARTY', '')),
     'pac_snapshot': bool(env.get_credential('FEC_FEATURE_PAC_SNAPSHOT', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
@@ -110,6 +112,8 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['house_senate_overview_totals'] = True
     FEATURES['nat_party_acct_receipts'] = True
     FEATURES['nat_party_acct_disbursements'] = True
+    FEATURES['nat_party_acct_rec_single'] = True
+    FEATURES['nat_party_acct_dis_single'] = True
 
 # Application definition
 INSTALLED_APPS = (

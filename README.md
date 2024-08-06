@@ -78,6 +78,7 @@ Use `pip` to install the Python dependencies:
 
 ```bash
 pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 
 Use `npm` to install JavaScript dependencies:
