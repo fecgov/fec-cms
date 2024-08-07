@@ -28,7 +28,7 @@
           </div>
         </div>
         <div class="row">
-          <span class="usa-width-one-half t-block t-sans">raised in total receipts by this committee from <strong>{{totals.coverage_start_date|date_full}} to {{totals.coverage_end_date|date_full}}.</strong></span>
+          <span class="usa-width-one-half t-block t-sans">raised in total receipts by this committee from <strong>{{totals.coverage_start_date|date_full(time_tag=True)}} to {{totals.coverage_end_date|date_full(time_tag=True)}}.</strong></span>
           <div class="usa-width-one-half">
             <span class="t-block t-sans">See the <a href="?tab=summary">financial summary</a> for a breakdown of each type of receipt.</span>
           </div>
@@ -219,7 +219,7 @@
             </div>
           </div>
           <div class="row u-margin-bottom">
-            <div class="usa-width-one-half t-block t-sans">raised by this committee from <strong><time>{{totals.coverage_start_date|date_full}}</time> to <time>{{totals.coverage_end_date|date_full}}</time>.</strong></div>
+            <div class="usa-width-one-half t-block t-sans">raised by this committee from <strong><time>{{totals.coverage_start_date|date_full(time_tag=True)}}</time> to <time>{{totals.coverage_end_date|date_full(time_tag=True)}}</time>.</strong></div>
             <div class="usa-width-one-half">
               <span class="t-block t-sans">See the <a href="?tab=summary">financial summary</a> for a breakdown of each type of account.</span>
             </div>

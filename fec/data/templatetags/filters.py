@@ -47,9 +47,18 @@ def date(value, fmt='%m/%d/%Y'):
 
 
 @library.filter
-def date_full(value, fmt='%B %d, %Y'):
+def date_full(value, fmt='%B %d, %Y', time_tag=False):
+    '''Format a date in the format of 'January 01, 2000'
+    :param value: date string to be formatted
+    :param fmt: requested format for the date. defaults to Month, DD, YYYY
+    :param time_tag: whether to wrap the returned date string in a <time> element
+    :returns: formatted string, optionally inside a <time>
+    '''
     if value is None:
         return None
+    if time_tag:
+        return format_html(ensure_date(value).strftime('<time datetime="%Y-%m-%d">' + fmt + '</time>'))
+
     return ensure_date(value).strftime(fmt)
 
 

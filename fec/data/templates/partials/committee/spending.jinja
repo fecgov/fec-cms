@@ -39,9 +39,9 @@
           </div>
           <div class="row">
             {% if not is_inaugural %}
-            <span class="usa-width-one-half t-block t-sans">spent in total disbursements by this committee from <strong>{{totals.coverage_start_date|date_full}} to {{totals.coverage_end_date|date_full}}.</strong></span>
+            <span class="usa-width-one-half t-block t-sans">spent in total disbursements by this committee from <strong>{{totals.coverage_start_date|date_full(time_tag=True)}} to {{totals.coverage_end_date|date_full(time_tag=True)}}.</strong></span>
             {% else %}
-            <span class="usa-width-one-half t-block t-sans">in total donations refunded by this committee from <strong>{{totals.coverage_start_date|date_full}} to {{totals.coverage_end_date|date_full}}.</strong></span>
+            <span class="usa-width-one-half t-block t-sans">in total donations refunded by this committee from <strong>{{totals.coverage_start_date|date_full(time_tag=True)}} to {{totals.coverage_end_date|date_full(time_tag=True)}}.</strong></span>
             {% endif %}
             <div class="usa-width-one-half">
               {% if not is_inaugural %}
