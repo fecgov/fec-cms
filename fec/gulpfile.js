@@ -15,6 +15,7 @@ const rename = require('gulp-rename');
 const rev = require('gulp-rev');
 const sass = require('gulp-sass')(require('sass'));
 const svgmin = require('gulp-svgmin');
+const webp = require('gulp-webp');
 const _ = require('underscore');
 
 // Consider using gulp-rev-delete-original later
@@ -47,6 +48,10 @@ gulp.task(
   })
 );
 
+/**
+ * purgecss prunes the homepage css,
+ * removing everything that isn't represented in the purgecss-homepage/*.html files
+ */
 gulp.task('purgecss', () => {
   return gulp
     .src('./dist/fec/static/css/home-*.css')
@@ -159,4 +164,17 @@ gulp.task('consolidate-icons', function() {
     .pipe(rename({ basename: '_icon-variables' }))
     .pipe(urlencode())
     .pipe(gulp.dest('./fec/static/scss/'));
+});
+
+/**
+ * Converts selected files to the webp file format
+ */
+gulp.task('build-webp-files', async function() {
+  gulp.src([
+    './fec/static/img/*hero*.*', // All files with 'hero' in the name
+    './fec/static/img/map-election-search-default.png',
+    './fec/static/img/fec-office.jpg'
+    ])
+    .pipe(webp())
+    .pipe(gulp.dest('./dist/fec/static/img/'));
 });
