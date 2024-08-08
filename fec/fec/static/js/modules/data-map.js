@@ -22,7 +22,6 @@
  * this.map.handleDataRefresh(theData);
  */
 
-// import * as d3 from 'd3';
 import { scale as chroma_scale } from 'chroma-js';
 import { descending as d3_sort_descending } from 'd3-array';
 import { geoAlbersUsa as d3_albersUsa, geoPath as d3_geoPath } from 'd3-geo';
