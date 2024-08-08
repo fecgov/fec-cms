@@ -20,7 +20,7 @@ Filter national party account disbursements
 <div class="filters__inner">
   {{ typeahead.field('committee_id', 'Recipient name or ID') }}
   {{ text.field('contributor_name', 'Source name or ID') }}
-  {{ years.cycles('two_year_transaction_period', 'Report time period', show_tooltip=True)  }}
+  {{ years.cycles('two_year_transaction_period', 'Report time period', show_tooltip=True, start_year=2013)  }}
   {{ date.field('contribution_receipt_date', 'Receipt date range') }}
 </div>
 <div class="js-accordion accordion--neutral restricted-fields" data-content-prefix="filter" data-open-first="false">
