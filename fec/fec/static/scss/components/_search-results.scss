@@ -16,8 +16,8 @@
 
 // To show/hide special PA district message on /data/elections (in election-search.js)
 .pa-message {
-  display:none;
-  padding: 0 0 2rem 0;
+  display: none;
+  padding: 0 0 2rem;
 }
 
 // Search results: Name search result
@@ -71,12 +71,12 @@
 }
 
 .result__header {
-  @include clearfix();
+  @include clearfix;
 }
 
 .result__left {
-  @include span-columns(5 of 9);
   border-right: 1px solid $gray;
+  @include span-columns(5 of 9);
 }
 
 .result__right {
@@ -153,8 +153,8 @@
   }
 
   .result__years {
-    @include span-columns(3 of 9);
     margin-bottom: 0;
+    @include span-columns(3 of 9);
   }
 
   .result__term {
@@ -162,9 +162,9 @@
   }
 
   .result__column {
-    @include span-columns(3 of 9);
     border-right: 1px solid $gray;
     border-bottom: none;
+    @include span-columns(3 of 9);
 
     &:last-child {
       border-right: none;

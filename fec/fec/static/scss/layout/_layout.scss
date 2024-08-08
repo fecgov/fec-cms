@@ -8,8 +8,8 @@
 
 // used to center and group grid items
 .container {
-  @include outer-container();
   padding: u(0 2rem);
+  @include outer-container;
 
   @include media($lg) {
     padding: 0;
@@ -18,15 +18,15 @@
 
 // clearfixes a group of divs / wraps grid columns
 .row {
-  @include clearfix();
+  @include clearfix;
 }
 
 // the main content area below heroes
 .main {
-  @include clearfix();
   padding-bottom: u(2rem);
   padding-top: u(2rem);
   position: relative;
+  @include clearfix;
 
   @include media($lg) {
     padding-top: u(3rem);
@@ -41,8 +41,8 @@
 
 // the area below page headers, next to sidebar
 .main__content {
-  @include clearfix();
   position: relative;
+  @include clearfix;
 
   @include media($med) {
     @include span-columns(8);
@@ -50,8 +50,8 @@
 }
 
 .main__content--right {
-  @include clearfix();
   position: relative;
+  @include clearfix;
 
   @include media($med) {
     @include span-columns(9);
@@ -60,14 +60,14 @@
 
 // full-width main content area
 .main__content--full {
-  @include clearfix();
   position: relative;
+  @include clearfix;
 }
 
 .main__content--right-full {
-  @include clearfix();
   position: relative;
   width: 100%;
+  @include clearfix;
 
   @include media($med) {
     display: table-cell;
@@ -77,13 +77,13 @@
 
 // adds padding for breaking up sections of body content
 .content__section {
-  @include clearfix();
   padding: u(0 0 2rem 0);
+  @include clearfix;
 }
 
 .content__section--extra {
-  @include clearfix();
   padding: u(2rem 0);
+  @include clearfix;
 
   @include media($lg) {
     padding: u(4rem 0);
@@ -105,7 +105,7 @@
   border-top: 1px solid $primary;
   margin-top: u(2rem);
   padding-top: u(2rem);
-  min-width:u(68rem);
+  min-width: u(68rem);
 
   &.content__section--extra {
     padding-top: u(4rem);
@@ -137,7 +137,7 @@
 }
 
 .u-padding--top--small {
-  padding-top: u(.5rem) !important;
+  padding-top: u(0.5rem) !important;
 }
 
 .u-padding--top--med {
@@ -149,7 +149,7 @@
 }
 
 .u-padding--bottom--small {
-  padding-bottom: u(.5rem) !important;
+  padding-bottom: u(0.5rem) !important;
 }
 
 .u-padding--left {
@@ -174,7 +174,7 @@
 }
 
 .u-margin--bottom--small {
-  margin-bottom: u(.5rem);
+  margin-bottom: u(0.5rem);
 }
 
 .u-margin--top {
@@ -190,11 +190,11 @@
 }
 
 .u-negative--top--margin {
-margin-top: u(-1rem);
+  margin-top: u(-1rem);
 }
 
 .u-negative--bottom--margin {
-margin-bottom: u(-1rem) !important;
+  margin-bottom: u(-1rem) !important;
 }
 
 // horizontal rule
