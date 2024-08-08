@@ -336,7 +336,7 @@ ReportingDates.prototype.mediaQueryResponse = function(mql) {
       for (const close of jsmodalClose) {
         close.addEventListener('click', () => {
           jsmodal[0].setAttribute('aria-hidden', 'true');
-          close.focus(); // TODO: jQuery deprecation
+          close.trigger('focus');
         });
       }
     });

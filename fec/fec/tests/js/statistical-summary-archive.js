@@ -83,8 +83,8 @@ describe('Tablefilter', function() {
     describe('disableNonPresYears', function() {
         beforeEach(function() {
             this.disableNonPresYears = spy(Tablefilter.prototype, 'disableNonPresYears');
-            this.chooseYear.val('1982').change(); // TODO: jQuery deprecation
-            this.chooseFiler.val('presidential').change(); // TODO: jQuery deprecation
+            this.chooseYear.val('1982').trigger('change');
+            this.chooseFiler.val('presidential').trigger('change');
             this.filter.showTable();
 
         });

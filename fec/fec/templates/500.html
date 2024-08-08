@@ -7,9 +7,8 @@
   <div class="container">
     <div class="message message--alert message--big">
       <h1 class="message__title">Server error</h1>
-      {# TODO: jQuery deprecation of .click() #}
       <p>Sorry, this page failed to load. Check the FEC’s <a href="https://www.fec.gov/status">API status page</a> to see if we are experiencing a temporary outage. If not, please try again, and thanks for your patience.</p>
-      <p>If you'd like to contact our team, use the <a href="javascript:$('.js-feedback.feedback__toggle.button--cta-secondary').click();" style="text-decoration:none">feedback box</a> on the bottom of any page or <a href="https://www.fec.gov/contact/">contact the FEC</a>.</p>
+      <p>If you'd like to contact our team, use the <a href="javascript:$('.js-feedback.feedback__toggle.button--cta-secondary').trigger('click');" style="text-decoration:none">feedback box</a> on the bottom of any page or <a href="https://www.fec.gov/contact/">contact the FEC</a>.</p>
     </div>
   </div>
 </section>

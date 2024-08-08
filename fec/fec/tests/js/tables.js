@@ -106,7 +106,7 @@ describe('data table', function() {
     });
 
     it('does nothing on click', function() {
-      this.table.$exportButton.click(); // TODO: jQuery deprecation
+      this.table.$exportButton.trigger('click');
       expect(DataTable_FEC.prototype.export).not.to.have.been.called;
     });
   });

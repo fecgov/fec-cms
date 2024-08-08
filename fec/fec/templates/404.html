@@ -7,8 +7,7 @@
     <div class="message message--alert message--big">
       <h1 class="message__title">Page not found</h1>
       <p>Sorry, we couldn't find the page you're looking for.</p>
-      {# TODO: jQuery deprecation of .click() #}
-      <p>We work hard to keep our URLs up to date, but please let us know if you think something is missing or broken. Use the <a href="javascript:$('.js-feedback.feedback__toggle.button--cta-secondary').click();" style="text-decoration:none">feedback box</a> on the bottom of any page or <a href="https://www.fec.gov/contact/">contact the FEC</a>.</p>
+      <p>We work hard to keep our URLs up to date, but please let us know if you think something is missing or broken. Use the <a href="javascript:$('.js-feedback.feedback__toggle.button--cta-secondary').trigger('click');" style="text-decoration:none">feedback box</a> on the bottom of any page or <a href="https://www.fec.gov/contact/">contact the FEC</a>.</p>
     </div>
   </div>
 </section>
