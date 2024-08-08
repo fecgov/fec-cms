@@ -44,7 +44,11 @@
 }
 
 .hero--home {
-  background-image: url('../img/Homepage-hero-image-flag.jpg');
+  background-image: url('../img/Homepage-hero-image-flag.jpg'); /* TODO: remove when image-set is more widely supported */
+  background-image: image-set( /* Add the webp and a backup */
+    url('../img/Homepage-hero-image-flag.webp') type('image/webp'),
+    url('../img/Homepage-hero-image-flag.jpg') type('image/jpeg')
+  );
   background-repeat: no-repeat;
   background-position: 50% 70%;
   background-size: cover;
@@ -84,28 +88,44 @@
 // Hero panel for the campaign finance data section
 .hero--data {
   .hero__image {
-    background-image: url('../img/hero-data.jpg');
+    background-image: url('../img/hero-data.jpg'); /* TODO: remove when image-set is more widely supported */
+    background-image: image-set( /* Add the webp and a backup */
+      url('../img/hero-data.webp') type('image/webp'),
+      url('../img/hero-data.jpg') type('image/jpg')
+    );
   }
 }
 
 .hero--registration,
 .hero--services {
   .hero__image {
-    background-image: url('../img/hero-registration.jpg');
+    background-image: url('../img/hero-registration.jpg'); /* TODO: remove when image-set is more widely supported */
+    background-image: image-set( /* Add the webp and a backup */
+      url('../img/hero-registration.webp') type('image/webp'),
+      url('../img/hero-registration.jpg') type('image/jpg')
+    );
   }
 }
 
 // Hero panel for the legal resources section.
 .hero--legal {
   .hero__image {
-    background-image: url('../img/hero-legal.jpg');
+    background-image: url('../img/hero-legal.jpg'); /* TODO: remove when image-set is more widely supported */
+    background-image: image-set( /* Add the webp and a backup */
+      url('../img/hero-legal.webp') type('image/webp'),
+      url('../img/hero-legal.jpg') type('image/jpg')
+    );
   }
 }
 
 // Hero panel for the OIG landing page.
 .hero--oig {
   .hero__image {
-    background-image: url('../img/hero-oig.png');
+    background-image: url('../img/hero-oig.png'); /* TODO: remove when image-set is more widely supported */
+    background-image: image-set( /* Add the webp and a backup */
+      url('../img/hero-oig.webp') type('image/webp'),
+      url('../img/hero-oig.jpg') type('image/jpg')
+    );
   }
   .container a {
     // TODO: Should we make this available outside of only OIG? (add to pattern library?)
@@ -154,13 +174,21 @@
 // Hero panel for the press section.
 .hero--press {
   .hero__image {
-    background-image: url('../img/hero-press.jpg');
+    background-image: url('../img/hero-press.jpg'); /* TODO: remove when image-set is more widely supported */
+    background-image: image-set( /* Add the webp and a backup */
+      url('../img/hero-press.webp') type('image/webp'),
+      url('../img/hero-press.jpg') type('image/jpg')
+    );
   }
 }
 
 .hero--about {
   .hero__image {
-    background-image: url('../img/hero-about.jpg');
+    background-image: url('../img/hero-about.jpg'); /* TODO: remove when image-set is more widely supported */
+    background-image: image-set( /* Add the webp and a backup */
+      url('../img/hero-about.webp') type('image/webp'),
+      url('../img/hero-about.jpg') type('image/jpg')
+    );
   }
 }
 
@@ -207,7 +235,11 @@
 
   @include media($med) {
     display: block;
-    background-image: url('../img/fec-office.jpg');
+    background-image: url('../img/fec-office.jpg'); /* TODO: remove when image-set is more widely supported */
+    background-image: image-set( /* Add the webp and a backup */
+      url('../img/fec-office.webp') type('image/webp'),
+      url('../img/fec-office.jpg') type('image/jpg')
+    );
     background-position: right center;
     background-repeat: no-repeat;
     background-size: cover;
