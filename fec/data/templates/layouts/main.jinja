@@ -15,13 +15,7 @@
   {% endblock css %}
 
   {% block head_js -%}
-  <script>{# Currently checking for window.fetch and Object.assign #}
-    var browserIsCapable = ('fetch' in window && 'assign' in Object);
-    if (!browserIsCapable) {
-      var browserWarningElement = document.getElementById('browser_warning');
-      browserWarningElement.style.display = 'block';
-    }
-  </script>
+  
   {% endblock %}
 
   {% include 'partials/google-tag-manager-script.jinja' %}

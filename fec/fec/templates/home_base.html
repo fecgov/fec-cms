@@ -23,6 +23,13 @@
       <h2>Your web browser is not supported</h2>
       <p>This site uses features that are not supported by this browser. Please upgrade or switch to another browser for a better experience.</p>
     </div>
+    <script>{# Currently checking for window.fetch and Object.assign #}
+      var browserIsCapable = ('fetch' in window && 'assign' in Object);
+      if (!browserIsCapable) {
+        var browserWarningElement = document.getElementById('browser_warning');
+        browserWarningElement.style.display = 'block';
+      }
+    </script>
 
     {% include 'partials/google-tag-manager-noscript.html' %}
 

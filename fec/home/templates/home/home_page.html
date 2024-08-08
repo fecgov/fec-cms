@@ -100,14 +100,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>{# Currently checking for window.fetch and Object.assign #}
-  var browserIsCapable = ('fetch' in window && 'assign' in Object);
-  if (!browserIsCapable) {
-    var browserWarningElement = document.getElementById('browser_warning');
-    browserWarningElement.style.display = 'block';
-    window.scrollTo(0,0);
-  }
-</script>
 
 {% tags_for_js_chunks 'home.js' '' %}
 
