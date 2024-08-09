@@ -104,7 +104,8 @@
 
           // Check if the tag is 'query' and remove it from the URL search parameters
           if (tag === 'query') {
-            url.searchParams.delete('search');
+              url.searchParams.delete('search');
+              url.searchParams.delete('search_exclude');
           // Check if the tag starts with 'doc_category_' for document types
           } else if (tag && tag.startsWith('doc_category_')) { // Check if tag is not null or undefined
             // Get the index from the tag
