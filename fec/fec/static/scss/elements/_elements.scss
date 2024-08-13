@@ -38,6 +38,10 @@ main {
   }
 }
 
+time {
+  white-space: nowrap;
+}
+
 [aria-hidden=true] {
   display: none !important;
 }
