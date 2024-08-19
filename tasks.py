@@ -6,7 +6,6 @@ import cfenv
 
 from invoke import run  # noqa: F401
 from invoke import task
-from slacker import Slacker
 
 env = cfenv.AppEnv()
 
@@ -74,7 +73,7 @@ def _detect_space(repo, branch=None, yes=False):
 DEPLOY_RULES = (
     ('prod', _detect_prod),
     ('stage', lambda _, branch: branch.startswith('release')),
-    ('dev', lambda _, branch: branch == 'develop'),
+    ('dev', lambda _, branch: branch == 'feature/6400-remove-slacker'),
     # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
     # ('feature', lambda _, branch: branch == '[BRANCH NAME]'),
 )
@@ -174,22 +173,3 @@ def deploy(ctx, space=None, branch=None, login=None, yes=False):
 
     # Needed by CircleCI
     return sys.exit(0)
-
-
-@task
-def notify(ctx):
-    try:
-        meta = json.load(open('.cfmeta'))
-    except OSError:
-        meta = {}
-    slack = Slacker(env.get_credential('FEC_SLACK_TOKEN'))
-    slack.chat.post_message(
-        env.get_credential('FEC_SLACK_CHANNEL', '#fec'),
-        'deploying branch {branch} of app {name} to space {space} by {user}'.format(
-            name=env.name,
-            space=env.space,
-            user=meta.get('user'),
-            branch=meta.get('branch'),
-        ),
-        username=env.get_credential('FEC_SLACK_BOT', 'fec-bot'),
-    )
