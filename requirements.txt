@@ -45,4 +45,4 @@ pre-commit==2.21.0 #client-side hook triggered by operations like git commit
 faker==26.0.0
 
 # CircleCI build
-setuptools==71.1.0 #pin to fix builds
+setuptools==73.0.1
