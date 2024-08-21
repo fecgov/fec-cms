@@ -69,7 +69,7 @@ KeywordModal.prototype.generateQueryString = function() {
   this.$fields.each(function() {
     const $input = $(this);
     if ($input.val() && includeQuery) {
-      includeQuery = includeQuery + '|' + '(' + self.parseValue($input) + ')';
+      includeQuery = includeQuery + ' | ' + '(' + self.parseValue($input) + ')';
     } else if ($input.val()) {
       includeQuery = '(' + self.parseValue($input) + ')';
     }
@@ -106,7 +106,7 @@ KeywordModal.prototype.parseValue = function($input) {
       .map(function(word) {
         return ' -' + word;
       })
-      .join(' ');
+      .join('');
   }
 };
 

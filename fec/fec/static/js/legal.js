@@ -61,7 +61,7 @@ KeywordModal.prototype.generateQueryString = function() {
   this.$fields.each(function() {
     const $input = $(this);
     if ($input.val() && includeQuery) {
-      includeQuery = includeQuery + '|' + '(' + self.parseValue($input) + ')';
+      includeQuery = includeQuery + ' | ' + '(' + self.parseValue($input) + ')';
     } else if ($input.val()) {
       includeQuery = '(' + self.parseValue($input) + ')';
     }
@@ -70,7 +70,7 @@ KeywordModal.prototype.generateQueryString = function() {
   if (this.$excludeField.val()) {
     excludeQuery = self.parseValue(this.$excludeField);
   }
-  var queryString =  includeQuery + excludeQuery;
+  var queryString = includeQuery + excludeQuery;
   return queryString;
 };
 
@@ -98,7 +98,7 @@ KeywordModal.prototype.parseValue = function($input) {
       .map(function(word) {
         return ' -' + word;
       })
-      .join(' ');
+      .join('');
   }
 };
 
