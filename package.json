@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "accessible-mega-menu": "git+https://github.com/noahmanger/Accessible-Mega-Menu.git",
+    "ace-builds": "^1.2.2",
     "d3": "^3.5.17",
     "draftail": "^1.4.1",
     "eventemitter2": "^6.4.9",
