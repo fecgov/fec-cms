@@ -124,7 +124,7 @@
     background-image: url('../img/hero-oig.png'); /* TODO: remove when image-set is more widely supported */
     background-image: image-set( /* Add the webp and a backup */
       url('../img/hero-oig.webp') type('image/webp'),
-      url('../img/hero-oig.jpg') type('image/jpg')
+      url('../img/hero-oig.png') type('image/png')
     );
   }
   .container a {
