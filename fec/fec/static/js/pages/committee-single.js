@@ -365,6 +365,53 @@ const individualContributionsColumns = [
   })
 ];
 
+const nationalPartyRaisingColumns = [
+  {
+    data: 'contributor_name',
+    className: 'all',
+    orderable: false
+  },
+  {
+    data: 'party_account_type',
+    className: 'all',
+    orderable: false
+  },
+  dateColumn({
+    data: 'contribution_receipt_date',
+    className: 'min-tablet hide-panel column--small'
+  }),
+  currencyColumn({
+    data: 'contribution_receipt_amount',
+    className: 'min-desktop hide-panel column--number t-mono'
+  })
+];
+
+const nationalPartySpendingColumns = [
+  {
+    data: 'recipient_name',
+    className: 'all',
+    orderable: false
+  },
+  {
+    data: 'party_account',
+    className: 'all',
+    orderable: false
+  },
+  {
+    data: 'disbursement_description',
+    className: 'all',
+    orderable: false
+  },
+  dateColumn({
+    data: 'disbursement_date',
+    className: 'min-tablet hide-panel column--small'
+  }),
+  currencyColumn({
+    data: 'disbursement_amount',
+    className: 'min-desktop hide-panel column--number t-mono'
+  })
+];
+
 const aggregateCallbacks = {
   afterRender: barsAfterRender.bind(undefined, undefined)
 };
@@ -624,6 +671,60 @@ $(function() {
               two_year_transaction_period: cycle
             },
             columns: ecItemizedDisbursementColumns,
+            callbacks: aggregateCallbacks,
+            order: [[3, 'desc']],
+            useExport: true,
+            singleEntityItemizedExport: true,
+            paginator: SeekPaginator,
+            hideEmptyOpts: {
+              dataType: 'disbursements',
+              name: window.context.name,
+              reason: missingDataReason('disbursements'),
+              timePeriod: window.context.timePeriod
+            }
+          })
+        );
+        break;
+      case 'national-party-account-raising':
+        path = ['national_party', 'schedule_a'],
+        // For raising/spending tabs, use previous cycle if provided
+        cycle = window.context.cycle || $table.attr('data-cycle');
+        DataTable_FEC.defer(
+          $table,
+          _extend({}, tableOpts, {
+            path: path,
+            query: {
+              committee_id: committeeId,
+              two_year_transaction_period: cycle
+            },
+            columns: nationalPartyRaisingColumns,
+            callbacks: aggregateCallbacks,
+            order: [[2, 'desc']],
+            useExport: true,
+            singleEntityItemizedExport: true,
+            paginator: SeekPaginator,
+            hideEmptyOpts: {
+              dataType: 'disbursements',
+              name: window.context.name,
+              reason: missingDataReason('disbursements'),
+              timePeriod: window.context.timePeriod
+            }
+          })
+        );
+        break;
+      case 'national-party-account-spending':
+        path = ['national_party', 'schedule_b'],
+        // For raising/spending tabs, use previous cycle if provided
+        cycle = window.context.cycle || $table.attr('data-cycle');
+        DataTable_FEC.defer(
+          $table,
+          _extend({}, tableOpts, {
+            path: path,
+            query: {
+              committee_id: committeeId,
+              two_year_transaction_period: cycle
+            },
+            columns: nationalPartySpendingColumns,
             callbacks: aggregateCallbacks,
             order: [[3, 'desc']],
             useExport: true,

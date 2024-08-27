@@ -14,7 +14,7 @@
   <div class="slab slab--inline slab--neutral u-padding--left u-padding--right">
     {{ select.committee_cycle_select(cycles, cycle, 'disbursements')}}
 
-    {% if totals and committee_type not in ['C', 'E', 'I'] %}
+  {% if totals and committee_type not in ['C', 'E', 'I'] %}
     <div id="total-disbursements" class="entity__figure row">
       <div class="content__section">
         <div class="heading--section heading--with-action">
@@ -342,4 +342,57 @@
       </div>
     </div>
   {% endif %}
+
+  {% if totals_national_party and FEATURES.nat_party_acct_dis_single %}
+    <div id="national-party-account-spending" class="entity__figure row">
+      <div class="content__section">
+        <div class="heading--section heading--with-action">
+          <h3 class="heading__left">National party headquarters, recounts and convention accounts</h3>
+          {#- only offer to filter the data / link to the datatable if that flag is on, too -#}
+          {% if FEATURES.nat_party_acct_receipts %}
+          <a
+            class="heading__right button--alt button--browse"
+            href="/data/national-party-account-disbursements/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}"
+            >Filter this data
+          </a>
+          {% endif %}
+        </div>
+        <div class="content__section--narrow">
+          <div class="row u-margin-bottom">
+            <div class="usa-width-one-half">
+              <span class="t-big-data">{{ totals_national_party.total_disbursements|currency }}</span>
+            </div>
+          </div>
+          <div class="row u-margin-bottom">
+            <span class="t-block t-sans">spent by this committee from <strong><time class="no-wrap">{{totals.coverage_start_date|date_full}}</time> to <time class="no-wrap">{{totals.coverage_end_date|date_full}}</time>.</strong></span>
+          </div>
+        </div>
+        <div class="content__section--ruled">
+          <div class="row">
+            <div class="results-info results-info--simple">
+              <div class="u-float-left tag__category">
+                <div class="tag__item">Coverage dates: {{totals.coverage_start_date|date}} to {{transaction_end|date}}</div>
+              </div>
+              <div class="u-float-right">
+                <div class="message message--info message--mini t-left-aligned data-container__message" data-export-message-for="national-party-account-spending" aria-hidden="true">
+                </div>
+                <button type="button" class="js-export button button--cta button--export" data-export-for="national-party-account-spending">Export</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <table class="data-table data-table--heading-borders data-table--entity u-margin--top" data-type="national-party-account-spending" data-committee="{{ committee_id }}" data-cycle="{{ cycle }}">
+        <thead>
+          <tr>
+            <th scope="col">Recipient name</th>
+            <th scope="col">Party account</th>
+            <th scope="col">Description</th>
+            <th scope="col">Disbursement date</th>
+            <th scope="col">Amount</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  {% endif %}{#- /NATIONAL PARTY -#}
 </section>

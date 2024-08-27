@@ -398,7 +398,7 @@ def get_committee(committee_id, cycle):
     # we set cycle = fallback_cycle
     cycle = fallback_cycle if cycle_out_of_range else cycle
 
-    reports, totals = load_reports_and_totals(
+    reports, totals, totals_national_party = load_reports_and_totals(
         committee_id, cycle, cycle_out_of_range, fallback_cycle
     )
 
@@ -562,6 +562,7 @@ def get_committee(committee_id, cycle):
         "report_type": report_type,
         "reports": reports,
         "totals": totals,
+        "totals_national_party": totals_national_party,
         "min_receipt_date": utils.three_days_ago(),
         "context_vars": context_vars,
         "party_full": committee["party_full"],
@@ -677,12 +678,23 @@ def load_reports_and_totals(committee_id, cycle, cycle_out_of_range, fallback_cy
         path, form_category="REPORT", most_recent=True, **filters
     )
 
-    # (4)call committee/{committee_id}/totals? under tag:financial
+    # (4) Call committee/{committee_id}/totals? under tag:financial
     # get financial totals
     path = "/committee/" + committee_id + "/totals/"
     totals = api_caller.load_first_row_data(path, **filters)
 
-    return reports, totals
+    # (5) Call national_party/totals/? for national party accounts
+    # otherwise set totals_national_party to False (for use in templates)
+    if committee_id in [
+        "C00010603", "C00042366", "C00000935", "C00003418", "C00027466", "C00075820", "C00255695", "C00418103",
+        "C00370221", "C00428664", "C00279802", "C00266759", "C00331314", "C00111476", "C00129668"
+    ]:
+        path = "/national_party/totals/"
+        totals_national_party = api_caller.load_first_row_data(path, **filters)
+    else:
+        totals_national_party = False
+
+    return reports, totals, totals_national_party
 
 
 def load_committee_history(committee_id, cycle=None):
