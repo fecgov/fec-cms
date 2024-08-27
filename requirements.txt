@@ -47,3 +47,5 @@ faker==26.0.0
 
 # CircleCI build
 setuptools==71.1.0 #pin to fix builds
+sqlparse>=0.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
