@@ -5,9 +5,6 @@
 set -o errexit
 set -o pipefail
 
-# Send out Slack notifications (off for now)
-# invoke notify
-
 cd fec
 # Run migrations
 ./manage.py makemigrations
