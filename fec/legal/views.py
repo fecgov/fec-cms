@@ -228,19 +228,48 @@ def legal_search(request):
 
 
 def legal_doc_search_ao(request):
-    results = {}
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
+    limit = request.GET.get('limit', 20)
+    ao_no = request.GET.get('ao_no', '')
+    ao_requestor = request.GET.get('ao_requestor', '')
+    ao_is_pending = request.GET.get('ao_is_pending', '')
+    ao_min_issue_date = request.GET.get('ao_min_issue_date', '')
+    ao_max_issue_date = request.GET.get('ao_max_issue_date', '')
+    ao_min_request_date = request.GET.get('ao_min_request_date', '')
+    ao_max_request_date = request.GET.get('ao_max_request_date', '')
+    ao_entity_name = request.GET.get('ao_entity_name', '')
 
-    results = api_caller.load_legal_search_results(query, 'advisory_opinions',
-                                                   offset=offset)
+    # Call the function and unpack its return values
+    results = api_caller.load_legal_search_results(
+        query, 'advisory_opinions',
+        offset=offset,
+        limit=limit,
+        ao_no=ao_no,
+        ao_requestor=ao_requestor,
+        ao_is_pending=ao_is_pending,
+        ao_min_issue_date=ao_min_issue_date,
+        ao_max_issue_date=ao_max_issue_date,
+        ao_min_request_date=ao_min_request_date,
+        ao_max_request_date=ao_max_request_date,
+        ao_entity_name=ao_entity_name,
+    )
 
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
         'parent': 'legal',
         'results': results,
         'result_type': 'advisory_opinions',
+        'ao_no': ao_no,
+        'ao_requestor': ao_requestor,
+        'ao_is_pending': ao_is_pending,
+        'ao_min_issue_date': ao_min_issue_date,
+        'ao_max_issue_date': ao_max_issue_date,
+        'ao_min_request_date': ao_min_request_date,
+        'ao_max_request_date': ao_max_request_date,
+        'ao_entity_name': ao_entity_name,
         'query': query,
-        'social_image_identifier': 'advisory-opinions'
+        'social_image_identifier': 'legal',
+        'is_loading': True,  # Indicate that the page is loading initially
     })
 
 

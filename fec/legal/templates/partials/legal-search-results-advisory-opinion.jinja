@@ -1,33 +1,62 @@
-<div class="message message--info">
-  <p>The advisory opinion search feature includes all FEC advisory opinions &#40;AOs&#41; to date. You can search all FEC AOs using keywords, AO numbers, names of requestors and more. For additional search filters, you can still search AOs using our legacy <a href="https://saos.fec.gov/saos/searchao" title="Search advisory opinions">AO search</a>.</p>
-</div>
-
-{% for advisory_opinion in advisory_opinions %}
-  <h3 class="ao-result__title">
-    <a title="{{ advisory_opinion.description }}"
-      href="/data/legal/advisory-opinions/{{ advisory_opinion.no }}">
-      <span class="font-bolt">AO {{ advisory_opinion.no }}: </span></a>
-      <span class="t-normal">{{ advisory_opinion.name }}</span>
-  <p class="u-padding--top">
-  <span class="t-bold">Summary: </span> <span class="t-normal">
-    {{ advisory_opinion.summary }}
-  </span>
-  </p>
-  </h3>
-  <div class="u-padding--left">
-  <table>
+<div class="panel__main legal-search-results">
+  <div class="overlay is-loading" {% if is_loading %}style="display:block;"{% else %}style="display:none;"{% endif %}></div>
+  <table class="simple-table simple-table--display">
+    <thead>
+      <tr class="simple-table__header">
+        <th class="simple-table__header-cell cell--15">Case</th>
+        <th class="simple-table__header-cell cell--15">Date issued</th>
+        <th class="simple-table__header-cell">Summary</th>
+        <th class="simple-table__header-cell">This opinion is cited by these later opinions</th>
+      </tr>
+    </thead>
     <tbody>
-    <tr class="legal-search-result">
-      <td>
-        <div class="t-serif legal-search-result__hit u-padding--top">
-          &hellip;
-          {% for highlight in advisory_opinion.highlights %}
-            {{ highlight|safe }} &hellip;
-          {% endfor %}
-        </div>
-      </td>
-    </tr>
-  </tbody>
+      {% for advisory_opinion in results.advisory_opinions %}
+      <tr class="simple-table__row">
+        <td class="simple-table__cell">
+          <div class="t-sans">
+            <i class="icon i-folder icon--inline--left"></i>
+            <a class="t-bold" title="{{ advisory_opinion.name }}" href="/data/legal/advisory-opinions/{{ advisory_opinion.ao_no }}">AO {{ advisory_opinion.ao_no }}<br />{{ advisory_opinion.name }}</a>
+            {% if advisory_opinion.status == 'Pending' %}
+            <div>
+              <i class="icon pending-ao__icon icon--inline--left"></i>
+              Pending request
+            </div>
+            {% endif %}
+          </div>
+        </td>
+        <td class="simple-table__cell">
+          <div class="t-sans">
+            {% if advisory_opinion.status == 'Pending' %}
+              Pending
+            {% elif advisory_opinion.status == "Withdrawn"%}
+              Withdrawn
+            {% else %}
+              {{ advisory_opinion.issue_date | date(fmt='%m/%d/%Y') }}
+            {% endif %}
+          </div>
+        </td>
+        <td class="simple-table__cell">
+          <div class="t-sans">
+            {{ advisory_opinion.summary }}
+          </div>
+        </td>
+        <td class="simple-table__cell">
+          <div class="t-sans">
+            {% if advisory_opinion.aos_cited_by|length > 0 %}
+                {% for citation in advisory_opinion.aos_cited_by %}
+                    <div>
+                        <a href="{{ citation.no }}">
+                            {{ citation.no }}
+                        </a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                This advisory opinion is not cited by other advisory opinions
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
   </table>
-  </div>
-{% endfor %}
+</div>

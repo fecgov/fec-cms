@@ -8,10 +8,147 @@
 </header>
 {% endblock %}
 
-{% block search %}
-<input id="query" type="hidden" value="{{ query }}" />
-<input id="contact-email" type="hidden" value="{{ WEBMANAGER_EMAIL }}" />
-<input id="advisory_opinion_page" type="hidden" value="/data/legal/advisory-opinions/ao_no" />
-<div id="root"></div>
-<script src="{{ path_for_js('legal-app.js') }}"></script>
+{% block filters %}
+  <div class="filters__inner">
+    {{ legal.keyword_search(result_type, query) }}
+    <div class="filter">
+      <label class="label" for="ao_no">AO number {{ ao_no }}</label>
+      <input id="ao_no" name="ao_no" type="text" value="{{ ao_no }}">
+    </div>
+    <div class="filter">
+      <label class="label" for="ao_requestor">Requestor name (or AO name)</label>
+      <input id="ao_requestor" name="ao_requestor" type="text" value="{{ ao_requestor }}">
+    </div>
+    {# <div class="filter">
+      <legend class="label">Document Type</legend>
+      {% for category_id, category_label in mur_document_categories.items() %}
+        <div>
+            <input type="checkbox" id="case_doc_category_id_{{ category_id }}" name="case_doc_category_id" value="{{ category_id }}" {% if category_id in selected_doc_category_ids %}checked{% endif %}>
+            <label for="case_doc_category_id_{{ category_id }}">{{ category_label }}</label>
+        </div>
+      {% endfor %}
+    </div> #}
+    <div class="filter">
+      <legend class="label">Issue date</legend>
+      <div class="range range--date js-date-range">
+        <div class="range__input range__input--min" data-filter="range">
+          <label for="ao_min_issue_date">Beginning</label>
+          <input id="ao_min_issue_date" name="ao_min_issue_date" placeholder="mm/dd/yyyy" value="{{ ao_min_issue_date }}">
+        </div>
+        <div class="range__hyphen">-</div>
+        <div class="range__input range__input--max" data-filter="range">
+          <label for="ao_max_issue_date">Ending</label>
+          <input id="ao_max_issue_date" name="ao_max_issue_date" placeholder="mm/dd/yyyy" value="{{ ao_max_issue_date }}">
+        </div>
+      </div>
+    </div>
+    <div class="filter">
+      <legend class="label">Requestor date</legend>
+      <div class="range range--date js-date-range">
+        <div class="range__input range__input--min" data-filter="range">
+          <label for="ao_min_request_date">Beginning</label>
+          <input id="ao_min_request_date" name="ao_min_request_date" placeholder="mm/dd/yyyy" value="{{ ao_min_request_date }}">
+        </div>
+        <div class="range__hyphen">-</div>
+        <div class="range__input range__input--max" data-filter="range">
+          <label for="ao_max_request_date">Ending</label>
+          <input id="ao_max_request_date" name="ao_max_request_date" placeholder="mm/dd/yyyy" value="{{ ao_max_request_date }}">
+        </div>
+      </div>
+    </div>
+    <div class="filter">
+      <label class="label" for="ao_entity_name">Entity name</label>
+      <input id="ao_entity_name" name="ao_entity_name" type="text" value="{{ ao_entity_name }}">
+    </div>
+    <div class="filter">
+      <button type="submit" class="button button--cta u-margin--top">Apply filters</button>
+    </div>
+  </div>
+{% endblock %}
+
+{% block message %}
+<div class="data-container__tags u-no-padding-left">
+  <div class="row">
+    <h3 class="tags__title">Viewing <span class="tags__count">{{ results.total_advisory_opinions }}</span> filtered results for:</h3>
+  </div>
+  <div class="js-filter-tags data-container__tags u-no-padding-left">
+    <ul class="tags">
+      {% if query %}
+        <li data-tag-category="query" class="tag__category">
+          <div data-removable="true" class="tag__item">{{ query }}<button class="button js-close tag__remove" data-tag="query"><span class="u-visually-hidden">Remove</span></button></div>
+        </li>
+      {% endif %}
+      {% if ao_no %}
+        <li data-tag-category="ao_no" class="tag__category">
+          <div data-removable="true" class="tag__item">{{ ao_no }}<button class="button js-close tag__remove" data-tag="ao_no"><span class="u-visually-hidden">Remove</span></button></div>
+        </li>
+      {% endif %}
+      {% if case_respondents %}
+        <li data-tag-category="case_respondents" class="tag__category">
+          <div data-removable="true" class="tag__item">{{ case_respondents }}<button class="button js-close tag__remove" data-tag="case_respondents"><span class="u-visually-hidden">Remove</span></button></div>
+        </li>
+      {% endif %}
+      {% if case_min_open_date or case_max_open_date %}
+        <li data-tag-category="open_date" class="tag__category tag__category__range--date">
+          <span class="tag__label">Open date</span>
+          {% if case_min_open_date %}
+          <div data-removable="true" data-id="min_open_date" class="tag__item">{% if not case_max_open_date %}Beginning {% endif %}{{ case_min_open_date }}<button class="button js-close tag__remove" data-tag="case_min_open_date"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+          {% if case_max_open_date %}
+          <div data-removable="true" data-id="max_open_date" class="tag__item">{% if not case_min_open_date %}Ending {% endif %}{{ case_max_open_date }}<button class="button js-close tag__remove" data-tag="case_max_open_date"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+        </li>
+      {% endif %}
+      {% if case_min_close_date or case_max_close_date %}
+        <li data-tag-category="close_date" class="tag__category tag__category__range--date">
+          <span class="tag__label">Close date</span>
+          {% if case_min_close_date %}
+          <div data-removable="true" data-id="min_close_date" class="tag__item">{% if not case_max_close_date %}Beginning {% endif %}{{ case_min_close_date }}<button class="button js-close tag__remove" data-tag="case_min_close_date"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+          {% if case_max_close_date %}
+          <div data-removable="true" data-id="max_close_date" class="tag__item">{% if not case_min_close_date %}Ending {% endif %}{{ case_max_close_date }}<button class="button js-close tag__remove" data-tag="case_max_close_date"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+        </li>
+      {% endif %}
+      {% if selected_doc_category_names and selected_doc_category_names | reject('equalto', none) | list %}
+        <li data-tag-category="doc_category" class="tag__category">
+          {% for selected_doc_category_name in selected_doc_category_names %}
+            <div data-removable="true" class="tag__item">{{ selected_doc_category_name }}<button class="button js-close tag__remove" data-tag="doc_category_{{ loop.index0 }}"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endfor %}
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block results %}
+  {% with results=results %}
+    {% include 'partials/legal-pagination.jinja' %}
+  {% endwith %}
+  {% with advisory_opinions = results.advisory_opinions %}
+    {% include 'partials/legal-search-results-advisory-opinion.jinja' %}
+  {% endwith %}
+  {% with results=results %}
+    {% include 'partials/legal-pagination.jinja' %}
+  {% endwith %}
+{% endblock %}
+
+{% block scripts %}
+  {# super loads scripts from parent #}
+  {{ super() }}
+  <script>
+
+  // Keep scroll-position with each reload
+  //https://stackoverflow.com/questions/17642872/refresh-page-and-keep-scroll-position 
+  document.addEventListener("DOMContentLoaded", function(event) {
+      var scrollpos = localStorage.getItem('scrollpos');
+      if (scrollpos) window.scrollTo(0, scrollpos);
+  });
+
+  window.onbeforeunload = function(e) {
+      localStorage.setItem('scrollpos', window.scrollY);
+      location.reload();
+  };
+  </script>
 {% endblock %}
