@@ -1,5 +1,6 @@
 {% extends "layouts/legal-doc-search-results.jinja" %}
 {% import 'macros/legal.jinja' as legal %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% set document_type_display_name = 'Advisory opinions' %}
 
 {% block header %}
@@ -10,7 +11,6 @@
 
 {% block filters %}
   <div class="filters__inner">
-    {{ legal.keyword_search(result_type, query) }}
     <div class="filter">
       <label class="label" for="ao_no">AO number {{ ao_no }}</label>
       <input id="ao_no" name="ao_no" type="text" value="{{ ao_no }}">
@@ -19,15 +19,40 @@
       <label class="label" for="ao_requestor">Requestor name (or AO name)</label>
       <input id="ao_requestor" name="ao_requestor" type="text" value="{{ ao_requestor }}">
     </div>
-    {# <div class="filter">
+    <div class="filter">
+      <label for="ao_requestor_type" class="label">Requestor Type</label>
+      <select id="ao_requestor_type" name="ao_requestor_type">
+        {% for requestor_type_id, requestor_type_label in ao_requestor_types.items() %}
+          <option value="{{ requestor_type_id }}" {% if requestor_type_id in selected_ao_requestor_type_ids %}selected{% endif %}>
+            {{ requestor_type_label }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    
+    {{ legal.keyword_search(result_type, query) }}
+    <div class="filter">
+      <input type="checkbox" id="ao_is_pending" name="ao_is_pending" value="{{ ao_is_pending }}" {% if ao_is_pending == 'true' %}checked{% endif %}>
+      <label for="ao_is_pending">Show only pending requests</label>
+    </div>
+    <div class="filter">
       <legend class="label">Document Type</legend>
-      {% for category_id, category_label in mur_document_categories.items() %}
+      {% for category_id, category_label in ao_document_categories.items() %}
         <div>
-            <input type="checkbox" id="case_doc_category_id_{{ category_id }}" name="case_doc_category_id" value="{{ category_id }}" {% if category_id in selected_doc_category_ids %}checked{% endif %}>
-            <label for="case_doc_category_id_{{ category_id }}">{{ category_label }}</label>
+            <input type="checkbox" id="ao_doc_category_id_{{ loop.index0 }}" name="ao_category" value="{{ category_id }}" {% if category_id in selected_ao_category_ids %}checked{% endif %}>
+            <label for="ao_doc_category_id_{{ loop.index0 }}">{{ category_label }}</label>
         </div>
       {% endfor %}
-    </div> #}
+    </div>
+
+    <div class="filter">
+      {# <label class="label" for="ao_regulatory_citation-filter">Regulatory citation</label>
+      <div class="combo combo--search--mini">
+        <input id="ao_regulatory_citation-filter" type="text" name="ao_regulatory_citation" class="combo__input" value="">
+      </div> #}
+      {{ typeahead.field('regulations', 'Regulatory citation', False, dataset='regulations', allow_text=True) }}
+    </div>
+
     <div class="filter">
       <legend class="label">Issue date</legend>
       <div class="range range--date js-date-range">
@@ -89,7 +114,7 @@
         </li>
       {% endif %}
       {% if ao_min_issue_date or ao_max_issue_date %}
-        <li data-tag-category="open_date" class="tag__category tag__category__range--date">
+        <li data-tag-category="issue_date" class="tag__category tag__category__range--date">
           <span class="tag__label">Issue date</span>
           {% if ao_min_issue_date %}
           <div data-removable="true" data-id="min_issue_date" class="tag__item">{% if not ao_max_issue_date %}Beginning {% endif %}{{ ao_min_issue_date }}<button class="button js-close tag__remove" data-tag="ao_min_issue_date"><span class="u-visually-hidden">Remove</span></button></div>
@@ -100,7 +125,7 @@
         </li>
       {% endif %}
       {% if ao_min_request_date or ao_max_request_date %}
-        <li data-tag-category="close_date" class="tag__category tag__category__range--date">
+        <li data-tag-category="request_date" class="tag__category tag__category__range--date">
           <span class="tag__label">Request date</span>
           {% if ao_min_request_date %}
           <div data-removable="true" data-id="min_request_date" class="tag__item">{% if not ao_max_request_date %}Beginning {% endif %}{{ ao_min_request_date }}<button class="button js-close tag__remove" data-tag="ao_min_request_date"><span class="u-visually-hidden">Remove</span></button></div>
@@ -115,14 +140,26 @@
           <div data-removable="true" class="tag__item">{{ ao_entity_name }}<button class="button js-close tag__remove" data-tag="ao_entity_name"><span class="u-visually-hidden">Remove</span></button></div>
         </li>
       {% endif %}
-      {% if selected_doc_category_names and selected_doc_category_names | reject('equalto', none) | list %}
+      {% if selected_ao_requestor_type_names %}
+        <li data-tag-category="ao_requestor_type" class="tag__category">
+          {% for selected_ao_requestor_type_name in selected_ao_requestor_type_names %}
+            <div data-removable="true" class="tag__item">{{ selected_ao_requestor_type_name }}<button class="button js-close tag__remove" data-tag="ao_requestor_type_id_{{ loop.index0 }}"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endfor %}
+        </li>
+      {% endif %}
+      {% if selected_ao_category_names and selected_ao_category_names | reject('equalto', none) | list %}
         <li data-tag-category="doc_category" class="tag__category">
-          {% for selected_doc_category_name in selected_doc_category_names %}
-            <div data-removable="true" class="tag__item">{{ selected_doc_category_name }}<button class="button js-close tag__remove" data-tag="doc_category_{{ loop.index0 }}"><span class="u-visually-hidden">Remove</span></button></div>
+          {% for selected_ao_category_name in selected_ao_category_names %}
+            <div data-removable="true" class="tag__item">{{ selected_ao_category_name }}<button class="button js-close tag__remove" data-tag="ao_doc_category_id_{{ loop.index0 }}"><span class="u-visually-hidden">Remove</span></button></div>
           {% endfor %}
         </li>
       {% endif %}
     </ul>
+  </div>
+  <div class="row">
+    <div class="message message--info">
+      <p>The advisory opinion search feature includes all FEC advisory opinions &#40;AOs&#41; to date. You can search all FEC AOs using keywords, AO numbers, names of requestors and more. For additional search filters, you can still search AOs using our legacy <a href="https://saos.fec.gov/saos/searchao" title="Search advisory opinions">AO search</a>.</p>
+    </div>
   </div>
 </div>
 {% endblock %}

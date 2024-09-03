@@ -251,6 +251,8 @@ def legal_doc_search_ao(request):
     ao_min_request_date = request.GET.get('ao_min_request_date', '')
     ao_max_request_date = request.GET.get('ao_max_request_date', '')
     ao_entity_name = request.GET.get('ao_entity_name', '')
+    ao_doc_category_ids = request.GET.getlist('ao_category', [])
+    ao_requestor_type_ids = request.GET.getlist('ao_requestor_type', [])
 
     query, query_exclude = parse_query(original_query)
 
@@ -263,20 +265,62 @@ def legal_doc_search_ao(request):
         limit=limit,
         ao_no=ao_no,
         ao_requestor=ao_requestor,
+        ao_requestor_type=ao_requestor_type_ids,
         ao_is_pending=ao_is_pending,
         ao_min_issue_date=ao_min_issue_date,
         ao_max_issue_date=ao_max_issue_date,
         ao_min_request_date=ao_min_request_date,
         ao_max_request_date=ao_max_request_date,
         ao_entity_name=ao_entity_name,
+        ao_category=ao_doc_category_ids,
     )
+
+    # Define AO document categories dictionary
+    ao_document_categories = {
+        "F": "Final Opinion",
+        "V": "Votes",
+        "D": "Draft Documents",
+        "R": "AO Request, Supplemental Material, and Extensions of Time",
+        "W": "Withdrawal of Request",
+        "C": "Comments and Ex parte Communications",
+        "S": "Commissioner Statements"
+    }
+
+    # Define AO requestor types dicitionary
+    ao_requestor_types = {
+        "0": "Any",
+        "1": "Federal candidate/candidate committee/officeholder",
+        "2": "Publicly funded candidates/committees",
+        "3": "Party committee, national",
+        "4": "Party committee, state or local",
+        "5": "Nonconnected political committee",
+        "6": "Separate segregated fund",
+        "7": "Labor Organization",
+        "8": "Trade Association",
+        "9": "Membership Organization, Cooperative, Corporation W/O Capital Stock",
+        "10": "Corporation (including LLCs electing corporate status)",
+        "11": "Partnership (including LLCs electing partnership status)",
+        "12": "Governmental entity",
+        "13": "Research/Public Interest/Educational Institution",
+        "14": "Law Firm",
+        "15": "Individual",
+        "16": "Other",
+    }
+
+    # Return the selected document category name
+    ao_document_category_names = [ao_document_categories.get(id) for id in ao_doc_category_ids]
+
+    # Return the selected requestor type name
+    ao_requestor_type_names = [ao_requestor_types.get(id) for id in ao_requestor_type_ids]
 
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
         'parent': 'legal',
         'results': results,
+        'ao_document_categories': ao_document_categories,
         'result_type': 'advisory_opinions',
         'ao_no': ao_no,
         'ao_requestor': ao_requestor,
+        'ao_requestor_types': ao_requestor_types,
         'ao_is_pending': ao_is_pending,
         'ao_min_issue_date': ao_min_issue_date,
         'ao_max_issue_date': ao_max_issue_date,
@@ -285,6 +329,10 @@ def legal_doc_search_ao(request):
         'ao_entity_name': ao_entity_name,
         'query': query,
         'social_image_identifier': 'legal',
+        'selected_ao_category_ids': ao_doc_category_ids,
+        'selected_ao_category_names': ao_document_category_names,
+        'selected_ao_requestor_type_ids': ao_requestor_type_ids,
+        'selected_ao_requestor_type_names': ao_requestor_type_names,
         'is_loading': True,  # Indicate that the page is loading initially
     })
 

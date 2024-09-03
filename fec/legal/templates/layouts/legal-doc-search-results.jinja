@@ -110,14 +110,24 @@
           } else if (tag && tag.startsWith('doc_category_')) { // Check if tag is not null or undefined
             // Get the index from the tag
             const index = tag.split('_')[2];
-            // Get all selected document categories from the URL
-            const selectedCategories = url.searchParams.getAll('case_doc_category_id');
+            // Handle selected document categories from URL for cases (i.e. adrs, admin_fines, murs, statutes)
+            const selectedCaseCategories = url.searchParams.getAll('case_doc_category_id');
             // Remove all instances of 'case_doc_category_id' from the URL
             url.searchParams.delete('case_doc_category_id');
             // Re-add all categories except the one at the specified index
-            selectedCategories.forEach((cat, i) => {
+            selectedCaseCategories.forEach((cat, i) => {
               if (i != index) {
                 url.searchParams.append('case_doc_category_id', cat);
+              }
+            });
+            // Handle selected document categories from URL for advisory_opinions
+            const selectedAoCategories = url.searchParams.getAll('ao_category');
+            // Remove all instances of 'ao_doc_category_id' from the URL
+            url.searchParams.delete('ao_category');
+            // Re-add all categories except the one at the specified index
+            selectedAoCategories.forEach((cat, i) => {
+              if (i != index) {
+                url.searchParams.append('ao_category', cat);
               }
             });
           } else {
@@ -131,4 +141,56 @@
       });
     });
   </script>
+
+  <script>
+// Add the script for removing tags
+document.addEventListener("DOMContentLoaded", function() {
+  // Select all elements with the class 'tag__remove'
+  const removeButtons = document.querySelectorAll('.tag__remove');
+
+  // Iterate over each remove button and add a click event listener
+  removeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // Get the value of the 'data-tag' attribute
+      const tag = this.getAttribute('data-tag');
+      // Create a new URL object from the current window location
+      const url = new URL(window.location);
+
+      // Check if the tag is 'query' and remove it from the URL search parameters
+      if (tag === 'query') {
+        url.searchParams.delete('search');
+        url.searchParams.delete('search_exclude');
+      // Check if the tag starts with 'doc_category_' for document types
+      } else if (tag && tag.startsWith('doc_category_')) { 
+        // Get the index from the tag
+        const index = tag.split('_')[2];
+
+        // Handle case_doc_category_id
+        const selectedCaseCategories = url.searchParams.getAll('case_doc_category_id');
+        url.searchParams.delete('case_doc_category_id');
+        selectedCaseCategories.forEach((cat, i) => {
+          if (i != index) {
+            url.searchParams.append('case_doc_category_id', cat);
+          }
+        });
+
+        // Handle ao_doc_category_id
+        const selectedAoCategories = url.searchParams.getAll('ao_doc_category_id');
+        url.searchParams.delete('ao_doc_category_id');
+        selectedAoCategories.forEach((cat, i) => {
+          if (i != index) {
+            url.searchParams.append('ao_doc_category_id', cat);
+          }
+        });
+      } else {
+        // For all other tags, remove the corresponding search parameter
+        url.searchParams.delete(tag);
+      }
+
+      // Redirect to the updated URL
+      window.location = url.toString();
+    });
+  });
+});
+</script>
 {% endblock %}
