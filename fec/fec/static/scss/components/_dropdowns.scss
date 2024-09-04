@@ -177,7 +177,7 @@
 
   li {
     input[type="checkbox"] + label.disabled {
-      pointer-events:none;
+      pointer-events: none;
       opacity: .5;
     }
 
@@ -193,7 +193,6 @@
         display: none;
       }
     }
-
   }
 
   input {
