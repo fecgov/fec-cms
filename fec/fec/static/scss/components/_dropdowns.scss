@@ -176,6 +176,11 @@
   margin: u(.5rem 0);
 
   li {
+    input[type="checkbox"] + label.disabled {
+      cursor: not-allowed;
+      opacity: .5;
+    }
+
     @include animation(fadeIn .2s ease-in);
     position: relative;
 
@@ -187,6 +192,11 @@
       input[type="checkbox"]:not(:checked) + label.is-unsuccessful + .dropdown__remove {
         display: none;
       }
+    }
+    input[type="checkbox"] + label.disabled {
+      border: 1px solid #aeb0b5 !important;
+      background-color: #aeb0b5 !important;
+
     }
   }
 
