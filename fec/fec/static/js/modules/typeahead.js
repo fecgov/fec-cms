@@ -60,7 +60,7 @@ function formatAuditCandidate(result) {
 
 function formatCitationRegulation(result) {
   return {
-    name: result.name,
+    name: result.citation_text,
     type: 'citationRegulation'
   };
 }
@@ -139,14 +139,8 @@ const citationRegulationEngine = createEngine({
     url: getUrlCitations('regulation'),
     wildcard: '%QUERY',
     transform: function(response) {
-      return _map(response.results, formatCitationRegulation);
+      return _map(response.citations, formatCitationRegulation);
     }
-  },
-  transform: function(response) {
-    console.log('Raw response:', response);
-    const transformed = _map(response.results, formatCitationRegulation);
-    console.log('Transformed results:', transformed);
-    return transformed;
   }
 });
 
@@ -294,13 +288,15 @@ const regulationDataset = {
     pending:
       '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
     notFound: compileHBS(''), // This has to be empty to not show anything
-    suggestion: compileHBS(
-      '<span class="selectCitation">{{ name }}</span>'
-    )
+    suggestion: function(datum) {
+      console.log(datum);
+      return (
+        '<span>' + datum.name + '</span>'
+      );
+    }
   }
 };
 
-console.log(citationRegulationEngine);
 
 export const datasets = {
   candidates: candidateDataset,
