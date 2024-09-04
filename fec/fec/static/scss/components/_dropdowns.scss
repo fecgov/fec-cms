@@ -177,7 +177,7 @@
 
   li {
     input[type="checkbox"] + label.disabled {
-      cursor: not-allowed;
+      pointer-events:none;
       opacity: .5;
     }
 
@@ -193,11 +193,7 @@
         display: none;
       }
     }
-    input[type="checkbox"] + label.disabled {
-      border: 1px solid #aeb0b5 !important;
-      background-color: #aeb0b5 !important;
 
-    }
   }
 
   input {
