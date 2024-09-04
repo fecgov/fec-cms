@@ -58,11 +58,27 @@ function formatAuditCandidate(result) {
   };
 }
 
+function formatCitationRegulation(result) {
+  return {
+    name: result.name,
+    type: 'citationRegulation'
+  };
+}
+
 function getUrl(resource) {
   return URI(window.API_LOCATION)
     .path([window.API_VERSION, 'names', resource, ''].join('/'))
     .query({
       q: '%QUERY',
+      api_key: window.API_KEY_PUBLIC
+    })
+    .readable();
+}
+
+function getUrlCitations(resource) {
+  return URI(window.API_LOCATION)
+    .path([window.API_VERSION, 'legal/citation', resource, encodeURIComponent('%QUERY')].join('/'))
+    .query({
       api_key: window.API_KEY_PUBLIC
     })
     .readable();
@@ -115,6 +131,22 @@ const auditCandidateEngine = createEngine({
     transform: function(response) {
       return _map(response.results, formatAuditCandidate);
     }
+  }
+});
+
+const citationRegulationEngine = createEngine({
+  remote: {
+    url: getUrlCitations('regulation'),
+    wildcard: '%QUERY',
+    transform: function(response) {
+      return _map(response.results, formatCitationRegulation);
+    }
+  },
+  transform: function(response) {
+    console.log('Raw response:', response);
+    const transformed = _map(response.results, formatCitationRegulation);
+    console.log('Transformed results:', transformed);
+    return transformed;
   }
 });
 
@@ -252,11 +284,30 @@ export const legalDataset = {
   }
 };
 
+const regulationDataset = {
+  name: 'regulation',
+  display: 'name',
+  limit: 10,
+  source: citationRegulationEngine,
+  templates: {
+    header: '<span class="tt-suggestion__header">Select a citation:</span>',
+    pending:
+      '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
+    notFound: compileHBS(''), // This has to be empty to not show anything
+    suggestion: compileHBS(
+      '<span class="selectCitation">{{ name }}</span>'
+    )
+  }
+};
+
+console.log(citationRegulationEngine);
+
 export const datasets = {
   candidates: candidateDataset,
   committees: committeeDataset,
   auditCandidates: auditCandidateDataset,
   auditCommittees: auditCommitteeDataset,
+  regulations: regulationDataset,
   allData: [candidateDataset, committeeDataset],
   all: [candidateDataset, committeeDataset, individualDataset, siteDataset, legalDataset]
 };
