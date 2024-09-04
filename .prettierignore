@@ -1,0 +1,15 @@
+# Ignore artifacts:
+build
+coverage
+icons
+*.cjs
+*.hbs
+*.html
+*.html
+*.jinja
+*.js
+*.json
+*.md
+*.yaml
+*.yml
+_icon-variables.scss

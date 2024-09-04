@@ -32,7 +32,7 @@
   @include prefixer(column-rule-style, $style, webkit moz spec);
 }
 
-@mixin column-rule-width ($width: none) {
+@mixin column-rule-width($width: none) {
   @include prefixer(column-rule-width, $width, webkit moz spec);
 }
 

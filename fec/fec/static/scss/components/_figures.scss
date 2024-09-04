@@ -33,7 +33,7 @@
   font-weight: normal;
   letter-spacing: 3px;
 
-  &[aria-hidden="true"] {
+  &[aria-hidden='true'] {
     display: inline !important;
   }
 }
@@ -52,7 +52,7 @@
   .figure__label,
   .figure__value {
     font-size: u(1.6rem);
-    padding: u(.5rem);
+    padding: u(0.5rem);
     vertical-align: top;
   }
 
