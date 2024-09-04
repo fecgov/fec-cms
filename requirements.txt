@@ -1,4 +1,4 @@
-Django==4.2.10
+Django==4.2.15
 cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
@@ -6,10 +6,9 @@ gunicorn==22.0.0
 gevent==23.9.1
 psycopg==3.1.8
 requests==2.32.3
-urllib3==1.26.18
-slacker==0.8.6
+urllib3==2.2.2
 whitenoise==5.2.0
-wagtail==5.2
+wagtail==5.2.6
 Jinja2==3.1.4
 django_jinja==2.11.0
 CacheControl==0.11.5
@@ -46,4 +45,4 @@ pre-commit==2.21.0 #client-side hook triggered by operations like git commit
 faker==26.0.0
 
 # CircleCI build
-setuptools==71.1.0 #pin to fix builds
+setuptools==73.0.1
