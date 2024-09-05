@@ -596,22 +596,6 @@ export function sanitizeQueryParams(query) {
   return query;
 }
 
-export function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie != '') {
-    let cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      let cookie = cookies[i].trim();
-      // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) == name + '=') {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  return cookieValue;
-}
-
 /**
  * Passive listeners on touchstart and scroll events improve page performance
  * but could crash non-supportive browsers.
