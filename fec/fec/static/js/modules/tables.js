@@ -1122,10 +1122,10 @@ export function initSpendingTables(className, pageContext, options) {
   });
 }
 
-function refreshTables(e, pageContext) {
+export function refreshTables(e, pageContext) {
   const $comparison = $('#comparison');
   const selected_count = $('#comparison input[type="checkbox"]:checked').length;
-  // Once ten checkboxes are checked, disable the dropdown and disanle any unchecked boxes
+  // Once ten checkboxes are checked, disable the dropdown and disable any unchecked boxes
   if (selected_count >= 10) {
     $comparison.find('.js-dropdown button')
     .prop('disabled', true)
