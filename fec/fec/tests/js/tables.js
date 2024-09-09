@@ -325,7 +325,6 @@ describe('data table', function() {
 
   });
 
-//////NEW
   describe('refreshTables', function() {
     before(function(done) {
       this.$fixture = $('<div id="fixtures"></div>');
@@ -466,11 +465,9 @@ describe('data table', function() {
       done();
     });
 
-    it('should start with 10 sekected boxes and dropdown disabled by defualt', function() {
+    it('should start with 10 selected boxes and dropdown disabled by default', function() {
       const dropdown_button = $('.dropdown__button')
       const selected_checkboxes =  $('.dropdown__selected input[type="checkbox"]:checked')
-      //expect(this.refreshTables).to.have.been.called;
-      //expect(this.drawComparison).to.have.been.called;
       expect(selected_checkboxes.length).to.equal(10);
       expect(dropdown_button.prop('disabled')).to.be.true
     });
@@ -491,40 +488,35 @@ describe('data table', function() {
     });
 
     it('re-enables unchecked box when checked-count becomes less than 10', function() {
-      // uncheck a checkbox
+      // Uncheck a checkbox
       this.checkbox = $('.js-dropdown input[data-id="S4FL00736"]')
       $(this.checkbox).prop('checked',false)
 
-      // check an item from the fropdown
+      // Check an item from the dropdown
       this.checkbox1 =  $('.js-dropdown input[data-id="S2FL00656"]')
       $(this.checkbox1).prop('checked',true)
 
-      // trigger a click on the previosly checked box to uncheck it and fire refreshTables()
+      // Trigger a click on the previously checked box to uncheck it and fire refreshTables()
       this.checkbox1.trigger('click').trigger('change')
     
       expect(this.checkbox.prop('disabled')).to.be.false
     });
 
-    it('it enables/allows removal of disabled checkboxes from dropdown', function() {
+    it('enables/allows removal of disabled checkboxes from dropdown', function() {
       new Dropdown('.js-dropdown');
-      // check one item from the dropdown
+      // Check one item from the dropdown
       this.checkbox =  $('.dropdown__list input[data-id="S2FL00656"]')
       $(this.checkbox).prop('checked',true)
 
-      //Uncheck the checkbox to make it disabled
+      // Uncheck the checkbox to make it disabled
       this.checkbox.trigger($.Event('click')).trigger($.Event('change'))
 
       this.rm=$('.dropdown__selected input[data-id="S2FL00656"]').nextAll('button.dropdown__remove')
 
       expect(this.checkbox.prop('disabled')).to.be.true
       expect(this.rm.prop('disabled')).to.be.false
-
     });
-
   });
-
-/////END NEW
-
 
   describe('initSpendingTables', function() {
     before(function(done) {
