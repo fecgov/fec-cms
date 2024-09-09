@@ -177,7 +177,7 @@
 
   li {
     input[type="checkbox"] + label.disabled {
-      pointer-events: none;
+      cursor: default;
       opacity: .5;
     }
 
@@ -191,6 +191,10 @@
 
       input[type="checkbox"]:not(:checked) + label.is-unsuccessful + .dropdown__remove {
         display: none;
+      }
+      .disabled {
+        border: 1px solid #aeb0b5;
+        background-color: #aeb0b5
       }
     }
   }
