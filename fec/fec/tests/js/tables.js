@@ -467,54 +467,54 @@ describe('data table', function() {
 
     it('should start with 10 selected boxes and dropdown disabled by default', function() {
       const dropdown_button = $('.dropdown__button')
-      const selected_checkboxes =  $('.dropdown__selected input[type="checkbox"]:checked')
+      const selected_checkboxes =  $('.dropdown__selected input[type="checkbox"]:checked');
       expect(selected_checkboxes.length).to.equal(10);
-      expect(dropdown_button.prop('disabled')).to.be.true
+      expect(dropdown_button.prop('disabled')).to.be.true;
     });
 
     it('should enable dropdown if less than 10 checkboxes are selected', function() {
-      $('.js-dropdown input[data-id="S4FL00736"]').prop('checked',false)
-      const dropdown_button = $('.dropdown__button')
+      $('.js-dropdown input[data-id="S4FL00736"]').prop('checked',false);
+      const dropdown_button = $('.dropdown__button');
       refreshTables(null, context);
-      expect(dropdown_button.prop('disabled')).to.be.false
+      expect(dropdown_button.prop('disabled')).to.be.false;
     });
 
     it('should disable unchecked box when another item is checked from dropdown', function() {
-      $('.js-dropdown input[data-id="S4FL00736"]').prop('checked',false)
-      $('.js-dropdown input[data-id="S2FL00656"]').prop('checked',true)
+      $('.js-dropdown input[data-id="S4FL00736"]').prop('checked',false);
+      $('.js-dropdown input[data-id="S2FL00656"]').prop('checked',true);
       refreshTables(null, context);
-      const disabled_checkboxes =  $('.dropdown__selected input[type="checkbox"]:disabled')
+      const disabled_checkboxes =  $('.dropdown__selected input[type="checkbox"]:disabled');
       expect(disabled_checkboxes.length).to.equal(1);
     });
 
     it('re-enables unchecked box when checked-count becomes less than 10', function() {
       // Uncheck a checkbox
-      this.checkbox = $('.js-dropdown input[data-id="S4FL00736"]')
-      $(this.checkbox).prop('checked',false)
+      this.checkbox = $('.js-dropdown input[data-id="S4FL00736"]');
+      $(this.checkbox).prop('checked',false);
 
       // Check an item from the dropdown
-      this.checkbox1 =  $('.js-dropdown input[data-id="S2FL00656"]')
-      $(this.checkbox1).prop('checked',true)
+      this.checkbox1 =  $('.js-dropdown input[data-id="S2FL00656"]');
+      $(this.checkbox1).prop('checked',true);
 
       // Trigger a click on the previously checked box to uncheck it and fire refreshTables()
-      this.checkbox1.trigger('click').trigger('change')
+      this.checkbox1.trigger('click').trigger('change');
     
-      expect(this.checkbox.prop('disabled')).to.be.false
+      expect(this.checkbox.prop('disabled')).to.be.false;
     });
 
     it('enables/allows removal of disabled checkboxes from dropdown', function() {
       new Dropdown('.js-dropdown');
       // Check one item from the dropdown
-      this.checkbox =  $('.dropdown__list input[data-id="S2FL00656"]')
-      $(this.checkbox).prop('checked',true)
+      this.checkbox =  $('.dropdown__list input[data-id="S2FL00656"]');
+      $(this.checkbox).prop('checked',true);
 
-      // Uncheck the checkbox to make it disabled
-      this.checkbox.trigger($.Event('click')).trigger($.Event('change'))
+      // Uncheck the checkbox to make it disabled and fire refreshTables()
+      this.checkbox.trigger('click').trigger('change');
 
-      this.rm=$('.dropdown__selected input[data-id="S2FL00656"]').nextAll('button.dropdown__remove')
+      this.rm=$('.dropdown__selected input[data-id="S2FL00656"]').nextAll('button.dropdown__remove');
 
-      expect(this.checkbox.prop('disabled')).to.be.true
-      expect(this.rm.prop('disabled')).to.be.false
+      expect(this.checkbox.prop('disabled')).to.be.true;
+      expect(this.rm.prop('disabled')).to.be.false;
     });
   });
 
