@@ -16,7 +16,7 @@ import { candidateColumn, committeeColumn, supportOpposeColumn } from '../../sta
 import { buildTotalLink } from '../../static/js/modules/column-helpers.js';
 import { buildUrl } from '../../static/js/modules/helpers.js';
 
-import { DataTable_FEC, drawComparison, refreshTables, getCycle, initSpendingTables, mapResponse, mapSort, yearRange } from '../../static/js/modules/tables.js';
+import { DataTable_FEC, drawComparison, getCycle, initSpendingTables, mapResponse, mapSort, refreshTables, yearRange } from '../../static/js/modules/tables.js';
 import { init as initTablist } from '../../static/js/vendor/tablist.js';
 import { default as Dropdown }  from '../../static/js/modules/dropdowns.js';
 
