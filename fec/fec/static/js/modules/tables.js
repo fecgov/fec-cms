@@ -1122,8 +1122,28 @@ export function initSpendingTables(className, pageContext, options) {
   });
 }
 
-function refreshTables(e, pageContext) {
+export function refreshTables(e, pageContext) {
   const $comparison = $('#comparison');
+  const selected_count = $('#comparison input[type="checkbox"]:checked').length;
+  // Once ten checkboxes are checked, disable the dropdown and disable any unchecked boxes
+  if (selected_count >= 10) {
+    $comparison.find('.js-dropdown button')
+    .prop('disabled', true)
+    .removeClass('is-active')
+    .next('.dropdown__panel').attr('aria-hidden','true');
+    $comparison.find('input[type="checkbox"]:not(:checked)')
+    .prop('disabled', true)
+    .next('label').addClass('disabled')
+    .next('.dropdown__remove').prop('disabled', false);
+  // If fewer than 10 are checked, enable the dropdown and enable any unchecked boxes
+  } else {
+    $comparison.find('.js-dropdown button')
+    .prop('disabled', false);
+    $comparison.find('input[type="checkbox"]:not(:checked)')
+    .prop('disabled', false)
+    .next('label').removeClass('disabled');
+  }
+
   const selected = $comparison
     .find('input[type="checkbox"]:checked')
     .map(function(_, input) {
