@@ -4,26 +4,26 @@
     {{#panelRow "Committee name"~}}
       <a href="{{basePath}}/committee/{{committee_id}}">{{committee_name}}</a>
     {{/panelRow}}
-      {{ currency transaction_amount }}
     {{#panelRow "Amount"~}}
+      {{currency transaction_amount}}
     {{/panelRow}}
-      {{ report_year }}
     {{#panelRow "Report year"~}}
+      {{report_year}}
     {{/panelRow}}
-      {{ datetime transaction_date format=pretty }}
     {{#panelRow "Transaction date"~}}
+      {{datetime transaction_date format=pretty}}
     {{/panelRow}}
     {{#panelRow "Transaction type"~}}
       {{transaction_type}}
     {{/panelRow}}
-      {{ communication_class }}
     {{#panelRow "Communication class"~}}
+      {{communication_class}}
     {{/panelRow}}
-      {{ communication_type }}
     {{#panelRow "Communication type"~}}
+      {{communication_type}}
     {{/panelRow}}
-      {{ purpose }}
     {{#panelRow "Purpose"~}}
+      {{purpose}}
     {{/panelRow}}
   </table>
 </div>
@@ -34,20 +34,20 @@
     {{#panelRow "Candidate"~}}
       <a href="{{basePath}}/candidate/{{candidate_id}}/">{{candidate_name}}</a> ({{decodeSupportOppose support_oppose_indicator}})
     {{/panelRow}}
-      {{ decodeParty candidate_party_affiliation }}
     {{#panelRow "Party"~}}
+      {{decodeParty candidate_party_affiliation}}
     {{/panelRow}}
-      {{ decodeOffice candidate_office }}
     {{#panelRow "Office"~}}
+      {{decodeOffice candidate_office}}
     {{/panelRow}}
-    {{#if candidate_office_state }}
-        {{ decodeState candidate_office_state }}
+    {{#if candidate_office_state}}
       {{#panelRow "State"~}}
+        {{decodeState candidate_office_state}}
       {{/panelRow}}
     {{/if}}
     {{#if candidate_office_district}}
-        {{ candidate_office_district }}
       {{#panelRow "District"~}}
+        {{candidate_office_district}}
       {{/panelRow}}
     {{/if}}
   </table>

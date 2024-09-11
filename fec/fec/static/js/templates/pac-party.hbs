@@ -22,25 +22,25 @@ Template for PAC and party committee datatable details panel
       {{/panelRow}}
     {{/if}}
     {{#if sponsor_candidate_list}}
-          <a href="{{basePath}}/candidate/{{ sponsor_candidate_id }}/"><span class="leadership_pac_sponsor_name">{{ sponsor_candidate_name }}</span> ({{ sponsor_candidate_id }})</a>{{#unless @last}};<br />{{/unless}}
       {{#panelRow "Leadership PAC sponsor"~}}
         {{#each sponsor_candidate_list~}}
+          <a href="{{basePath}}/candidate/{{sponsor_candidate_id}}/"><span class="leadership_pac_sponsor_name">{{sponsor_candidate_name}}</span> ({{sponsor_candidate_id}})</a>{{#unless @last}};<br />{{/unless}}
         {{/each}}
       {{/panelRow}}
     {{/if}}
-      {{ treasurer_name }}
     {{#panelRow "Most recent treasurer"~}}
+      {{treasurer_name}}
     {{/panelRow}}
-      {{ committee_state }}
     {{#panelRow "State"~}}
+      {{committee_state}}
     {{/panelRow}}
-      {{ filing_frequency_full }}
     {{#panelRow "Filing frequency"~}}
+      {{filing_frequency_full}}
     {{/panelRow}}
-      {{ datetime first_f1_date format="pretty" }}
     {{#panelRow "Registration date"~}}
+      {{datetime first_f1_date format="pretty"}}
     {{/panelRow}}
-    {{#if (eq committee_designation_full "Joint fundraising committee") }}
+    {{#if (eq committee_designation_full "Joint fundraising committee")}}
     {{#panelRow "Joint fundraising participants"~}}
       <a href="{{basePath}}/committee/{{committee_id}}/?tab=about-committee">Full list of current participants</a>
     {{/panelRow}}
@@ -50,14 +50,14 @@ Template for PAC and party committee datatable details panel
 
 <div class="panel__row">
   <h4 class="panel__title">
-    Financial totals for {{ format_range cycle }}
+    Financial totals for {{format_range cycle}}
   </h4>
   <table>
-      {{ datetime coverage_end_date format="pretty" }}
     {{#panelRow "Coverage end date"~}}
+      {{datetime coverage_end_date format="pretty"}}
     {{/panelRow}}
-      {{ currency receipts }}
     {{#panelRow "Receipts"~}}
+      {{currency receipts}}
     {{/panelRow}}
     <tr>
       <td class="panel__term">
@@ -70,11 +70,11 @@ Template for PAC and party committee datatable details panel
         </div>
       </td>
       <td class="panel__data">
-        {{ currency individual_contributions }}
+        {{currency individual_contributions}}
       </td>
     </tr>
-      {{ currency disbursements }}
     {{#panelRow "Disbursements"~}}
+      {{currency disbursements}}
     {{/panelRow}}
     <tr>
       <td class="panel__term">
@@ -87,11 +87,11 @@ Template for PAC and party committee datatable details panel
         </div>
       </td>
       <td class="panel__data">
-        {{ currency last_cash_on_hand_end_period }}
+        {{currency last_cash_on_hand_end_period}}
       </td>
     </tr>
-      {{ currency last_debts_owed_by_committee }}
     {{#panelRow "Debts owed by committee"~}}
+      {{currency last_debts_owed_by_committee}}
     {{/panelRow}}
   </table>
 </div>

@@ -4,11 +4,11 @@
     {{#panelRow "Spender"~}}
       <a href="{{basePath}}/committee/{{committee_id}}">{{committee_name}}</a>
     {{/panelRow}}
-      {{ currency disbursement_amount }}
     {{#panelRow "Amount"~}}
+      {{currency disbursement_amount}}
     {{/panelRow}}
-      {{ number_of_candidates }}
     {{#panelRow "Number of candidates mentioned"~}}
+      {{number_of_candidates}}
     {{/panelRow}}
     <tr>
       <td class="panel__term">
@@ -21,20 +21,20 @@
         </div>
       </td>
       <td class="panel__data">
-        {{ currency calculated_candidate_share }}
+        {{currency calculated_candidate_share}}
       </td>
     </tr>
-      {{ report_year }}
     {{#panelRow "Report year"~}}
+      {{report_year}}
     {{/panelRow}}
-      {{ datetime disbursement_date format=pretty }}
     {{#panelRow "Disbursement date"~}}
+      {{datetime disbursement_date format=pretty}}
     {{/panelRow}}
-      {{ datetime communication_date format=pretty }}
     {{#panelRow "Communication date"~}}
+      {{datetime communication_date format=pretty}}
     {{/panelRow}}
-      {{ purpose_description }}
     {{#panelRow "Purpose description"~}}
+      {{purpose_description}}
     {{/panelRow}}
   </table>
 </div>
@@ -45,15 +45,15 @@
     {{#panelRow "Candidate"~}}
       <a href="{{basePath}}/candidate/{{candidate_id}}/">{{candidate_name}}</a>
     {{/panelRow}}
-      {{ decodeOffice candidate_office }}
     {{#panelRow "Office"~}}
+      {{decodeOffice candidate_office}}
     {{/panelRow}}
     {{#if candidate_state}}
       {{#panelRow "State"~}}
         {{decodeState candidate_state}}
       {{/panelRow}}
     {{/if}}
-    {{#unless (eq candidate_district '00') }}
+    {{#unless (eq candidate_district '00')}}
       {{#panelRow "District"~}}
         {{candidate_district}}
       {{/panelRow}}

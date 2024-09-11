@@ -26,8 +26,8 @@
     {{#panelRow "Disbursement date"~}}
       {{{datetime disbursement_date format="pretty"}}}
     {{/panelRow}}
-      {{{ report_year }}}
     {{#panelRow "Report year"~}}
+      {{{report_year}}}
     {{/panelRow}}
     {{#panelRow "Filing date"~}}
       {{{datetime receipt_date format="pretty"}}}
@@ -44,10 +44,10 @@
     {{#panelRow "Memo code"~}}
       {{memoed_subtotal}}
     {{/panelRow}}
-      Form {{formNumber filing_form }} on line {{line_number}}
     {{#panelRow "Reported on"~}}
+      Form {{formNumber filing_form}} on line {{line_number}}
     {{/panelRow}}    
-    {{#if election_type_full }}
+    {{#if election_type_full}}
       {{#panelRow "Election type"~}}
         {{election_type_full}}
       {{/panelRow}}

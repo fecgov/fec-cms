@@ -12,11 +12,11 @@
     {{{amendment_version}}}
   </div>
   <table>
-      <a href="{{basePath}}/committee/{{committee_id}}">{{ committee_name }}</a>
     {{#panelRow "Filer"~}}
+      <a href="{{basePath}}/committee/{{committee_id}}">{{committee_name}}</a>
     {{/panelRow}}
-      {{ fec_file_id }}
     {{#panelRow "FEC file number"~}}
+      {{fec_file_id}}
     {{/panelRow}}
     {{#panelRow "Report coverage"~}}
       {{datetime coverage_start_date format="pretty"}} to {{datetime coverage_end_date format="pretty"}}
@@ -24,21 +24,21 @@
     {{#panelRow "Receipt date"~}}
       {{datetime receipt_date format="pretty"}}
     {{/panelRow}}
-      {{ decodeMeans means_filed}}
     {{#panelRow "Filing method"~}}
+      {{decodeMeans means_filed}}
     {{/panelRow}}
-        <a target="_blank" href="{{ html_url }}">Webpage</a> |
     {{#panelRow "Read report"~}}
       {{#if html_url~}}
+        <a target="_blank" href="{{html_url}}">Webpage</a> |
       {{/if}}
-      <a target="_blank" href="{{ csv_url }}">.csv</a> |
       {{#if csv_url~}}
+      <a target="_blank" href="{{csv_url}}">.csv</a> |
       {{/if}}
-      <a target="_blank" href="{{ pdf_url }}">.pdf</a>
       {{#if pdf_url~}}
+      <a target="_blank" href="{{pdf_url}}">.pdf</a>
       {{/if}}
-      | <a target="_blank" href="{{ fec_url }}">.fec</a>
       {{#if fec_url~}}
+      | <a target="_blank" href="{{fec_url}}">.fec</a>
       {{/if}}
     {{/panelRow}}
   </table>

@@ -65,7 +65,7 @@ ContactForm.prototype.initOtherReason = function() {
 
 /**
  *
- * @param {JQuery.Event} e
+ * @param {jQuery.Event} e
  */
 ContactForm.prototype.toggleOtherReason = function(e) {
   if (e.target.value === 'other') {
@@ -77,7 +77,7 @@ ContactForm.prototype.toggleOtherReason = function(e) {
 
 /**
  *
- * @param {JQuery.Event} e
+ * @param {jQuery.Event} e
  */
 ContactForm.prototype.clearForm = function(e) {
   e.preventDefault();
@@ -88,7 +88,7 @@ ContactForm.prototype.clearForm = function(e) {
 
 /**
  * Analyst lookup tool
- * @param {JQuery.$element} $elm
+ * @param {jQuery} $elm
  */
 export function AnalystLookup($elm) {
   this.$elm = $elm;
@@ -167,7 +167,7 @@ AnalystLookup.prototype.hideAnalyst = function() {
 
 /**
  *
- * @param {JQuery.Event} e
+ * @param {jQuery.Event} e
  */
 AnalystLookup.prototype.handleChange = function(e) {
   if (!$(e.target).val()) {

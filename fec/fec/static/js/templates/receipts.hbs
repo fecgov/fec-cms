@@ -2,9 +2,9 @@
   <h4 class="panel__title">Source information</h4>
   <table>
     <tr>
-          {{#if (isEarmarked receipt_type) }}
       {{#panelRow "Name"~}}
         {{#if contributor~}}
+          {{#if (isEarmarked receipt_type)~}}
            {{contributor_name}}
           {{else~}}
             <a href="{{basePath}}/committee/{{contributor.committee_id}}">{{contributor.name}}</a>
@@ -47,15 +47,15 @@
     {{#panelRow "Receipt date"~}}
       {{{datetime contribution_receipt_date format="pretty"}}}
     {{/panelRow}}
-      {{{ report_year }}}
     {{#panelRow "Report year"~}}
+      {{{report_year}}}
     {{/panelRow}}
     {{#panelRow "Memo"~}}
       {{memo_text}}
     {{/panelRow}}
     {{#if filing_form}}
-        Form {{formNumber filing_form }} on line {{line_number}}
       {{#panelRow "Reported on"~}}
+        Form {{formNumber filing_form}} on line {{line_number}}
       {{/panelRow}}
     {{/if}}
     {{#panelRow "Election type"~}}
@@ -67,8 +67,8 @@
 <div class="panel__row">
   <h4 class="panel__title">Recipient information</h4>
   <table>
-      <a href="{{basePath}}/committee/{{ committee.committee_id }}/">{{ committee.name }}</a>
     {{#panelRow "Committee"~}}
+      <a href="{{basePath}}/committee/{{committee.committee_id}}/">{{committee.name}}</a>
     {{/panelRow}}
     {{#panelRow "Political party"~}}
       {{committee.party_full}}
