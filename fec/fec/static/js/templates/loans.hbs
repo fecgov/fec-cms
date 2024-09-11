@@ -7,10 +7,10 @@ This shows all the fields available on the Schedule C form.
 <div class="panel__row">
   <h4 class="panel__title">Committee information</h4>
   <table>
-    {{#panelRow "Name"}}
+    {{#panelRow "Name"~}}
       <a href="{{basePath}}/committee/{{committee_id}}">{{committee.name}}</a>
     {{/panelRow}}
-    {{#panelRow "Committee city, state and ZIP code"}}
+    {{#panelRow "Committee city, state and ZIP code"~}}
       {{committee.city}}, {{committee.state}}  {{zipCode committee.zip}}
     {{/panelRow}}
   </table>
@@ -19,12 +19,12 @@ This shows all the fields available on the Schedule C form.
 <div class="panel__row">
   <h4 class="panel__title">Loan Source information</h4>
   <table>
-    {{#panelRow "Loan source name"}}
-      {{#if loan_source_name}}
+    {{#panelRow "Loan source name"~}}
+      {{#if loan_source_name~}}
         {{loan_source_name}}
       {{/if}}
     {{/panelRow}}
-    {{#panelRow "City and state"}}
+    {{#panelRow "City and state"~}}
       {{loan_source_city}}, {{loan_source_state}}
     {{/panelRow}}
   </table>
@@ -33,16 +33,16 @@ This shows all the fields available on the Schedule C form.
 <div class="panel__row">
   <h4 class="panel__title">Loan information</h4>
   <table>
-    {{#panelRow "Original Amount of Loan"}}
+    {{#panelRow "Original Amount of Loan"~}}
       {{{currency original_loan_amount}}}
     {{/panelRow}}
-    {{#panelRow "Cumulative Payment to Date"}}
+    {{#panelRow "Cumulative Payment to Date"~}}
       {{{currency payment_to_date}}}
     {{/panelRow}}
-    {{#panelRow "Balance Outstanding at Close of This Period"}}
+    {{#panelRow "Balance Outstanding at Close of This Period"~}}
       {{{currency loan_balance}}}
     {{/panelRow}}
-    {{#panelRow "Interest Rate"}}
+    {{#panelRow "Interest Rate"~}}
       {{interest_rate_terms}} %
     {{/panelRow}}
   </table>

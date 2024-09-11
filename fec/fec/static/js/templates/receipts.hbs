@@ -2,37 +2,37 @@
   <h4 class="panel__title">Source information</h4>
   <table>
     <tr>
-      {{#panelRow "Name"}}
-        {{#if contributor}}
           {{#if (isEarmarked receipt_type) }}
+      {{#panelRow "Name"~}}
+        {{#if contributor~}}
            {{contributor_name}}
-          {{else }}
+          {{else~}}
             <a href="{{basePath}}/committee/{{contributor.committee_id}}">{{contributor.name}}</a>
           {{/if}}
-        {{else}}
+        {{else~}}
           {{contributor_name}}
         {{/if}}
       {{/panelRow}}
     </tr>
-    {{#if contributor}}
-      {{#if (isEarmarked receipt_type) }}
-        {{#panelRow "Earmarked by"}}
+    {{#if contributor~}}
+      {{#if (isEarmarked receipt_type)~}}
+        {{#panelRow "Earmarked by"~}}
           <a href="{{basePath}}/committee/{{contributor.committee_id}}">{{contributor.name}}</a>
         {{/panelRow}}
       {{/if}}
     {{/if}}
-    {{#panelRow "City, state and ZIP code"}}
+    {{#panelRow "City, state and ZIP code"~}}
       {{contributor_city}}, {{contributor_state}} {{zipCode contributor_zip}}
     {{/panelRow}}
     {{#if is_individual}}
-      {{#panelRow "Occupation"}}
+      {{#panelRow "Occupation"~}}
         {{contributor_occupation}}
       {{/panelRow}}
-      {{#panelRow "Employer"}}
+      {{#panelRow "Employer"~}}
         {{contributor_employer}}
       {{/panelRow}}
     {{/if}}
-    {{#panelRow "Year to date"}}
+    {{#panelRow "Year to date"~}}
       {{{currency contributor_aggregate_ytd}}}
     {{/panelRow}}
   </table>
@@ -41,24 +41,24 @@
 <div class="panel__row">
   <h4 class="panel__title">Receipt information</h4>
   <table>
-    {{#panelRow "Amount"}}
+    {{#panelRow "Amount"~}}
       {{{currency contribution_receipt_amount}}}
     {{/panelRow}}
-    {{#panelRow "Receipt date"}}
+    {{#panelRow "Receipt date"~}}
       {{{datetime contribution_receipt_date format="pretty"}}}
     {{/panelRow}}
-    {{#panelRow "Report year"}}
       {{{ report_year }}}
+    {{#panelRow "Report year"~}}
     {{/panelRow}}
-    {{#panelRow "Memo"}}
+    {{#panelRow "Memo"~}}
       {{memo_text}}
     {{/panelRow}}
     {{#if filing_form}}
-      {{#panelRow "Reported on"}}
         Form {{formNumber filing_form }} on line {{line_number}}
+      {{#panelRow "Reported on"~}}
       {{/panelRow}}
     {{/if}}
-    {{#panelRow "Election type"}}
+    {{#panelRow "Election type"~}}
       {{fec_election_type_desc}}
     {{/panelRow}}
   </table>
@@ -67,16 +67,16 @@
 <div class="panel__row">
   <h4 class="panel__title">Recipient information</h4>
   <table>
-    {{#panelRow "Committee"}}
       <a href="{{basePath}}/committee/{{ committee.committee_id }}/">{{ committee.name }}</a>
+    {{#panelRow "Committee"~}}
     {{/panelRow}}
-    {{#panelRow "Political party"}}
+    {{#panelRow "Political party"~}}
       {{committee.party_full}}
     {{/panelRow}}
-    {{#panelRow "Type"}}
+    {{#panelRow "Type"~}}
       {{committee.committee_type_full}}
     {{/panelRow}}
-    {{#panelRow "State"}}
+    {{#panelRow "State"~}}
       {{committee.state_full}}
     {{/panelRow}}
   </table>

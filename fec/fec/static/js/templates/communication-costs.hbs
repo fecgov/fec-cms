@@ -1,29 +1,29 @@
 <div class="panel__row">
   <h4 class="panel__title">Disbursement information</h4>
   <table>
-    {{#panelRow "Committee name"}}
+    {{#panelRow "Committee name"~}}
       <a href="{{basePath}}/committee/{{committee_id}}">{{committee_name}}</a>
     {{/panelRow}}
-    {{#panelRow "Amount"}}
       {{ currency transaction_amount }}
+    {{#panelRow "Amount"~}}
     {{/panelRow}}
-    {{#panelRow "Report year"}}
       {{ report_year }}
+    {{#panelRow "Report year"~}}
     {{/panelRow}}
-    {{#panelRow "Transaction date"}}
       {{ datetime transaction_date format=pretty }}
+    {{#panelRow "Transaction date"~}}
     {{/panelRow}}
-    {{#panelRow "Transaction type"}}
+    {{#panelRow "Transaction type"~}}
       {{transaction_type}}
     {{/panelRow}}
-    {{#panelRow "Communication class"}}
       {{ communication_class }}
+    {{#panelRow "Communication class"~}}
     {{/panelRow}}
-    {{#panelRow "Communication type"}}
       {{ communication_type }}
+    {{#panelRow "Communication type"~}}
     {{/panelRow}}
-    {{#panelRow "Purpose"}}
       {{ purpose }}
+    {{#panelRow "Purpose"~}}
     {{/panelRow}}
   </table>
 </div>
@@ -31,23 +31,23 @@
 <div class="panel__row">
   <h4 class="panel__title">Candidate information</h4>
   <table>
-    {{#panelRow "Candidate"}}
+    {{#panelRow "Candidate"~}}
       <a href="{{basePath}}/candidate/{{candidate_id}}/">{{candidate_name}}</a> ({{decodeSupportOppose support_oppose_indicator}})
     {{/panelRow}}
-    {{#panelRow "Party"}}
       {{ decodeParty candidate_party_affiliation }}
+    {{#panelRow "Party"~}}
     {{/panelRow}}
-    {{#panelRow "Office"}}
       {{ decodeOffice candidate_office }}
+    {{#panelRow "Office"~}}
     {{/panelRow}}
     {{#if candidate_office_state }}
-      {{#panelRow "State"}}
         {{ decodeState candidate_office_state }}
+      {{#panelRow "State"~}}
       {{/panelRow}}
     {{/if}}
     {{#if candidate_office_district}}
-      {{#panelRow "District"}}
         {{ candidate_office_district }}
+      {{#panelRow "District"~}}
       {{/panelRow}}
     {{/if}}
   </table>

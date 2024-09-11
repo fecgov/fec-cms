@@ -4,14 +4,14 @@ Template for national party accounts disbursements datatable details panel
 <div class="panel__row">
   <h4 class="panel__title">Recipient information</h4>
   <table>
-    {{#panelRow "Name"}}
-      {{#if recipient_committee_id}}
+    {{#panelRow "Name"~}}
+      {{#if recipient_committee_id~}}
         <a href="/data/committee/{{recipient_committee_id}}/">{{recipient_name}}</a>
-      {{else}}
+      {{else~}}
       {{recipient_name}}
       {{/if}}
     {{/panelRow}}
-    {{#panelRow "City, state and ZIP code"}}
+    {{#panelRow "City, state and ZIP code"~}}
       {{recipient_city}}, {{recipient_state}}  {{zipCode recipient_zip}}
     {{/panelRow}}
   </table>
@@ -20,31 +20,31 @@ Template for national party accounts disbursements datatable details panel
 <div class="panel__row">
   <h4 class="panel__title">Disbursement information</h4>
   <table>
-    {{#panelRow "Amount"}}
+    {{#panelRow "Amount"~}}
       {{currency disbursement_amount}}
     {{/panelRow}}
-    {{#panelRow "Disbursement date"}}
+    {{#panelRow "Disbursement date"~}}
       {{{datetime disbursement_date format="pretty"}}}
     {{/panelRow}}
-    {{#panelRow "Report year"}}
+    {{#panelRow "Report year"~}}
       {{report_year}}
     {{/panelRow}}
-    {{#panelRow "Description"}}
+    {{#panelRow "Description"~}}
       {{disbursement_description}}
     {{/panelRow}}
-    {{#panelRow "Purpose category"}}
+    {{#panelRow "Purpose category"~}}
       {{disbursement_purpose_category}}
     {{/panelRow}}
-    {{#panelRow "Disbursement type"}}
+    {{#panelRow "Disbursement type"~}}
       {{disbursement_type_desc}}
     {{/panelRow}}
-    {{#panelRow "Memo"}}
+    {{#panelRow "Memo"~}}
       {{memo_text}}
     {{/panelRow}}
-    {{#panelRow "Memo code"}}
+    {{#panelRow "Memo code"~}}
       {{memo_cd_desc}}
     {{/panelRow}}
-    {{#panelRow "Reported on"}}
+    {{#panelRow "Reported on"~}}
       {{filing_form}} on Line {{line_number}}
     {{/panelRow}}
   </table>
@@ -53,16 +53,16 @@ Template for national party accounts disbursements datatable details panel
 <div class="panel__row">
   <h4 class="panel__title">Spender information</h4>
   <table>
-    {{#panelRow "Name"}}
+    {{#panelRow "Name"~}}
       <a href="{{entityUrl this type="committee"}}">{{committee_name}}</a>
     {{/panelRow}}
-    {{#panelRow "Designation"}}
+    {{#panelRow "Designation"~}}
       {{spender_committee_designation}} {{!-- TODO: this will change to spender_committee_designation_full --}}
     {{/panelRow}}
-    {{#panelRow "Treasurer"}}
+    {{#panelRow "Treasurer"~}}
       {{treasurer_name}}
     {{/panelRow}}
-    {{#panelRow "State"}}
+    {{#panelRow "State"~}}
       {{state_full}}
     {{/panelRow}}
   </table>

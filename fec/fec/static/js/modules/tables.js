@@ -198,6 +198,10 @@ export function modalRenderFactory(template, fetch) {
       callback
     );
     callback = function(e) {
+      console.log('click callback');
+      console.log('  e.type: ', e.type);
+      console.log('  e.which: ', e.which);
+
       if (e.which === 13 || e.type === 'click') {
         // Note: Use `currentTarget` to get parent row, since the target column
         // may have been moved since the triggering event
@@ -206,8 +210,14 @@ export function modalRenderFactory(template, fetch) {
         if ($target.is('a')) {
           return true;
         }
+
+        // const tr = e.target.closest('tr');
+        // const row = api.row($table, tr);
+        
+        // else row.child(format(row.data())).show();
+        
         if (!$target.closest('td').hasClass('dataTables_empty')) {
-          const index = api.row($row).index();
+          const row = api.row($row);
           $.when(fetch(response.results[index])).done(function(fetched) {
             $modal.find('.js-panel-content').html(template(fetched));
             $modal.attr('aria-hidden', 'false');

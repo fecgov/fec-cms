@@ -1,17 +1,17 @@
 <div class="panel__row">
   <h4 class="panel__title">Recipient information</h4>
   <table>
-    {{#panelRow "Recipient name"}}
-      {{#if recipient}}
+    {{#panelRow "Recipient name"~}}
+      {{#if recipient~}}
         <a href="{{basePath}}/committee/{{recipient.committee_id}}">{{recipient.name}}</a>
-      {{else}}
+      {{else~}}
         {{recipient_name}}
       {{/if}}
     {{/panelRow}}
-    {{#panelRow "Recipient city, state and ZIP code"}}
+    {{#panelRow "Recipient city, state and ZIP code"~}}
       {{recipient_city}}, {{recipient_state}}  {{zipCode recipient_zip}}
     {{/panelRow}}
-    {{#panelRow "Beneficiary committee name"}}
+    {{#panelRow "Beneficiary committee name"~}}
       {{beneficiary_committee_name}}
     {{/panelRow}}
   </table>
@@ -20,35 +20,35 @@
 <div class="panel__row">
   <h4 class="panel__title">Transaction information</h4>
   <table>
-    {{#panelRow "Amount"}}
+    {{#panelRow "Amount"~}}
       {{{currency disbursement_amount}}}
     {{/panelRow}}
-    {{#panelRow "Disbursement date"}}
+    {{#panelRow "Disbursement date"~}}
       {{{datetime disbursement_date format="pretty"}}}
     {{/panelRow}}
-    {{#panelRow "Report year"}}
       {{{ report_year }}}
+    {{#panelRow "Report year"~}}
     {{/panelRow}}
-    {{#panelRow "Filing date"}}
+    {{#panelRow "Filing date"~}}
       {{{datetime receipt_date format="pretty"}}}
     {{/panelRow}}
-    {{#panelRow "Description"}}
+    {{#panelRow "Description"~}}
       {{disbursement_description}}
     {{/panelRow}}
-    {{#panelRow "Purpose category"}}
+    {{#panelRow "Purpose category"~}}
       {{disbursement_purpose_category}}
     {{/panelRow}}
-    {{#panelRow "Memo"}}
+    {{#panelRow "Memo"~}}
       {{memo_text}}
     {{/panelRow}}
-    {{#panelRow "Memo code"}}
+    {{#panelRow "Memo code"~}}
       {{memoed_subtotal}}
     {{/panelRow}}
-    {{#panelRow "Reported on"}}
       Form {{formNumber filing_form }} on line {{line_number}}
+    {{#panelRow "Reported on"~}}
     {{/panelRow}}    
     {{#if election_type_full }}
-      {{#panelRow "Election type"}}
+      {{#panelRow "Election type"~}}
         {{election_type_full}}
       {{/panelRow}}
     {{/if}}
@@ -58,21 +58,21 @@
 <div class="panel__row">
   <h4 class="panel__title">Committee information</h4>
   <table>
-    {{#panelRow "Name"}}
+    {{#panelRow "Name"~}}
       <a href="{{basePath}}/committee/{{committee_id}}">{{committee.name}}</a>
     {{/panelRow}}
-    {{#panelRow "Designation"}}
+    {{#panelRow "Designation"~}}
       {{committee.designation_full}}
     {{/panelRow}}
     {{#if committee.type}}
-      {{#panelRow "Type"}}
+      {{#panelRow "Type"~}}
         {{committee.type_full}}
       {{/panelRow}}
     {{/if}}
-    {{#panelRow "Treasurer"}}
+    {{#panelRow "Treasurer"~}}
       {{committee.treasurer_name}}
     {{/panelRow}}
-    {{#panelRow "Committee city, state and ZIP code"}}
+    {{#panelRow "Committee city, state and ZIP code"~}}
       {{committee.city}}, {{committee.state}}  {{zipCode committee.zip}}
     {{/panelRow}}
   </table>
