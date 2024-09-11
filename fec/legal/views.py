@@ -253,6 +253,7 @@ def legal_doc_search_ao(request):
     ao_entity_name = request.GET.get('ao_entity_name', '')
     ao_doc_category_ids = request.GET.getlist('ao_category', [])
     ao_requestor_type_ids = request.GET.getlist('ao_requestor_type', [])
+    ao_regulatory_citation = request.GET.get('ao_regulatory_citation', '')
 
     query, query_exclude = parse_query(original_query)
 
@@ -273,6 +274,7 @@ def legal_doc_search_ao(request):
         ao_max_request_date=ao_max_request_date,
         ao_entity_name=ao_entity_name,
         ao_category=ao_doc_category_ids,
+        ao_regulatory_citation=ao_regulatory_citation,
     )
 
     # Define AO document categories dictionary
@@ -310,8 +312,8 @@ def legal_doc_search_ao(request):
     # Return the selected document category name
     ao_document_category_names = [ao_document_categories.get(id) for id in ao_doc_category_ids]
 
-    # Return the selected requestor type name
-    ao_requestor_type_names = [ao_requestor_types.get(id) for id in ao_requestor_type_ids]
+    # Return the selected requestor type name, when "Any" is selected, clear the value
+    ao_requestor_type_names = [ao_requestor_types.get(id) for id in ao_requestor_type_ids if id != 0]
 
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
         'parent': 'legal',
@@ -328,6 +330,8 @@ def legal_doc_search_ao(request):
         'ao_max_request_date': ao_max_request_date,
         'ao_entity_name': ao_entity_name,
         'query': query,
+        'ao_regulatory_citation': ao_regulatory_citation,
+        'category_order': get_legal_category_order(results, 'advisory_opinions'),
         'social_image_identifier': 'legal',
         'selected_ao_category_ids': ao_doc_category_ids,
         'selected_ao_category_names': ao_document_category_names,

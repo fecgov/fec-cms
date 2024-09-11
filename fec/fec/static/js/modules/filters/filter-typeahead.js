@@ -19,7 +19,7 @@ function slugify(value) {
 
 function formatLabel(datum) {
   return datum.name
-    ? datum.name + ' (' + datum.id + ')'
+    ? datum.name + (datum.id ?' (' + datum.id + ')' : '')
     : '"' + stripQuotes(datum.id) + '"';
 }
 
@@ -121,10 +121,13 @@ FilterTypeahead.prototype.setFirstItem = function() {
 };
 
 FilterTypeahead.prototype.handleSelect = function(e, datum) {
-  const id = formatId(datum.id);
+  let identifier = datum.id || datum.name;
+  console.log('handleSelect:', e, ' datum: ', datum, 'id:', identifier);
+
+  const id = formatId(identifier);
   this.appendCheckbox({
     name: this.fieldName,
-    value: datum.id,
+    value: identifier,
     datum: datum
   });
   this.datum = null;
@@ -201,6 +204,7 @@ FilterTypeahead.prototype.handleHover = function() {
 };
 
 FilterTypeahead.prototype.handleSubmit = function(e) {
+  console.log('handleSubmit:' , e,' datum: ', this.datum, 'allowT:', this.allowText);
   if (this.datum) {
     this.handleSelect(e, this.datum);
   } else if (!this.datum && !this.allowText) {

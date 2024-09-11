@@ -19,28 +19,34 @@
       <label class="label" for="ao_requestor">Requestor name (or AO name)</label>
       <input id="ao_requestor" name="ao_requestor" type="text" value="{{ ao_requestor }}">
     </div>
-    <div class="filter">
+    {# <div class="filter">
       <label for="ao_requestor_type" class="label">Requestor Type</label>
       <select id="ao_requestor_type" name="ao_requestor_type">
         {% for requestor_type_id, requestor_type_label in ao_requestor_types.items() %}
-          <option value="{{ requestor_type_id }}" {% if requestor_type_id in selected_ao_requestor_type_ids %}selected{% endif %}>
+          <option value="{{ requestor_type_id }}" 
+            {% if requestor_type_id in selected_ao_requestor_type_ids %}{% if requestor_type_id == 0 %}none{% else %}selected{% endif %}{% endif %}>
             {{ requestor_type_label }}
           </option>
         {% endfor %}
       </select>
-    </div>
+    </div> #}
     
     {{ legal.keyword_search(result_type, query) }}
     <div class="filter">
-      <input type="checkbox" id="ao_is_pending" name="ao_is_pending" value="{{ ao_is_pending }}" {% if ao_is_pending == 'true' %}checked{% endif %}>
+      <input type="checkbox" id="ao_is_pending" name="ao_is_pending" value="true" {% if ao_is_pending == 'true' %}checked{% endif %}>
       <label for="ao_is_pending">Show only pending requests</label>
     </div>
     <div class="filter">
       <legend class="label">Document Type</legend>
       {% for category_id, category_label in ao_document_categories.items() %}
         <div>
-            <input type="checkbox" id="ao_doc_category_id_{{ loop.index0 }}" name="ao_category" value="{{ category_id }}" {% if category_id in selected_ao_category_ids %}checked{% endif %}>
-            <label for="ao_doc_category_id_{{ loop.index0 }}">{{ category_label }}</label>
+          <input type="checkbox" 
+                id="ao_doc_category_id_{{ loop.index0 }}" 
+                name="ao_category" 
+                value="{{ category_id }}" 
+                {% if category_id in selected_ao_category_ids and not (ao_is_pending == 'true') %}checked{% endif %}
+                {% if ao_is_pending == 'true' and category_id == 'F' %}{% endif %}>
+          <label for="ao_doc_category_id_{{ loop.index0 }}">{{ category_label }}</label>
         </div>
       {% endfor %}
     </div>
@@ -50,7 +56,7 @@
       <div class="combo combo--search--mini">
         <input id="ao_regulatory_citation-filter" type="text" name="ao_regulatory_citation" class="combo__input" value="">
       </div> #}
-      {{ typeahead.field('regulations', 'Regulatory citation', False, dataset='regulations', allow_text=True) }}
+      {{ typeahead.field('ao_regulatory_citation', 'Regulatory citation', False, dataset='regulations', allow_text=False) }}
     </div>
 
     <div class="filter">
@@ -152,6 +158,11 @@
           {% for selected_ao_category_name in selected_ao_category_names %}
             <div data-removable="true" class="tag__item">{{ selected_ao_category_name }}<button class="button js-close tag__remove" data-tag="ao_doc_category_id_{{ loop.index0 }}"><span class="u-visually-hidden">Remove</span></button></div>
           {% endfor %}
+        </li>
+      {% endif %}
+      {% if ao_regulatory_citation %}
+        <li data-tag-category="ao_regulatory_citation" class="tag__category">
+          <div data-removable="true" class="tag__item">{{ ao_regulatory_citation }}<button class="button js-close tag__remove" data-tag="{{ ao_regulatory_citation }}"><span class="u-visually-hidden">Remove</span></button></div>
         </li>
       {% endif %}
     </ul>
