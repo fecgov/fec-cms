@@ -57,7 +57,7 @@ function Filters(props) {
             TooltipHelp={{
               addTooltip: true,
               message:
-                'Refine a keyword search by using AND, OR, “ ”, -, to expand or limit results.',
+                'Refine a keyword search by using +, |, “ ”, -, to expand or limit results.',
               verticalPosition: 'above',
               horizontalPosition: 'left'
             }}

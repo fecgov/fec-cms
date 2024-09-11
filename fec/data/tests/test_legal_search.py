@@ -10,6 +10,7 @@ from data import api_caller
 from data import ecfr_caller
 from data import legal_test_data
 from legal import views
+from legal.views import parse_query
 
 client = Client()
 
@@ -53,7 +54,7 @@ class TestLegalSearch(TestCase):
         )
         assert response.status_code == 200
         load_legal_search_results.assert_called_once_with(
-            'in kind donation', 'all', limit=3
+            'in kind donation', '', 'all', limit=3
         )
 
     # Test4 : This test is checking against the static data on
@@ -81,14 +82,13 @@ class TestLegalSearch(TestCase):
     def test_transform_ecfr_query_string(self):
         # Define input query string
         input_query_string = (
-            '((coordinated OR communications) OR (in-kind AND' +
-            ' contributions) OR ("independent expenditure")) AND (-travel)'
+            '(coordinated | communications)|(in-kind + contributions)|("independent expenditure") -travel'
         )
 
         # Expected output after transformation
         expected_output = (
-            '((coordinated | communications) | (in-kind' +
-            ' contributions) | ("independent expenditure")) -travel'
+            '(coordinated | communications)|(in-kind' +
+            ' contributions)|("independent expenditure") -travel'
         )
 
         # Apply transformation
@@ -110,7 +110,8 @@ class TestLegalSearch(TestCase):
             data={'search': 'in kind donation', 'search_type': 'statutes'}
         )
         assert response.status_code == 200
-        load_legal_search_results.assert_called_once_with('in kind donation',
+
+        load_legal_search_results.assert_called_once_with('in kind donation', '',
                                                           'statutes', offset=0)
 
     # # Test 6: OK
@@ -139,12 +140,14 @@ class TestLegalSearch(TestCase):
         calls = [
             mock.call(
                 query='',
+                query_exclude='',
                 query_type='advisory_opinions',
                 ao_min_issue_date=ao_min_date,
                 ao_category=['F', 'W']
             ),
             mock.call(
                 query='',
+                query_exclude='',
                 query_type='advisory_opinions',
                 ao_status='Pending',
                 ao_category='R'
@@ -195,3 +198,31 @@ class TestLegalSearch(TestCase):
             "MUR 1: There were no data for commission_votes action at index 1"
             not in log_contents
         )
+
+
+# Tests parsing legal query and extracting exclude parameters.
+class TestParseQuery:
+    def test_parse_query_no_exclude(self):
+        query = "in-kind contribution"
+        result = parse_query(query)
+        assert result == (query, "")
+
+    def test_parse_query_single_exclude(self):
+        query = "-in-kind contribution"
+        result = parse_query(query)
+        assert result == ("contribution", "in-kind")
+
+    def test_parse_query_multiple_exclude(self):
+        query = "in-kind contribution -travel -authorization"
+        result = parse_query(query)
+        assert result == ("in-kind contribution", "travel authorization")
+
+    def test_parse_query_exclude_with_spaces(self):
+        query = "in-kind -authorization contribution"
+        result = parse_query(query)
+        assert result == ("in-kind contribution", "authorization")
+
+    def test_parse_query_empty_string(self):
+        query = ""
+        result = parse_query(query)
+        assert result == ("", "")

@@ -9,11 +9,24 @@ from data import ecfr_caller
 from data import constants
 
 
+def parse_query(q):
+    # Split the string by space and then find strings that start with - and collect them
+    query_split = q.split(' ')
+    exclude_words = [x for x in query_split if x.startswith('-')]
+    # Remove the first character of each word in the list
+    filtered_words = [word[1:] for word in exclude_words]
+    query_exclude = ' '.join(filtered_words)
+    # Filter the original_list to remove words that are in prefix_set
+    query = ' '.join([word for word in query_split if word not in exclude_words])
+    return query, query_exclude
+
+
 def advisory_opinions_landing(request):
     today = datetime.date.today()
     ao_min_date = today - datetime.timedelta(weeks=26)
     recent_aos = api_caller.load_legal_search_results(
         query='',
+        query_exclude='',
         query_type='advisory_opinions',
         ao_category=['F', 'W'],  # TODO: this is erring, expecting a string
         ao_min_issue_date=ao_min_date
@@ -21,6 +34,7 @@ def advisory_opinions_landing(request):
 
     pending_aos = api_caller.load_legal_search_results(
         query='',
+        query_exclude='',
         query_type='advisory_opinions',
         ao_category='R',
         ao_status='Pending'
@@ -159,7 +173,7 @@ def admin_fine_page(request, admin_fine_no):
 
 # Transform boolean queries for eCFR API
 # Query string:
-# ((coordinated OR communications) OR (in-kind AND contributions) OR
+# ((coordinated | communications) | (in-kind AND contributions) |
 # ("independent expenditure")) AND (-authorization)
 # eCFR query string transformation:
 # (coordinated | communications) | (in-kind contributions) |
@@ -169,57 +183,54 @@ def transform_ecfr_query_string(query_string):
 
     # Define the replacements for eCFR query string
     replacements = [
-        (r'\((-[^)]*)\)', r'\1'),  # Removes parentheses around on statement
-        (r' OR ', ' | '),  # Replace OR with |
-        (r' AND ', ' '),  # Replace AND with space
+        (r' \+', ''),  # Replace space+ with empty string
     ]
 
     # Apply replacements sequentially
     for pattern, replacement in replacements:
         query_string = re.sub(pattern, replacement, query_string)
-
     return query_string
 
 
 def legal_search(request):
-    query = request.GET.get('search', '')
-    Updated_ecfr_query_string = transform_ecfr_query_string(query)
+    original_query = request.GET.get('search', '')
+    updated_ecfr_query_string = transform_ecfr_query_string(original_query)
     result_type = request.GET.get('search_type', 'all')
     results = {}
+    query, query_exclude = parse_query(original_query)
 
     # Only hit the API if there's an actual query
-    if query:
-        results = api_caller.load_legal_search_results(query, result_type, limit=3)
+    if original_query:
+        results = api_caller.load_legal_search_results(query, query_exclude, result_type, limit=3)
 
-        # Only search regulations if result type is all or regulations
+        # Only search regulations if result_type is all or regulations
         if result_type == 'all' or result_type == 'regulations':
-            ecfr_results = ecfr_caller.fetch_ecfr_data(Updated_ecfr_query_string, limit=3, page=1)
+            ecfr_results = ecfr_caller.fetch_ecfr_data(updated_ecfr_query_string, limit=3, page=1)
             if 'results' in ecfr_results:
-
                 regulations = [{
-                            "doc_id": None,
-                            "document_highlights": {},
-                            "highlights": [obj['headings']['part'],
-                                           obj['full_text_excerpt']],
-                            "name": obj['headings']['section'],
-                            "no": obj['hierarchy']['section'],
-                            "type": None,
-                            "url":  (
-                                "https://www.ecfr.gov/current/title-11/"
-                                f"chapter-{obj['hierarchy']['chapter']}/"
-                                f"section-{obj['hierarchy']['section']}"
-                            )
-                            } for obj in ecfr_results['results']]
+                    "doc_id": None,
+                    "document_highlights": {},
+                    "highlights": [obj['headings']['part'],
+                                   obj['full_text_excerpt']],
+                    "name": obj['headings']['section'],
+                    "no": obj['hierarchy']['section'],
+                    "type": None,
+                    "url": (
+                        "https://www.ecfr.gov/current/title-11/"
+                        f"chapter-{obj['hierarchy']['chapter']}/"
+                        f"section-{obj['hierarchy']['section']}"
+                    )
+                } for obj in ecfr_results['results']]
 
                 results['regulations'] = regulations
                 results["total_regulations"] = ecfr_results.get('meta', {}).get(
-                                                                'total_count', 0)
+                    'total_count', 0)
                 results["regulations_returned"] = ('3' if results["total_regulations"] > 3
                                                    else results["total_regulations"])
 
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
-        'query': query,
+        'query': original_query,
         'results': results,
         'result_type': result_type,
         'category_order': get_legal_category_order(results, result_type),
@@ -229,23 +240,25 @@ def legal_search(request):
 
 def legal_doc_search_ao(request):
     results = {}
-    query = request.GET.get('search', '')
+    original_query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
 
-    results = api_caller.load_legal_search_results(query, 'advisory_opinions',
+    query, query_exclude = parse_query(original_query)
+
+    results = api_caller.load_legal_search_results(query, query_exclude, 'advisory_opinions',
                                                    offset=offset)
 
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
         'parent': 'legal',
         'results': results,
         'result_type': 'advisory_opinions',
-        'query': query,
+        'query': original_query,
         'social_image_identifier': 'advisory-opinions'
     })
 
 
 def legal_doc_search_mur(request):
-    query = request.GET.get('search', '')
+    original_query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
     limit = request.GET.get('limit', 20)
     case_no = request.GET.get('case_no', '')
@@ -257,6 +270,8 @@ def legal_doc_search_mur(request):
     case_max_close_date = request.GET.get('case_max_close_date', '')
     case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
 
+    query, query_exclude = parse_query(original_query)
+
     # For JS sorting
     sort_dir = ('descending' if sort == '-case_no' or sort == '' or
                 sort == 'null' else 'ascending')
@@ -265,7 +280,9 @@ def legal_doc_search_mur(request):
 
     # Call the function and unpack its return values
     results = api_caller.load_legal_search_results(
-        query, 'murs',
+        query,
+        query_exclude,
+        'murs',
         offset=offset,
         limit=limit,
         case_no=case_no,
@@ -313,7 +330,7 @@ def legal_doc_search_mur(request):
         'case_max_open_date': case_max_open_date,
         'case_min_close_date': case_min_close_date,
         'case_max_close_date': case_max_close_date,
-        'query': query,
+        'query': original_query,
         'social_image_identifier': 'legal',
         'selected_doc_category_ids': case_doc_category_ids,
         'selected_doc_category_names': mur_document_category_names,
@@ -323,7 +340,7 @@ def legal_doc_search_mur(request):
 
 def legal_doc_search_adr(request):
     results = {}
-    query = request.GET.get('search', '')
+    original_query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
     limit = request.GET.get('limit', 20)
     case_no = request.GET.get('case_no', '')
@@ -334,8 +351,12 @@ def legal_doc_search_adr(request):
     case_max_close_date = request.GET.get('case_max_close_date', '')
     case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
 
+    query, query_exclude = parse_query(original_query)
+
     results = api_caller.load_legal_search_results(
-        query, 'adrs',
+        query,
+        query_exclude,
+        'adrs',
         offset=offset,
         limit=limit,
         case_no=case_no,
@@ -378,7 +399,7 @@ def legal_doc_search_adr(request):
         'case_max_open_date': case_max_open_date,
         'case_min_close_date': case_min_close_date,
         'case_max_close_date': case_max_close_date,
-        'query': query,
+        'query': original_query,
         'social_image_identifier': 'legal',
         'selected_doc_category_ids': case_doc_category_ids,
         'selected_doc_category_names': adr_document_category_names,
@@ -388,13 +409,15 @@ def legal_doc_search_adr(request):
 
 def legal_doc_search_af(request):
     results = {}
-    query = request.GET.get('search', '')
+    original_query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
     limit = request.GET.get('limit', 20)
     case_no = request.GET.get('case_no', '')
     af_name = request.GET.get('af_name', '')
+    query, query_exclude = parse_query(original_query)
+
     results = api_caller.load_legal_search_results(
-        query, 'admin_fines', offset=offset, limit=limit, case_no=case_no, af_name=af_name)
+        query, query_exclude, 'admin_fines', offset=offset, limit=limit, case_no=case_no, af_name=af_name)
 
     return render(request, 'legal-search-results-afs.jinja', {
         'parent': 'legal',
@@ -402,7 +425,7 @@ def legal_doc_search_af(request):
         'result_type': 'admin_fines',
         'case_no': case_no,
         'af_name': af_name,
-        'query': query,
+        'query': original_query,
         'social_image_identifier': 'legal',
         'is_loading': True,  # Indicate that the page is loading initially
     })
@@ -412,8 +435,8 @@ def legal_doc_search_regulations(request):
     results = {}
     query = request.GET.get('search', '')
     page = request.GET.get('page', 1)
-    Updated_ecfr_query_string = transform_ecfr_query_string(query)
-    ecfr_results = ecfr_caller.fetch_ecfr_data(Updated_ecfr_query_string,
+    updated_ecfr_query_string = transform_ecfr_query_string(query)
+    ecfr_results = ecfr_caller.fetch_ecfr_data(updated_ecfr_query_string,
                                                page=page)
 
     regulations = [{
@@ -451,7 +474,7 @@ def legal_doc_search_statutes(request):
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
 
-    results = api_caller.load_legal_search_results(query, 'statutes',
+    results = api_caller.load_legal_search_results(query, '', 'statutes',
                                                    offset=offset)
 
     return render(request, 'legal-search-results-statutes.jinja', {
