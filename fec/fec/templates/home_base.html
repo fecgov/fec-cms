@@ -25,7 +25,7 @@
     </div>
     <script>{# Currently checking for window.fetch and Object.assign #}
       var browserIsCapable = ('fetch' in window && 'assign' in Object);
-      if (1 != 2) {
+      if (!browserIsCapable) {
         var browserWarningElement = document.getElementById('browser_warning');
         browserWarningElement.style.display = 'block';
       }
