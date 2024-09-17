@@ -6,11 +6,11 @@
 {% set result_entities = results.get(result_type, []) %}
 
 {% block title %}
-  {% if query %}
+  {%- if query -%}
   Searching {{ document_type_display_name }} for &ldquo;{{ query }}&rdquo;
-  {% else %}
+  {%- else -%}
   Search {{ document_type_display_name }}
-  {% endif %}
+  {%- endif -%}
 {% endblock %}
 
 {% block css %}
