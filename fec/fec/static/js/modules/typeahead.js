@@ -65,7 +65,7 @@ function formatCitationRegulation(result) {
   };
 }
 
-function getUrl(resource) {
+function getUrl_names(resource) {
   return URI(window.API_LOCATION)
     .path([window.API_VERSION, 'names', resource, ''].join('/'))
     .query({
@@ -75,9 +75,9 @@ function getUrl(resource) {
     .readable();
 }
 
-function getUrlCitations(resource) {
+function getUrl_legal(resource) {
   return URI(window.API_LOCATION)
-    .path([window.API_VERSION, 'legal/citation', resource, encodeURIComponent('%QUERY')].join('/'))
+    .path([window.API_VERSION, 'legal', resource, encodeURIComponent('%QUERY')].join('/'))
     .query({
       api_key: window.API_KEY_PUBLIC
     })
@@ -96,7 +96,7 @@ function createEngine(opts) {
 
 const candidateEngine = createEngine({
   remote: {
-    url: getUrl('candidates'),
+    url: getUrl_names('candidates'),
     wildcard: '%QUERY',
     transform: function(response) {
       return _map(response.results, formatCandidate);
@@ -106,7 +106,7 @@ const candidateEngine = createEngine({
 
 const committeeEngine = createEngine({
   remote: {
-    url: getUrl('committees'),
+    url: getUrl_names('committees'),
     wildcard: '%QUERY',
     transform: function(response) {
       return _map(response.results, formatCommittee);
@@ -116,7 +116,7 @@ const committeeEngine = createEngine({
 
 const auditCommitteeEngine = createEngine({
   remote: {
-    url: getUrl('audit_committees'),
+    url: getUrl_names('audit_committees'),
     wildcard: '%QUERY',
     transform: function(response) {
       return _map(response.results, formatAuditCommittee);
@@ -126,7 +126,7 @@ const auditCommitteeEngine = createEngine({
 
 const auditCandidateEngine = createEngine({
   remote: {
-    url: getUrl('audit_candidates'),
+    url: getUrl_names('audit_candidates'),
     wildcard: '%QUERY',
     transform: function(response) {
       return _map(response.results, formatAuditCandidate);
@@ -136,7 +136,17 @@ const auditCandidateEngine = createEngine({
 
 const citationRegulationEngine = createEngine({
   remote: {
-    url: getUrlCitations('regulation'),
+    url: getUrl_legal('citation/regulation'),
+    wildcard: '%QUERY',
+    transform: function(response) {
+      return _map(response.citations, formatCitationRegulation);
+    }
+  }
+});
+
+const citationStatuteEngine = createEngine({
+  remote: {
+    url: getUrl_legal('citation/statute'),
     wildcard: '%QUERY',
     transform: function(response) {
       return _map(response.citations, formatCitationRegulation);
@@ -297,6 +307,43 @@ const regulationDataset = {
   }
 };
 
+const aoRegulatoryCitationDataset = {
+  name: 'aoRegulatoryCitation',
+  display: 'name',
+  limit: 10,
+  source: citationRegulationEngine,
+  templates: {
+    header: '<span class="tt-suggestion__header">Select a citation:</span>',
+    pending:
+      '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
+    notFound: compileHBS(''), // This has to be empty to not show anything
+    suggestion: function(datum) {
+      console.log(datum);
+      return (
+        '<span>' + datum.name + '</span>'
+      );
+    }
+  }
+};
+
+const aoStatutoryCitationDataset = {
+  name: 'aoStatutoryCitation',
+  display: 'name',
+  limit: 10,
+  source: citationStatuteEngine,
+  templates: {
+    header: '<span class="tt-suggestion__header">Select a citation:</span>',
+    pending:
+      '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
+    notFound: compileHBS(''), // This has to be empty to not show anything
+    suggestion: function(datum) {
+      console.log(datum);
+      return (
+        '<span>' + datum.name + '</span>'
+      );
+    }
+  }
+};
 
 export const datasets = {
   candidates: candidateDataset,
@@ -304,6 +351,8 @@ export const datasets = {
   auditCandidates: auditCandidateDataset,
   auditCommittees: auditCommitteeDataset,
   regulations: regulationDataset,
+  aoRegulatoryCitations: aoRegulatoryCitationDataset,
+  aoStatutoryCitations: aoStatutoryCitationDataset,
   allData: [candidateDataset, committeeDataset],
   all: [candidateDataset, committeeDataset, individualDataset, siteDataset, legalDataset]
 };

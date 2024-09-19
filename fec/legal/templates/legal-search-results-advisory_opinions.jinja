@@ -56,11 +56,12 @@
       <div class="combo combo--search--mini">
         <input id="ao_regulatory_citation-filter" type="text" name="ao_regulatory_citation" class="combo__input" value="">
       </div> #}
-      {{ typeahead.field('ao_regulatory_citation', 'Regulatory citation', False, dataset='regulations', allow_text=False) }}
     </div>
 
     <div class="filter">
       <legend class="label">Issue date</legend>
+    {{ typeahead.field('ao_regulatory_citation', 'Regulatory citation', False, dataset='aoRegulatoryCitations', allow_text=False) }}
+    {{ typeahead.field('ao_statutory_citation', 'Statutory citation', False, dataset='aoStatutoryCitations', allow_text=False) }}
       <div class="range range--date js-date-range">
         <div class="range__input range__input--min" data-filter="range">
           <label for="ao_min_issue_date">Beginning</label>
