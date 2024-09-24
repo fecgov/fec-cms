@@ -35,8 +35,9 @@
           Currently serving
         {% endif %}
         </div>
-        {% if self.picture %}
-            <a class="button button--standard button--download u-margin--top" href="{{ commissioner_picture.url }}" download>Download headshot</a>
+        {% if self.picture_download %}
+        {% image self.picture_download original as commissioner_picture_download %}
+            <a class="button button--standard button--download u-margin--top" href="{{ commissioner_picture_download.url }}" download>Download headshot</a>
         {% endif %}
       </div>
 
