@@ -19,7 +19,7 @@ $(function() {
     useExport: true,
     rowCallback: modalRenderRow,
     error400Message:
-      '<p><p>You&#39;re trying to search across multiple time periods. Filter by recipient name or ID, other source details, or image number.</p>',
+      '<p><p>You&#39;re trying to search across multiple time periods. Filter by recipient name or ID, other contributor details, or image number.</p>',
     callbacks: {
       afterRender: modalRenderFactory(donationTemplate)
     }
