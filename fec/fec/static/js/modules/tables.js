@@ -45,6 +45,10 @@ export const browseDOM = '<"panel__main"t>' + '<"results-info"lpi>';
 export const DOWNLOAD_CAP = 500000;
 export const downloadCapFormatted = formatNumber(DOWNLOAD_CAP);
 export const MAX_DOWNLOADS = 5;
+
+/**
+ * @enum {String}
+ */
 export const DOWNLOAD_MESSAGES = {
   recordCap:
     'Use <a href="' +
@@ -155,17 +159,27 @@ export function mapResponse(response) {
   };
 }
 
+/**
+ * Returns the exact value it's given
+ * TODO: Why does this exist?
+ * @param {*} value
+ * @returns value
+ */
 function identity(value) {
   return value;
 }
 
+/** Selector class name for the modal trigger */
 export const MODAL_TRIGGER_CLASS = 'js-panel-trigger';
+
+/** String of html that becomes the 'Toggle details' button */
 export const MODAL_TRIGGER_HTML =
   '<button class="js-panel-button button--panel">' +
   '<span class="u-visually-hidden">Toggle details</span>' +
   '</button>';
 
 /**
+ * Adds MODAL_TRIGGER_CLASS and `row--has-panel` classes to the given element
  * @param {HTMLTableRowElement} row
  */
 export function modalRenderRow(row) {
@@ -304,6 +318,12 @@ export function barsAfterRender(template, api) {
   });
 }
 
+/**
+ * Sets up the 'change' event listener and handler for input and select inside $form.
+ * The change handler halts the event, hides the details, starts the reload and saves e.target as updateChangedEl
+ * @param {JQuery} $form
+ * @param {DataTable.api} api
+ */
 function updateOnChange($form, api) {
   function onChange(e) {
     e.preventDefault();
@@ -453,6 +473,11 @@ OffsetPaginator.prototype.handleResponse = function() {}; //eslint-disable-line 
 
 /**
  * The SeekPaginator class
+ * @function getIndexes
+ * @function setIndexes
+ * @function clearIndexes
+ * @function mapQuery
+ * @function handleResponse
  */
 export function SeekPaginator() {
   this.indexes = {};
@@ -766,6 +791,11 @@ DataTable_FEC.prototype.enableExport = function() {
   }
 };
 
+/**
+ * Called initially and after filter changes
+ * @param {Object} data
+ * @param {Function} callback
+ */
 DataTable_FEC.prototype.fetch = function(data, callback) {
   const self = this;
   self.ensureWidgets();

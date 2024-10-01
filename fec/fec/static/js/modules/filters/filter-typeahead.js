@@ -17,16 +17,34 @@ function slugify(value) {
     .replace(/[^a-z0-9:._-]/gi, '');
 }
 
+/**
+ * Takes a datum object and returns
+ * - its name with ID in parentheses if it has an id or
+ * - its name or
+ * - its id in quotes
+ * @param {Object} datum
+ * @returns {string} `name (id)` or `name` or `"id"`
+ */
 function formatLabel(datum) {
   return datum.name
     ? datum.name + (datum.id ? ' (' + datum.id + ')' : '')
     : '"' + stripQuotes(datum.id) + '"';
 }
 
+/**
+ *
+ * @param {*} value
+ * @returns {string} The slugified given value with `-checkbox` appended to it
+ */
 function formatId(value) {
   return slugify(value) + '-checkbox';
 }
 
+/**
+ *
+ * @param {*} value
+ * @returns {string} A string with the straight double quotes removed
+ */
 function stripQuotes(value) {
   return value.replace(/["]+/g, '');
 }

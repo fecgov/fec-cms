@@ -9,6 +9,11 @@ import { default as URI } from 'urijs';
 import { pageView } from './analytics.js';
 import { sanitizeQueryParams } from './helpers.js';
 
+/**
+ * Takes a list of key/value, runs them through {@linkcode nextUrl()} and sets them to the window.history
+ * @param {Object} params - Object of key/value for query params and their values
+ * @param {Array} fields - Object TODO
+ */
 export function updateQuery(params, fields) {
   var queryString = nextUrl(params, fields);
   if (queryString !== null) {
@@ -33,6 +38,12 @@ export function pushQuery(params, fields) {
   }
 }
 
+/**
+ * Builds a URL… 
+ * @param {Object} params 
+ * @param {Array} fields 
+ * @returns {string} Of…
+ */
 export function nextUrl(params, fields) {
   var query = sanitizeQueryParams(
     URI.parseQuery(window.location.search)

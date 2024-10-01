@@ -16,6 +16,10 @@ import { default as ToggleFilter } from './toggle-filter.js';
 import { default as TypeaheadFilter } from './typeahead-filter.js';
 import { sanitizeQueryParams } from '../helpers.js';
 
+/**
+ * Created by a new FilterPanel (modules/filters/filter-panel.js)
+ * @param {JQuery} elm
+ */
 export default function FilterSet(elm) {
   this.$body = $(elm);
   $(document.body).on('tag:removed', this.handleTagRemoved.bind(this));
@@ -23,6 +27,7 @@ export default function FilterSet(elm) {
   this.$body.on('filters:validation', this.handleValidation.bind(this));
   this.efiling = this.$body.data('efiling-filters') || false;
 
+  /** Array of names of filter/API var name IDs {@example ['committee_id', 'form_line_number']} */
   this.fields = [];
   this.isValid = true;
   this.firstLoad = true;
@@ -133,8 +138,12 @@ FilterSet.prototype.clear = function() {
   });
 };
 
-//This removes the checkboxes in the panel that show whats been selected when you remove the tag from
-//the tags panel at the top of the table
+/**
+ * Removes the checkboxes in the panel that show whats been selected when you remove the tag from
+ * the tags panel at the top of the table
+ * @param {jQuery.event} e
+ * @param {Object} opts - settings object like { key: value } where value is the clicked tag's data-id
+ */
 FilterSet.prototype.handleTagRemoved = function(e, opts) {
   const $input = $(document.getElementById(opts.key));
   if ($input.length > 0) {

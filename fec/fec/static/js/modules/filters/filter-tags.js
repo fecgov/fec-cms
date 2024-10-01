@@ -1,4 +1,12 @@
 
+/**
+ * Builds the html for the FilterTags' tag count header element
+ * @param {Object} value
+ * @param {string} value.resultType - The text to display as `filtered [resultType] for:`, initially ['events'|'results']
+ * @param {string} value.clearResetFiltersClass - Class names for the button
+ * @param {string} value.clearResetFiltersLabel - Text label for the clear/reset button
+ * @returns {string} HTML
+ */
 const template_body = value => `
 <div>
   <div class="row">
@@ -11,10 +19,27 @@ const template_body = value => `
   <ul class="tags">
   </ul>
 </div>`;
+
+/**
+ * Builds the html for the individual filter tags above datatables
+ * @param {Object} value
+ * @param {string} value.key - The value for the data-id parameter, tied to the filter element in the left column
+ * @param {string} value.value - The text label for the tag
+ * @param {string} [value.lineType] - Optional text to appear before value.value
+ * @returns {string} HTML
+ */
 const template_tag = value => `<div data-id="${value.key}" data-removable="true" class="tag__item">${value.lineType || ''}${value.value}
   <button class="button js-close tag__remove"><span class="u-visually-hidden">Remove</span></button>
 </div>`;
 
+/**
+ * Builds the html for the individual _nonremoveable_ filter tags above datatables
+ * @param {Object} value
+ * @param {string} value.key - The value for the data-id parameter, tied to the filter element in the left column
+ * @param {string} value.value - The text label for the tag
+ * @param {[boolean|'true'|'false']} value.removeOnSwitch - Whether the tag should remove itself when its filter is switched off
+ * @returns {string} HTML
+ */
 const template_nonremoveableTag = value => `<div data-id="${value.key}" data-removable="false" data-remove-on-switch="${value.removeOnSwitch}" class="tag__item">
     ${value.value}
 </div>`;
