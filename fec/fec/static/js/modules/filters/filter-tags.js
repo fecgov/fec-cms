@@ -21,10 +21,10 @@ const template_nonremoveableTag = value => `<div data-id="${value.key}" data-rem
 
 /**
  * TagLists are created by modules/tables.js and calendar-page.js
- * @param {*} opts
- * @param {*} opts.resultType
- * @param {*} opts.showResultCount
- * @param {*} opts.tableTitle
+ * @param {Object} opts
+ * @param {string} opts.resultType
+ * @param {boolean} opts.showResultCount
+ * @param {string} opts.tableTitle
  */
 export default function TagList(opts) {
   this.opts = opts;
@@ -71,13 +71,14 @@ export default function TagList(opts) {
 }
 
 /**
- * Called document.body hears filter:added
- * @param {} e
- * @param {} opts
- * @param {} opts.key
- * @param {} opts.name
- * @param {} opts.range
- * @param {} opts.rangeName
+ * Called when document.body hears filter:added
+ * @param {jQuery.Event} e
+ * @param {Object} opts
+ * @param {string} opts.key
+ * @param {string} opts.name - Used for data-tag-category=""
+ * @param {boolean} [opts.range=false] - If true, will use opts.rangename over opts.name
+ * @param {string} [opts.rangeName] - Used as data-tag-category="" if opts.range is true
+ * @param {boolean} [opts.nonremovable=false] - determines which template to use. Default: false
  */
 TagList.prototype.addTag = function(e, opts) {
   var tag = opts.nonremovable
@@ -115,7 +116,7 @@ TagList.prototype.addTag = function(e, opts) {
 
 /**
  * Called from within @see TagList.prototype.addTag
- * @param {} $tagCategory
+ * @param {JQuery} $tagCategory
  * @param {} tag
  * @param {} opts
  * @param {} opts.range
@@ -157,9 +158,9 @@ TagList.prototype.removeTagElement = function($tag, emit) {
  * Called from @see TagList.prototype.removeAllTags
  * Called from @see TagList.prototype.removeTagEvt
  * Called from @see TagList.prototype.addTag
- * @param {} key
- * @param {} emit
- * @param {} forceRemove
+ * @param {string} key
+ * @param {boolean} emit
+ * @param {boolean} forceRemove
  */
 TagList.prototype.removeTag = function(key, emit, forceRemove) {
   var $tag = this.$list.find('[data-id="' + key + '"]');

@@ -102,7 +102,7 @@ Handlebars.registerHelper('datetime', datetime);
  * Compares two strings with an optional
  * @param {string} string1 - First string to compare
  * @param {string} string2 - Second string to compare
- * @param {Boolean} [caseSensitive=false] - Whether to compare capitalization
+ * @param {boolean} [caseSensitive=false] - Whether to compare capitalization
  * @returns true if they match, false if they don't
  */
 function stringsMatch(string1, string2, caseSensitive=false) {
@@ -549,7 +549,7 @@ export function missingDataReason(dataType) {
 
 /**
  * Takes a jQuery element and returns whether or not it's in the viewport
- * @param {jQuery} $elm - the element to check
+ * @param {JQuery} $elm - the element to check
  * @return {bool} - If the element is in the viewport
  */
 export function isInViewport($elm) {

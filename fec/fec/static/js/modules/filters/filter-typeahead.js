@@ -19,7 +19,7 @@ function slugify(value) {
 
 function formatLabel(datum) {
   return datum.name
-    ? datum.name + (datum.id ?' (' + datum.id + ')' : '')
+    ? datum.name + (datum.id ? ' (' + datum.id + ')' : '')
     : '"' + stripQuotes(datum.id) + '"';
 }
 

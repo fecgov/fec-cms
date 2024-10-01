@@ -522,11 +522,11 @@ const defaultCallbacks = {
 };
 
 /**
- * The FEC's class of DataTable (the `_FEC` suffix is to differentiate between
+ * The FEC's class of DataTable (the `_FEC` suffix is to differentiate between this and
  * datatables v1's '.Datatable' jQuery plugin and
- * datatables v2's official DataTable object.
+ * datatables v2's official DataTable object)
  * @param {*} selector
- * @param {*} opts
+ * @param {Object} opts
  */
 export function DataTable_FEC(selector, opts) {
   opts = opts || {};
@@ -623,37 +623,37 @@ DataTable_FEC.prototype.checkFromQuery = function(){
          }
       });
 
-    // Put 0-second, set-timeout on receipts/disbursements datatables so checkoxes are availale to check...
-    // ...after the two filter panels are loaded
-    if ('data_type' in queryFields){
+  // Put 0-second, set-timeout on receipts/disbursements datatables so checkboxes are available to check…
+  // …after the two filter panels are loaded
+  if ('data_type' in queryFields) {
     setTimeout(function() {
-      // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
-      // ...if they are not already checked
+      // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()…
+      // …if they are not already checked
       for (let box of queryBoxes) {
         if (!($(box).is(':checked'))) {
-              $(box).prop('checked', true).change(); // TODO: jQuery deprecation
+          $(box).prop('checked', true).change(); // TODO: jQuery deprecation
         }
-       }
-      }, 0);
-
-     // No Set-timeout needed on datatables without two filter panels...
-     // ... Also it causes a noticeable intermittent time-lag while populating table on these pages
-     } else {
-      // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
-      // ...if they are not already checked
-      for (let box of queryBoxes) {
-        if (!($(box).is(':checked'))) {
-              $(box).prop('checked', true).change(); // TODO: jQuery deprecation
-        }
-       }
       }
+    }, 0);
+
+    // No Set-timeout needed on datatables without two filter panels…
+    // …Also it causes a noticeable intermittent time-lag while populating table on these pages
+    } else {
+    // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
+    // ...if they are not already checked
+    for (let box of queryBoxes) {
+      if (!($(box).is(':checked'))) {
+        $(box).prop('checked', true).change(); // TODO: jQuery deprecation
+      }
+    }
+  }
 
   // Remove the loading label GIF on the filter panel
   $('button.is-loading, label.is-loading').removeClass('is-loading');
 };
 
 DataTable_FEC.prototype.initFilters = function() {
-  // Set `this.filterSet` before instantiating the nested `DataTable` so that
+  // Set `this.filterSet` before instantiating the nested `DataTable_FEC` so that
   // filters are available on fetching initial data
   if (this.opts.useFilters) {
     const tagList = new TagList({
