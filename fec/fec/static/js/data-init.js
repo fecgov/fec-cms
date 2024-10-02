@@ -5,7 +5,7 @@
 // Implementing a polyfill for js native WeakMap
 // in order to patch functionality in an included library
 // require('es6-weak-map/implement');
-import { default as A11yDialog } from 'a11y-dialog';
+
 import { Accordion } from 'aria-accordion/src/accordion.js';
 import { default as Sticky } from 'component-sticky/index.js';
 
@@ -67,16 +67,6 @@ $(function() {
   // Initialize search
   $('.js-search').each(function() {
     new Search($(this));
-  });
-
-  $('.js-modal').each(function() {
-    new A11yDialog(this);
-    this.addEventListener('dialog:show', function() {
-      $('body').css('overflow', 'hidden');
-    });
-    this.addEventListener('dialog:hide', function() {
-      $('body').css('overflow', 'scroll');
-    });
   });
 
   // Initialize cycle selects

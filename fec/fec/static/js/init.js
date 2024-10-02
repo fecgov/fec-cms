@@ -3,7 +3,7 @@
  * If present, this file initializes…
  * .js-accordion, .js-dropdown, .js-form-nav, .js-post-content, .js-scroll, .js-sticky-side
  */
-import { default as A11yDialog } from 'a11y-dialog';
+
 import { Accordion } from 'aria-accordion/src/accordion.js';
 import { default as Sticky } from 'component-sticky/index.js';
 
@@ -74,16 +74,5 @@ $(function() {
     }
     $p.nextAll().remove();
   });
-
-  $('.js-modal').each(function() {
-  new A11yDialog(this);
-  this.addEventListener('dialog:show', function() {
-    $('body').css('overflow', 'hidden');
-    });
-  this.addEventListener('dialog:hide', function() {
-    $('body').css('overflow', 'scroll');
-    });
-  });
-
 });
 

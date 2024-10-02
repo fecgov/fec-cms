@@ -3,6 +3,7 @@
  */
 import Glossary from 'glossary-panel/src/glossary.js';
 
+import { default as A11yDialog } from 'a11y-dialog';
 import { default as terms } from './data/terms.json' assert { type: 'json' };
 import Feedback from './modules/feedback.js';
 import SiteNav from './modules/site-nav.js';
@@ -56,4 +57,14 @@ $(function() {
   window.submitFeedback = function(token) {
     feedbackWidget.submit(token);
   };
+
+  $('.js-modal').each(function() {
+    new A11yDialog(this);
+    this.addEventListener('dialog:show', function() {
+      $('body').css('overflow', 'hidden');
+      });
+    this.addEventListener('dialog:hide', function() {
+      $('body').css('overflow', 'scroll');
+      });
+    });
 });
