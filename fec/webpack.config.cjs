@@ -68,7 +68,7 @@ const mainEntries = {
     dependOn: 'global' // Any chunks for data-init will also expect global's chunks to exist
   },
   'legal-search-ao': {
-    import: `${js}/legal/legal-search-ao.js`,
+    import: `${js}/legal-search-ao.js`,
     filename: 'legal-search-ao-[contenthash].js',
     dependOn: 'data-init'
   },
