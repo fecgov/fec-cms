@@ -50,6 +50,7 @@ const template_nonremoveableTag = value => `<div data-id="${value.key}" data-rem
  * @param {string} opts.resultType
  * @param {boolean} opts.showResultCount
  * @param {string} opts.tableTitle
+ * @param {string} [opts.existingFilterTagsElement]
  */
 export default function TagList(opts) {
   this.opts = opts;
@@ -62,17 +63,22 @@ export default function TagList(opts) {
     (this.opts.tableTitle == 'Receipts' ||
       this.opts.tableTitle == 'Individual contributions');
 
-  this.$body = $(
-    template_body({
-      resultType: this.opts.resultType,
-      clearResetFiltersLabel: shouldResetFilters
-        ? 'Reset filters'
-        : 'Clear all filters',
-      clearResetFiltersClass: shouldResetFilters
-        ? 'js-filter-reset'
-        : 'js-filter-clear'
-    })
-  );
+  // If we're being told to use a specific element for the filter tags, do so
+  if (opts.existingFilterTagsElement) this.$body = $(opts.existingFilterTagsElement);
+  // Otherwise, create one
+  else {
+    this.$body = $(
+      template_body({
+        resultType: this.opts.resultType,
+        clearResetFiltersLabel: shouldResetFilters
+          ? 'Reset filters'
+          : 'Clear all filters',
+        clearResetFiltersClass: shouldResetFilters
+          ? 'js-filter-reset'
+          : 'js-filter-clear'
+      })
+    );
+  }
 
   this.$list = this.$body.find('.tags');
   this.$resultType = this.$body.find('.js-result-type');
@@ -113,16 +119,11 @@ TagList.prototype.addTag = function(e, opts) {
   const $tagCategory = this.$list.find('[data-tag-category="' + name + '"]');
   this.removeTag(opts.key, false);
 
+
   if ($tagCategory.length > 0) {
     this.addTagItem($tagCategory, tag, opts);
   } else {
-    this.$list.append(
-      '<li data-tag-category="' +
-        name +
-        '" class="tag__category">' +
-        tag +
-        '</li>'
-    );
+    this.$list.append(`<li data-tag-category="${name}" class="tag__category">${tag}</li>`);
   }
 
   if (this.$list.find('.tag__item').length > 0) {
@@ -164,7 +165,7 @@ TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
  * @param {} emit
  */
 TagList.prototype.removeTagElement = function($tag, emit) {
-  // This handles the actual removal of the DOM elementrs
+  // This handles the actual removal of the DOM elements
   const $tagCategory = $tag.parent();
   const key = $tag.data('id');
   if (emit) {
