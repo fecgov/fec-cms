@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import Http404
 
 import datetime
@@ -239,6 +239,10 @@ def legal_search(request):
 
 
 def legal_doc_search_ao(request):
+    # If there are no params passed, default to Final Opinions
+    if len(request.GET) == 0:
+        return redirect('/data/legal/search/advisory-opinions/?ao_category=F')
+
     results = {}
     original_query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
