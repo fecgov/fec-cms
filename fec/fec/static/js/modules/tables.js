@@ -335,10 +335,13 @@ function updateOnChange($form, api) {
   $form.on('change', 'input,select', _debounce(onChange, 250));
 }
 
+/**
+ * on filter change update:
+ * - loading/success status
+ * - count change message
+ * @param {number} changeCount
+ */
 function filterSuccessUpdates(changeCount) {
-  // on filter change update:
-  // - loading/success status
-  // - count change message
 
   // check if there is a changed form element
   if (updateChangedEl) {
@@ -552,6 +555,7 @@ const defaultCallbacks = {
  * datatables v2's official DataTable object)
  * @param {*} selector
  * @param {Object} opts
+ * @property {[OffsetPaginator|SeekPaginator]} this.paginator
  */
 export function DataTable_FEC(selector, opts) {
   opts = opts || {};

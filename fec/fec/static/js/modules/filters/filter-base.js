@@ -63,6 +63,12 @@ export default function Filter(elm) {
   }
 }
 
+/**
+ * Sets its own value, makes loadedOnce true, returns self.
+ * Called at the end of FilterSet.activate()
+ * @param {Object} query - An object of query parameters
+ * @returns {Filter} This particular Filter
+ */
 Filter.prototype.fromQuery = function(query) {
   this.setValue(query[this.name]);
   this.loadedOnce = true;

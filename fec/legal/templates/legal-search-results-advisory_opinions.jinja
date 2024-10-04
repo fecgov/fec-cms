@@ -212,7 +212,7 @@
     </div>
   </div>
 </div>
-{% endblock %}
+{% endblock %}{# close message block #}
 
 {% block results %}
   {% with results=results %}
@@ -224,7 +224,7 @@
   {% with results=results %}
     {% include 'partials/legal-pagination.jinja' %}
   {% endwith %}
-{% endblock %}
+{% endblock %}{# close results block #}
 
 {% block scripts %}
   {{ tags_for_js_chunks('legal-search-ao.js', '')|safe }}

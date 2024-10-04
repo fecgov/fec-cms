@@ -54,6 +54,11 @@ FilterSet.prototype.buildFilter = function($elm) {
   return new F($elm);
 };
 
+/**
+ * Called by {@link activateAll}
+ * @param {JQuery} $selector - jQuery list of elements
+ * @returns 
+ */
 FilterSet.prototype.activate = function($selector) {
   const self = this;
   const query = sanitizeQueryParams(
@@ -104,6 +109,10 @@ FilterSet.prototype.activateDataType = function() {
   this.activate($filter);
 };
 
+/**
+ * Activate the FilterSet, looking for every .js-filter
+ * @returns {FilterSet}
+ */
 FilterSet.prototype.activateAll = function() {
   // If the panel uses efiling filters, activate the data type filter
   // and activate the others when necessary
@@ -115,6 +124,10 @@ FilterSet.prototype.activateAll = function() {
   return this;
 };
 
+/**
+ * Get an id/value list of every Filter id that has a value
+ * @returns {Object}
+ */
 FilterSet.prototype.serialize = function() {
   return _reduce(
     this.$body.find('input,select').serializeArray(),

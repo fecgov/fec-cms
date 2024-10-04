@@ -370,6 +370,12 @@ export function buildAppUrl(path, query) {
     .toString();
 }
 
+/**
+ * Builds a URL from API_LOCATION, path, query, and api_key
+ * @param {string} path
+ * @param {string} query
+ * @returns {string} The final URL
+ */
 export function buildUrl(path, query) {
   const uri = URI(API_LOCATION)
     .path(Array.prototype.concat(API_VERSION, path, '').join('/'))
@@ -561,8 +567,12 @@ export function isInViewport($elm) {
   }
 }
 
-// Sanitizes a single value by removing HTML tags and whitelisting valid
-// characters.
+/**
+ * Sanitizes a single value by removing HTML tags and whitelisting valid characters.
+ * Sanitizes a string or an Array of strings. (and likely numbers)
+ * @param {[string|string[]]} value
+ * @returns {[string|string[]]} A sanitized single (or array of) string(s), in line with what it's fed
+ */
 export function sanitizeValue(value) {
   let validCharactersRegEx = /[^a-z0-9-',.()\s]/gi;
 
@@ -582,7 +592,11 @@ export function sanitizeValue(value) {
   return value;
 }
 
-// Sanitizes all parameters retrieved from the query string in the URL.
+/**
+ * Sanitizes all parameters retrieved from the query string in the URL.
+ * @param {Object} query
+ * @returns {string}
+ */
 export function sanitizeQueryParams(query) {
   let param;
 

@@ -1,6 +1,9 @@
 
 import { default as Filter } from './filter-base.js';
 
+/**
+ * @param {JQuery} elm
+ */
 export default function CheckboxFilter(elm) {
   Filter.call(this, elm);
   this.removable = this.$elm.data('removable') || false;
@@ -16,6 +19,9 @@ export default function CheckboxFilter(elm) {
 CheckboxFilter.prototype = Object.create(Filter.prototype);
 CheckboxFilter.constructor = CheckboxFilter;
 
+/**
+ * @param {jQuery.Event} e
+ */
 CheckboxFilter.prototype.handleChange = function(e) {
   const $input = $(e.target);
   const id = $input.attr('id');

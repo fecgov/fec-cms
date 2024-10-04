@@ -2,6 +2,7 @@ import { default as FilterSet } from './filter-set.js';
 import { removeTabindex, restoreTabindex } from '../accessibility.js';
 import { BREAKPOINTS, getWindowWidth, isLargeScreen } from '../helpers.js';
 
+/** @enum */
 const defaultOptions = {
   body: '.filters',
   content: '.filters__content',
@@ -11,6 +12,16 @@ const defaultOptions = {
   toggle: '.js-filter-toggle'
 };
 
+/**
+ * Powers the left-hand columns of filters
+ * @param {Object} [options=defaultOptions]
+ * @param {string} [options.body]
+ * @param {string} [options.content]
+ * @param {string} [options.filterHeader]
+ * @param {string} [options.focus]
+ * @param {string} [options.form]
+ * @param {string} [options.toggle]
+ */
 export default function FilterPanel(options) {
   this.isOpen = false;
   this.options = Object.assign(defaultOptions, options);
@@ -48,7 +59,7 @@ FilterPanel.prototype.show = function(focus) {
   restoreTabindex(this.$form);
   $('body').addClass('is-showing-filters');
   this.isOpen = true;
-  // Don't focus on the first filter unless explicitly intended to
+  // Don't focus on the first unless explicitly intended to
   // Prevents the first filter from being focused on initial page load
   if (focus) {
     this.$body
