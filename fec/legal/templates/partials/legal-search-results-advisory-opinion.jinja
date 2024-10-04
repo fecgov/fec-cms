@@ -1,9 +1,9 @@
 <div class="panel__main legal-search-results">
   <div class="overlay is-loading" {% if is_loading %}style="display:block;"{% else %}style="display:none;"{% endif %}></div>
-  <table class="simple-table simple-table--display">
+  <table id="results" class="simple-table simple-table--display">
     <thead>
       <tr class="simple-table__header">
-        <th class="simple-table__header-cell cell--15">Case</th>
+        <th class="simple-table__header-cell cell--15" data-sort="ao_no">Case</th>
         <th class="simple-table__header-cell cell--15">Date issued</th>
         <th class="simple-table__header-cell">Summary</th>
         <th class="simple-table__header-cell">This opinion is cited by these later opinions</th>
