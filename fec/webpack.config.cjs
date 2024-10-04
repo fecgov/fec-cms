@@ -220,40 +220,6 @@ module.exports = [
       chunkLoading: 'jsonp'
     }
   },
-  // {
-  //   // LEGAL ENTRIES configuration
-  //   name: 'legal',
-  //   entry: {
-  //     'legal-app': `${js}/legal/LegalApp.cjs`
-  //   },
-  //   output: {
-  //     filename: '[name]-[contenthash].js',
-  //     path: path.resolve(__dirname, './dist/fec/static/js')
-  //   },
-  //   devtool: mode == 'production' ? sourceMapType_prod : sourceMapType,
-  //   plugins: [
-  //     new webpack.DefinePlugin({
-  //       context: {}
-  //     }),
-  //     new webpack.ProvidePlugin({
-  //       $: 'jquery',
-  //       jQuery: 'jquery'
-  //     }),
-  //     sharedManifestPlugin
-  //   ],
-  //   module: {
-  //     rules: [
-  //       {
-  //         test: /\.(cjs|js)$/,
-  //         exclude: /node_modules/,
-  //         loader: 'babel-loader',
-  //         options: {
-  //           presets: ['@babel/preset-env', '@babel/preset-react']
-  //         }
-  //     }
-  //     ]
-  //   }
-  // },
   {
     // DRAFTAIL ENTRY configuration
     name: 'draftail',
