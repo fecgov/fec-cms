@@ -247,7 +247,7 @@ def legal_doc_search_ao(request):
     original_query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
     limit = request.GET.get('limit', 20)
-    ao_no = request.GET.get('ao_no', '')
+    ao_no = request.GET.getlist('ao_no', [])
     ao_requestor = request.GET.get('ao_requestor', '')
     ao_is_pending = request.GET.get('ao_is_pending', '')
     ao_min_issue_date = request.GET.get('ao_min_issue_date', '')
