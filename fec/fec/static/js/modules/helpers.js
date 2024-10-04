@@ -371,7 +371,7 @@ export function buildAppUrl(path, query) {
 }
 
 export function buildUrl(path, query) {
-  let uri = URI(API_LOCATION)
+  const uri = URI(API_LOCATION)
     .path(Array.prototype.concat(API_VERSION, path, '').join('/'))
     .addQuery({ api_key: API_KEY_PUBLIC });
 

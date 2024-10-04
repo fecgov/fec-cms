@@ -15,7 +15,7 @@ import { sanitizeQueryParams } from './helpers.js';
  * @param {Array} fields - Object TODO
  */
 export function updateQuery(params, fields) {
-  var queryString = nextUrl(params, fields);
+  const queryString = nextUrl(params, fields);
   if (queryString !== null) {
     window.history.replaceState(
       params,
@@ -45,7 +45,7 @@ export function pushQuery(params, fields) {
  * @returns {string} Of…
  */
 export function nextUrl(params, fields) {
-  var query = sanitizeQueryParams(
+  const query = sanitizeQueryParams(
     URI.parseQuery(window.location.search)
   );
   if (!compareQuery(query, params, fields)) {

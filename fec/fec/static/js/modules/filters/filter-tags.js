@@ -57,7 +57,7 @@ export default function TagList(opts) {
   // Resetting filters will re-apply two-year limitations, like when users first land on the page.
   // Right now we're only applying the two-year filters for Receipts and Individual Contributions
   // Otherwise, we'll leave the functionality as 'Clear all filters'
-  var shouldResetFilters =
+  const shouldResetFilters =
     this.opts &&
     (this.opts.tableTitle == 'Receipts' ||
       this.opts.tableTitle == 'Individual contributions');
@@ -106,11 +106,11 @@ export default function TagList(opts) {
  * @param {boolean} [opts.nonremovable=false] - determines which template to use. Default: false
  */
 TagList.prototype.addTag = function(e, opts) {
-  var tag = opts.nonremovable
+  const tag = opts.nonremovable
     ? template_nonremoveableTag(opts)
     : template_tag(opts);
-  var name = opts.range ? opts.rangeName : opts.name;
-  var $tagCategory = this.$list.find('[data-tag-category="' + name + '"]');
+  const name = opts.range ? opts.rangeName : opts.name;
+  const $tagCategory = this.$list.find('[data-tag-category="' + name + '"]');
   this.removeTag(opts.key, false);
 
   if ($tagCategory.length > 0) {
@@ -147,7 +147,7 @@ TagList.prototype.addTag = function(e, opts) {
  * @param {} opts.range
  */
 TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
-  var rangeClass = 'tag__category__range--' + opts.rangeName;
+  const rangeClass = 'tag__category__range--' + opts.rangeName;
 
   if (opts.range == 'min') {
     $tagCategory.addClass(rangeClass).prepend(tag);
@@ -165,8 +165,8 @@ TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
  */
 TagList.prototype.removeTagElement = function($tag, emit) {
   // This handles the actual removal of the DOM elementrs
-  var $tagCategory = $tag.parent();
-  var key = $tag.data('id');
+  const $tagCategory = $tag.parent();
+  const key = $tag.data('id');
   if (emit) {
     $tag.trigger('tag:removed', [{ key: key }]);
   }
@@ -188,7 +188,7 @@ TagList.prototype.removeTagElement = function($tag, emit) {
  * @param {boolean} forceRemove
  */
 TagList.prototype.removeTag = function(key, emit, forceRemove) {
-  var $tag = this.$list.find('[data-id="' + key + '"]');
+  const $tag = this.$list.find('[data-id="' + key + '"]');
   if ($tag.length > 0) {
     // If the tag exists, remove the element if it's removable
     if ($tag.attr('data-removable') !== 'false') {
@@ -207,7 +207,7 @@ TagList.prototype.removeTag = function(key, emit, forceRemove) {
 
   // Update the text display
   if (this.$list.find('.tag__item').length === 0) {
-    var text = this.opts.emptyText ? this.opts.emptyText : this.opts.resultType;
+    const text = this.opts.emptyText ? this.opts.emptyText : this.opts.resultType;
     this.$resultType.html(text);
     this.$list.attr('aria-hidden', true);
   }
@@ -229,12 +229,12 @@ TagList.prototype.removeAllTags = function(e, opts, emit) {
     (!opts || !opts.fromFilterSet)
   ) {
     // Set reset link based on page url
-    var url = 'receipts/';
+    let url = 'receipts/';
     if (window.location.href.indexOf('individual-contributions') !== -1) {
       url = url + 'individual-contributions/';
     }
 
-    var resetLink =
+    const resetLink =
       '/data/' +
       url +
       '?data_type=processed&two_year_transaction_period=' +
@@ -247,8 +247,8 @@ TagList.prototype.removeAllTags = function(e, opts, emit) {
     window.location.href = resetLink;
   } else {
     // Clear by removing tags for all other datatables
-    var self = this;
-    var forceRemove = opts.forceRemove || false;
+    const self = this;
+    const forceRemove = opts.forceRemove || false;
     this.$list.find('[data-removable]').each(function() {
       self.removeTag($(this).data('id'), true, forceRemove);
     });
@@ -300,7 +300,7 @@ TagList.prototype.removeTagEvt = function(e, opts) {
  * @param {} e
  */
 TagList.prototype.removeTagDom = function(e) {
-  var key = $(e.target)
+  const key = $(e.target)
     .closest('.tag__item')
     .data('id');
   this.removeTag(key, true);
@@ -314,10 +314,10 @@ TagList.prototype.removeTagDom = function(e) {
  * @param {} opts.nonremovable
  */
 TagList.prototype.renameTag = function(e, opts) {
-  var tag = opts.nonremovable
+  const tag = opts.nonremovable
     ? template_nonremoveableTag(opts)
     : template_tag(opts);
-  var $tag = this.$list.find('[data-id="' + opts.key + '"]');
+  const $tag = this.$list.find('[data-id="' + opts.key + '"]');
   if ($tag.length) {
     $tag.replaceWith(tag);
   }
@@ -330,7 +330,7 @@ TagList.prototype.renameTag = function(e, opts) {
  * @param {} opts.key
  */
 TagList.prototype.disableTag = function(e, opts) {
-  var $tag = this.$list.find('[data-id="' + opts.key + '"]');
+  const $tag = this.$list.find('[data-id="' + opts.key + '"]');
   $tag.closest('.tag__category').hide();
 };
 
@@ -341,6 +341,6 @@ TagList.prototype.disableTag = function(e, opts) {
  * @param {} opts.key
  */
 TagList.prototype.enableTag = function(e, opts) {
-  var $tag = this.$list.find('[data-id="' + opts.key + '"]');
+  const $tag = this.$list.find('[data-id="' + opts.key + '"]');
   $tag.closest('.tag__category').show();
 };

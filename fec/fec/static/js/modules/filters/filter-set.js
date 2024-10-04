@@ -61,7 +61,7 @@ FilterSet.prototype.activate = function($selector) {
   );
   const filters = _chain($selector)
     .map(function(elm) {
-      var filter = self.buildFilter($(elm)); // .fromQuery(query);
+      const filter = self.buildFilter($(elm)); // .fromQuery(query);
       return [filter.name, filter];
     })
     .object()

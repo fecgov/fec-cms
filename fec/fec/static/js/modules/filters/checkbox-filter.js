@@ -17,13 +17,11 @@ CheckboxFilter.prototype = Object.create(Filter.prototype);
 CheckboxFilter.constructor = CheckboxFilter;
 
 CheckboxFilter.prototype.handleChange = function(e) {
-  var $input = $(e.target);
-  var id = $input.attr('id');
-  var loadedOnce, eventName;
-
-  var $label = this.$elm.find('label[for="' + id + '"]');
-  loadedOnce = $input.data('loaded-once') || false;
-  eventName = $input.is(':checked') ? 'filter:added' : 'filter:removed';
+  const $input = $(e.target);
+  const id = $input.attr('id');
+  const $label = this.$elm.find('label[for="' + id + '"]');
+  const loadedOnce = $input.data('loaded-once') || false;
+  const eventName = $input.is(':checked') ? 'filter:added' : 'filter:removed';
 
   if (loadedOnce) {
     $label.addClass('is-loading');
@@ -50,7 +48,7 @@ CheckboxFilter.prototype.handleChange = function(e) {
 };
 
 CheckboxFilter.prototype.removeCheckbox = function(e, opts) {
-  var $input = $(e.target);
+  let $input = $(e.target);
 
   // tag removal
   if (opts) {
@@ -62,7 +60,7 @@ CheckboxFilter.prototype.removeCheckbox = function(e, opts) {
 
 // "Clear all filters" will remove unchecked checkboxes
 CheckboxFilter.prototype.handleClearFilters = function() {
-  var self = this;
+  const self = this;
   this.$elm.find('input:checkbox:not(:checked)').each(function() {
     self.removeCheckbox({ target: this });
   });

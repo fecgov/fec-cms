@@ -60,7 +60,7 @@ FilterPanel.prototype.show = function(focus) {
 
 FilterPanel.prototype.hide = function() {
   if (!isLargeScreen()) {
-    var top = this.$toggle.outerHeight() + this.$toggle.position().top;
+    const top = this.$toggle.outerHeight() + this.$toggle.position().top;
     this.$content.css('top', top);
   }
   this.$body.removeClass('is-open');
@@ -85,7 +85,7 @@ FilterPanel.prototype.handleAddEvent = function(e, opts) {
     return;
   }
 
-  var filterCount = this.$filterHeader.find('.filter-count');
+  const filterCount = this.$filterHeader.find('.filter-count');
 
   if (filterCount.html()) {
     filterCount.html(parseInt(filterCount.html(), 10) + 1);
@@ -99,7 +99,7 @@ FilterPanel.prototype.handleRemoveEvent = function(e, opts) {
     return;
   }
 
-  var filterCount = this.$filterHeader.find('.filter-count');
+  const filterCount = this.$filterHeader.find('.filter-count');
 
   if (filterCount.html() === '1') {
     filterCount.remove();
