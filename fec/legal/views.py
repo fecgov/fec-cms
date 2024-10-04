@@ -288,7 +288,7 @@ def legal_doc_search_ao(request):
         "S": "Commissioner Statements"
     }
 
-    # Define AO requestor types dicitionary
+    # Define AO requestor types dictionary
     ao_requestor_types = {
         "0": "Any",
         "1": "Federal candidate/candidate committee/officeholder",

@@ -12,7 +12,7 @@ const ID_PATTERN = /^\w{9}$/;
 
 function slugify(value) {
   return value
-    .trim() // TODO: jQuery deprecation
+    .trim()
     .replace(/\s+/g, '-')
     .replace(/[^a-z0-9:._-]/gi, '');
 }
@@ -88,11 +88,7 @@ export default function FilterTypeahead(selector, dataset, allowText) {
   this.$selected = this.$elm.find('.dropdown__selected');
 
   this.$elm.on('change', 'input[type="text"]', this.handleChange.bind(this));
-  this.$elm.on(
-    'change',
-    'input[type="checkbox"]',
-    this.handleCheckbox.bind(this)
-  );
+  this.$elm.on('change', 'input[type="checkbox"]', this.handleCheckbox.bind(this));
   this.$elm.on('click', '.dropdown__remove', this.removeCheckbox.bind(this));
 
   this.$elm.on('mouseenter', '.tt-suggestion', this.handleHover.bind(this));
@@ -140,7 +136,6 @@ FilterTypeahead.prototype.setFirstItem = function() {
 
 FilterTypeahead.prototype.handleSelect = function(e, datum) {
   let identifier = datum.id || datum.name;
-  console.log('handleSelect:', e, ' datum: ', datum, 'id:', identifier);
 
   const id = formatId(identifier);
   this.appendCheckbox({
@@ -222,7 +217,6 @@ FilterTypeahead.prototype.handleHover = function() {
 };
 
 FilterTypeahead.prototype.handleSubmit = function(e) {
-  console.log('handleSubmit:' , e,' datum: ', this.datum, 'allowT:', this.allowText);
   if (this.datum) {
     this.handleSelect(e, this.datum);
   } else if (!this.datum && !this.allowText) {

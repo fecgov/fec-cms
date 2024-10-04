@@ -299,7 +299,6 @@ const regulationDataset = {
       '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
     notFound: compileHBS(''), // This has to be empty to not show anything
     suggestion: function(datum) {
-      console.log(datum);
       return (
         '<span>' + datum.name + '</span>'
       );
@@ -318,7 +317,6 @@ const aoRegulatoryCitationDataset = {
       '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
     notFound: compileHBS(''), // This has to be empty to not show anything
     suggestion: function(datum) {
-      console.log(datum);
       return (
         '<span>' + datum.name + '</span>'
       );
@@ -337,7 +335,6 @@ const aoStatutoryCitationDataset = {
       '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
     notFound: compileHBS(''), // This has to be empty to not show anything
     suggestion: function(datum) {
-      console.log(datum);
       return (
         '<span>' + datum.name + '</span>'
       );

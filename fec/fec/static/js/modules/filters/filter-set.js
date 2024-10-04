@@ -71,10 +71,12 @@ FilterSet.prototype.activate = function($selector) {
     })
     .object()
     .value();
-    const fields = _chain(filters)
+
+  const fields = _chain(filters)
     .pluck('fields')
     .flatten()
     .value();
+  
 
   // Activate each filter
   _each(filters, function(filter) {
@@ -83,6 +85,7 @@ FilterSet.prototype.activate = function($selector) {
 
   // Store all field key-values in this.fields and return the filters object
   this.fields = this.fields.concat(fields);
+
   return filters;
 };
 

@@ -46,9 +46,7 @@ export const DOWNLOAD_CAP = 500000;
 export const downloadCapFormatted = formatNumber(DOWNLOAD_CAP);
 export const MAX_DOWNLOADS = 5;
 
-/**
- * @enum {String}
- */
+/** @enum {string} */
 export const DOWNLOAD_MESSAGES = {
   recordCap:
     'Use <a href="' +
@@ -174,9 +172,7 @@ export const MODAL_TRIGGER_CLASS = 'js-panel-trigger';
 
 /** String of html that becomes the 'Toggle details' button */
 export const MODAL_TRIGGER_HTML =
-  '<button class="js-panel-button button--panel">' +
-  '<span class="u-visually-hidden">Toggle details</span>' +
-  '</button>';
+  `<button class="js-panel-button button--panel"><span class="u-visually-hidden">Toggle details</span></button>`;
 
 /**
  * Adds MODAL_TRIGGER_CLASS and `row--has-panel` classes to the given element
@@ -462,6 +458,7 @@ function filterSuccessUpdates(changeCount) {
 export function OffsetPaginator() {/* */}
 
 /**
+ *
  * @param {*} data
  * @returns Object with number values for `per_page` and `page`
  */
@@ -567,6 +564,9 @@ export function DataTable_FEC(selector, opts) {
   this.hasWidgets = null;
   this.filters = null;
   this.$widgets = $(DATA_WIDGETS);
+  this.filterPanel = null;
+  this.filterSet = null;
+
   this.initFilters();
 
   const Paginator = this.opts.paginator || OffsetPaginator;
@@ -624,33 +624,33 @@ DataTable_FEC.prototype.parseParams = function(querystring){
 };
 
 // Activate checkbox filter fields that filterSet.js cannot find to activate (see committee_types.jinja)
-DataTable_FEC.prototype.checkFromQuery = function(){
-    // Create a variable representing the querystring key/vals as an object
-    const queryFields = this.parseParams(this.getVars());
-    // Create an array to hold checkbox html elements
-    const queryBoxes = [];
-    // Iterate the key/vals of queryFields
-    $.each(queryFields, function(key, val){
-      // Create a variable for matching checkbox
-      let queryBox;
-      // Handle val as array
-      if (Array.isArray(val)) {
-          // iterate the val array
-          val.forEach(i => {
-            // Find matching checkboxes
-            queryBox = $(`input:checkbox[name="${key}"][value="${i}"]`);
-            // Push matching checkboxes to the  array
-            queryBoxes.push(queryBox);
-          });
-        }
-        // Handle singular val
-        else {
-          // find matching checkbox
-          queryBox = $(`input:checkbox[name="${key}"][value="${val}"]`);
-          // Push matching checkbox to the array
-          queryBoxes.push(queryBox);
-         }
+DataTable_FEC.prototype.checkFromQuery = function() {
+  // Create a variable representing the querystring key/vals as an object
+  const queryFields = this.parseParams(this.getVars());
+  // Create an array to hold checkbox html elements
+  const queryBoxes = [];
+  // Iterate the key/vals of queryFields
+  $.each(queryFields, function(key, val) {
+    // Create a variable for matching checkbox
+    let queryBox;
+    // Handle val as array
+    if (Array.isArray(val)) {
+      // iterate the val array
+      val.forEach(i => {
+        // Find matching checkboxes
+        queryBox = $(`input:checkbox[name="${key}"][value="${i}"]`);
+        // Push matching checkboxes to the  array
+        queryBoxes.push(queryBox);
       });
+    }
+    // Handle singular val
+    else {
+      // find matching checkbox
+      queryBox = $(`input:checkbox[name="${key}"][value="${val}"]`);
+      // Push matching checkbox to the array
+      queryBoxes.push(queryBox);
+    }
+  });
 
   // Put 0-second, set-timeout on receipts/disbursements datatables so checkboxes are available to check…
   // …after the two filter panels are loaded

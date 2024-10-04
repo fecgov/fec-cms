@@ -1,5 +1,5 @@
 {% extends "layouts/main.jinja" %}
-{% import 'macros/legal.jinja' as legal %}
+{% import 'macros/legal.jinja' as legal %}{# TODO: is this still being used? #}
 {% import 'macros/breadcrumbs.jinja' as breadcrumb %}
 
 {% set breadcrumb_links=[('/legal-resources', 'Legal resources')] %}
@@ -153,9 +153,6 @@
                 }
               });
             }
-
-            console.log("Updated URL:", url.toString());
-
             // Update the URL without reloading the page
             window.history.pushState({}, '', url.toString());
           });

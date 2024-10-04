@@ -2,9 +2,11 @@
 import { default as Filter } from './filter-base.js';
 
 /**
+ *
  * @param {JQuery} elm
  */
 export default function CheckboxFilter(elm) {
+
   Filter.call(this, elm);
   this.removable = this.$elm.data('removable') || false;
 
@@ -14,12 +16,14 @@ export default function CheckboxFilter(elm) {
     $(document.body).on('tag:removeAll', this.handleClearFilters.bind(this));
     this.$elm.on('click', '.js-remove', this.removeCheckbox.bind(this));
   }
+
 }
 
 CheckboxFilter.prototype = Object.create(Filter.prototype);
 CheckboxFilter.constructor = CheckboxFilter;
 
 /**
+ *
  * @param {jQuery.Event} e
  */
 CheckboxFilter.prototype.handleChange = function(e) {
@@ -39,7 +43,6 @@ CheckboxFilter.prototype.handleChange = function(e) {
         .addClass('is-loading');
     }
   }
-
   $input.trigger(eventName, [
     {
       key: id,

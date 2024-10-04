@@ -76,7 +76,7 @@ Filter.prototype.fromQuery = function(query) {
 };
 
 /**
- * 
+ *
  * @param {*} value
  * @returns {Filter}
  */
