@@ -44,14 +44,14 @@
 </div>
 {% endmacro %}
 
-{% macro checkbox_list(name, label, options, value) %}
+{% macro checkbox_list(name, filterLabel, options, selectedValue) %}
 <div class="filter">
-  <legend class="label">{{ label }}</legend>
-  {% for option in options %}
+  <legend class="label">{{filterLabel}}</legend>
+  {% for value, label in options.items() %}
     <div>
-      <input type="checkbox" id="ao_category_{{ option['value'] }}" name="{{ name }}" value="{{ option['value'] }}"
-        {% if value and option['value'] in value %} checked="true" {% endif %}>
-      <label for="ao_category_{{ option['value'] }}">{{ option['text'] }}</label>
+      <input type="checkbox" id="ao_category_{{value}}" name="{{name}}" value="{{value}}"
+        {% if selectedValue and (value in selectedValue) %} checked="true" {% else %} selectedValue="{{selectedValue}}" {% endif %}>
+      <label for="ao_category_{{value}}">{{label}}</label>
     </div>
   {% endfor %}
 </div>
