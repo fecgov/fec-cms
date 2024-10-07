@@ -2,7 +2,6 @@
  * Initial (likely temporary) class
  */
 
-// import { default as _debounce } from 'underscore/modules/debounce.js';
 import { default as URI } from 'urijs';
 
 import { default as FilterPanel } from './modules/filters/filter-panel.js';
@@ -32,9 +31,6 @@ export default function LegalSearchAo() {
   this.initFilters();
   new KeywordModal();
   this.initTable();
-
-  // const Paginator = OffsetPaginator;
-  // this.paginator = new Paginator();
 }
 
 LegalSearchAo.prototype.initFilters = function() {
@@ -46,21 +42,21 @@ LegalSearchAo.prototype.initFilters = function() {
 
   this.updatePagination(this.lastQueryResponse.total_advisory_opinions);
 
-  const taglist = new TagList({
+  const tagList = new TagList({
     resultType: 'results',
     showResultCount: true,
     tableTitle: 'Advisory opinions',
     existingFilterTagsElement: $('.js-filter-tags')
+    // Notes carried over from filter-tags.js:
     // We're using the table title to decide whether to clear or reset filters.
     // This is a temporary solution to clear filters and not break pages/tables that still require two-year restrictions
-    // TODO
   });
 
   // Because search keywords is a special situation,
   // grab the search value from the URL and create the tag directly
   const queryParams = URI.parseQuery(window.location.search);
   if (queryParams.search)
-    taglist.addTag(null, { key: 'search-input', name: 'search', value: queryParams.search });
+    tagList.addTag(null, { key: 'search-input', name: 'search', value: queryParams.search });
 
   this.filterPanel = new FilterPanel();
   this.filterSet = this.filterPanel.filterSet;
