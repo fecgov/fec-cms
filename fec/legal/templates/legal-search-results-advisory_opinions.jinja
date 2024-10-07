@@ -215,9 +215,9 @@
 {% endblock %}{# close message block #}
 
 {% block results %}
-  {% with results=results %}
+  {# {% with results=results %}
     {% include 'partials/legal-pagination.jinja' %}
-  {% endwith %}
+  {% endwith %} #}
   {% with advisory_opinions = results.advisory_opinions %}
     {% include 'partials/legal-search-results-advisory-opinion.jinja' %}
   {% endwith %}
