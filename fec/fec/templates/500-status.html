@@ -15,10 +15,17 @@
   </head>
 
   <body class="status-mode {% block body_class %}{% endblock %}">
-    <div id="ie_warning" style="display: none;">
+    <div id="browser_warning" style="display: none;">
       <h2>Your web browser is not supported</h2>
-      <p>You&apos;re using Internet Explorer, some features might not work. Please switch to another browser like Chrome, Firefox, or Edge for a better experience.</p>
+      <p>This site uses features that are not supported by this browser. For a better experience, please switch to a modern browser.</p>
     </div>
+    <script>{# Currently checking for window.fetch and Object.assign #}
+      var browserIsCapable = ('fetch' in window && 'assign' in Object);
+      if (!browserIsCapable) {
+        var browserWarningElement = document.getElementById('browser_warning');
+        browserWarningElement.style.display = 'block';
+      }
+    </script>
 
     {% include 'partials/google-tag-manager-noscript.html' %}
 
@@ -59,17 +66,9 @@
       window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
       window.API_LOCATION = '{{ settings.FEC_API_URL }}';
     </script>
+
     {% tags_for_js_chunks 'global.js' '' %}
     {% tags_for_js_chunks 'init.js' '' %}
-    <script>
-      var canSkipPolyfills = ('fetch' in window && 'assign' in Object);
-      if (!canSkipPolyfills) {
-        var pfScriptElem = document.createElement('script');
-        pfScriptElem.async = false;
-        pfScriptElem.src = "{% path_for_js 'polyfills.js' %}";
-        document.head.appendChild(pfScriptElem);
-      }
-    </script>
 
     {% block extra_js %}
     {# Override this in templates to add extra javascript #}

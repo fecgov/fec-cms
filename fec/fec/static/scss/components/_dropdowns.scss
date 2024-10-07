@@ -176,6 +176,13 @@
   margin: u(.5rem 0);
 
   li {
+    input[type="checkbox"] + label.disabled {
+      cursor: default;
+      opacity: .5;
+      border: 1px solid #aeb0b5 !important;
+      background-color: #aeb0b5 !important;
+    }
+
     @include animation(fadeIn .2s ease-in);
     position: relative;
 

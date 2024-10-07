@@ -129,11 +129,24 @@ def statutes_landing(request):
     })
 
 
+def process_mur_subjects(mur):
+    """
+    Process the subjects in a MUR and return a list of subject names.
+    Fallback to an empty list if no subjects are found or list is empty.
+    """
+    if 'subjects' in mur and mur['subjects']:
+        return [subject.get('subject') for subject in mur['subjects'] if subject.get('subject')]
+    return []
+
+
 def mur_page(request, mur_no):
     mur = api_caller.load_legal_mur(mur_no)
 
     if not mur:
         raise Http404()
+
+    # Process MUR subjects
+    mur['subject_list'] = process_mur_subjects(mur)
 
     return render(request, 'legal-' + mur['mur_type'] + '-mur.jinja', {
         'mur': mur,
@@ -309,6 +322,9 @@ def legal_doc_search_mur(request):
     mur_document_category_names = [mur_document_categories.get(id) for id in case_doc_category_ids]
 
     for mur in results['murs']:
+        # Process MUR subjects
+        mur['subject_list'] = process_mur_subjects(mur)
+
         for index, doc in enumerate(mur['documents']):
             # Checks if the selected document category filters matching the document categories
             doc['category_match'] = mur["mur_type"] != "archived" and str(doc['doc_order_id']) in case_doc_category_ids
