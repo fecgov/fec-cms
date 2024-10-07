@@ -18,7 +18,6 @@ import { updateQuery } from './modules/urls.js';
  * @property {number} this.debounceTimer - The number for the debouncing setTimeout
  * @property {number} this.messageTimer - The number for the "filter added/removed" fade-outs
  * @property {string} this.lastFilterId - The last filter ID that was changed by the user
-//  * @property {OffsetPaginator} this.paginator - Named this way to keep in sync with tables.js
  * @property {number} this.lastQuery - The most recent query results
  */
 export default function LegalSearchAo() {
@@ -47,7 +46,7 @@ LegalSearchAo.prototype.initFilters = function() {
 
   this.updatePagination(this.lastQueryResponse.total_advisory_opinions);
 
-  new TagList({
+  const taglist = new TagList({
     resultType: 'results',
     showResultCount: true,
     tableTitle: 'Advisory opinions',
@@ -57,12 +56,15 @@ LegalSearchAo.prototype.initFilters = function() {
     // TODO
   });
 
+  // Because search keywords is a special situation,
+  // grab the search value from the URL and create the tag directly
+  const queryParams = URI.parseQuery(window.location.search);
+  if (queryParams.search)
+    taglist.addTag(null, { key: 'search-input', name: 'search', value: queryParams.search });
+
   this.filterPanel = new FilterPanel();
   this.filterSet = this.filterPanel.filterSet;
 
-  // document.body.addEventListener('filter:changed', this.handleFilterChange.bind(this));
-  // document.body.addEventListener('filter:added', this.handleFilterChange.bind(this));
-  // document.body.addEventListener('filter:removed', this.handleFilterChange.bind(this));
   document.body.querySelector('#filters').addEventListener('change', this.handleFiltersChanged.bind(this));
 
   const conflictingCheckboxes = document.querySelectorAll('#ao_is_pending-field, #ao_category-field');
@@ -158,15 +160,6 @@ LegalSearchAo.prototype.overrideCheckboxes = function(e) {
 };
 
 /**
- * Called on any filter:added, filter:changed, or filter:removed,
- * then debounces getResults (so other filters can be changed, too)
- * TODO: no longer necessary?
- */
-// LegalSearchAo.prototype.handleFilterChange = function() {
-  // this.debounce(this.getResults, 250);
-// };
-
-/**
  * Initialize everything
  */
 document.addEventListener('DOMContentLoaded', () => {
@@ -181,7 +174,7 @@ LegalSearchAo.prototype.getResults = function(e) {
   if (e) e.preventDefault();
 
   // Adjust various classes and appearances
-  this.getReadyToFetch();
+  // TODO ?
 
   // If getResults is called after a delay, reset that timeout var
   if (this.debounceTimer) delete this.debounceTimer;
@@ -192,9 +185,10 @@ LegalSearchAo.prototype.getResults = function(e) {
 
   // Let's override any filters here
 
-  // Make sure sort is an allowed field
-  filterFields.push('sort');
-  // Set its value according to this.sortOrder
+  // Make sure search and sort are allowed fields
+  filterFields.push('search', 'sort');
+
+  // Set the sort param value according to this.sortOrder
   serializedFilters.sort = this.sortOrder == 'asc' ? 'case_no' : '-case_no';
 
   // Then update the URL with currently params
@@ -206,6 +200,12 @@ LegalSearchAo.prototype.getResults = function(e) {
   // Initial params from the URL
   const fetchParams = URI.parseQuery(window.location.search);
 
+  // Dates have been problematic so we'll remove any empty query params.
+  // Problematic in that URIs with &ao_max_issue_date=& would get a warning: date must be MM/DD/YYYY or YYYY-MM-DD
+  for (let param in fetchParams) {
+    if (!fetchParams[param]) delete fetchParams[param];
+  }
+
   const fetchUrl = buildUrl(fetchPath, fetchParams);
 
   // Set the various states to loading
@@ -216,14 +216,6 @@ LegalSearchAo.prototype.getResults = function(e) {
     fetchUrl.toString(),
     this.handleFetchSuccess.bind(this)
   );
-};
-
-/**
- * Goes through filters and other page components to update various status
- * TODO: no longer necessary?
- */
-LegalSearchAo.prototype.getReadyToFetch = function() {
-  // TODO: ?
 };
 
 /**

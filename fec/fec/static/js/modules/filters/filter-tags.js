@@ -119,7 +119,6 @@ TagList.prototype.addTag = function(e, opts) {
   const $tagCategory = this.$list.find('[data-tag-category="' + name + '"]');
   this.removeTag(opts.key, false);
 
-
   if ($tagCategory.length > 0) {
     this.addTagItem($tagCategory, tag, opts);
   } else {
