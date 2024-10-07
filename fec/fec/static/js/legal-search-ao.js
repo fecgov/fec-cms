@@ -9,7 +9,6 @@ import { default as FilterPanel } from './modules/filters/filter-panel.js';
 import { default as TagList } from './modules/filters/filter-tags.js';
 import { buildUrl, SUCCESS_DELAY } from './modules/helpers.js';
 import KeywordModal from './modules/keyword-modal.js';
-import { OffsetPaginator } from './modules/tables.js';
 import { updateQuery } from './modules/urls.js';
 
 /**
@@ -19,7 +18,7 @@ import { updateQuery } from './modules/urls.js';
  * @property {number} this.debounceTimer - The number for the debouncing setTimeout
  * @property {number} this.messageTimer - The number for the "filter added/removed" fade-outs
  * @property {string} this.lastFilterId - The last filter ID that was changed by the user
- * @property {OffsetPaginator} this.paginator - Named this way to keep in sync with tables.js
+//  * @property {OffsetPaginator} this.paginator - Named this way to keep in sync with tables.js
  * @property {number} this.lastQuery - The most recent query results
  */
 export default function LegalSearchAo() {
@@ -35,8 +34,8 @@ export default function LegalSearchAo() {
   new KeywordModal();
   this.initTable();
 
-  const Paginator = OffsetPaginator;
-  this.paginator = new Paginator();
+  // const Paginator = OffsetPaginator;
+  // this.paginator = new Paginator();
 }
 
 LegalSearchAo.prototype.initFilters = function() {
@@ -45,6 +44,8 @@ LegalSearchAo.prototype.initFilters = function() {
 
   document.querySelector('.js-count .tags__count').textContent =
     this.lastQueryResponse.total_advisory_opinions.toLocaleString('en-US');
+
+  this.updatePagination(this.lastQueryResponse.total_advisory_opinions);
 
   new TagList({
     resultType: 'results',
@@ -319,7 +320,7 @@ LegalSearchAo.prototype.handleFetchSuccess = function(response) {
 
   this.updateFiltersOnSuccess(resultsChangeCount);
 
-  this.paginator.handleResponse(this.lastQueryResponse, response.advisory_opinions);
+  this.updatePagination(response.total_advisory_opinions);
 
   this.refreshTable(response);
 
@@ -458,4 +459,128 @@ LegalSearchAo.prototype.updateFiltersOnSuccess = function(changeCount) {
       $('.date-range-grid').fadeOut();
     }, SUCCESS_DELAY);
   }
+};
+
+/**
+ * Update the pagination buttons, updating text content, URLs, and appearance
+ * @param {number} resultsCount
+ */
+LegalSearchAo.prototype.updatePagination = function(resultsCount) {
+  const paginationHolder = document.querySelector('.results-info');
+  const control_count = paginationHolder.querySelector('.results-length');
+  const summary = paginationHolder.querySelector('.dataTables_info');
+  const maxButtonCount = 5;
+
+  const resultLimit = parseInt(control_count.value);
+
+  const currentSearchParams = new URLSearchParams(window.location.search);
+
+  let currentOffset = parseInt(currentSearchParams.get('offset')) || 0;
+
+  if (currentOffset > resultsCount || currentOffset < 0) currentOffset = 0;
+
+  // Update the text summary
+  const firstResultShown = currentOffset + 1; // Working with 0-indexed (i.e. the first will be 0)
+  const lastResultShown = Math.min(firstResultShown - 1 + resultLimit, resultsCount); // Will be 0-indexed
+  summary.textContent = 'Showing ';
+  summary.textContent += firstResultShown < 1000 ? firstResultShown : firstResultShown.toLocaleString('en-US');
+  summary.textContent += '-';
+  summary.textContent += lastResultShown < 1000 ? lastResultShown : lastResultShown.toLocaleString('en-US');
+  summary.textContent += ' of ';
+  summary.textContent += resultsCount < 1000 ? resultsCount : resultsCount.toLocaleString('en-US');
+  summary.textContent += ' results';
+
+  const totalNumberOfPages = Math.floor(resultsCount / resultLimit);
+  const currentPageNum = Math.floor(currentOffset / resultLimit);
+  const pageNumbers = [];
+
+  // If we have fewer pages than our max buttons, we don't need to worry about balancing them
+  if (totalNumberOfPages <= maxButtonCount) {
+    // Yay! We can just use every button
+    for (let i = 0; i < totalNumberOfPages; i++) {
+      pageNumbers.push(i + 1);
+    }
+  } else {
+    const buttonsBeforeCurrent = Math.floor(maxButtonCount / 2);
+
+    pageNumbers.push(currentPageNum);
+
+    // Let's pad buttons for pages before the current page.
+    // Start backward from the current page, adding page numbers but only as many as buttonsBeforeCurrent allows
+    // (Perfect if we're on page 3 of 5 buttons)
+    for (let i = currentPageNum - 1; i >= 0 && pageNumbers.length < buttonsBeforeCurrent + 1; i--) {
+      pageNumbers.unshift(i);
+    }
+    // Now for the buttons after the current page
+    // Start at the current page and work forward but not to exceed maxButtonCount
+    // (Perfect if we're on page 3-5 of 5 buttons)
+    for (let i = currentPageNum + 1; i < totalNumberOfPages && pageNumbers.length < maxButtonCount; i++) {
+      pageNumbers.push(i);
+    }
+    // Coming back to the front, let's build to maxButtonCount
+    // (Necessary if we're on 4-5 of 5 buttons and only added two to the beginning)
+    for (let i = currentPageNum - buttonsBeforeCurrent - 1; i >= 0 && pageNumbers.length < maxButtonCount; i--) {
+      pageNumbers.unshift(i);
+    }
+  }
+
+  // Start building the URLs for the buttons
+  const fetchParams = URI.parseQuery(window.location.search);
+  const sharedUri = URI(window.location.pathname).addQuery(fetchParams);
+
+  // Find the buttons holder and remove its content
+  const buttonsParent = document.querySelector('.paginate_button').parentElement;
+  buttonsParent.innerText = '';
+
+  // Let's start with the Previous button (because we want to use appendChild because it's still more widely supported)
+  const newPrevButton = document.createElement(currentPageNum === 0 ? 'span' : 'a');
+  newPrevButton.classList.add('paginate_button', 'previous');
+  newPrevButton.textContent = 'Previous';
+  if (newPrevButton.nodeName == 'SPAN') {
+    newPrevButton.classList.add('is-disabled');
+    newPrevButton.setAttribute('aria-label', `No previous results to show`);
+  } else {
+    newPrevButton.setAttribute('aria-label', `Go to page ${currentPageNum}`);
+    newPrevButton.setAttribute(
+      'href',
+      sharedUri.setQuery({ offset: Math.max(0, currentPageNum - 1) * resultLimit }).toString()
+    );
+  }
+  buttonsParent.appendChild(newPrevButton);
+
+  // Now continue with the numbered buttons
+  for (let i = 0; i < pageNumbers.length; i++) {
+    const newPageButton = document.createElement(pageNumbers[i] == currentPageNum ? 'span' : 'a');
+    newPageButton.classList.add(`paginate_button`);
+    newPageButton.textContent = `${pageNumbers[i] + 1}`;
+    if (pageNumbers[i] == currentPageNum) {
+      newPageButton.classList.add('current');
+      newPageButton.setAttribute('aria-label', `Showing results for page ${pageNumbers[i] + 1}`);
+      newPageButton.setAttribute('aria-current', 'true');
+    } else {
+      newPageButton.setAttribute(
+        'href',
+        sharedUri.setQuery({ offset: pageNumbers[i] * resultLimit, limit: resultLimit }).toString()
+      );
+      newPageButton.setAttribute('aria-label', `Go to page ${pageNumbers[i] + 1}`);
+    }
+
+    buttonsParent.appendChild(newPageButton);
+  }
+
+  // Finally, the Next button
+  const newNextButton = document.createElement(currentOffset + resultLimit >= resultsCount ? 'span' : 'a');
+  newNextButton.classList.add('paginate_button', 'next');
+  newNextButton.textContent = 'Next';
+  if (newNextButton.nodeName == 'SPAN') {
+    newNextButton.classList.add('is-disabled');
+    newPrevButton.setAttribute('aria-label', `No next results to show`);
+  } else {
+    newNextButton.setAttribute('aria-label', `Go to page ${currentPageNum + 2}`);
+    newNextButton.setAttribute(
+      'href',
+      sharedUri.setQuery({ offset: (currentPageNum + 1) * resultLimit }).toString()
+    );
+  }
+  buttonsParent.appendChild(newNextButton);
 };
