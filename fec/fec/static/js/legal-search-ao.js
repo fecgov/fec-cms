@@ -42,6 +42,14 @@ LegalSearchAo.prototype.initFilters = function() {
 
   this.updatePagination(this.lastQueryResponse.total_advisory_opinions);
 
+  // Do a quick edit for the Requestor Type field
+  /** @property {HTMLSelectElement} */
+  const requestorSelect = document.querySelector('#ao_requestor_type');
+  // The jinja element includes a <option>More</option> that we want to remove
+  if (requestorSelect.options[0].value == '') requestorSelect.removeChild(requestorSelect.options[0]);
+  // The Python list doesn't like assigning an empty string as its value so we'll do that here
+  if (requestorSelect.options[0].textContent == 'Any') requestorSelect.options[0].value = '';
+
   const tagList = new TagList({
     resultType: 'results',
     showResultCount: true,

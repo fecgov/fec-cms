@@ -1,9 +1,10 @@
-{% extends "layouts/legal-doc-search-results.jinja" %}
+{% extends 'layouts/legal-doc-search-results.jinja' %}
 {% import 'macros/filters/checkbox.jinja' as checkbox %}
-{% import 'macros/filters/text.jinja' as text %}
 {% import 'macros/filters/date.jinja' as date %}
-{% import 'macros/legal.jinja' as legal %}
+{% import 'macros/filters/dropdown-json.jinja' as dropdown %}
+{% import 'macros/filters/text.jinja' as text %}
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% import 'macros/legal.jinja' as legal %}
 
 {% set document_type_display_name = 'Advisory opinions' %}
 
@@ -23,6 +24,7 @@
     {# {{ typeahead.field('ao_no', 'AO number', '', dataset='auditCommittees', allow_text=True) }} #}
   {# </div> #}
   {{ text.field('ao_requestor', 'Requestor name (or AO name)') }}
+  {{ dropdown.select_single_flat_list('ao_requestor_type', 'Requestor Type', options=ao_requestor_types )}}
   {# {{ legal.text_filter('ao_requestor', 'Requestor name (or AO name)') }} #}
   {# <div class="filter">
     <label class="label" for="ao_requestor">Requestor name (or AO name)</label>
