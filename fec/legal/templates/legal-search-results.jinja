@@ -5,11 +5,11 @@
 {% set breadcrumb_links=[('/legal-resources', 'Legal resources')] %}
 
 {% block title %}
-  {% if query %}
+  {%- if query -%}
   Search results for &ldquo;{{query}}&rdquo;
-  {% else %}
+  {%- else -%}
   Search legal resources
-  {% endif %}
+  {%- endif -%}
 {% endblock %}
 
 {% block css %}

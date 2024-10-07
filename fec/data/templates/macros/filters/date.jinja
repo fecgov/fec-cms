@@ -1,16 +1,16 @@
-{% macro field(name, label, id_suffix='') %}
-  <div class="filter js-filter" id="{{ name }}{{id_suffix}}" data-name="{{ name }}" data-filter="date">
+{% macro field(name, label, id_suffix='', id_prefix='') %}
+  <div class="filter js-filter" id="{{ id_prefix }}{{ name }}{{ id_suffix }}" data-name="{{ name }}" data-filter="date">
   <fieldset>
     <legend class="label">{{ label }}</legend>
     <div class="range range--date js-date-range">
       <div class="range__input range__input--min" data-filter="range">
-        <label for="min_{{ name }}{{id_suffix}}">Beginning</label>
-        <input type="text" id="min_{{ name }}{{id_suffix}}" name="min_{{ name }}" data-range="min" data-removable="true" class="js-min-date" data-prefix="Beginning">
+        <label for="{{ id_prefix }}min_{{ name }}{{ id_suffix }}">Beginning</label>
+        <input type="text" id="{{ id_prefix }}min_{{ name }}{{ id_suffix }}" name="{{ id_prefix }}min_{{ name }}" data-range="min" data-removable="true" class="js-min-date" data-prefix="Beginning">
       </div>
       <div class="range__hyphen">-</div>
       <div class="range__input range__input--max" data-filter="range">
-        <label for="max_{{ name }}{{id_suffix}}">Ending</label>
-        <input type="text" id="max_{{ name }}{{id_suffix}}" name="max_{{ name }}" data-range="max" data-removable="true" class="js-max-date" data-prefix="Ending">
+        <label for="{{ id_prefix }}max_{{ name }}{{ id_suffix }}">Ending</label>
+        <input type="text" id="{{ id_prefix }}max_{{ name }}{{ id_suffix }}" name="{{ id_prefix }}max_{{ name }}" data-range="max" data-removable="true" class="js-max-date" data-prefix="Ending">
       </div>
       <button class="button--go button--standard" type="button">
         <span class="u-visually-hidden">Search</span>

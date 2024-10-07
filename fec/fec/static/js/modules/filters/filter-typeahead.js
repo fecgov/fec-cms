@@ -12,21 +12,39 @@ const ID_PATTERN = /^\w{9}$/;
 
 function slugify(value) {
   return value
-    .trim() // TODO: jQuery deprecation
+    .trim()
     .replace(/\s+/g, '-')
     .replace(/[^a-z0-9:._-]/gi, '');
 }
 
+/**
+ * Takes a datum object and returns
+ * - its name with ID in parentheses if it has an id or
+ * - its name or
+ * - its id in quotes
+ * @param {Object} datum
+ * @returns {string} `name (id)` or `name` or `"id"`
+ */
 function formatLabel(datum) {
   return datum.name
-    ? datum.name + ' (' + datum.id + ')'
+    ? datum.name + (datum.id ? ' (' + datum.id + ')' : '')
     : '"' + stripQuotes(datum.id) + '"';
 }
 
+/**
+ *
+ * @param {*} value
+ * @returns {string} The slugified given value with `-checkbox` appended to it
+ */
 function formatId(value) {
   return slugify(value) + '-checkbox';
 }
 
+/**
+ *
+ * @param {*} value
+ * @returns {string} A string with the straight double quotes removed
+ */
 function stripQuotes(value) {
   return value.replace(/["]+/g, '');
 }
@@ -70,11 +88,7 @@ export default function FilterTypeahead(selector, dataset, allowText) {
   this.$selected = this.$elm.find('.dropdown__selected');
 
   this.$elm.on('change', 'input[type="text"]', this.handleChange.bind(this));
-  this.$elm.on(
-    'change',
-    'input[type="checkbox"]',
-    this.handleCheckbox.bind(this)
-  );
+  this.$elm.on('change', 'input[type="checkbox"]', this.handleCheckbox.bind(this));
   this.$elm.on('click', '.dropdown__remove', this.removeCheckbox.bind(this));
 
   this.$elm.on('mouseenter', '.tt-suggestion', this.handleHover.bind(this));
@@ -121,10 +135,12 @@ FilterTypeahead.prototype.setFirstItem = function() {
 };
 
 FilterTypeahead.prototype.handleSelect = function(e, datum) {
-  const id = formatId(datum.id);
+  let identifier = datum.id || datum.name;
+
+  const id = formatId(identifier);
   this.appendCheckbox({
     name: this.fieldName,
-    value: datum.id,
+    value: identifier,
     datum: datum
   });
   this.datum = null;

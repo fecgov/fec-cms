@@ -1,6 +1,7 @@
 # Custom Dictionary Words
 blockquote
 bythenumbers
+camelcase
 draftail
 Draftail
 labelledby

@@ -1,9 +1,9 @@
 {% extends "layouts/main.jinja" %}
 {% import 'macros/page-header.jinja' as header %}
 
-{% block title %}
+{% block title -%}
   {{ title }}
-{% endblock %}
+{%- endblock %}
 
 {% block css %}
   <link rel="stylesheet" type="text/css" href="{{ path_for_css('common.css') }}" />

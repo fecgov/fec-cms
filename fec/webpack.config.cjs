@@ -52,8 +52,8 @@ const sharedManifestPlugin = new WebpackManifestPlugin({
   }
 });
 
-// Queue up the files for the entries for the homepage and the data pages
-const homeAndDataEntries = {
+// Queue up the files for the entries for the homepage, data, and non-draftail pages
+const mainEntries = {
   global: `${js}/global.js`,
   home: {
     import: `${js}/pages/home.js`,
@@ -67,6 +67,15 @@ const homeAndDataEntries = {
     import: `${js}/data-init.js`,
     dependOn: 'global' // Any chunks for data-init will also expect global's chunks to exist
   },
+  'legal-search-ao': {
+    import: `${js}/legal-search-ao.js`,
+    filename: 'legal-search-ao-[contenthash].js',
+    dependOn: 'data-init'
+  },
+  // 'legal-app': {
+  //   import: `${js}/legal/LegalApp.js`,
+  //   dependOn: 'global'
+  // },
   // 'calc-admin-fines-modal': `${js}/modules/calc-admin-fines-modal.js`, // Pulled into init.js
   'calc-admin-fines': `${js}/modules/calc-admin-fines.js`,
   'widgets/aggregate-totals-box': {
@@ -111,25 +120,25 @@ fs.readdirSync(`${js}/pages`).forEach(function(f) {
   // Set the path to be fec/static/js/pages/ plus its filename
   const p = path.join(`${js}/pages`, f);
   // If the file name isn't already queued as its own entry,
-  if (!homeAndDataEntries[name]) {
+  if (!mainEntries[name]) {
 
     // If it's a datatable page, or a data page that requires data-init,
     if (name.indexOf('datatable-') >= 0 || pagesThatDependOnDataInit.includes(name)) {
       // add it, marking that it depends on data-init (which depends on global)
-      homeAndDataEntries[name] = {
+      mainEntries[name] = {
         import: `./${p}`,
         dependOn: ['data-init', 'global']
       };
     // If it's a page that requires init,
     } else if (name.indexOf('datatable-') >= 0 || pagesThatDependOnInit.includes(name)) {
       // add it, marking that it depends on init (which depends on global)
-      homeAndDataEntries[name] = {
+      mainEntries[name] = {
         import: `./${p}`,
         dependOn: ['init', 'global']
       };
     } else {
       // else add it, marking that it depends on global
-      homeAndDataEntries[name] = {
+      mainEntries[name] = {
         import: `./${p}`,
         dependOn: 'global'
       };
@@ -150,7 +159,7 @@ module.exports = [
     // DATA AND HOME ENTRIES configuration
     // Everything that isn't Legal or Draftail, which are the next configurations in this array
     name: 'data_and_home',
-    entry: homeAndDataEntries,
+    entry: mainEntries,
     devtool: mode == 'production' ? sourceMapType_prod : sourceMapType,
     optimization: {
       emitOnErrors: true,
@@ -209,40 +218,6 @@ module.exports = [
       filename: '[name]-[contenthash].js',
       path: path.resolve(__dirname, './dist/fec/static/js'),
       chunkLoading: 'jsonp'
-    }
-  },
-  {
-    // LEGAL ENTRIES configuration
-    name: 'legal',
-    entry: {
-      'legal-app': `${js}/legal/LegalApp.cjs`
-    },
-    output: {
-      filename: '[name]-[contenthash].js',
-      path: path.resolve(__dirname, './dist/fec/static/js')
-    },
-    devtool: mode == 'production' ? sourceMapType_prod : sourceMapType,
-    plugins: [
-      new webpack.DefinePlugin({
-        context: {}
-      }),
-      new webpack.ProvidePlugin({
-        $: 'jquery',
-        jQuery: 'jquery'
-      }),
-      sharedManifestPlugin
-    ],
-    module: {
-      rules: [
-        {
-          test: /\.(cjs|js)$/,
-          exclude: /node_modules/,
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env', '@babel/preset-react']
-          }
-      }
-      ]
     }
   },
   {
