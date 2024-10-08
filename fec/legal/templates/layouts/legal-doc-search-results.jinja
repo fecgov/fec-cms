@@ -113,11 +113,11 @@
               }
             });
 
-            const selectedAoCategories = url.searchParams.getAll('ao_category');
-            url.searchParams.delete('ao_category');
+            const selectedAoCategories = url.searchParams.getAll('ao_doc_category_id');
+            url.searchParams.delete('ao_doc_category_id');
             selectedAoCategories.forEach((cat, i) => {
               if (i != index) {
-                url.searchParams.append('ao_category', cat);
+                url.searchParams.append('ao_doc_category_id', cat);
               }
             });
           } else {

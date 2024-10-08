@@ -61,12 +61,12 @@
         <div>
           {# {{ checkbox.checkbox('ao_category', category_id, category_label, 'ao_doc_category_id_') }} #}
           <input type="checkbox"
-            id="ao_category_{{ category_id }}"
-            name="ao_category"
+            id="ao_doc_category_id_{{ category_id }}"
+            name="ao_doc_category_id"
             value="{{ category_id }}"
-            {% if category_id in selected_ao_category_ids and not (ao_is_pending == 'true') %}checked{% endif %}
+            {% if category_id in selected_ao_doc_category_ids and not (ao_is_pending == 'true') %}checked{% endif %}
             {% if ao_is_pending == 'true' and category_id == 'F' %}{% endif %}>
-          <label for="ao_category_{{ category_id }}">{{ category_label }}</label>
+          <label for="ao_doc_category_id_{{ category_id }}">{{ category_label }}</label>
         </div>
       {% endfor %}
     </div>

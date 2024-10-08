@@ -43,7 +43,7 @@
         {%- if ao_max_request_date %}ao_max_request_date={{ ao_max_request_date }}&{% endif -%}
         {%- if ao_entity_name %}ao_entity_name={{ ao_entity_name }}&{% endif -%}
         {%- if ao_regulatory_citation %}ao_regulatory_citation={{ ao_regulatory_citation }}&{% endif -%}
-        {%- for category_id in selected_ao_category_ids %}ao_category={{ category_id }}&{% endfor -%}
+        {%- for category_id in selected_ao_doc_category_ids %}ao_doc_category_id={{ category_id }}&{% endfor -%}
         &offset={{ offset - limit }}&limit={{ limit }}#results-{{ result_type }}">Previous</a>
     {% else %}
       <span class="paginate_button previous is-disabled">Previous</span>
@@ -66,7 +66,7 @@
           {%- if ao_max_request_date %}ao_max_request_date={{ ao_max_request_date }}&{% endif -%}
           {%- if ao_entity_name %}ao_entity_name={{ ao_entity_name }}&{% endif -%}
           {%- if ao_regulatory_citation %}ao_regulatory_citation={{ ao_regulatory_citation }}&{% endif -%}
-          {%- for category_id in selected_ao_category_ids %}ao_category={{ category_id }}&{% endfor -%}
+          {%- for category_id in selected_ao_doc_category_ids %}ao_doc_category_id={{ category_id }}&{% endfor -%}
           &offset={{ page_offset }}&limit={{ limit }}#results-{{ result_type }}">{{ page }}</a>
       {% endif %}
     {% endfor %}
@@ -84,7 +84,7 @@
         {%- if ao_max_request_date %}ao_max_request_date={{ ao_max_request_date }}&{% endif -%}
         {%- if ao_entity_name %}ao_entity_name={{ ao_entity_name }}&{% endif -%}
         {%- if ao_regulatory_citation %}ao_regulatory_citation={{ ao_regulatory_citation }}&{% endif -%}
-        {%- for category_id in selected_ao_category_ids %}ao_category={{ category_id }}&{% endfor -%}
+        {%- for category_id in selected_ao_doc_category_ids %}ao_doc_category_id={{ category_id }}&{% endfor -%}
         &offset={{ offset + limit }}&limit={{ limit }}#results-{{ result_type }}">Next</a>
     {% else %}
       <span class="paginate_button next is-disabled">Next</span>

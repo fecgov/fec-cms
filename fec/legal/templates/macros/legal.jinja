@@ -49,9 +49,9 @@
   <legend class="label">{{filterLabel}}</legend>
   {% for value, label in options.items() %}
     <div>
-      <input type="checkbox" id="ao_category_{{value}}" name="{{name}}" value="{{value}}"
+      <input type="checkbox" id="ao_doc_category_id_{{value}}" name="{{name}}" value="{{value}}"
         {% if selectedValue and (value in selectedValue) %} checked="true" {% else %} selectedValue="{{selectedValue}}" {% endif %}>
-      <label for="ao_category_{{value}}">{{label}}</label>
+      <label for="ao_doc_category_id_{{value}}">{{label}}</label>
     </div>
   {% endfor %}
 </div>

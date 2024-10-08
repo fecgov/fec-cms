@@ -28,7 +28,7 @@ def advisory_opinions_landing(request):
         query='',
         query_exclude='',
         query_type='advisory_opinions',
-        ao_category=['F', 'W'],  # TODO: this is erring, expecting a string
+        ao_doc_category_id=['F', 'W'],  # TODO: this is erring, expecting a string
         ao_min_issue_date=ao_min_date
     )
 
@@ -36,7 +36,7 @@ def advisory_opinions_landing(request):
         query='',
         query_exclude='',
         query_type='advisory_opinions',
-        ao_category='R',
+        ao_doc_category_id='R',
         ao_status='Pending'
     )
 
@@ -241,7 +241,7 @@ def legal_search(request):
 def legal_doc_search_ao(request):
     # If there are no params passed, default to Final Opinions
     if len(request.GET) == 0:
-        return redirect('/data/legal/search/advisory-opinions/?ao_category=F')
+        return redirect('/data/legal/search/advisory-opinions/?ao_doc_category_id=F')
 
     results = {}
     original_query = request.GET.get('search', '')
@@ -255,7 +255,7 @@ def legal_doc_search_ao(request):
     ao_min_request_date = request.GET.get('ao_min_request_date', '')
     ao_max_request_date = request.GET.get('ao_max_request_date', '')
     ao_entity_name = request.GET.get('ao_entity_name', '')
-    ao_doc_category_ids = request.GET.getlist('ao_category', [])
+    ao_doc_category_ids = request.GET.getlist('ao_doc_category_id', [])
     ao_requestor_type_ids = request.GET.getlist('ao_requestor_type', [])
     ao_regulatory_citation = request.GET.get('ao_regulatory_citation', '')
 
@@ -277,7 +277,7 @@ def legal_doc_search_ao(request):
         ao_min_request_date=ao_min_request_date,
         ao_max_request_date=ao_max_request_date,
         ao_entity_name=ao_entity_name,
-        ao_category=ao_doc_category_ids,
+        ao_doc_category_id=ao_doc_category_ids,
         ao_regulatory_citation=ao_regulatory_citation,
     )
 
@@ -337,8 +337,8 @@ def legal_doc_search_ao(request):
         'ao_regulatory_citation': ao_regulatory_citation,
         'category_order': get_legal_category_order(results, 'advisory_opinions'),
         'social_image_identifier': 'legal',
-        'selected_ao_category_ids': ao_doc_category_ids,
-        'selected_ao_category_names': ao_document_category_names,
+        'selected_ao_doc_category_ids': ao_doc_category_ids,
+        'selected_ao_doc_category_names': ao_document_category_names,
         'selected_ao_requestor_type_ids': ao_requestor_type_ids,
         'selected_ao_requestor_type_names': ao_requestor_type_names,
         'is_loading': True,  # Indicate that the page is loading initially

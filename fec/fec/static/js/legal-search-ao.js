@@ -82,7 +82,7 @@ LegalSearchAo.prototype.initFilters = function() {
 
   document.body.querySelector('#filters').addEventListener('change', this.handleFiltersChanged.bind(this));
 
-  const conflictingCheckboxes = document.querySelectorAll('#ao_is_pending-field, #ao_category-field');
+  const conflictingCheckboxes = document.querySelectorAll('#ao_is_pending-field, #ao_doc_category_id-field');
   conflictingCheckboxes.forEach(checkbox => {
     checkbox.addEventListener('change', this.overrideCheckboxes.bind(this));
   });
@@ -158,17 +158,17 @@ function updateTableSortColumn(th, newVal) {
 LegalSearchAo.prototype.overrideCheckboxes = function(e) {
   // If we've checked 'only pending', we need to uncheck all the categories
   if (e.target.id == 'ao_is_pending') {
-    const checkedCategories = document.querySelectorAll('#ao_category-field input:checked');
+    const checkedCategories = document.querySelectorAll('#ao_doc_category_id-field input:checked');
     checkedCategories.forEach(input => {
       $(input).trigger('click'); // Remote trigger a click so we also remove the tag
     });
 
     // If pending has been unchecked, we need to re-select Final Opinions
     if (!e.target.checked)
-      $('#ao_category_F').trigger('click');
+      $('#ao_doc_category_id_F').trigger('click');
 
   // We need to uncheck only-pending if we've chosen a category
-  } else if (e.target.id.indexOf('ao_category_') === 0) {
+  } else if (e.target.id.indexOf('ao_doc_category_id_') === 0) {
     // (but only trigger a click if it's checked—we're not trying to toggle its checked state)
     $('#ao_is_pending-field input:checked').trigger('click'); // Remote trigger a click so we also remove the tag
   }
@@ -204,7 +204,7 @@ LegalSearchAo.prototype.getResults = function(e) {
   filterFields.push('search', 'sort');
 
   // Set the sort param value according to this.sortOrder
-  serializedFilters.sort = this.sortOrder == 'asc' ? 'case_no' : '-case_no';
+  serializedFilters.sort = this.sortOrder == 'asc' ? 'ao_no' : '-ao_no';
 
   // Then update the URL with currently params
   updateQuery(serializedFilters, filterFields);
