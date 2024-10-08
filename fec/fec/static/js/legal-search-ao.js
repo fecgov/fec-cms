@@ -341,7 +341,8 @@ LegalSearchAo.prototype.handleFetchSuccess = function(response) {
  */
 LegalSearchAo.prototype.setLoading = function(isLoading) {
   this.isLoading = isLoading;
-  document.querySelector('.overlay.is-loading').setAttribute('style', `display:${isLoading ? 'block' : 'none'}`);
+  const isLoadingElement = document.querySelector('.overlay.is-loading');
+  if (isLoadingElement) isLoadingElement.setAttribute('style', `display:${isLoading ? 'block' : 'none'}`);
 
   // Since we have a success, let's change all the is-loading filters to is-successful
   if (!this.isLoading) {

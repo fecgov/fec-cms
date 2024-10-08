@@ -105,6 +105,11 @@ FilterPanel.prototype.handleAddEvent = function(e, opts) {
   }
 };
 
+/**
+ * If it hasn't been called once, updates the content of .filter-count
+ * @param {jQuery.Event} e
+ * @param {Object} opts
+ */
 FilterPanel.prototype.handleRemoveEvent = function(e, opts) {
   if (opts.loadedOnce !== true) {
     return;

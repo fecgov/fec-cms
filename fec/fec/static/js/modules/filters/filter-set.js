@@ -162,6 +162,7 @@ FilterSet.prototype.clear = function() {
  */
 FilterSet.prototype.handleTagRemoved = function(e, opts) {
   const $input = $(document.getElementById(opts.key));
+
   if ($input.length > 0) {
     const type = $input.get(0).type;
 
@@ -169,10 +170,10 @@ FilterSet.prototype.handleTagRemoved = function(e, opts) {
       $input.click(); // TODO: jQuery deprecation
     } else if (type === 'text') {
       $input.val('').trigger('change');
-    }
-    else if (type === 'select-one') {
-        $input.find('option[value=""]').prop('selected', true);
-        $input.trigger('change');
+    } else if (type === 'select-one') {
+      // Find the option with no value and set it to selected
+      $input.find('option[value=""]').attr('selected', true);
+      $input.trigger('change');
     }
   }
 };

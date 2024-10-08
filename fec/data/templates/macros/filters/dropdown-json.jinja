@@ -10,7 +10,6 @@ data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{
 </div>
 {% endmacro %}
 
-
 {% macro select_json_indentation(name, label, keys, options={}, default=none) %}
 <div class="filter js-filter js-filter-control sub--filter--indent" data-filter="select" 
 data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{{ default }}">
@@ -34,7 +33,7 @@ data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{
   @param {list} [forms=[]] - Used in <optgroup label="… {forms[loop.index-1]}"></optgroup>
 #}
 {% macro select_single(name, label, options={}, default=none, selected={}, title_prefix='', forms=[]) %}
-<div class="filter js-filter js-filter-control"  data-filter="select" data-name="{{ name }}" data-validate="false" data-modifies-filter="{{ name }}">
+<div class="filter js-filter js-filter-control" data-filter="select" data-name="{{ name }}" data-validate="false" data-modifies-filter="{{ name }}">
   <label for="{{ name }}" class="label">{{ label }}</label>
   <label class="label--help u-margin--top">Limit 1 {{ label | lower }}</label>
   <select id="{{ name }}" name="{{ name }}" data-filter-change="true" data-removeable-filter="true">
