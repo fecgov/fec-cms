@@ -54,8 +54,8 @@
         <label for="ao_is_pending">Show only pending requests</label>
       </div>
     </div>
-    <div class="filter js-filter" id="ao_category-field" data-filter="checkbox">
       {# {{ legal.checkbox_list('ao_category', 'Document Type', ao_document_categories, ao_category) }} #}
+    <div class="filter js-filter" id="ao_doc_category_id-field" data-filter="checkbox">
       <legend class="label">Document Type</legend>
       {% for category_id, category_label in ao_document_categories.items() %}
         <div>
