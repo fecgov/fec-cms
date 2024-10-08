@@ -16,50 +16,24 @@
 
 {% block filters %}
 <div class="filters__inner">
-  {# {{ legal.text_filter('ao_no', 'AO number') }} #}
   {{ text.field('ao_no', 'AO number') }}
-  {# <div class="filter"> #}
-    {# <label class="label" for="ao_no">AO number {{ ao_no }}</label> #}
-    {# <input id="ao_no" name="ao_no" type="text" value="{{ ao_no }}"> #}
-    {# {{ typeahead.field('ao_no', 'AO number', '', dataset='auditCommittees', allow_text=True) }} #}
-  {# </div> #}
   {{ text.field('ao_requestor', 'Requestor name (or AO name)') }}
   {{ dropdown.select_single_flat_list('ao_requestor_type', 'Requestor Type', options=ao_requestor_types )}}
-  {# {{ legal.text_filter('ao_requestor', 'Requestor name (or AO name)') }} #}
-  {# <div class="filter">
-    <label class="label" for="ao_requestor">Requestor name (or AO name)</label>
-    <input id="ao_requestor" name="ao_requestor" type="text" value="{{ ao_requestor }}">
-  </div> #}
-  {# <div class="filter">
-    <label for="ao_requestor_type" class="label">Requestor Type</label>
-    <select id="ao_requestor_type" name="ao_requestor_type">
-      {% for requestor_type_id, requestor_type_label in ao_requestor_types.items() %}
-        <option value="{{ requestor_type_id }}" 
-          {% if requestor_type_id in selected_ao_requestor_type_ids %}{% if requestor_type_id == 0 %}none{% else %}selected{% endif %}{% endif %}>
-          {{ requestor_type_label }}
-        </option>
-      {% endfor %}
-    </select>
-  </div> #}
 </div>
-
 <div class="js-accordion accordion--neutral restricted-fields" data-content-prefix="filter" data-open-first="true">
   <button type="button" class="js-accordion-trigger accordion__button">Documents</button>
   <div class="accordion__content">
     {{ legal.keyword_search(result_type, query) }}
-
     <div class="filter js-filter" id="ao_is_pending-field" data-filter="checkbox">
       <div>
         <input type="checkbox" id="ao_is_pending" name="ao_is_pending" value="true" {% if ao_is_pending == 'true' %}checked{% endif %}>
         <label for="ao_is_pending">Show only pending requests</label>
       </div>
     </div>
-      {# {{ legal.checkbox_list('ao_category', 'Document Type', ao_document_categories, ao_category) }} #}
     <div class="filter js-filter" id="ao_doc_category_id-field" data-filter="checkbox">
       <legend class="label">Document Type</legend>
       {% for category_id, category_label in ao_document_categories.items() %}
         <div>
-          {# {{ checkbox.checkbox('ao_category', category_id, category_label, 'ao_doc_category_id_') }} #}
           <input type="checkbox"
             id="ao_doc_category_id_{{ category_id }}"
             name="ao_doc_category_id"
@@ -78,52 +52,18 @@
     <label for="citation_require_all_false">Show cases citing any of them</label>
     <input type="radio" id="citation_require_all_true" name="ao_citation_require_all" value="true">
     <label for="citation_require_all_true">Show cases citing all of them</label>
-
     {{ typeahead.field('ao_regulatory_citation', 'Regulatory citation', False, dataset='aoRegulatoryCitations', allow_text=False) }}
     {{ typeahead.field('ao_statutory_citation', 'Statutory citation', False, dataset='aoStatutoryCitations', allow_text=False) }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Time period</button>
   <div class="accordion__content">
     {{ date.field('issue_date', 'Issued date', id_prefix='ao_') }}
-    {# <div class="filter">
-      <legend class="label">Issued date</legend>
-      <div class="range range--date js-date-range">
-        <div class="range__input range__input--min" data-filter="range">
-          <label for="ao_min_issue_date">Beginning</label>
-          <input id="ao_min_issue_date" name="ao_min_issue_date" placeholder="mm/dd/yyyy" value="{{ ao_min_issue_date }}">
-        </div>
-        <div class="range__hyphen">-</div>
-        <div class="range__input range__input--max" data-filter="range">
-          <label for="ao_max_issue_date">Ending</label>
-          <input id="ao_max_issue_date" name="ao_max_issue_date" placeholder="mm/dd/yyyy" value="{{ ao_max_issue_date }}">
-        </div>
-      </div>
-    </div> #}
     {{ date.field('request_date', 'Requested date', id_prefix='ao_') }}
-    {# <div class="filter">
-      <legend class="label">Requested date</legend>
-      <div class="range range--date js-date-range">
-        <div class="range__input range__input--min" data-filter="range">
-          <label for="ao_min_request_date">Beginning</label>
-          <input id="ao_min_request_date" name="ao_min_request_date" placeholder="mm/dd/yyyy" value="{{ ao_min_request_date }}">
-        </div>
-        <div class="range__hyphen">-</div>
-        <div class="range__input range__input--max" data-filter="range">
-          <label for="ao_max_request_date">Ending</label>
-          <input id="ao_max_request_date" name="ao_max_request_date" placeholder="mm/dd/yyyy" value="{{ ao_max_request_date }}">
-        </div>
-      </div>
-    </div>#}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Other entities</button>
-  <div class="accordion__content">
-    <div class="filter" id="ao_entity_name-field">
-      <label class="label" for="ao_entity_name">Entity name</label>
-      <input id="ao_entity_name" name="ao_entity_name" type="text" value="{{ ao_entity_name }}">
-    </div>
-  </div>
+  {{ text.field('ao_entity_name', 'Entity name') }}
 </div>
-{% endblock %}{# close filters block #}
+{% endblock %}
 
 {% block message %}
 <div class="data-container__tags u-no-padding-left">
@@ -139,74 +79,6 @@
       </div>
       <ul class="tags"></ul>
     </div>
-    {# <ul class="tags">
-      {% if query %}
-        <li data-tag-category="query" class="tag__category">
-          <div data-removable="true" class="tag__item">{{ query }}<button class="button js-close tag__remove" data-tag="query"><span class="u-visually-hidden">Remove</span></button></div>
-        </li>
-      {% endif %}
-      {% if ao_no %}
-        <li data-tag-category="ao_no" class="tag__category">
-          <div data-id="ao_no" data-removable="true" class="tag__item">{{ ao_no }}<button class="button js-close tag__remove" data-tag="ao_no"><span class="u-visually-hidden">Remove</span></button></div>
-        </li>
-      {% endif %}
-      {% if ao_requestor %}
-        <li data-tag-category="ao_requestor" class="tag__category">
-          <div data-removable="true" class="tag__item">Requestor: {{ ao_requestor }}<button class="button js-close tag__remove" data-tag="ao_requestor"><span class="u-visually-hidden">Remove</span></button></div>
-        </li>
-      {% endif %}
-      {% if ao_min_issue_date or ao_max_issue_date %}
-        <li data-tag-category="issue_date" class="tag__category tag__category__range--date">
-          <span class="tag__label">Issue date</span>
-          {% if ao_min_issue_date %}
-          <div data-removable="true" data-id="min_issue_date" class="tag__item">{% if not ao_max_issue_date %}Beginning {% endif %}{{ ao_min_issue_date }}<button class="button js-close tag__remove" data-tag="ao_min_issue_date"><span class="u-visually-hidden">Remove</span></button></div>
-          {% endif %}
-          {% if ao_max_issue_date %}
-          <div data-removable="true" data-id="max_issue_date" class="tag__item">{% if not ao_min_issue_date %}Ending {% endif %}{{ ao_max_issue_date }}<button class="button js-close tag__remove" data-tag="ao_max_issue_date"><span class="u-visually-hidden">Remove</span></button></div>
-          {% endif %}
-        </li>
-      {% endif %}
-      {% if ao_min_request_date or ao_max_request_date %}
-        <li data-tag-category="request_date" class="tag__category tag__category__range--date">
-          <span class="tag__label">Request date</span>
-          {% if ao_min_request_date %}
-          <div data-removable="true" data-id="min_request_date" class="tag__item">{% if not ao_max_request_date %}Beginning {% endif %}{{ ao_min_request_date }}<button class="button js-close tag__remove" data-tag="ao_min_request_date"><span class="u-visually-hidden">Remove</span></button></div>
-          {% endif %}
-          {% if ao_max_request_date %}
-          <div data-removable="true" data-id="max_request_date" class="tag__item">{% if not ao_min_request_date %}Ending {% endif %}{{ ao_max_request_date }}<button class="button js-close tag__remove" data-tag="ao_max_request_date"><span class="u-visually-hidden">Remove</span></button></div>
-          {% endif %}
-        </li>
-      {% endif %}
-      {% if ao_entity_name %}
-        <li data-tag-category="ao_entity_name" class="tag__category">
-          <div data-removable="true" class="tag__item">{{ ao_entity_name }}<button class="button js-close tag__remove" data-tag="ao_entity_name"><span class="u-visually-hidden">Remove</span></button></div>
-        </li>
-      {% endif %}
-      {% if selected_ao_requestor_type_names %}
-        <li data-tag-category="ao_requestor_type" class="tag__category">
-          {% for selected_ao_requestor_type_name in selected_ao_requestor_type_names %}
-            <div data-removable="true" class="tag__item">{{ selected_ao_requestor_type_name }}<button class="button js-close tag__remove" data-tag="ao_requestor_type_id_{{ loop.index0 }}"><span class="u-visually-hidden">Remove</span></button></div>
-          {% endfor %}
-        </li>
-      {% endif %}
-      {% if selected_ao_category_names and selected_ao_category_names | reject('equalto', none) | list %}
-        <li data-tag-category="doc_category" class="tag__category">
-          {% for selected_ao_category_name in selected_ao_category_names %}
-            <div data-removable="true" class="tag__item">{{ selected_ao_category_name }}<button class="button js-close tag__remove" data-tag="ao_doc_category_id_{{ loop.index0 }}"><span class="u-visually-hidden">Remove</span></button></div>
-          {% endfor %}
-        </li>
-      {% endif %}
-      {% if ao_regulatory_citation %}
-        <li data-tag-category="ao_regulatory_citation" class="tag__category">
-          <div data-removable="true" class="tag__item">{{ ao_regulatory_citation }}<button class="button js-close tag__remove" data-tag="{{ ao_regulatory_citation }}"><span class="u-visually-hidden">Remove</span></button></div>
-        </li>
-      {% endif %}
-      {% if ao_statuatory_citation %}
-        <li data-tag-category="ao_statuatory_citation" class="tag__category">
-          <div data-removable="true" class="tag__item">{{ ao_statuatory_citation }}<button class="button js-close tag__remove" data-tag="{{ ao_statuatory_citation }}"><span class="u-visually-hidden">Remove</span></button></div>
-        </li>
-      {% endif %}
-    </ul> #}
   </div>
   <div class="row">
     <div class="message message--info">
@@ -214,19 +86,16 @@
     </div>
   </div>
 </div>
-{% endblock %}{# close message block #}
+{% endblock %}
 
 {% block results %}
-  {# {% with results=results %}
-    {% include 'partials/legal-pagination.jinja' %}
-  {% endwith %} #}
   {% with advisory_opinions = results.advisory_opinions %}
     {% include 'partials/legal-search-results-advisory-opinion.jinja' %}
   {% endwith %}
   {% with results=results %}
     {% include 'partials/legal-pagination.jinja' %}
   {% endwith %}
-{% endblock %}{# close results block #}
+{% endblock %}
 
 {% block scripts %}
   {{ tags_for_js_chunks('legal-search-ao.js', '')|safe }}
