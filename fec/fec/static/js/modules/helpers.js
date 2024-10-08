@@ -556,7 +556,7 @@ export function missingDataReason(dataType) {
 /**
  * Takes a jQuery element and returns whether or not it's in the viewport
  * @param {JQuery} $elm - the element to check
- * @return {bool} - If the element is in the viewport
+ * @returns {boolean} - If the element is in the viewport
  */
 export function isInViewport($elm) {
   let top = $elm.offset().top;

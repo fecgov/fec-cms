@@ -110,7 +110,7 @@ AggregateTotalsFrame.prototype.handleResize = function(e = null) {
 /**
  * Builds the <iframe> and puts it into the page
  * @param {HTMLScriptElement} scriptElement - Used to transfer dataset from <script> to <iframe>
- * @return {HTMLObjectElement} - An <iframe> element that has been inserted into the page.
+ * @returns {HTMLIFrameElement} - An <iframe> element that has been inserted into the page.
  */
 function buildElement(scriptElement) {
   let toReturn = document.createElement('iframe');
