@@ -56,10 +56,12 @@ LegalSearchAo.prototype.initFilters = function() {
   // Do a quick edit for the Requestor Type field
   /** @property {HTMLSelectElement} */
   const requestorSelect = document.querySelector('#ao_requestor_type');
-  // The jinja element includes a <option>More</option> that we want to remove
-  if (requestorSelect.options[0].value == '') requestorSelect.removeChild(requestorSelect.options[0]);
+  // The Jinja template element includes a <option>More</option> that we want to remove
   // The Python list doesn't like assigning an empty string as its value so we'll do that here
-  if (requestorSelect.options[0].textContent == 'Any') requestorSelect.options[0].value = '';
+  if (requestorSelect.options[1].textContent == 'Any') {
+    requestorSelect.removeChild(requestorSelect.options[1]);
+    requestorSelect.options[0].textContent = 'Any';
+  }
 
   const tagList = new TagList({
     resultType: 'results',
@@ -80,7 +82,9 @@ LegalSearchAo.prototype.initFilters = function() {
   this.filterPanel = new FilterPanel();
   this.filterSet = this.filterPanel.filterSet;
 
-  document.body.querySelector('#filters').addEventListener('change', this.handleFiltersChanged.bind(this));
+  document.querySelector('#category-filters').addEventListener('change', this.handleFiltersChanged.bind(this));
+
+  document.querySelector('.js-filter-tags').addEventListener('click', this.handleRemovingRequestorTypeTag.bind(this));
 
   const conflictingCheckboxes = document.querySelectorAll('#ao_is_pending-field, #ao_doc_category_id-field');
   conflictingCheckboxes.forEach(checkbox => {
@@ -175,6 +179,18 @@ LegalSearchAo.prototype.overrideCheckboxes = function(e) {
 };
 
 /**
+ * TODO: FIX THE NEED FOR THIS
+ * Removing the filter tag for ao_requestor_type was resetting its <select>,
+ * but its 'change' and 'select' events weren't bubbling.
+ * This sets getResults to a delay when this single filter tag is removed.
+ * @param {PointerEvent} e
+ */
+LegalSearchAo.prototype.handleRemovingRequestorTypeTag = function(e) {
+  if (e.target.closest('[data-id="ao_requestor_type"]'))
+    this.debounce(this.getResults.bind(this), 250);
+};
+
+/**
  * Initialize everything
  */
 document.addEventListener('DOMContentLoaded', () => {
@@ -186,6 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
  * @param {Event} e
  */
 LegalSearchAo.prototype.getResults = function(e) {
+
   if (e) e.preventDefault();
 
   // Adjust various classes and appearances
