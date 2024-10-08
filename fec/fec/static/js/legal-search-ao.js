@@ -34,6 +34,17 @@ export default function LegalSearchAo() {
 }
 
 LegalSearchAo.prototype.initFilters = function() {
+  // The template includes a <input id="search-type" type="hidden"> that we want to fix
+  // because 'search_type' goes to the URL upon this.filterSet.serialize() but we want `type`.
+  // But only change its name and id if there isn't already a #type element
+  // TODO: Change this in legal-doc-search-results.jinja, moving that input into the filters blocks?
+  // TODO: It would require changing all the templates that extend legal-doc-search-results
+  if (!document.querySelector('#type')) {
+    const theSearchType = document.querySelector('#search-type');
+    theSearchType.id = 'type';
+    theSearchType.name = 'type';
+  }
+
   this.lastQueryResponse.total_advisory_opinions =
     parseInt(document.querySelector('.js-count .tags__count').textContent) || 0;
 

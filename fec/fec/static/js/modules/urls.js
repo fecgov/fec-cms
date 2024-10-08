@@ -28,7 +28,7 @@ export function updateQuery(params, fields) {
 }
 
 export function pushQuery(params, fields) {
-  var queryString = nextUrl(params, fields);
+  const queryString = nextUrl(params, fields);
   if (queryString !== null) {
     window.history.pushState(
       params,
@@ -65,7 +65,7 @@ export function nextUrl(params, fields) {
 
 export function compareQuery(first, second, keys) {
   keys = keys || _union(_keys(first), _keys(second));
-  var different = _find(keys, function(key) {
+  const different = _find(keys, function(key) {
     return !_isEqual(
       ensureArray(first[key]).sort(),
       ensureArray(second[key]).sort()
