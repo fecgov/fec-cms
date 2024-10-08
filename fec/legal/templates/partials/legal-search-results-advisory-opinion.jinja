@@ -30,7 +30,7 @@
               Pending
             {% elif advisory_opinion.status == "Withdrawn"%}
               Withdrawn
-            {% else %}
+            {% elif advisory_opinion.issue_date != undefined %}
               {{ advisory_opinion.issue_date | date(fmt='%m/%d/%Y') }}
             {% endif %}
           </div>
