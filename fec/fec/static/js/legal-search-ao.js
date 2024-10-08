@@ -474,6 +474,8 @@ LegalSearchAo.prototype.updateFiltersOnSuccess = function(changeCount) {
  */
 LegalSearchAo.prototype.updatePagination = function(resultsCount) {
   const paginationHolder = document.querySelector('.results-info');
+  if (!paginationHolder) return; // If we can't find the pagination holder, no reason to continue
+
   const control_count = paginationHolder.querySelector('.results-length');
   const summary = paginationHolder.querySelector('.dataTables_info');
   const maxButtonCount = 5;
