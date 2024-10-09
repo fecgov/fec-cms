@@ -623,7 +623,7 @@ DataTable_FEC.prototype.checkFromQuery = function(){
          }
       });
 
-    // Put 0-second, set-timeout on receipts/disbursements datatables so checkoxes are availale to check...
+    // Put 0-second, set-timeout on datatables with processed/raw tabs so function can run...
     // ...after the two filter panels are loaded
     if ('data_type' in queryFields){
     setTimeout(function() {
@@ -634,6 +634,7 @@ DataTable_FEC.prototype.checkFromQuery = function(){
               $(box).prop('checked', true).change(); // TODO: jQuery deprecation
         }
        }
+      $('button.is-loading, label.is-loading').removeClass('is-loading');
       }, 0);
 
      // No Set-timeout needed on datatables without two filter panels...
