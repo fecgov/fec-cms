@@ -45,13 +45,17 @@ LegalSearchAo.prototype.initFilters = function() {
     theSearchType.name = 'type';
   }
 
-  this.lastQueryResponse.total_advisory_opinions =
-    parseInt(document.querySelector('.js-count .tags__count').textContent) || 0;
-
-  document.querySelector('.js-count .tags__count').textContent =
-    this.lastQueryResponse.total_advisory_opinions.toLocaleString('en-US');
-
-  this.updatePagination(this.lastQueryResponse.total_advisory_opinions);
+  // If we have a results count,
+  // (without one, we'll get errors)
+  const resultsCountHolder = document.querySelector('.js-count .tags__count');
+  if (resultsCountHolder) {
+    // Save its textContent as our initial results count
+    this.lastQueryResponse.total_advisory_opinions = parseInt(resultsCountHolder.textContent) || 0;
+    // Add commas to that value
+    resultsCountHolder.textContent = this.lastQueryResponse.total_advisory_opinions.toLocaleString('en-US');
+    // And tell the pagination to update its results counts (adding commas, too)
+    this.updatePagination(this.lastQueryResponse.total_advisory_opinions);
+  }
 
   // Do a quick edit for the Requestor Type field
   /** @property {HTMLSelectElement} */
@@ -257,8 +261,13 @@ LegalSearchAo.prototype.getResults = function(e) {
 LegalSearchAo.prototype.refreshTable = function(response) {
 
   // Update the results count
-  document.querySelector('.js-count .tags__count').textContent =
-    response.total_advisory_opinions.toLocaleString('en-US');
+  const resultsCountHolder = document.querySelector('.js-count .tags__count');
+  if (resultsCountHolder)
+    resultsCountHolder.textContent = response.total_advisory_opinions.toLocaleString('en-US');
+
+  // If we don't have a table to put the results, no reason to continue
+  // TODO: seems this should create a table if it doesn't exist
+  if (!this.resultsTbody) return;
 
   // Update the table itself
   const tableBodyRows = [];
