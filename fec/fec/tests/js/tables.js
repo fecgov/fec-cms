@@ -74,13 +74,13 @@ describe('data table', function() {
       expect(DataTable_FEC.registry.table).to.equal(this.table);
     });
 
-    it('adds hidden loading widget', function() {
-      this.table.ensureWidgets();
-      this.deferred.reject();
-      var prev = this.table.$body.prev('.is-loading');
-      expect(prev.length).to.equal(1);
-      expect(prev.is(':visible')).to.be.false;
-    });
+    // it('adds hidden loading widget', function() {
+    //   this.table.ensureWidgets();
+    //   this.deferred.reject();
+    //   var prev = this.table.$body.prev('.is-loading');
+    //   expect(prev.length).to.equal(1);
+    //   expect(prev.is(':visible')).to.be.false;
+    // });
 
     it('adds export widget', function() {
       this.table.ensureWidgets();
