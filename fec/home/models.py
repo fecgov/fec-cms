@@ -808,6 +808,13 @@ class CommissionerPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+    picture_download = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
     sworn_in = models.DateField(null=True, blank=True)
     term_expiration = models.DateField(null=True, blank=True)
     reappointed_dates = models.CharField(max_length=255, blank=True)
@@ -834,6 +841,7 @@ class CommissionerPage(Page):
         FieldPanel('middle_initial'),
         FieldPanel('last_name'),
         FieldPanel('picture'),
+        FieldPanel('picture_download'),
         FieldPanel('sworn_in'),
         FieldPanel('term_expiration'),
         FieldPanel('reappointed_dates'),
