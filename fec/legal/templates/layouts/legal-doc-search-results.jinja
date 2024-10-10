@@ -57,7 +57,7 @@
     {% if results.total_all %}
       {% block results %}{% endblock %}
     {% else %}
-    <div class="u-padding--left u-padding--right">
+    <div class="u-padding--left u-padding--right js-legal-search-no-results">
       <div class="message message--no-icon">
         <h2 class="message__title">No results</h2>
         <p>Sorry, we didn&rsquo;t find any documents matching {% if query %}<span class="t-bold">{{ query }}</span>{% else %}your search{% endif %}.</p>

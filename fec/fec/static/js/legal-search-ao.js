@@ -12,27 +12,62 @@ import { updateQuery } from './modules/urls.js';
 
 /**
  * @property {FilterPanel} this.filterPanel - The left column's filters panel element
- * @property {HTMLElement} this.resultsTbody - The table body where fetched results should go
+ * @property {HTMLElement} this.resultsTable - The table of results
+ * @property {HTMLElement} this.paginationElement - The <div> that holds the pagination
+ * @property {HTMLElement} this.noResultsMessage - The <div> to toggle to show or hide the 'no results' message
+ * @property {HTMLElement} widgetsElement - The <div> that holds the header filter tags and message
  * @property {boolean} this.isLoading - Controls appearance and behavior of elements on the screen
  * @property {number} this.debounceTimer - The number for the debouncing setTimeout
  * @property {number} this.messageTimer - The number for the "filter added/removed" fade-outs
- * @property {string} this.lastFilterId - The last filter ID that was changed by the user
  * @property {number} this.lastQuery - The most recent query results
+ * @property {string} this.lastFilterId - The last filter ID that was changed by the user
  */
 export default function LegalSearchAo() {
-  this.filterPanel;
-  this.resultsTbody = document.querySelector('.legal-search-results tbody');
-  this.isLoading = false;
   this.debounceTimer;
+  this.filterPanel;
+  this.isLoading = false;
+  this.lastQueryResponse = {};
+  this.noResultsMessage;
+  this.paginationElement;
+  this.resultsTable;
   this.sortOrder = 'desc';
 
-  this.lastQueryResponse = {};
-
+  this.widgetsElement = document.querySelector('.data-container__widgets');
+  this.initPageParts();
   this.initFilters();
   new KeywordModal();
   this.initTable();
 }
 
+/**
+ * The Jinja templates add either the results table + pagination or the no-results message.
+ * This adds what's missing
+ */
+LegalSearchAo.prototype.initPageParts = function() {
+  const tableExists = document.querySelector('.panel__main.legal-search-results');
+  const paginationExists = document.querySelector('.results-info');
+  const noResultsMessageExists = document.querySelector('.u-padding--left.u-padding--right .message.message--no-icon');
+
+  // We're inserting html after the widgets, so let's insert the pagination first,
+  if (!paginationExists)
+    this.widgetsElement.insertAdjacentHTML('afterend', template_no_pagination);
+
+  // then push a missing results table between widgets and pagination
+  if (!tableExists)
+    this.widgetsElement.insertAdjacentHTML('afterend', template_no_table);
+
+  if (!noResultsMessageExists)
+    document.querySelector('.results-info').insertAdjacentHTML('afterend', template_no_results);
+
+  // Now that all the parts are created, save 'em
+  this.resultsTable = document.querySelector('.js-legal-search-results');
+  this.paginationElement = document.querySelector('.js-legal-search-pagination');
+  this.noResultsMessage = document.querySelector('.js-legal-search-no-results');
+};
+
+/**
+ * Do the work to get the filters initialized and wired together
+ */
 LegalSearchAo.prototype.initFilters = function() {
   // The template includes a <input id="search-type" type="hidden"> that we want to fix
   // because 'search_type' goes to the URL upon this.filterSet.serialize() but we want `type`.
@@ -116,10 +151,10 @@ LegalSearchAo.prototype.initFilters = function() {
 };
 
 /**
- * Assigns event listeners to the sortable column
+ * Assign event listeners to the sortable column
  */
 LegalSearchAo.prototype.initTable = function() {
-  // Add the functionality for the ao_no sorting, but only if the table exists
+  // Add the functionality for the case (first column) sorting, but only if the table exists
   const theTh = document.querySelector('#results th[data-sort]');
   if (theTh) {
     theTh.setAttribute('aria-controls', 'results');
@@ -202,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * After we've received the call for more data, let's so get it
+ * After we've received the demand for more data, let's so get it
  * @param {Event} e
  */
 LegalSearchAo.prototype.getResults = function(e) {
@@ -260,6 +295,8 @@ LegalSearchAo.prototype.getResults = function(e) {
  */
 LegalSearchAo.prototype.refreshTable = function(response) {
 
+  const resultsTableBody = this.resultsTable.querySelector('tbody');
+
   // Update the results count
   const resultsCountHolder = document.querySelector('.js-count .tags__count');
   if (resultsCountHolder)
@@ -267,7 +304,7 @@ LegalSearchAo.prototype.refreshTable = function(response) {
 
   // If we don't have a table to put the results, no reason to continue
   // TODO: seems this should create a table if it doesn't exist
-  if (!this.resultsTbody) return;
+  if (!resultsTableBody) return;
 
   // Update the table itself
   const tableBodyRows = [];
@@ -317,7 +354,7 @@ LegalSearchAo.prototype.refreshTable = function(response) {
 
     tableBodyRows.push(newRow);
   });
-  this.resultsTbody.innerHTML = tableBodyRows.join('');
+  resultsTableBody.innerHTML = tableBodyRows.join('');
 };
 
 /**
@@ -500,11 +537,22 @@ LegalSearchAo.prototype.updateFiltersOnSuccess = function(changeCount) {
  * @param {number} resultsCount
  */
 LegalSearchAo.prototype.updatePagination = function(resultsCount) {
-  const paginationHolder = document.querySelector('.results-info');
-  if (!paginationHolder) return; // If we can't find the pagination holder, no reason to continue
+  // const paginationHolder = document.querySelector('.results-info');
+  if (!this.paginationElement) return; // If we can't find the pagination holder, no reason to continue
 
-  const control_count = paginationHolder.querySelector('.results-length');
-  const summary = paginationHolder.querySelector('.dataTables_info');
+  // Toggle major components on whether we have results
+  if (resultsCount > 0) {
+    this.noResultsMessage.setAttribute('aria-hidden', true);
+    this.paginationElement.removeAttribute('aria-hidden');
+    this.resultsTable.removeAttribute('aria-hidden');
+  } else {
+    this.noResultsMessage.removeAttribute('aria-hidden');
+    this.paginationElement.setAttribute('aria-hidden', true);
+    this.resultsTable.setAttribute('aria-hidden', true);
+  }
+
+  const control_count = this.paginationElement.querySelector('.results-length');
+  const summary = this.paginationElement.querySelector('.dataTables_info');
   const maxButtonCount = 5;
 
   const resultLimit = parseInt(control_count.value);
@@ -620,3 +668,50 @@ LegalSearchAo.prototype.updatePagination = function(resultsCount) {
   }
   buttonsParent.appendChild(newNextButton);
 };
+
+// The bare-minimum html for the results table
+const template_no_results = `<div class="u-padding--left u-padding--right js-legal-search-no-results">
+  <div class="message message--no-icon">
+    <h2 class="message__title">No results</h2>
+    <p>Sorry, we didn’t find any documents matching your search.</p>
+    <div class="message--alert__bottom">
+      <p>Think this was a mistake?</p>
+      <ul class="list--buttons">
+        <li><a class="button button--standard" href="${window.WEBMANAGER_EMAIL}">Email our team</a></li>
+        <li><a class="button button--standard" href="https://github.com/fecgov/fec/issues">File an issue</a></li>
+      </ul>
+    </div>
+  </div>
+</div>`;
+
+const template_no_table = `<div class="panel__main legal-search-results js-legal-search-results">
+  <div class="overlay is-loading" style="display: none;"></div>
+  <table id="results" class="simple-table simple-table--display">
+    <thead>
+      <tr class="simple-table__header">
+        <th class="simple-table__header-cell cell--15 sorting_desc sorting" data-sort="ao_no" aria-controls="results" aria-sort="descending" aria-description="Case: Activate to sort column descending">Case</th>
+        <th class="simple-table__header-cell cell--15">Date issued</th>
+        <th class="simple-table__header-cell">Summary</th>
+        <th class="simple-table__header-cell">This opinion is cited by these later opinions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>`;
+
+const template_no_pagination = `<div class="results-info u-border-top-base">
+  <div class="dataTables_length">
+    <label for="results-length">Results per page: 
+      <select name="results_length" aria-controls="results" class="results-length">
+          <option value="20" selected="">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+      </select>
+    </label> 
+  </div>
+  <div class="dataTables_paginate">
+    <span class="paginate_button previous is-disabled" aria-label="No previous results to show">Previous</span>
+    <span class="paginate_button next" aria-label="Go to page 2">Next</span>
+  </div>
+  <div class="dataTables_info">Showing 0 results</div>
+</div>`;
