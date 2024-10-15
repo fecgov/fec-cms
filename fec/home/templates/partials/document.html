@@ -29,6 +29,6 @@
     </h3>
   {% endif %}
     <div class="post__meta">
-      <a class="tag tag--secondary" href="">{{ document.category }}</a>
+      <a class="tag tag--secondary" href="{{self.get_parent.url}}?category={{ document.category | cms_query_syntax }}">{{ document.category }}</a>
     </div>
 </article>
