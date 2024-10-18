@@ -245,7 +245,9 @@ FilterTypeahead.prototype.handleSubmit = function(e) {
 };
 
 FilterTypeahead.prototype.clearInput = function() {
-  this.$field.typeahead('val', null).change(); // TODO: jQuery deprecation
+  this.$field.typeahead('val', null);
+  // Switching to a native Event (instead of jQuery.Event) because the bubbling wasn't working as expected
+  this.$field.get(0).dispatchEvent(new Event('change', { bubbles: true }));
   this.disableButton();
 };
 
