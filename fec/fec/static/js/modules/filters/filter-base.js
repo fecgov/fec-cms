@@ -29,7 +29,7 @@ export function prepareValue($elm, value) {
  * @property {JQuery} this.$input - The jQuery-selected HTMLElement <input>
  * @property {JQuery} this.$filterLabel - The HTMLElement where the label and filter count will go
  * @property {Array} this.fields
- * @property {boolean} this.isSubfilter
+ * @property {boolean} this.isSubfilter - True if this.$elm has the .js-sub-filter class
  * @property {string} this.lastAction - When filters are changed, this is the message for the user @ex "Filter added"
  * @property {boolean} this.loadedOnce
  * @property {string} this.name

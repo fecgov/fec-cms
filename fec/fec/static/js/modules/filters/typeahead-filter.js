@@ -7,6 +7,7 @@ import { datasets } from '../typeahead.js';
 /**
  *
  * @param {jQuery.Object} elm
+ * @property {FilterTypeahead} this.typeaheadFilter - An instance of FilterTypeahead
  */
 export default function TypeaheadFilter(elm) {
   Filter.call(this, elm);
@@ -44,6 +45,9 @@ TypeaheadFilter.prototype.fromQuery = function(query) {
 // Ignore changes on typeahead input
 TypeaheadFilter.prototype.handleChange = function() {}; // eslint-disable-line no-empty-function
 
+/**
+ * @param {jQuery.Event} e
+ */
 TypeaheadFilter.prototype.handleNestedChange = function(e) {
   const $input = $(e.target);
   const id = $input.attr('id');

@@ -90,6 +90,10 @@ FilterPanel.prototype.toggle = function() {
   }
 };
 
+/**
+ * @param {jQuery.Event} e
+ * @param {Object} opts
+ */
 FilterPanel.prototype.handleAddEvent = function(e, opts) {
   // If it's a data-type toggle, we tell it to ignore for the count of active filters
   if (opts.ignoreCount) {

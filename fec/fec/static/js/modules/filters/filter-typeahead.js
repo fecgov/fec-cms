@@ -77,6 +77,12 @@ const template_checkbox = value => `
   </li>
 `;
 
+/**
+ * Used inside typeahead-filter.js as this.typeaheadFilter
+ * @param {JQuery} selector
+ * @param {Object} dataset
+ * @param {boolean} allowText
+ */
 export default function FilterTypeahead(selector, dataset, allowText) {
   this.$elm = $(selector);
   this.dataset = dataset;
@@ -135,6 +141,13 @@ FilterTypeahead.prototype.setFirstItem = function() {
 };
 
 FilterTypeahead.prototype.handleSelect = function(e, datum) {
+/**
+ * Event handler for typeahead:selected, also called from inside @see handleSubmit()
+ * @param {jQueryEvent} e
+ * @param {Object} datum
+ * @param {string} datum.name
+ * @param {[number|string]} datum.value
+ */
   let identifier = datum.id || datum.name;
 
   const id = formatId(identifier);
@@ -154,6 +167,9 @@ FilterTypeahead.prototype.handleAutocomplete = function(e, datum) {
   this.datum = datum;
 };
 
+/**
+ * @param {KeyboardEvent} e
+ */
 FilterTypeahead.prototype.handleKeypress = function(e) {
   this.handleChange();
 
@@ -173,6 +189,12 @@ FilterTypeahead.prototype.handleChange = function() {
     (this.allowText && this.$field.typeahead('val').length > 1) ||
     this.datum
   ) {
+/**
+ * Called with every keystroke. Generally serves to enable or disable the button if the
+ * TODO: remove the e after debugging
+ * @property {Function} this.$field.typeahead - Initialized during typeaheadInit
+ * @property {string} this.$field.typeahead('val') - Returns the content of the typeahead <input>
+ */
     this.enableButton();
   } else if (
     this.$field.typeahead('val').length === 0 ||

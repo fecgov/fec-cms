@@ -318,7 +318,7 @@ export function barsAfterRender(template, api) {
  * Sets up the 'change' event listener and handler for input and select inside $form.
  * The change handler halts the event, hides the details, starts the reload and saves e.target as updateChangedEl
  * @param {JQuery} $form
- * @param {DataTable.api} api
+ * @param {DataTable.Api} api
  */
 function updateOnChange($form, api) {
   function onChange(e) {
