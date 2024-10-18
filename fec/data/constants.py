@@ -983,19 +983,6 @@ SENATE_CLASSES = {
             'MO', 'NV', 'NH', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'SC', 'SD', 'UT', 'VT', 'WA', 'WI']
 }
 
-pac_party_types = OrderedDict([
-    ('N', 'PAC - nonqualified'),
-    ('Q', 'PAC - qualified'),
-    ('V', 'Hybrid PAC - nonqualified'),
-    ('W', 'Hybrid PAC - qualified'),
-    ('P', 'Party - nonqualified'),
-    ('Y', 'Party - qualified'),
-    ('Z', 'National party nonfederal account'),
-    ('U', 'Single candidate independent expenditure'),
-    ('O', 'Super PAC (independent expenditure only'),
-    ('I', 'Independent expenditure filer (not a committee)')
-])
-
 mur_disposition_category_ids = OrderedDict([
     ('1', 'Approved by Commission'),
     ('2', 'Approved In Part Recs.'),
