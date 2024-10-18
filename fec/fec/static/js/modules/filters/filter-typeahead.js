@@ -49,7 +49,7 @@ function stripQuotes(value) {
   return value.replace(/["]+/g, '');
 }
 
-var textDataset = {
+const textDataset = {
   display: 'id',
   source: function(query, syncResults) {
     syncResults([{ id: sanitizeValue(query) }]);
@@ -100,7 +100,6 @@ export default function FilterTypeahead(selector, dataset, allowText) {
   this.$elm.on('mouseenter', '.tt-suggestion', this.handleHover.bind(this));
   $('body').on('filter:modify', this.changeDataset.bind(this));
 
-  this.$field.on('typeahead:selected', this.handleSelect.bind(this));
   this.$field.on('typeahead:selected', this.handleSelected.bind(this));
   this.$field.on('typeahead:autocomplete', this.handleAutocomplete.bind(this));
   this.$field.on('typeahead:render', this.setFirstItem.bind(this));
@@ -185,22 +184,18 @@ FilterTypeahead.prototype.handleKeypress = function(e) {
   }
 };
 
-FilterTypeahead.prototype.handleChange = function() {
-  if (
-    (this.allowText && this.$field.typeahead('val').length > 1) ||
-    this.datum
-  ) {
 /**
  * Called with every keystroke. Generally serves to enable or disable the button if the
- * TODO: remove the e after debugging
  * @property {Function} this.$field.typeahead - Initialized during typeaheadInit
  * @property {string} this.$field.typeahead('val') - Returns the content of the typeahead <input>
  */
+FilterTypeahead.prototype.handleChange = function() {
+
+  if ( (this.allowText && this.$field.typeahead('val').length > 1) || this.datum) {
     this.enableButton();
   } else if (
-    this.$field.typeahead('val').length === 0 ||
-    (!this.allowText && this.$field.typeahead('val').length < 3)
-  ) {
+    this.$field.typeahead('val').length === 0 || (!this.allowText && this.$field.typeahead('val').length < 3)
+    ) {
     this.datum = null;
     this.disableButton();
   }

@@ -121,14 +121,11 @@ LegalSearchAo.prototype.initFilters = function() {
   this.filterPanel = new FilterPanel();
   this.filterSet = this.filterPanel.filterSet;
 
-  document.querySelector('#category-filters').addEventListener('change', this.handleFiltersChanged.bind(this));
+  const categoryFiltersElement = document.querySelector('#category-filters');
+  categoryFiltersElement.addEventListener('change', this.handleFiltersChanged.bind(this));
 
-  document.querySelector('.js-filter-tags').addEventListener('click', this.handleRemovingRequestorTypeTag.bind(this));
-
-  const conflictingCheckboxes = document.querySelectorAll('#ao_is_pending-field, #ao_doc_category_id-field');
-  conflictingCheckboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', this.overrideCheckboxes.bind(this));
-  });
+  const filterTagsElement = document.querySelector('.js-filter-tags');
+  filterTagsElement.addEventListener('click', this.handleRemovingRequestorTypeTag.bind(this));
 
   // Update the window.location based on filters, in case this special template is setting values
   updateQuery(this.filterSet.serialize(), this.filterSet.fields);
@@ -241,7 +238,6 @@ document.addEventListener('DOMContentLoaded', () => {
  * @param {Event} e
  */
 LegalSearchAo.prototype.getResults = function(e) {
-
   if (e) e.preventDefault();
 
   // Adjust various classes and appearances
