@@ -179,7 +179,7 @@ FilterTypeahead.prototype.handleKeypress = function(e) {
     this.$field.attr('aria-expanded', 'false');
   }
 
-  if (e.keyCode === 13) {
+  if (e.keyCode === 13 || e.code === 'Enter') { // 13 = enter/return but .keyCode has been deprecated
     this.handleSubmit(e);
   }
 };
