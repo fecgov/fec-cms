@@ -17,7 +17,7 @@
 {% block filters %}
 <div class="filters__inner">
   {{ text.field('ao_no', 'AO number') }}
-  {{ text.field('ao_requestor', 'Requestor name (or AO name)') }}
+  {{ text.field('ao_requestor', 'Requestor name (or AO name)', select_qty='single') }}
   {{ dropdown.select_single_flat_list('ao_requestor_type', 'Requestor Type', options=ao_requestor_types )}}
 </div>
 <div class="js-accordion accordion--neutral restricted-fields" data-content-prefix="filter" data-open-first="true">
