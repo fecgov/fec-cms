@@ -117,17 +117,19 @@ Filter.prototype.formatValue = function($input, value) {
  */
 Filter.prototype.handleAddEvent = function(e, opts) {
   if (opts.name !== this.name) {
-    return;
+    // return; // return nothing
+  } else {
+    // The only time when opts.filterLabel != this.$filterLabel
+    // is when a checkbox is a subfilter of a multifilter.
+    // In that case, the multifilter explicitly sets the label and the checkbox
+    // passes that value through via the event options.
+    // Subfilters don't add listeners that trigger this handler, so it will only
+    // be called by the MultiFilter.
+    const $filterLabel = opts.filterLabel || this.$filterLabel;
+    this.increment($filterLabel);
+    this.setLastAction(e, opts);
+
   }
-  // The only time when opts.filterLabel != this.$filterLabel
-  // is when a checkbox is a subfilter of a multifilter.
-  // In that case, the multifilter explicitly sets the label and the checkbox
-  // passes that value through via the event options.
-  // Subfilters don't add listeners that trigger this handler, so it will only
-  // be called by the MultiFilter.
-  const $filterLabel = opts.filterLabel || this.$filterLabel;
-  this.increment($filterLabel);
-  this.setLastAction(e, opts);
 };
 
 /**
@@ -138,11 +140,12 @@ Filter.prototype.handleAddEvent = function(e, opts) {
 Filter.prototype.handleRemoveEvent = function(e, opts) {
   // Don't decrement on initial page load
   if (opts.name !== this.name || opts.loadedOnce !== true) {
-    return;
+    // return; // return nothing
+  } else {
+    const $filterLabel = opts.filterLabel || this.$filterLabel;
+    this.decrement($filterLabel);
+    this.setLastAction(e, opts);
   }
-  const $filterLabel = opts.filterLabel || this.$filterLabel;
-  this.decrement($filterLabel);
-  this.setLastAction(e, opts);
 };
 
 /**
@@ -181,15 +184,17 @@ Filter.prototype.decrement = function($filterLabel) {
  */
 Filter.prototype.setLastAction = function(e, opts) {
   if (opts.name !== this.name) {
-    return;
-  }
-
-  if (e.type === 'filter:added') {
-    this.lastAction = 'Filter added';
-  } else if (e.type === 'filter:removed') {
-    this.lastAction = 'Filter removed';
+    // return; // return nothing
   } else {
-    this.lastAction = 'Filter changed';
+
+    if (e.type === 'filter:added')
+      this.lastAction = 'Filter added';
+
+    else if (e.type === 'filter:removed')
+      this.lastAction = 'Filter removed';
+
+    else
+      this.lastAction = 'Filter changed';
   }
 };
 

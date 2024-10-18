@@ -97,15 +97,15 @@ FilterPanel.prototype.toggle = function() {
 FilterPanel.prototype.handleAddEvent = function(e, opts) {
   // If it's a data-type toggle, we tell it to ignore for the count of active filters
   if (opts.ignoreCount) {
-    return;
-  }
-
-  const filterCount = this.$filterHeader.find('.filter-count');
-
-  if (filterCount.html()) {
-    filterCount.html(parseInt(filterCount.html(), 10) + 1);
+    // return; // return nothing
   } else {
-    this.$filterHeader.append('<span class="filter-count">1</span>');
+    const filterCount = this.$filterHeader.find('.filter-count');
+
+    if (filterCount.html()) {
+      filterCount.html(parseInt(filterCount.html(), 10) + 1);
+    } else {
+      this.$filterHeader.append('<span class="filter-count">1</span>');
+    }
   }
 };
 
@@ -116,14 +116,15 @@ FilterPanel.prototype.handleAddEvent = function(e, opts) {
  */
 FilterPanel.prototype.handleRemoveEvent = function(e, opts) {
   if (opts.loadedOnce !== true) {
-    return;
-  }
-
-  const filterCount = this.$filterHeader.find('.filter-count');
-
-  if (filterCount.html() === '1') {
-    filterCount.remove();
+    // return; // return nothing
   } else {
-    filterCount.html(parseInt(filterCount.html(), 10) - 1);
+
+    const filterCount = this.$filterHeader.find('.filter-count');
+
+    if (filterCount.html() === '1') {
+      filterCount.remove();
+    } else {
+      filterCount.html(parseInt(filterCount.html(), 10) - 1);
+    }
   }
 };

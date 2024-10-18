@@ -273,12 +273,13 @@ FilterTypeahead.prototype.appendCheckbox = function(opts) {
   const data = this.formatCheckboxData(opts);
 
   if (this.$elm.find('#' + data.id).length) {
-    return;
+    // return; // return nothing
+  } else {
+    const checkbox = $(template_checkbox(data));
+    checkbox.appendTo(this.$selected);
+    checkbox.find('input').change(); // TODO: jQuery deprecation
+    this.clearInput();
   }
-  var checkbox = $(template_checkbox(data));
-  checkbox.appendTo(this.$selected);
-  checkbox.find('input').change(); // TODO: jQuery deprecation
-  this.clearInput();
 };
 
 FilterTypeahead.prototype.formatCheckboxData = function(input) {
