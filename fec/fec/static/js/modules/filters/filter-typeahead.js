@@ -101,6 +101,7 @@ export default function FilterTypeahead(selector, dataset, allowText) {
   $('body').on('filter:modify', this.changeDataset.bind(this));
 
   this.$field.on('typeahead:selected', this.handleSelect.bind(this));
+  this.$field.on('typeahead:selected', this.handleSelected.bind(this));
   this.$field.on('typeahead:autocomplete', this.handleAutocomplete.bind(this));
   this.$field.on('typeahead:render', this.setFirstItem.bind(this));
   this.$field.on('keyup', this.handleKeypress.bind(this));
@@ -140,7 +141,6 @@ FilterTypeahead.prototype.setFirstItem = function() {
   }
 };
 
-FilterTypeahead.prototype.handleSelect = function(e, datum) {
 /**
  * Event handler for typeahead:selected, also called from inside @see handleSubmit()
  * @param {jQueryEvent} e
@@ -148,6 +148,7 @@ FilterTypeahead.prototype.handleSelect = function(e, datum) {
  * @param {string} datum.name
  * @param {[number|string]} datum.value
  */
+FilterTypeahead.prototype.handleSelected = function(e, datum) {
   let identifier = datum.id || datum.name;
 
   const id = formatId(identifier);
@@ -240,11 +241,11 @@ FilterTypeahead.prototype.handleHover = function() {
 
 FilterTypeahead.prototype.handleSubmit = function(e) {
   if (this.datum) {
-    this.handleSelect(e, this.datum);
+    this.handleSelected(e, this.datum);
   } else if (!this.datum && !this.allowText) {
-    this.handleSelect(e, this.firstItem);
+    this.handleSelected(e, this.firstItem);
   } else if (this.allowText && this.$field.typeahead('val').length > 0) {
-    this.handleSelect(e, { id: this.$field.typeahead('val') });
+    this.handleSelected(e, { id: this.$field.typeahead('val') });
   }
 };
 
