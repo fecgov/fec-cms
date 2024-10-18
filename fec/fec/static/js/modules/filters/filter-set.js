@@ -169,7 +169,8 @@ FilterSet.prototype.handleTagRemoved = function(e, opts) {
     if (type === 'checkbox' || type === 'radio') {
       $input.click(); // TODO: jQuery deprecation
     } else if (type === 'text') {
-      $input.val('').trigger('change');
+      $input.val('');
+      $input.get(0).dispatchEvent(new Event('change', { bubbles: true }));
     } else if (type === 'select-one') {
       // Find the option with no value and set it to selected
       $input.find('option[value=""]').attr('selected', true);

@@ -31,6 +31,7 @@ export default function LegalSearchAo() {
   this.paginationElement;
   this.resultsTable;
   this.sortOrder = 'desc';
+  this.tagList;
 
   this.widgetsElement = document.querySelector('.data-container__widgets');
   this.initPageParts();
@@ -102,7 +103,7 @@ LegalSearchAo.prototype.initFilters = function() {
     requestorSelect.options[0].textContent = 'Any';
   }
 
-  const tagList = new TagList({
+  this.tagList = new TagList({
     resultType: 'results',
     showResultCount: true,
     tableTitle: 'Advisory opinions',
@@ -116,7 +117,7 @@ LegalSearchAo.prototype.initFilters = function() {
   // grab the search value from the URL and create the tag directly
   const queryParams = URI.parseQuery(window.location.search);
   if (queryParams.search)
-    tagList.addTag(null, { key: 'search-input', name: 'search', value: queryParams.search });
+    this.tagList.addTag(null, { key: 'search-input', name: 'search', value: queryParams.search });
 
   this.filterPanel = new FilterPanel();
   this.filterSet = this.filterPanel.filterSet;
@@ -129,6 +130,8 @@ LegalSearchAo.prototype.initFilters = function() {
 
   // Update the window.location based on filters, in case this special template is setting values
   updateQuery(this.filterSet.serialize(), this.filterSet.fields);
+
+  document.querySelector('#search-input').addEventListener('change', this.handleKeywordSearchChange.bind(this));
 
   /**
    * Keep scroll-position with each reload
@@ -214,6 +217,25 @@ LegalSearchAo.prototype.overrideCheckboxes = function(e) {
   }
 };
 
+LegalSearchAo.prototype.handleKeywordSearchChange = function(e) {
+  const newVal = e.target.value;
+  const currentTag = document.querySelectorAll('.tags .tag__item[data-id="search-input"]');
+
+  // If there's already a tag, we need to change its label
+  if (currentTag.length >= 1) {
+    currentTag.forEach((tag, i) => {
+      // We only want to keep one filter tag for keywords, so change its label
+      // but only if it has a value to show 
+      if (i === 0 && newVal.length > 0)
+        tag.textContent = newVal;
+      // Otherwise, if it's after the first one, click its X button
+      else tag.querySelector('.js-close').click();
+    });
+  } else {
+    this.tagList.addTag(null, { key: 'search-input', name: 'search', value: newVal });
+  }
+};
+
 /**
  * TODO: FIX THE NEED FOR THIS
  * Removing the filter tag for ao_requestor_type was resetting its <select>,
@@ -267,10 +289,16 @@ LegalSearchAo.prototype.getResults = function(e) {
   // Initial params from the URL
   const fetchParams = URI.parseQuery(window.location.search);
 
-  // Dates have been problematic so we'll remove any empty query params.
+  // Dates and ao_no have been problematic so we'll remove any empty query params.
   // Problematic in that URIs with &ao_max_issue_date=& would get a warning: date must be MM/DD/YYYY or YYYY-MM-DD
   for (let param in fetchParams) {
-    if (!fetchParams[param]) delete fetchParams[param];
+    if (!fetchParams[param] || fetchParams[param] === '' || fetchParams == [''] || fetchParams[param].length < 1)
+      delete fetchParams[param];
+
+    if (param == 'search') {
+      fetchParams['q'] = fetchParams['search'];
+      delete fetchParams['search'];
+    }
   }
 
   const fetchUrl = buildUrl(fetchPath, fetchParams);

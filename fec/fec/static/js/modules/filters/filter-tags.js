@@ -160,8 +160,8 @@ TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
 
 /**
  * Called from @see TagList.prototype.removeTag
- * @param {} $tag
- * @param {} emit
+ * @param {JQuery} $tag
+ * @param {boolean} emit
  */
 TagList.prototype.removeTagElement = function($tag, emit) {
   // This handles the actual removal of the DOM elements
@@ -297,7 +297,7 @@ TagList.prototype.removeTagEvt = function(e, opts) {
 
 /**
  * Click handler for this.$list .js-close
- * @param {} e
+ * @param {jQuery.Event} e
  */
 TagList.prototype.removeTagDom = function(e) {
   const key = $(e.target)
