@@ -1,5 +1,6 @@
 {% extends "layouts/legal-doc-search-results.jinja" %}
 {% import 'macros/legal.jinja' as legal %}
+{% import 'macros/filters/checkbox.jinja' as checkbox %}
 {% set document_type_display_name = 'Closed Matters Under Review' %}
 
 {% block header %}
@@ -57,6 +58,9 @@
         </div>
       </div>
     </div>
+   
+    {{ checkbox.checkbox_dropdown_multiple('mur_disposition_category_id', 'Final disposition', selected=suggested_mur_disposition_category_ids, options=mur_disposition_category_ids_display, legend=True, prefix='mur_disposition_category_id') }}
+
     <div class="filter">
       <button type="submit" class="button button--cta u-margin--top">Apply filters</button>
     </div>
@@ -111,6 +115,13 @@
         <li data-tag-category="doc_category" class="tag__category">
           {% for selected_doc_category_name in selected_doc_category_names %}
             <div data-removable="true" class="tag__item">{{ selected_doc_category_name }}<button class="button js-close tag__remove" data-tag="doc_category_{{ loop.index0 }}"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endfor %}
+        </li>
+      {% endif %}
+      {% if selected_mur_disposition_names and selected_mur_disposition_names | reject('equalto', none) | list %}
+        <li data-tag-category="disposition_category" class="tag__category">
+          {% for selected_mur_disposition_name in selected_mur_disposition_names %}
+            <div data-removable="true" class="tag__item">{{ selected_mur_disposition_name }}<button class="button js-close tag__remove" data-tag="disposition_category_{{ loop.index0 }}"><span class="u-visually-hidden">Remove</span></button></div>
           {% endfor %}
         </li>
       {% endif %}
@@ -171,5 +182,63 @@
       localStorage.setItem('scrollpos', window.scrollY);
       location.reload();
   };
-  </script>
+
+
+  // Allow the selected-item button to uncheck box in list above
+  $(document).on('click','.dropdown__item',  function(e){
+      const btn = $(this).find('.dropdown__item--selected');
+      if (btn) {
+        $('#' + btn.data('label')).trigger('click');
+      }
+    });
+/* 
+ Checks the checkboxes for the chosen items because the existing JS does not do it as expected.
+ This is specific to this particular filter, but could be extended to handle all checkbox-dropdown 
+ filters on a page as we do in tables.js with the checkFromQuery() function.
+*/
+  // Get the context vars from the view to use in JS
+  window.context = {{ context_vars|to_json|safe }};
+    setTimeout(function() {
+    (function() {
+    //Create an object of the mur_disposition_category_id parameter value(s) from the request
+    const queryFields = {'mur_disposition_category_id':window.context.mur_disposition_category_id}
+    // Create an array to hold checkbox html elements
+    const queryBoxes = [];
+    // Iterate the key/vals of queryFields
+    $.each(queryFields, function(key, val){
+      // Create a variable for matching checkbox
+      let queryBox;
+      // Handle val as array
+      if (Array.isArray(val)) {
+          // iterate the val array
+          val.forEach(i => {
+            // Find matching checkboxes
+            queryBox = $(`input:checkbox[name="${key}"][value="${i}"]`);
+            // Push matching checkboxes to the  array
+            queryBoxes.push(queryBox);
+          });
+        }
+        // Handle singular val
+        else {
+          // find matching checkbox
+          queryBox = $(`input:checkbox[name="${key}"][value="${val}"]`);
+          // Push matching checkbox to the array
+          queryBoxes.push(queryBox);
+         }
+      });
+      // Iterate the array of matching checkboxes(queryBoxes), check by triggering click
+      // ...if they are not already checked
+      for (let box of queryBoxes) {
+        if (!($(box).is(':checked'))) {
+              $(box).trigger('click');   
+        }
+       }
+     
+  // Remove the loading label GIF on the filter panel
+   $('button.is-loading, label.is-loading').removeClass('is-loading');
+  //$('.dropdown__item--selected.is-checked').css('pointer-events','none')
+  
+})();
+}, 500)
+</script>
 {% endblock %}
