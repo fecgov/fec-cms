@@ -982,3 +982,6 @@ SENATE_CLASSES = {
         ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'MD',
             'MO', 'NV', 'NH', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'SC', 'SD', 'UT', 'VT', 'WA', 'WI']
 }
+
+# Archived MUR that has the same number as the current MUR
+ARCHIVED_MUR_EXCEPTION = "3620"

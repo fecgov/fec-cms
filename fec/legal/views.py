@@ -140,7 +140,8 @@ def process_mur_subjects(mur):
 
 
 def mur_page(request, mur_no):
-    mur = api_caller.load_legal_mur(mur_no)
+    requested_mur_type = request.GET.get('mur_type', 'current')
+    mur = api_caller.load_legal_mur(mur_no, requested_mur_type)
 
     if not mur:
         raise Http404()
@@ -347,6 +348,7 @@ def legal_doc_search_mur(request):
         'case_min_close_date': case_min_close_date,
         'case_max_close_date': case_max_close_date,
         'query': original_query,
+        'ARCHIVED_MUR_EXCEPTION': constants.ARCHIVED_MUR_EXCEPTION,
         'social_image_identifier': 'legal',
         'selected_doc_category_ids': case_doc_category_ids,
         'selected_doc_category_names': mur_document_category_names,
