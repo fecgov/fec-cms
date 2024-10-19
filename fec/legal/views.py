@@ -367,10 +367,10 @@ def legal_doc_search_mur(request):
         'social_image_identifier': 'legal',
         'selected_doc_category_ids': case_doc_category_ids,
         'selected_doc_category_names': mur_document_category_names,
+        'mur_disposition_category_ids': mur_disposition_category_ids,
         'selected_mur_disposition_names': selected_mur_disposition_names,
         'mur_disposition_category_ids_display': mur_disposition_category_ids_display,
-        'suggested_mur_disposition_category_ids': suggested_mur_disposition_category_ids,
-
+        #'suggested_mur_disposition_category_ids': suggested_mur_disposition_category_ids,
         'is_loading': True,  # Indicate that the page is loading initially
         "context_vars": context_vars,
     })
