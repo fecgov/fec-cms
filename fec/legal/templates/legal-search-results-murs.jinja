@@ -58,20 +58,24 @@
         </div>
       </div>
     </div>
-
-    {{ checkbox.checkbox_dropdown_multiple(
-      'mur_disposition_category_id',
-      'Final disposition',
-      selected=suggested_mur_disposition_category_ids,
-      options=mur_disposition_category_ids_display,
-      legend=True,
-      prefix='mur_disposition_category_id'
-      ) }}
-    
-    <div class="filter">
-      <button type="submit" class="button button--cta u-margin--top">Apply filters</button>
+  </div>
+  <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
+    <button type="button" class="js-accordion-trigger accordion__button">Case details</button>
+    <div class="accordion__content">
+      {{ checkbox.checkbox_dropdown_multiple(
+        'mur_disposition_category_id',
+        'Final disposition',
+        selected=suggested_mur_disposition_category_ids,
+        options=mur_disposition_category_ids_display,
+        legend=True,
+        prefix='mur_disposition_category_id'
+        ) }}
     </div>
   </div>
+  <div class="filters__inner">
+    <button type="submit" class="button button--cta u-margin--top">Apply filters</button>
+  </div>
+ 
 {% endblock %}
 
 {% block message %}
@@ -205,47 +209,42 @@
 */
   // Get the context vars from the view to use in JS
   window.context = {{ context_vars|to_json|safe }};
-    setTimeout(function() {
-    (function() {
-    //Create an object of the mur_disposition_category_id parameter value(s) from the request
-    const queryFields = {'mur_disposition_category_id':window.context.mur_disposition_category_id}
-    // Create an array to hold checkbox html elements
-    const queryBoxes = [];
-    // Iterate the key/vals of queryFields
-    $.each(queryFields, function(key, val){
-      // Create a variable for matching checkbox
-      let queryBox;
-      // Handle val as array
-      if (Array.isArray(val)) {
-          // iterate the val array
-          val.forEach(i => {
-            // Find matching checkboxes
-            queryBox = $(`input:checkbox[name="${key}"][value="${i}"]`);
-            // Push matching checkboxes to the  array
-            queryBoxes.push(queryBox);
-          });
-        }
-        // Handle singular val
-        else {
-          // find matching checkbox
-          queryBox = $(`input:checkbox[name="${key}"][value="${val}"]`);
-          // Push matching checkbox to the array
+  setTimeout(function() {
+  (function() {
+  //Create an object of the mur_disposition_category_id parameter value(s) from the request
+  const queryFields = {'mur_disposition_category_id':window.context.mur_disposition_category_id}
+  // Create an array to hold checkbox html elements
+  const queryBoxes = [];
+  // Iterate the key/vals of queryFields
+  $.each(queryFields, function(key, val){
+    // Create a variable for matching checkbox
+    let queryBox;
+    // Handle val as array
+    if (Array.isArray(val)) {
+        // iterate the val array
+        val.forEach(i => {
+          // Find matching checkboxes
+          queryBox = $(`input:checkbox[name="${key}"][value="${i}"]`);
+          // Push matching checkboxes to the  array
           queryBoxes.push(queryBox);
-         }
-      });
-      // Iterate the array of matching checkboxes(queryBoxes), check by triggering click
-      // ...if they are not already checked
-      for (let box of queryBoxes) {
-        if (!($(box).is(':checked'))) {
-              $(box).trigger('click');   
+        });
+      }
+      // Handle singular val
+      else {
+        // find matching checkbox
+        queryBox = $(`input:checkbox[name="${key}"][value="${val}"]`);
+        // Push matching checkbox to the array
+        queryBoxes.push(queryBox);
         }
-       }
-     
-  // Remove the loading label GIF on the filter panel
-   $('button.is-loading, label.is-loading').removeClass('is-loading');
-  //$('.dropdown__item--selected.is-checked').css('pointer-events','none')
-  
-})();
-}, 500)
+    });
+    // Iterate the array of matching checkboxes(queryBoxes), check by triggering click
+    // ...if they are not already checked
+    for (let box of queryBoxes) {
+      if (!($(box).is(':checked'))) {
+            $(box).trigger('click');   
+      }
+    }
+   })();
+  }, 500)
 </script>
 {% endblock %}
