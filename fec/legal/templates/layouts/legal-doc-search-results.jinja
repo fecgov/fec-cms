@@ -76,6 +76,7 @@
     {% endif %}
   </div>
 </section>
+
 {% endblock %}
 
 {% include 'partials/legal-disclaimer.jinja' %}
@@ -118,6 +119,19 @@
             selectedCategories.forEach((cat, i) => {
               if (i != index) {
                 url.searchParams.append('case_doc_category_id', cat);
+              }
+            });
+          } else if (tag && tag.startsWith('disposition_category_')) { // Check if tag is not null or undefined
+            // Get the index from the tag
+            const index = tag.split('_')[2];
+            // Get all selected mur_disposition_category_ids from the URL
+            const selectedCategories_d = url.searchParams.getAll('mur_disposition_category_id');
+            // Remove all instances of 'mur_disposition_category_id' from the URL
+            url.searchParams.delete('mur_disposition_category_id');
+            // Re-add all categories except the one at the specified index
+            selectedCategories_d.forEach((cat, i) => {
+              if (i != index) {
+                url.searchParams.append('mur_disposition_category_id', cat);
               }
             });
           } else {
