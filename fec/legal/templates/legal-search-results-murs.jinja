@@ -58,8 +58,15 @@
         </div>
       </div>
     </div>
-   
-    {{ checkbox.checkbox_dropdown_multiple('mur_disposition_category_id', 'Final disposition', selected=suggested_mur_disposition_category_ids, options=mur_disposition_category_ids_display, legend=True, prefix='mur_disposition_category_id') }}
+
+    {{ checkbox.checkbox_dropdown_multiple(
+      'mur_disposition_category_id',
+      'Final disposition',
+      selected=suggested_mur_disposition_category_ids,
+      options=mur_disposition_category_ids_display,
+      legend=True,
+      prefix='mur_disposition_category_id'
+      ) }}
     
     <div class="filter">
       <button type="submit" class="button button--cta u-margin--top">Apply filters</button>

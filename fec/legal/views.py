@@ -323,14 +323,14 @@ def legal_doc_search_mur(request):
     # Return the selected document category name
     mur_document_category_names = [mur_document_categories.get(id) for id in case_doc_category_ids]
 
-    # mur_disposition_category variables
+    # mur_disposition_category_id variables:
     # Dropdown options
     mur_disposition_category_ids_display = constants.mur_disposition_category_ids
     # Suggested items above dropdown
     suggested_mur_disposition_category_ids = constants.suggested_mur_disposition_category_ids
-    # Combine the dropdown options and suggested 
+    # Combine the dropdown options and suggested for the full list
     mur_disposition_category_ids_list = {**mur_disposition_category_ids_display, **suggested_mur_disposition_category_ids}
-    # Iterate the combined list to find selected names
+    # Get list of selected names
     selected_mur_disposition_names = [mur_disposition_category_ids_list.get(id) for id in mur_disposition_category_ids]
     
     # Pass chosen ids to Javascript
@@ -370,7 +370,7 @@ def legal_doc_search_mur(request):
         'mur_disposition_category_ids': mur_disposition_category_ids,
         'selected_mur_disposition_names': selected_mur_disposition_names,
         'mur_disposition_category_ids_display': mur_disposition_category_ids_display,
-        #'suggested_mur_disposition_category_ids': suggested_mur_disposition_category_ids,
+        'suggested_mur_disposition_category_ids' : suggested_mur_disposition_category_ids,
         'is_loading': True,  # Indicate that the page is loading initially
         "context_vars": context_vars,
     })
