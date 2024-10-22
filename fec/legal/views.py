@@ -282,6 +282,7 @@ def legal_doc_search_mur(request):
     case_min_close_date = request.GET.get('case_min_close_date', '')
     case_max_close_date = request.GET.get('case_max_close_date', '')
     case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
+    mur_disposition_category_ids = request.GET.getlist('mur_disposition_category_id', [])
 
     query, query_exclude = parse_query(original_query)
 
@@ -306,6 +307,7 @@ def legal_doc_search_mur(request):
         case_min_close_date=case_min_close_date,
         case_max_close_date=case_max_close_date,
         case_doc_category_id=case_doc_category_ids,
+        mur_disposition_category_id=mur_disposition_category_ids
     )
 
     # Define MUR document categories dictionary
@@ -320,6 +322,21 @@ def legal_doc_search_mur(request):
 
     # Return the selected document category name
     mur_document_category_names = [mur_document_categories.get(id) for id in case_doc_category_ids]
+
+    # mur_disposition_category_id variables:
+    # Dropdown options
+    mur_disposition_category_ids_display = constants.mur_disposition_category_ids
+    # Suggested items above dropdown
+    suggested_mur_disposition_category_ids = constants.suggested_mur_disposition_category_ids
+    # Combine the dropdown options and suggested for the full list
+    mur_disposition_category_ids_list = {**mur_disposition_category_ids_display, **suggested_mur_disposition_category_ids}
+    # Get list of selected names
+    selected_mur_disposition_names = [mur_disposition_category_ids_list.get(id) for id in mur_disposition_category_ids]
+    
+    # Pass chosen ids to Javascript
+    context_vars = {
+        "mur_disposition_category_id": mur_disposition_category_ids,
+    }
 
     for mur in results['murs']:
         # Process MUR subjects
@@ -350,7 +367,12 @@ def legal_doc_search_mur(request):
         'social_image_identifier': 'legal',
         'selected_doc_category_ids': case_doc_category_ids,
         'selected_doc_category_names': mur_document_category_names,
+        'mur_disposition_category_ids': mur_disposition_category_ids,
+        'selected_mur_disposition_names': selected_mur_disposition_names,
+        'mur_disposition_category_ids_display': mur_disposition_category_ids_display,
+        'suggested_mur_disposition_category_ids' : suggested_mur_disposition_category_ids,
         'is_loading': True,  # Indicate that the page is loading initially
+        "context_vars": context_vars,
     })
 
 
