@@ -56,6 +56,10 @@ CheckboxFilter.prototype.handleChange = function(e) {
   $input.data('loaded-once', true);
 };
 
+/**
+ * @param {jQuery.Event} e
+ * @param {Object} [opts]
+ */
 CheckboxFilter.prototype.removeCheckbox = function(e, opts) {
   let $input = $(e.target);
 

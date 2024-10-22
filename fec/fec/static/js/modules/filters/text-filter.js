@@ -83,7 +83,11 @@ TextFilter.prototype.handleChange = function() {
   this.$input.data('loaded-once', true);
 };
 
+/**
+ * @param {jQuery.Event} e
+ */
 TextFilter.prototype.handleKeyup = function() {
+  // e.preventDefault();
   this.$submit.removeClass('is-disabled');
 };
 

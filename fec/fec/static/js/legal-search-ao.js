@@ -256,8 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * After we've received the demand for more data, let's so get it
- * @param {Event} e
+ * After we've received the demand for more data, let's go get it
+ * @param {Event} [e]
  */
 LegalSearchAo.prototype.getResults = function(e) {
   if (e) e.preventDefault();

@@ -57,7 +57,7 @@ FilterSet.prototype.buildFilter = function($elm) {
 /**
  * Called by {@link activateAll}
  * @param {JQuery} $selector - jQuery list of elements
- * @returns 
+ * @returns
  */
 FilterSet.prototype.activate = function($selector) {
   const self = this;
@@ -76,7 +76,6 @@ FilterSet.prototype.activate = function($selector) {
     .pluck('fields')
     .flatten()
     .value();
-  
 
   // Activate each filter
   _each(filters, function(filter) {
