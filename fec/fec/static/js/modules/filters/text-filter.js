@@ -11,7 +11,7 @@ export default function TextFilter(elm) {
   Filter.call(this, elm);
 
   this.id = this.$input.attr('id');
-  this.singleSelectOnly = elm.attr('data-select-qty') == 'single';
+  this.singleSelectOnly = elm.attr('data-select-qty') && elm.attr('data-select-qty') == 'single';
 
   this.$submit = this.$elm.find('button');
 
@@ -64,7 +64,7 @@ TextFilter.prototype.handleChange = function() {
     this.$submit.removeClass('is-disabled');
 
     // If we're a single-select, uncheck and remove any current filters
-    if (this.singleSelectOnly) {
+    if (this.singleSelectOnly === true) {
       this.$elm.find('input[type="checkbox"]').trigger('click');
       this.$elm.find('.js-remove').trigger('click');
     }

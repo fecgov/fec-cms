@@ -122,8 +122,12 @@ LegalSearchAo.prototype.initFilters = function() {
   this.filterPanel = new FilterPanel();
   this.filterSet = this.filterPanel.filterSet;
 
-  const categoryFiltersElement = document.querySelector('#category-filters');
-  categoryFiltersElement.addEventListener('change', this.handleFiltersChanged.bind(this));
+  const categoryFiltersFormElement = document.querySelector('#category-filters');
+  categoryFiltersFormElement.addEventListener('change', this.handleFiltersChanged.bind(this));
+  categoryFiltersFormElement.addEventListener('submit', function(e) {
+    // We don't want 'Enter' to submit the form
+    e.preventDefault();
+  });
 
   const filterTagsElement = document.querySelector('.js-filter-tags');
   filterTagsElement.addEventListener('click', this.handleRemovingRequestorTypeTag.bind(this));
