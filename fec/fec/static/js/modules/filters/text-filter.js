@@ -1,3 +1,8 @@
+/**
+ * To find TextFilter instances in Jinja templates, search for something like
+ * `import 'macros/filters/text.jinja' as text` and `text.field(`
+ */
+
 import Inputmask from 'inputmask';
 import { default as _escape } from 'underscore/modules/escape.js';
 
@@ -16,6 +21,7 @@ export default function TextFilter(elm) {
   this.$submit = this.$elm.find('button');
 
   this.$input.on('change', this.handleChange.bind(this));
+  this.$input.on('keydown', this.handleKeydown.bind(this));
   this.$input.on('keyup', this.handleKeyup.bind(this));
   this.$input.on('blur', this.handleBlur.bind(this));
 
@@ -81,6 +87,16 @@ TextFilter.prototype.handleChange = function() {
   }
 
   this.$input.data('loaded-once', true);
+};
+
+/**
+ * @param {jQuery.Event} e
+ */
+TextFilter.prototype.handleKeydown = function(e) {
+  if (e && e.key == 'Enter') {
+    e.preventDefault();
+    this.$input.trigger('blur'); // Trigger the blur, which will cause a change event
+  }
 };
 
 /**

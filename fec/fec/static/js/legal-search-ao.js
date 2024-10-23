@@ -124,10 +124,6 @@ LegalSearchAo.prototype.initFilters = function() {
 
   const categoryFiltersFormElement = document.querySelector('#category-filters');
   categoryFiltersFormElement.addEventListener('change', this.handleFiltersChanged.bind(this));
-  categoryFiltersFormElement.addEventListener('submit', function(e) {
-    // We don't want 'Enter' to submit the form
-    e.preventDefault();
-  });
 
   const filterTagsElement = document.querySelector('.js-filter-tags');
   filterTagsElement.addEventListener('click', this.handleRemovingRequestorTypeTag.bind(this));
@@ -136,22 +132,6 @@ LegalSearchAo.prototype.initFilters = function() {
   updateQuery(this.filterSet.serialize(), this.filterSet.fields);
 
   document.querySelector('#search-input').addEventListener('change', this.handleKeywordSearchChange.bind(this));
-
-  /**
-   * Keep scroll-position with each reload
-   * @TODO: do we still need this if we're refreshing the data immediately?
-   * {@link https://stackoverflow.com/questions/17642872/refresh-page-and-keep-scroll-position}
-  */
-  // document.addEventListener('DOMContentLoaded', function() {
-  //   const scrollpos = localStorage.getItem('scrollpos');
-  //   if (scrollpos) window.scrollTo(0, scrollpos);
-  //   // this.getResults();
-  // });
-
-  // window.onbeforeunload = function() {
-  //   localStorage.setItem('scrollpos', window.scrollY);
-  //   location.reload();
-  // };
 };
 
 /**
