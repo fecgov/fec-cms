@@ -565,7 +565,6 @@ LegalSearchAo.prototype.updateFiltersOnSuccess = function(changeCount) {
  * @param {number} resultsCount
  */
 LegalSearchAo.prototype.updatePagination = function(resultsCount) {
-  // const paginationHolder = document.querySelector('.results-info');
   if (!this.paginationElement) return; // If we can't find the pagination holder, no reason to continue
 
   // Toggle major components on whether we have results
@@ -581,7 +580,7 @@ LegalSearchAo.prototype.updatePagination = function(resultsCount) {
 
   const control_count = this.paginationElement.querySelector('.results-length');
   const summary = this.paginationElement.querySelector('.dataTables_info');
-  const maxButtonCount = 5;
+  const maxButtonsOnScreen = 5;
 
   const resultLimit = parseInt(control_count.value);
 
@@ -602,18 +601,18 @@ LegalSearchAo.prototype.updatePagination = function(resultsCount) {
   summary.textContent += resultsCount < 1000 ? resultsCount : resultsCount.toLocaleString('en-US');
   summary.textContent += ' results';
 
-  const totalNumberOfPages = Math.floor(resultsCount / resultLimit);
+  const totalNumberOfPages = Math.ceil(resultsCount / resultLimit);
   const currentPageNum = Math.floor(currentOffset / resultLimit);
   const pageNumbers = [];
 
   // If we have fewer pages than our max buttons, we don't need to worry about balancing them
-  if (totalNumberOfPages <= maxButtonCount) {
+  if (totalNumberOfPages <= maxButtonsOnScreen) {
     // Yay! We can just use every button
     for (let i = 0; i < totalNumberOfPages; i++) {
       pageNumbers.push(i + 1);
     }
   } else {
-    const buttonsBeforeCurrent = Math.floor(maxButtonCount / 2);
+    const buttonsBeforeCurrent = Math.floor(maxButtonsOnScreen / 2);
 
     pageNumbers.push(currentPageNum);
 
@@ -624,14 +623,14 @@ LegalSearchAo.prototype.updatePagination = function(resultsCount) {
       pageNumbers.unshift(i);
     }
     // Now for the buttons after the current page
-    // Start at the current page and work forward but not to exceed maxButtonCount
+    // Start at the current page and work forward but not to exceed maxButtonsOnScreen
     // (Perfect if we're on page 3-5 of 5 buttons)
-    for (let i = currentPageNum + 1; i < totalNumberOfPages && pageNumbers.length < maxButtonCount; i++) {
+    for (let i = currentPageNum + 1; i < totalNumberOfPages && pageNumbers.length < maxButtonsOnScreen; i++) {
       pageNumbers.push(i);
     }
-    // Coming back to the front, let's build to maxButtonCount
+    // Coming back to the front, let's build to maxButtonsOnScreen
     // (Necessary if we're on 4-5 of 5 buttons and only added two to the beginning)
-    for (let i = currentPageNum - buttonsBeforeCurrent - 1; i >= 0 && pageNumbers.length < maxButtonCount; i--) {
+    for (let i = currentPageNum - buttonsBeforeCurrent - 1; i >= 0 && pageNumbers.length < maxButtonsOnScreen; i--) {
       pageNumbers.unshift(i);
     }
   }
