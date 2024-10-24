@@ -225,7 +225,7 @@ export function modalRenderFactory(template, fetch) {
               $modal.find('.js-pdf_url').remove();
             }
             // Set focus on the close button
-            $('.js-hide').focus(); // TODO: jQuery deprecation
+            $('.js-hide').trigger('focus');
 
             // When under $large-screen
             // TODO figure way to share these values with CSS.
@@ -250,7 +250,7 @@ export function modalRenderFactory(template, fetch) {
 }
 
 function hidePanel(api, $modal) {
-  $('.row-active .js-panel-button').focus(); // TODO: jQuery deprecation
+  $('.row-active .js-panel-button').trigger('focus');
   $('.js-panel-toggle tr').toggleClass('row-active', false);
   $('body').toggleClass('panel-active', false);
   $modal.attr('aria-hidden', 'true');
@@ -595,58 +595,60 @@ DataTable_FEC.prototype.parseParams = function(querystring){
 };
 
 // Activate checkbox filter fields that filterSet.js cannot find to activate (see committee_types.jinja)
-DataTable_FEC.prototype.checkFromQuery = function(){
-    // Create a variable representing the querystring key/vals as an object
-    const queryFields = this.parseParams(this.getVars());
-    // Create an array to hold checkbox html elements
-    const queryBoxes = [];
-    // Iterate the key/vals of queryFields
-    $.each(queryFields, function(key, val){
-      // Create a variable for matching checkbox
-      let queryBox;
-      // Handle val as array
-      if (Array.isArray(val)) {
-          // iterate the val array
-          val.forEach(i => {
-            // Find matching checkboxes
-            queryBox = $(`input:checkbox[name="${key}"][value="${i}"]`);
-            // Push matching checkboxes to the  array
-            queryBoxes.push(queryBox);
-          });
-        }
-        // Handle singular val
-        else {
-          // find matching checkbox
-          queryBox = $(`input:checkbox[name="${key}"][value="${val}"]`);
-          // Push matching checkbox to the array
-          queryBoxes.push(queryBox);
-         }
+DataTable_FEC.prototype.checkFromQuery = function() {
+  // Create a variable representing the querystring key/vals as an object
+  const queryFields = this.parseParams(this.getVars());
+  // Create an array to hold checkbox html elements
+  const queryBoxes = [];
+  // Iterate the key/vals of queryFields
+  $.each(queryFields, function(key, val) {
+    // Create a variable for matching checkbox
+    let queryBox;
+    // Handle val as array
+    if (Array.isArray(val)) {
+      // iterate the val array
+      val.forEach(i => {
+        // Find matching checkboxes
+        queryBox = $(`input:checkbox[name="${key}"][value="${i}"]`);
+        // Push matching checkboxes to the  array
+        queryBoxes.push(queryBox);
       });
+    }
+    // Handle singular val
+    else {
+      // find matching checkbox
+      queryBox = $(`input:checkbox[name="${key}"][value="${val}"]`);
+      // Push matching checkbox to the array
+      queryBoxes.push(queryBox);
+    }
+  });
 
-    // Put 0-second, set-timeout on receipts/disbursements datatables so checkoxes are availale to check...
-    // ...after the two filter panels are loaded
-    if ('data_type' in queryFields){
-    setTimeout(function() {
-      // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
-      // ...if they are not already checked
-      for (let box of queryBoxes) {
-        if (!($(box).is(':checked'))) {
-              $(box).prop('checked', true).change(); // TODO: jQuery deprecation
+  // Put 0-second, set-timeout on receipts/disbursements datatables so checkoxes are availale to check...
+  // ...after the two filter panels are loaded
+  if ('data_type' in queryFields) {
+    setTimeout(
+      function() {
+        // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
+        // ...if they are not already checked
+        for (let box of queryBoxes) {
+          if (!($(box).is(':checked'))) {
+            $(box).prop('checked', true).trigger('change');
+          }
         }
-       }
-      }, 0);
-
-     // No Set-timeout needed on datatables without two filter panels...
-     // ... Also it causes a noticeable intermittent time-lag while populating table on these pages
-     } else {
-      // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
-      // ...if they are not already checked
-      for (let box of queryBoxes) {
-        if (!($(box).is(':checked'))) {
-              $(box).prop('checked', true).change(); // TODO: jQuery deprecation
-        }
-       }
+      },
+      0
+    );
+  // No Set-timeout needed on datatables without two filter panels...
+  // ... Also it causes a noticeable intermittent time-lag while populating table on these pages
+  } else {
+    // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
+    // ...if they are not already checked
+    for (let box of queryBoxes) {
+      if (!($(box).is(':checked'))) {
+        $(box).prop('checked', true).trigger('change');
       }
+    }
+  }
 
   // Remove the loading label GIF on the filter panel
   $('button.is-loading, label.is-loading').removeClass('is-loading');

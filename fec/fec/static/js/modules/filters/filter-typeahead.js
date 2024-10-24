@@ -12,7 +12,7 @@ const ID_PATTERN = /^\w{9}$/;
 
 function slugify(value) {
   return value
-    .trim() // TODO: jQuery deprecation
+    .trim()
     .replace(/\s+/g, '-')
     .replace(/[^a-z0-9:._-]/gi, '');
 }
@@ -131,7 +131,8 @@ FilterTypeahead.prototype.handleSelect = function(e, datum) {
 
   this.$elm.find('label[for="' + id + '"]').addClass('is-loading');
 
-  this.$button.focus().addClass('is-loading');
+  this.$button.trigger('focus');
+  this.$button.addClass('is-loading');
 };
 
 FilterTypeahead.prototype.handleAutocomplete = function(e, datum) {
@@ -147,7 +148,7 @@ FilterTypeahead.prototype.handleKeypress = function(e) {
     this.$field.attr('aria-expanded', 'false');
   }
 
-  if (e.keyCode === 13) {
+  if (e.which === 13) {
     this.handleSubmit(e);
   }
 };
@@ -211,7 +212,7 @@ FilterTypeahead.prototype.handleSubmit = function(e) {
 };
 
 FilterTypeahead.prototype.clearInput = function() {
-  this.$field.typeahead('val', null).change(); // TODO: jQuery deprecation
+  this.$field.typeahead('val', null).trigger('change');
   this.disableButton();
 };
 
@@ -239,7 +240,7 @@ FilterTypeahead.prototype.appendCheckbox = function(opts) {
   }
   var checkbox = $(template_checkbox(data));
   checkbox.appendTo(this.$selected);
-  checkbox.find('input').change(); // TODO: jQuery deprecation
+  checkbox.find('input').trigger('change');
   this.clearInput();
 };
 

@@ -46,7 +46,7 @@ TextFilter.prototype.handleChange = function() {
   // set the button focus within a timeout
   // to prevent change event from firing twice
   setTimeout(function() {
-    button.focus(); // TODO: jQuery deprecation
+    button.trigger('focus');
   }, 0);
 
   if (value.length > 0) {
@@ -105,7 +105,7 @@ TextFilter.prototype.appendCheckbox = function(value) {
   };
   const checkbox = $(template_checkbox(opts));
   checkbox.appendTo(this.checkboxList.$elm);
-  checkbox.find('input').change();
+  checkbox.find('input').trigger('change');
   this.$input.val('');
   this.checkboxIndex++;
 };

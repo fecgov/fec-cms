@@ -352,5 +352,5 @@ Typeahead.prototype.searchSite = function(query) {
   const action = $form.attr('action');
   this.$input.val(query);
   $form.attr('action', action);
-  $form.submit();
+  $form.trigger('submit');
 };

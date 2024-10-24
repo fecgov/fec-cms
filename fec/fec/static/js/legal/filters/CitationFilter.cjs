@@ -1,4 +1,5 @@
 const React = require('react');
+
 const PropTypes = require('prop-types');
 const URI = require('urijs');
 
@@ -63,7 +64,7 @@ class CitationFilter extends React.Component {
     return this.state.dropdownVisible ? 'block' : 'none';
   }
 
-  hideDropdown(e) {
+  hideDropdown() {
     this.setState({ dropdownVisible: false });
   }
 
@@ -91,7 +92,7 @@ class CitationFilter extends React.Component {
   }
 
   handleMouseOver(index) {
-    return e => {
+    return () => {
       this.setState({ highlightCitation: index });
     };
   }
@@ -101,7 +102,7 @@ class CitationFilter extends React.Component {
 
     if (this.state.dropdownVisible) {
       // down arrow or tab
-      if (e.keyCode === 40 || e.keyCode === 9) {
+      if (e.which === 40 || e.which === 9) {
         e.preventDefault();
         if (highlightCitation < this.state.citations.length - 1) {
           this.setState({ highlightCitation: highlightCitation + 1 });
@@ -111,7 +112,7 @@ class CitationFilter extends React.Component {
       }
 
       // up arrow
-      if (e.keyCode === 38) {
+      if (e.which === 38) {
         if (highlightCitation > 0) {
           this.setState({ highlightCitation: highlightCitation - 1 });
         } else {
@@ -120,7 +121,7 @@ class CitationFilter extends React.Component {
       }
 
       // enter
-      if (e.keyCode === 13) {
+      if (e.which === 13) {
         this.setSelection(
           this.state.citations[this.state.highlightCitation].citation_text
         );
