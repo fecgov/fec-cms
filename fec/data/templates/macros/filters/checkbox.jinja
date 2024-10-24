@@ -35,11 +35,19 @@
 {% endmacro %}
 
 <!-- Used when there are multiple dropdowns within a single filter -->
-{% macro checkbox_dropdown_multiple(name, label, selected={}, options={}, legend=True, prefix='') %}
+{% macro checkbox_dropdown_multiple(name, label, selected={}, options={}, legend=True, prefix='', show_tooltip_text='') %}
 <div class="filter" data-filter="checkbox">
   <div class="js-dropdown">
-    {% if legend %}
-    <span class="label" for="{{ name }}">{{ label }}</span>
+    {% if legend and show_tooltip_text == '' %}
+    <span for="{{ name }}" class="label">{{ label }}</span>
+    {% elif show_tooltip_text != '' %}
+    <label for="{{ name }}" class="label t-inline-block">{{ label }}</label>
+    <div class="tooltip__container">
+      <button class="tooltip__trigger"><span class="u-visually-hidden">Learn more</span></button>
+      <div class="tooltip tooltip--left tooltip--above">
+        <p class="tooltip__content tooltip__content">{{ show_tooltip_text }}</p>
+      </div>
+    </div>
     {% else %}
     <label for="{{ name }}">{{ label }}</label>
     {% endif %}
