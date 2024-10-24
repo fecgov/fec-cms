@@ -170,6 +170,10 @@
     margin-right: u(1rem);
     padding-right: u(1rem);
     border-right: 1px solid;
+
+    &:last-child {
+      border-right: none;
+    }
   }
 
   // Specific to admin fine pages for now. In the future, we should refine the entity type last of type dividers for other pages.
