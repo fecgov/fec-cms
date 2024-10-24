@@ -105,7 +105,7 @@ TextFilter.prototype.appendCheckbox = function(value) {
   };
   const checkbox = $(template_checkbox(opts));
   checkbox.appendTo(this.checkboxList.$elm);
-  checkbox.find('input').change();
+  checkbox.find('input').trigger('change');
   this.$input.val('');
   this.checkboxIndex++;
 };
