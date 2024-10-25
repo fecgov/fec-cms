@@ -1,69 +1,69 @@
 {{!--
-Template for national party accounts disbursements datatable details panel
+Template for national party accounts disbursements datatable details row
 --}}
-<div class="panel__row">
-  <h4 class="panel__title">Recipient information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Name"~}}
+    <caption>Recipient information</caption>
+    {{#dtDetailsTableRow "Name"~}}
       {{#if recipient_committee_id~}}
         <a href="/data/committee/{{recipient_committee_id}}/">{{recipient_name}}</a>
       {{else~}}
       {{recipient_name}}
       {{/if}}
-    {{/panelRow}}
-    {{#panelRow "City, state and ZIP code"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "City, state and ZIP code"~}}
       {{recipient_city}}, {{recipient_state}}  {{zipCode recipient_zip}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">Disbursement information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Amount"~}}
+    <caption>Disbursement information</caption>
+    {{#dtDetailsTableRow "Amount"~}}
       {{currency disbursement_amount}}
-    {{/panelRow}}
-    {{#panelRow "Disbursement date"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Disbursement date"~}}
       {{{datetime disbursement_date format="pretty"}}}
-    {{/panelRow}}
-    {{#panelRow "Report year"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Report year"~}}
       {{report_year}}
-    {{/panelRow}}
-    {{#panelRow "Description"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Description"~}}
       {{disbursement_description}}
-    {{/panelRow}}
-    {{#panelRow "Purpose category"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Purpose category"~}}
       {{disbursement_purpose_category}}
-    {{/panelRow}}
-    {{#panelRow "Disbursement type"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Disbursement type"~}}
       {{disbursement_type_desc}}
-    {{/panelRow}}
-    {{#panelRow "Memo"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Memo"~}}
       {{memo_text}}
-    {{/panelRow}}
-    {{#panelRow "Memo code"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Memo code"~}}
       {{memo_cd_desc}}
-    {{/panelRow}}
-    {{#panelRow "Reported on"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Reported on"~}}
       {{filing_form}} on Line {{line_number}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">Spender information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Name"~}}
+    <caption>Spender information</caption>
+    {{#dtDetailsTableRow "Name"~}}
       <a href="{{entityUrl this type="committee"}}">{{committee_name}}</a>
-    {{/panelRow}}
-    {{#panelRow "Designation"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Designation"~}}
       {{spender_committee_designation}} {{!-- TODO: this will change to spender_committee_designation_full --}}
-    {{/panelRow}}
-    {{#panelRow "Treasurer"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Treasurer"~}}
       {{treasurer_name}}
-    {{/panelRow}}
-    {{#panelRow "State"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "State"~}}
       {{state_full}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>

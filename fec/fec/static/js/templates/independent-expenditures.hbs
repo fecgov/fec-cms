@@ -1,90 +1,90 @@
-<div class="panel__row">
-  <h4 class="panel__title">Expenditure information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Version"~}}
+    <caption>Expenditure information</caption>
+    {{#dtDetailsTableRow "Version"~}}
       {{{amendment_version}}}
-    {{/panelRow}}
-    {{#panelRow "Amount"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Amount"~}}
       {{currency expenditure_amount}}
-    {{/panelRow}}
-    {{#panelRow "Expenditure date"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Expenditure date"~}}
       {{datetime expenditure_date format="pretty"}}
-    {{/panelRow}}
-    {{#panelRow "Dissemination date"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Dissemination date"~}}
       {{datetime dissemination_date format="pretty"}}
-    {{/panelRow}}
-    {{#panelRow "Candidate"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Candidate"~}}
       {{#if candidate_id~}}
         <a href="{{basePath}}/candidate/{{candidate_id}}/">{{candidate_name}}</a>
       {{else~}}
         {{candidate_name}}
       {{/if}}
-      ({{decodeSupportOppose support_oppose_indicator}})</td>
-    {{/panelRow}}
-    {{#panelRow "Description"~}}
+      ({{decodeSupportOppose support_oppose_indicator}})
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Description"~}}
       {{expenditure_description}}
-    {{/panelRow}}
-    {{#panelRow "Payee"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Payee"~}}
       {{payee_name}}<br>{{payee_city}}, {{payee_state}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">Filing information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Report type"~}}
+    <caption>Filing information</caption>
+    {{#dtDetailsTableRow "Report type"~}}
       {{decodeReport report_type}}
-    {{/panelRow}}
-    {{#panelRow "Form type"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Form type"~}}
       {{decodeForm filing_form}} ({{filing_form}})
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">Committee information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Committee name"~}}
+    <caption>Committee information</caption>
+    {{#dtDetailsTableRow "Committee name"~}}
       <a href="{{basePath}}/committee/{{committee_id}}">{{committee.name}}</a>
-    {{/panelRow}}
-    {{#panelRow "Committee type"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Committee type"~}}
       {{committee.committee_type_full}}
-    {{/panelRow}}
-    {{#panelRow "Treasurer"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Treasurer"~}}
       {{committee.treasurer_name}}
-    {{/panelRow}}
-    {{#panelRow "City and state"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "City and state"~}}
       {{committee.city}}, {{committee.state}}
-    {{/panelRow}}
-    {{#panelRow "Total spent on office (year to date)"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Total spent on office (year to date)"~}}
       {{currency office_total_ytd}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">Candidate information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Candidate"~}}
+    <caption>Candidate information</caption>
+    {{#dtDetailsTableRow "Candidate"~}}
       {{#if candidate_id~}}
         <a href="{{basePath}}/candidate/{{candidate_id}}/">{{candidate_name}}</a>
       {{else~}}
         {{candidate_name}}
       {{/if}}
-    {{/panelRow}}
-    {{#panelRow "Office"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Office"~}}
       {{decodeOffice candidate_office}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     {{#if candidate_state }}
-      {{#panelRow "State"~}}
+      {{#dtDetailsTableRow "State"~}}
         {{cand_office_state}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
     {{#if candidate_district}}
-      {{#panelRow "District"~}}
+      {{#dtDetailsTableRow "District"~}}
         {{cand_office_district}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
   </table>
 </div>

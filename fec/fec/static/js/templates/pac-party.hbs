@@ -1,66 +1,60 @@
 {{!--
-Template for PAC and party committee datatable details panel
+Template for PAC and party committee datatable details row
 --}}
+<h4 class="dt-details__title"><a href="{{basePath}}/committee/{{committee_id}}/">{{committee_name}}</a></h4>
 
-<div class="panel__row">
-  <h4 class="panel__title u-padding--bottom">
-    <a href="{{basePath}}/committee/{{committee_id}}/">{{committee_name}}</a>
-  </h4>
-  <h4 class="panel__title">
-    Committee information
-  </h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Committee type"~}}
+    <caption>Committee information</caption>
+    {{#dtDetailsTableRow "Committee type"~}}
       {{committee_type_full}}
-    {{/panelRow}}
-    {{#panelRow "Designation"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Designation"~}}
       {{committee_designation_full}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     {{#if party_full}}
-      {{#panelRow "Political party"~}}
+      {{#dtDetailsTableRow "Political party"~}}
         {{party_full}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
     {{#if sponsor_candidate_list}}
-      {{#panelRow "Leadership PAC sponsor"~}}
+      {{#dtDetailsTableRow "Leadership PAC sponsor"~}}
         {{#each sponsor_candidate_list~}}
           <a href="{{basePath}}/candidate/{{sponsor_candidate_id}}/"><span class="leadership_pac_sponsor_name">{{sponsor_candidate_name}}</span> ({{sponsor_candidate_id}})</a>{{#unless @last}};<br />{{/unless}}
         {{/each}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
-    {{#panelRow "Most recent treasurer"~}}
+    {{#dtDetailsTableRow "Most recent treasurer"~}}
       {{treasurer_name}}
-    {{/panelRow}}
-    {{#panelRow "State"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "State"~}}
       {{committee_state}}
-    {{/panelRow}}
-    {{#panelRow "Filing frequency"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Filing frequency"~}}
       {{filing_frequency_full}}
-    {{/panelRow}}
-    {{#panelRow "Registration date"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Registration date"~}}
       {{datetime first_f1_date format="pretty"}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     {{#if (eq committee_designation_full "Joint fundraising committee")}}
-    {{#panelRow "Joint fundraising participants"~}}
+    {{#dtDetailsTableRow "Joint fundraising participants"~}}
       <a href="{{basePath}}/committee/{{committee_id}}/?tab=about-committee">Full list of current participants</a>
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     {{/if}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">
-    Financial totals for {{format_range cycle}}
-  </h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Coverage end date"~}}
+    <caption>Financial totals for {{format_range cycle}}</caption>
+    {{#dtDetailsTableRow "Coverage end date"~}}
       {{datetime coverage_end_date format="pretty"}}
-    {{/panelRow}}
-    {{#panelRow "Receipts"~}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Receipts"~}}
       {{currency receipts}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     <tr>
-      <td class="panel__term">
+      <th scope="row">
         Individual contributions
         <div class="tooltip__container">
           <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
@@ -68,16 +62,16 @@ Template for PAC and party committee datatable details panel
             <p class="tooltip__content">Individual contributions include itemized and unitemized contributions from the Form 3X Detailed Summary page line 11(a)(iii).</p>
           </div>
         </div>
-      </td>
-      <td class="panel__data">
+      </th>
+      <td>
         {{currency individual_contributions}}
       </td>
     </tr>
-    {{#panelRow "Disbursements"~}}
+    {{#dtDetailsTableRow "Disbursements"~}}
       {{currency disbursements}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     <tr>
-      <td class="panel__term">
+      <th scope="row">
         Ending cash on hand
         <div class="tooltip__container">
           <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
@@ -85,13 +79,13 @@ Template for PAC and party committee datatable details panel
             <p class="tooltip__content">The total amount of cash on hand that remains after the amount of cash on hand at the beginning of the reporting period is adjusted to add the total receipts for the reporting period and subtract the total disbursements for the reporting period.</p>
           </div>
         </div>
-      </td>
-      <td class="panel__data">
+      </th>
+      <td>
         {{currency last_cash_on_hand_end_period}}
       </td>
     </tr>
-    {{#panelRow "Debts owed by committee"~}}
+    {{#dtDetailsTableRow "Debts owed by committee"~}}
       {{currency last_debts_owed_by_committee}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>

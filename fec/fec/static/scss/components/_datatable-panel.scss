@@ -270,18 +270,3 @@
     }
   }
 }
-
-#datatable-modal .panel .panel__row {
-  // TODO This selector is overly specific because of a very specific selector in the tables.scss
-  // file which has to be refactored.
-  @include media($med) {
-    td {
-      padding-left: 0 !important;
-      vertical-align: bottom;
-
-      &.panel__term, &.panel__data {
-        vertical-align: top;
-      }
-    }
-  }
-}

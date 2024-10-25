@@ -13,7 +13,7 @@ import { default as _pairs } from 'underscore/modules/pairs.js';
 import { default as _pluck } from 'underscore/modules/pluck.js';
 import 'datatables.net-responsive-dt';
 
-import { removeTabindex, restoreTabindex } from './accessibility.js';
+// import { removeTabindex, restoreTabindex } from './accessibility.js';
 import { sizeColumns, stateColumns } from './column-helpers.js';
 import { download, isPending, pendingCount } from './download.js';
 import Dropdown from './dropdowns.js';
@@ -159,17 +159,15 @@ function identity(value) {
   return value;
 }
 
-export const MODAL_TRIGGER_CLASS = 'js-panel-trigger';
+export const DETAILS_TRIGGER_CLASS = 'js-dt-details-trigger';
 export const MODAL_TRIGGER_HTML =
-  '<button class="js-panel-button button--panel">' +
-  '<span class="u-visually-hidden">Toggle details</span>' +
-  '</button>';
+  `<button class="button--dt-details"><span class="u-visually-hidden">Toggle details</span></button>`;
 
 /**
  * @param {HTMLTableRowElement} row
  */
 export function modalRenderRow(row) {
-  row.classList.add(MODAL_TRIGGER_CLASS, 'row--has-panel');
+  row.classList.add(DETAILS_TRIGGER_CLASS, 'row--has-details');
 }
 
 /**
@@ -183,10 +181,6 @@ export function modalRenderFactory(template, fetch) {
 
   return function(api, data, response) {
     const $table = $(api.table().node());
-    const $modal = $('#datatable-modal');
-    const $main = $table.closest('.panel__main');
-    // Move the modal to the results div.
-    $modal.appendTo($main);
     $modal.css('display', 'block');
 
     // Add a class to the .dataTables_wrapper
@@ -198,7 +192,6 @@ export function modalRenderFactory(template, fetch) {
       callback
     );
     callback = function(e) {
-      console.log('click callback');
       console.log('  e.type: ', e.type);
       console.log('  e.which: ', e.which);
 
@@ -215,33 +208,32 @@ export function modalRenderFactory(template, fetch) {
         // const row = api.row($table, tr);
         
         // else row.child(format(row.data())).show();
-        
         if (!$target.closest('td').hasClass('dataTables_empty')) {
           const row = api.row($row);
+          const index = row.index();
+
+            $row.removeClass('row-active');
+            $row.removeAttr('aria-details');
+            return;
+          }
+
           $.when(fetch(response.results[index])).done(function(fetched) {
-            $modal.find('.js-panel-content').html(template(fetched));
-            $modal.attr('aria-hidden', 'false');
-            $row.siblings().toggleClass('row-active', false);
             $row.toggleClass('row-active', true);
-            $('body').toggleClass('panel-active', true);
-            restoreTabindex($modal);
-            const hideColumns = api.columns('.hide-panel');
-            hideColumns.visible(false);
+            const newChildRowContent = template(fetched);
+            const newChildRowHtml = childRow(newChildRowContent);
+            const newChildRow = row.child(newChildRowHtml);
 
-            // Populate the pdf button if there is one
-            if (fetched.pdf_url) {
-              $modal.find('.js-pdf_url').attr('href', fetched.pdf_url);
-            } else {
-              $modal.find('.js-pdf_url').remove();
-            }
-            // Set focus on the close button
-            $('.js-hide').focus(); // TODO: jQuery deprecation
-
-            // When under $large-screen
-            // TODO figure way to share these values with CSS.
-            if ($(document).width() < 980) {
-              api.columns('.hide-panel-tablet').visible(false);
-            }
+            newChildRow.show();
+            $row.addClass('row-active');
+            row.child().addClass('dt-isChild row-active');
+            // Aria link the normal row and its child/details row
+            row.child().attr('id', `details-for-tr-${index}`);
+            $row.attr('aria-details', `details-for-tr-${index}`);
+            const newChildRowPdfButton = $row.next().find('.js-pdf_url');
+            if (fetched.pdf_url)
+              newChildRowPdfButton.attr('href', fetched.pdf_url);
+            else
+              newChildRowPdfButton.remove();
           });
         }
       }
@@ -251,31 +243,14 @@ export function modalRenderFactory(template, fetch) {
       '.js-panel-toggle tr.' + MODAL_TRIGGER_CLASS,
       callback
     );
-
-    $modal.on('click', '.js-panel-close', function(e) {
       e.preventDefault();
       hidePanel(api, $modal);
-    });
   };
 }
 
-function hidePanel(api, $modal) {
   $('.row-active .js-panel-button').focus(); // TODO: jQuery deprecation
   $('.js-panel-toggle tr').toggleClass('row-active', false);
   $('body').toggleClass('panel-active', false);
-  $modal.attr('aria-hidden', 'true');
-
-  if ($(document).width() > 640) {
-    api.columns('.hide-panel-tablet').visible(true);
-    api.columns('.hide-panel.min-tablet').visible(true);
-  }
-
-  if ($(document).width() > 980) {
-    api.columns('.hide-panel').visible(true);
-  }
-
-  removeTabindex($modal);
-}
 /**
  *
  * @param {?string} template
@@ -1335,4 +1310,16 @@ function drawContributionsByStateTable(selected, pageContext) {
       )
     );
   });
+}
+ * @returns {string} a string to be used as the innerHTML of the child/details row
+ */
+function childRow(contents) {
+  return `<div class="dt-details">
+    <div class="dt-details__nav">
+      <a class="dt-details__link button--small button--standard js-pdf_url" target="_blank">Open image</a>
+    </div>
+    <div class="dt-details__content">
+      ${contents}
+    </div>
+  </div>`;
 }

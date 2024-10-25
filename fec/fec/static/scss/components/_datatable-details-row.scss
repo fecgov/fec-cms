@@ -1,0 +1,102 @@
+.dt-details {
+  font-family: "karla", sans-serif;
+  position: relative;
+
+  .dt-details__nav {
+    text-align: right;
+    width: 100%;
+
+    @include media($xl) {
+      position: absolute;
+      right: 0;
+      width: 50%;
+    }
+  }
+
+  .dt-details__sect {
+    padding-bottom: 1rem;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #f1f1f1;
+    }
+    
+    @include media($med) {
+      &:nth-child(odd) {
+        border-right: 1px solid #f1f1f1;
+        padding-right: 1rem;
+      }
+      &:nth-child(even) {
+        padding-left: 1rem;
+      }
+    }
+  }
+
+  .dt-details__heading {
+    border-bottom: 1px solid #f1f1f1;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+
+    .dt-details__title {
+      margin-bottom: 0;
+    }
+  }
+
+  table {
+    caption {
+      font-size: 1.8rem;
+      line-height: 1.2;
+      margin: 0 0 1em;
+      font-weight: 700;
+      letter-spacing: -.3px;
+      margin-top: 1rem;
+      text-align: left;
+    }
+
+    tr {
+      background-color: transparent;
+      border: none;
+
+      td, th[scope="row"] {
+        background-color: transparent;
+        box-sizing: inherit;
+        border: none !important;
+        border-collapse: collapse;
+        letter-spacing: -.3px;
+        font-size: 1.4rem;
+        line-height: 1.4em;
+        padding-bottom: 1rem;
+        padding-top: 0;
+        vertical-align: top;
+      }
+      
+      th[scope="row"] {
+        // border-bottom: none;
+        font-weight: 700;
+        padding-left: 0 !important;
+        padding-right: 2rem;
+      }
+    }
+
+  }
+  @include media($med) {
+    .dt-details__content {
+      display: flex;
+      flex-wrap: wrap;
+      
+      & > .dt-details__sect {
+        width: 50%;
+      }
+      & > .dt-details__title {
+        width: 100%;
+      }
+      // For full-width row
+      & > .dt-details__sect-full {
+        width: 100%;
+
+        table {
+          width: auto;
+        }
+      }
+    }
+  }
+}
