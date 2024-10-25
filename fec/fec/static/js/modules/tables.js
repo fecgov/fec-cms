@@ -181,14 +181,13 @@ export function modalRenderFactory(template, fetch) {
 
   return function(api, data, response) {
     const $table = $(api.table().node());
-    $modal.css('display', 'block');
 
     // Add a class to the .dataTables_wrapper
     $table.closest('.dataTables_wrapper').addClass('dataTables_wrapper--panel');
 
     $table.off(
       'click keypress',
-      '.js-panel-toggle tr.' + MODAL_TRIGGER_CLASS,
+      `.js-panel-toggle tr.${DETAILS_TRIGGER_CLASS}`,
       callback
     );
     callback = function(e) {
@@ -218,7 +217,6 @@ export function modalRenderFactory(template, fetch) {
           }
 
           $.when(fetch(response.results[index])).done(function(fetched) {
-            $row.toggleClass('row-active', true);
             const newChildRowContent = template(fetched);
             const newChildRowHtml = childRow(newChildRowContent);
             const newChildRow = row.child(newChildRowHtml);
@@ -240,17 +238,12 @@ export function modalRenderFactory(template, fetch) {
     };
     $table.on(
       'click keypress',
-      '.js-panel-toggle tr.' + MODAL_TRIGGER_CLASS,
+      `.js-panel-toggle tr.${DETAILS_TRIGGER_CLASS}`,
       callback
     );
-      e.preventDefault();
-      hidePanel(api, $modal);
   };
 }
 
-  $('.row-active .js-panel-button').focus(); // TODO: jQuery deprecation
-  $('.js-panel-toggle tr').toggleClass('row-active', false);
-  $('body').toggleClass('panel-active', false);
 /**
  *
  * @param {?string} template
@@ -292,7 +285,6 @@ export function barsAfterRender(template, api) {
 function updateOnChange($form, api) {
   function onChange(e) {
     e.preventDefault();
-    hidePanel(api, $('#datatable-modal'));
     api.ajax.reload();
 
     updateChangedEl = e.target;
