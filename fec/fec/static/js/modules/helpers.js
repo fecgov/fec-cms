@@ -19,13 +19,19 @@ import {
   states as decoders_states
 } from './decoders.js';
 
-// set parameters from the API
+/**
+ * Set parameters from the API
+ * @enum {string}
+ */
 export const API = {
   amendment_indicator_new: 'N',
   amendment_indicator_terminated: 'T',
   means_filed_e_file: 'e-file'
 };
 
+/**
+ * Pixel widths when we consider a screen small (default), medium, or large
+ * @enum {number} */
 export const BREAKPOINTS = {
   MEDIUM: 640,
   LARGE: 860
@@ -34,6 +40,10 @@ export const BREAKPOINTS = {
 export const LOADING_DELAY = 1500;
 export const SUCCESS_DELAY = 5000;
 
+/**
+ * Selection of date formats
+ * @enum {string} Selected date format e.g. 'MM/DD/YYYY' or 'MMMM D, h:mma'
+ */
 export const formatMap = {
   default: 'MM/DD/YYYY',
   pretty: 'MMMM D, YYYY',
@@ -43,8 +53,11 @@ export const formatMap = {
   fullDayOfWeek: 'dddd'
 };
 
+/**
+ * Attach anchor <a> links to any tag with a given attribute.
+ * @param {string} attr - Content of a `[]` selector
+ */
 export function anchorify(attr) {
-  // Attach anchor <a> links to any tag with a given attribute
   $('[' + attr + ']').each(function(idx, item) {
     const elt = $(item);
     const link = $('<a></a>');
@@ -56,6 +69,10 @@ export function anchorify(attr) {
   });
 }
 
+/**
+ * Scrolls the page to the anchor specified by the in the URL, over ms number of milliseconds
+ * @param {number} ms - The duration of the animation in milliseconds
+ */
 export function scrollAnchor(ms) {
   ms = ms || 1000;
   if (window.location.hash) {
@@ -236,15 +253,6 @@ Handlebars.registerHelper('formatSentence', function(value) {
 });
 
 Handlebars.registerHelper('basePath', global.BASE_PATH);
-
-Handlebars.registerHelper('panelRow', function(label, options) {
-  return new Handlebars.SafeString(
-    `<tr>` +
-      `<td class="panel__term">${label}</td>` +
-      `<td class="panel__data">${options.fn(this)}</td>` +
-    '</tr>'
-  );
-});
 
 Handlebars.registerHelper('dtDetailsTableRow', function(label, options) {
   return new Handlebars.SafeString(`<tr><th scope="row">${label}</th><td>${options.fn(this)}</td></tr>`);

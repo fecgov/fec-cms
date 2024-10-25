@@ -1,3 +1,14 @@
+/**
+ * tables.js contains three classes:
+ *
+ * DataTable_FEC - A custom class that extends datatables.net-responsive-dt
+ *   across the site, every time "datatables" is referenced, it's DataTable_FEC, not datatables.net*
+ *
+ * OffsetPaginator -
+ *
+ * SeekPaginator -
+ */
+
 import { default as _chain } from 'underscore/modules/chain.js';
 import { default as _clone } from 'underscore/modules/clone.js';
 import { default as _debounce } from 'underscore/modules/debounce.js';
@@ -118,7 +129,7 @@ export function getCycle(value, meta) {
  *
  * @param {*} order
  * @param {*} column
- * @returns
+ * @returns {string}
  */
 export function mapSort(order, column) {
   return _map(order, function(item) {
@@ -130,6 +141,11 @@ export function mapSort(order, column) {
   });
 }
 
+/**
+ * Returns the number of results if <= 500K, otherwise rounds to the nearest 1K
+ * @param {*} response
+ * @returns {number} Number of real or estimated results
+ */
 function getCount(response) {
   let pagination_count = response.pagination.count; // eslint-disable-line camelcase
 
@@ -191,9 +207,6 @@ export function modalRenderFactory(template, fetch) {
       callback
     );
     callback = function(e) {
-      console.log('  e.type: ', e.type);
-      console.log('  e.which: ', e.which);
-
       if (e.which === 13 || e.type === 'click') {
         // Note: Use `currentTarget` to get parent row, since the target column
         // may have been moved since the triggering event
@@ -203,14 +216,12 @@ export function modalRenderFactory(template, fetch) {
           return true;
         }
 
-        // const tr = e.target.closest('tr');
-        // const row = api.row($table, tr);
-        
-        // else row.child(format(row.data())).show();
         if (!$target.closest('td').hasClass('dataTables_empty')) {
           const row = api.row($row);
           const index = row.index();
 
+          if (row.child.isShown()) {
+            row.child.hide();
             $row.removeClass('row-active');
             $row.removeAttr('aria-details');
             return;
@@ -795,7 +806,7 @@ DataTable_FEC.prototype.fetch = function(data, callback) {
         .addClass('is-active-filter')
         .removeClass('is-disabled-filter');
 
-      // Datatables that should have limits and reached the maxiumum
+      // Datatables that should have limits and reached the maximum
       // filter limit should display the field's error message
       // and disable that field's filter
       if (
@@ -1059,7 +1070,7 @@ DataTable_FEC.prototype.handleSwitch = function(e, opts) {
 
 /**
  * Used for…
- * @param {string} className - Selector text, including the leading period (ex: `.data-table` instead of `data-table`)
+ * @param {string} tableElementSelector - Selector text, including the leading period (ex: `.data-table` instead of `data-table`)
  * @param {Object} pageContext - The window.context data object
  * @param {string} pageContext.candidateID
  * @param {number} pageContext.cycle
@@ -1069,8 +1080,8 @@ DataTable_FEC.prototype.handleSwitch = function(e, opts) {
  * @param {string} pageContext.timePeriod - In the format of `2023-2024`
  * @param {Object} options - spendingTableOpts from {@link /fec/fec/static/js/pages/elections.js}
  */
-export function initSpendingTables(className, pageContext, options) {
-  $(className).each(function(index, table) {
+export function initSpendingTables(tableElementSelector, pageContext, options) {
+  $(tableElementSelector).each(function(index, table) {
     const $table = $(table);
     const dataType = $table.attr('data-type');
     const opts = options[dataType];
@@ -1303,6 +1314,10 @@ function drawContributionsByStateTable(selected, pageContext) {
     );
   });
 }
+
+/**
+ * Build the HTML for the child row / details row
+ * @param {string} contents
  * @returns {string} a string to be used as the innerHTML of the child/details row
  */
 function childRow(contents) {
