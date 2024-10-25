@@ -246,6 +246,10 @@ Handlebars.registerHelper('panelRow', function(label, options) {
   );
 });
 
+Handlebars.registerHelper('dtDetailsTableRow', function(label, options) {
+  return new Handlebars.SafeString(`<tr><th scope="row">${label}</th><td>${options.fn(this)}</td></tr>`);
+});
+
 /**
  * @function entityUrl
  * @param {Object} entity - the data object, likely from the API
