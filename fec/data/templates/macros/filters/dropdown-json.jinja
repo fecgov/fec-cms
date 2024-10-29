@@ -1,23 +1,30 @@
-{% macro select_json(name, label, keys, options={}, default=none) %}
+{% macro select_json(name, label, keys, options={}, default=none, show_tooltip_text='') %}
 <div class="filter js-filter js-filter-control" data-filter="select"
 data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{{ default }}">
-  <label for="{{ name }}" class="label">{{ label }}</label>
+  <label for="{{ name }}" class="label t-inline-block">{{ label }}</label>
+  {% if show_tooltip_text != '' %}
+  <div class="tooltip__container">
+    <button class="tooltip__trigger"><span class="u-visually-hidden">Learn more</span></button>
+    <div class="tooltip tooltip--left tooltip--above">
+      <p class="tooltip__content tooltip__content">{{ show_tooltip_text }}</p>
+    </div>
+  </div>
+  {% endif %}
   <select id="{{ name }}" name="{{ name }}">
-    {% for option in options %}
-      <option value={{option[keys[0]]}}>{{ option[keys[1]] }}</option>
+    {% for key,value in options.items() %}
+      <option value="{{ key }}">{{ value }}</option>
     {% endfor %}
   </select>
 </div>
 {% endmacro %}
-
 
 {% macro select_json_indentation(name, label, keys, options={}, default=none) %}
 <div class="filter js-filter js-filter-control sub--filter--indent" data-filter="select" 
 data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{{ default }}">
   <label for="{{ name }}" class="label">{{ label }}</label>
   <select id="{{ name }}" name="{{ name }}">
-    {% for option in options %}
-      <option value={{option[keys[0]]}}>{{ option[keys[1]] }}</option>
+    {% for key,value in options.items() %}
+      <option value="{{ key }}">{{ value }}</option>
     {% endfor %}
   </select>
 </div>

@@ -373,75 +373,27 @@ house_senate_types = OrderedDict([
 primary_category_keys = ['primary_category_id', 'primary_category_name']
 sub_category_keys = ['sub_category_id', 'sub_category_name']
 
-audit_primary_categories_options = [
-    {
-        "primary_category_id": 'all',
-        "primary_category_name": 'All'
-    },
-    {
-        "primary_category_id": '2',
-        "primary_category_name": 'Allocation Issues'
-    },
-    {
-        "primary_category_id": '3',
-        "primary_category_name": 'Disclosure'
-    },
-    {
-        "primary_category_id": '5',
-        "primary_category_name": 'Excessive Contributions'
-    },
-    {
-        "primary_category_id": '1',
-        "primary_category_name": 'Failure to File Reports/Schedules/Notices'
-    },
-    {
-        "primary_category_id": '8',
-        "primary_category_name": 'Loans'
-    },
-    {
-        "primary_category_id": '7',
-        "primary_category_name": 'Misstatement of Financial Activity'
-    },
-    {
-        "primary_category_id": '14',
-        "primary_category_name": 'Net Outstanding Campaign/Convention ' + 'Expenditures/Obligations'
-    },
-    {
-        "primary_category_id": '16',
-        "primary_category_name": 'No Findings or Issues/Not a Committee'
-    },
-    {
-        "primary_category_id": '9',
-        "primary_category_name": 'Other'
-    },
-    {
-        "primary_category_id": '15',
-        "primary_category_name": 'Payments/Disgorgements'
-    },
-    {
-        "primary_category_id": '6',
-        "primary_category_name": 'Prohibited Contributions'
-    },
-    {
-        "primary_category_id": '4',
-        "primary_category_name": 'Recordkeeping'
-    },
-    {
-        "primary_category_id": '17',
-        "primary_category_name": 'Referred Findings Not Listed'
-    },
-    {
-        "primary_category_id": '13',
-        "primary_category_name": 'Repayment to US Treasury'
-    }
-]
+audit_primary_categories_options = OrderedDict([
+    ('all', 'All'),
+    ('2', 'Allocation Issues'),
+    ('3', 'Disclosure'),
+    ('5', 'Excessive Contributions'),
+    ('1', 'Failure to File Reports/Schedules/Notices'),
+    ('8', 'Loans'),
+    ('7', 'Misstatement of Financial Activity'),
+    ('14', 'Net Outstanding Campaign/Convention ' + 'Expenditures/Obligations'),
+    ('16', 'No Findings or Issues/Not a Committee'),
+    ('9', 'Other'),
+    ('15', 'Payments/Disgorgements'),
+    ('6', 'Prohibited Contributions'),
+    ('4', 'Recordkeeping'),
+    ('17', 'Referred Findings Not Listed'),
+    ('13', 'Repayment to US Treasury')
+])
 
-audit_sub_categories_options = [
-    {
-        "sub_category_id": 'all',
-        "sub_category_name": ' '
-    }
-]
+audit_sub_categories_options = OrderedDict([
+    ('all', 'All')
+])
 
 
 table_columns = OrderedDict([
@@ -1036,3 +988,59 @@ suggested_mur_disposition_category_ids = OrderedDict([
     ('7', 'Conciliation: Pre Probable Cause'),
     ('6', 'Conciliation: Probable Cause'),
 ])
+
+
+primary_subject_ids = {
+    "": "All",
+    "1": "Allocation",
+    "2": "Committees",
+    "3": "Contributions",
+    "4": "Disclaimer",
+    "5": "Disbursements",
+    "6": "Electioneering",
+    "7": "Expenditures",
+    "8": "Express Advocacy",
+    "9": "Foreign Nationals",
+    "10": "Fraudulent misrepresentation",
+    "11": "Issue Advocacy",
+    "12": "Knowing and Willful",
+    "13": "Loans",
+    "14": "Non-federal",
+    "15": "Other",
+    "16": "Personal use",
+    "17": "Presidential",
+    "18": "Reporting",
+    "19": "Soft Money",
+}
+
+secondary_subject_placeholder = {
+   "": "All",
+}
+
+secondary_subject_ids = {
+  "2": {
+    "1": "Candidate",
+    "2": "Multi-candidate",
+    "3": "Non-Party",
+    "4": "PAC",
+    "5": "Party",
+    "6": "Political",
+    "7": "Presidential",
+  },
+  "3": {
+    "8": "Corporations",
+    "9": "Excessive",
+    "10": "Exemptions",
+    "11": "In the name of another",
+    "12": "Labor Unions",
+    "13": "Limitations",
+    "14": "National Bank",
+    "15": "Prohibited",
+  },
+  "7": {
+    "10": "Exemptions",
+    "16": "Coordinated",
+    "17": "Limits",
+    "18": "Prohibitions",
+  }
+}

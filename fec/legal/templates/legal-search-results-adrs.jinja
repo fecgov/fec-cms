@@ -1,5 +1,6 @@
 {% extends "layouts/legal-doc-search-results.jinja" %}
 {% import 'macros/legal.jinja' as legal %}
+{% import 'macros/filters/dropdown-json.jinja' as dropdown %}
 {% set document_type_display_name = 'Alternative Dispute Resolution' %}
 
 {% block header %}
@@ -57,11 +58,33 @@
         </div>
       </div>
     </div>
+    {{
+  	  dropdown.select_json(
+          'primary_subject_id',
+          'Case subject',
+          options=constants.primary_subject_ids,
+          default=""
+      )
+    }}
+    {{
+  	  dropdown.select_json_indentation(
+        'secondary_subject_id',
+        'Secondary case subject',
+        options=constants.secondary_subject_placeholder,
+        default=""
+      )
+    }}
     
     <div class="filter">
       <button type="submit" class="button button--cta">Apply filters</button>
     </div>
   </div>
+  <style>
+  [data-modifies-filter='secondary_subject_id']{
+display: none;
+  }
+
+  </style>
 {% endblock %}
 
 {% block message %}
@@ -115,6 +138,16 @@
           {% endfor %}
         </li>
       {% endif %}
+      {% if primary_subject_id or secondary_subject_id_name  %}
+        <li data-tag-category="primary_subject_id" class="tag__category tag__category__range--date">
+        {% if primary_subject_id_name and primary_subject_id %}
+          <div data-removable="true" class="tag__item">{{ primary_subject_id_name }}<button class="button js-close tag__remove" data-tag="primary_subject_id"><span class="u-visually-hidden">Remove</span></button></div>
+        {% endif %}
+        {% if secondary_subject_id_name %}
+          <div data-removable="true" class="tag__item">{{ secondary_subject_id_name }}<button class="button js-close tag__remove" data-tag="secondary_subject_id"><span class="u-visually-hidden">Remove</span></button></div>
+        {% endif %}
+        </li>
+      {% endif %}
     </ul>
   </div>
 </div>
@@ -129,4 +162,8 @@
   {% with results=results %}
     {% include 'partials/legal-pagination.jinja' %}
   {% endwith %}
+{% endblock %}
+{% block scripts %}
+  {# super loads scripts from parent #}
+  {{ super() }}
 {% endblock %}

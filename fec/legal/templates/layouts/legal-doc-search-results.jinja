@@ -134,15 +134,81 @@
                 url.searchParams.append('mur_disposition_category_id', cat);
               }
             });
+          } else if (tag && tag == 'primary_subject_id') { // Check if tag is not null or undefined
+            // Get the index from the tag
+            // const selectedCategories = url.searchParams.getAll('primary_subject_id');
+            // // Remove all instances of 'case_doc_category_id' from the URL
+            url.searchParams.delete('primary_subject_id');
+            url.searchParams.delete('secondary_subject_id');
+          } else if (tag && tag == 'secondary_subject_id') { // Check if tag is not null or undefined
+            // // Get the index from the tag
+            // const selectedCategories = url.searchParams.getAll('primary_subject_id');
+            // Remove all instances of 'case_doc_category_id' from the URL
+            url.searchParams.delete('secondary_subject_id');
           } else {
             // For all other tags, remove the corresponding search parameter
             url.searchParams.delete(tag);
           }
-
+          
+          // Go back to first page in case there are fewer pages in new result set
+          url.searchParams.set('offset', 0)
           // Redirect to the updated URL
           window.location = url.toString();
         });
       });
-    });
+
+      // JS for subject MUR/ADR selects
+      const subject_select = document.getElementById('primary_subject_id');
+      const secondary_select_div = document.querySelector("[data-modifies-filter='secondary_subject_id']");
+      const secondary_select = document.getElementById('secondary_subject_id');
+
+      window.context = {{ context_vars|to_json|safe }};
+      const secondary_subject_ids = window.context.secondary_subject_ids;
+      const primary_subject_id = window.context.primary_subject_id;
+      const secondary_subject_id = window.context.secondary_subject_id;
+
+      // Load secondary select on page load
+      load_secondary_select(primary_subject_id);
+
+      // Add aria attribute to selected option in primary select
+      Array.from(subject_select.options).forEach(option => {
+        if (option.value == primary_subject_id) {
+          //option.selected = 'selected';
+          option.setAttribute('aria-selected', 'true');
+        };
+      });
+
+      // Load secondary select, upon change of primary select
+      subject_select.addEventListener('change', (event) => {
+        const selected_id = event.target.value;
+        load_secondary_select(selected_id);
+      });
+
+      function load_secondary_select(id){
+        // First, reset the secondary select to default
+        secondary_select.replaceChildren(new Option('All', "", false, true))
+        // Populate secondary select options, if applicable
+        if (id in secondary_subject_ids) {
+            // Show secondary select
+            secondary_select_div.style.display = 'block';
+            // Append secondary select options
+            for (const [key, value] of Object.entries(secondary_subject_ids[id])) {
+              //If there is a current secondary_subject_id, append it as the selected option
+              if (key == secondary_subject_id) {
+                secondary_select.append(new Option(value, key, true, true));
+                // Add aria-selected to that option
+                secondary_select.options[secondary_select.selectedIndex].setAttribute('aria-selected', 'true');
+              // Append other options, unselected
+              } else {
+                secondary_select.append(new Option(value, key));
+              };
+            };
+
+        } else {
+            secondary_select_div.style.display = 'none';
+        };
+      };
+   });
+
   </script>
 {% endblock %}
