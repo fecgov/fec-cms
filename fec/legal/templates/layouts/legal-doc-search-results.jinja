@@ -161,13 +161,13 @@
       const subject_select = document.getElementById('primary_subject_id');
       const secondary_select_div = document.querySelector("[data-modifies-filter='secondary_subject_id']");
       const secondary_select = document.getElementById('secondary_subject_id');
-
-      window.context = {{ context_vars|to_json|safe }};
+       
+      // The window.context is declared in the child templates (MUR/ADR)
       const secondary_subject_ids = window.context.secondary_subject_ids;
       const primary_subject_id = window.context.primary_subject_id;
       const secondary_subject_id = window.context.secondary_subject_id;
 
-      // Load secondary select on page load
+      // Populate secondary select on page load
       load_secondary_select(primary_subject_id);
 
       // Add aria attribute to selected option in primary select
@@ -187,7 +187,7 @@
       function load_secondary_select(id){
         // First, reset the secondary select to default
         secondary_select.replaceChildren(new Option('All', "", false, true))
-        // Populate secondary select options, if applicable
+        // Show and populate secondary select options, if applicable
         if (id in secondary_subject_ids) {
             // Show secondary select
             secondary_select_div.style.display = 'block';
@@ -209,6 +209,5 @@
         };
       };
    });
-
   </script>
 {% endblock %}

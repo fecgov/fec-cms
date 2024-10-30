@@ -58,33 +58,31 @@
         </div>
       </div>
     </div>
-    {{
-  	  dropdown.select_json(
-          'primary_subject_id',
-          'Case subject',
-          options=constants.primary_subject_ids,
+  </div>
+  <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
+    <button type="button" class="js-accordion-trigger accordion__button">Case details</button>
+    <div class="accordion__content">
+      {{
+        dropdown.select_json(
+            'primary_subject_id',
+            'Case subject',
+            options=constants.primary_subject_ids,
+            default=""
+        )
+      }}
+      {{
+        dropdown.select_json_indentation(
+          'secondary_subject_id',
+          'Secondary case subject',
+          options=constants.secondary_subject_placeholder,
           default=""
-      )
-    }}
-    {{
-  	  dropdown.select_json_indentation(
-        'secondary_subject_id',
-        'Secondary case subject',
-        options=constants.secondary_subject_placeholder,
-        default=""
-      )
-    }}
-    
-    <div class="filter">
-      <button type="submit" class="button button--cta">Apply filters</button>
+        )
+      }}
     </div>
   </div>
-  <style>
-  [data-modifies-filter='secondary_subject_id']{
-display: none;
-  }
-
-  </style>
+  <div class="filters__inner">
+    <button type="submit" class="button button--cta">Apply filters</button>
+  </div>
 {% endblock %}
 
 {% block message %}
@@ -166,4 +164,7 @@ display: none;
 {% block scripts %}
   {# super loads scripts from parent #}
   {{ super() }}
+  <script>
+     window.context = {{ context_vars|to_json|safe }};
+  </script>
 {% endblock %}
