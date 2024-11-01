@@ -40,30 +40,6 @@ $(function() {
     .detach()
     .appendTo('body');
 
-  // Initialize new accordions
-  $('.js-accordion').each(function() {
-    const contentPrefix = $(this).data('content-prefix') || 'accordion';
-    const openFirst = $(this).data('open-first');
-    const reflectStatic = $(this).data('reflect-static');
-    const selectors = {
-      trigger: '.js-accordion-trigger'
-    };
-    const opts = {
-      contentPrefix: contentPrefix,
-      openFirst: openFirst,
-      reflectStatic: reflectStatic,
-      collapseOthers:
-        window.location.href.indexOf('president/presidential-map') > 0
-          ? true
-          : false,
-      customHiding:
-        window.location.href.indexOf('president/presidential-map') > 0
-          ? true
-          : false
-    };
-    new Accordion(this, selectors, opts);
-  });
-
   // Initialize search
   $('.js-search').each(function() {
     new Search($(this));
