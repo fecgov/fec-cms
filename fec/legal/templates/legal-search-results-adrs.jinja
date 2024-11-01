@@ -59,32 +59,10 @@
       </div>
     </div>
   </div>
-  <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
-    <button type="button" class="js-accordion-trigger accordion__button">Case details</button>
-    <div class="accordion__content">
-      {{
-        dropdown.select_json(
-            'primary_subject_id',
-            'Case subject',
-            options=constants.primary_subject_ids,
-            default=""
-        )
-      }}
-      {{
-        dropdown.select_json_indentation(
-          'secondary_subject_id',
-          'Secondary case subject',
-          options=constants.secondary_subject_placeholder,
-          default=""
-        )
-      }}
-    </div>
-  </div>
   <div class="filters__inner">
     <button type="submit" class="button button--cta">Apply filters</button>
   </div>
 {% endblock %}
-
 {% block message %}
 <div class="data-container__tags u-no-padding-left">
   <div class="row">
@@ -136,16 +114,6 @@
           {% endfor %}
         </li>
       {% endif %}
-      {% if primary_subject_id or secondary_subject_id_name  %}
-        <li data-tag-category="primary_subject_id" class="tag__category tag__category__range--date">
-        {% if primary_subject_id_name and primary_subject_id %}
-          <div data-removable="true" class="tag__item">{{ primary_subject_id_name }}<button class="button js-close tag__remove" data-tag="primary_subject_id"><span class="u-visually-hidden">Remove</span></button></div>
-        {% endif %}
-        {% if secondary_subject_id_name %}
-          <div data-removable="true" class="tag__item">{{ secondary_subject_id_name }}<button class="button js-close tag__remove" data-tag="secondary_subject_id"><span class="u-visually-hidden">Remove</span></button></div>
-        {% endif %}
-        </li>
-      {% endif %}
     </ul>
   </div>
 </div>
@@ -164,7 +132,4 @@
 {% block scripts %}
   {# super loads scripts from parent #}
   {{ super() }}
-  <script>
-     window.context = {{ context_vars|to_json|safe }};
-  </script>
 {% endblock %}

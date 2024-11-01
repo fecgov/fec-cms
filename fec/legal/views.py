@@ -349,7 +349,8 @@ def legal_doc_search_mur(request):
 
     # For Javascript
     context_vars = {
-        "mur_disposition_category_id": mur_disposition_category_ids,
+        'result_type': 'murs',
+        'mur_disposition_category_id': mur_disposition_category_ids,
         'primary_subject_id': primary_subject_id,
         'secondary_subject_id': secondary_subject_id,
         'secondary_subject_ids': secondary_subject_ids,
@@ -409,8 +410,6 @@ def legal_doc_search_adr(request):
     case_min_close_date = request.GET.get('case_min_close_date', '')
     case_max_close_date = request.GET.get('case_max_close_date', '')
     case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
-    primary_subject_id = request.GET.get('primary_subject_id', '')
-    secondary_subject_id = request.GET.get('secondary_subject_id', '')
 
     query, query_exclude = parse_query(original_query)
 
@@ -427,8 +426,6 @@ def legal_doc_search_adr(request):
         case_min_close_date=case_min_close_date,
         case_max_close_date=case_max_close_date,
         case_doc_category_id=case_doc_category_ids,
-        primary_subject_id=primary_subject_id,
-        secondary_subject_id=secondary_subject_id,
     )
 
     # Define ADR document categories dictionary
@@ -451,23 +448,6 @@ def legal_doc_search_adr(request):
             # Checks for document keyword text match
             doc['text_match'] = str(index) in adr['document_highlights']
 
-    # Get primary_subject_id_name from dict
-    primary_subject_id_name = constants.primary_subject_ids.get(primary_subject_id, '')
-    secondary_subject_ids = constants.secondary_subject_ids
-
-    def get_secondary_subject_name(id):
-        for key in secondary_subject_ids:
-            if id in secondary_subject_ids[key]:
-                return secondary_subject_ids[key][id]
-    secondary_subject_id_name = get_secondary_subject_name(secondary_subject_id)
-
-    # For Javascript
-    context_vars = {
-        'primary_subject_id': primary_subject_id,
-        'secondary_subject_id': secondary_subject_id,
-        'secondary_subject_ids': secondary_subject_ids,
-    }
-
     return render(request, 'legal-search-results-adrs.jinja', {
         'parent': 'legal',
         'results': results,
@@ -483,11 +463,6 @@ def legal_doc_search_adr(request):
         'social_image_identifier': 'legal',
         'selected_doc_category_ids': case_doc_category_ids,
         'selected_doc_category_names': adr_document_category_names,
-        'primary_subject_id': primary_subject_id,
-        'secondary_subject_id': secondary_subject_id,
-        'primary_subject_id_name': primary_subject_id_name,
-        'secondary_subject_id_name': secondary_subject_id_name,
-        "context_vars": context_vars,
         'is_loading': True,  # Indicate that the page is loading initially
     })
 

@@ -156,58 +156,59 @@
           window.location = url.toString();
         });
       });
-
+     
       // JS for subject MUR/ADR selects
-      const subject_select = document.getElementById('primary_subject_id');
-      const secondary_select_div = document.querySelector("[data-modifies-filter='secondary_subject_id']");
-      const secondary_select = document.getElementById('secondary_subject_id');
-       
-      // The window.context is declared in the child templates (MUR/ADR)
-      const secondary_subject_ids = window.context.secondary_subject_ids;
-      const primary_subject_id = window.context.primary_subject_id;
-      const secondary_subject_id = window.context.secondary_subject_id;
+      // The window.context is declared in the child templates (MURm, ADR(maybe later))
+      if (window.context && window.context.result_type == 'murs') {
+        const secondary_subject_ids = window.context.secondary_subject_ids;
+        const primary_subject_id = window.context.primary_subject_id;
+        const secondary_subject_id = window.context.secondary_subject_id;
+      
+        const subject_select = document.getElementById('primary_subject_id');
+        const secondary_select_div = document.querySelector("[data-modifies-filter='secondary_subject_id']");
+        const secondary_select = document.getElementById('secondary_subject_id');
 
-      // Populate secondary select on page load
-      load_secondary_select(primary_subject_id);
+        // Populate secondary select on page load
+        load_secondary_select(primary_subject_id);
+        
+        // Add aria attribute to selected option in primary select
+        Array.from(subject_select.options).forEach(option => {
+          if (option.value == primary_subject_id) {
+            option.setAttribute('aria-selected', 'true');
+          };
+        });
 
-      // Add aria attribute to selected option in primary select
-      Array.from(subject_select.options).forEach(option => {
-        if (option.value == primary_subject_id) {
-          //option.selected = 'selected';
-          option.setAttribute('aria-selected', 'true');
-        };
-      });
+        // Load secondary select, upon change of primary select
+        subject_select.addEventListener('change', (event) => {
+          const selected_id = event.target.value;
+          load_secondary_select(selected_id);
+        });
 
-      // Load secondary select, upon change of primary select
-      subject_select.addEventListener('change', (event) => {
-        const selected_id = event.target.value;
-        load_secondary_select(selected_id);
-      });
-
-      function load_secondary_select(id){
-        // First, reset the secondary select to default
-        secondary_select.replaceChildren(new Option('All', "", false, true))
-        // Show and populate secondary select options, if applicable
-        if (id in secondary_subject_ids) {
-            // Show secondary select
-            secondary_select_div.style.display = 'block';
-            // Append secondary select options
-            for (const [key, value] of Object.entries(secondary_subject_ids[id])) {
-              //If there is a current secondary_subject_id, append it as the selected option
-              if (key == secondary_subject_id) {
-                secondary_select.append(new Option(value, key, true, true));
-                // Add aria-selected to that option
-                secondary_select.options[secondary_select.selectedIndex].setAttribute('aria-selected', 'true');
-              // Append other options, unselected
-              } else {
-                secondary_select.append(new Option(value, key));
+        function load_secondary_select(id){
+          // First, reset the secondary select to default
+          secondary_select.replaceChildren(new Option('All', "", false, true))
+          // Show and populate secondary select options, if applicable
+          if (id in secondary_subject_ids) {
+              // Show secondary select
+              secondary_select_div.style.display = 'block';
+              // Append secondary select options
+              for (const [key, value] of Object.entries(secondary_subject_ids[id])) {
+                //If there is a current secondary_subject_id, append it as the selected option
+                if (key == secondary_subject_id) {
+                  secondary_select.append(new Option(value, key, true, true));
+                  // Add aria-selected to that option
+                  secondary_select.options[secondary_select.selectedIndex].setAttribute('aria-selected', 'true');
+                // Append other options, unselected
+                } else {
+                  secondary_select.append(new Option(value, key));
+                };
               };
-            };
 
-        } else {
-            secondary_select_div.style.display = 'none';
+          } else {
+              secondary_select_div.style.display = 'none';
+          };
         };
-      };
-   });
+      }
+    });
   </script>
 {% endblock %}
