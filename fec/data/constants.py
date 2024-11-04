@@ -936,51 +936,21 @@ SENATE_CLASSES = {
 }
 
 mur_disposition_category_ids = OrderedDict([
-    ('1', 'Approved by Commission'),
-    ('2', 'Approved In Part Recs.'),
-    ('3', 'Approved Recs.'),
-    ('4', 'Case Activated'),
-    ('5', 'Case Activation'),
     ('8', 'Dismiss and Remind'),
     ('9', 'Dismissed'),
-    ('10', 'Dismissed - Agreement Rejected'),
     ('11', 'Dismissed-Low Rated'),
     ('12', 'Dismissed-Other'),
     ('13', 'Dismissed-Stale'),
     ('14', 'Dismiss pursuant to prosecutorial discretion'),
     ('15', 'Dismiss pursuant to prosecutorial discretion, and caution'),
     ('16', 'Enforcement - Disposition - Dismissed "Dismiss" - Dismiss and Caution'),
-    ('17', 'Failed to Approve Recs.'),
-    ('18', 'First General Counsel Report'),
-    ('19', 'Formal Discovery Authorized'),
-    ('20', 'Investigative Activity'),
-    ('21', 'Mailed to Respondent'),
-    ('22', 'Merged'),
     ('23', 'No PCTB'),
     ('24', 'No RTB'),
-    ('25', 'Offer from Respondent Received'),
-    ('26', 'Other'),
-    ('27', 'PC Brief'),
-    ('28', 'PC Conciliation Approved'),
     ('30', 'PCTB Finding'),
-    ('31', 'Pre-PCC Commenced'),
-    ('32', 'Received'),
-    ('33', 'Received from Audit Division'),
-    ('34', 'Received from Commission'),
-    ('35', 'Received from OGC'),
-    ('36', 'Received from RAD'),
-    ('37', 'Request for Extension of Time Approved'),
-    ('38', 'Request for Extension of Time Approved/Denied'),
-    ('39', 'Request for Extension of Time Received'),
-    ('40', 'Response Received'),
     ('41', 'RTB Finding'),
     ('42', 'RTB/NFA'),
-    ('43', 'Settlement Agreement'),
-    ('44', 'Suit Authorization'),
     ('45', 'Take no action'),
     ('46', 'Take No Further Action'),
-    ('47', 'To Respondent'),
-    ('48', 'Transferred to ADR'),
 ])
 
 suggested_mur_disposition_category_ids = OrderedDict([
@@ -988,7 +958,6 @@ suggested_mur_disposition_category_ids = OrderedDict([
     ('7', 'Conciliation: Pre Probable Cause'),
     ('6', 'Conciliation: Probable Cause'),
 ])
-
 
 primary_subject_ids = {
     "": "All",
@@ -1011,6 +980,7 @@ primary_subject_ids = {
     "17": "Presidential",
     "18": "Reporting",
     "19": "Soft Money",
+    "20": "Solicitation",
 }
 
 secondary_subject_placeholder = {
