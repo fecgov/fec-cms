@@ -373,75 +373,27 @@ house_senate_types = OrderedDict([
 primary_category_keys = ['primary_category_id', 'primary_category_name']
 sub_category_keys = ['sub_category_id', 'sub_category_name']
 
-audit_primary_categories_options = [
-    {
-        "primary_category_id": 'all',
-        "primary_category_name": 'All'
-    },
-    {
-        "primary_category_id": '2',
-        "primary_category_name": 'Allocation Issues'
-    },
-    {
-        "primary_category_id": '3',
-        "primary_category_name": 'Disclosure'
-    },
-    {
-        "primary_category_id": '5',
-        "primary_category_name": 'Excessive Contributions'
-    },
-    {
-        "primary_category_id": '1',
-        "primary_category_name": 'Failure to File Reports/Schedules/Notices'
-    },
-    {
-        "primary_category_id": '8',
-        "primary_category_name": 'Loans'
-    },
-    {
-        "primary_category_id": '7',
-        "primary_category_name": 'Misstatement of Financial Activity'
-    },
-    {
-        "primary_category_id": '14',
-        "primary_category_name": 'Net Outstanding Campaign/Convention ' + 'Expenditures/Obligations'
-    },
-    {
-        "primary_category_id": '16',
-        "primary_category_name": 'No Findings or Issues/Not a Committee'
-    },
-    {
-        "primary_category_id": '9',
-        "primary_category_name": 'Other'
-    },
-    {
-        "primary_category_id": '15',
-        "primary_category_name": 'Payments/Disgorgements'
-    },
-    {
-        "primary_category_id": '6',
-        "primary_category_name": 'Prohibited Contributions'
-    },
-    {
-        "primary_category_id": '4',
-        "primary_category_name": 'Recordkeeping'
-    },
-    {
-        "primary_category_id": '17',
-        "primary_category_name": 'Referred Findings Not Listed'
-    },
-    {
-        "primary_category_id": '13',
-        "primary_category_name": 'Repayment to US Treasury'
-    }
-]
+audit_primary_categories_options = OrderedDict([
+    ('all', 'All'),
+    ('2', 'Allocation Issues'),
+    ('3', 'Disclosure'),
+    ('5', 'Excessive Contributions'),
+    ('1', 'Failure to File Reports/Schedules/Notices'),
+    ('8', 'Loans'),
+    ('7', 'Misstatement of Financial Activity'),
+    ('14', 'Net Outstanding Campaign/Convention ' + 'Expenditures/Obligations'),
+    ('16', 'No Findings or Issues/Not a Committee'),
+    ('9', 'Other'),
+    ('15', 'Payments/Disgorgements'),
+    ('6', 'Prohibited Contributions'),
+    ('4', 'Recordkeeping'),
+    ('17', 'Referred Findings Not Listed'),
+    ('13', 'Repayment to US Treasury')
+])
 
-audit_sub_categories_options = [
-    {
-        "sub_category_id": 'all',
-        "sub_category_name": ' '
-    }
-]
+audit_sub_categories_options = OrderedDict([
+    ('all', 'All')
+])
 
 
 table_columns = OrderedDict([
@@ -984,51 +936,21 @@ SENATE_CLASSES = {
 }
 
 mur_disposition_category_ids = OrderedDict([
-    ('1', 'Approved by Commission'),
-    ('2', 'Approved In Part Recs.'),
-    ('3', 'Approved Recs.'),
-    ('4', 'Case Activated'),
-    ('5', 'Case Activation'),
     ('8', 'Dismiss and Remind'),
     ('9', 'Dismissed'),
-    ('10', 'Dismissed - Agreement Rejected'),
     ('11', 'Dismissed-Low Rated'),
     ('12', 'Dismissed-Other'),
     ('13', 'Dismissed-Stale'),
     ('14', 'Dismiss pursuant to prosecutorial discretion'),
     ('15', 'Dismiss pursuant to prosecutorial discretion, and caution'),
     ('16', 'Enforcement - Disposition - Dismissed "Dismiss" - Dismiss and Caution'),
-    ('17', 'Failed to Approve Recs.'),
-    ('18', 'First General Counsel Report'),
-    ('19', 'Formal Discovery Authorized'),
-    ('20', 'Investigative Activity'),
-    ('21', 'Mailed to Respondent'),
-    ('22', 'Merged'),
     ('23', 'No PCTB'),
     ('24', 'No RTB'),
-    ('25', 'Offer from Respondent Received'),
-    ('26', 'Other'),
-    ('27', 'PC Brief'),
-    ('28', 'PC Conciliation Approved'),
     ('30', 'PCTB Finding'),
-    ('31', 'Pre-PCC Commenced'),
-    ('32', 'Received'),
-    ('33', 'Received from Audit Division'),
-    ('34', 'Received from Commission'),
-    ('35', 'Received from OGC'),
-    ('36', 'Received from RAD'),
-    ('37', 'Request for Extension of Time Approved'),
-    ('38', 'Request for Extension of Time Approved/Denied'),
-    ('39', 'Request for Extension of Time Received'),
-    ('40', 'Response Received'),
     ('41', 'RTB Finding'),
     ('42', 'RTB/NFA'),
-    ('43', 'Settlement Agreement'),
-    ('44', 'Suit Authorization'),
     ('45', 'Take no action'),
     ('46', 'Take No Further Action'),
-    ('47', 'To Respondent'),
-    ('48', 'Transferred to ADR'),
 ])
 
 suggested_mur_disposition_category_ids = OrderedDict([
@@ -1036,3 +958,59 @@ suggested_mur_disposition_category_ids = OrderedDict([
     ('7', 'Conciliation: Pre Probable Cause'),
     ('6', 'Conciliation: Probable Cause'),
 ])
+
+primary_subject_ids = {
+    "": "All",
+    "1": "Allocation",
+    "2": "Committees",
+    "3": "Contributions",
+    "4": "Disclaimer",
+    "5": "Disbursements",
+    "6": "Electioneering",
+    "7": "Expenditures",
+    "8": "Express Advocacy",
+    "9": "Foreign Nationals",
+    "10": "Fraudulent Misrepresentation",
+    "11": "Issue Advocacy",
+    "12": "Knowing and Willful",
+    "13": "Loans",
+    "14": "Non-federal",
+    "15": "Other",
+    "16": "Personal Use",
+    "17": "Presidential",
+    "18": "Reporting",
+    "19": "Soft Money",
+    "20": "Solicitation",
+}
+
+secondary_subject_placeholder = {
+   "": "All",
+}
+
+secondary_subject_ids = {
+  "2": {
+    "1": "Candidate",
+    "2": "Multi-candidate",
+    "3": "Non-Party",
+    "4": "PAC",
+    "5": "Party",
+    "6": "Political",
+    "7": "Presidential",
+  },
+  "3": {
+    "8": "Corporations",
+    "9": "Excessive",
+    "10": "Exemptions",
+    "11": "In the Name of Another",
+    "12": "Labor Unions",
+    "13": "Limitations",
+    "14": "National Bank",
+    "15": "Prohibited",
+  },
+  "7": {
+    "10": "Exemptions",
+    "16": "Coordinated",
+    "17": "Limits",
+    "18": "Prohibitions",
+  }
+}

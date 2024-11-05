@@ -1,6 +1,7 @@
 {% extends "layouts/legal-doc-search-results.jinja" %}
 {% import 'macros/legal.jinja' as legal %}
 {% import 'macros/filters/checkbox.jinja' as checkbox %}
+{% import 'macros/filters/dropdown-json.jinja' as dropdown %}
 {% set document_type_display_name = 'Closed Matters Under Review' %}
 
 {% block header %}
@@ -71,6 +72,25 @@
         prefix='mur_disposition_category_id',
         show_tooltip_text='Final disposition does not search archived cases'
         ) }}
+
+        {{
+          dropdown.select_json(
+              'primary_subject_id',
+              'Case subject',
+              options=constants.primary_subject_ids,
+              default="",
+              show_tooltip_text='Case subject does not search archived cases'
+
+          )
+        }}
+        {{
+          dropdown.select_json_indentation(
+            'secondary_subject_id',
+            'Secondary case subject',
+            options=constants.secondary_subject_placeholder,
+            default=""
+          )
+        }}
     </div>
   </div>
   <div class="filters__inner">
@@ -137,6 +157,16 @@
           {% endfor %}
         </li>
       {% endif %}
+      {% if primary_subject_id or secondary_subject_id_name  %}
+        <li data-tag-category="primary_subject_id" class="tag__category tag__category__range--date">
+        {% if primary_subject_id_name and primary_subject_id %}
+          <div data-removable="true" class="tag__item">{{ primary_subject_id_name }}<button class="button js-close tag__remove" data-tag="primary_subject_id"><span class="u-visually-hidden">Remove</span></button></div>
+        {% endif %}
+        {% if secondary_subject_id_name %}
+          <div data-removable="true" class="tag__item">{{ secondary_subject_id_name }}<button class="button js-close tag__remove" data-tag="secondary_subject_id"><span class="u-visually-hidden">Remove</span></button></div>
+        {% endif %}
+        </li>
+      {% endif %}
     </ul>
   </div>
 </div>
@@ -155,6 +185,9 @@
 {% endblock %}
 
 {% block scripts %}
+  <script>
+   window.context = {{ context_vars|to_json|safe }};
+  </script>
   {# super loads scripts from parent #}
   {{ super() }}
   <script>
@@ -195,7 +228,7 @@
       location.reload();
   };
 
-
+  // JS for final disposition filter
   // Allow the selected-item button to uncheck box in list above
   $(document).on('click','.dropdown__item',  function(e){
       const btn = $(this).find('.dropdown__item--selected');
@@ -213,7 +246,7 @@
   setTimeout(function() {
   (function() {
   //Create an object of the mur_disposition_category_id parameter value(s) from the request
-  const queryFields = {'mur_disposition_category_id':window.context.mur_disposition_category_id}
+  const queryFields = {'mur_disposition_category_id': window.context.mur_disposition_category_id}
   // Create an array to hold checkbox html elements
   const queryBoxes = [];
   // Iterate the key/vals of queryFields
