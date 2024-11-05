@@ -135,21 +135,16 @@
               }
             });
           } else if (tag && tag == 'primary_subject_id') { // Check if tag is not null or undefined
-            // Get the index from the tag
-            // const selectedCategories = url.searchParams.getAll('primary_subject_id');
-            // // Remove all instances of 'case_doc_category_id' from the URL
+            // Remove 'primary_subject_id' and 'secondary_subject_id' from the URL
             url.searchParams.delete('primary_subject_id');
             url.searchParams.delete('secondary_subject_id');
           } else if (tag && tag == 'secondary_subject_id') { // Check if tag is not null or undefined
-            // // Get the index from the tag
-            // const selectedCategories = url.searchParams.getAll('primary_subject_id');
-            // Remove all instances of 'case_doc_category_id' from the URL
+            // Remove 'secondary_subject_id'  from the URL
             url.searchParams.delete('secondary_subject_id');
           } else {
             // For all other tags, remove the corresponding search parameter
             url.searchParams.delete(tag);
           }
-          
           // Go back to first page in case there are fewer pages in new result set
           url.searchParams.set('offset', 0)
           // Redirect to the updated URL
