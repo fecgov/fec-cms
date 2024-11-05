@@ -23,6 +23,9 @@
               <a title="{{ mur.name }}" href="/data/legal/matter-under-review/{{ mur.no }}">
                 {{ mur.name|upper }}
               </a>
+            {% elif mur.no == ARCHIVED_MUR_EXCEPTION and mur.mur_type == 'archived'%}
+              <a title="{{ mur.mur_name }}" href="/data/legal/matter-under-review/{{ mur.no }}?mur_type=archived">
+                {{ mur.mur_name|upper }}
             {% else %}
               <a title="{{ mur.mur_name }}" href="/data/legal/matter-under-review/{{ mur.no }}">
                 {{ mur.mur_name|upper }}

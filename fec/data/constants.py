@@ -935,6 +935,11 @@ SENATE_CLASSES = {
             'MO', 'NV', 'NH', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'SC', 'SD', 'UT', 'VT', 'WA', 'WI']
 }
 
+
+# Archived MUR that has the same number as the current MUR
+ARCHIVED_MUR_EXCEPTION = "3620"
+
+
 mur_disposition_category_ids = OrderedDict([
     ('8', 'Dismiss and Remind'),
     ('9', 'Dismissed'),

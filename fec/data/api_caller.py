@@ -112,15 +112,19 @@ def load_legal_advisory_opinion(ao_no):
     return ao
 
 
-def load_legal_mur(mur_no):
+def load_legal_mur(mur_no, requested_mur_type='current'):
 
     url = "/legal/docs/murs/"
-    mur = _call_api(url, parse.quote(mur_no))
+    murs = _call_api(url, parse.quote(mur_no))
 
-    if not mur:
+    if not murs:
         raise Http404
 
-    mur = mur["docs"][0]
+    # get matching doc by mur_type, else use the first
+    if constants.ARCHIVED_MUR_EXCEPTION == mur_no:
+        mur = next((doc for doc in murs["docs"] if doc['mur_type'] == requested_mur_type), murs["docs"][0])
+    else:
+        mur = murs["docs"][0]
 
     if mur["mur_type"] == "current":
         complainants = []
