@@ -12,7 +12,8 @@
 
     <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | FEC {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
 
-    {% include 'partials/google-tag-manager-script.html' %}
+    {% if not request.is_preview %}{% include 'partials/google-tag-manager-script.html' %}{% endif %}
+
     {% block css %}
     <link defer rel="stylesheet" type="text/css" href="{% path_for_css 'home.css' %}">
     {% endblock %}
@@ -31,7 +32,7 @@
       }
     </script>
 
-    {% include 'partials/google-tag-manager-noscript.html' %}
+    {% if not request.is_preview %}{% include 'partials/google-tag-manager-noscript.html' %}{% endif %}
 
     {% wagtailuserbar %}
     <a href="#main" class="skip-nav">skip navigation</a>
