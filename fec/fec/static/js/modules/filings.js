@@ -1,6 +1,6 @@
 import { default as _extend } from 'underscore/modules/extend.js';
 
-import { MODAL_TRIGGER_CLASS, modalRenderFactory } from './tables.js';
+import { DETAILS_TRIGGER_CLASS, modalRenderFactory } from './tables.js';
 import { amendmentVersion, amendmentVersionDescription, buildUrl } from '../modules/helpers.js';
 import { default as candidateTemplate } from '../templates/reports/candidate.hbs';
 import { default as ieTemplate } from '../templates/reports/ie-only.hbs';
@@ -40,6 +40,6 @@ export const renderModal = modalRenderFactory(
 
 export function renderRow(row, data) {
   if (data.form_type && data.form_type.match(/^F[35][XP]?$/)) {
-    row.classList.add(MODAL_TRIGGER_CLASS, 'row--has-panel');
+    row.classList.add(DETAILS_TRIGGER_CLASS, 'row--has-details');
   }
 }

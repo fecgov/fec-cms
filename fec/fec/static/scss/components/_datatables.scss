@@ -229,7 +229,7 @@
 }
 
 // Special styles for rows that trigger panels
-.row--has-panel {
+.row--has-details {
   @include transition(border-left-width, 0.2s);
   cursor: pointer;
 }
