@@ -129,11 +129,24 @@ def statutes_landing(request):
     })
 
 
+def process_mur_subjects(mur):
+    """
+    Process the subjects in a MUR and return a list of subject names.
+    Fallback to an empty list if no subjects are found or list is empty.
+    """
+    if 'subjects' in mur and mur['subjects']:
+        return [subject.get('subject') for subject in mur['subjects'] if subject.get('subject')]
+    return []
+
+
 def mur_page(request, mur_no):
     mur = api_caller.load_legal_mur(mur_no)
 
     if not mur:
         raise Http404()
+
+    # Process MUR subjects
+    mur['subject_list'] = process_mur_subjects(mur)
 
     return render(request, 'legal-' + mur['mur_type'] + '-mur.jinja', {
         'mur': mur,
@@ -357,6 +370,9 @@ def legal_doc_search_mur(request):
     case_min_close_date = request.GET.get('case_min_close_date', '')
     case_max_close_date = request.GET.get('case_max_close_date', '')
     case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
+    mur_disposition_category_ids = request.GET.getlist('mur_disposition_category_id', [])
+    primary_subject_id = request.GET.get('primary_subject_id', '')
+    secondary_subject_id = request.GET.get('secondary_subject_id', '')
 
     query, query_exclude = parse_query(original_query)
 
@@ -381,6 +397,9 @@ def legal_doc_search_mur(request):
         case_min_close_date=case_min_close_date,
         case_max_close_date=case_max_close_date,
         case_doc_category_id=case_doc_category_ids,
+        mur_disposition_category_id=mur_disposition_category_ids,
+        primary_subject_id=primary_subject_id,
+        secondary_subject_id=secondary_subject_id,
     )
 
     # Define MUR document categories dictionary
@@ -396,7 +415,42 @@ def legal_doc_search_mur(request):
     # Return the selected document category name
     mur_document_category_names = [mur_document_categories.get(id) for id in case_doc_category_ids]
 
+    # mur_disposition_category_id variables:
+    # Dropdown options
+    mur_disposition_category_ids_display = constants.mur_disposition_category_ids
+    # Suggested items above dropdown
+    suggested_mur_disposition_category_ids = constants.suggested_mur_disposition_category_ids
+    # Combine the dropdown options and suggested for the full list
+    mur_disposition_category_ids_list = {
+        **mur_disposition_category_ids_display,
+        **suggested_mur_disposition_category_ids
+    }
+    # Get list of selected names
+    selected_mur_disposition_names = [mur_disposition_category_ids_list.get(id) for id in mur_disposition_category_ids]
+
+    # Get primary_subject_id_name from dict
+    primary_subject_id_name = constants.primary_subject_ids.get(primary_subject_id, '')
+    secondary_subject_ids = constants.secondary_subject_ids
+
+    def get_secondary_subject_name(id):
+        for key in secondary_subject_ids:
+            if id in secondary_subject_ids[key]:
+                return secondary_subject_ids[key][id]
+    secondary_subject_id_name = get_secondary_subject_name(secondary_subject_id)
+
+    # For Javascript
+    context_vars = {
+        'result_type': 'murs',
+        'mur_disposition_category_id': mur_disposition_category_ids,
+        'primary_subject_id': primary_subject_id,
+        'secondary_subject_id': secondary_subject_id,
+        'secondary_subject_ids': secondary_subject_ids,
+    }
+
     for mur in results['murs']:
+        # Process MUR subjects
+        mur['subject_list'] = process_mur_subjects(mur)
+
         for index, doc in enumerate(mur['documents']):
             # Checks if the selected document category filters matching the document categories
             doc['category_match'] = mur["mur_type"] != "archived" and str(doc['doc_order_id']) in case_doc_category_ids
@@ -422,7 +476,16 @@ def legal_doc_search_mur(request):
         'social_image_identifier': 'legal',
         'selected_doc_category_ids': case_doc_category_ids,
         'selected_doc_category_names': mur_document_category_names,
+        'mur_disposition_category_ids': mur_disposition_category_ids,
+        'selected_mur_disposition_names': selected_mur_disposition_names,
+        'mur_disposition_category_ids_display': mur_disposition_category_ids_display,
+        'suggested_mur_disposition_category_ids': suggested_mur_disposition_category_ids,
+        'primary_subject_id': primary_subject_id,
+        'secondary_subject_id': secondary_subject_id,
+        'primary_subject_id_name': primary_subject_id_name,
+        'secondary_subject_id_name': secondary_subject_id_name,
         'is_loading': True,  # Indicate that the page is loading initially
+        "context_vars": context_vars,
     })
 
 

@@ -76,6 +76,7 @@
     {% endif %}
   </div>
 </section>
+
 {% endblock %}
 
 {% include 'partials/legal-disclaimer.jinja' %}
@@ -108,24 +109,43 @@
             const selectedCaseCategories = url.searchParams.getAll('case_doc_category_id');
             url.searchParams.delete('case_doc_category_id');
             selectedCaseCategories.forEach((cat, i) => {
-              if (i != index) {
-                url.searchParams.append('case_doc_category_id', cat);
-              }
+              if (i != index) url.searchParams.append('case_doc_category_id', cat);
             });
 
             const selectedAoCategories = url.searchParams.getAll('ao_doc_category_id');
             url.searchParams.delete('ao_doc_category_id');
             selectedAoCategories.forEach((cat, i) => {
-              if (i != index) {
-                url.searchParams.append('ao_doc_category_id', cat);
-              }
+              if (i != index) url.searchParams.append('ao_doc_category_id', cat);
             });
+          } else if (tag && tag.startsWith('disposition_category_')) { // Check if tag is not null or undefined
+            // Get the index from the tag
+            const index = tag.split('_')[2];
+            // Get all selected mur_disposition_category_ids from the URL
+            const selectedCategories_d = url.searchParams.getAll('mur_disposition_category_id');
+            // Remove all instances of 'mur_disposition_category_id' from the URL
+            url.searchParams.delete('mur_disposition_category_id');
+            // Re-add all categories except the one at the specified index
+            selectedCategories_d.forEach((cat, i) => {
+              if (i != index) url.searchParams.append('mur_disposition_category_id', cat);
+            });
+          } else if (tag && tag == 'primary_subject_id') { // Check if tag is not null or undefined
+            // Remove 'primary_subject_id' and 'secondary_subject_id' from the URL
+            url.searchParams.delete('primary_subject_id');
+            url.searchParams.delete('secondary_subject_id');
+          } else if (tag && tag == 'secondary_subject_id') { // Check if tag is not null or undefined
+            // Remove 'secondary_subject_id' from the URL
+            url.searchParams.delete('secondary_subject_id');
           } else {
             url.searchParams.delete(tag);
           }
 
           // Update the URL without reloading the page
-          window.history.pushState({}, '', url.toString());
+          // window.history.pushState({}, '', url.toString());
+          
+          // Go back to first page in case there are fewer pages in new result set
+          url.searchParams.set('offset', 0);
+          // Redirect to the updated URL
+          window.location = url.toString();
         });
       });
 
@@ -148,9 +168,7 @@
               
               // Re-add all citations except the one that was unchecked
               citations.forEach(existingCitation => {
-                if (existingCitation !== citation) {
-                  url.searchParams.append('ao_regulatory_citation', existingCitation);
-                }
+                if (existingCitation !== citation) url.searchParams.append('ao_regulatory_citation', existingCitation);
               });
             }
             // Update the URL without reloading the page
@@ -158,7 +176,57 @@
           });
         });
       }
+     
+      // JS for subject MUR/ADR selects
+      // The window.context is declared in the child templates (MURm, ADR(maybe later))
+      if (window.context && window.context.result_type == 'murs') {
+        const secondary_subject_ids = window.context.secondary_subject_ids;
+        const primary_subject_id = window.context.primary_subject_id;
+        const secondary_subject_id = window.context.secondary_subject_id;
+      
+        const subject_select = document.getElementById('primary_subject_id');
+        const secondary_select_div = document.querySelector("[data-modifies-filter='secondary_subject_id']");
+        const secondary_select = document.getElementById('secondary_subject_id');
+
+        // Populate secondary select on page load
+        load_secondary_select(primary_subject_id);
+        
+        // Add aria attribute to selected option in primary select
+        Array.from(subject_select.options).forEach(option => {
+          if (option.value == primary_subject_id) option.setAttribute('aria-selected', 'true');
+        });
+
+        // Load secondary select, upon change of primary select
+        subject_select.addEventListener('change', event => {
+          const selected_id = event.target.value;
+          load_secondary_select(selected_id);
+        });
+
+        function load_secondary_select(id) {
+          // First, reset the secondary select to default
+          secondary_select.replaceChildren(new Option('All', "", false, true));
+          // Show and populate secondary select options, if applicable
+          if (id in secondary_subject_ids) {
+            // Show secondary select
+            secondary_select_div.style.display = 'block';
+            // Append secondary select options
+            for (const [key, value] of Object.entries(secondary_subject_ids[id])) {
+              //If there is a current secondary_subject_id, append it as the selected option
+              if (key == secondary_subject_id) {
+                secondary_select.append(new Option(value, key, true, true));
+                // Add aria-selected to that option
+                secondary_select.options[secondary_select.selectedIndex].setAttribute('aria-selected', 'true');
+              // Append other options, unselected
+              } else {
+                secondary_select.append(new Option(value, key));
+              };
+            };
+
+          } else {
+            secondary_select_div.style.display = 'none';
+          };
+        };
+      }
     });
   </script>
-
 {% endblock %}

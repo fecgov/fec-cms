@@ -37,7 +37,7 @@
           {% if mur.mur_type == 'current' %}
           {# Archived MUR subjects are a tree-structure so we don't render them inline #}
             <div class="u-margin--bottom u-margin--left">
-              <strong>Subject(s):</strong> {{ '; '.join(mur['subjects']) }}
+              <strong>Subject(s):</strong> {{ '; '.join(mur['subject_list']) }}
             </div>
           {% endif %}
           <div class="u-margin--top u-margin--bottom u-margin--left">
@@ -60,7 +60,7 @@
               {{ disposition }} ({{ disposition_dict[disposition] }} respondents){% if not loop.last %};&nbsp;{% endif %}
             {% endfor %}
           {% else %}
-            <strong>Disposition(s):</strong> Not available for archived cases
+             Case details preview not available for archived cases
           {% endif %}
           </div>
           <div class="legal-search-result__hit u-padding--left--small split__cell">
