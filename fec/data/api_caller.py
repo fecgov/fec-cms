@@ -184,13 +184,13 @@ def load_legal_adr(adr_no):
         # Or any default value you prefer if the list is empty
         adr["disposition_text"] = None
 
-    adr["collated_dispositions"] = collate_dispositions(adr["adr_dispositions"])
+    adr["collated_dispositions"] = collate_dispositions(adr["dispositions"])
     adr["complainants"] = complainants
     adr["participants_by_type"] = _get_sorted_participants_by_type(adr)
 
     referring_office = None  # Initialize referring_office variable
 
-    for disposition in adr["adr_dispositions"]:
+    for disposition in adr["dispositions"]:
         if "Received from" in disposition["disposition"]:
             referring_office = disposition["disposition"]
             # Transformation dictionary for referring office
@@ -232,7 +232,7 @@ def load_legal_admin_fines(admin_fine_no):
             documents_by_type[doc["category"]] = [doc]
     admin_fine["documents_by_type"] = documents_by_type
     disposition_items = OrderedDict()
-    for item in admin_fine["af_dispositions"]:
+    for item in admin_fine["dispositions"]:
         if item["disposition_description"] in disposition_items:
             disposition_items[item["disposition_description"]].append(item)
         else:
