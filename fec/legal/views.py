@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import Http404
 
 import datetime
@@ -28,7 +28,7 @@ def advisory_opinions_landing(request):
         query='',
         query_exclude='',
         query_type='advisory_opinions',
-        ao_category=['F', 'W'],  # TODO: this is erring, expecting a string
+        ao_doc_category_id=['F', 'W'],  # TODO: this is erring, expecting a string
         ao_min_issue_date=ao_min_date
     )
 
@@ -36,7 +36,7 @@ def advisory_opinions_landing(request):
         query='',
         query_exclude='',
         query_type='advisory_opinions',
-        ao_category='R',
+        ao_doc_category_id='R',
         ao_status='Pending'
     )
 
@@ -252,21 +252,109 @@ def legal_search(request):
 
 
 def legal_doc_search_ao(request):
+    # If there are no params passed, default to Final Opinions
+    if len(request.GET) == 0:
+        return redirect('/data/legal/search/advisory-opinions/?ao_doc_category_id=F')
+
     results = {}
     original_query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
+    limit = request.GET.get('limit', 20)
+    ao_no = request.GET.getlist('ao_no', [])
+    ao_requestor = request.GET.get('ao_requestor', '')
+    ao_is_pending = request.GET.get('ao_is_pending', '')
+    ao_min_issue_date = request.GET.get('ao_min_issue_date', '')
+    ao_max_issue_date = request.GET.get('ao_max_issue_date', '')
+    ao_min_request_date = request.GET.get('ao_min_request_date', '')
+    ao_max_request_date = request.GET.get('ao_max_request_date', '')
+    ao_entity_name = request.GET.get('ao_entity_name', '')
+    ao_doc_category_ids = request.GET.getlist('ao_doc_category_id', [])
+    ao_requestor_type_ids = request.GET.getlist('ao_requestor_type', [])
+    ao_regulatory_citation = request.GET.get('ao_regulatory_citation', '')
 
     query, query_exclude = parse_query(original_query)
 
-    results = api_caller.load_legal_search_results(query, query_exclude, 'advisory_opinions',
-                                                   offset=offset)
+    # Call the function and unpack its return values
+    results = api_caller.load_legal_search_results(
+        query,
+        query_exclude,
+        'advisory_opinions',
+        offset=offset,
+        limit=limit,
+        ao_no=ao_no,
+        ao_requestor=ao_requestor,
+        ao_requestor_type=ao_requestor_type_ids,
+        ao_is_pending=ao_is_pending,
+        ao_min_issue_date=ao_min_issue_date,
+        ao_max_issue_date=ao_max_issue_date,
+        ao_min_request_date=ao_min_request_date,
+        ao_max_request_date=ao_max_request_date,
+        ao_entity_name=ao_entity_name,
+        ao_doc_category_id=ao_doc_category_ids,
+        ao_regulatory_citation=ao_regulatory_citation,
+    )
+
+    # Define AO document categories dictionary
+    ao_document_categories = {
+        "F": "Final Opinion",
+        "V": "Votes",
+        "D": "Draft Documents",
+        "R": "AO Request, Supplemental Material, and Extensions of Time",
+        "W": "Withdrawal of Request",
+        "C": "Comments and Ex parte Communications",
+        "S": "Commissioner Statements"
+    }
+
+    # Define AO requestor types dictionary
+    ao_requestor_types = {
+        "0": "Any",
+        "1": "Federal candidate/candidate committee/officeholder",
+        "2": "Publicly funded candidates/committees",
+        "3": "Party committee, national",
+        "4": "Party committee, state or local",
+        "5": "Nonconnected political committee",
+        "6": "Separate segregated fund",
+        "7": "Labor Organization",
+        "8": "Trade Association",
+        "9": "Membership Organization, Cooperative, Corporation W/O Capital Stock",
+        "10": "Corporation (including LLCs electing corporate status)",
+        "11": "Partnership (including LLCs electing partnership status)",
+        "12": "Governmental entity",
+        "13": "Research/Public Interest/Educational Institution",
+        "14": "Law Firm",
+        "15": "Individual",
+        "16": "Other",
+    }
+
+    # Return the selected document category name
+    ao_document_category_names = [ao_document_categories.get(id) for id in ao_doc_category_ids]
+
+    # Return the selected requestor type name, when "Any" is selected, clear the value
+    ao_requestor_type_names = [ao_requestor_types.get(id) for id in ao_requestor_type_ids if id != 0]
 
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
         'parent': 'legal',
         'results': results,
+        'ao_document_categories': ao_document_categories,
         'result_type': 'advisory_opinions',
-        'query': original_query,
-        'social_image_identifier': 'advisory-opinions'
+        'ao_no': ao_no,
+        'ao_requestor': ao_requestor,
+        'ao_requestor_types': ao_requestor_types,
+        'ao_is_pending': ao_is_pending,
+        'ao_min_issue_date': ao_min_issue_date,
+        'ao_max_issue_date': ao_max_issue_date,
+        'ao_min_request_date': ao_min_request_date,
+        'ao_max_request_date': ao_max_request_date,
+        'ao_entity_name': ao_entity_name,
+        'query': query,
+        'ao_regulatory_citation': ao_regulatory_citation,
+        'category_order': get_legal_category_order(results, 'advisory_opinions'),
+        'social_image_identifier': 'legal',
+        'selected_ao_doc_category_ids': ao_doc_category_ids,
+        'selected_ao_doc_category_names': ao_document_category_names,
+        'selected_ao_requestor_type_ids': ao_requestor_type_ids,
+        'selected_ao_requestor_type_names': ao_requestor_type_names,
+        'is_loading': True,  # Indicate that the page is loading initially
     })
 
 
@@ -333,7 +421,10 @@ def legal_doc_search_mur(request):
     # Suggested items above dropdown
     suggested_mur_disposition_category_ids = constants.suggested_mur_disposition_category_ids
     # Combine the dropdown options and suggested for the full list
-    mur_disposition_category_ids_list = {**mur_disposition_category_ids_display, **suggested_mur_disposition_category_ids}
+    mur_disposition_category_ids_list = {
+        **mur_disposition_category_ids_display,
+        **suggested_mur_disposition_category_ids
+    }
     # Get list of selected names
     selected_mur_disposition_names = [mur_disposition_category_ids_list.get(id) for id in mur_disposition_category_ids]
 

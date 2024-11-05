@@ -1,16 +1,16 @@
 {% extends "layouts/main.jinja" %}
-{% import 'macros/legal.jinja' as legal %}
+{% import 'macros/legal.jinja' as legal %}{# TODO: is this still being used? #}
 {% import 'macros/breadcrumbs.jinja' as breadcrumb %}
 
 {% set breadcrumb_links=[('/legal-resources', 'Legal resources')] %}
 {% set result_entities = results.get(result_type, []) %}
 
 {% block title %}
-  {% if query %}
+  {%- if query -%}
   Searching {{ document_type_display_name }} for &ldquo;{{ query }}&rdquo;
-  {% else %}
+  {%- else -%}
   Search {{ document_type_display_name }}
-  {% endif %}
+  {%- endif -%}
 {% endblock %}
 
 {% block css %}
@@ -29,7 +29,7 @@
       <span class="filters__title">Edit filters</span>
     </button>
     <div class="filters__content">
-      <form id="category-filters" action="/data/legal/search/{{ result_type }}">
+      <form id="category-filters" action="/data/legal/search/{{ result_type | replace('_', '-') }}">
         <input id="search-type" type="hidden" name="search_type" value="{{ result_type }}">
         {% block filters %}
         {% endblock %}
@@ -57,7 +57,7 @@
     {% if results.total_all %}
       {% block results %}{% endblock %}
     {% else %}
-    <div class="u-padding--left u-padding--right">
+    <div class="u-padding--left u-padding--right js-legal-search-no-results">
       <div class="message message--no-icon">
         <h2 class="message__title">No results</h2>
         <p>Sorry, we didn&rsquo;t find any documents matching {% if query %}<span class="t-bold">{{ query }}</span>{% else %}your search{% endif %}.</p>
@@ -90,7 +90,6 @@
   {#- data-init and global chunks are loaded by main.jinja -#}
   {{ tags_for_js_chunks('legal.js', '')|safe }}
   <script>
-    // Add the script for removing tags
     document.addEventListener("DOMContentLoaded", function() {
       // Select all elements with the class 'tag__remove'
       const removeButtons = document.querySelectorAll('.tag__remove');
@@ -98,28 +97,25 @@
       // Iterate over each remove button and add a click event listener
       removeButtons.forEach(button => {
         button.addEventListener('click', function() {
-          // Get the value of the 'data-tag' attribute
           const tag = this.getAttribute('data-tag');
-          // Create a new URL object from the current window location
           const url = new URL(window.location);
 
-          // Check if the tag is 'query' and remove it from the URL search parameters
+          // Remove tags logic
           if (tag === 'query') {
-              url.searchParams.delete('search');
-              url.searchParams.delete('search_exclude');
-          // Check if the tag starts with 'doc_category_' for document types
-          } else if (tag && tag.startsWith('doc_category_')) { // Check if tag is not null or undefined
-            // Get the index from the tag
+            url.searchParams.delete('search');
+            url.searchParams.delete('search_exclude');
+          } else if (tag && tag.startsWith('doc_category_')) {
             const index = tag.split('_')[2];
-            // Get all selected document categories from the URL
-            const selectedCategories = url.searchParams.getAll('case_doc_category_id');
-            // Remove all instances of 'case_doc_category_id' from the URL
+            const selectedCaseCategories = url.searchParams.getAll('case_doc_category_id');
             url.searchParams.delete('case_doc_category_id');
-            // Re-add all categories except the one at the specified index
-            selectedCategories.forEach((cat, i) => {
-              if (i != index) {
-                url.searchParams.append('case_doc_category_id', cat);
-              }
+            selectedCaseCategories.forEach((cat, i) => {
+              if (i != index) url.searchParams.append('case_doc_category_id', cat);
+            });
+
+            const selectedAoCategories = url.searchParams.getAll('ao_doc_category_id');
+            url.searchParams.delete('ao_doc_category_id');
+            selectedAoCategories.forEach((cat, i) => {
+              if (i != index) url.searchParams.append('ao_doc_category_id', cat);
             });
           } else if (tag && tag.startsWith('disposition_category_')) { // Check if tag is not null or undefined
             // Get the index from the tag
@@ -130,32 +126,56 @@
             url.searchParams.delete('mur_disposition_category_id');
             // Re-add all categories except the one at the specified index
             selectedCategories_d.forEach((cat, i) => {
-              if (i != index) {
-                url.searchParams.append('mur_disposition_category_id', cat);
-              }
+              if (i != index) url.searchParams.append('mur_disposition_category_id', cat);
             });
           } else if (tag && tag == 'primary_subject_id') { // Check if tag is not null or undefined
-            // Get the index from the tag
-            // const selectedCategories = url.searchParams.getAll('primary_subject_id');
-            // // Remove all instances of 'case_doc_category_id' from the URL
+            // Remove 'primary_subject_id' and 'secondary_subject_id' from the URL
             url.searchParams.delete('primary_subject_id');
             url.searchParams.delete('secondary_subject_id');
           } else if (tag && tag == 'secondary_subject_id') { // Check if tag is not null or undefined
-            // // Get the index from the tag
-            // const selectedCategories = url.searchParams.getAll('primary_subject_id');
-            // Remove all instances of 'case_doc_category_id' from the URL
+            // Remove 'secondary_subject_id' from the URL
             url.searchParams.delete('secondary_subject_id');
           } else {
-            // For all other tags, remove the corresponding search parameter
             url.searchParams.delete(tag);
           }
+
+          // Update the URL without reloading the page
+          // window.history.pushState({}, '', url.toString());
           
           // Go back to first page in case there are fewer pages in new result set
-          url.searchParams.set('offset', 0)
+          url.searchParams.set('offset', 0);
           // Redirect to the updated URL
           window.location = url.toString();
         });
       });
+
+      // Handle 'ao_regulatory_citation' when checkboxes are checked or unchecked
+      const regulationsField = document.querySelector('#regulations-field ul.dropdown__selected');
+      if (regulationsField) {
+        // Listen for changes in checkboxes inside the dropdown__selected list
+        regulationsField.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+          checkbox.addEventListener('change', function(event) {
+            const citation = checkbox.getAttribute('name');
+            const url = new URL(window.location);
+
+            if (checkbox.checked) {
+              // Add citation to URL if checkbox is checked
+              url.searchParams.append('ao_regulatory_citation', citation);
+            } else {
+              // Remove citation from URL if checkbox is unchecked
+              const citations = url.searchParams.getAll('ao_regulatory_citation');
+              url.searchParams.delete('ao_regulatory_citation');
+              
+              // Re-add all citations except the one that was unchecked
+              citations.forEach(existingCitation => {
+                if (existingCitation !== citation) url.searchParams.append('ao_regulatory_citation', existingCitation);
+              });
+            }
+            // Update the URL without reloading the page
+            window.history.pushState({}, '', url.toString());
+          });
+        });
+      }
      
       // JS for subject MUR/ADR selects
       // The window.context is declared in the child templates (MURm, ADR(maybe later))
@@ -173,39 +193,37 @@
         
         // Add aria attribute to selected option in primary select
         Array.from(subject_select.options).forEach(option => {
-          if (option.value == primary_subject_id) {
-            option.setAttribute('aria-selected', 'true');
-          };
+          if (option.value == primary_subject_id) option.setAttribute('aria-selected', 'true');
         });
 
         // Load secondary select, upon change of primary select
-        subject_select.addEventListener('change', (event) => {
+        subject_select.addEventListener('change', event => {
           const selected_id = event.target.value;
           load_secondary_select(selected_id);
         });
 
-        function load_secondary_select(id){
+        function load_secondary_select(id) {
           // First, reset the secondary select to default
-          secondary_select.replaceChildren(new Option('All', "", false, true))
+          secondary_select.replaceChildren(new Option('All', "", false, true));
           // Show and populate secondary select options, if applicable
           if (id in secondary_subject_ids) {
-              // Show secondary select
-              secondary_select_div.style.display = 'block';
-              // Append secondary select options
-              for (const [key, value] of Object.entries(secondary_subject_ids[id])) {
-                //If there is a current secondary_subject_id, append it as the selected option
-                if (key == secondary_subject_id) {
-                  secondary_select.append(new Option(value, key, true, true));
-                  // Add aria-selected to that option
-                  secondary_select.options[secondary_select.selectedIndex].setAttribute('aria-selected', 'true');
-                // Append other options, unselected
-                } else {
-                  secondary_select.append(new Option(value, key));
-                };
+            // Show secondary select
+            secondary_select_div.style.display = 'block';
+            // Append secondary select options
+            for (const [key, value] of Object.entries(secondary_subject_ids[id])) {
+              //If there is a current secondary_subject_id, append it as the selected option
+              if (key == secondary_subject_id) {
+                secondary_select.append(new Option(value, key, true, true));
+                // Add aria-selected to that option
+                secondary_select.options[secondary_select.selectedIndex].setAttribute('aria-selected', 'true');
+              // Append other options, unselected
+              } else {
+                secondary_select.append(new Option(value, key));
               };
+            };
 
           } else {
-              secondary_select_div.style.display = 'none';
+            secondary_select_div.style.display = 'none';
           };
         };
       }
