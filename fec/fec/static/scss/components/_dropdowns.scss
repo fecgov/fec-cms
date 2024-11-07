@@ -4,13 +4,15 @@
 //
 // <div class="dropdown">
 //   <button type="button" class="dropdown__button button--alt" data-name="name">More</button>
-//   <div id="name-dropdown" class="dropdown__panel" aria-hidden="true">
-//     <ul class="dropdown__list">
-//       <li class="dropdown__item">
-//         <input id="name-checkbox-2016" name="name" type="checkbox" value="2016" />
-//         <label class="dropdown__value" for="name-checkbox-2016">2016</label>
-//       </li>
-//     </ul>
+//   <div id="name-dropdown" class="dropdown__panel dropdown__panel" aria-hidden="true">
+//     <div class="dropdown__content">
+//       <ul class="dropdown__list">
+//         <li class="dropdown__item">
+//           <input id="name-checkbox-2016" name="name" type="checkbox" value="2016" />
+//           <label class="dropdown__value" for="name-checkbox-2016">2016</label>
+//         </li>
+//       </ul>
+//     </div>
 //   </div>
 // </div>
 //
@@ -94,6 +96,37 @@
   text-align: left;
   top: u(3.4rem);
   z-index: $z-dropdowns;
+
+  .dropdown__content {
+    position: relative;
+    width: 100%;
+  }
+
+  // For scrolling dropdowns, force the scrollbars to appear,
+  // flip its x to move the scroll to the left, then flip its content back
+  &.dropdown-scrolling {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    // scrollbar-color: $gray-dark $gray-medium; // For Firefox but it breaks Chrome on Mac OS
+    // scrollbar-width: thin; // For Firefox but it breaks Chrome on Mac OS
+    transform: scaleX(-1);
+
+    .dropdown__content {
+      overflow: hidden;
+      transform: scaleX(-1);
+    }
+
+    &::-webkit-scrollbar {
+      -webkit-appearance: none !important;
+      background: $gray-medium !important;
+      width: 4px !important;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: $gray-dark !important;
+      border-radius: 4px !important;
+      width: 4px !important;
+    }
+  }
 
   .dropdown__value,
   label.dropdown__value {
@@ -226,6 +259,4 @@
       width: 30%;
     }
   }
-}
-  width: 4px;
 }

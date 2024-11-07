@@ -393,7 +393,6 @@ describe('data table', function() {
               '<div class="grid grid--3-wide">'+
                 '<div class="dropdown grid__item">'+
                   '<button type="button" class="dropdown__button button--alt" aria-haspopup="true">More</button>'+
-                  '<div class="dropdown__panel ps ps--active-y" aria-hidden="true" aria-label="More options">'+
                     '<ul class="dropdown__list">'+
                       '<li class="dropdown__item">'+
                       '<input id="checkbox-S2FL00656" name="candidate-list" type="checkbox" data-id="S2FL00656" data-name="NGUYEN, QUOC TUAN MR." tabindex="0">'+
@@ -450,6 +449,7 @@ describe('data table', function() {
                         '<label class="dropdown__value disabled" for="checkbox-S4FL00793">RAMSAROOP, JOEL</label>'+
                       '</li>'+
                     '</ul>'+
+                  '<div class="dropdown__panel dropdown-scrolling" aria-hidden="true" aria-label="More options">'+
                 '</div>'+
               '</div>'+
             '</fieldset>'+

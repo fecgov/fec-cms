@@ -12,15 +12,17 @@
   <ul class="dropdown__selected"></ul>
   <div class="dropdown">
     <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
-    <div id="{{ name }}-dropdown" class="dropdown__panel" aria-hidden="true">
-      <ul class="dropdown__list">
-      {% for year in range(end_year, start_year, -2) %}
-        <li class="dropdown__item">
-          <input id="{{ name }}-checkbox-{{ year }}" name="{{ name }}" type="checkbox" value="{{ year }}" />
-          <label class="dropdown__value" for="{{name}}-checkbox-{{ year }}">{{ year | fmt_year_range }}</label>
-        </li>
-      {% endfor %}
-      </ul>
+    <div id="{{ name }}-dropdown" class="dropdown__panel dropdown-scrolling" aria-hidden="true">
+      <div class="dropdown__content">
+        <ul class="dropdown__list">
+        {% for year in range(end_year, start_year, -2) %}
+          <li class="dropdown__item">
+            <input id="{{ name }}-checkbox-{{ year }}" name="{{ name }}" type="checkbox" value="{{ year }}" />
+            <label class="dropdown__value" for="{{name}}-checkbox-{{ year }}">{{ year | fmt_year_range }}</label>
+          </li>
+        {% endfor %}
+        </ul>
+      </div>
     </div>
     {% if multi_time_period_label %}
       <label class="label--help--filter u-margin--top">{{ multi_time_period_label }}</label>
@@ -36,15 +38,17 @@
   <ul class="dropdown__selected"></ul>
   <div class="dropdown">
     <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
-    <div id="{{ name }}-dropdown" class="dropdown__panel" aria-hidden="true">
-      <ul class="dropdown__list">
-      {% for year in range(end_year, start_year, -1) %}
-        <li class="dropdown__item">
-          <input id="{{ name }}-checkbox-{{ year }}" name="{{ name }}" type="checkbox" value="{{ year }}" />
-          <label class="dropdown__value" for="{{name}}-checkbox-{{ year }}">{{ year }}</label>
-        </li>
-      {% endfor %}
-      </ul>
+    <div id="{{ name }}-dropdown" class="dropdown__panel dropdown-scrolling" aria-hidden="true">
+      <div class="dropdown__content">
+        <ul class="dropdown__list">
+        {% for year in range(end_year, start_year, -1) %}
+          <li class="dropdown__item">
+            <input id="{{ name }}-checkbox-{{ year }}" name="{{ name }}" type="checkbox" value="{{ year }}" />
+            <label class="dropdown__value" for="{{name}}-checkbox-{{ year }}">{{ year }}</label>
+          </li>
+        {% endfor %}
+        </ul>
+      </div>
     </div>
   </div>
 </fieldset>
