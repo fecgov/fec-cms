@@ -35,7 +35,7 @@
   }
 
   hr {
-    border-top: 1px dotted $gray-dark;
+    border-bottom: 1px dotted $gray-dark;
     margin: u(0 0 1rem 0);
   }
 
@@ -68,6 +68,25 @@
     position: absolute;
     right: u(1rem);
     top: u(1rem);
+  }
+
+  .card--feedback {
+    display: flex;
+    flex-direction: row;
+
+    .card__left {
+      padding: 1rem 1rem 1rem 0;
+      a {
+        white-space: nowrap;
+      }
+    }
+    .card__right {
+      padding: 1rem 0 1rem 1rem;
+
+      p {
+        margin-bottom: 0;
+      }
+    }
   }
 
   @include media($lg) {
