@@ -41,21 +41,31 @@
               {{ datatables.committees(data) }}
             {% endif %}
           </noscript>
-        </table>
-        <noscript>
+          <noscript>
           {% if query %}
-          <div class="results-info">
-            <div class="dataTables_paginate paging_simple">
-              {% if query['page']|int > 1 %}
-                <a href="?page={{query['page']|int - 1}}" class="button button--previous button--standard"></a>
-              {% endif %}
-                <a href="?page={{query['page']|int + 1}}" class="button button--next button--standard"></a>
+            <div class="results-info">
+              <div class="dataTables_paginate paging_simple">
+                {% if query['page']|int > 1 %}
+                  <a href="?page={{query['page']|int - 1}}" class="button button--previous button--standard"></a>
+                {% endif %}
+                  <a href="?page={{query['page']|int + 1}}" class="button button--next button--standard"></a>
+              </div>
             </div>
-          </div>
           {% endif %}
-        </noscript>
+          </noscript>
+        </table>
+        {% if result_type == 'national_party_account_disbursements' %}
+        <div class="datatable__note">
+          <p class="t-note">Total spent is not a summary total disclosed by the committee.</p>
+        </div>
+        {% elif result_type == 'national_party_account_receipts' %}
+        <div class="datatable__note">
+          <p class="t-note">Total raised is not a summary total disclosed by the committee. It may include contributions that did not meet the itemization threshold.</p>
+        </div>
+        {% endif %}
       </div>
     </div>
+  </div>
 </section>
 
 {% include 'partials/datatable-modal.jinja' %}
