@@ -227,20 +227,5 @@
     }
   }
 }
-
-.ps-scrollbar-y-rail {
-  background: $gray-medium;
-  border-left: 1px solid $gray-dark;
-  position: absolute;
-  left: 0;
-  right: auto;
-  width: 4px;
-}
-
-.ps-scrollbar-y {
-  background: $gray-dark;
-  left: 0;
-  position: absolute;
-  right: auto;
   width: 4px;
 }
