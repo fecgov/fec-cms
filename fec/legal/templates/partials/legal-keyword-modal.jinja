@@ -5,8 +5,8 @@
       <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide title="Close this dialog window"></button>
       <h2 id="spending-modal-title" class="heading--section">Find documents with...</h2>
       <div class="row u-padding--top">
-        <form class="modal__form  search-controls__either" action="">
-          <p>Use these search boxes to refine your search:</p>
+        <form class="modal__form" action="">
+          <p>Use these search boxes to refine your search. Only words with letters, numbers, spaces, and hyphens (such as in-kind) are accepted:</p>
           <div class="filter">
             <label class="label" for="keywords-any">Any of these words</label>
             <input type="text" id="keywords-any" data-operator="or">
@@ -26,41 +26,11 @@
             <label class="label" for="keywords-none">None of these words</label>
             <input type="text" id="keywords-none" data-operator="exclude">
             <span class="t-note t-sans">Entering <span class="t-underline">text message</span> will exclude <span class="t-underline">text</span> and <span class="t-underline">message</span></span>
-            <button class="u-margin--top button button--cta button--search--text" type="submit">Search</button>
+            <div>
+              <button class="u-margin--top button button--cta button--search--text" type="submit">Search</button>
+            </div>
           </div>
         </form>
-
-        <div class="search-controls__or search-controls__or--vertical">or</div>
-
-        <div class="modal__tips search-controls__either">
-          <p>Use these symbols in the main search box:</p>
-          <table class="simple-table">
-            <thead class="simple-table__header">
-              <tr>
-                <th>Symbol</th>
-                <th>Meaning</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="simple-table__row">
-                <td class="simple-table__cell">OR</td>
-                <td class="simple-table__cell">or</td>
-              </tr>
-              <tr class="simple-table__row">
-                <td class="simple-table__cell">AND</td>
-                <td class="simple-table__cell">and</td>
-              </tr>
-              <tr class="simple-table__row">
-                <td class="simple-table__cell">&ldquo; &rdquo;</td>
-                <td class="simple-table__cell">exact phrase</td>
-              </tr>
-              <tr class="simple-table__row">
-                <td class="simple-table__cell">-</td>
-                <td class="simple-table__cell">but not</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
   </div>

@@ -31,8 +31,24 @@ $fontWeightBold: 700;
     grid-template-columns: 4em auto 25%;
     display: grid;
 
-    .js-meter-row {
-      display: contents;
+    .js-parties-holder {
+      grid-template-columns: 4em auto 25%;
+      display: grid;
+
+      .js-meter-row {
+        display: contents;
+      }
+      .js.party.title {
+        padding-top: 3px;
+      }
+      .js-party-value {
+        padding: 0 1em 3px 0;
+        white-space: nowrap;
+      }
+
+      div, label {
+        border-bottom: solid 1px $colorBorderBottom;
+      }
     }
     .js.party.title {
       padding-top: 3px;

@@ -240,6 +240,7 @@ $filter-button-width: u(4.6rem);
   }
 
   select {
+    width: 100%;
     max-width: 26rem;
   }
 
@@ -250,12 +251,26 @@ $filter-button-width: u(4.6rem);
   }
 
   &.sub--filter--indent {
-    border-left: 3px solid $gray;
+    position: relative;
     padding-left: 5%;
-
-    select,
-    input {
+  
+    select {
       width: 100%;
+    }
+
+    &::before {
+      display: block;
+      position: absolute;
+      left: 0;
+      content: '';
+      height: 6rem;
+      border-left: 3px solid $gray;
+    }
+
+    .filter__message {
+      border-left: 3px solid $gray;
+      padding: 5% 0 0 5%;
+      margin: -5% 0 4% -5.2%;
     }
   }
 }

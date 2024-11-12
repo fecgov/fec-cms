@@ -100,15 +100,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-  var canSkipPolyfills = ('fetch' in window && 'assign' in Object);
-  if (!canSkipPolyfills) {
-    var pfScriptElem = document.createElement('script');
-    pfScriptElem.async = false;
-    pfScriptElem.src = "{% path_for_js 'polyfills.js' %}";
-    document.head.appendChild(pfScriptElem);
-  }
-</script>
 
 {% tags_for_js_chunks 'home.js' '' %}
 

@@ -301,12 +301,11 @@
     }
   }
 
-  //for keyword-options modals on AO, MUR, Statues searches
-  .keyword-modal {
-    .modal__tips,
-    .modal__form {
+    //for keyword-options modals on AO, MUR, Statues searches
+  .keyword-modal{
+    .modal__tips, .modal__form {
       display: table-cell;
-      width: 44%;
+      width: 100%;
     }
     .modal__tips {
       margin-left: u(1rem);

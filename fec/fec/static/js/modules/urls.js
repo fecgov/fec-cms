@@ -9,8 +9,14 @@ import { default as URI } from 'urijs';
 import { pageView } from './analytics.js';
 import { sanitizeQueryParams } from './helpers.js';
 
+/**
+ * Takes a list of key/value, runs them through {@linkcode nextUrl()} and sets them to the window.history
+ * then logs an analytics pageView
+ * @param {Object} params - Object of key/value for query params and their values
+ * @param {Array} fields - Object TODO
+ */
 export function updateQuery(params, fields) {
-  var queryString = nextUrl(params, fields);
+  const queryString = nextUrl(params, fields);
   if (queryString !== null) {
     window.history.replaceState(
       params,
@@ -22,7 +28,7 @@ export function updateQuery(params, fields) {
 }
 
 export function pushQuery(params, fields) {
-  var queryString = nextUrl(params, fields);
+  const queryString = nextUrl(params, fields);
   if (queryString !== null) {
     window.history.pushState(
       params,
@@ -33,8 +39,14 @@ export function pushQuery(params, fields) {
   }
 }
 
+/**
+ * Builds a URL from provided values (params) and allowed fields (fields)
+ * @param {Object} params - The values to included in the URL
+ * @param {Array} fields - List of allowed field names. Any keys in params will be ignore if they aren't in this list
+ * @returns {string}
+ */
 export function nextUrl(params, fields) {
-  var query = sanitizeQueryParams(
+  const query = sanitizeQueryParams(
     URI.parseQuery(window.location.search)
   );
   if (!compareQuery(query, params, fields)) {
@@ -53,7 +65,7 @@ export function nextUrl(params, fields) {
 
 export function compareQuery(first, second, keys) {
   keys = keys || _union(_keys(first), _keys(second));
-  var different = _find(keys, function(key) {
+  const different = _find(keys, function(key) {
     return !_isEqual(
       ensureArray(first[key]).sort(),
       ensureArray(second[key]).sort()

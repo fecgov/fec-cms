@@ -123,7 +123,7 @@
   padding-top: 0;
   padding-bottom: 0;
   font-size: u(1.2rem);
-  font-weight: 400;
+  font-weight: 400 !important;
 }
 
 .usa-banner-header {
@@ -513,23 +513,21 @@
   }
 }
 
-#ie_warning {
+#browser_warning {
+  /* The banner across the top of the site, warning that the current browser doesn't support all site features */
+  /* Start by not showing it */
   display: none;
   background-color: #000;
+  color: #fff;
   padding: 15px;
-}
 
-#ie_warning p {
-  color: #fff;
-  font-size: 16px;
-}
-
-#ie_warning h2 {
-  color: #fff;
-}
-
-@media screen and (-ms-high-contrast: none) {
-  #ie_warning {
+  /* JavaScript will show it if some features aren't supported but if JS is off… */
+  /* Internet Explorer 10+ */
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    display: block !important;
+  }
+  /* Pre-Chromium Edge */
+  @supports (-ms-ime-align: auto) {
     display: block !important;
   }
 }

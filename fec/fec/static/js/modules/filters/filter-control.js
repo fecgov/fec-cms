@@ -1,4 +1,8 @@
 
+/**
+ * Added inside filter-base.js for elements with the js-filter-control class
+ * @param {JQuery} $selector
+ */
 export default function FilterControl($selector) {
   this.$element = $selector;
   this.formType = this.getFormType();

@@ -136,6 +136,10 @@
         cursor: default;
         @include u-icon-bg($check, $gray);
       }
+      
+      &[data-label*="mur_disposition_category_id-"] {
+        pointer-events: none; 
+      }
     }
 
     &:last-of-type {
@@ -176,6 +180,13 @@
   margin: u(0.5rem 0);
 
   li {
+    input[type="checkbox"] + label.disabled {
+      cursor: default;
+      opacity: .5;
+      border: 1px solid #aeb0b5 !important;
+      background-color: #aeb0b5 !important;
+    }
+
     position: relative;
     @include animation(fadeIn 0.2s ease-in);
 
