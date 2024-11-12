@@ -941,27 +941,27 @@ ARCHIVED_MUR_EXCEPTION = "3620"
 
 
 mur_disposition_category_ids = OrderedDict([
-    ('8', 'Dismiss and Remind'),
-    ('9', 'Dismissed'),
-    ('11', 'Dismissed-Low Rated'),
-    ('12', 'Dismissed-Other'),
-    ('13', 'Dismissed-Stale'),
-    ('14', 'Dismiss pursuant to prosecutorial discretion'),
-    ('15', 'Dismiss pursuant to prosecutorial discretion, and caution'),
-    ('16', 'Enforcement - Disposition - Dismissed "Dismiss" - Dismiss and Caution'),
-    ('23', 'No PCTB'),
-    ('24', 'No RTB'),
-    ('30', 'PCTB Finding'),
-    ('41', 'RTB Finding'),
-    ('42', 'RTB/NFA'),
-    ('45', 'Take no action'),
-    ('46', 'Take No Further Action'),
+    ('3', 'Dismiss and Remind'),
+    ('4', 'Dismissed'),
+    ('5', 'Dismissed-Low Rated'),
+    ('6', 'Dismissed-Other'),
+    ('7', 'Dismissed-Stale'),
+    ('8', 'Dismiss pursuant to prosecutorial discretion'),
+    ('9', 'Dismiss pursuant to prosecutorial discretion, and caution'),
+    ('10', 'Enforcement - Disposition - Dismissed "Dismiss" - Dismiss and Caution'),
+    ('11', 'No PCTB'),
+    ('12', 'No RTB'),
+    ('13', 'PCTB Finding'),
+    ('15', 'RTB Finding'),
+    ('16', 'RTB/NFA'),
+    ('17', 'Take no action'),
+    ('18', 'Take No Further Action'),
 ])
 
 suggested_mur_disposition_category_ids = OrderedDict([
-    ('29', 'Probable Cause/NFA'),
-    ('7', 'Conciliation: Pre Probable Cause'),
-    ('6', 'Conciliation: Probable Cause'),
+    ('14', 'Probable Cause/NFA'),
+    ('1', 'Conciliation: Pre Probable Cause'),
+    ('2', 'Conciliation: Probable Cause'),
 ])
 
 primary_subject_ids = {
