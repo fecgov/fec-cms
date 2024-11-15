@@ -1,7 +1,12 @@
 
 import { default as Filter } from './filter-base.js';
 
+/**
+ *
+ * @param {JQuery} elm
+ */
 export default function CheckboxFilter(elm) {
+
   Filter.call(this, elm);
   this.removable = this.$elm.data('removable') || false;
 
@@ -11,19 +16,22 @@ export default function CheckboxFilter(elm) {
     $(document.body).on('tag:removeAll', this.handleClearFilters.bind(this));
     this.$elm.on('click', '.js-remove', this.removeCheckbox.bind(this));
   }
+
 }
 
 CheckboxFilter.prototype = Object.create(Filter.prototype);
 CheckboxFilter.constructor = CheckboxFilter;
 
+/**
+ *
+ * @param {jQuery.Event} e
+ */
 CheckboxFilter.prototype.handleChange = function(e) {
-  var $input = $(e.target);
-  var id = $input.attr('id');
-  var loadedOnce, eventName;
-
-  var $label = this.$elm.find('label[for="' + id + '"]');
-  loadedOnce = $input.data('loaded-once') || false;
-  eventName = $input.is(':checked') ? 'filter:added' : 'filter:removed';
+  const $input = $(e.target);
+  const id = $input.attr('id');
+  const $label = this.$elm.find('label[for="' + id + '"]');
+  const loadedOnce = $input.data('loaded-once') || false;
+  const eventName = $input.is(':checked') ? 'filter:added' : 'filter:removed';
 
   if (loadedOnce) {
     $label.addClass('is-loading');
@@ -35,7 +43,6 @@ CheckboxFilter.prototype.handleChange = function(e) {
         .addClass('is-loading');
     }
   }
-
   $input.trigger(eventName, [
     {
       key: id,
@@ -49,8 +56,12 @@ CheckboxFilter.prototype.handleChange = function(e) {
   $input.data('loaded-once', true);
 };
 
+/**
+ * @param {jQuery.Event} e
+ * @param {Object} [opts]
+ */
 CheckboxFilter.prototype.removeCheckbox = function(e, opts) {
-  var $input = $(e.target);
+  let $input = $(e.target);
 
   // tag removal
   if (opts) {
@@ -62,7 +73,7 @@ CheckboxFilter.prototype.removeCheckbox = function(e, opts) {
 
 // "Clear all filters" will remove unchecked checkboxes
 CheckboxFilter.prototype.handleClearFilters = function() {
-  var self = this;
+  const self = this;
   this.$elm.find('input:checkbox:not(:checked)').each(function() {
     self.removeCheckbox({ target: this });
   });

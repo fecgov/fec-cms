@@ -7,7 +7,7 @@
 
     <title>Website status error | FEC</title>
 
-    {% include 'partials/google-tag-manager-script.html' %}
+    {% if not request.is_preview %}{% include 'partials/google-tag-manager-script.html' %}{% endif %}
 
     {% block css %}
     <link rel="stylesheet" type="text/css" href="{% path_for_css 'base.css' %}">
@@ -27,7 +27,7 @@
       }
     </script>
 
-    {% include 'partials/google-tag-manager-noscript.html' %}
+    {% if not request.is_preview %}{% include 'partials/google-tag-manager-noscript.html' %}{% endif %}
 
     {% wagtailuserbar %}
     {# env-specific banner #} 
