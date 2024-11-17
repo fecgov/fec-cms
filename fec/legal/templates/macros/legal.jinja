@@ -4,7 +4,7 @@
   <div class="tooltip__container">
    <button class="tooltip__trigger"><span class="u-visually-hidden">Learn more</span></button>
    <div class="tooltip tooltip--left tooltip--under">
-      <p class="tooltip__content tooltip__content">Refine a keyword search by using +, |, “ ”, -, to expand or limit results.</p>
+      <p class="tooltip__content tooltip__content">Refine a keyword search by using + (and), | (or), " " (exact phrase), - (but not), to expand or limit results. Search returns a maximum 6 keyword matches per document.</p>
    </div>
   </div>
   <div class="combo combo--search--mini no-mar-b">
@@ -14,16 +14,15 @@
     </button>
   </div>
   <div class="combo combo--search--mini--example">
-        {% if result_type == 'statutes' %}
-          <span class="t-note t-sans search__example">Examples: contribution; 52; 30123</span>
-        {% elif result_type == 'adrs' %}
-          <span class="t-note t-sans search__example">Examples: contributions, "financial activity"</span>
-        {% else %}
-          <span class="t-note t-sans search__example">Examples: spending; 52 U.S.C §30123</span>
-        {% endif %}
+    {% if result_type == 'statutes' %}
+      <span class="t-note t-sans search__example">Examples: contribution; 52; 30123</span>
+    {% elif result_type == 'adrs' %}
+      <span class="t-note t-sans search__example">Examples: contributions, "financial activity"</span>
+    {% else %}
+      <span class="t-note t-sans search__example">Examples: spending; 52 U.S.C §30123</span>
+    {% endif %}
   </div>
   <button type="button" class="button--keywords" aria-controls="keyword-modal" data-a11y-dialog-show="keyword-modal">More keyword options</button>
-
 </div>
 {% endmacro %}
 
@@ -31,6 +30,10 @@
   <div class="filter">
     <label class="label" for="{{name}}-filter">{{ label }}</label>
     <input type="text" name="{{name}}" id="{{name}}-filter"{% if value%} value="{{ value }}"{% endif %}>
+    {# TODO: is this needed?
+    <button class="combo__button button--go button--standard is-disabled" type="button"></button>
+      <span class="u-visually-hidden">Search</span>
+    </button> #}
   </div>
 {% endmacro %}
 
@@ -41,14 +44,14 @@
 </div>
 {% endmacro %}
 
-{% macro checkbox_list(name, label, options, value) %}
+{% macro checkbox_list(name, filterLabel, options, selectedValue) %}
 <div class="filter">
-  <legend class="label">{{ label }}</legend>
-  {% for option in options %}
+  <legend class="label">{{filterLabel}}</legend>
+  {% for value, label in options.items() %}
     <div>
-      <input type="checkbox" id="ao_category_{{ option['value'] }}" name="{{ name }}" value="{{ option['value'] }}"
-        {% if value and option['value'] in value %} checked="true" {% endif %}>
-      <label for="ao_category_{{ option['value'] }}">{{ option['text'] }}</label>
+      <input type="checkbox" id="ao_doc_category_id_{{value}}" name="{{name}}" value="{{value}}"
+        {% if selectedValue and (value in selectedValue) %} checked="true" {% else %} selectedValue="{{selectedValue}}" {% endif %}>
+      <label for="ao_doc_category_id_{{value}}">{{label}}</label>
     </div>
   {% endfor %}
 </div>
@@ -95,10 +98,10 @@
       {% endfor %}
     </select>
     <input class="combo__input" type="text" name="search"
-    aria-label="Search for legal documents"
-    autocomplete="off"
-    autocorrect="off" autocapitalize="off" spellcheck="false"
-    value="{{ query or '' }}">
+      aria-label="Search for legal documents"
+      autocomplete="off"
+      autocorrect="off" autocapitalize="off" spellcheck="false"
+      value="{{ query or '' }}">
     <button type="submit" class="combo__button button--search {{ button_color }}">
       <span class="u-visually-hidden">Search</span>
     </button>

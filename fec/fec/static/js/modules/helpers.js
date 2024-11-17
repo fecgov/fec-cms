@@ -102,7 +102,7 @@ Handlebars.registerHelper('datetime', datetime);
  * Compares two strings with an optional
  * @param {string} string1 - First string to compare
  * @param {string} string2 - Second string to compare
- * @param {Boolean} [caseSensitive=false] - Whether to compare capitalization
+ * @param {boolean} [caseSensitive=false] - Whether to compare capitalization
  * @returns true if they match, false if they don't
  */
 function stringsMatch(string1, string2, caseSensitive=false) {
@@ -370,8 +370,14 @@ export function buildAppUrl(path, query) {
     .toString();
 }
 
+/**
+ * Builds a URL from API_LOCATION, path, query, and api_key
+ * @param {string} path
+ * @param {string} query
+ * @returns {string} The final URL
+ */
 export function buildUrl(path, query) {
-  let uri = URI(API_LOCATION)
+  const uri = URI(API_LOCATION)
     .path(Array.prototype.concat(API_VERSION, path, '').join('/'))
     .addQuery({ api_key: API_KEY_PUBLIC });
 
@@ -549,8 +555,8 @@ export function missingDataReason(dataType) {
 
 /**
  * Takes a jQuery element and returns whether or not it's in the viewport
- * @param {jQuery} $elm - the element to check
- * @return {bool} - If the element is in the viewport
+ * @param {JQuery} $elm - the element to check
+ * @returns {boolean} - If the element is in the viewport
  */
 export function isInViewport($elm) {
   let top = $elm.offset().top;
@@ -561,8 +567,12 @@ export function isInViewport($elm) {
   }
 }
 
-// Sanitizes a single value by removing HTML tags and whitelisting valid
-// characters.
+/**
+ * Sanitizes a single value by removing HTML tags and whitelisting valid characters.
+ * Sanitizes a string or an Array of strings. (and likely numbers)
+ * @param {[string|string[]]} value
+ * @returns {[string|string[]]} A sanitized single (or array of) string(s), in line with what it's fed
+ */
 export function sanitizeValue(value) {
   let validCharactersRegEx = /[^a-z0-9-',.()\s]/gi;
 
@@ -582,7 +592,11 @@ export function sanitizeValue(value) {
   return value;
 }
 
-// Sanitizes all parameters retrieved from the query string in the URL.
+/**
+ * Sanitizes all parameters retrieved from the query string in the URL.
+ * @param {Object} query
+ * @returns {string}
+ */
 export function sanitizeQueryParams(query) {
   let param;
 

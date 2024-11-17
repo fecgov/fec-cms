@@ -1,6 +1,12 @@
-{% extends "layouts/legal-doc-search-results.jinja" %}
+{% extends 'layouts/legal-doc-search-results.jinja' %}
+{% import 'macros/filters/checkbox.jinja' as checkbox %}
+{% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/dropdown-json.jinja' as dropdown %}
+{% import 'macros/filters/text.jinja' as text %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/legal.jinja' as legal %}
-{% set document_type_display_name = 'advisory opinions' %}
+
+{% set document_type_display_name = 'Advisory opinions' %}
 
 {% block header %}
 <header class="page-header slab slab--primary">
@@ -8,10 +14,91 @@
 </header>
 {% endblock %}
 
-{% block search %}
-<input id="query" type="hidden" value="{{ query }}" />
-<input id="contact-email" type="hidden" value="{{ WEBMANAGER_EMAIL }}" />
-<input id="advisory_opinion_page" type="hidden" value="/data/legal/advisory-opinions/ao_no" />
-<div id="root"></div>
-<script src="{{ path_for_js('legal-app.js') }}"></script>
+{% block filters %}
+<div class="filters__inner">
+  {{ text.field('ao_no', 'AO number') }}
+  {{ text.field('ao_requestor', 'Requestor name (or AO name)', select_qty='single') }}
+  {{ dropdown.select_single_flat_list('ao_requestor_type', 'Requestor Type', options=ao_requestor_types )}}
+</div>
+<div class="js-accordion accordion--neutral restricted-fields" data-content-prefix="filter" data-open-first="true">
+  <button type="button" class="js-accordion-trigger accordion__button">Documents</button>
+  <div class="accordion__content">
+    {{ legal.keyword_search(result_type, query) }}
+    <div class="filter js-filter" id="ao_is_pending-field" data-filter="checkbox">
+      <div>
+        <input type="checkbox" id="ao_is_pending" name="ao_is_pending" value="true" {% if ao_is_pending == 'true' %}checked{% endif %}>
+        <label for="ao_is_pending">Show only pending requests</label>
+      </div>
+    </div>
+    <div class="filter js-filter" id="ao_doc_category_id-field" data-filter="checkbox">
+      <legend class="label">Document Type</legend>
+      {% for category_id, category_label in ao_document_categories.items() %}
+        <div>
+          <input type="checkbox"
+            id="ao_doc_category_id_{{ category_id }}"
+            name="ao_doc_category_id"
+            value="{{ category_id }}"
+            {% if category_id in selected_ao_doc_category_ids and not (ao_is_pending == 'true') %}checked{% endif %}
+            {% if ao_is_pending == 'true' and category_id == 'F' %}{% endif %}>
+          <label for="ao_doc_category_id_{{ category_id }}">{{ category_label }}</label>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Citations</button>
+  <div class="accordion__content">
+    <label>If more than one citation is entered:</label>
+    <input type="radio" id="citation_require_all_false" name="ao_citation_require_all" value="false" checked="">
+    <label for="citation_require_all_false">Show cases citing any of them</label>
+    <input type="radio" id="citation_require_all_true" name="ao_citation_require_all" value="true">
+    <label for="citation_require_all_true">Show cases citing all of them</label>
+    {{ typeahead.field('ao_regulatory_citation', 'Regulatory citation', False, dataset='aoRegulatoryCitations', allow_text=False) }}
+    {{ typeahead.field('ao_statutory_citation', 'Statutory citation', False, dataset='aoStatutoryCitations', allow_text=False) }}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Time period</button>
+  <div class="accordion__content">
+    {{ date.field('issue_date', 'Issued date', id_prefix='ao_') }}
+    {{ date.field('request_date', 'Requested date', id_prefix='ao_') }}
+  </div>
+  <button type="button" class="js-accordion-trigger accordion__button">Other entities</button>
+  <div class="accordion__content">
+    {{ text.field('ao_entity_name', 'Entity name') }}
+  </div>
+</div>
+{% endblock %}
+
+{% block message %}
+<div class="data-container__tags u-no-padding-left">
+  <div class="js-filter-tags data-container__tags u-no-padding-left">
+    <div>
+      <div class="row">
+        <h3 class="tags__title">Viewing 
+          <span class="js-count" aria-hidden="false">
+            <span class="tags__count">{{ results.total_advisory_opinions }}</span>
+          </span>
+          <span class="js-result_type">filtered results for:</span>
+        </h3>
+      </div>
+      <ul class="tags"></ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="message message--info">
+      <p>The advisory opinion search feature includes all FEC advisory opinions &#40;AOs&#41; to date. You can search all FEC AOs using keywords, AO numbers, names of requestors and more. For additional search filters, you can still search AOs using our legacy <a href="https://saos.fec.gov/saos/searchao" title="Search advisory opinions">AO search</a>.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block results %}
+  {% with advisory_opinions = results.advisory_opinions %}
+    {% include 'partials/legal-search-results-advisory-opinion.jinja' %}
+  {% endwith %}
+  {% with results=results %}
+    {% include 'partials/legal-pagination.jinja' %}
+  {% endwith %}
+{% endblock %}
+
+{% block scripts %}
+  {{ tags_for_js_chunks('legal-search-ao.js', '')|safe }}
 {% endblock %}

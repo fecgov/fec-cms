@@ -136,6 +136,10 @@
         padding-right: u(1.5rem);
         cursor: default;
       }
+      
+      &[data-label*="mur_disposition_category_id-"] {
+        pointer-events: none; 
+      }
     }
 
     &:last-of-type {

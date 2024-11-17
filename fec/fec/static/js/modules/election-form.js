@@ -28,7 +28,7 @@ export default function ElectionForm(elm) {
  * Identify if a select has an option matching a particular value
  * @param {jQuery.Object} $select - jQuery.Object selector of a <select>
  * @param {string} value - The value to check for
- * @return {boolean} Whether or not the select has the value
+ * @returns {boolean} Whether or not the select has the value
  */
 ElectionForm.prototype.hasOption = function($select, value) {
   return $select.find('option[value="' + value + '"]').length > 0;

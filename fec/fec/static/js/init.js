@@ -1,9 +1,9 @@
 /**
  * Initializes things common to many pages, but not universal (the truly universal are inside global.js)
  * If present, this file initializes…
- * .js-accordion, .js-dropdown, .js-form-nav, .js-post-content, .js-scroll, .js-sticky-side
+ * .js-dropdown, .js-form-nav, .js-post-content, .js-scroll, .js-sticky-side
  */
-import { Accordion } from 'aria-accordion/src/accordion.js';
+
 import { default as Sticky } from 'component-sticky/index.js';
 
 import Dropdown from './modules/dropdowns.js';
@@ -16,20 +16,6 @@ import './modules/calc-admin-fines-modal.js';
 tablistInit();
 
 $(function() {
-  // Initialize new accordions
-  $('.js-accordion').each(function() {
-    const contentPrefix = $(this).data('content-prefix') || 'accordion';
-    const openFirst = $(this).data('open-first') || false;
-    const selectors = {
-      trigger: '.js-accordion-trigger'
-    };
-    const opts = {
-      contentPrefix: contentPrefix,
-      openFirst: openFirst
-    };
-    new Accordion(this, selectors, opts);
-  });
-
   // Initialize sticky elements
   $('.js-sticky-side').each(function() {
     const container = $(this).data('sticky-container');
