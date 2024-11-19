@@ -125,6 +125,21 @@ LegalSearchAo.prototype.initFilters = function() {
   const categoryFiltersFormElement = document.querySelector('#category-filters');
   categoryFiltersFormElement.addEventListener('change', this.handleFiltersChanged.bind(this));
 
+  // Add a null submit button at the top of the form to prevent Enter submits
+  const submitBlocker = document.createElement('input');
+  submitBlocker.setAttribute('type', 'submit');
+  submitBlocker.setAttribute('disabled', 'disabled');
+  submitBlocker.setAttribute('style', 'display:none');
+  submitBlocker.setAttribute('aria-hidden', 'true');
+  categoryFiltersFormElement.prepend(submitBlocker);
+
+  // Change the keyword search button from submit to a regular button since JS will be handling it
+  const searchInputField = document.querySelector('#search-input');
+  if (searchInputField) {
+    const searchInputSubmitButton = searchInputField.parentNode.querySelector('[type="submit"]');
+    if (searchInputSubmitButton) searchInputSubmitButton.setAttribute('type', 'button');
+  }
+
   const filterTagsElement = document.querySelector('.js-filter-tags');
   filterTagsElement.addEventListener('click', this.handleRemovingRequestorTypeTag.bind(this));
 
@@ -209,7 +224,7 @@ LegalSearchAo.prototype.handleKeywordSearchChange = function(e) {
   if (currentTag.length >= 1) {
     currentTag.forEach((tag, i) => {
       // We only want to keep one filter tag for keywords, so change its label
-      // but only if it has a value to show 
+      // but only if it has a value to show
       if (i === 0 && newVal.length > 0)
         tag.textContent = newVal;
       // Otherwise, if it's after the first one, click its X button
@@ -350,7 +365,7 @@ LegalSearchAo.prototype.refreshTable = function(response) {
             <div class="t-sans">`;
     if (advisory_opinion.aos_cited_by.length > 0) {
       advisory_opinion.aos_cited_by.forEach(citation => {
-        newRow += `<div><a href="${citation.no}">${citation.no}</a></div>`;
+        newRow += `<div><a href="/data/legal/advisory-opinions/${citation.no}/">${citation.no}</a></div>`;
       });
     } else {
       newRow += `This advisory opinion is not cited by other advisory opinions`;
