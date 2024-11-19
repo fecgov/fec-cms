@@ -365,7 +365,7 @@ LegalSearchAo.prototype.refreshTable = function(response) {
             <div class="t-sans">`;
     if (advisory_opinion.aos_cited_by.length > 0) {
       advisory_opinion.aos_cited_by.forEach(citation => {
-        newRow += `<div><a href="${citation.no}">${citation.no}</a></div>`;
+        newRow += `<div><a href="/data/legal/advisory-opinions/${citation.no}/">${citation.no}</a></div>`;
       });
     } else {
       newRow += `This advisory opinion is not cited by other advisory opinions`;
