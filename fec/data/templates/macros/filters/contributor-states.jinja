@@ -5,15 +5,17 @@
     <ul class="dropdown__selected"></ul>
     <div class="dropdown">
       <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
-      <div id="state-dropdown{{id_suffix}}" class="dropdown__panel" aria-hidden="true">
-        <ul class="dropdown__list">
-          {% for state in constants.contributor_states.items() %}
-            <li class="dropdown__item">
-              <input name="{{ name }}" id="state-checkbox-{{state[0]}}{{id_suffix}}" type="checkbox" value="{{ state[0] }}">
-              <label class="dropdown__value" for="state-checkbox-{{ state[0] }}{{id_suffix}}">{{ state[1] }}</label>
-            </li>
-          {% endfor %}
-        </ul>
+      <div id="state-dropdown{{id_suffix}}" class="dropdown__panel dropdown-scrolling" aria-hidden="true">
+        <div class="dropdown__content">
+          <ul class="dropdown__list">
+            {% for state in constants.contributor_states.items() %}
+              <li class="dropdown__item">
+                <input name="{{ name }}" id="state-checkbox-{{state[0]}}{{id_suffix}}" type="checkbox" value="{{ state[0] }}">
+                <label class="dropdown__value" for="state-checkbox-{{ state[0] }}{{id_suffix}}">{{ state[1] }}</label>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
     </div>
   </fieldset>

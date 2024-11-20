@@ -6,8 +6,9 @@
     <ul class="dropdown__selected"></ul>
     <div class="dropdown">
       <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
-      <div id="district-dropdown{{id_suffix}}" class="dropdown__panel" aria-hidden="true">
-        <ul class="dropdown__list">
+      <div id="district-dropdown{{id_suffix}}" class="dropdown__panel dropdown-scrolling" aria-hidden="true">
+        <div class="dropdown__content">
+          <ul class="dropdown__list">
             {% for district in range(100) %}
             {% with formatted = '{0:02d}'.format(district) %}
               <li class="dropdown__item">
@@ -16,7 +17,8 @@
               </li>
             {% endwith %}
             {% endfor %}
-        </ul>
+          </ul>
+        </div>
       </div>
     </div>
   </fieldset>
