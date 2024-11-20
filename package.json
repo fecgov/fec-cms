@@ -121,7 +121,6 @@
     "prettier": "^3.3.3",
     "puppeteer": "^22.11.2",
     "numeral": "^1.5.6",
-    "perfect-scrollbar": "^1.5.5",
     "puppeteer-core": "^21.11.0",
     "sass": "^1.78.0",
     "scrollmonitor": "^1.2.11",
