@@ -1,7 +1,12 @@
 @charset "UTF-8";
 
-@mixin breakpoint($query:$feature $value $columns, $total-columns: $grid-columns) {
-  @include -neat-warn("The breakpoint() mixin was renamed to media() in Neat 1.0. Please update your project with the new syntax before the next version bump.");
+@mixin breakpoint(
+  $query: $feature $value $columns,
+  $total-columns: $grid-columns
+) {
+  @include -neat-warn(
+    'The breakpoint() mixin was renamed to media() in Neat 1.0. Please update your project with the new syntax before the next version bump.'
+  );
 
   @if length($query) == 1 {
     @media screen and ($default-feature: nth($query, 1)) {
@@ -39,12 +44,16 @@
       $grid-columns: $default-grid-columns;
     }
   } @else {
-    @include -neat-warn("Wrong number of arguments for breakpoint(). Read the documentation for more details.");
+    @include -neat-warn(
+      'Wrong number of arguments for breakpoint(). Read the documentation for more details.'
+    );
   }
 }
 
 @mixin nth-omega($nth, $display: block, $direction: default) {
-  @include -neat-warn("The nth-omega() mixin is deprecated. Please use omega() instead.");
+  @include -neat-warn(
+    'The nth-omega() mixin is deprecated. Please use omega() instead.'
+  );
   @include omega($nth $display, $direction);
 }
 
@@ -61,7 +70,9 @@
 
 @mixin reset-display {
   $container-display-table: false !global;
-  @include -neat-warn("Resetting $display will be deprecated in future versions in favor of the display(){...} mixin.");
+  @include -neat-warn(
+    'Resetting $display will be deprecated in future versions in favor of the display(){...} mixin.'
+  );
 }
 
 /// Resets the active layout direction to the default value set in `$default-layout-direction`. Particularly useful when changing the layout direction in a single row.
@@ -77,7 +88,9 @@
 
 @mixin reset-layout-direction {
   $layout-direction: $default-layout-direction !global;
-  @include -neat-warn("Resetting $direction will be deprecated in future versions in favor of the direction(){...} mixin.");
+  @include -neat-warn(
+    'Resetting $direction will be deprecated in future versions in favor of the direction(){...} mixin.'
+  );
 }
 
 /// Resets both the active layout direction and the active display property.
