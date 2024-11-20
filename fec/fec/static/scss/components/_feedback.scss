@@ -36,7 +36,7 @@
 
   hr {
     border-bottom: 1px dotted $gray-dark;
-    margin: u(0 0 1rem 0);
+    margin: u(2rem 0);
   }
 
   .t-note {
@@ -58,10 +58,8 @@
     border-color: $base;
   }
 
-  h3 {
-    &:first-of-type {
-      margin-top: u(2rem);
-    }
+  h3:first-of-type {
+    margin-top: u(2rem);
   }
 
   .feedback__close {
@@ -75,13 +73,13 @@
     flex-direction: row;
 
     .card__left {
-      padding: 1rem 1rem 1rem 0;
+      padding: 1rem 1rem 0 0;
       a {
         white-space: nowrap;
       }
     }
     .card__right {
-      padding: 1rem 0 1rem 1rem;
+      padding: 1rem 0 0 1rem;
 
       p {
         margin-bottom: 0;
