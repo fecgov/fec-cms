@@ -16,8 +16,10 @@
 {% macro checkbox_options(name, options, prefix='') %}
 <div class="dropdown">
   <button type="button" class="dropdown__button button--alt" data-name="{{ name }}">More</button>
-  <div class="dropdown__panel" aria-hidden="true">
-    {{ checkbox_list(name, options, prefix) }}
+  <div class="dropdown__panel{% if options.items()|length > 11%} dropdown-scrolling{% endif %}" aria-hidden="true">
+    <div class="dropdown__content">
+      {{ checkbox_list(name, options, prefix) }}
+    </div>
   </div>
 </div>
 {% endmacro %}

@@ -43,15 +43,13 @@
         <td class="simple-table__cell">
           <div class="t-sans">
             {% if advisory_opinion.aos_cited_by|length > 0 %}
-                {% for citation in advisory_opinion.aos_cited_by %}
-                    <div>
-                        <a href="{{ citation.no }}">
-                            {{ citation.no }}
-                        </a>
-                    </div>
-                {% endfor %}
+              {% for citation in advisory_opinion.aos_cited_by %}
+                <div>
+                  <a href="/data/legal/advisory-opinions/{{ citation.no }}/">{{ citation.no }}</a>
+                </div>
+              {% endfor %}
             {% else %}
-                This advisory opinion is not cited by other advisory opinions
+              This advisory opinion is not cited by other advisory opinions
             {% endif %}
           </div>
         </td>
