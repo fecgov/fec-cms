@@ -221,7 +221,7 @@
   }
 }
 
-@media screen and (width <= 40em) {
+@media screen and (max-width: 40em) {
   .mega-heading__title {
     margin-left: u(1rem);
     margin-top: u(1rem);

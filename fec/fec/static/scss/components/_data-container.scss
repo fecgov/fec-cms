@@ -170,7 +170,7 @@
 }
 
 //Responsive behavior for datatables in tab panels on profile pages (committee, candidate, election)
-@media screen and (width <= 940px) {
+@media screen and (max-width: 940px) {
   .data-container__wrapper .main__content--right-full {
     display: block;
   }
