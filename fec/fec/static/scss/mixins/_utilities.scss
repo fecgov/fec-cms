@@ -375,7 +375,6 @@
 // $width         - Width of the icon, defaults to 1.5rem
 //
 
-
 @mixin u-icon-button($icon, $side: left, $width: 1.5rem, $overrides...) {
   background-image: url('#{svg-fill($icon, $base)}');
   background-repeat: no-repeat;
@@ -388,7 +387,7 @@
     background-position: right u(1rem) top 50%;
     padding-right: $width + 2rem;
   }
-  
+
   // Allow for any overrides
   @each $overrideProp, $overVal1, $overVal2, $overVal3, $overVal4 in $overrides {
     #{$overrideProp}: $overVal1 $overVal2 $overVal3 $overVal4;

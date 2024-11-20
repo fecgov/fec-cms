@@ -148,8 +148,9 @@ path.shape {
   display: block !important;
 }
 
-.election-map.dormant, .election-map--home.dormant {
-  background-image: url("/static/img/map-election-search-default.png");
+.election-map.dormant,
+.election-map--home.dormant {
+  background-image: url('/static/img/map-election-search-default.png');
   background-image: image-set(
     url('../img/map-election-search-default.webp') type('image/webp'),
     url('../img/map-election-search-default.png') type('image/png')

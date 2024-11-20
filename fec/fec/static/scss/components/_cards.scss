@@ -312,7 +312,7 @@
 .card--primary {
   border: 2px solid transparent;
   font-weight: bold;
-  
+
   @include u-bg--primary;
   @include u-font-color($gray-lightest);
 

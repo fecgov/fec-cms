@@ -132,9 +132,9 @@
         cursor: default;
         @include u-icon-bg($check, $gray);
       }
-      
-      &[data-label*="mur_disposition_category_id-"] {
-        pointer-events: none; 
+
+      &[data-label*='mur_disposition_category_id-'] {
+        pointer-events: none;
       }
     }
 
@@ -178,11 +178,11 @@
   li {
     position: relative;
 
-    @include animation(fadeIn .2s ease-in);
+    @include animation(fadeIn 0.2s ease-in);
 
-    input[type="checkbox"] + label.disabled {
+    input[type='checkbox'] + label.disabled {
       cursor: default;
-      opacity: .5;
+      opacity: 0.5;
       border: 1px solid #aeb0b5 !important;
       background-color: #aeb0b5 !important;
     }
