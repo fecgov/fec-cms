@@ -109,7 +109,6 @@
 // Generates a circle with a background color and an icon within that circle
 // Can be used in pseudo-elements to create a quasi-background image
 //
-
 @mixin u-icon-circle($icon, $circlecolor, $iconcolor, $size) {
   background-position: 50% 50%;
   background-size: 60%;
@@ -118,19 +117,15 @@
   display: block;
   height: $size;
   width: $size;
-
   @include u-icon-bg($icon, $iconcolor);
 }
 
-// u-font-color()
-//
-// Used to set the color of all child elements
+// u-font-color[-declaration|-nested]()
 //
 // $color     - The color of the font and (if applicable) border-color
 //
-
 @mixin u-font-color($color) {
-  & {
+  & { // Adding this nested style so u-font-color isn't adding both declarations and nested
     color: $color;
   }
 
@@ -225,8 +220,8 @@
 @mixin u-bg--primary() {
   background-color: $primary;
 
-  @include u-form--inverse;
   @include u-font-color($gray-lightest);
+  @include u-form--inverse;
 
   a {
     border-bottom-color: $gray-lightest;
@@ -252,8 +247,9 @@
 
 @mixin u-bg--secondary() {
   background-color: $secondary;
-  @include u-form--inverse;
+
   @include u-font-color($gray-lightest);
+  @include u-form--inverse;
 
   a {
     border-bottom-color: $gray-lightest;
@@ -279,14 +275,9 @@
 
 @mixin u-bg--neutral() {
   background-color: $gray-lightest;
+
   @include u-font-color($base);
-  @include u-form-color(
-    $inverse,
-    $primary,
-    $primary-contrast,
-    'neutral',
-    $primary
-  );
+  @include u-form-color($inverse, $primary, $primary-contrast, 'neutral', $primary);
 
   a {
     &:hover {
@@ -303,8 +294,8 @@
 @mixin u-bg--dark() {
   background-color: $gray-dark;
 
-  @include u-form--inverse;
   @include u-font-color($gray-lightest);
+  @include u-form--inverse;
 
   a {
     border-bottom-color: $gray-lightest;
@@ -316,9 +307,7 @@
 }
 
 @mixin u-bg--neutral() {
-  & {
-    background-color: $gray-lightest;
-  }
+  background-color: $gray-lightest;
 
   @include u-font-color($base);
 
@@ -386,7 +375,8 @@
 // $width         - Width of the icon, defaults to 1.5rem
 //
 
-@mixin u-icon-button($icon, $side: left, $width: 1.5rem) {
+
+@mixin u-icon-button($icon, $side: left, $width: 1.5rem, $overrides...) {
   background-image: url('#{svg-fill($icon, $base)}');
   background-repeat: no-repeat;
   background-size: $width;
@@ -397,6 +387,11 @@
   } @else {
     background-position: right u(1rem) top 50%;
     padding-right: $width + 2rem;
+  }
+  
+  // Allow for any overrides
+  @each $overrideProp, $overVal1, $overVal2, $overVal3, $overVal4 in $overrides {
+    #{$overrideProp}: $overVal1 $overVal2 $overVal3 $overVal4;
   }
 
   &.button--alt {
@@ -435,7 +430,7 @@
   @include animation(fadeIn 0.8s ease-out);
 }
 
-// Printer style utitlity
+// Printer style utility
 .u-print-only {
   display: none;
 

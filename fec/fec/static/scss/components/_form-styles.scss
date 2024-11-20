@@ -253,11 +253,7 @@
     }
 
     &.is-successful {
-      background-size: u(2rem);
-      background-position: 50%;
-      padding: u(1.5rem);
-
-      @include u-icon-button($check);
+      @include u-icon-button($check, left, 1.5rem, background-size u(2rem), background-position 50%, padding u(1.5rem));
     }
   }
 }

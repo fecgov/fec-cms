@@ -28,7 +28,6 @@
   width: 100%;
 
   &::after {
-    background-repeat: no-repeat;
     background-position: 90% 50%;
     background-size: 12px;
     border-left: 1px solid $primary;
@@ -56,11 +55,8 @@
 
   &.is-successful {
     &::after {
-      background-position: u(1.25rem) 50%;
-      background-size: 18px;
-      padding-left: u(2.5rem);
       right: 0;
-      @include u-icon-button($check);
+      @include u-icon-button($check, left, 1.5rem, background-position u(1.25rem) 50%, background-size 18px, padding-left u(2.5rem));
     }
   }
 
@@ -180,15 +176,16 @@
   margin: u(0.5rem 0);
 
   li {
+    position: relative;
+
+    @include animation(fadeIn .2s ease-in);
+
     input[type="checkbox"] + label.disabled {
       cursor: default;
       opacity: .5;
       border: 1px solid #aeb0b5 !important;
       background-color: #aeb0b5 !important;
     }
-
-    position: relative;
-    @include animation(fadeIn 0.2s ease-in);
 
     &:hover {
       input[type='checkbox']:not(:checked)
@@ -215,14 +212,12 @@
   }
 
   .dropdown__remove {
-    background-position: u(0.75rem) 50%;
-    background-size: 18px;
     display: none;
     top: 0;
     bottom: u(1rem);
     position: absolute;
     z-index: $z1;
-    @include u-icon-button($x, $gray-dark);
+    @include u-icon-button($x, left, 1.5rem, background-position u(.75rem) 50%, background-size 18px);
   }
 
   @include media($med) {

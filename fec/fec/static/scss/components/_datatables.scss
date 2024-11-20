@@ -131,6 +131,8 @@
     padding: u(1rem);
     word-wrap: break-word;
 
+    @include transition(padding-left, 0.2s);
+
     @include media($med) {
       max-width: max(9em, 30vw);
     }
@@ -138,8 +140,6 @@
     @include media($lg) {
       max-width: max(13em, 20vw);
     }
-
-    @include transition(padding-left, 0.2s);
 
     &.column--number {
       text-align: right;

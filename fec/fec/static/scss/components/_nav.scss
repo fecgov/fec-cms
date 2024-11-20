@@ -43,7 +43,6 @@
   $devBannerTop: 4rem;
 
   height: calc(100vh - 12rem);
-  top: 4rem;
 
   @include media($lg) {
     height: auto;
@@ -184,8 +183,8 @@
     position: relative;
     top: 0;
     width: 100%;
-    @include clearfix;
     @include transform(translateX(0));
+    @include clearfix;
   }
 
   .site-nav__panel {

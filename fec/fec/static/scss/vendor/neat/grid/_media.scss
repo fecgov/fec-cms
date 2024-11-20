@@ -90,8 +90,8 @@
     }
 
     @media #{$media-query} {
-      @content;
       $grid-columns: $default-grid-columns !global;
+      @content;
     }
   }
 }

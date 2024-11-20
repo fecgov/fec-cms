@@ -76,8 +76,7 @@
   text-align: left;
 
   .card__image {
-    display: table-cell;
-    @include span-columns(1 of 3);
+    @include span-columns(1 of 3, table-cell);
   }
 
   .card__image__container {
@@ -220,10 +219,9 @@
   border: 2px solid transparent;
 
   .card__image__container {
-    display: table-cell;
     float: none;
     vertical-align: middle;
-    @include span-columns(4);
+    @include span-columns(4, table-cell);
   }
 
   .card__image {
@@ -312,13 +310,11 @@
 }
 
 .card--primary {
+  border: 2px solid transparent;
+  font-weight: bold;
+  
   @include u-bg--primary;
   @include u-font-color($gray-lightest);
-
-  & {
-    border: 2px solid transparent;
-    font-weight: bold;
-  }
 
   &:hover {
     background-color: $navy;

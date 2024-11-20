@@ -84,7 +84,11 @@ p {
 .message--big {
   @include media($lg) {
     @include span-columns(8);
-    @include shift(2);
+    & {
+      // We need shift() to happen second to override margin- from span-columns().
+      // Problem: shift() only adds declaration while span-columns() is declaration and nested (&:lastchild)
+      @include shift(2);
+    }
   }
 }
 

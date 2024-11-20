@@ -117,9 +117,12 @@
     }
 
     .address {
-      margin-right: 0;
-      float: right;
+      margin-right: 0 !important; // overriding span-columns()
       @include span-columns(3);
+
+      & {
+        float: right;
+      }
     }
   }
 }

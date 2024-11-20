@@ -31,34 +31,18 @@ $fontWeightBold: 700;
     grid-template-columns: 4em auto 25%;
     display: grid;
 
-    .js-parties-holder {
-      grid-template-columns: 4em auto 25%;
-      display: grid;
-
-      .js-meter-row {
-        display: contents;
-      }
-      .js.party.title {
-        padding-top: 3px;
-      }
-      .js-party-value {
-        padding: 0 1em 3px 0;
-        white-space: nowrap;
-      }
-
-      div, label {
-        border-bottom: solid 1px $colorBorderBottom;
-      }
+    .js-meter-row {
+      display: contents;
     }
     .js.party.title {
       padding-top: 3px;
     }
     .js-party-value {
       padding: 0 1em 3px 0;
+      white-space: nowrap;
     }
 
-    div,
-    label {
+    div, label {
       border-bottom: solid 1px $colorBorderBottom;
     }
   }
@@ -69,7 +53,6 @@ $fontWeightBold: 700;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     margin-bottom: $fontSizeBase;
-    // padding-bottom: $fontSizeBase * 2;
 
     .value {
       font-family: $fontFamilyMonospace;
@@ -256,7 +239,6 @@ $fontWeightBold: 700;
 
     .total-wrapper {
       border-bottom: none;
-      // border-right: solid thin $colorElementBordersOnLight;
       margin: 0;
       padding-bottom: 0;
       padding-right: $fontSizeBase * 4;
@@ -264,14 +246,12 @@ $fontWeightBold: 700;
       width: 50%;
 
       .value {
-        // margin: -5px 0 $fontSizeBase 0;
         -ms-flex-order: 1;
         order: 1;
         text-align: right;
       }
       .description {
         font-size: $fontSizeBase * 1.4;
-        // margin: 5px 0 0;
         -ms-flex-order: 2;
         order: 2;
       }

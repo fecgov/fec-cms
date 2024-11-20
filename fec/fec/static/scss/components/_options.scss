@@ -72,6 +72,10 @@
   .option__aside {
     padding-top: 0;
     @include span-columns(2 of 9);
-    @include shift(1);
+    & {
+      // We need shift() to happen second to override margin- from span-columns().
+      // Problem: shift() only adds declaration while span-columns() is declaration and nested (&:lastchild)
+      @include shift(1);
+    }
   }
 }

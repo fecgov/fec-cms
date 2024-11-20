@@ -173,9 +173,9 @@ aside.contribs-by-state {
         }
 
         button.is-successful {
-          background-position: 50%;
-          background-size: 2.8rem;
-          @include u-icon-button($check);
+          // background-size: 2.8rem;
+          // background-position: 50%;
+          @include u-icon-button($check, left, 2.8rem, background-position 50%);
         }
       }
       #contribs-by-state-typeahead-error {

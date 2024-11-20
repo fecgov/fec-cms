@@ -252,10 +252,8 @@
 }
 
 .button--search {
-  background-size: u(2.2rem);
-  background-position: 50%;
   padding: 0;
-  @include u-icon-button($magnifying-glass);
+  @include u-icon-button($magnifying-glass, left, u(2.2rem), background-position 50%, padding 0);
 }
 
 // Buttons: Calendar dropdown buttons
@@ -324,15 +322,11 @@
 
 // toggle two-candidate view on map comparison
 .button--two-candidates {
-  background-size: u(3rem);
-  padding-left: u(5rem);
-  @include u-icon-button($two-candidates, left);
+  @include u-icon-button($two-candidates, left, u(3rem), background-size u(3rem), padding-left u(5rem));
 }
 
 .button--candidate {
-  background-size: u(2rem);
-  padding-left: u(4rem);
-  @include u-icon-button($candidate, left);
+  @include u-icon-button($candidate, left, u(2rem), padding-left u(4rem));
 }
 
 .button--election {
@@ -352,13 +346,11 @@
 }
 
 .button--download--dropdown {
-  padding-right: u(6rem);
-  @include u-icon-button($download, left);
+  @include u-icon-button($download, left, 1.5rem, padding-right u(6rem));
 }
 
 .button--subscribe {
-  padding-right: u(6rem);
-  @include u-icon-button($signal, left);
+  @include u-icon-button($signal, left, 1.5rem, padding-right u(6rem));
 }
 
 .button--grid {
@@ -398,31 +390,23 @@
 }
 
 .button--disbursements {
-  background-size: u(3rem);
-  padding: u(2rem 3rem 2rem 5rem);
-  @include u-icon-button($disbursement, left);
+  @include u-icon-button($disbursement, left, u(3rem), padding u(2rem 3rem 2rem 5rem));
 }
 
 .button--raising {
-  background-size: u(3rem);
-  padding: u(2rem 3rem 2rem 5rem);
-  @include u-icon-button($piggy-bank, left);
+  @include u-icon-button($piggy-bank, left, u(3rem), padding u(2rem 3rem 2rem 5rem));
 }
 
 .button--envelope {
-  background-size: u(3rem);
-  padding-left: u(5rem);
-  @include u-icon-button($moving-envelope, left);
+  @include u-icon-button($moving-envelope, left, u(3rem), padding-left u(5rem));
 }
 
 .button--previous {
-  background-position: 50% 50%;
-  @include u-icon-button($arrow-left, left, 1rem);
+  @include u-icon-button($arrow-left, left, 1rem, background-position 50% 50%);
 }
 
 .button--next {
-  background-position: 50% 50%;
-  @include u-icon-button($arrow-right, right, 1rem);
+  @include u-icon-button($arrow-right, right, 1rem, background-position 50% 50%);
 }
 
 .button--close--base {

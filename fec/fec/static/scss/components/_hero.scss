@@ -223,7 +223,11 @@
   @include media($lg) {
     .hero__heading {
       @include span-columns(6);
-      @include shift(3);
+      & {
+        // We need shift() to happen second to override margin- from span-columns().
+        // Problem: shift() only adds declaration while span-columns() is declaration and nested (&:lastchild)
+        @include shift(3);
+      }
     }
   }
 }

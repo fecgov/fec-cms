@@ -7,7 +7,7 @@
   $original-prefix-for-spec: $prefix-for-spec;
 
   @if $original-prefix-for-webkit {
-    @include disable-prefix-for-all();
+    @include disable-prefix-for-all;
     $prefix-for-webkit: true !global;
     @-webkit-keyframes #{$name} {
       @content;
@@ -15,7 +15,7 @@
   }
 
   @if $original-prefix-for-mozilla {
-    @include disable-prefix-for-all();
+    @include disable-prefix-for-all;
     $prefix-for-mozilla: true !global;
     @-moz-keyframes #{$name} {
       @content;

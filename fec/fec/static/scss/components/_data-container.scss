@@ -117,17 +117,16 @@
   }
 
   .data-container__action {
-    float: right;
+    float: right !important; // overriding span-columns()
     text-align: right;
-    @include span-columns(5);
+    @include span-columns(5, block);
   }
 
   .data-container__share {
-    padding-left: u(2rem);
     text-indent: 0;
     width: auto;
     margin-right: u(1rem);
-    @include u-icon-button($share, right);
+    @include u-icon-button($share, right, 1.5rem, padding-left u(2rem));
   }
 
   .data-container__export {
@@ -170,7 +169,7 @@
   }
 }
 
-//Responsive behavior for datatables in tab pannels on profile pages (committee, candidate, election)
+//Responsive behavior for datatables in tab panels on profile pages (committee, candidate, election)
 @media screen and (width <= 940px) {
   .data-container__wrapper .main__content--right-full {
     display: block;

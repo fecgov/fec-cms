@@ -127,8 +127,8 @@ $filter-button-width: u(4.6rem);
   width: 100%;
   overflow: visible;
   left: -800px;
-  @include transition(left 0.2s ease-in-out);
-  @include u-bg--neutral;
+  @include u-bg--neutral; // Adds declaration and nested
+  @include transition(left .2s ease-in-out);
 
   &[aria-hidden='true'] {
     display: block !important;
@@ -145,12 +145,13 @@ $filter-button-width: u(4.6rem);
   border-top: 2px solid $primary;
   color: $primary;
   line-height: u(3rem);
-  margin: 0;
+  margin: 0 !important; // overriding what heading() will do
   padding: u(1rem);
   text-align: left;
   width: 100%;
-  @include clearfix;
+
   @include heading(h2);
+  @include clearfix;
 }
 
 .filters__toggle {
@@ -217,9 +218,7 @@ $filter-button-width: u(4.6rem);
       width: u(4.6rem);
 
       &.is-successful {
-        background-size: u(2.2rem);
-        background-position: 50%;
-        @include u-icon-button($check);
+        @include u-icon-button($check, left, 1.5rem, background-size u(2.2rem), background-position 50%);
       }
     }
 
