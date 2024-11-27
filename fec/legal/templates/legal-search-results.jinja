@@ -5,11 +5,11 @@
 {% set breadcrumb_links=[('/legal-resources', 'Legal resources')] %}
 
 {% block title %}
-  {% if query %}
+  {%- if query -%}
   Search results for &ldquo;{{query}}&rdquo;
-  {% else %}
+  {%- else -%}
   Search legal resources
-  {% endif %}
+  {%- endif -%}
 {% endblock %}
 
 {% block css %}
@@ -67,12 +67,8 @@
                 {% if results["total_" + category] %}
                     <div class="results-info__right">
                       <span class="results-info__details">1&ndash;{{ results[category + "_returned"] }} of 
-                        {% if category == 'admin_fines' %}
-                          <a href="/data/legal/search/{{ category }}/?search={{ query }}&search_type={{ category}}">
-                        {% else %}
-                          <a href="/data/legal/search/{{ category | replace('_', '-') }}/?search={{ query }}&search_type={{ category}}">
-                        {% endif %}
-                          <strong>{{ results["total_" + category] }}</strong> results
+                        <a href="/data/legal/search/{{ category | replace('_', '-') }}/?search={{ query }}&search_type={{ category}}">
+                        <strong>{{ results["total_" + category] }}</strong> results
                         </a>
                       </span>
                     </div>

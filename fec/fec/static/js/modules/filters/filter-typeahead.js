@@ -17,21 +17,39 @@ function slugify(value) {
     .replace(/[^a-z0-9:._-]/gi, '');
 }
 
+/**
+ * Takes a datum object and returns
+ * - its name with ID in parentheses if it has an id or
+ * - its name or
+ * - its id in quotes
+ * @param {Object} datum
+ * @returns {string} `name (id)` or `name` or `"id"`
+ */
 function formatLabel(datum) {
   return datum.name
-    ? datum.name + ' (' + datum.id + ')'
+    ? datum.name + (datum.id ? ' (' + datum.id + ')' : '')
     : '"' + stripQuotes(datum.id) + '"';
 }
 
+/**
+ *
+ * @param {*} value
+ * @returns {string} The slugified given value with `-checkbox` appended to it
+ */
 function formatId(value) {
   return slugify(value) + '-checkbox';
 }
 
+/**
+ *
+ * @param {*} value
+ * @returns {string} A string with the straight double quotes removed
+ */
 function stripQuotes(value) {
   return value.replace(/["]+/g, '');
 }
 
-var textDataset = {
+const textDataset = {
   display: 'id',
   source: function(query, syncResults) {
     syncResults([{ id: sanitizeValue(query) }]);
@@ -59,6 +77,12 @@ const template_checkbox = value => `
   </li>
 `;
 
+/**
+ * Used inside typeahead-filter.js as this.typeaheadFilter
+ * @param {JQuery} selector
+ * @param {Object} dataset
+ * @param {boolean} allowText
+ */
 export default function FilterTypeahead(selector, dataset, allowText) {
   this.$elm = $(selector);
   this.dataset = dataset;
@@ -70,17 +94,13 @@ export default function FilterTypeahead(selector, dataset, allowText) {
   this.$selected = this.$elm.find('.dropdown__selected');
 
   this.$elm.on('change', 'input[type="text"]', this.handleChange.bind(this));
-  this.$elm.on(
-    'change',
-    'input[type="checkbox"]',
-    this.handleCheckbox.bind(this)
-  );
+  this.$elm.on('change', 'input[type="checkbox"]', this.handleCheckbox.bind(this));
   this.$elm.on('click', '.dropdown__remove', this.removeCheckbox.bind(this));
 
   this.$elm.on('mouseenter', '.tt-suggestion', this.handleHover.bind(this));
   $('body').on('filter:modify', this.changeDataset.bind(this));
 
-  this.$field.on('typeahead:selected', this.handleSelect.bind(this));
+  this.$field.on('typeahead:selected', this.handleSelected.bind(this));
   this.$field.on('typeahead:autocomplete', this.handleAutocomplete.bind(this));
   this.$field.on('typeahead:render', this.setFirstItem.bind(this));
   this.$field.on('keyup', this.handleKeypress.bind(this));
@@ -120,11 +140,20 @@ FilterTypeahead.prototype.setFirstItem = function() {
   }
 };
 
-FilterTypeahead.prototype.handleSelect = function(e, datum) {
-  const id = formatId(datum.id);
+/**
+ * Event handler for typeahead:selected, also called from inside @see handleSubmit()
+ * @param {jQueryEvent} e
+ * @param {Object} datum
+ * @param {string} datum.name
+ * @param {[number|string]} datum.value
+ */
+FilterTypeahead.prototype.handleSelected = function(e, datum) {
+  let identifier = datum.id || datum.name;
+
+  const id = formatId(identifier);
   this.appendCheckbox({
     name: this.fieldName,
-    value: datum.id,
+    value: identifier,
     datum: datum
   });
   this.datum = null;
@@ -139,6 +168,9 @@ FilterTypeahead.prototype.handleAutocomplete = function(e, datum) {
   this.datum = datum;
 };
 
+/**
+ * @param {KeyboardEvent} e
+ */
 FilterTypeahead.prototype.handleKeypress = function(e) {
   this.handleChange();
 
@@ -148,21 +180,23 @@ FilterTypeahead.prototype.handleKeypress = function(e) {
     this.$field.attr('aria-expanded', 'false');
   }
 
-  if (e.which === 13) {
+  if (e.which === 13 || e.code == 'Enter') {
     this.handleSubmit(e);
   }
 };
 
+/**
+ * Called with every keystroke. Generally serves to enable or disable the button if the
+ * @property {Function} this.$field.typeahead - Initialized during typeaheadInit
+ * @property {string} this.$field.typeahead('val') - Returns the content of the typeahead <input>
+ */
 FilterTypeahead.prototype.handleChange = function() {
-  if (
-    (this.allowText && this.$field.typeahead('val').length > 1) ||
-    this.datum
-  ) {
+
+  if ( (this.allowText && this.$field.typeahead('val').length > 1) || this.datum) {
     this.enableButton();
   } else if (
-    this.$field.typeahead('val').length === 0 ||
-    (!this.allowText && this.$field.typeahead('val').length < 3)
-  ) {
+    this.$field.typeahead('val').length === 0 || (!this.allowText && this.$field.typeahead('val').length < 3)
+    ) {
     this.datum = null;
     this.disableButton();
   }
@@ -203,16 +237,18 @@ FilterTypeahead.prototype.handleHover = function() {
 
 FilterTypeahead.prototype.handleSubmit = function(e) {
   if (this.datum) {
-    this.handleSelect(e, this.datum);
+    this.handleSelected(e, this.datum);
   } else if (!this.datum && !this.allowText) {
-    this.handleSelect(e, this.firstItem);
+    this.handleSelected(e, this.firstItem);
   } else if (this.allowText && this.$field.typeahead('val').length > 0) {
-    this.handleSelect(e, { id: this.$field.typeahead('val') });
+    this.handleSelected(e, { id: this.$field.typeahead('val') });
   }
 };
 
 FilterTypeahead.prototype.clearInput = function() {
-  this.$field.typeahead('val', null).trigger('change');
+  this.$field.typeahead('val', null);
+  // Switching to a native Event (instead of jQuery.Event) because the bubbling wasn't working as expected
+  this.$field.get(0).dispatchEvent(new Event('change', { bubbles: true }));
   this.disableButton();
 };
 
@@ -236,12 +272,13 @@ FilterTypeahead.prototype.appendCheckbox = function(opts) {
   const data = this.formatCheckboxData(opts);
 
   if (this.$elm.find('#' + data.id).length) {
-    return;
+    // return; // return nothing
+  } else {
+    const checkbox = $(template_checkbox(data));
+    checkbox.appendTo(this.$selected);
+    checkbox.find('input').trigger('change');
+    this.clearInput();
   }
-  var checkbox = $(template_checkbox(data));
-  checkbox.appendTo(this.$selected);
-  checkbox.find('input').trigger('change');
-  this.clearInput();
 };
 
 FilterTypeahead.prototype.formatCheckboxData = function(input) {

@@ -1,8 +1,6 @@
 /**
  *
  */
-import PerfectScrollbar from 'perfect-scrollbar';
-
 import { removeTabindex, restoreTabindex } from './accessibility.js';
 import Listeners from './listeners.js';
 
@@ -87,7 +85,6 @@ Dropdown.prototype.toggle = function(e) {
 Dropdown.prototype.show = function() {
   restoreTabindex(this.$panel);
   this.$panel.attr('aria-hidden', 'false');
-  new PerfectScrollbar(this.$panel.get(0), { suppressScrollX: true });
   this.$panel.find('input[type="checkbox"]').first().trigger('focus');
   this.$button.addClass('is-active');
   this.isOpen = true;

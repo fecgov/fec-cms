@@ -51,7 +51,7 @@ KeywordModal.prototype.handleSubmit = function(e) {
 
 /**
  * Converts the keyword modal value into a formatted search query string
- * @return {String} formatted search query string
+ * @returns {string} formatted search query string
  */
 KeywordModal.prototype.generateQueryString = function() {
   let includeQuery = '';

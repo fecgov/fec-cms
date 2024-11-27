@@ -16,6 +16,10 @@ import { default as ToggleFilter } from './toggle-filter.js';
 import { default as TypeaheadFilter } from './typeahead-filter.js';
 import { sanitizeQueryParams } from '../helpers.js';
 
+/**
+ * Created by a new FilterPanel (modules/filters/filter-panel.js)
+ * @param {JQuery} elm
+ */
 export default function FilterSet(elm) {
   this.$body = $(elm);
   $(document.body).on('tag:removed', this.handleTagRemoved.bind(this));
@@ -23,6 +27,7 @@ export default function FilterSet(elm) {
   this.$body.on('filters:validation', this.handleValidation.bind(this));
   this.efiling = this.$body.data('efiling-filters') || false;
 
+  /** Array of names of filter/API var name IDs {@example ['committee_id', 'form_line_number']} */
   this.fields = [];
   this.isValid = true;
   this.firstLoad = true;
@@ -49,6 +54,11 @@ FilterSet.prototype.buildFilter = function($elm) {
   return new F($elm);
 };
 
+/**
+ * Called by {@link activateAll}
+ * @param {JQuery} $selector - jQuery list of elements
+ * @returns
+ */
 FilterSet.prototype.activate = function($selector) {
   const self = this;
   const query = sanitizeQueryParams(
@@ -56,12 +66,13 @@ FilterSet.prototype.activate = function($selector) {
   );
   const filters = _chain($selector)
     .map(function(elm) {
-      var filter = self.buildFilter($(elm)); // .fromQuery(query);
+      const filter = self.buildFilter($(elm)); // .fromQuery(query);
       return [filter.name, filter];
     })
     .object()
     .value();
-    const fields = _chain(filters)
+
+  const fields = _chain(filters)
     .pluck('fields')
     .flatten()
     .value();
@@ -73,6 +84,7 @@ FilterSet.prototype.activate = function($selector) {
 
   // Store all field key-values in this.fields and return the filters object
   this.fields = this.fields.concat(fields);
+
   return filters;
 };
 
@@ -99,6 +111,10 @@ FilterSet.prototype.activateDataType = function() {
   this.activate($filter);
 };
 
+/**
+ * Activate the FilterSet, looking for every .js-filter
+ * @returns {FilterSet}
+ */
 FilterSet.prototype.activateAll = function() {
   // If the panel uses efiling filters, activate the data type filter
   // and activate the others when necessary
@@ -110,6 +126,10 @@ FilterSet.prototype.activateAll = function() {
   return this;
 };
 
+/**
+ * Get an id/value list of every Filter id that has a value
+ * @returns {Object}
+ */
 FilterSet.prototype.serialize = function() {
   return _reduce(
     this.$body.find('input,select').serializeArray(),
@@ -133,21 +153,27 @@ FilterSet.prototype.clear = function() {
   });
 };
 
-//This removes the checkboxes in the panel that show whats been selected when you remove the tag from
-//the tags panel at the top of the table
+/**
+ * Removes the checkboxes in the panel that show whats been selected when you remove the tag from
+ * the tags panel at the top of the table
+ * @param {jQuery.event} e
+ * @param {Object} opts - settings object like { key: value } where value is the clicked tag's data-id
+ */
 FilterSet.prototype.handleTagRemoved = function(e, opts) {
   const $input = $(document.getElementById(opts.key));
+
   if ($input.length > 0) {
     const type = $input.get(0).type;
 
     if (type === 'checkbox' || type === 'radio') {
       $input.trigger('click');
     } else if (type === 'text') {
-      $input.val('').trigger('change');
-    }
-    else if (type === 'select-one') {
-        $input.find('option[value=""]').prop('selected', true);
-        $input.trigger('change');
+      $input.val('');
+      $input.get(0).dispatchEvent(new Event('change', { bubbles: true }));
+    } else if (type === 'select-one') {
+      // Find the option with no value and set it to selected
+      $input.find('option[value=""]').attr('selected', true);
+      $input.trigger('change');
     }
   }
 };

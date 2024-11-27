@@ -57,13 +57,11 @@
         </div>
       </div>
     </div>
-    
-    <div class="filter">
-      <button type="submit" class="button button--cta">Apply filters</button>
-    </div>
+  </div>
+  <div class="filters__inner">
+    <button type="submit" class="button button--cta">Apply filters</button>
   </div>
 {% endblock %}
-
 {% block message %}
 <div class="data-container__tags u-no-padding-left">
   <div class="row">
@@ -129,4 +127,8 @@
   {% with results=results %}
     {% include 'partials/legal-pagination.jinja' %}
   {% endwith %}
+{% endblock %}
+{% block scripts %}
+  {# super loads scripts from parent #}
+  {{ super() }}
 {% endblock %}

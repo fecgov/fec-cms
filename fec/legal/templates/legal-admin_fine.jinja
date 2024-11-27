@@ -73,7 +73,7 @@
           </tr>
         </thead>
         <tbody>
-          {% if 'af_dispositions' in admin_fine and admin_fine.disposition_items %}
+          {% if 'dispositions' in admin_fine and admin_fine.disposition_items %}
             {% for item in admin_fine.disposition_items %}
               {% set itemloop = loop %}
               {% for item in admin_fine.disposition_items[item] %}
