@@ -5,21 +5,9 @@
 {% endif %}
   <meta charset="utf-8">
   <meta name="description" content="{{ description }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
 
-  {# Mobile Specific Metas
-  ================================================== -#}
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
-
-  {# Twitter
-  ================================================== -#}
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ title | trim }} - FEC.gov">
-  <meta name="twitter:description" content="{{ description }}">
-  <meta name="twitter:image" content="{{ get_social_image_path(social_image_identifier) }}">
-
-  {# Facebook
+  {# Social media and sharing
   ================================================== -#}
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{ CANONICAL_BASE }}{{ request.path }}">
@@ -28,22 +16,27 @@
   <meta property="og:description" content="{{ description }}">
   <meta property="og:image" content="{{ get_social_image_path(social_image_identifier) }}">
 
-  {# Google
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ title | trim }} - FEC.gov">
+  <meta name="twitter:description" content="{{ description }}">
+  <meta name="twitter:image" content="{{ get_social_image_path(social_image_identifier) }}">
+
+  {# Search engines
   ================================================== -#}
   <link rel="canonical" href="{{ CANONICAL_BASE }}">
 
   {# Favicons
   ================================================== -#}
-  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ static('img/favicon/data/apple-touch-icon-57x57.png') }}">
-  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ static('img/favicon/data/apple-touch-icon-72x72.png') }}">
-  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ static('img/favicon/data/apple-touch-icon-114x114.png') }}">
-  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ static('img/favicon/data/apple-touch-icon-120x120.png') }}">
-  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ static('img/favicon/data/apple-touch-icon-144x144.png') }}">
-  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{ static('img/favicon/data/apple-touch-icon-152x152.png') }}">
-
   <link rel="icon" type="image/png" href="{{ static('img/favicon/favicon-32x32.png') }}" sizes="32x32">
   <link rel="icon" type="image/png" href="{{ static('img/favicon/favicon-16x16.png') }}" sizes="16x16">
-
-  <meta name="application-name" content="&nbsp;">
-  <meta name="msapplication-TileColor" content="#FFFFFF">
-  <meta name="msapplication-TileImage" href="{{ static('img/favicon/data/mstile-144x144.png') }}">
+  <link rel="icon" type="image/x-icon" href="{{ static('img/favicon/favicon.ico') }}" sizes="32x32">
+  {# Android, Chrome -#}
+  <link rel="icon" type="image/png" sizes="48x48" href="{{ static('img/favicon/general/favicon-48x48.png') }}">
+  <link rel="icon" type="image/png" sizes="192x192" href="{{ static('img/favicon/data/favicon-192x192.png') }}">
+  {# iOS -#}
+  <link rel="apple-touch-icon" sizes="120x120" href="{{ static('img/favicon/data/favicon-120x120.png') }}">
+  <link rel="apple-touch-icon" sizes="152x152" href="{{ static('img/favicon/data/favicon-152x152.png') }}">
+  <link rel="apple-touch-icon" sizes="167x167" href="{{ static('img/favicon/data/favicon-167x167.png') }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ static('img/favicon/data/favicon-180x180.png') }}">
+  {# Do we need this? -#}
+  {# <link rel="icon" href="{{ static('img/favicon/favicon-full.svg') }}" type="image/svg+xml"> -#}
