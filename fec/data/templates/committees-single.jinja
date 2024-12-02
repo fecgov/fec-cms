@@ -5,9 +5,9 @@
 {% import 'macros/cycle-select.jinja' as select %}
 {% import 'macros/page-header.jinja' as header %}
 
-{% block title %}
+{% block title -%}
     {{ committee.name }} - committee overview
-{% endblock %}
+{%- endblock %}
 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{{ path_for_css('entity.css') }}" />

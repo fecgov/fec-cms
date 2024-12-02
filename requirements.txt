@@ -1,9 +1,9 @@
-Django==4.2.15
+Django==4.2.16
 cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
 gunicorn==22.0.0
-gevent==23.9.1
+gevent==24.11.1
 psycopg==3.1.8
 requests==2.32.3
 urllib3==2.2.2

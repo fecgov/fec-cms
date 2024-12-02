@@ -12,6 +12,16 @@ const defaultOptions = {
   toggle: '.js-filter-toggle'
 };
 
+/**
+ * Powers the left-hand columns of filters
+ * @param {Object} [options=defaultOptions]
+ * @param {string} [options.body]
+ * @param {string} [options.content]
+ * @param {string} [options.filterHeader]
+ * @param {string} [options.focus]
+ * @param {string} [options.form]
+ * @param {string} [options.toggle]
+ */
 export default function FilterPanel(options) {
   this.isOpen = false;
   this.options = Object.assign(defaultOptions, options);
@@ -49,7 +59,7 @@ FilterPanel.prototype.show = function(focus) {
   restoreTabindex(this.$form);
   $('body').addClass('is-showing-filters');
   this.isOpen = true;
-  // Don't focus on the first filter unless explicitly intended to
+  // Don't focus on the first unless explicitly intended to
   // Prevents the first filter from being focused on initial page load
   if (focus) {
     this.$body
@@ -61,7 +71,7 @@ FilterPanel.prototype.show = function(focus) {
 
 FilterPanel.prototype.hide = function() {
   if (!isLargeScreen()) {
-    var top = this.$toggle.outerHeight() + this.$toggle.position().top;
+    const top = this.$toggle.outerHeight() + this.$toggle.position().top;
     this.$content.css('top', top);
   }
   this.$body.removeClass('is-open');
@@ -80,31 +90,41 @@ FilterPanel.prototype.toggle = function() {
   }
 };
 
+/**
+ * @param {jQuery.Event} e
+ * @param {Object} opts
+ */
 FilterPanel.prototype.handleAddEvent = function(e, opts) {
   // If it's a data-type toggle, we tell it to ignore for the count of active filters
   if (opts.ignoreCount) {
-    return;
-  }
-
-  var filterCount = this.$filterHeader.find('.filter-count');
-
-  if (filterCount.html()) {
-    filterCount.html(parseInt(filterCount.html(), 10) + 1);
+    // return; // return nothing
   } else {
-    this.$filterHeader.append('<span class="filter-count">1</span>');
+    const filterCount = this.$filterHeader.find('.filter-count');
+
+    if (filterCount.html()) {
+      filterCount.html(parseInt(filterCount.html(), 10) + 1);
+    } else {
+      this.$filterHeader.append('<span class="filter-count">1</span>');
+    }
   }
 };
 
+/**
+ * If it hasn't been called once, updates the content of .filter-count
+ * @param {jQuery.Event} e
+ * @param {Object} opts
+ */
 FilterPanel.prototype.handleRemoveEvent = function(e, opts) {
   if (opts.loadedOnce !== true) {
-    return;
-  }
-
-  var filterCount = this.$filterHeader.find('.filter-count');
-
-  if (filterCount.html() === '1') {
-    filterCount.remove();
+    // return; // return nothing
   } else {
-    filterCount.html(parseInt(filterCount.html(), 10) - 1);
+
+    const filterCount = this.$filterHeader.find('.filter-count');
+
+    if (filterCount.html() === '1') {
+      filterCount.remove();
+    } else {
+      filterCount.html(parseInt(filterCount.html(), 10) - 1);
+    }
   }
 };

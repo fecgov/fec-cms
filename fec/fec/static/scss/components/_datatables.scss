@@ -342,6 +342,9 @@
     @include span-columns(9);
   }
 }
+#results_wrapper + .datatable__note {
+  padding: u(1rem);
+}
 
 // Datatable cell widths
 //
