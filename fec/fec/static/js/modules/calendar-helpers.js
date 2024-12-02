@@ -4,6 +4,14 @@
 import moment from 'moment';
 import { default as URI } from 'urijs';
 
+/**
+ * @param {Object} event - {start: '', end: '', title: '', summary: ''}
+ * @param {Moment} [event.start]
+ * @param {Moment} [event.end]
+ * @param {string} [event.title]
+ * @param {string} [event.summary]
+ * @returns {string}
+ */
 export function getGoogleUrl(event) {
   let fmt, dates;
   if (event.end) {
@@ -29,6 +37,11 @@ export function getGoogleUrl(event) {
     .toString();
 }
 
+/**
+ * @param {string} path
+ * @param {Object} params - key-value pairs on an Object
+ * @returns {string} a string like '/v1/path/?param1key=param1val&param2key=param2val'
+ */
 export function calendarDownload(path, params) {
   const url = URI(window.API_LOCATION)
     .path(Array.prototype.concat(window.API_VERSION, path || [], '').join('/'))
@@ -57,6 +70,12 @@ export function getUrl(path, params, type) {
     .toString();
   return URI.decode(url);
 }
+
+/**
+ * Returns a class name for multi-date events, i.e. those with valid but different start day and end day
+ * @param {Object} event - Event object, looking at start_date and end_date
+ * @returns {string} Returns a class name for multi-day events, else ''
+ */
 export function className(event) {
   const start = event.start_date ? moment(event.start_date).format('M D') : null;
   const end = event.end_date ? moment(event.end_date).format('M D') : null;
@@ -67,6 +86,11 @@ export function className(event) {
   }
 }
 
+/**
+ * Does event.start_date have an hour (vs only yyyy-mm-dd or null)
+ * @param {Object} event
+ * @returns {boolean} true if event.start_date has a legitimate hour included, otherwise false
+ */
 export function checkStartTime(event) {
   if (event.start_date) {
     return moment(event.start_date).hour() ? true : false;
@@ -75,8 +99,12 @@ export function checkStartTime(event) {
   }
 }
 
+/**
+ * Matches the category parameter from calendar date API
+ * @param {string} category
+ * @returns {string} String for the tooltip content for category
+ */
 export function mapCategoryDescription(category) {
-  // matches the category parameter from calendar date API
   const tooltipContent = {
     'Reporting Deadlines':
       'Throughout the year, filers submit regularly scheduled reports about their campaign finance activity. These reporting requirements are outlined in Title 11 of the Code of Federal Regulations (CFR) and vary, depending on the type of filer.',
