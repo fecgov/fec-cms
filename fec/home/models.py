@@ -735,7 +735,8 @@ class DocumentPage(ContentPage):
     @property
     def extension(self):
         # Return the file extension of file_url
-        return self.file_url.rsplit('.', 1)[1].upper()
+        if self.file_url:
+            return self.file_url.rsplit('.', 1)[1].upper()
 
 
 class DocumentFeedPage(ContentPage):
