@@ -652,9 +652,9 @@ DataTable_FEC.prototype.checkFromQuery = function() {
     }
   });
 
-  // Put 0-second, set-timeout on receipts/disbursements datatables so checkboxes are available to check…
-  // …after the two filter panels are loaded
-  if ('data_type' in queryFields) {
+    // Put 0-second, set-timeout on receipts/disbursements datatables so checkboxes are available to check...
+    // ...after the two filter panels are loaded
+    if ('data_type' in queryFields){
     setTimeout(function() {
       // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()…
       // …if they are not already checked
@@ -662,8 +662,9 @@ DataTable_FEC.prototype.checkFromQuery = function() {
         if (!($(box).is(':checked'))) {
           $(box).prop('checked', true).change(); // TODO: jQuery deprecation
         }
-      }
-    }, 0);
+       }
+      $('button.is-loading, label.is-loading').removeClass('is-loading');
+      }, 0);
 
     // No Set-timeout needed on datatables without two filter panels…
     // …Also it causes a noticeable intermittent time-lag while populating table on these pages

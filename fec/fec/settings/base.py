@@ -35,8 +35,8 @@ FEC_GITHUB_TOKEN = env.get_credential('FEC_GITHUB_TOKEN')
 FEC_SERVICE_NOW_API = env.get_credential('FEC_SERVICE_NOW_API')
 FEC_SERVICE_NOW_USERNAME = env.get_credential('FEC_SERVICE_NOW_USERNAME')
 FEC_SERVICE_NOW_PASSWORD = env.get_credential('FEC_SERVICE_NOW_PASSWORD')
-# Search.gov website keys
-SEARCHGOV_BASE_API_URL = env.get_credential('SEARCHGOV_BASE_API_URL', '')
+
+# Search.gov API keys
 SEARCHGOV_API_ACCESS_KEY = env.get_credential('SEARCHGOV_API_ACCESS_KEY')
 SEARCHGOV_POLICY_GUIDANCE_KEY = env.get_credential('SEARCHGOV_POLICY_GUIDANCE_KEY')
 

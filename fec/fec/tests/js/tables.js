@@ -18,11 +18,10 @@ import { buildUrl } from '../../static/js/modules/helpers.js';
 
 import { DataTable_FEC, drawComparison, getCycle, initSpendingTables, mapResponse, mapSort, refreshTables, yearRange } from '../../static/js/modules/tables.js';
 import { init as initTablist } from '../../static/js/vendor/tablist.js';
-import { default as Dropdown }  from '../../static/js/modules/dropdowns.js';
+import { default as Dropdown } from '../../static/js/modules/dropdowns.js';
 
 import { default as context } from '../fixtures/context.js';
 import { default as houseResults } from '../fixtures/house-results.js';
-// const DataTable = DataTable_FEC;
 
 describe('data table', function() {
   before(function() {
@@ -200,7 +199,7 @@ describe('data table', function() {
           results: [],
           pagination: { count: 1000000 }
         };
-        this.table.fetch({}, function() {});
+        this.table.fetch({}, function() {}); // eslint-disable-line no-empty-function
         this.deferred.resolve(resp);
         expect(this.table.disableExport).to.have.been.called;
         expect(this.table.enableExport).not.to.have.been.called;
@@ -220,7 +219,7 @@ describe('data table', function() {
         fields: ['name', 'office', 'party']
       };
       this.table.filterSet.isValid = true;
-      this.table.fetch({}, function() {});
+      this.table.fetch({}, function() {}); // eslint-disable-line no-empty-function
       expect(this.table.filters).to.deep.equal(serialized);
       var params = URI.parseQuery(window.location.search);
       expect(params.name).to.equal('bartlet');
@@ -228,7 +227,7 @@ describe('data table', function() {
 
     it('terminates ongoing ajax requests', function() {
       var xhr = (this.table.xhr = { abort: stub() });
-      this.table.fetch({}, function() {});
+      this.table.fetch({}, function() {}); // eslint-disable-line no-empty-function
       expect(xhr.abort).to.have.been.called;
     });
   });
@@ -245,7 +244,7 @@ describe('data table', function() {
     it('calls fetch on reload', function() {
       var serialized = { name: 'bartlet' };
       this.table.filterSet = {
-        activateAll: function() {},
+        activateAll: function() {}, // eslint-disable-line no-empty-function
         serialize: function() {
           return serialized;
         }
@@ -258,7 +257,7 @@ describe('data table', function() {
     it('does not call fetch on reload when state is unchanged', function() {
       var serialized = { name: 'bartlet' };
       this.table.filterSet = {
-        activateAll: function() {},
+        activateAll: function() {}, // eslint-disable-line no-empty-function
         serialize: function() {
           return serialized;
         }
@@ -319,7 +318,6 @@ describe('data table', function() {
     });
 
     it('should draw tables for comparison and show by-size by default', function(done) {
-      var tables = $('#fixtures');
       done();
     });
 
@@ -345,9 +343,9 @@ describe('data table', function() {
         .empty()
         .append(
           '<div id="comparison">'+
-          '<fieldset class="js-dropdown">'+
-            '<legend class="label" for="candidate-list">Candidates to compare (listed by amount raised):</legend>'+
-            '<label class="label--help label--help u-negative--top--margin u-padding--bottom">Limit 10 candidates</label>'+
+            '<fieldset class="js-dropdown">'+
+              '<legend class="label" for="candidate-list">Candidates to compare (listed by amount raised):</legend>'+
+              '<label class="label--help label--help u-negative--top--margin u-padding--bottom">Limit 10 candidates</label>'+
               '<ul class="dropdown__selected list--3-columns">'+
                 '<li class="dropdown__item">'+
                   '<input id="checkbox-S8FL00273" name="candidate-list" type="checkbox" data-id="S8FL00273" data-name="SCOTT, RICK SEN" checked>'+
@@ -393,81 +391,84 @@ describe('data table', function() {
               '<div class="grid grid--3-wide">'+
                 '<div class="dropdown grid__item">'+
                   '<button type="button" class="dropdown__button button--alt" aria-haspopup="true">More</button>'+
-                  '<div class="dropdown__panel ps ps--active-y" aria-hidden="true" aria-label="More options">'+
-                    '<ul class="dropdown__list">'+
-                      '<li class="dropdown__item">'+
-                      '<input id="checkbox-S2FL00656" name="candidate-list" type="checkbox" data-id="S2FL00656" data-name="NGUYEN, QUOC TUAN MR." tabindex="0">'+
-                      '<label class="dropdown__value disabled" for="checkbox-S2FL00656">NGUYEN, QUOC TUAN MR.</label></li>'+
-                      '<li class="dropdown__item">'+
-                        '<input id="checkbox-S4FL00579" name="candidate-list" type="checkbox" data-id="S4FL00579" data-name="STERN, EVERETT" tabindex="0">'+
-                        '<label class="dropdown__value disabled" for="checkbox-S4FL00579">STERN, EVERETT</label></li>'+
-                      '<li class="dropdown__item">'+
-                        '<input id="checkbox-S4FL00439" name="candidate-list" type="checkbox" data-id="S4FL00439" data-name="DAVIS, JAMES" tabindex="0">'+
-                        '<label class="dropdown__value disabled" for="checkbox-S4FL00439">DAVIS, JAMES</label>'+
-                      '</li>'+
-                      '<li class="dropdown__item">'+
-                        '<input id="checkbox-S4FL00454" name="candidate-list" type="checkbox" data-id="S4FL00454" data-name="BOSWELL, MATT" tabindex="0">'+
-                        '<label class="dropdown__value disabled" for="checkbox-S4FL00454">BOSWELL, MATT</label>'+
-                      '</li>'+
-                      '<li class="dropdown__item">'+
-                        '<input id="checkbox-S4FL00462" name="candidate-list" type="checkbox" data-id="S4FL00462" data-name="LAROSE, JOSUE DR." tabindex="0">'+
-                        '<label class="dropdown__value disabled" for="checkbox-S4FL00462">LAROSE, JOSUE DR.</label>'+
-                      '</li>'+
-                      '<li class="dropdown__item">'+
-                        '<input id="checkbox-S4FL00488" name="candidate-list" type="checkbox" data-id="S4FL00488" data-name="SANSCRAINTE, MATTHEW ALEXANDER MR" tabindex="0">'+
-                        '<label class="dropdown__value disabled" for="checkbox-S4FL00488">SANSCRAINTE, MATTHEW ALEXANDER MR</label>'+
-                      '</li>'+
-                      '<li class="dropdown__item">'+
-                        '<input id="checkbox-S4FL00520" name="candidate-list" type="checkbox" data-id="S4FL00520" data-name="TOULME, ALIX CHRISTOPHER MR. JR." tabindex="0">'+
-                        '<label class="dropdown__value disabled" for="checkbox-S4FL00520">TOULME, ALIX CHRISTOPHER MR. JR.</label>'+
-                      '</li>'+
-                      '<li class="dropdown__item">'+
-                        '<input id="checkbox-S4FL00561" name="candidate-list" type="checkbox" data-id="S4FL00561" data-name="ROMAGNANO, CHASE ANDERSON MR." tabindex="0">'+
-                        '<label class="dropdown__value disabled" for="checkbox-S4FL00561">ROMAGNANO, CHASE ANDERSON MR.</label>'+
-                      '</li>'+
-                      '<li class="dropdown__item">'+
-                        '<input id="checkbox-S4FL00629" name="candidate-list" type="checkbox" data-id="S4FL00629" data-name="SMITH, JOE" tabindex="0">'+
-                        '<label class="dropdown__value disabled" for="checkbox-S4FL00629">SMITH, JOE</label>'+
-                      '</li>'+
-                      '<li class="dropdown__item">'+
-                        '<input id="checkbox-S4FL00678" name="candidate-list" type="checkbox" data-id="S4FL00678" data-name="ODELL, SHANNON MAY" tabindex="0">'+
-                        '<label class="dropdown__value disabled" for="checkbox-S4FL00678">ODELL, SHANNON MAY</label>'+
-                      '</li>'+
-                      '<li class="dropdown__item">'+
-                        '<input id="checkbox-S4FL00686" name="candidate-list" type="checkbox" data-id="S4FL00686" data-name="SUN, KATY" tabindex="0">'+
-                        '<label class="dropdown__value disabled" for="checkbox-S4FL00686">SUN, KATY</label>'+
-                      '</li>'+
-                      '<li class="dropdown__item">'+
-                        '<input id="checkbox-S4FL00751" name="candidate-list" type="checkbox" data-id="S4FL00751" data-name="BENNETT, SHANTELE RENEE MS N/A" tabindex="0">'+
-                        '<label class="dropdown__value disabled" for="checkbox-S4FL00751">BENNETT, SHANTELE RENEE MS N/A</label>'+
-                      '</li>'+
-                      '<li class="dropdown__item">'+
-                        '<input id="checkbox-S4FL00769" name="candidate-list" type="checkbox" data-id="S4FL00769" data-name="TOULME, ALIX CHRISTOPHER MR. JR." tabindex="0">'+
-                        '<label class="dropdown__value disabled" for="checkbox-S4FL00769">TOULME, ALIX CHRISTOPHER MR. JR.</label>'+
-                      '</li>'+
-                      '<li class="dropdown__item">'+
-                        '<input id="checkbox-S4FL00793" name="candidate-list" type="checkbox" data-id="S4FL00793" data-name="RAMSAROOP, JOEL" tabindex="0">'+
-                        '<label class="dropdown__value disabled" for="checkbox-S4FL00793">RAMSAROOP, JOEL</label>'+
-                      '</li>'+
-                    '</ul>'+
+                  '<div class="dropdown__panel dropdown-scrolling" aria-hidden="true" aria-label="More options">'+
+                    '<div class="dropdown__content">'+
+                      '<ul class="dropdown__list">'+
+                        '<li class="dropdown__item">'+
+                          '<input id="checkbox-S2FL00656" name="candidate-list" type="checkbox" data-id="S2FL00656" data-name="NGUYEN, QUOC TUAN MR." tabindex="0">'+
+                          '<label class="dropdown__value disabled" for="checkbox-S2FL00656">NGUYEN, QUOC TUAN MR.</label></li>'+
+                        '<li class="dropdown__item">'+
+                          '<input id="checkbox-S4FL00579" name="candidate-list" type="checkbox" data-id="S4FL00579" data-name="STERN, EVERETT" tabindex="0">'+
+                          '<label class="dropdown__value disabled" for="checkbox-S4FL00579">STERN, EVERETT</label></li>'+
+                        '<li class="dropdown__item">'+
+                          '<input id="checkbox-S4FL00439" name="candidate-list" type="checkbox" data-id="S4FL00439" data-name="DAVIS, JAMES" tabindex="0">'+
+                          '<label class="dropdown__value disabled" for="checkbox-S4FL00439">DAVIS, JAMES</label>'+
+                        '</li>'+
+                        '<li class="dropdown__item">'+
+                          '<input id="checkbox-S4FL00454" name="candidate-list" type="checkbox" data-id="S4FL00454" data-name="BOSWELL, MATT" tabindex="0">'+
+                          '<label class="dropdown__value disabled" for="checkbox-S4FL00454">BOSWELL, MATT</label>'+
+                        '</li>'+
+                        '<li class="dropdown__item">'+
+                          '<input id="checkbox-S4FL00462" name="candidate-list" type="checkbox" data-id="S4FL00462" data-name="LAROSE, JOSUE DR." tabindex="0">'+
+                          '<label class="dropdown__value disabled" for="checkbox-S4FL00462">LAROSE, JOSUE DR.</label>'+
+                        '</li>'+
+                        '<li class="dropdown__item">'+
+                          '<input id="checkbox-S4FL00488" name="candidate-list" type="checkbox" data-id="S4FL00488" data-name="SANSCRAINTE, MATTHEW ALEXANDER MR" tabindex="0">'+
+                          '<label class="dropdown__value disabled" for="checkbox-S4FL00488">SANSCRAINTE, MATTHEW ALEXANDER MR</label>'+
+                        '</li>'+
+                        '<li class="dropdown__item">'+
+                          '<input id="checkbox-S4FL00520" name="candidate-list" type="checkbox" data-id="S4FL00520" data-name="TOULME, ALIX CHRISTOPHER MR. JR." tabindex="0">'+
+                          '<label class="dropdown__value disabled" for="checkbox-S4FL00520">TOULME, ALIX CHRISTOPHER MR. JR.</label>'+
+                        '</li>'+
+                        '<li class="dropdown__item">'+
+                          '<input id="checkbox-S4FL00561" name="candidate-list" type="checkbox" data-id="S4FL00561" data-name="ROMAGNANO, CHASE ANDERSON MR." tabindex="0">'+
+                          '<label class="dropdown__value disabled" for="checkbox-S4FL00561">ROMAGNANO, CHASE ANDERSON MR.</label>'+
+                        '</li>'+
+                        '<li class="dropdown__item">'+
+                          '<input id="checkbox-S4FL00629" name="candidate-list" type="checkbox" data-id="S4FL00629" data-name="SMITH, JOE" tabindex="0">'+
+                          '<label class="dropdown__value disabled" for="checkbox-S4FL00629">SMITH, JOE</label>'+
+                        '</li>'+
+                        '<li class="dropdown__item">'+
+                          '<input id="checkbox-S4FL00678" name="candidate-list" type="checkbox" data-id="S4FL00678" data-name="ODELL, SHANNON MAY" tabindex="0">'+
+                          '<label class="dropdown__value disabled" for="checkbox-S4FL00678">ODELL, SHANNON MAY</label>'+
+                        '</li>'+
+                        '<li class="dropdown__item">'+
+                          '<input id="checkbox-S4FL00686" name="candidate-list" type="checkbox" data-id="S4FL00686" data-name="SUN, KATY" tabindex="0">'+
+                          '<label class="dropdown__value disabled" for="checkbox-S4FL00686">SUN, KATY</label>'+
+                        '</li>'+
+                        '<li class="dropdown__item">'+
+                          '<input id="checkbox-S4FL00751" name="candidate-list" type="checkbox" data-id="S4FL00751" data-name="BENNETT, SHANTELE RENEE MS N/A" tabindex="0">'+
+                          '<label class="dropdown__value disabled" for="checkbox-S4FL00751">BENNETT, SHANTELE RENEE MS N/A</label>'+
+                        '</li>'+
+                        '<li class="dropdown__item">'+
+                          '<input id="checkbox-S4FL00769" name="candidate-list" type="checkbox" data-id="S4FL00769" data-name="TOULME, ALIX CHRISTOPHER MR. JR." tabindex="0">'+
+                          '<label class="dropdown__value disabled" for="checkbox-S4FL00769">TOULME, ALIX CHRISTOPHER MR. JR.</label>'+
+                        '</li>'+
+                        '<li class="dropdown__item">'+
+                          '<input id="checkbox-S4FL00793" name="candidate-list" type="checkbox" data-id="S4FL00793" data-name="RAMSAROOP, JOEL" tabindex="0">'+
+                          '<label class="dropdown__value disabled" for="checkbox-S4FL00793">RAMSAROOP, JOEL</label>'+
+                        '</li>'+
+                      '</ul>'+
+                    '</div>'+
+                  '</div>'+
                 '</div>'+
               '</div>'+
             '</fieldset>'+
-          '</div>'     
+          '</div>'
       );
-      this.refreshTables = sinon.spy(refreshTables(null, context));
-      this.drawComparison = sinon.spy(drawComparison);  
+      this.refreshTables = sinon.spy(refreshTables(null, context)); // eslint-disable-line no-undef
+      this.drawComparison = sinon.spy(drawComparison); // eslint-disable-line no-undef
       done();
     });
-        
+
     afterEach(function(done) {
       this.$fixture.empty();
       done();
     });
 
     it('should start with 10 selected boxes and dropdown disabled by default', function() {
-      const dropdown_button = $('.dropdown__button')
-      const selected_checkboxes =  $('.dropdown__selected input[type="checkbox"]:checked');
+      const dropdown_button = $('.dropdown__button');
+      const selected_checkboxes = $('.dropdown__selected input[type="checkbox"]:checked');
       expect(selected_checkboxes.length).to.equal(10);
       expect(dropdown_button.prop('disabled')).to.be.true;
     });
@@ -483,7 +484,7 @@ describe('data table', function() {
       $('.js-dropdown input[data-id="S4FL00736"]').prop('checked',false);
       $('.js-dropdown input[data-id="S2FL00656"]').prop('checked',true);
       refreshTables(null, context);
-      const disabled_checkboxes =  $('.dropdown__selected input[type="checkbox"]:disabled');
+      const disabled_checkboxes = $('.dropdown__selected input[type="checkbox"]:disabled');
       expect(disabled_checkboxes.length).to.equal(1);
     });
 
@@ -493,19 +494,19 @@ describe('data table', function() {
       $(this.checkbox).prop('checked',false);
 
       // Check an item from the dropdown
-      this.checkbox1 =  $('.js-dropdown input[data-id="S2FL00656"]');
+      this.checkbox1 = $('.js-dropdown input[data-id="S2FL00656"]');
       $(this.checkbox1).prop('checked',true);
 
       // Trigger a click on the previously checked box to uncheck it and fire refreshTables()
       this.checkbox1.trigger('click').trigger('change');
-    
+
       expect(this.checkbox.prop('disabled')).to.be.false;
     });
 
     it('enables/allows removal of disabled checkboxes from dropdown', function() {
       new Dropdown('.js-dropdown');
       // Check one item from the dropdown
-      this.checkbox =  $('.dropdown__list input[data-id="S2FL00656"]');
+      this.checkbox = $('.dropdown__list input[data-id="S2FL00656"]');
       $(this.checkbox).prop('checked',true);
 
       // Uncheck the checkbox to make it disabled and fire refreshTables()
@@ -536,7 +537,7 @@ describe('data table', function() {
           orderSequence: ['desc', 'asc'],
           render: buildTotalLink(
             ['independent-expenditures'],
-            function(data, type, row, meta) {
+            function(data, type, row) {
               return {
                 data_type: 'processed',
                 is_notice: 'false',
@@ -617,8 +618,6 @@ describe('data table', function() {
     });
 
     it('should return an object when no table available', function() {
-      var meta = { settings: { sTableId: 'notable' } };
-      var results = this.spy(null, meta);
       this.spy.calledOnce;
       this.spy.returned({});
     });

@@ -117,7 +117,6 @@
     "moment": "^2.29.4",
     "npm-watch": "^0.13.0",
     "numeral": "^1.5.6",
-    "perfect-scrollbar": "^1.5.5",
     "puppeteer-core": "^21.11.0",
     "sass": "^1.77.6",
     "scrollmonitor": "^1.2.11",
