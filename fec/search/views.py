@@ -1,31 +1,42 @@
 import os
 import requests
 import math
+import logging
 
 from urllib import parse
 
 from django.shortcuts import render
 from django.conf import settings
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 def search_candidates(query):
     """Searches the data API for candidates matching the query"""
     path = os.path.join(settings.FEC_API_VERSION, 'candidates', 'search')
     url = parse.urljoin(settings.FEC_API_URL, path)
-    r = requests.get(url, params={
-        'q': query, 'sort': '-receipts', 'per_page': 3, 'api_key': settings.FEC_API_KEY_PRIVATE
-    })
-    return r.json()
+
+    try:
+        r = requests.get(url, params={'q': query, 'sort': '-receipts', 'per_page': 3, 'api_key': settings.FEC_API_KEY_PRIVATE})
+        return r.json()
+    except (Exception) as ex:
+        logger.error('search_canndidates:' + ex.__class__.__name__)
+        return None
 
 
 def search_committees(query):
     """Searches the data API for committees matching the query"""
     path = os.path.join(settings.FEC_API_VERSION, 'committees')
     url = parse.urljoin(settings.FEC_API_URL, path)
-    r = requests.get(url, params={
-        'q': query, 'per_page': 3, 'sort': '-receipts', 'api_key': settings.FEC_API_KEY_PRIVATE
-    })
-    return r.json()
+
+    try:
+        r = requests.get(url, params={
+            'q': query, 'per_page': 3, 'sort': '-receipts', 'api_key': settings.FEC_API_KEY_PRIVATE})
+        return r.json()
+    except (Exception) as ex:
+        logger.error('search_committees:' + ex.__class__.__name__)
+        return None
 
 
 def prev_offset(limit, next_offset):
@@ -98,10 +109,12 @@ def search_site(query, limit=0, offset=0):
         'limit': limit,
         'offset': offset
     }
-    r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14y', params=params)
-
-    if r.status_code == 200:
+    try:
+        r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14y', params=params)
         return process_site_results(r.json(), limit=limit, offset=offset)
+    except (Exception) as ex:
+        logger.error('search_site:' + ex.__class__.__name__)
+        return None
 
 
 def search(request):
@@ -117,26 +130,40 @@ def search(request):
     results = {}
     results['count'] = 0
 
+    site_search_error = ''
+    cand_search_error = ''
+    comm_search_error = ''
+
     if 'candidates' in search_type and search_query:
         results['candidates'] = search_candidates(search_query)
         if results['candidates']:
             results['count'] += len(results['candidates']['results'])
+        else:
+            cand_search_error = 'We were unable to search <strong>Candidates</strong> because that FEC API endpoint is currently not responding. Please try again later.'
 
     if 'committees' in search_type and search_query:
         results['committees'] = search_committees(search_query)
         if results['committees']:
             results['count'] += len(results['committees']['results'])
+        else:
+            comm_search_error = 'We were unable to search <strong>Committees</strong> because that FEC API endpoint is currently not responding. Please try again later.'
 
     if 'site' in search_type and search_query:
         results['site'] = search_site(search_query, limit=limit, offset=offset)
         if results['site']:
             results['count'] += len(results['site']['results'])
+        else:
+            site_search_error = 'We were unable to search <strong>Other pages</strong> because search.gov is currently not responding. Please try again later.'
 
     return render(request, 'search/search.html', {
         'search_query': search_query,
         'results': results,
         'type': search_type,
-        'self': {'title': 'Search results'}
+        'self': {'title': 'Search results'},
+        'site_search_error': site_search_error,
+        'cand_search_error': cand_search_error,
+        'comm_search_error': comm_search_error,
+
     })
 
 
@@ -153,9 +180,12 @@ def policy_guidance_search_site(query, limit=0, offset=0):
         'offset': offset
     }
 
-    r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14y', params=params)
-    if r.status_code == 200:
+    try:
+        r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14yX', params=params)
         return process_site_results(r.json(), limit=limit, offset=offset)
+    except (Exception) as ex:
+        logger.error('policy_guidance_search_site' + ex.__class__.__name__)
+        return None
 
 
 def policy_guidance_search(request):
@@ -163,18 +193,23 @@ def policy_guidance_search(request):
     Takes a page request and calls the appropriate searches
     depending on the type requested
     """
-
+    results = {}
     limit = 10
     search_query = request.GET.get('query', None)
     offset = request.GET.get('offset', 0)
-
-    results = policy_guidance_search_site(search_query, limit=limit, offset=offset)
     current_page = int(int(offset) / limit) + 1
     num_pages = 1
     total_count = 0
-    if results:
-        num_pages = math.ceil(int(results['meta']['count']) / limit)
-        total_count = results['meta']['count'] + results['best_bets']['count']
+    policy_search_error = ''
+
+    if search_query:
+        results = policy_guidance_search_site(search_query, limit=limit, offset=offset)
+
+        if results:
+            num_pages = math.ceil(int(results['meta']['count']) / limit)
+            total_count = results['meta']['count'] + results['best_bets']['count']
+        else:
+            policy_search_error = 'We were unable to search <strong>Policy and Other Guidance</strong> because search.gov is currently not responding. Please try again later.'
 
     resultset = {}
     resultset['search_query'] = search_query
@@ -183,6 +218,7 @@ def policy_guidance_search(request):
     resultset['offset'] = offset
     resultset['num_pages'] = num_pages
     resultset['current_page'] = current_page
-    resultset['total_count'] = total_count
+    resultset['total_count'] = total_count,
+    resultset['policy_search_error'] = policy_search_error
 
     return render(request, 'search/policy_guidance_search_page.html', resultset)

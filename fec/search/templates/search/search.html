@@ -182,10 +182,54 @@
               </div>
             </section>
           {% endif %}
-        {% else %}
+          {% if site_search_error %}
+          <div class="messag message--small message--alert">
+            <p>{{ site_search_error | safe }} </p>
+            </div>
+          {% endif %}
+          {% if cand_search_error %}
+          <div class="message message--small message--alert">
+            <p>{{ cand_search_error | safe }} </p>
+            </div>
+          {% endif %}
+          {% if comm_search_error %}
+          <div class="message message--small message--alert">
+            <p>{{ comm_search_error | safe }} </p>
+            </div>
+          {% endif %}
+        {% elif results.count == 0 %}
           <div class="message message--info">
             <h2>No results</h2>
-            <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong>.</p>
+            {% if site_search_error or cand_search_error or comm_search_error %}
+              <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong> in:</p>
+               <ul  class="list--bulleted">
+              {% if 'candidates' in type and not cand_search_error %}
+              <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong> in:</p>
+                <li><strong>Candidates</strong></li>
+              {% endif %}
+              {% if 'committees' in type and not comm_search_error %}
+                <li><strong>Committees</strong></li>
+              {% endif %}
+              {% if 'site' in type and not site_search_error %}
+                <li><strong>Other pages</strong></li>
+              {% endif %}
+              </ul>
+              {% if site_search_error %}
+              <div class="message message--white message--small message--alert">
+                <p>{{ site_search_error | safe }} </p>
+                </div>
+              {% endif %}
+              {% if cand_search_error %}
+              <div class="message message--white message--small message--alert">
+                <p>{{ cand_search_error | safe }}</p>
+                </div>
+              {% endif %}
+              {% if comm_search_error %}
+              <div class="message message--white message--small message--alert">
+                <p>{{ comm_search_error | safe }}</p>
+                </div>
+              {% endif %}
+            {% endif %}
             <div class="message--alert__bottom">
               <p>Think this was a mistake?<br>Try one of the other search tools or submit feedback.</p>
               <p>
