@@ -181,7 +181,7 @@ def policy_guidance_search_site(query, limit=0, offset=0):
     }
 
     try:
-        r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14yX', params=params)
+        r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14y', params=params)
         return process_site_results(r.json(), limit=limit, offset=offset)
     except (Exception) as ex:
         logger.error('policy_guidance_search_site' + ex.__class__.__name__)

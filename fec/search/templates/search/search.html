@@ -183,7 +183,7 @@
             </section>
           {% endif %}
           {% if site_search_error %}
-          <div class="messag message--small message--alert">
+          <div class="message message--small message--alert">
             <p>{{ site_search_error | safe }} </p>
             </div>
           {% endif %}
@@ -204,7 +204,6 @@
               <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong> in:</p>
                <ul  class="list--bulleted">
               {% if 'candidates' in type and not cand_search_error %}
-              <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong> in:</p>
                 <li><strong>Candidates</strong></li>
               {% endif %}
               {% if 'committees' in type and not comm_search_error %}
