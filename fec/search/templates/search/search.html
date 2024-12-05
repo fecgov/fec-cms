@@ -228,6 +228,8 @@
                 <p>{{ comm_search_error | safe }}</p>
                 </div>
               {% endif %}
+            {% else %}
+              <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong></p>
             {% endif %}
             <div class="message--alert__bottom">
               <p>Think this was a mistake?<br>Try one of the other search tools or submit feedback.</p>
