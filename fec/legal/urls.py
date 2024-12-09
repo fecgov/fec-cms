@@ -1,4 +1,5 @@
 from django.urls import re_path
+from django.views.generic.base import RedirectView
 from django.conf import settings
 
 from legal import views
@@ -31,6 +32,14 @@ if settings.FEATURES['adrs']:
     ),
 
 if settings.FEATURES['afs']:
-    urlpatterns += re_path(
-        r'^data/legal/search/admin_fines/$', views.legal_doc_search_af
-    ),
+    urlpatterns += [
+        # Redirect from `admin_fines` to `admin-fines`
+        re_path(
+            r'^data/legal/search/admin_fines/$',
+            RedirectView.as_view(url='/data/legal/search/admin-fines/', query_string=True)
+        ),
+        # The actual `admin-fines` view
+        re_path(
+            r'^data/legal/search/admin-fines/$', views.legal_doc_search_af
+        ),
+    ]
