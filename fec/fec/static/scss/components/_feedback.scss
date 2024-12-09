@@ -35,8 +35,8 @@
   }
 
   hr {
-    border-top: 1px dotted $gray-dark;
-    margin: u(0 0 1rem 0);
+    border-bottom: 1px dotted $gray-dark;
+    margin: u(2rem 0);
   }
 
   .t-note {
@@ -58,16 +58,33 @@
     border-color: $base;
   }
 
-  h3 {
-    &:first-of-type {
-      margin-top: u(2rem);
-    }
+  h3:first-of-type {
+    margin-top: u(2rem);
   }
 
   .feedback__close {
     position: absolute;
     right: u(1rem);
     top: u(1rem);
+  }
+
+  .card--feedback {
+    display: flex;
+    flex-direction: row;
+
+    .card__left {
+      padding: 1rem 1rem 0 0;
+      a {
+        white-space: nowrap;
+      }
+    }
+    .card__right {
+      padding: 1rem 0 0 1rem;
+
+      p {
+        margin-bottom: 0;
+      }
+    }
   }
 
   @include media($lg) {
