@@ -51,7 +51,7 @@ $xl: new-breakpoint(min-width $x-large-screen 12);
   }
 
   .usa-end-row {
-    @include omega();
+    @include omega;
   }
 }
 @include media(xl) {

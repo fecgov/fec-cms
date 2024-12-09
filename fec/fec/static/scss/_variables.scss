@@ -67,7 +67,7 @@ $z5: 500;
 $z6: 600;
 $z7: 700;
 $z8: 800;
-$z9: 900; 
+$z9: 900;
 $z10: 1000; // leaflet map controls (zoom in/out)
 $z11: 1100;
 $z-max: 90000000;
@@ -75,7 +75,7 @@ $z-max: 90000000;
 $z-overlay: $z2;
 $z-tooltip: $z4;
 $z-downloads: $z4;
-$z-navigation: $z7;
+$z-navigation: $z11 + 1;
 $z-header: $z6;
 $z-sticky: $z7;
 $z-glossary: $z8;

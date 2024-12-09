@@ -63,7 +63,6 @@ $px-only: false !default;
       } @else {
         $converted: append($converted, $value);
       }
-
     } @else {
       $converted: append($converted, $value);
     }
