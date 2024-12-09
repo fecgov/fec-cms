@@ -88,15 +88,15 @@ def splitlines(value):
     return value.splitlines()
 
 
-@register.filter(name='get_touch_icon')
-def get_touch_icon(content_section, dimension):
+@register.filter(name='get_icon')
+def get_icon(content_section, dimension):
     """
     Returns a path to a touch icon for the given dimension and content_section
     """
     if content_section in ['legal', 'help']:
-        return static('img/favicon/{}/apple-touch-icon-{}.png'.format(content_section, dimension))
+        return static('img/favicon/{}/{}.png'.format(content_section, dimension))
     else:
-        return static('img/favicon/general/apple-touch-icon-{}.png'.format(dimension))
+        return static('img/favicon/general/{}.png'.format(dimension))
 
 
 @register.filter(name='get_meta_description')
