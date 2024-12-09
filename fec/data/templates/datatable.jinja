@@ -41,21 +41,22 @@
               {{ datatables.committees(data) }}
             {% endif %}
           </noscript>
-        </table>
-        <noscript>
+          <noscript>
           {% if query %}
-          <div class="results-info">
-            <div class="dataTables_paginate paging_simple">
-              {% if query['page']|int > 1 %}
-                <a href="?page={{query['page']|int - 1}}" class="button button--previous button--standard"></a>
-              {% endif %}
-                <a href="?page={{query['page']|int + 1}}" class="button button--next button--standard"></a>
+            <div class="results-info">
+              <div class="dataTables_paginate paging_simple">
+                {% if query['page']|int > 1 %}
+                  <a href="?page={{query['page']|int - 1}}" class="button button--previous button--standard"></a>
+                {% endif %}
+                  <a href="?page={{query['page']|int + 1}}" class="button button--next button--standard"></a>
+              </div>
             </div>
-          </div>
           {% endif %}
-        </noscript>
+          </noscript>
+        </table>
       </div>
     </div>
+  </div>
 </section>
 
 {% include 'partials/datatable-modal.jinja' %}
