@@ -372,6 +372,9 @@ def legal_doc_search_mur(request):
     case_max_close_date = request.GET.get('case_max_close_date', '')
     case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
     mur_disposition_category_ids = request.GET.getlist('mur_disposition_category_id', [])
+    case_citation_require_all = request.GET.get('case_citation_require_all', '')
+    case_regulatory_citation = request.GET.getlist('case_regulatory_citation', [])
+    case_statutory_citation = request.GET.getlist('case_statutory_citation', [])
     primary_subject_id = request.GET.get('primary_subject_id', '')
     secondary_subject_id = request.GET.get('secondary_subject_id', '')
 
@@ -392,12 +395,15 @@ def legal_doc_search_mur(request):
         limit=limit,
         case_no=case_no,
         sort=sort,
-        case_respondents=case_respondents,
-        case_min_open_date=case_min_open_date,
+        case_citation_require_all=case_citation_require_all,
+        case_doc_category_id=case_doc_category_ids,
+        case_max_close_date=case_max_close_date,
         case_max_open_date=case_max_open_date,
         case_min_close_date=case_min_close_date,
-        case_max_close_date=case_max_close_date,
-        case_doc_category_id=case_doc_category_ids,
+        case_min_open_date=case_min_open_date,
+        case_regulatory_citation=case_regulatory_citation,
+        case_respondents=case_respondents,
+        case_statutory_citation=case_statutory_citation,
         mur_disposition_category_id=mur_disposition_category_ids,
         primary_subject_id=primary_subject_id,
         secondary_subject_id=secondary_subject_id,
@@ -487,7 +493,10 @@ def legal_doc_search_mur(request):
         'primary_subject_id_name': primary_subject_id_name,
         'secondary_subject_id_name': secondary_subject_id_name,
         'is_loading': True,  # Indicate that the page is loading initially
-        "context_vars": context_vars,
+        'context_vars': context_vars,
+        'case_citation_require_all': case_citation_require_all,
+        'case_regulatory_citation': case_regulatory_citation,
+        'case_statutory_citation': case_statutory_citation,
     })
 
 
