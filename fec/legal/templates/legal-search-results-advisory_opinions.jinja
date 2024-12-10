@@ -44,6 +44,7 @@
         </div>
       {% endfor %}
     </div>
+    {{ date.field('document_date', 'Document date', id_prefix='ao_') }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Citations</button>
   <div class="accordion__content">
@@ -57,7 +58,6 @@
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Time period</button>
   <div class="accordion__content">
-    {{ date.field('document_date', 'Document date', id_prefix='ao_') }}
     {{ date.field('issue_date', 'Issued date', id_prefix='ao_') }}
     {{ date.field('request_date', 'Requested date', id_prefix='ao_') }}
   </div>

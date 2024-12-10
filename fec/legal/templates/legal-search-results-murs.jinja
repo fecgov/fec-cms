@@ -32,20 +32,6 @@
       {% endfor %}
     </div>
     <div class="filter">
-      <legend class="label">Penalty amount by respondent</legend>
-      <div class="range range--currency">
-        <div class="range__input range__input--min js-filter" data-filter="range">
-          <label for="case_min_penalty_amount">From</label>
-          <input id="case_min_penalty_amount" type="text" name="case_min_penalty_amount" data-range="min" data-prefix="$" data-suffix="or more" value="{{ case_min_penalty_amount }}">
-        </div>
-        <div class="range__hyphen">-</div>
-        <div class="range__input range__input--max js-filter" data-filter="range">
-          <label for="case_max_penalty_amount">To</label>
-          <input id="case_max_penalty_amount" type="text" name="case_max_penalty_amount" data-range="max" data-prefix="$" data-suffix="or less" value="{{ case_max_penalty_amount }}">
-        </div>
-      </div>
-    </div>
-    <div class="filter">
       <legend class="label">Document date range</legend>
       <div class="range range--date js-date-range">
         <div class="range__input range__input--min" data-filter="range">
@@ -119,6 +105,20 @@
             default=""
           )
         }}
+      <div class="filter">
+        <legend class="label">Penalty amount by respondent</legend>
+        <div class="range range--currency">
+          <div class="range__input range__input--min js-filter" data-filter="range">
+            <label for="case_min_penalty_amount">From</label>
+            <input id="case_min_penalty_amount" type="text" name="case_min_penalty_amount" data-range="min" data-prefix="$" data-suffix="or more" value="{{ case_min_penalty_amount }}">
+          </div>
+          <div class="range__hyphen">-</div>
+          <div class="range__input range__input--max js-filter" data-filter="range">
+            <label for="case_max_penalty_amount">To</label>
+            <input id="case_max_penalty_amount" type="text" name="case_max_penalty_amount" data-range="max" data-prefix="$" data-suffix="or less" value="{{ case_max_penalty_amount }}">
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="filters__inner">
