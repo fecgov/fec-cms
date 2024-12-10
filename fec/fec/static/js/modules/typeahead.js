@@ -342,6 +342,42 @@ const aoStatutoryCitationDataset = {
   }
 };
 
+const caseRegulatoryCitationDataset = {
+  name: 'aoRegulatoryCitation',
+  display: 'name',
+  limit: 10,
+  source: citationRegulationEngine,
+  templates: {
+    header: '<span class="tt-suggestion__header">Select a citation:</span>',
+    pending:
+      '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
+    notFound: compileHBS(''), // This has to be empty to not show anything
+    suggestion: function(datum) {
+      return (
+        '<span>' + datum.name + '</span>'
+      );
+    }
+  }
+};
+
+const caseStatutoryCitationDataset = {
+  name: 'aoStatutoryCitation',
+  display: 'name',
+  limit: 10,
+  source: citationStatuteEngine,
+  templates: {
+    header: '<span class="tt-suggestion__header">Select a citation:</span>',
+    pending:
+      '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
+    notFound: compileHBS(''), // This has to be empty to not show anything
+    suggestion: function(datum) {
+      return (
+        '<span>' + datum.name + '</span>'
+      );
+    }
+  }
+};
+
 export const datasets = {
   candidates: candidateDataset,
   committees: committeeDataset,
@@ -350,6 +386,8 @@ export const datasets = {
   regulations: regulationDataset,
   aoRegulatoryCitations: aoRegulatoryCitationDataset,
   aoStatutoryCitations: aoStatutoryCitationDataset,
+  caseRegulatoryCitations: caseRegulatoryCitationDataset,
+  caseStatutoryCitations: caseStatutoryCitationDataset,
   allData: [candidateDataset, committeeDataset],
   all: [candidateDataset, committeeDataset, individualDataset, siteDataset, legalDataset]
 };
