@@ -149,6 +149,17 @@
           <div data-removable="true" class="tag__item">{{ case_respondents }}<button class="button js-close tag__remove" data-tag="case_respondents"><span class="u-visually-hidden">Remove</span></button></div>
         </li>
       {% endif %}
+      {% if case_min_document_date or case_max_document_date %}
+        <li data-tag-category="open_date" class="tag__category tag__category__range--date">
+          <span class="tag__label">Document date</span>
+          {% if case_min_document_date %}
+          <div data-removable="true" data-id="min_doc_open_date" class="tag__item">{% if not case_max_document_date %}Beginning {% endif %}{{ case_min_document_date }}<button class="button js-close tag__remove" data-tag="case_min_document_date"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+          {% if case_max_document_date %}
+          <div data-removable="true" data-id="max_doc_open_date" class="tag__item">{% if not case_min_document_date %}Ending {% endif %}{{ case_max_document_date }}<button class="button js-close tag__remove" data-tag="case_max_document_date"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+        </li>
+      {% endif %}
       {% if case_min_open_date or case_max_open_date %}
         <li data-tag-category="open_date" class="tag__category tag__category__range--date">
           <span class="tag__label">Open date</span>
@@ -168,6 +179,16 @@
           {% endif %}
           {% if case_max_close_date %}
           <div data-removable="true" data-id="max_close_date" class="tag__item">{% if not case_min_close_date %}Ending {% endif %}{{ case_max_close_date }}<button class="button js-close tag__remove" data-tag="case_max_close_date"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+        </li>
+      {% endif %}
+      {% if case_min_penalty_amount or case_max_penalty_amount %}
+        <li data-tag-category="close_date" class="tag__category tag__category__range--date">
+          {% if case_min_penalty_amount %}
+          <div data-removable="true" data-id="min_penalty_amount" class="tag__item">{{ case_min_penalty_amount }}<button class="button js-close tag__remove" data-tag="case_min_penalty_amount"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+          {% if case_max_penalty_amount %}
+          <div data-removable="true" data-id="max_penalty_amount" class="tag__item">{{ case_max_penalty_amount }}<button class="button js-close tag__remove" data-tag="case_max_penalty_amount"><span class="u-visually-hidden">Remove</span></button></div>
           {% endif %}
         </li>
       {% endif %}
