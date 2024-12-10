@@ -57,4 +57,34 @@ time {
   footer {
     display: none;
   }
+
+  // Rules to make <a> elements' hrefs visible for those who print the page 
+  // .print-url: class we can add to individual elements to show the URL for print media
+  // .no-print-url: class to skip printing the URL when it would otherwise be printed
+  
+  #main h2 a,
+  #main h3 a,
+  #main li > a:first-child,
+  #main p a,
+  #main a.button,
+  #main .message a,
+  #main .legal-search-result a,
+  #main .legal-search-results a,
+  .footer-links a,
+  .print-url {
+    &:not(.no-print-url):not([href^='#']):not(.paginate_button) {
+      border-bottom: none;
+      text-decoration: underline; 
+  
+      &:after {
+        content: '\00a0[' attr(href) ']';
+        border-bottom: none !important;
+        display: inline-block;
+        font-size: .9em;
+        font-weight: normal;
+        text-decoration: none !important;
+        word-break: break-all;
+      }
+    }
+  }
 }

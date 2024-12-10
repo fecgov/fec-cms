@@ -104,6 +104,7 @@
           <th>Disposition</th>
           <th>Penalty</th>
           <th>Respondent</th>
+          <th>Citation</th>
         </tr>
       </thead>
       <tbody>
@@ -111,12 +112,30 @@
           {% set dispositionloop = loop %}
           {% for penalty in adr.collated_dispositions[disposition] %}
             {% for entry in adr.collated_dispositions[disposition][penalty] %}
-            <tr class="{{ dispositionloop.cycle('row-color-normal', 'row-color-contrast') }}">
+              <tr class="{{ dispositionloop.cycle('row-color-normal', 'row-color-contrast') }}">
                 {% if loop.first %}
                 <td rowspan="{{ adr.collated_dispositions[disposition][penalty] | length }}">{{ disposition }}</td>
                 <td rowspan="{{ adr.collated_dispositions[disposition][penalty] | length }}"> {{ penalty | currency or '' }} </td>
                 {% endif %}
                 <td> {{ entry.respondent }}</td>
+                <td>
+                  {% for citation in entry.citations %}
+                      {{ citation.title }}
+                      {% if citation.type == 'statute' %}
+                          U.S.C.
+                      {% else %}
+                          CFR
+                      {% endif %}
+                      <a href="{{ citation.url }}">
+                      {% if citation.type == 'statute' %}
+                          &sect;{{ citation.text -}}
+                      {% else %}
+                          {{ citation.text }}
+                      {% endif %}
+                      {% if not loop.last %}<br>{% endif %}
+                      </a>
+                  {% endfor %}
+                </td>
               </tr>
             {% endfor %}
           {% endfor %}

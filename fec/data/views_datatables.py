@@ -217,7 +217,7 @@ def national_party_account_receipts(request):
 def national_party_account_disbursements(request):
     return render(request, 'datatable.jinja', {
         'parent': 'data',
-        'result_type': 'national_party_account_receipts',
+        'result_type': 'national_party_account_disbursements',
         'slug': 'national-party-account-disbursements',
         'title': 'National party account disbursements',
         'columns': constants.table_columns['national-party-account-disbursements'],
