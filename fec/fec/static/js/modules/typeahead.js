@@ -343,7 +343,7 @@ const aoStatutoryCitationDataset = {
 };
 
 const caseRegulatoryCitationDataset = {
-  name: 'aoRegulatoryCitation',
+  name: 'caseRegulatoryCitation',
   display: 'name',
   limit: 10,
   source: citationRegulationEngine,
@@ -361,7 +361,7 @@ const caseRegulatoryCitationDataset = {
 };
 
 const caseStatutoryCitationDataset = {
-  name: 'aoStatutoryCitation',
+  name: 'caseStatutoryCitation',
   display: 'name',
   limit: 10,
   source: citationStatuteEngine,
