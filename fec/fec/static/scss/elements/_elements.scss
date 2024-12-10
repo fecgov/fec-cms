@@ -68,9 +68,11 @@ time {
   #main p a,
   #main a.button,
   #main .message a,
+  #main .legal-search-result a,
+  #main .legal-search-results a,
   .footer-links a,
   .print-url {
-    &:not(.no-print-url):not([href^='#']) {
+    &:not(.no-print-url):not([href^='#']):not(.paginate_button) {
       border-bottom: none;
       text-decoration: underline; 
   
