@@ -604,7 +604,7 @@ LegalSearchAo.prototype.updatePagination = function(resultsCount) {
   if (totalNumberOfPages <= maxButtonsOnScreen) {
     // Yay! We can just use every button
     for (let i = 0; i < totalNumberOfPages; i++) {
-      pageNumbers.push(i + 1);
+      pageNumbers.push(i);
     }
   } else {
     const buttonsBeforeCurrent = Math.floor(maxButtonsOnScreen / 2);
