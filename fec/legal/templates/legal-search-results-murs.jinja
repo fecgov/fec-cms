@@ -41,7 +41,13 @@
       {% endfor %}
       </div>
       <div class="filter">
-        <legend class="label">Document date range</legend>
+        <label class="label t-inline-block">Document date range</label>
+        <div class="tooltip__container" tabindex="0">
+          <button class="tooltip__trigger"><span class="u-visually-hidden">Learn more</span></button>
+          <div class="tooltip tooltip--left tooltip--above">
+            <p class="tooltip__content tooltip__content">Document date range does not search archived cases</p>
+          </div>
+        </div>
         <div class="range range--date js-date-range">
           <div class="range__input range__input--min" data-filter="range">
             <label for="case_min_document_date">Beginning</label>
