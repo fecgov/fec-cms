@@ -9,15 +9,15 @@
 //   <div class="contact-item__content">
 //     <h5 class="contact-item__title">Toll free</h5>
 //     <span class="t-block">1-800-424-9530</span>
-//     <span class="t-block">8:30 a.m. to 5:30 p.m. Eastern Time</span>
+//     <span class="t-block">8: 30 a.m. to 5: 30 p.m. Eastern Time</span>
 //   </div>
 // </li>
 //
 
 .contact-item {
-  @include clearfix();
   display: table;
   margin-bottom: u(4rem);
+  @include clearfix;
 
   &:not(.contact-item--half) {
     &::before {
@@ -36,13 +36,13 @@
     @include span-columns(6);
 
     &:nth-child(even) {
-      @include omega();
+      @include omega;
     }
   }
 }
 
 .contact-item__title {
-  margin-bottom: u(.5rem);
+  margin-bottom: u(0.5rem);
   margin-top: 0;
 }
 
@@ -92,30 +92,30 @@
 
 .contact-item--question-bubble {
   &::before {
+    background-size: 75% !important;
     @include u-icon-circle($question-bubble, $primary, $inverse, 3.4rem);
-    background-size:75% !important;
   }
 }
 
 .contact-item--hand {
   &.contact-item::before {
-    @include u-icon-circle($hand-envelope, $primary, $inverse, 3.4rem);
     background-position: 100% 50%;
     background-size: 100%;
+    @include u-icon-circle($hand-envelope, $primary, $inverse, 3.4rem);
   }
 }
 
 .contact-item--map-pin {
   &.contact-item::before {
-    @include u-icon-circle($map-pin, $primary, $inverse, 3.4rem);
     background-position: 50%;
     background-size: 60%;
+    @include u-icon-circle($map-pin, $primary, $inverse, 3.4rem);
   }
 }
 
 .address span {
   display: block;
-  margin-bottom: u(.8rem);
+  margin-bottom: u(0.8rem);
 }
 
 .grid__item {
@@ -125,24 +125,21 @@
   }
 }
 
-
-
 // For FEC-Offices pages contact items where icon is stacked with other items and label is sans-serif
 
 .offices-contact {
-
-  .contact-item:not(.contact-item--half)::before{
+  .contact-item:not(.contact-item--half)::before {
     display: block;
     margin-bottom: u(1.5rem);
-   }
-  
+  }
+
   .contact-item__content {
     display: block;
   }
 
- .contact-item__label {
-  text-transform: uppercase;
-  font-size: u(1.8rem);
-  font-family: Karla,sans-serif;
+  .contact-item__label {
+    text-transform: uppercase;
+    font-size: u(1.8rem);
+    font-family: Karla, sans-serif;
   }
 }

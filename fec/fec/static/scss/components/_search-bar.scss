@@ -273,14 +273,14 @@ $search-button-width: u(5.6rem);
   color: $base;
   display: block;
   font-weight: bold;
-  padding: u(1rem .5rem);
+  padding: u(1rem 0.5rem);
 }
 
 .tt-suggestion__loading.tt-suggestion__loading {
   color: $primary;
   display: block;
   font-weight: bold;
-  padding: u(1rem .5rem);
+  padding: u(1rem 0.5rem);
 }
 
 .tt-dataset-0,
@@ -289,17 +289,15 @@ $search-button-width: u(5.6rem);
 }
 
 .tt-highlight {
-  background-color: rgba($aqua, .3);
+  background-color: rgba($aqua, 0.3);
 }
 
 // Specific styles for typeahead filters
 // Just testing things out. Refactor to use non-js class if we use it
 .typeahead-filter {
   .button--search {
-    @include u-icon-button($magnifying-glass-arrow);
-    background-size: u(2.8rem);
-    background-position: 50%;
     padding: 0;
+    @include u-icon-button($magnifying-glass-arrow, left, u(2.8rem), background-position 50%, padding 0);
   }
 
   &[data-allow-text] {
@@ -308,10 +306,8 @@ $search-button-width: u(5.6rem);
     }
 
     .button--search {
-      @include u-icon-button($magnifying-glass);
-      background-size: u(2.2rem);
-      background-position: 50%;
       padding: 0;
+      @include u-icon-button($magnifying-glass, left, u(2.2rem), background-position 50%, padding 0);
     }
 
     button.is-loading {
@@ -319,9 +315,7 @@ $search-button-width: u(5.6rem);
     }
 
     button.is-successful {
-      @include u-icon-button($check);
-      background-size: u(2.8rem);
-      background-position: 50%;
+      @include u-icon-button($check, left, 1.5rem, background-size u(2.8rem), background-position 50%);
     }
   }
 }
