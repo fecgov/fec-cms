@@ -279,6 +279,9 @@ LegalSearchAo.prototype.getResults = function(e) {
   // Set the sort param value according to this.sortOrder
   serializedFilters.sort = this.sortOrder == 'asc' ? 'ao_no' : '-ao_no';
 
+  // If we're getting new results, let's reset the page offset (go back to page 1)
+  serializedFilters['offset'] = 0;
+
   // Then update the URL with currently params
   updateQuery(serializedFilters, filterFields);
 
