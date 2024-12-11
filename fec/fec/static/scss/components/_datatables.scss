@@ -187,6 +187,12 @@
   .value-bar {
     margin-top: u(0.5rem);
     height: u(0.5rem);
+
+    @media print {
+      color-adjust: exact;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact; 
+    }
   }
 
   @include media($lg) {

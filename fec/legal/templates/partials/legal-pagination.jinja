@@ -33,21 +33,25 @@
     {#- Previous page button -#}
     {% if result_type != 'advisory_opinions' and current_page > 1 %}
       <a class="paginate_button previous" href="/data/legal/search/{{ result_type }}/
+        {%- if offset %}offset={{ offset - limit }}&{% endif -%}
+        {%- if limit %}limit={{ limit }}&{% endif -%}
         {%- if query %}?search={{ query }}&{% endif -%}
+        {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
         {%- if case_respondents %}case_respondents={{ case_respondents }}&{% endif -%}
         {%- for category_id in selected_doc_category_ids -%}
           case_doc_category_id={{ category_id }}&
         {%- endfor -%}
+        {%- if case_min_document_date %}case_min_document_date={{ case_min_document_date }}&{% endif -%}
+        {%- if case_max_document_date %}case_max_document_date={{ case_max_document_date }}&{% endif -%}
         {%- if case_min_open_date %}case_min_open_date={{ case_min_open_date }}&{% endif -%}
         {%- if case_max_open_date %}case_max_open_date={{ case_max_open_date }}&{% endif -%}
         {%- if case_min_close_date %}case_min_close_date={{ case_min_close_date }}&{% endif -%}
         {%- if case_max_close_date %}case_max_close_date={{ case_max_close_date }}&{% endif -%}
+        {%- if case_min_penalty_amount %}case_min_penalty_amount={{ case_min_penalty_amount }}&{% endif -%}
+        {%- if case_max_penalty_amount %}case_max_penalty_amount={{ case_max_penalty_amount }}&{% endif -%}
         {%- if primary_subject_id or secondary_subject_id %} -%}
           primary_subject_id={{ primary_subject_id }}&secondary_subject_id={{ secondary_subject_id }}&
         {%- endif -%}
-        {%- if offset %}offset={{ offset - limit }}&{% endif -%}
-        {%- if limit %}limit={{ limit }}&{% endif -%}
-        {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
         {%- for category_id in mur_disposition_category_ids -%}
           mur_disposition_category_id={{ category_id }}&
         {%- endfor -%}
@@ -83,24 +87,28 @@
         <span class="paginate_button current">{{ page }}</span>
       {% elif result_type != 'advisory_opinions' %}
         <a class="paginate_button" href="/data/legal/search/{{ result_type }}/?
+        {%- if page_offset %}offset={{ page_offset }}&{% endif -%}
+        {%- if limit %}limit={{ limit }}&{% endif -%}
         {%- if query %}search={{ query }}&{% endif -%}
+        {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
         {%- if case_respondents %}case_respondents={{ case_respondents }}&{% endif -%}
         {%- for category_id in selected_doc_category_ids -%}
           case_doc_category_id={{ category_id }}&
         {%- endfor -%}
-        {%- for category_id in mur_disposition_category_ids -%}
-          mur_disposition_category_id={{ category_id }}&
-        {%- endfor -%}
+        {%- if case_min_document_date %}case_min_document_date={{ case_min_document_date }}&{% endif -%}
+        {%- if case_max_document_date %}case_max_document_date={{ case_max_document_date }}&{% endif -%}
         {%- if case_min_open_date %}case_min_open_date={{ case_min_open_date }}&{% endif -%}
         {%- if case_max_open_date %}case_max_open_date={{ case_max_open_date }}&{% endif -%}
         {%- if case_min_close_date %}case_min_close_date={{ case_min_close_date }}&{% endif -%}
         {%- if case_max_close_date %}case_max_close_date={{ case_max_close_date }}&{% endif -%}
-        {%- if primary_subject_id or secondary_subject_id -%}
+        {%- if case_min_penalty_amount %}case_min_penalty_amount={{ case_min_penalty_amount }}&{% endif -%}
+        {%- if case_max_penalty_amount %}case_max_penalty_amount={{ case_max_penalty_amount }}&{% endif -%}
+        {%- if primary_subject_id or secondary_subject_id %} -%}
           primary_subject_id={{ primary_subject_id }}&secondary_subject_id={{ secondary_subject_id }}&
         {%- endif -%}
-        {%- if page_offset %}offset={{ page_offset }}&{% endif -%}
-        {%- if limit %}limit={{ limit }}&{% endif -%}
-        {%- if sort %}sort={{ sort }}&{% endif -%}
+        {%- for category_id in mur_disposition_category_ids -%}
+          mur_disposition_category_id={{ category_id }}&
+        {%- endfor -%}
         {%- if case_citation_require_all %}case_citation_require_all={{ case_citation_require_all }}&{% endif -%}
         {%- for case_reg_cite in case_regulatory_citation -%}
           case_regulatory_citation={{ case_reg_cite }}&
@@ -128,32 +136,36 @@
     {#- Next page button -#}
     {% if result_type != 'advisory_opinions' and offset + limit < total_all %}
       <a class="paginate_button next" href="/data/legal/search/{{ result_type }}/?
-      {%- if query %}search={{ query }}&{% endif -%}
-      {%- if case_respondents %}case_respondents={{ case_respondents }}&{% endif -%}
-      {%- for category_id in selected_doc_category_ids -%}
-        case_doc_category_id={{ category_id }}&
-      {%- endfor -%}
-      {%- for category_id in mur_disposition_category_ids -%}
-        mur_disposition_category_id={{ category_id }}&
-      {%- endfor -%}
-      {%- if case_min_open_date %}case_min_open_date={{ case_min_open_date }}&{% endif -%}
-      {%- if case_max_open_date %}case_max_open_date={{ case_max_open_date }}&{% endif -%}
-      {%- if case_min_close_date %}case_min_close_date={{ case_min_close_date }}&{% endif -%}
-      {%- if case_max_close_date %}case_max_close_date={{ case_max_close_date }}&{% endif -%}
-      {%- if primary_subject_id or secondary_subject_id -%}
-        primary_subject_id={{ primary_subject_id }}&secondary_subject_id={{ secondary_subject_id }}&
-      {%- endif -%}
       {%- if offset %}offset={{ offset + limit }}&{% endif -%}
       {%- if limit %}limit={{ limit }}&{% endif -%}
-      {%- if sort %}sort={{ sort }}&{% endif -%}
-      {%- if case_citation_require_all %}case_citation_require_all={{ case_citation_require_all }}&{% endif -%}
-      {%- for case_reg_cite in case_regulatory_citation -%}
-        case_regulatory_citation={{ case_reg_cite }}&
-      {%- endfor -%}
-      {%- for case_stat_cite in case_statutory_citation -%}
-        case_statutory_citation={{ case_stat_cite }}&
-      {%- endfor -%}
-      #results-{{ result_type }}">Next</a>
+      {%- if query %}search={{ query }}&{% endif -%}
+      {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
+        {%- if case_respondents %}case_respondents={{ case_respondents }}&{% endif -%}
+        {%- for category_id in selected_doc_category_ids -%}
+          case_doc_category_id={{ category_id }}&
+        {%- endfor -%}
+        {%- if case_min_document_date %}case_min_document_date={{ case_min_document_date }}&{% endif -%}
+        {%- if case_max_document_date %}case_max_document_date={{ case_max_document_date }}&{% endif -%}
+        {%- if case_min_open_date %}case_min_open_date={{ case_min_open_date }}&{% endif -%}
+        {%- if case_max_open_date %}case_max_open_date={{ case_max_open_date }}&{% endif -%}
+        {%- if case_min_close_date %}case_min_close_date={{ case_min_close_date }}&{% endif -%}
+        {%- if case_max_close_date %}case_max_close_date={{ case_max_close_date }}&{% endif -%}
+        {%- if case_min_penalty_amount %}case_min_penalty_amount={{ case_min_penalty_amount }}&{% endif -%}
+        {%- if case_max_penalty_amount %}case_max_penalty_amount={{ case_max_penalty_amount }}&{% endif -%}
+        {%- if primary_subject_id or secondary_subject_id %} -%}
+          primary_subject_id={{ primary_subject_id }}&secondary_subject_id={{ secondary_subject_id }}&
+        {%- endif -%}
+        {%- for category_id in mur_disposition_category_ids -%}
+          mur_disposition_category_id={{ category_id }}&
+        {%- endfor -%}
+        {%- if case_citation_require_all %}case_citation_require_all={{ case_citation_require_all }}&{% endif -%}
+        {%- for case_reg_cite in case_regulatory_citation -%}
+          case_regulatory_citation={{ case_reg_cite }}&
+        {%- endfor -%}
+        {%- for case_stat_cite in case_statutory_citation -%}
+          case_statutory_citation={{ case_stat_cite }}&
+        {%- endfor -%}
+        #results-{{ result_type }}">Next</a>
     {% elif result_type == 'advisory_opinions' and offset + limit < total_all %}
       <a class="paginate_button next" href="/data/legal/search/advisory-opinions/?
         {%- if query %}search={{ query }}&{% endif -%}

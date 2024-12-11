@@ -365,7 +365,11 @@ def legal_doc_search_mur(request):
     limit = request.GET.get('limit', 20)
     case_no = request.GET.get('case_no', '')
     sort = request.GET.get('sort', '')
+    case_min_penalty_amount = request.GET.get('case_min_penalty_amount', '')
+    case_max_penalty_amount = request.GET.get('case_max_penalty_amount', '')
     case_respondents = request.GET.get('case_respondents', '')
+    case_min_document_date = request.GET.get('case_min_document_date', '')
+    case_max_document_date = request.GET.get('case_max_document_date', '')
     case_min_open_date = request.GET.get('case_min_open_date', '')
     case_max_open_date = request.GET.get('case_max_open_date', '')
     case_min_close_date = request.GET.get('case_min_close_date', '')
@@ -398,9 +402,13 @@ def legal_doc_search_mur(request):
         case_citation_require_all=case_citation_require_all,
         case_doc_category_id=case_doc_category_ids,
         case_max_close_date=case_max_close_date,
+        case_max_document_date=case_max_document_date,
         case_max_open_date=case_max_open_date,
+        case_max_penalty_amount=case_max_penalty_amount,
         case_min_close_date=case_min_close_date,
+        case_min_document_date=case_min_document_date,
         case_min_open_date=case_min_open_date,
+        case_min_penalty_amount=case_min_penalty_amount,
         case_regulatory_citation=case_regulatory_citation,
         case_respondents=case_respondents,
         case_statutory_citation=case_statutory_citation,
@@ -475,6 +483,10 @@ def legal_doc_search_mur(request):
         'sort_dir_option': sort_dir_option,
         'sort_class': sort_class,
         'case_respondents': case_respondents,
+        'case_min_penalty_amount': case_min_penalty_amount,
+        'case_max_penalty_amount': case_max_penalty_amount,
+        'case_min_document_date': case_min_document_date,
+        'case_max_document_date': case_max_document_date,
         'case_min_open_date': case_min_open_date,
         'case_max_open_date': case_max_open_date,
         'case_min_close_date': case_min_close_date,
@@ -507,6 +519,10 @@ def legal_doc_search_adr(request):
     limit = request.GET.get('limit', 20)
     case_no = request.GET.get('case_no', '')
     case_respondents = request.GET.get('case_respondents', '')
+    case_min_penalty_amount = request.GET.get('case_min_penalty_amount', '')
+    case_max_penalty_amount = request.GET.get('case_max_penalty_amount', '')
+    case_min_document_date = request.GET.get('case_min_document_date', '')
+    case_max_document_date = request.GET.get('case_max_document_date', '')
     case_min_open_date = request.GET.get('case_min_open_date', '')
     case_max_open_date = request.GET.get('case_max_open_date', '')
     case_min_close_date = request.GET.get('case_min_close_date', '')
@@ -523,6 +539,10 @@ def legal_doc_search_adr(request):
         limit=limit,
         case_no=case_no,
         case_respondents=case_respondents,
+        case_min_penalty_amount=case_min_penalty_amount,
+        case_max_penalty_amount=case_max_penalty_amount,
+        case_min_document_date=case_min_document_date,
+        case_max_document_date=case_max_document_date,
         case_min_open_date=case_min_open_date,
         case_max_open_date=case_max_open_date,
         case_min_close_date=case_min_close_date,
@@ -557,6 +577,10 @@ def legal_doc_search_adr(request):
         'result_type': 'adrs',
         'case_no': case_no,
         'case_respondents': case_respondents,
+        'case_min_penalty_amount': case_min_penalty_amount,
+        'case_max_penalty_amount': case_max_penalty_amount,
+        'case_min_document_date': case_min_document_date,
+        'case_max_document_date': case_max_document_date,
         'case_min_open_date': case_min_open_date,
         'case_max_open_date': case_max_open_date,
         'case_min_close_date': case_min_close_date,
@@ -576,10 +600,25 @@ def legal_doc_search_af(request):
     limit = request.GET.get('limit', 20)
     case_no = request.GET.get('case_no', '')
     af_name = request.GET.get('af_name', '')
+    case_min_penalty_amount = request.GET.get('case_min_penalty_amount', '')
+    case_max_penalty_amount = request.GET.get('case_max_penalty_amount', '')
+    case_min_document_date = request.GET.get('case_min_document_date', '')
+    case_max_document_date = request.GET.get('case_max_document_date', '')
     query, query_exclude = parse_query(original_query)
 
     results = api_caller.load_legal_search_results(
-        query, query_exclude, 'admin_fines', offset=offset, limit=limit, case_no=case_no, af_name=af_name)
+        query,
+        query_exclude,
+        'admin_fines',
+        offset=offset,
+        limit=limit,
+        case_no=case_no,
+        af_name=af_name,
+        case_min_penalty_amount=case_min_penalty_amount,
+        case_max_penalty_amount=case_max_penalty_amount,
+        case_min_document_date=case_min_document_date,
+        case_max_document_date=case_max_document_date,
+    )
 
     return render(request, 'legal-search-results-afs.jinja', {
         'parent': 'legal',
@@ -587,6 +626,10 @@ def legal_doc_search_af(request):
         'result_type': 'admin_fines',
         'case_no': case_no,
         'af_name': af_name,
+        'case_min_document_date': case_min_document_date,
+        'case_max_document_date': case_max_document_date,
+        'case_min_penalty_amount': case_min_penalty_amount,
+        'case_max_penalty_amount': case_max_penalty_amount,
         'query': original_query,
         'social_image_identifier': 'legal',
         'is_loading': True,  # Indicate that the page is loading initially
