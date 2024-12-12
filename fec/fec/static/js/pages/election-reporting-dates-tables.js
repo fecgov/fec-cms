@@ -82,10 +82,10 @@ function ReportingDates() {
 
     this.addFootnotes(); //adds hidden footnote rows
 
-    this.stripeByState(); //zebra strip by state
+    this.stripeByState();
 
-    //it only runs this logic if the page has an `.election-dates-table` on it, TODO:  might not e necessary for this trmplate
-    if (this.dates_table) {
+  //it only runs this logic if the page has an `.election-dates-table` on it, TODO:  might not be necessary for the new template
+  if (this.dates_table) {
     //get all acnhor links in TDs)
       this.anchors = this.dates_table.querySelectorAll('td a[href^=\'#\']');
 
@@ -116,6 +116,7 @@ function ReportingDates() {
 
     //attach listener function to listen in on state changes
     mql.addListener(this.mediaQueryResponse); // TODO: .addListener() has been deprecated
+    // See: https://developer.mozilla.org/en-US/docs/Web/API/MediaQueryList/addListener
 
     //show footnotes on click of a link that wraps the superscripts in cells
     for (const anchor of this.anchors) {
@@ -163,6 +164,9 @@ ReportingDates.prototype.buildStaticElements = function() {
   //Add states dropdown template to page
   const dropdown_wrapper = document.createElement('div');
   dropdown_wrapper.innerHTML = states_dropdown_template;
+  if (this.dates_table.dataset.hideStateDropdown == 'true'){
+    dropdown_wrapper.style.display='none';
+  }
 
   const table_parent = this.dates_table.parentNode;
 
@@ -206,27 +210,41 @@ ReportingDates.prototype.buildStaticElements = function() {
  }
 };
 
-// Adds state classes to rows
+// Adds state classes to rows (and any user-created classes)
 ReportingDates.prototype.addStateClass = function() {
    const all_tr = document.querySelectorAll('tr');
    const states_select = document.getElementById('states');
+
       Array.from(all_tr).forEach(row => {
 
+        /* For more granular control over zebra-striping, Users can add an additional class to a row in the Wagtail table block
+        by wrapping the election title text in the first column in a custom <election> html tag with a clas attribute.
+        Example(includiing a footnote tilda): <election class="fl1">Florida 1st Congressional District Special Primary</election> ~*
+        This will add the class from the election tag to that row in addition to the state appreviation class added by default.
+        So the resultiing class on this row would be "fl1 fl".
+        */
+        // Before adding state classes, add any user-created classes to rows
+        let election_cell = row.cells[0];
+        // Find any rows that have custom <election> tags added by user
+        let election_tag = election_cell.getElementsByTagName('election')[0];
+        // Add the user-created class to the row
+        if (election_tag){
+          row.classList.add(election_tag.classList[0]);
+        }
+
+        // Add the state class to each row:
         let state_election_name_str = row.cells[0].textContent;
          // Remove extra spaces, set to lowercase to normalize human input errors
         let state_election_name = state_election_name_str.replace(/\s+/g,' ').trim().toLowerCase();
-
         // Match state name in the full election name with states select option to get the state abbreviation
         Array.from(states_select.options).forEach(opt => {
           // Use '^' to match the full state-name at beginning of string, to lowercase
           let regex = `^${opt.textContent.toLowerCase()}.*$`;
           // Match state-name in full state_election_string
           if (state_election_name.match(regex)) {
-
              row.classList.add(opt.value.toLowerCase());
            }
         });
-
       });
 };
 
@@ -491,6 +509,7 @@ ReportingDates.prototype.showFootnotes = function(e) {
   }
 };
 
+// Stripe rows by state-name - the default
 ReportingDates.prototype.stripeByState = function() {
   const bg = 'rgba(241,241,241,.5)';
   const state_rows = this.dates_table.getElementsByTagName('tr');
