@@ -100,7 +100,8 @@
           const tag = this.getAttribute('data-tag');
           const url = new URL(window.location);
 
-          // Remove tags logic
+          // "Remove tags" logic
+          // Assigns a URL to each remove/"⤫" button that removes its own value from the URL
           if (tag === 'query') {
             url.searchParams.delete('search');
             url.searchParams.delete('search_exclude');
@@ -135,6 +136,32 @@
           } else if (tag && tag == 'secondary_subject_id') { // Check if tag is not null or undefined
             // Remove 'secondary_subject_id' from the URL
             url.searchParams.delete('secondary_subject_id');
+          } else if (tag && tag == 'case_citation_require_all') {
+            url.searchParams.delete('case_citation_require_all');
+          } else if (tag && tag.startsWith('case_regulatory_citation')) {
+            // Get the 0-indexed position of this item
+            const index = tag.split('_').at(-1);
+            // Hold all the case_regulatory_citation from the URL
+            const citations = url.searchParams.getAll('case_regulatory_citation');
+            // Remove all of the case_regulatory_citation from the URL
+            url.searchParams.delete('case_regulatory_citation');
+            // For all of the held citations,
+            citations.forEach((cite, i) => {
+              // Add all but this element back to the URL
+              if (i != index) url.searchParams.append('case_regulatory_citation', cite);
+            });
+          } else if (tag && tag.startsWith('case_statutory_citation')) {
+            // Get the 0-indexed position of this item
+            const index = tag.split('_').at(-1);
+            // Hold all the case_statutory_citation from the URL
+            const citations = url.searchParams.getAll('case_statutory_citation');
+            // Remove all of the case_statutory_citation from the URL
+            url.searchParams.delete('case_statutory_citation');
+            // For all of the held citations,
+            citations.forEach((cite, i) => {
+              // Add all but this element back to the URL
+              if (i != index) url.searchParams.append('case_statutory_citation', cite);
+            });
           } else {
             url.searchParams.delete(tag);
           }
