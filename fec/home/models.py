@@ -1429,7 +1429,9 @@ class ReportingDatesTable(Page):
                             use_json_field=True)
 
     content_panels = Page.content_panels + [
-        FieldPanel('reporting_dates_table'),
+        FieldPanel('reporting_dates_table', help_text='Tip: To add additional row classes for custom zebra stripes, wrap \
+                   the election title text in the first column with an <election> html tag. \
+                   Example (includiing footnote tilda ): <election class="fl1">Florida 1st Congressional District Special Primary</election> ~*'),
         FieldPanel('footnotes'),
         FieldPanel('citations')
     ]
