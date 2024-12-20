@@ -212,12 +212,10 @@ class ReportingTableBlock(blocks.StructBlock):
         'language': 'en',
         'renderer': 'html',
         'renderAllRows': True,
-        'hide_state_dropdown': True,
     }
-    
+
     hide_state_dropdown = blocks.BooleanBlock(required=False, help_text='Hide state dropdown on this table?')
     table = TableBlock(table_options=reporting_table_options)
-
 
     class Meta:
         template = 'blocks/reporting-dates-table-block.html'
