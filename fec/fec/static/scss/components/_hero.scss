@@ -14,12 +14,12 @@
 }
 
 .hero--primary {
-  @include u-bg--primary();
+  @include u-bg--primary;
   @include u-font-color($gray-lightest);
 }
 
 .hero--secondary {
-  @include u-bg--secondary();
+  @include u-bg--secondary;
   @include u-font-color($gray-lightest);
 
   .hero__action {
@@ -73,7 +73,6 @@
   }
 
   @include media($lg) {
-
     h2 {
       margin-bottom: u(3rem);
     }
@@ -170,7 +169,6 @@
   }
 }
 
-
 // Hero panel for the press section.
 .hero--press {
   .hero__image {
@@ -213,19 +211,23 @@
   }
 
   .photo-credit {
-    background: rgba($gray-lightest, .6);
+    background: rgba($gray-lightest, 0.6);
     font-size: u(1rem);
     font-family: $sans-serif;
     position: absolute;
     right: 0;
     bottom: 0;
-    padding: u(.5rem);
+    padding: u(0.5rem);
   }
 
   @include media($lg) {
     .hero__heading {
       @include span-columns(6);
-      @include shift(3);
+      & {
+        // We need shift() to happen second to override margin- from span-columns().
+        // Problem: shift() only adds declaration while span-columns() is declaration and nested (&:lastchild)
+        @include shift(3);
+      }
     }
   }
 }
@@ -255,9 +257,10 @@
 @media print {
   .hero--primary,
   .hero--secondary {
-    @include u-font-color($base);
     background: $inverse;
     border-bottom: 1px solid $base;
+
+    @include u-font-color($base);
   }
 
   .hero__image {

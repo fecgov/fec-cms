@@ -5,15 +5,15 @@
 
 .feedback {
   background-color: $gray-lightest;
-  bottom: u(.5rem);
+  bottom: u(0.5rem);
   color: $base;
   display: block;
-  left: u(.5rem);
+  left: u(0.5rem);
   overflow-y: scroll;
-  padding: u(2rem .5rem 8rem .5rem);
+  padding: u(2rem 0.5rem 8rem 0.5rem);
   position: fixed;
-  right: u(.5rem);
-  top: u(.5rem);
+  right: u(0.5rem);
+  top: u(0.5rem);
   z-index: $z-feedback;
 
   legend {
@@ -22,7 +22,7 @@
 
   label {
     line-height: 1.2em;
-    
+
     & > .label--help {
       display: inline-block;
       font-weight: normal;
@@ -35,8 +35,8 @@
   }
 
   hr {
-    border-top: 1px dotted $gray-dark;
-    margin: u(0 0 1rem 0);
+    border-bottom: 1px dotted $gray-dark;
+    margin: u(2rem 0);
   }
 
   .t-note {
@@ -58,10 +58,8 @@
     border-color: $base;
   }
 
-  h3 {
-    &:first-of-type {
-      margin-top: u(2rem);
-    }
+  h3:first-of-type {
+    margin-top: u(2rem);
   }
 
   .feedback__close {
@@ -70,8 +68,26 @@
     top: u(1rem);
   }
 
+  .card--feedback {
+    display: flex;
+    flex-direction: row;
+
+    .card__left {
+      padding: 1rem 1rem 0 0;
+      a {
+        white-space: nowrap;
+      }
+    }
+    .card__right {
+      padding: 1rem 0 0 1rem;
+
+      p {
+        margin-bottom: 0;
+      }
+    }
+  }
+
   @include media($lg) {
-    @include transition(top .5s);
     height: 95vh;
     left: auto;
     overflow: auto;
@@ -79,6 +95,7 @@
     right: u(4rem);
     top: 5vh;
     width: u(52rem);
+    @include transition(top 0.5s);
 
     &[aria-hidden='true'] {
       display: block !important;
@@ -106,8 +123,8 @@
 }
 
 .feedback__title {
+  margin-bottom: u(0.5rem);
   @include heading(h2);
-  margin-bottom: u(.5rem);
 }
 
 .feedback__toggle {
@@ -130,7 +147,7 @@
 /* Hides the recaptcha containing div so we can move the badge to bottom */
 .feedback textarea:last-of-type + div {
   display: block;
-  height: 0px;
+  height: 0;
   width: 1px;
   zoom: 1;
 }

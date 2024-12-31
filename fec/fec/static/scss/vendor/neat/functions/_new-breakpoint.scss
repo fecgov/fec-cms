@@ -34,7 +34,10 @@
 ///     }
 ///   }
 
-@function new-breakpoint($query: $feature $value $columns, $total-columns: $grid-columns) {
+@function new-breakpoint(
+  $query: $feature $value $columns,
+  $total-columns: $grid-columns
+) {
   @if length($query) == 1 {
     $query: $default-feature nth($query, 1) $total-columns;
   } @else if is-even(length($query)) {
@@ -42,7 +45,11 @@
   }
 
   @if is-not(belongs-to($query, $visual-grid-breakpoints)) {
-    $visual-grid-breakpoints: append($visual-grid-breakpoints, $query, comma) !global;
+    $visual-grid-breakpoints: append(
+      $visual-grid-breakpoints,
+      $query,
+      comma
+    ) !global;
   }
 
   @return $query;

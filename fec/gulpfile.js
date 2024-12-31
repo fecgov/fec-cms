@@ -19,33 +19,34 @@ const webp = require('gulp-webp');
 const _ = require('underscore');
 
 // Consider using gulp-rev-delete-original later
-gulp.task('clear-css-dir', function() {
+gulp.task('_css-clear-directory', function() {
   return gulp
     .src('./dist/fec/static/css', { read: false, allowEmpty: true })
     .pipe(clean());
 });
+gulp.task('_css-compile', function() {
+  return (
+    gulp
+      .src('./fec/static/scss/*.scss')
+      // compiles sass
+      .pipe(sass().on('error', sass.logError))
+      // minifies css
+      .pipe(csso())
+      // sourcemaps for local to back-trace source of scss
+      //.pipe(gulpif(!production, sourcemaps.init())
+      //makes manifest sass (static asset revision) and puts in destination
+      .pipe(rev())
+      .pipe(gulp.dest('./dist/fec/static/css'))
+      // writes manifest file into destination
+      .pipe(rev.manifest('./dist/fec/static/css/rev-manifest-css.json'))
+      .pipe(gulp.dest('.'))
+  );
+  //.pipe(gulpif(!production, sourcemaps.write()))
+});
 
 gulp.task(
   'build-sass',
-  gulp.series('clear-css-dir', function() {
-    return (
-      gulp
-        .src('./fec/static/scss/*.scss')
-        // compiles sass
-        .pipe(sass().on('error', sass.logError))
-        // minifies css
-        .pipe(csso())
-        // sourcemaps for local to back-trace source of scss
-        //.pipe(gulpif(!production, sourcemaps.init()))*/
-        //makes manifest sass (static asset revision) and puts in destination
-        .pipe(rev())
-        .pipe(gulp.dest('./dist/fec/static/css'))
-        // writes manifest file into destination
-        .pipe(rev.manifest('./dist/fec/static/css/rev-manifest-css.json'))
-        .pipe(gulp.dest('.'))
-    );
-    //.pipe(gulpif(!production, sourcemaps.write()))
-  })
+  gulp.series('_css-clear-directory', '_css-compile')
 );
 
 /**
@@ -71,32 +72,34 @@ gulp.task('purgecss', () => {
 });
 
 // The widgets are separate because we want them in a specific place with a predictable naming convention
-gulp.task('clear-widgets-css-dir', function() {
+gulp.task('_widgets-clear-directory', function() {
   return gulp
     .src('./dist/fec/static/css/widgets', { read: false, allowEmpty: true })
     .pipe(clean());
 });
+gulp.task('_widgets-compile-sass', function() {
+  return (
+    gulp
+      .src('./fec/static/scss/widgets/*.scss')
+      // compiles sass
+      .pipe(sass().on('error', sass.logError))
+      // minifies css
+      .pipe(csso())
+      // sourcemaps for local to back-trace source of scss
+      //.pipe(gulpif(!production, sourcemaps.init()))
+      //makes manifest sass (static asset revision) and puts in destination
+      // .pipe(rev())
+      .pipe(gulp.dest('./dist/fec/static/css/widgets'))
+      // writes manifest file into destination
+      // .pipe(rev.manifest('./dist/fec/static/css/rev-manifest-modules-css.json'))
+      .pipe(gulp.dest('./dist/fec/static/css/widgets'))
+  );
+  //.pipe(gulpif(!production, sourcemaps.write()))
+});
+
 gulp.task(
   'build-widgets-sass',
-  gulp.series('clear-widgets-css-dir', function() {
-    return (
-      gulp
-        .src('./fec/static/scss/widgets/*.scss')
-        // compiles sass
-        .pipe(sass().on('error', sass.logError))
-        // minifies css
-        .pipe(csso())
-        // sourcemaps for local to back-trace source of scss
-        //.pipe(gulpif(!production, sourcemaps.init()))*/
-        //makes manifest sass (static asset revision) and puts in destination
-        // .pipe(rev())
-        .pipe(gulp.dest('./dist/fec/static/css/widgets'))
-        // writes manifest file into destination
-        // .pipe(rev.manifest('./dist/fec/static/css/rev-manifest-modules-css.json'))
-        .pipe(gulp.dest('./dist/fec/static/css/widgets'))
-    );
-    //.pipe(gulpif(!production, sourcemaps.write()))
-  })
+  gulp.series('_widgets-clear-directory', '_widgets-compile-sass')
 );
 
 // clear icons output folder to clean old icons
