@@ -543,6 +543,7 @@
 
   .masthead {
     background: none;
+    border-bottom: none;
   }
 
   .site-title {
@@ -560,9 +561,17 @@
     display: block;
     height: 114px;
     width: 100%;
+
+    color-adjust: exact;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
   }
 
   .homepage-seal {
     display: none;
+  }
+
+  #hero-heading {
+    padding-top: 0;
   }
 }

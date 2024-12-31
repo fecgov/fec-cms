@@ -481,6 +481,12 @@ h3 + .simple-table {
     &[data-party='REP'] {
       background-color: $red-data;
     }
+
+    @media print {
+      color-adjust: exact;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact; 
+    }
   }
 
   & + .results-info {
