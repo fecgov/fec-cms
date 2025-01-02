@@ -17,13 +17,13 @@ export const availableDates = [
   },
   {
     value: '2025',
-    label: 'On or after December 27, 2024',
-    summary: 'Assessed on or after December 27, 2024'
+    label: 'On or after January 3, 2025',
+    summary: 'Assessed on or after January 3, 2025'
   },
   {
     value: '2024',
-    label: 'January 5, 2024 to December 26, 2024',
-    summary: 'Assessed January 5, 2024 to December 26, 2024'
+    label: 'January 5, 2024 to January 2, 2025',
+    summary: 'Assessed January 5, 2024 to January 2, 2025'
   },
   {
     value: '2023',
