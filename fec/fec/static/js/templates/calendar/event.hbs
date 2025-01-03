@@ -1,0 +1,53 @@
+<div class="cal-list__event">
+  <div class="cal-list__details">
+    <div class="cal-list__date">
+      <span class="t-block">{{datetime start format="pretty"}}</span>
+      <span class="t-block">{{datetime start format="fullDayOfWeek"}}</span>
+    </div>
+    <div class="cal-list__time">
+      {{#if hasStartTime}}
+        {{datetime start format="time"}}
+        {{#if end}}&ndash;{{datetime end format="time"}}{{/if}}
+      {{else}}
+        &nbsp;
+      {{/if}}
+    </div>
+    <div class="cal-list__info" id="cal-info-{{@index}}">
+      <p class="cal-list__summary" id="cal-summary-{{@index}}">{{summary}}</p>
+      <p id="cal-description-{{@index}}"> {{description}}</p>
+      {{#if location}}
+        <span class="cal-list__location">Location: {{location}}</span>
+      {{/if}}
+      {{#if detailUrl}}
+        <span class="cal-list__details"><a class="t-bold" href="{{detailUrl}}" aria-describedby="cal-description-{{@index}}">Learn more</a></span>
+      {{/if}}
+    </div>
+    <div class="cal-list__category">
+      {{#if tooltipContent }}
+      <div class="cal-list__category-title">
+        <span class="tooltip__trigger-text" aria-describedby="category-tooltip-{{@index}}">{{ toUpperCase category }}</span>
+        <div class="tooltip__container">
+          <button class="tooltip__trigger"><span class="u-visually-hidden">Show tooltip</span></button>
+          <div class="tooltip tooltip--under tooltip--right" role="tooltip" id="category-tooltip-{{@index}}">
+            <div class="tooltip__content">
+              {{{ tooltipContent }}}
+            </div>
+          </div>
+        </div>
+      </div>
+      {{else}}
+      <span class="cal-list__category-title">{{ toUpperCase category }}</span>
+      {{/if}}
+    </div>
+  </div>
+  <div class="cal-list__add">
+    <div class="dropdown">
+      <button class="button button--alt dropdown__button dropdown__button--mini button--add-calendar--mini" aria-describedby="cal-description-{{@index}}"><span class="u-visually-hidden">Download calendar</span></button>
+      <ul class="dropdown__panel dropdown__panel--right" aria-hidden="true">
+        <li class="dropdown__item"><a class="dropdown__value" href="{{download}}">Apple Calendar</a></li>
+        <li class="dropdown__item"><a class="dropdown__value" href="{{google}}" target="_blank" rel="noreferrer">Google Calendar</a></li>
+        <li class="dropdown__item"><a class="dropdown__value" href="{{download}}">Outlook Calendar</a></li>
+      </ul>
+    </div>
+  </div>
+</div>

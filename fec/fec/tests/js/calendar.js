@@ -36,8 +36,8 @@ describe('calendar', function() {
     );
     this.calendar = new Calendar({
       selector: '#calendar',
-      download: '#download',
-      subscribe: '#subscribe',
+      selector_download: '#download',
+      selector_subscribe: '#subscribe',
       url: 'http://test.calendar',
       exportUrl: 'http://test.calendar/export',
       subscribeUrl: 'http://test.calendar/export',

@@ -1,8 +1,30 @@
+/* eslint-disable */
 /**
  *
  */
 import moment from 'moment';
 import { default as URI } from 'urijs';
+
+function dateString(dateToParse, format, adjustmentHours) {
+  const parsed = new Date(Date.parse(dateToParse));
+
+  if (adjustmentHours) parsed.setHours(parsed.getHours() + adjustmentHours);
+
+  let YYYY = parsed.getUTCFullYear();
+  let MM = (parsed.getUTCMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
+  let DD = (parsed.getUTCDate()).toString().padStart(2, '0');
+  let hh = (parsed.getUTCHours()).toString().padStart(2, '0');
+  let mm = (parsed.getUTCMinutes()).toString().padStart(2, '0');
+  let ss = (parsed.getUTCSeconds()).toString().padStart(2, '0');
+
+  if (format == 'YYYYMMDD')
+    return `${YYYY}${MM}${DD}`;
+
+  else if (format == 'YYYYMMDD[T]HHmmss')
+    return `${YYYY}${MM}${DD}T${hh}${mm}${ss}`;
+
+  return dateToParse;
+}
 
 /**
  * @param {Object} event - {start: '', end: '', title: '', summary: ''}
@@ -14,18 +36,31 @@ import { default as URI } from 'urijs';
  */
 export function getGoogleUrl(event) {
   let fmt, dates;
-  if (event.end) {
-    fmt = 'YYYYMMDD[T]HHmmss';
-    dates = event.start.format(fmt) + '/' + event.end.format(fmt);
+  // TODO: remove this .format check after Moment has been removed
+  if (event.start.format) {
+    // If we're dealing with a Moment date (i.e. it has a .format() )
+    if (event.end) {
+      fmt = 'YYYYMMDD[T]HHmmss';
+      dates = event.start.format(fmt) + '/' + event.end.format(fmt);
+    } else {
+      fmt = 'YYYYMMDD';
+      dates =
+        event.start.format(fmt) +
+        '/' +
+        event.start
+          .clone()
+          .add(1, 'day')
+          .format(fmt);
+    }
   } else {
-    fmt = 'YYYYMMDD';
-    dates =
-      event.start.format(fmt) +
-      '/' +
-      event.start
-        .clone()
-        .add(1, 'day')
-        .format(fmt);
+    // Otherwise, if we have a native date
+
+    if (event.end) {
+      dates = `${dateString(event.start, 'YYYYMMDD[T]HHmmss')}/${dateString(event.end, 'YYYYMMDD[T]HHmmss')}`;
+
+    } else {
+      dates = `${dateString(event.start, 'YYYYMMDD')}/${dateString(event.start, 'YYYYMMDD', 24)}`;
+    }
   }
   return URI('https://calendar.google.com/calendar/render')
     .addQuery({

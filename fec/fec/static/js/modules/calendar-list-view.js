@@ -1,8 +1,11 @@
+/* eslint-disable */
 /**
  *
  */
-import { Calendar } from '@fullcalendar/core';
 // import $ from 'jquery';
+import { createPlugin, sliceEvents, Calendar } from '@fullcalendar/core';
+import listPlugin from '@fullcalendar/list';
+// import { ViewRoot } from '@fullcalendar/common';
 import { default as moment } from 'moment';
 import { default as _chain } from 'underscore/modules/chain.js';
 import { default as _each } from 'underscore/modules/each.js';
@@ -10,10 +13,11 @@ import { default as _pairs } from 'underscore/modules/pairs.js';
 import { default as _reduce } from 'underscore/modules/reduce.js';
 
 import Dropdown from './dropdowns.js';
-import { default as eventTemplate } from '../templates/calendar/events.hbs';
+import { default as eventTemplate } from '../templates/calendar/event.hbs';
+import { default as eventsTemplate } from '../templates/calendar/events.hbs';
 
-const FC = $.fullCalendar;
-const View = FC.View;
+// const FC = $.fullCalendar;
+// const View = FC.View;
 
 // 'Sort by: Category' view
 // Property name is the category
@@ -101,13 +105,86 @@ const chronologicalGroups = function(events, start, end) {
   return events;
 };
 
-const ListView = View.extend({
-  setDate: function(date) {
-    const intervalUnit = this.options.duration.intervalUnit || this.intervalUnit;
-    View.prototype.setDate.call(this, date.startOf(intervalUnit));
+// const ListView = View.extend({
+const customViewConfig = {
+  classNames: ['fec-list-view'],//'fec-list-VIEW'],
+
+  /**
+   * @param {Object} d 
+   * @param {Object} d 
+   * @param {Function} (callback?)
+   * @returns {Object} {html: ''}
+   */
+  content: function(props) {
+
+
+    // TODO: NEXT STEPS
+    Working on sending vars like settings from the config option into this plugin so the events.hbs template can use them
+
+
+    console.log('CustomViewConfig.content(props): ', props);
+    console.log('  this: ', this);
+    // console.log('  self: ', self);
+    // console.log('  self.window: ', self.window);
+    console.log('  root self var: ', window.calendar.view.customProps);
+    // console.log('  self.window.calendar: ', self.window.calendar);
+    // console.log('  self.calendar.view: ', self.window.calendar.view);
+    // let segs = sliceEvents(props, true);
+    // console.log('  segs, true: ', segs);
+    let segs = sliceEvents(props, false);
+    console.log('  segs, false: ', segs);
+    let html = '';
+
+    // const groups = this.options.categories
+    //   ? categoryGroups(events, this.start, this.end)
+    //   : chronologicalGroups(events, this.start, this.end);
+    // const settings = {
+    //   duration: this.options.duration.intervalUnit,
+    //   sortBy: this.options.sortBy
+    // };
+
+    const eventsObj = {
+      sortyBy: 'as'
+    };
+
+    
+
+    return { html: eventsTemplate({
+      
+    }) };
+  },
+  // render: function(d) {
+  //   console.log('CustomViewConfig.render(d): ', d);
+  // },
+  /**
+   * @param {Object} d
+   * @param {Date} d.date
+   * @param {ViewImpl} d.view
+   * @returns {Object} `{html: '<time>${d.text}</time>'}`
+   */
+  dayHeaderContent: function(d, two) {
+    console.log('CustomViewConfig.dayHeaderContent(d, two): ', d, two);
+    return { html: `<time datetime="${d.date}" class="cal-list__title">${d.text}</time>` };
   },
 
-  renderEvents: function(events) {
+  /**
+   * 
+   * @param {Object}      d
+   * @param {Object}      d.dateProfile
+   * @param {HTMLElement} d.el
+   * @param {Object}      d.eventStore
+   * @param {Object}      d.eventUiBases
+   * @param {Function} [callback]
+   */
+  didMount: function(props, callback) {
+    console.log('CustomViewConfig.didMount(props): ', props);
+    self.window.calendar.view.customProps = {self: this};
+    console.log('  this: ', this);
+  },
+  /*eventContent: function(arg) {
+    console.log('CustomViewConfig.eventContent(arg): ', arg);
+    let toReturn = '';
+
     const groups = this.options.categories
       ? categoryGroups(events, this.start, this.end)
       : chronologicalGroups(events, this.start, this.end);
@@ -116,20 +193,86 @@ const ListView = View.extend({
       sortBy: this.options.sortBy
     };
 
-    this.el.html(eventTemplate({ groups: groups, settings: settings }));
+    this.el.html(eventsTemplate({ groups: groups, settings: settings }));
+
+
+    return {html: toReturn};
+      // templates.details(
+        // Object.assign({}, calEvent, { detailsId: this.detailsId })
+        // {
+          // detailsId: ,
+          // category: ,
+          // allDay: ,
+          // summary: ,
+          // location: ,
+          // description: ,
+          // detailUrl: ,
+          // download: ,
+          // google: ,
+      //   }
+      // )
+    // };
+  },*/
+  
+
+
+  // Deprecated
+  // setDate: function(date) {
+  //   console.log('CustomViewConfig.setDate(props): ', props);
+  //   const intervalUnit = this.options.duration.intervalUnit || this.intervalUnit;
+  //   ViewRoot.prototype.setDate.call(this, date.startOf(intervalUnit));
+  // },
+
+  // Deprecated
+  /*
+  renderEvents: function(events) {
+    console.log('CustomViewConfig.renderEvents(events): ', events);
+    const groups = this.options.categories
+      ? categoryGroups(events, this.start, this.end)
+      : chronologicalGroups(events, this.start, this.end);
+    const settings = {
+      duration: this.options.duration.intervalUnit,
+      sortBy: this.options.sortBy
+    };
+
+    this.el.html(eventsTemplate({ groups: groups, settings: settings }));
     this.dropdowns = $(this.el.html)
       .find('.dropdown')
       .map(function(idx, elm) {
         return new Dropdown($(elm), { checkboxes: false });
       });
-  },
+  },*/
 
+  // Deprecated
+  /*
   unrenderEvents: function() {
+    console.log('CustomViewConfig.unrenderEvents(props): ', props);
     this.dropdowns.each(function(idx, dropdown) {
       dropdown.destroy();
     });
     this.el.html('');
+  }*/
+};
+
+
+/**
+ * 
+ * @param {Object} d 
+ * @returns {string}
+ */
+export function eventHtmlString(d) {
+  console.log('calendar-list-view.eventHtmlString(d): ', d);
+  return '<p>YES!</p>';
+}
+
+
+
+
+const CustomViewConfig = customViewConfig;
+
+
+export default createPlugin({
+  views: {
+    custom: CustomViewConfig
   }
 });
-
-FC.views.list = ListView;

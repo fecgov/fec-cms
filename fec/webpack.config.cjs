@@ -183,7 +183,8 @@ module.exports = [
     },
     module: {
       rules: [
-        { test: /\.hbs/, use: ['handlebars-loader'] }
+        { test: /\.hbs/, use: ['handlebars-loader'] },
+        { test: /\.css$/, use: ['style-loader', 'css-loader'] }
       ]
     },
     resolve: {
@@ -225,7 +226,7 @@ module.exports = [
     name: 'draftail',
     entry: { draftail: `${js}/draftail/App.js` },
     output: {
-      clean: mode === 'development' ? true : undefined, // Deploying to Prod doesn't need this at all
+      // clean: mode === 'development' ? true : undefined, // Deploying to Prod doesn't need this at all
       filename: '[name]-[contenthash].js',
       path: path.resolve(__dirname, './dist/fec/static/js')
     },
