@@ -124,7 +124,7 @@
   padding-top: 0;
   padding-bottom: 0;
   font-size: u(1.2rem);
-  font-weight: 400;
+  font-weight: 400 !important;
 }
 
 .usa-banner-header {
@@ -555,6 +555,7 @@
 
   .masthead {
     background: none;
+    border-bottom: none;
   }
 
   .site-title {
@@ -572,9 +573,17 @@
     display: block;
     height: 114px;
     width: 100%;
+
+    color-adjust: exact;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
   }
 
   .homepage-seal {
     display: none;
+  }
+
+  #hero-heading {
+    padding-top: 0;
   }
 }

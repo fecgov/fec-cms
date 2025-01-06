@@ -28,42 +28,72 @@
           </div>
       {% endfor %}
     </div>
-
     <div class="filter">
-      <legend class="label">Case open date range</legend>
+      <legend class="label">Document date range</legend>
       <div class="range range--date js-date-range">
         <div class="range__input range__input--min" data-filter="range">
-          <label for="case_min_open_date">Beginning</label>
-          <input id="case_min_open_date" name="case_min_open_date" placeholder="mm/dd/yyyy" value="{{ case_min_open_date }}">
+          <label for="case_min_document_date">Beginning</label>
+          <input id="case_min_document_date" name="case_min_document_date" placeholder="mm/dd/yyyy" value="{{ case_min_document_date }}">
         </div>
         <div class="range__hyphen">-</div>
         <div class="range__input range__input--max" data-filter="range">
-          <label for="case_max_open_date">Ending</label>
-          <input id="case_max_open_date" name="case_max_open_date" placeholder="mm/dd/yyyy" value="{{ case_max_open_date }}">
+          <label for="case_max_document_date">Ending</label>
+          <input id="case_max_document_date" name="case_max_document_date" placeholder="mm/dd/yyyy" value="{{ case_max_document_date }}">
         </div>
       </div>
-    </div>
-    <div class="filter">
-      <legend class="label">Case close date range</legend>
-      <div class="range range--date js-date-range">
-        <div class="range__input range__input--min" data-filter="range">
-          <label for="case_min_close_date">Beginning</label>
-          <input id="case_min_close_date" name="case_min_close_date" placeholder="mm/dd/yyyy" value="{{ case_min_close_date }}">
-        </div>
-        <div class="range__hyphen">-</div>
-        <div class="range__input range__input--max" data-filter="range">
-          <label for="case_max_close_date">Ending</label>
-          <input id="case_max_close_date" name="case_max_close_date" placeholder="mm/dd/yyyy" value="{{ case_max_close_date }}">
-        </div>
-      </div>
-    </div>
-    
-    <div class="filter">
-      <button type="submit" class="button button--cta">Apply filters</button>
     </div>
   </div>
+  <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false">
+    <button type="button" class="js-accordion-trigger accordion__button">Case details</button>
+    <div class="accordion__content">
+      <div class="filter">
+        <legend class="label">Case open date range</legend>
+        <div class="range range--date js-date-range">
+          <div class="range__input range__input--min" data-filter="range">
+            <label for="case_min_open_date">Beginning</label>
+            <input id="case_min_open_date" name="case_min_open_date" placeholder="mm/dd/yyyy" value="{{ case_min_open_date }}">
+          </div>
+          <div class="range__hyphen">-</div>
+          <div class="range__input range__input--max" data-filter="range">
+            <label for="case_max_open_date">Ending</label>
+            <input id="case_max_open_date" name="case_max_open_date" placeholder="mm/dd/yyyy" value="{{ case_max_open_date }}">
+          </div>
+        </div>
+      </div>
+      <div class="filter">
+        <legend class="label">Case close date range</legend>
+        <div class="range range--date js-date-range">
+          <div class="range__input range__input--min" data-filter="range">
+            <label for="case_min_close_date">Beginning</label>
+            <input id="case_min_close_date" name="case_min_close_date" placeholder="mm/dd/yyyy" value="{{ case_min_close_date }}">
+          </div>
+          <div class="range__hyphen">-</div>
+          <div class="range__input range__input--max" data-filter="range">
+            <label for="case_max_close_date">Ending</label>
+            <input id="case_max_close_date" name="case_max_close_date" placeholder="mm/dd/yyyy" value="{{ case_max_close_date }}">
+          </div>
+        </div>
+      </div>
+      <div class="filter">
+        <legend class="label">Penalty amount by respondent</legend>
+        <div class="range range--currency">
+          <div class="range__input range__input--min js-filter" data-filter="range">
+            <label for="case_min_penalty_amount">From</label>
+            <input id="case_min_penalty_amount" type="text" name="case_min_penalty_amount" data-range="min" data-prefix="$" data-suffix="or more" value="{{ case_min_penalty_amount }}">
+          </div>
+          <div class="range__hyphen">-</div>
+          <div class="range__input range__input--max js-filter" data-filter="range">
+            <label for="case_max_penalty_amount">To</label>
+            <input id="case_max_penalty_amount" type="text" name="case_max_penalty_amount" data-range="max" data-prefix="$" data-suffix="or less" value="{{ case_max_penalty_amount }}">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="filters__inner">
+    <button type="submit" class="button button--cta">Apply filters</button>
+  </div>
 {% endblock %}
-
 {% block message %}
 <div class="data-container__tags u-no-padding-left">
   <div class="row">
@@ -84,6 +114,17 @@
       {% if case_respondents %}
         <li data-tag-category="case_respondents" class="tag__category">
           <div data-removable="true" class="tag__item">{{ case_respondents }}<button class="button js-close tag__remove" data-tag="case_respondents"><span class="u-visually-hidden">Remove</span></button></div>
+        </li>
+      {% endif %}
+      {% if case_min_document_date or case_max_document_date %}
+        <li data-tag-category="open_date" class="tag__category tag__category__range--date">
+          <span class="tag__label">Document date</span>
+          {% if case_min_document_date %}
+          <div data-removable="true" data-id="min_doc_open_date" class="tag__item">{% if not case_max_document_date %}Beginning {% endif %}{{ case_min_document_date }}<button class="button js-close tag__remove" data-tag="case_min_document_date"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+          {% if case_max_document_date %}
+          <div data-removable="true" data-id="max_doc_open_date" class="tag__item">{% if not case_min_document_date %}Ending {% endif %}{{ case_max_document_date }}<button class="button js-close tag__remove" data-tag="case_max_document_date"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
         </li>
       {% endif %}
       {% if case_min_open_date or case_max_open_date %}
@@ -108,6 +149,17 @@
           {% endif %}
         </li>
       {% endif %}
+      {% if case_min_penalty_amount or case_max_penalty_amount %}
+        <li data-tag-category="close_date" class="tag__category tag__category__range--date">
+          <span class="tag__label">Close date</span>
+          {% if case_min_penalty_amount %}
+          <div data-removable="true" data-id="min_penalty_amount" class="tag__item">{{ case_min_penalty_amount }}<button class="button js-close tag__remove" data-tag="case_min_penalty_amount"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+          {% if case_max_penalty_amount %}
+          <div data-removable="true" data-id="max_penalty_amount" class="tag__item">{{ case_max_penalty_amount }}<button class="button js-close tag__remove" data-tag="case_max_penalty_amount"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+        </li>
+      {% endif %}
       {% if selected_doc_category_names and selected_doc_category_names | reject('equalto', none) | list %}
         <li data-tag-category="doc_category" class="tag__category">
           {% for selected_doc_category_name in selected_doc_category_names %}
@@ -129,4 +181,8 @@
   {% with results=results %}
     {% include 'partials/legal-pagination.jinja' %}
   {% endwith %}
+{% endblock %}
+{% block scripts %}
+  {# super loads scripts from parent #}
+  {{ super() }}
 {% endblock %}

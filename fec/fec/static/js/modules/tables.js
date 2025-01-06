@@ -56,6 +56,8 @@ export const browseDOM = '<"panel__main"t>' + '<"results-info"lpi>';
 export const DOWNLOAD_CAP = 500000;
 export const downloadCapFormatted = formatNumber(DOWNLOAD_CAP);
 export const MAX_DOWNLOADS = 5;
+
+/** @enum {string} */
 export const DOWNLOAD_MESSAGES = {
   recordCap:
     'Use <a href="' +
@@ -171,15 +173,25 @@ export function mapResponse(response) {
   };
 }
 
+/**
+ * Returns the exact value it's given
+ * TODO: Why does this exist?
+ * @param {*} value
+ * @returns value
+ */
 function identity(value) {
   return value;
 }
 
+/** Selector class name for the details trigger */
 export const DETAILS_TRIGGER_CLASS = 'js-dt-details-trigger';
+
+/** String of html that becomes the 'Toggle details' button */
 export const MODAL_TRIGGER_HTML =
   `<button class="button--dt-details"><span class="u-visually-hidden">Toggle details</span></button>`;
 
 /**
+ * Adds MODAL_TRIGGER_CLASS and `row--has-panel` classes to the given element
  * @param {HTMLTableRowElement} row
  */
 export function modalRenderRow(row) {
@@ -293,6 +305,12 @@ export function barsAfterRender(template, api) {
   });
 }
 
+/**
+ * Sets up the 'change' event listener and handler for input and select inside $form.
+ * The change handler halts the event, hides the details, starts the reload and saves e.target as updateChangedEl
+ * @param {JQuery} $form
+ * @param {DataTable.Api} api
+ */
 function updateOnChange($form, api) {
   function onChange(e) {
     e.preventDefault();
@@ -303,10 +321,13 @@ function updateOnChange($form, api) {
   $form.on('change', 'input,select', _debounce(onChange, 250));
 }
 
+/**
+ * on filter change update:
+ * - loading/success status
+ * - count change message
+ * @param {number} changeCount
+ */
 function filterSuccessUpdates(changeCount) {
-  // on filter change update:
-  // - loading/success status
-  // - count change message
 
   // check if there is a changed form element
   if (updateChangedEl) {
@@ -427,6 +448,7 @@ function filterSuccessUpdates(changeCount) {
 export function OffsetPaginator() {/* */}
 
 /**
+ *
  * @param {*} data
  * @returns Object with number values for `per_page` and `page`
  */
@@ -441,6 +463,11 @@ OffsetPaginator.prototype.handleResponse = function() {}; //eslint-disable-line 
 
 /**
  * The SeekPaginator class
+ * @function getIndexes
+ * @function setIndexes
+ * @function clearIndexes
+ * @function mapQuery
+ * @function handleResponse
  */
 export function SeekPaginator() {
   this.indexes = {};
@@ -510,11 +537,12 @@ const defaultCallbacks = {
 };
 
 /**
- * The FEC's class of DataTable (the `_FEC` suffix is to differentiate between
+ * The FEC's class of DataTable (the `_FEC` suffix is to differentiate between this and
  * datatables v1's '.Datatable' jQuery plugin and
- * datatables v2's official DataTable object.
+ * datatables v2's official DataTable object)
  * @param {*} selector
- * @param {*} opts
+ * @param {Object} opts
+ * @property {[OffsetPaginator|SeekPaginator]} this.paginator
  */
 export function DataTable_FEC(selector, opts) {
   opts = opts || {};
@@ -526,6 +554,9 @@ export function DataTable_FEC(selector, opts) {
   this.hasWidgets = null;
   this.filters = null;
   this.$widgets = $(DATA_WIDGETS);
+  this.filterPanel = null;
+  this.filterSet = null;
+
   this.initFilters();
 
   const Paginator = this.opts.paginator || OffsetPaginator;
@@ -583,65 +614,66 @@ DataTable_FEC.prototype.parseParams = function(querystring){
 };
 
 // Activate checkbox filter fields that filterSet.js cannot find to activate (see committee_types.jinja)
-DataTable_FEC.prototype.checkFromQuery = function(){
-    // Create a variable representing the querystring key/vals as an object
-    const queryFields = this.parseParams(this.getVars());
-    // Create an array to hold checkbox html elements
-    const queryBoxes = [];
-    // Iterate the key/vals of queryFields
-    $.each(queryFields, function(key, val){
-      // Create a variable for matching checkbox
-      let queryBox;
-      // Handle val as array
-      if (Array.isArray(val)) {
-          // iterate the val array
-          val.forEach(i => {
-            // Find matching checkboxes
-            queryBox = $(`input:checkbox[name="${key}"][value="${i}"]`);
-            // Push matching checkboxes to the  array
-            queryBoxes.push(queryBox);
-          });
-        }
-        // Handle singular val
-        else {
-          // find matching checkbox
-          queryBox = $(`input:checkbox[name="${key}"][value="${val}"]`);
-          // Push matching checkbox to the array
-          queryBoxes.push(queryBox);
-         }
+DataTable_FEC.prototype.checkFromQuery = function() {
+  // Create a variable representing the querystring key/vals as an object
+  const queryFields = this.parseParams(this.getVars());
+  // Create an array to hold checkbox html elements
+  const queryBoxes = [];
+  // Iterate the key/vals of queryFields
+  $.each(queryFields, function(key, val) {
+    // Create a variable for matching checkbox
+    let queryBox;
+    // Handle val as array
+    if (Array.isArray(val)) {
+      // iterate the val array
+      val.forEach(i => {
+        // Find matching checkboxes
+        queryBox = $(`input:checkbox[name="${key}"][value="${i}"]`);
+        // Push matching checkboxes to the  array
+        queryBoxes.push(queryBox);
       });
+    }
+    // Handle singular val
+    else {
+      // find matching checkbox
+      queryBox = $(`input:checkbox[name="${key}"][value="${val}"]`);
+      // Push matching checkbox to the array
+      queryBoxes.push(queryBox);
+    }
+  });
 
-    // Put 0-second, set-timeout on receipts/disbursements datatables so checkoxes are availale to check...
+    // Put 0-second, set-timeout on receipts/disbursements datatables so checkboxes are available to check...
     // ...after the two filter panels are loaded
     if ('data_type' in queryFields){
     setTimeout(function() {
-      // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
-      // ...if they are not already checked
+      // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()…
+      // …if they are not already checked
       for (let box of queryBoxes) {
         if (!($(box).is(':checked'))) {
-              $(box).prop('checked', true).change(); // TODO: jQuery deprecation
+          $(box).prop('checked', true).change(); // TODO: jQuery deprecation
         }
        }
+      $('button.is-loading, label.is-loading').removeClass('is-loading');
       }, 0);
 
-     // No Set-timeout needed on datatables without two filter panels...
-     // ... Also it causes a noticeable intermittent time-lag while populating table on these pages
-     } else {
-      // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
-      // ...if they are not already checked
-      for (let box of queryBoxes) {
-        if (!($(box).is(':checked'))) {
-              $(box).prop('checked', true).change(); // TODO: jQuery deprecation
-        }
-       }
+    // No Set-timeout needed on datatables without two filter panels…
+    // …Also it causes a noticeable intermittent time-lag while populating table on these pages
+    } else {
+    // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
+    // ...if they are not already checked
+    for (let box of queryBoxes) {
+      if (!($(box).is(':checked'))) {
+        $(box).prop('checked', true).change(); // TODO: jQuery deprecation
       }
+    }
+  }
 
   // Remove the loading label GIF on the filter panel
   $('button.is-loading, label.is-loading').removeClass('is-loading');
 };
 
 DataTable_FEC.prototype.initFilters = function() {
-  // Set `this.filterSet` before instantiating the nested `DataTable` so that
+  // Set `this.filterSet` before instantiating the nested `DataTable_FEC` so that
   // filters are available on fetching initial data
   if (this.opts.useFilters) {
     const tagList = new TagList({
@@ -754,6 +786,11 @@ DataTable_FEC.prototype.enableExport = function() {
   }
 };
 
+/**
+ * Called initially and after filter changes
+ * @param {Object} data
+ * @param {Function} callback
+ */
 DataTable_FEC.prototype.fetch = function(data, callback) {
   const self = this;
   self.ensureWidgets();

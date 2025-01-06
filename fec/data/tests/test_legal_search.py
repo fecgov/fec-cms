@@ -143,14 +143,14 @@ class TestLegalSearch(TestCase):
                 query_exclude='',
                 query_type='advisory_opinions',
                 ao_min_issue_date=ao_min_date,
-                ao_category=['F', 'W']
+                ao_doc_category_id=['F', 'W']
             ),
             mock.call(
                 query='',
                 query_exclude='',
                 query_type='advisory_opinions',
                 ao_status='Pending',
-                ao_category='R'
+                ao_doc_category_id='R'
             )
         ]
         load_legal_search_results.assert_has_calls(calls, any_order=True)

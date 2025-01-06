@@ -1,5 +1,7 @@
 {% extends "layouts/legal-doc-search-results.jinja" %}
 {% import 'macros/legal.jinja' as legal %}
+{% import 'macros/filters/checkbox.jinja' as checkbox %}
+{% import 'macros/filters/dropdown-json.jinja' as dropdown %}
 {% set document_type_display_name = 'Closed Matters Under Review' %}
 
 {% block header %}
@@ -30,6 +32,20 @@
       {% endfor %}
     </div>
     <div class="filter">
+      <legend class="label">Document date range</legend>
+      <div class="range range--date js-date-range">
+        <div class="range__input range__input--min" data-filter="range">
+          <label for="case_min_document_date">Beginning</label>
+          <input id="case_min_document_date" name="case_min_document_date" placeholder="mm/dd/yyyy" value="{{ case_min_document_date }}">
+        </div>
+        <div class="range__hyphen">-</div>
+        <div class="range__input range__input--max" data-filter="range">
+          <label for="case_max_document_date">Ending</label>
+          <input id="case_max_document_date" name="case_max_document_date" placeholder="mm/dd/yyyy" value="{{ case_max_document_date }}">
+        </div>
+      </div>
+    </div>
+    <div class="filter">
       <legend class="label">Case open date range</legend>
       <div class="range range--date js-date-range">
         <div class="range__input range__input--min" data-filter="range">
@@ -57,10 +73,58 @@
         </div>
       </div>
     </div>
-    <div class="filter">
-      <button type="submit" class="button button--cta u-margin--top">Apply filters</button>
+  </div>
+  <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
+    <button type="button" class="js-accordion-trigger accordion__button">Case details</button>
+    <div class="accordion__content">
+      {{ checkbox.checkbox_dropdown_multiple(
+        'mur_disposition_category_id',
+        'Final disposition',
+        selected=suggested_mur_disposition_category_ids,
+        options=mur_disposition_category_ids_display,
+        legend=True,
+        prefix='mur_disposition_category_id',
+        show_tooltip_text='Final disposition does not search archived cases'
+        ) }}
+
+        {{
+          dropdown.select_json(
+              'primary_subject_id',
+              'Case subject',
+              options=constants.primary_subject_ids,
+              default="",
+              show_tooltip_text='Case subject does not search archived cases'
+
+          )
+        }}
+        {{
+          dropdown.select_json_indentation(
+            'secondary_subject_id',
+            'Secondary case subject',
+            options=constants.secondary_subject_placeholder,
+            default=""
+          )
+        }}
+      <div class="filter">
+        <legend class="label">Penalty amount by respondent</legend>
+        <div class="range range--currency">
+          <div class="range__input range__input--min js-filter" data-filter="range">
+            <label for="case_min_penalty_amount">From</label>
+            <input id="case_min_penalty_amount" type="text" name="case_min_penalty_amount" data-range="min" data-prefix="$" data-suffix="or more" value="{{ case_min_penalty_amount }}">
+          </div>
+          <div class="range__hyphen">-</div>
+          <div class="range__input range__input--max js-filter" data-filter="range">
+            <label for="case_max_penalty_amount">To</label>
+            <input id="case_max_penalty_amount" type="text" name="case_max_penalty_amount" data-range="max" data-prefix="$" data-suffix="or less" value="{{ case_max_penalty_amount }}">
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+  <div class="filters__inner">
+    <button type="submit" class="button button--cta u-margin--top">Apply filters</button>
+  </div>
+ 
 {% endblock %}
 
 {% block message %}
@@ -85,6 +149,17 @@
           <div data-removable="true" class="tag__item">{{ case_respondents }}<button class="button js-close tag__remove" data-tag="case_respondents"><span class="u-visually-hidden">Remove</span></button></div>
         </li>
       {% endif %}
+      {% if case_min_document_date or case_max_document_date %}
+        <li data-tag-category="open_date" class="tag__category tag__category__range--date">
+          <span class="tag__label">Document date</span>
+          {% if case_min_document_date %}
+          <div data-removable="true" data-id="min_doc_open_date" class="tag__item">{% if not case_max_document_date %}Beginning {% endif %}{{ case_min_document_date }}<button class="button js-close tag__remove" data-tag="case_min_document_date"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+          {% if case_max_document_date %}
+          <div data-removable="true" data-id="max_doc_open_date" class="tag__item">{% if not case_min_document_date %}Ending {% endif %}{{ case_max_document_date }}<button class="button js-close tag__remove" data-tag="case_max_document_date"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+        </li>
+      {% endif %}
       {% if case_min_open_date or case_max_open_date %}
         <li data-tag-category="open_date" class="tag__category tag__category__range--date">
           <span class="tag__label">Open date</span>
@@ -107,11 +182,38 @@
           {% endif %}
         </li>
       {% endif %}
+      {% if case_min_penalty_amount or case_max_penalty_amount %}
+        <li data-tag-category="close_date" class="tag__category tag__category__range--date">
+          {% if case_min_penalty_amount %}
+          <div data-removable="true" data-id="min_penalty_amount" class="tag__item">{{ case_min_penalty_amount }}<button class="button js-close tag__remove" data-tag="case_min_penalty_amount"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+          {% if case_max_penalty_amount %}
+          <div data-removable="true" data-id="max_penalty_amount" class="tag__item">{{ case_max_penalty_amount }}<button class="button js-close tag__remove" data-tag="case_max_penalty_amount"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endif %}
+        </li>
+      {% endif %}
       {% if selected_doc_category_names and selected_doc_category_names | reject('equalto', none) | list %}
         <li data-tag-category="doc_category" class="tag__category">
           {% for selected_doc_category_name in selected_doc_category_names %}
             <div data-removable="true" class="tag__item">{{ selected_doc_category_name }}<button class="button js-close tag__remove" data-tag="doc_category_{{ loop.index0 }}"><span class="u-visually-hidden">Remove</span></button></div>
           {% endfor %}
+        </li>
+      {% endif %}
+      {% if selected_mur_disposition_names and selected_mur_disposition_names | reject('equalto', none) | list %}
+        <li data-tag-category="disposition_category" class="tag__category">
+          {% for selected_mur_disposition_name in selected_mur_disposition_names %}
+            <div data-removable="true" class="tag__item">{{ selected_mur_disposition_name }}<button class="button js-close tag__remove" data-tag="disposition_category_{{ loop.index0 }}"><span class="u-visually-hidden">Remove</span></button></div>
+          {% endfor %}
+        </li>
+      {% endif %}
+      {% if primary_subject_id or secondary_subject_id_name  %}
+        <li data-tag-category="primary_subject_id" class="tag__category tag__category__range--date">
+        {% if primary_subject_id_name and primary_subject_id %}
+          <div data-removable="true" class="tag__item">{{ primary_subject_id_name }}<button class="button js-close tag__remove" data-tag="primary_subject_id"><span class="u-visually-hidden">Remove</span></button></div>
+        {% endif %}
+        {% if secondary_subject_id_name %}
+          <div data-removable="true" class="tag__item">{{ secondary_subject_id_name }}<button class="button js-close tag__remove" data-tag="secondary_subject_id"><span class="u-visually-hidden">Remove</span></button></div>
+        {% endif %}
         </li>
       {% endif %}
     </ul>
@@ -132,6 +234,9 @@
 {% endblock %}
 
 {% block scripts %}
+  <script>
+   window.context = {{ context_vars|to_json|safe }};
+  </script>
   {# super loads scripts from parent #}
   {{ super() }}
   <script>
@@ -171,5 +276,58 @@
       localStorage.setItem('scrollpos', window.scrollY);
       location.reload();
   };
-  </script>
+
+  // JS for final disposition filter
+  // Allow the selected-item button to uncheck box in list above
+  $(document).on('click','.dropdown__item',  function(e){
+      const btn = $(this).find('.dropdown__item--selected');
+      if (btn) {
+        $('#' + btn.data('label')).trigger('click');
+      }
+    });
+/* 
+ Checks the checkboxes for the chosen items because the existing JS does not do it as expected.
+ This is specific to this particular filter, but could be extended to handle all checkbox-dropdown 
+ filters on a page as we do in tables.js with the checkFromQuery() function.
+*/
+  // Get the context vars from the view to use in JS
+  window.context = {{ context_vars|to_json|safe }};
+  setTimeout(function() {
+  (function() {
+  //Create an object of the mur_disposition_category_id parameter value(s) from the request
+  const queryFields = {'mur_disposition_category_id': window.context.mur_disposition_category_id}
+  // Create an array to hold checkbox html elements
+  const queryBoxes = [];
+  // Iterate the key/vals of queryFields
+  $.each(queryFields, function(key, val){
+    // Create a variable for matching checkbox
+    let queryBox;
+    // Handle val as array
+    if (Array.isArray(val)) {
+        // iterate the val array
+        val.forEach(i => {
+          // Find matching checkboxes
+          queryBox = $(`input:checkbox[name="${key}"][value="${i}"]`);
+          // Push matching checkboxes to the  array
+          queryBoxes.push(queryBox);
+        });
+      }
+      // Handle singular val
+      else {
+        // find matching checkbox
+        queryBox = $(`input:checkbox[name="${key}"][value="${val}"]`);
+        // Push matching checkbox to the array
+        queryBoxes.push(queryBox);
+        }
+    });
+    // Iterate the array of matching checkboxes(queryBoxes), check by triggering click
+    // ...if they are not already checked
+    for (let box of queryBoxes) {
+      if (!($(box).is(':checked'))) {
+            $(box).trigger('click');   
+      }
+    }
+   })();
+  }, 500)
+</script>
 {% endblock %}

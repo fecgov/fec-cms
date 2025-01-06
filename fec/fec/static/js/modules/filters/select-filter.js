@@ -5,7 +5,7 @@ export default function SelectFilter(elm) {
   this.$input = this.$elm.find('select');
   this.name = this.$input.attr('name');
   this.requiredDefault = this.$elm.data('required-default') || null; // If a default is required
-  this.loadedOnce = false;
+  this.loadedOnce = false; // Set to true after the filter has been created and its change event has been called
   this.$input.on('change', this.handleChange.bind(this));
 
   this.setRequiredDefault();
@@ -33,10 +33,10 @@ SelectFilter.prototype.setValue = function(value) {
 };
 
 SelectFilter.prototype.handleChange = function(e) {
-  var $input = $(e.target);
-  var value = $input.val();
-  var $optElement = $input.find(`option[value="${value}"]`);
-  var eventName;
+  const $input = $(e.target);
+  const value = $input.val();
+  const $optElement = $input.find(`option[value="${value}"]`);
+  let eventName;
 
   // Handles change for select box filter tags when data-filter-change="true" is present
   if ($input.data('had-value') && value.length > 0) {
@@ -48,19 +48,17 @@ SelectFilter.prototype.handleChange = function(e) {
     eventName = 'filter:removed';
     $input.data('had-value', false);
   }
-  var fireTrigger = $input.data('filter-change');
+  const fireTrigger = $input.data('filter-change');
   if (fireTrigger) {
     if ($input.data('removeable-filter')) {
-      $input.trigger(eventName, [
-        {
-          key: $input.attr('id'),
-          value: this.formatValue($input, $optElement.text()),
-          name: this.name,
-          nonremovable: false,
-          lineType: $optElement.data('line-type') ? `${$optElement.data('line-type')} - ` : '',
-          loadedOnce: $input.data('loaded-once') || true
-        }
-      ]);
+      $input.trigger(eventName, {
+        key: $input.attr('id'),
+        value: this.formatValue($input, $optElement.text()),
+        name: this.name,
+        nonremovable: false,
+        lineType: $optElement.data('line-type') ? `${$optElement.data('line-type')} - ` : '',
+        loadedOnce: $input.data('loaded-once') || true
+      });
     }
     else {
       $input.trigger(eventName, [

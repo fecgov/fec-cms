@@ -112,15 +112,19 @@ def load_legal_advisory_opinion(ao_no):
     return ao
 
 
-def load_legal_mur(mur_no):
+def load_legal_mur(mur_no, requested_mur_type='current'):
 
     url = "/legal/docs/murs/"
-    mur = _call_api(url, parse.quote(mur_no))
+    murs = _call_api(url, parse.quote(mur_no))
 
-    if not mur:
+    if not murs:
         raise Http404
 
-    mur = mur["docs"][0]
+    # get matching doc by mur_type, else use the first
+    if constants.ARCHIVED_MUR_EXCEPTION == mur_no:
+        mur = next((doc for doc in murs["docs"] if doc['mur_type'] == requested_mur_type), murs["docs"][0])
+    else:
+        mur = murs["docs"][0]
 
     if mur["mur_type"] == "current":
         complainants = []
@@ -180,13 +184,13 @@ def load_legal_adr(adr_no):
         # Or any default value you prefer if the list is empty
         adr["disposition_text"] = None
 
-    adr["collated_dispositions"] = collate_dispositions(adr["adr_dispositions"])
+    adr["collated_dispositions"] = collate_dispositions(adr["dispositions"])
     adr["complainants"] = complainants
     adr["participants_by_type"] = _get_sorted_participants_by_type(adr)
 
     referring_office = None  # Initialize referring_office variable
 
-    for disposition in adr["adr_dispositions"]:
+    for disposition in adr["dispositions"]:
         if "Received from" in disposition["disposition"]:
             referring_office = disposition["disposition"]
             # Transformation dictionary for referring office
@@ -228,7 +232,7 @@ def load_legal_admin_fines(admin_fine_no):
             documents_by_type[doc["category"]] = [doc]
     admin_fine["documents_by_type"] = documents_by_type
     disposition_items = OrderedDict()
-    for item in admin_fine["af_dispositions"]:
+    for item in admin_fine["dispositions"]:
         if item["disposition_description"] in disposition_items:
             disposition_items[item["disposition_description"]].append(item)
         else:
@@ -384,6 +388,14 @@ def _get_sorted_documents(ao):
         ao["documents"], key=itemgetter("description", "document_id"), reverse=False
     )
     sorted_documents = sorted(sorted_documents, key=itemgetter("date"), reverse=True)
+
+    # # Sort by document date unless it's a final opinion. Final opinion uses issue date.
+    # sorted_documents = sorted(
+    #     sorted_documents,
+    #     key=lambda doc: doc.get("date") if doc.get("ao_doc_category_id") != 'F' else ao.get("issue_date"),
+    #     reverse=True
+    # )
+
     return sorted_documents
 
 
