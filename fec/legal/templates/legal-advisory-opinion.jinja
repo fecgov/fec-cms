@@ -43,7 +43,7 @@
           <h2>Documents</h2>
           {% if final_opinion %}
             <div class="content__section">
-              <a class="button button--cta button--document button--lg" href="{{ final_opinion.url }}">Final opinion</a> <span class="t-sans u-padding--left">{{ advisory_opinion.issue_date | date(fmt='%B %d, %Y') }}</span>
+              <a class="button button--cta button--document button--lg" href="{{ final_opinion.url }}">Final opinion</a> <span class="t-sans u-padding--left">{{ final_opinion.date | date(fmt='%B %d, %Y') }}</span>
             </div>
           {% endif %}
           <table class="data-table simple-table" style="table-layout: auto;">
@@ -57,12 +57,7 @@
             <tbody>
               {% for document in advisory_opinion.sorted_documents %}
                 <tr>
-                  <td>
-                  {% if document.ao_doc_category_id == 'F' %}
-                    {{ advisory_opinion.issue_date | ao_document_date }}
-                  {% else %}
-                    {{ document.date | ao_document_date }}
-                  {% endif %}</td>
+                  <td>{{ document.date | ao_document_date }}</td>
                   <td><a href="{{ document.url }}">{{ document.description }}</a></td>
                   <td>{{ document.category }}</td>
                 </tr>
