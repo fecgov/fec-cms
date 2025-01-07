@@ -38,3 +38,20 @@
 @import 'components/page-headers';
 @import 'components/search-bar';
 @import 'components/site-header';
+
+body:before {
+   background-color: green;
+   box-shadow: rgba(255, 255, 255, .5) 0px 0px 6px 3px;
+   color: white;
+   content: "sass deprecation pr";
+   display: block;
+   font-family: 'karla';
+   font-size: 1.5rem;
+   font-weight: bold;
+   left: 0;
+   line-height: 1rem;
+   padding: 1rem;
+   position: fixed;
+   top: 0;
+   z-index: 999999;
+}
