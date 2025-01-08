@@ -295,7 +295,22 @@ LegalSearchAo.prototype.getResults = function(e) {
       delete fetchParams[param];
 
     if (param == 'search') {
-      fetchParams['q'] = fetchParams['search'];
+      // We need to divide any 'search' value into q and q_exclude, split on ` -`
+      const qStrings = [];
+      const qExcludeStrings = [];
+      if (fetchParams['search'].indexOf(' -') >= 0) {
+        const allTerms = fetchParams['search'].split(' ');
+        allTerms.forEach(term => {
+          if (term.startsWith('-'))
+            qExcludeStrings.push(term.substring(1));
+          else qStrings.push(term);
+        });
+      }
+      if (qStrings.length > 0)
+        fetchParams['q'] = qStrings.join(' ');
+      if (qExcludeStrings.length > 0)
+        fetchParams['q_exclude'] = qExcludeStrings.join(' ');
+
       delete fetchParams['search'];
     }
   }
