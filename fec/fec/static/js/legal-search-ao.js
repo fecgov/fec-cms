@@ -305,11 +305,12 @@ LegalSearchAo.prototype.getResults = function(e) {
             qExcludeStrings.push(term.substring(1));
           else qStrings.push(term);
         });
-      }
-      if (qStrings.length > 0)
-        fetchParams['q'] = qStrings.join(' ');
-      if (qExcludeStrings.length > 0)
-        fetchParams['q_exclude'] = qExcludeStrings.join(' ');
+        if (qStrings.length > 0)
+          fetchParams['q'] = qStrings.join(' ');
+        if (qExcludeStrings.length > 0)
+          fetchParams['q_exclude'] = qExcludeStrings.join(' ');
+      } else
+        fetchParams['q'] = fetchParams['search'];
 
       delete fetchParams['search'];
     }
