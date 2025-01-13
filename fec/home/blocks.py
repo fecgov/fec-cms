@@ -213,7 +213,8 @@ class ReportingTableBlock(blocks.StructBlock):
         'renderer': 'html',
         'renderAllRows': True,
     }
-
+    
+    hide_state_dropdown = blocks.BooleanBlock(required=False, help_text='Hide state dropdown on this table?')
     table = TableBlock(table_options=reporting_table_options)
 
     class Meta:
