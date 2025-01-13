@@ -279,6 +279,9 @@ LegalSearchAo.prototype.getResults = function(e) {
   // Set the sort param value according to this.sortOrder
   serializedFilters.sort = this.sortOrder == 'asc' ? 'ao_no' : '-ao_no';
 
+  // If we're getting new results, let's reset the page offset (go back to page 1)
+  serializedFilters['offset'] = 0;
+
   // Then update the URL with currently params
   updateQuery(serializedFilters, filterFields);
 
@@ -620,7 +623,7 @@ LegalSearchAo.prototype.updatePagination = function(resultsCount) {
   if (totalNumberOfPages <= maxButtonsOnScreen) {
     // Yay! We can just use every button
     for (let i = 0; i < totalNumberOfPages; i++) {
-      pageNumbers.push(i + 1);
+      pageNumbers.push(i);
     }
   } else {
     const buttonsBeforeCurrent = Math.floor(maxButtonsOnScreen / 2);
