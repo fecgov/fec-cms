@@ -15,7 +15,7 @@
 
     {% if self.picture %}
       {% image self.picture original as commissioner_picture %}
-      <img src="{{ commissioner_picture.url }}" alt="Headshot of {{ self.title }}">
+      <img src="{{ commissioner_picture.url }}" alt="Official photo of {{ self.title }}">
     {% endif %}
 
       <div class="u-padding--top u-padding--bottom">
@@ -37,7 +37,7 @@
         </div>
         {% if self.picture_download %}
         {% image self.picture_download original as commissioner_picture_download %}
-            <a class="button button--standard button--download u-margin--top" href="{{ commissioner_picture_download.url }}" download>Download headshot</a>
+            <a class="button button--standard button--download u-margin--top" href="{{ commissioner_picture_download.url }}" download>Download official photo</a>
         {% endif %}
       </div>
 
