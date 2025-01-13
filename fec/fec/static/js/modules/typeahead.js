@@ -76,11 +76,18 @@ function getUrl_names(resource) {
 }
 
 function getUrl_legal(resource) {
+  // Which parameters do we know we're going to query?
+  const queryParams = {
+    api_key: window.API_KEY_PUBLIC
+  };
+
+  // If there's a doc_type, let's add that to the query
+  const docTypeInput = document.querySelector('input[name="doc_type"]');
+  if (docTypeInput && docTypeInput.value != '') queryParams.doc_type = docTypeInput.value;
+
   return URI(window.API_LOCATION)
     .path([window.API_VERSION, 'legal', resource, encodeURIComponent('%QUERY')].join('/'))
-    .query({
-      api_key: window.API_KEY_PUBLIC
-    })
+    .query(queryParams)
     .readable();
 }
 
