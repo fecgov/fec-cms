@@ -76,20 +76,20 @@ function ReportingDates() {
 
     this.buildStaticElements(); // build header_notes dialog and states dropdown
 
-    this.convertFootnotes(); //converts number or symbol following "~" to footnote html, in-place
+    this.convertFootnotes(); // converts number or symbol following "~" to footnote html, in-place
 
     this.addStateClass(); // adds state abbr classes to rows
 
-    this.addFootnotes(); //adds hidden footnote rows
+    this.addFootnotes(); // adds hidden footnote rows
 
-    this.stripeByState(); //zebra strip by state
+    this.stripeByState(); // zebra strip by state
 
-    //it only runs this logic if the page has an `.election-dates-table` on it, TODO:  might not e necessary for this trmplate
+    // only runs this logic if the page has an `.election-dates-table` on it.
     if (this.dates_table) {
-    //get all acnhor links in TDs)
+    // get all acnhor links in TDs)
       this.anchors = this.dates_table.querySelectorAll('td a[href^=\'#\']');
 
-      //disable default jump behavior for anchor links(#) but keep links for accessibility
+      // disable default jump behavior for anchor links(#) but keep links for accessibility
       for (const anchor of this.anchors) {
         anchor.addEventListener('click', e => {
           e.preventDefault();
@@ -100,7 +100,7 @@ function ReportingDates() {
       'tr:first-child th a[href^="#"]'
     );
 
-    //add data attribute to the header sups to open AY11 dialog and disable default jump behavior for anchor links(#) but keep links for accessibility
+    // add data attribute to the header sups to open AY11 dialog and disable default jump behavior for anchor links(#) but keep links for accessibility
     for (const header_sup of header_sups) {
       header_sup.setAttribute('data-a11y-dialog-show', 'header_notes_modal');
       header_sup.addEventListener('click', e => {
@@ -108,47 +108,47 @@ function ReportingDates() {
       });
     }
 
-    //Define media query
+    // define media query
     const mql = window.matchMedia('screen and (max-width: 650px)');
 
-    //call listener function explicitly at run time
+    // call listener function explicitly at run time
     this.mediaQueryResponse(mql);
 
-    //attach listener function to listen in on state changes
+    // attach listener function to listen in on state changes
     mql.addListener(this.mediaQueryResponse); // TODO: .addListener() has been deprecated
 
-    //show footnotes on click of a link that wraps the superscripts in cells
+    // show footnotes on click of a link that wraps the superscripts in cells
     for (const anchor of this.anchors) {
       anchor.addEventListener('click', this.showFootnotes.bind(this));
     }
 
-    //handle changes on states dropdown to filter by state
+    // handle changes on states dropdown to filter by state
     this.states = document.getElementById('states');
     this.states.addEventListener('change', this.handleStateChange.bind(this));
 
-    //Define nexUntil() function for use in ShowFootnotes()
+    // define nexUntil() function for use in ShowFootnotes()
     this.nextUntil = function(elem, selector, filter) {
-      // Setup siblings array
+      // setup siblings array
       const siblings = [];
 
-      // Get the next sibling element
+      // get the next sibling element
       elem = elem.nextElementSibling;
 
-      // As long as a sibling exists
+      // as long as a sibling exists
       while (elem) {
-        // If we've reached our match, bail
+        // if we've reached our match, bail
         if (elem.matches(selector)) break;
 
-        // If filtering by a selector, check if the sibling matches
+        // if filtering by a selector, check if the sibling matches
         if (filter && !elem.matches(filter)) {
           elem = elem.nextElementSibling;
           continue;
         }
 
-        // Otherwise, push it to the siblings array
+        // otherwise, push it to the siblings array
         siblings.push(elem);
 
-        // Get the next sibling element
+        // get the next sibling element
         elem = elem.nextElementSibling;
       }
 
@@ -158,23 +158,26 @@ function ReportingDates() {
 
 }
 
-//create and insert states-dropdown, static header-notes-list, and dialog
+// create and insert states-dropdown, static header-notes-list, and dialog
 ReportingDates.prototype.buildStaticElements = function() {
-  //Add states dropdown template to page
+  // add states dropdown template to page
   const dropdown_wrapper = document.createElement('div');
   dropdown_wrapper.innerHTML = states_dropdown_template;
+  if (this.dates_table.dataset.hideStateDropdown == 'true') {
+    dropdown_wrapper.style.display='none';
+  }
 
   const table_parent = this.dates_table.parentNode;
 
   table_parent.insertBefore(dropdown_wrapper, this.dates_table);
 
-  //Create header note list for modal dialogue
- let hdr_str = '';
+  // create header note list for modal dialogue
+  let hdr_str = '';
 
- //Get the '#header_notes' script tag created in the template with json_script
- const header_notes = document.getElementById('header_notes');
- if (header_notes) {
- const header_notes_json = JSON.parse(document.getElementById('header_notes').textContent);
+  // get the '#header_notes' script tag created in the template with json_script
+  const header_notes = document.getElementById('header_notes');
+  if (header_notes) {
+  const header_notes_json = JSON.parse(document.getElementById('header_notes').textContent);
 
   if (typeof header_notes_json == 'object') {
     hdr_str = `<h4>Header notes</h4><ul>`;
@@ -188,9 +191,9 @@ ReportingDates.prototype.buildStaticElements = function() {
     }
 
   if (typeof header_notes_json == 'object') {
-    //Create A11Y modal dialog for header_notes popup and add innerHTML
+    // create A11Y modal dialog for header_notes popup and add innerHTML
     const dialog = document.createElement('div');
-    //Must add these three classes separately for IE :-(
+    // must add these three classes separately for IE :-(
     dialog.classList.add('js-modal');
     dialog.classList.add('modal');
     dialog.classList.add('modal__content');
@@ -198,7 +201,7 @@ ReportingDates.prototype.buildStaticElements = function() {
     dialog.id = 'header_notes_modal';
     document.body.appendChild(dialog);
     dialog.innerHTML = header_notes_modal_partial;
-    //Populate dialog with all header notes
+    // populate dialog with all header notes
     const dialog_p = document.querySelector('.modal p');
     dialog_p.innerHTML = `${hdr_str}`;
 
@@ -206,21 +209,36 @@ ReportingDates.prototype.buildStaticElements = function() {
  }
 };
 
-// Adds state classes to rows
+// adds state classes to rows
 ReportingDates.prototype.addStateClass = function() {
    const all_tr = document.querySelectorAll('tr');
    const states_select = document.getElementById('states');
       Array.from(all_tr).forEach(row => {
+        /* For more granular control over zebra-striping, Users can add an additional class to a row in the Wagtail table block
+        by wrapping the election title text in the first column in a custom <election> html tag with a clas attribute.
+        Example(includiing a footnote tilda): <election class="fl1">Florida 1st Congressional District Special Primary</election> ~*
+        This will add the class from the election tag to that row in addition to the state appreviation class added by default.
+        So the resultiing class on this row would be "fl1 fl".
+        */
+        // before adding state classes, add any user-created classes to rows
+        let election_cell = row.cells[0];
+        // find any rows that have custom <election> tags added by user
+        let election_tag = election_cell.getElementsByTagName('election')[0];
+        // add the user-created class to the row
+        if (election_tag) {
+          row.classList.add(election_tag.classList[0]);
+        }
 
+        // add the state class to each row:
         let state_election_name_str = row.cells[0].textContent;
-         // Remove extra spaces, set to lowercase to normalize human input errors
+         // remove extra spaces, set to lowercase to normalize human input errors
         let state_election_name = state_election_name_str.replace(/\s+/g,' ').trim().toLowerCase();
 
-        // Match state name in the full election name with states select option to get the state abbreviation
+        // match state name in the full election name with states select option to get the state abbreviation
         Array.from(states_select.options).forEach(opt => {
-          // Use '^' to match the full state-name at beginning of string, to lowercase
+          // use '^' to match the full state-name at beginning of string, to lowercase
           let regex = `^${opt.textContent.toLowerCase()}.*$`;
-          // Match state-name in full state_election_string
+          // match state-name in full state_election_string
           if (state_election_name.match(regex)) {
 
              row.classList.add(opt.value.toLowerCase());
@@ -230,11 +248,10 @@ ReportingDates.prototype.addStateClass = function() {
       });
 };
 
-// Show chosen state rows, hide others
+// show chosen state rows, hide others
 ReportingDates.prototype.handleStateChange = function() {
   const state = this.states.value.toLowerCase();
 
- //TODO: Should this be `this.dates_table.querySelectorAll` ?
   const tr = document.querySelectorAll('tr');
   const ftnt = document.querySelectorAll('tr.footnote_row');
 
@@ -246,13 +263,13 @@ ReportingDates.prototype.handleStateChange = function() {
 
     for (const not_one of not_ones) {
       not_one.style.display = 'none';
-      //use class to handle Safari's lack of support for visibiity:visible/collapse
+      // use class to handle Safari's lack of support for visibiity:visible/collapse
       not_one.classList.remove('row_display');
     }
 
     for (const one of ones) {
       one.style.display = 'table-row';
-      //use class to handle Safari's lack of support for visibiity:visible/collapse
+      // use class to handle Safari's lack of support for visibiity:visible/collapse
       one.classList.add('row_display');
     }
   } else {
@@ -268,9 +285,9 @@ ReportingDates.prototype.handleStateChange = function() {
   }
 };
 
-// Add footnote rows based on existence of superscript number created by convertFootnotes()
+// add footnote rows based on existence of superscript number created by convertFootnotes()
 ReportingDates.prototype.addFootnotes = function() {
-  //Get the '#footnotes' script tag created in the template with json_script
+  // get the '#footnotes' script tag created in the template with json_script
   const footnotes = document.getElementById('footnotes');
   if (footnotes) {
   const footnotes_json = JSON.parse(document.getElementById('footnotes').textContent);
@@ -282,15 +299,15 @@ ReportingDates.prototype.addFootnotes = function() {
   Array.from(date_sups)
     .reverse()
     .forEach(node => {
-      const indx = node.innerText; //should this be textContent?
-      //Only put period after numeric footnotes
+      const indx = node.innerText; // should this be textContent?
+      // only put period after numeric footnotes
       const dot = /^\d+$/.test(indx) ? '.' : '';
       const state_class = node.closest('tr').className;
       const ftnt_colspan = node.closest('tr').cells.length - 1;
       let current_text;
 
-      for (let note of footnotes_array){
-        if(note.value.footnote_number == indx){
+      for (let note of footnotes_array) {
+        if(note.value.footnote_number == indx) {
 
           current_text = note.value.footnote_text;
 
@@ -305,40 +322,40 @@ ReportingDates.prototype.addFootnotes = function() {
       node.closest('tr').insertAdjacentHTML('afterend', ftnt_row);
     });
   }
-  //hide footnotes rows initially
+  // hide footnotes rows initially
   const footnote_rows = document.querySelectorAll('.footnote_row');
   for (const footnote_row of footnote_rows) {
     footnote_row.style.display = 'none';
   }
  }
 };
-//Prepend header to cells in mobile ONLY, also add/remove them on resize between mobile/desktop
+// prepend header to cells in mobile ONLY, also add/remove them on resize between mobile/desktop
 ReportingDates.prototype.mediaQueryResponse = function(mql) {
-  //get all non-footnote row cells for mobile
+  // get all non-footnote row cells for mobile
   const all_tds = document.querySelectorAll('tr:not(.footnote_row) td');
-  //get all table header cells
+  // get all table header cells
   const all_th = document.querySelectorAll('th');
 
-  //If mobile
+  // if mobile
   if (mql.matches) {
-    //Iterate over non-foonote-row cells
+    // iterate over non-foonote-row cells
     Array.from(all_tds).forEach(cell => {
-      //get the header html for each cell index
+      // get the header html for each cell index
       const th_append = Array.from(all_th)[cell.cellIndex].outerHTML;
 
-      //prepend it to the cell in a span
+      // prepend it to the cell in a span
       cell.insertAdjacentHTML(
         'afterbegin',
         `<span class='th_append'>${th_append}</span>`
       );
 
-      //get all the appended header anchor links
+      // get all the appended header anchor links
       const appended_anchors = cell.querySelectorAll('.th_append a[href^="#"]');
-      //get the modal and modal-close
+      // get the modal and modal-close
       const jsmodal = document.getElementsByClassName('js-modal');
       const jsmodalClose = document.querySelectorAll('.modal__close');
 
-      //Re-stablish A11Y data-attributes to the appended header's anchor if it was removed and re-added
+      // re-stablish A11Y data-attributes to the appended header's anchor if it was removed and re-added
       for (const anchor of appended_anchors) {
         anchor.setAttribute('data-a11y-dialog-show', 'header_notes_modal');
         anchor.addEventListener('click', e => {
@@ -355,13 +372,13 @@ ReportingDates.prototype.mediaQueryResponse = function(mql) {
       }
     });
   }
-  //If not mobile
+  // if not mobile
   else {
-    //Iterate over non-foonote-row cells
+    // iterate over non-foonote-row cells
     Array.from(all_tds).forEach(cell => {
-      //get prepended header --if it exists-- and remove it
+      // get prepended header --if it exists-- and remove it
       cell.getElementsByTagName('span');
-      const th_appended = cell.getElementsByTagName('span'); //cell.getElementsByClassname('th_append');
+      const th_appended = cell.getElementsByTagName('span');
       if (th_appended.length) {
         th_appended[0].remove();
       }
@@ -369,11 +386,11 @@ ReportingDates.prototype.mediaQueryResponse = function(mql) {
   }
 };
 
-//Show chosen footnote or append it in Mobile view
+// show chosen footnote or append it in Mobile view
 ReportingDates.prototype.showFootnotes = function(e) {
-  //escape symbols and invalid CSS selectors in indx (ie: '*', '**', etc.)
+  // escape symbols and invalid CSS selectors in indx (ie: '*', '**', etc.)
   const indx = CSS.escape(e.target.textContent);
-  //get the string representaton of indx to use elsewhere
+  // get the string representaton of indx to use elsewhere
   const clean_indx = e.target.textContent;
 
   const el = e.target;
@@ -383,40 +400,39 @@ ReportingDates.prototype.showFootnotes = function(e) {
   const current_row = el.closest('tr');
   const el_td = el.closest('td');
 
-  //get background color of parent row so footnotes can match parent without zebra striping
+  // get background color of parent row so footnotes can match parent without zebra striping
   const style = window.getComputedStyle(current_row, '');
   const bgColor = style.getPropertyValue('background-color');
-  //create new no-transparency color based on background color of current row to change(hide) the btm border on selected cell
+  // create new no-transparency color based on background color of current row to change(hide) the btm border on selected cell
   const newColor =
     bgColor == 'rgba(0, 0, 0, 0)'
       ? 'rgba(255,255,255,1)'
       : 'rgba(248,248,248,1)';
 
-  //get footnote row corresponding to the one clicked
+  // get footnote row corresponding to the one clicked
   const live_note = this.nextUntil(current_row, notftnt, ftnt);
-  //get all other footnote rows
+  // get all other footnote rows
   const not_live_note = this.nextUntil(current_row, notftnt, ntlvftnt);
 
-  //Change border under clicked footnote in Desktop view
+  // change border under clicked footnote in Desktop view
 
   const tds = current_row.cells;
 
-  //First set borderBottom on all TDs on parent row, then below we change
-  //border on only the one clicked
-  //have to use 'Array.from' here for Safari, not sure why only in this for/of stmt and not others
+  // first set borderBottom on all TDs on parent row, then below we change border on only the one clicked
+  // have to use 'Array.from' here for Safari, not sure why only in this for/of stmt and not others
   for (const td of Array.from(tds)) {
     td.style.borderBottom = '1px solid #ddd';
   }
 
-  //Show/hide footnote and change border color under cell
+  // show/hide footnote and change border color under cell
   if (live_note[0].style.display == 'none') {
-    //remove bottom border on first TD (state cell)
+    // remove bottom border on first TD (state cell)
     current_row.cells[0].style.borderBottom = `1px solid ${newColor}`;
-    //show chosen footnote
+    // show chosen footnote
     live_note[0].style.display = 'table-row';
-    //set bg color on footnote rows to match parent rows
+    // set bg color on footnote rows to match parent rows
     live_note[0].style.backgroundColor = bgColor;
-    //hide bottom border under cell in which the footnote sup was clicked
+    // hide bottom border under cell in which the footnote sup was clicked
     // or left border for first-column cells
     if (el_td.cellIndex == '0') {
       current_row.parentNode.rows[
@@ -429,7 +445,7 @@ ReportingDates.prototype.showFootnotes = function(e) {
       el_td.style.borderBottom = `1px solid ${newColor}`;
     }
 
-    //hide all but the footnote clicked
+    // hide all but the footnote clicked
     for (const not of not_live_note) {
       not.style.display = 'none';
     }
@@ -438,34 +454,34 @@ ReportingDates.prototype.showFootnotes = function(e) {
     el_td.style.borderBottom = '1px solid #ddd';
   }
 
-  //Dynamically add footnotes in Mobile view (under each cell, per click)
+  // dynamically add footnotes in Mobile view (under each cell, per click)
 
-  //Add footnote innerHTML in span under clicked cell(display:block) in mobile
+  // add footnote innerHTML in span under clicked cell(display:block) in mobile
 
-  //get innerHTML from chosen footnote using the results of the nextUntil function (i.e live_note const)
+  // get innerHTML from chosen footnote using the results of the nextUntil function (i.e live_note const)
   const live_note_text = live_note[0].cells[1].innerHTML;
 
-  //define any existing responsive_footnote for just the current row(i.e. current_row const)
+  // define any existing responsive_footnote for just the current row(i.e. current_row const)
   const resp_exists = current_row.querySelector(`.append${indx}`);
 
-  //For toggling on/off the same one using superscript
+  // for toggling on/off the same one using superscript
   if (!resp_exists) {
-    //if it does not already exist, add it with a class of the clicked index
+    // if it does not already exist, add it with a class of the clicked index
     el_td.insertAdjacentHTML(
       'beforeend',
       `<span class="ftnt_append append${clean_indx}">${live_note_text}</span>`
     );
   }
-  //else remove it
+  // else remove it
   else {
     resp_exists.remove();
   }
 
-  //get all '.ftnt_append' classes per row
+  // get all '.ftnt_append' classes per row
   const resp_ftnts = current_row.getElementsByClassName('ftnt_append');
 
-  //For going from one footnote to another within each row
-  //Iterate over them and remove the ones that are not the clicked index number
+  // for going from one footnote to another within each row
+  // iterate over them and remove the ones that are not the clicked index number
   Array.from(resp_ftnts).forEach(nt => {
     if (nt.classList.contains(`append${clean_indx}`)) {
       nt.style.display = 'block';
@@ -474,14 +490,14 @@ ReportingDates.prototype.showFootnotes = function(e) {
     }
   });
 
-  //Extra close('x') button for mobile footnotes
+  // extra close('x') button for mobile footnotes
   if (resp_ftnts[0]) {
     const close_btn = document.createElement('button');
     close_btn.classList.add('ftnt-close');
     close_btn.classList.add('button--close--primary');
     close_btn.textContent = 'x';
     resp_ftnts[0].appendChild(close_btn);
-    //get ftnt-close for just this row and activate it
+    // get ftnt-close for just this row and activate it
     const closer = current_row.querySelectorAll('.ftnt-close');
     closer[0].addEventListener('click', ex => {
       const x = ex.target;
@@ -531,7 +547,7 @@ const all_hdr = this.dates_table.getElementsByTagName('th');
 
   });
 
-   //get all non-footnote/non-header row cells
+   // get all non-footnote/non-header row cells
    const all_td = this.dates_table.querySelectorAll('tr:not(.footnote_row) td');
 
     Array.from(all_td).forEach(cell => {
@@ -539,11 +555,11 @@ const all_hdr = this.dates_table.getElementsByTagName('th');
      const txt = cell.innerHTML;
 
      if (/~/.test(txt)) {
-      //Create an array from the string split on the tilda(s)
+      // create an array from the string split on the tilda(s)
       let txt_array = txt.split('~');
-      ///The first item is the date text, return that as a var. Now txt_array only includes footnotes.
+      // the first item is the date text, return that as a var. Now txt_array only includes footnotes.
       let date_txt = txt_array.shift();
-      //Creeate a new varialble for clarity
+      // creeate a new varialble for clarity
       let appended_footnotes = txt_array;
 
       let footnote_html_array = [];
