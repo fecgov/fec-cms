@@ -272,6 +272,8 @@ def legal_doc_search_ao(request):
     ao_doc_category_ids = request.GET.getlist('ao_doc_category_id', [])
     ao_requestor_type_ids = request.GET.getlist('ao_requestor_type', [])
     ao_regulatory_citation = request.GET.get('ao_regulatory_citation', '')
+    ao_statutory_citation = request.GET.get('ao_statutory_citation', '')
+    ao_citation_require_all = request.GET.get('ao_citation_require_all', '')
 
     query, query_exclude = parse_query(original_query)
 
@@ -293,6 +295,8 @@ def legal_doc_search_ao(request):
         ao_entity_name=ao_entity_name,
         ao_doc_category_id=ao_doc_category_ids,
         ao_regulatory_citation=ao_regulatory_citation,
+        ao_statutory_citation=ao_statutory_citation,
+        ao_citation_require_all=ao_citation_require_all,
     )
 
     # Define AO document categories dictionary
@@ -349,6 +353,8 @@ def legal_doc_search_ao(request):
         'ao_entity_name': ao_entity_name,
         'query': query,
         'ao_regulatory_citation': ao_regulatory_citation,
+        'ao_statutory_citation': ao_statutory_citation,
+        'ao_citation_require_all': ao_citation_require_all,
         'category_order': get_legal_category_order(results, 'advisory_opinions'),
         'social_image_identifier': 'legal',
         'selected_ao_doc_category_ids': ao_doc_category_ids,
