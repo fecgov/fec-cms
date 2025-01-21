@@ -308,9 +308,10 @@ h3 + .simple-table {
     display: none !important;
   }
 
-  /* as a necessity, we depart from mobile-first(min-width only MQs) here for these tables only */
-  @media only screen and (width <= 650px),
-    (device-width >= 650px) and (device-width <= 1024px) {
+  /* As a necessity, we depart from mobile-first(min-width only MQs) here for these tables only.
+  As of January 2025, this media query works with `max-width:` but not `width <=` */
+  @media only screen and (max-width: 650px),
+    (min-device-width: 650px) and (max-device-width: 1024px) {
     /* Force table to not be like tables anymore */
     table,
     thead,
@@ -371,6 +372,7 @@ h3 + .simple-table {
       display: block !important;
       padding: u(0 3rem);
       font-weight: normal;
+
       b {
         margin-left: u(-1.5rem);
         padding-right: u(0.1rem);
