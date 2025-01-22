@@ -15,6 +15,8 @@
     "build-js": "cd fec && webpack --mode development",
     "build-production": "cd fec && webpack --mode production && gulp build-sass && gulp build-widgets-sass && gulp purgecss && gulp build-webp-files",
     "format": "eslint --fix ./fec/fec/static/js/**/*.js",
+    "format-sass": "prettier './fec/fec/static/scss/**/*.scss' --check",
+    "format-sass-fix": "prettier './fec/fec/static/scss/**/*.scss' --write",
     "lint": "eslint --quiet ./fec/fec/static/js/**/*.js",
     "format-lint": "npm run format && npm run lint",
     "test": "karma start",
@@ -117,8 +119,10 @@
     "moment": "^2.29.4",
     "npm-watch": "^0.13.0",
     "numeral": "^1.5.6",
+    "prettier": "^3.3.3",
+    "puppeteer": "^22.11.2",
     "puppeteer-core": "^21.11.0",
-    "sass": "^1.77.6",
+    "sass": "^1.78.0",
     "scrollmonitor": "^1.2.11",
     "sinon": "^17.0.1",
     "sinon-chai": "^3.7.0",
@@ -128,9 +132,9 @@
     "underscore": "^1.13.6",
     "urijs": "^1.19.11",
     "vue": "^2.7.16",
-    "webpack": "^5.92.1",
+    "webpack": "^5.97.1",
     "webpack-bundle-analyzer": "^4.10.2",
-    "webpack-cli": "5.1.4",
+    "webpack-cli": "^6.0.1",
     "webpack-manifest-plugin": "^5.0.0"
   },
   "watch": {
@@ -146,7 +150,7 @@
   "browserslist": "last 2 versions, > 1%, IE 10",
   "engines": {
     "node": "22.1.0",
-    "npm": "10.8.2"
+    "npm": "10.9.2"
   },
   "license": "CC0-1.0"
 }

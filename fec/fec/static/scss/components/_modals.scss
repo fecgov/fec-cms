@@ -4,7 +4,7 @@
 //
 
 .modal__overlay {
-  background-color: rgba($base, .5);
+  background-color: rgba($base, 0.5);
   bottom: 0;
   left: 0;
   right: 0;
@@ -34,7 +34,7 @@
   @include media($lg) {
     margin-left: u(-40rem);
     width: u(80rem);
-    max-height:650px;
+    max-height: 650px;
   }
 }
 
@@ -49,15 +49,18 @@
 }
 
 .modal__tips {
-  @include span-columns(5);
-  @include shift(1);
   padding-top: u(1rem);
+
+  @include span-columns(5);
+  & {
+    // We need shift() to happen second to override margin- from span-columns().
+    // Problem: shift() only adds declaration while span-columns() is declaration and nested (&:lastchild)
+    @include shift(1);
+  }
 }
 
 .keyword-modal {
-  .simple-table{
-    border-width: 0 0;
+  .simple-table {
+    border-width: 0;
   }
-
 }
-

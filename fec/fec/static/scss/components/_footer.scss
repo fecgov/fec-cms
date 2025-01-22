@@ -20,7 +20,7 @@
   li {
     font-size: u(1.6rem);
     line-height: u(1.9rem);
-    padding: (.75rem 0);
+    padding: (0.75rem 0);
     position: relative;
   }
 
@@ -35,7 +35,7 @@
     }
 
     // override clear because of first empty column
-    &:nth-child(2n+1) {
+    &:nth-child(2n + 1) {
       clear: none;
     }
   }
@@ -49,9 +49,9 @@
   @include media($lg) {
     .grid--6-wide .grid__item {
       @include span-columns(2);
-    
-    &:nth-child(2),
-    &:nth-child(3) {
+
+      &:nth-child(2),
+      &:nth-child(3) {
         display: block;
       }
     }
@@ -59,10 +59,11 @@
 }
 
 .footer {
-  @include u-bg--primary();
-  @include u-font-color($neutral);
   padding: u(5rem 0);
   position: relative;
+
+  @include u-bg--primary;
+  @include u-font-color($neutral);
 
   .address__title {
     font-size: u(2.2rem);
@@ -116,9 +117,12 @@
     }
 
     .address {
+      margin-right: 0 !important; // overriding span-columns()
       @include span-columns(3);
-      margin-right: 0;
-      float: right;
+
+      & {
+        float: right;
+      }
     }
   }
 }
@@ -136,7 +140,7 @@
   p {
     font-family: $sans-serif;
     font-size: u(1.4rem);
-    letter-spacing: -.3px;
+    letter-spacing: -0.3px;
     color: $base;
   }
 }
