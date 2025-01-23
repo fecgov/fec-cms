@@ -246,9 +246,13 @@
         {% endif %}
         </li>
       {% endif %}
-      {% if case_citation_require_all %}
+      {% if case_regulatory_citation or case_statutory_citation %}
         <li data-tag-category="case_regulatory_citation" class="tag__category">
-          <div data-removable="true" class="tag__item">Cases with all citations<button class="button js-close tag__remove" data-tag="case_citation_require_all"><span class="u-visually-hidden">Remove</span></button></div>
+          {% if case_citation_require_all =='true' %}
+          <div data-removable="false" class="tag__item">Cases with all citations</div>
+          {% else %}
+          <div data-removable="false" class="tag__item">Cases with any citations</div>
+          {% endif %}
         </li>
       {% endif %}
       {% if case_regulatory_citation %}
