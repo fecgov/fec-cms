@@ -50,9 +50,9 @@
   <button type="button" class="js-accordion-trigger accordion__button">Citations</button>
   <div class="accordion__content">
     <label>If more than one citation is entered:</label>
-    <input type="radio" id="ao_citation_require_all_false" name="ao_citation_require_all" value="false"{% if ao_citation_require_all is not true %} checked{% endif %}>
+    <input type="radio" id="ao_citation_require_all_false" name="ao_citation_require_all" value="false"{% if ao_citation_require_all != 'true' %} checked{% endif %}>
     <label for="ao_citation_require_all_false">Show cases citing any of them</label>
-    <input type="radio" id="ao_citation_require_all_true" name="ao_citation_require_all" value="true"{% if ao_citation_require_all is true %} checked{% endif %}>
+    <input type="radio" id="ao_citation_require_all_true" name="ao_citation_require_all" value="true"{% if ao_citation_require_all == 'true' %} checked{% endif %}>
     <label for="ao_citation_require_all_true">Show cases citing all of them</label>
     {{ typeahead.field('ao_regulatory_citation', 'Regulatory citation', False, dataset='aoRegulatoryCitations', allow_text=False) }}
     {{ typeahead.field('ao_statutory_citation', 'Statutory citation', False, dataset='aoStatutoryCitations', allow_text=False) }}
