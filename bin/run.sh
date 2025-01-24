@@ -11,4 +11,4 @@ cd fec
 ./manage.py migrate --noinput
 
 # Run application
-gunicorn -k gthread --threads 2 -w 2 fec.wsgi:application
+gunicorn -k gthread --threads 2 -w 4 fec.wsgi:application
