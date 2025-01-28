@@ -1,28 +1,27 @@
-@import "../../../../node_modules/leaflet/dist/leaflet";
+@import '../../../../node_modules/leaflet/dist/leaflet';
 
-@import "global";
+@import 'global';
 
-@import "components/hero";
-@import "components/overviews";
-@import "components/figures";
-@import "components/icons";
-@import "components/type-styles";
-@import "components/maps";
-@import "components/reaction-boxes";
-@import "components/_options";
-@import "components/datatables";
+@import 'components/hero';
+@import 'components/overviews';
+@import 'components/figures';
+@import 'components/icons';
+@import 'components/type-styles';
+@import 'components/maps';
+@import 'components/reaction-boxes';
+@import 'components/_options';
+@import 'components/datatables';
 
 // for spending raising breakdown pages
-@import "components/breakdowns";
-@import "components/sidebar";
-@import "components/side-nav";
-@import "components/table-styles";
-@import "components/results-info";
-@import "components/charts";
-@import "components/modals";
-@import "components/examples";
-@import "components/headings";
-@import "components/icon-headings";
-@import "components/search-controls";
-@import "components/data-landing-callouts";
-
+@import 'components/breakdowns';
+@import 'components/sidebar';
+@import 'components/side-nav';
+@import 'components/table-styles';
+@import 'components/results-info';
+@import 'components/charts';
+@import 'components/modals';
+@import 'components/examples';
+@import 'components/headings';
+@import 'components/icon-headings';
+@import 'components/search-controls';
+@import 'components/data-landing-callouts';

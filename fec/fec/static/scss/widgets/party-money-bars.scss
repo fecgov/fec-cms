@@ -16,50 +16,44 @@ $fontWeightBold: 700;
 
 // The party money bars root selector
 .js-party-money-bars {
+  font-family: fontFamilySerif; // TODO - complete it
+  font-feature-settings: 'kern', 'liga', 'pnum';
+  font-size: $fontSizeBase;
   min-width: 20rem;
+
   &,
   & * {
     // THESE ARE PASSED DOWN TO CHILDREN
     box-sizing: border-box;
   }
 
-// background-color: $colorBgLight;
-// border-radius: 4px;
-// box-shadow: 0 0 0 2px $colorTextOnLight inset;
-// color: $colorTextOnLight;
-  font-family: fontFamilySerif; // TODO - complete it
-  font-feature-settings: 'kern', 'liga', 'pnum';
-  font-size: $fontSizeBase;
-// margin: 0 0 ($fontSizeBase * 2);
-// padding: ($fontSizeBase * 2);
+  .js-parties-holder {
+    grid-template-columns: 4em auto 25%;
+    display: grid;
 
-    .js-parties-holder {
-      grid-template-columns: 4em auto 25%;
-      display: grid;
-
-      .js-meter-row {
-        display: contents;
-      }
-      .js.party.title {
-        padding-top: 3px;
-      }
-      .js-party-value {
-        padding: 0 1em 3px 0;
-        white-space: nowrap;
-      }
-
-      div, label {
-        border-bottom: solid 1px $colorBorderBottom;
-      }
+    .js-meter-row {
+      display: contents;
     }
-    
+    .js.party.title {
+      padding-top: 3px;
+    }
+    .js-party-value {
+      padding: 0 1em 3px 0;
+      white-space: nowrap;
+    }
+
+    div,
+    label {
+      border-bottom: solid 1px $colorBorderBottom;
+    }
+  }
+
   .total-wrapper {
-    display: -ms-flexbox;
+    display: flexbox;
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     margin-bottom: $fontSizeBase;
-    // padding-bottom: $fontSizeBase * 2;
 
     .value {
       font-family: $fontFamilyMonospace;
@@ -133,8 +127,8 @@ $fontWeightBold: 700;
         background: $colorBarDef;
         transition: all 1s;
       }
-      &:before {
-        content: "";
+      &::before {
+        content: '';
         display: block;
         height: 20px;
         position: absolute;
@@ -151,7 +145,7 @@ $fontWeightBold: 700;
           background: $colorBarDem;
           transition: all 1s;
         }
-        &:before {
+        &::before {
           border-right-color: $colorBarDem;
         }
       }
@@ -166,7 +160,7 @@ $fontWeightBold: 700;
           background: $colorBarRep;
           transition: all 1s;
         }
-        &:before {
+        &::before {
           border-right-color: $colorBarRep;
         }
       }
@@ -187,7 +181,7 @@ $fontWeightBold: 700;
   footer {
     -ms-flex-align: baseline;
     align-items: baseline;
-    display: -ms-flexbox;
+    display: flexbox;
     display: flex;
     -ms-flex-pack: justify;
     justify-content: space-between;
@@ -235,9 +229,10 @@ $fontWeightBold: 700;
   // Medium sizes for the light theme, which is the default
   &.w-m {
     @extend .w-s;
+
     -ms-flex-align: center;
     align-items: center;
-    display: -ms-flexbox;
+    display: flexbox;
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
@@ -245,7 +240,6 @@ $fontWeightBold: 700;
 
     .total-wrapper {
       border-bottom: none;
-      // border-right: solid thin $colorElementBordersOnLight;
       margin: 0;
       padding-bottom: 0;
       padding-right: $fontSizeBase * 4;
@@ -253,14 +247,12 @@ $fontWeightBold: 700;
       width: 50%;
 
       .value {
-        // margin: -5px 0 $fontSizeBase 0;
         -ms-flex-order: 1;
         order: 1;
         text-align: right;
       }
       .description {
         font-size: $fontSizeBase * 1.4;
-        // margin: 5px 0 0;
         -ms-flex-order: 2;
         order: 2;
       }
@@ -360,7 +352,7 @@ $fontWeightBold: 700;
     // Medium sizes of the dark theme
     &.w-m {
       .main-content-wrapper {
-        display: -ms-flexbox;
+        display: flexbox;
         display: flex;
         -ms-flex-pack: justify;
         justify-content: space-between;
@@ -402,7 +394,7 @@ $fontWeightBold: 700;
 
   // Universals
   .t-mono-stacked-currency {
-    font-family: fec_currency_mono;
+    font-family: 'fec_currency_mono';
     text-align: right;
   }
 

@@ -2,6 +2,7 @@
 {% import 'macros/legal.jinja' as legal %}
 {% import 'macros/filters/checkbox.jinja' as checkbox %}
 {% import 'macros/filters/dropdown-json.jinja' as dropdown %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% set document_type_display_name = 'Closed Matters Under Review' %}
 
 {% block header %}
@@ -12,8 +13,9 @@
 
 {% block filters %}
   <input id="sort" type="hidden" name="sort" value="{{ sort }}">
+  <input id="doc_type" type="hidden" name="doc_type" value="murs">
   <div class="filters__inner">
-    {{ legal.keyword_search(result_type, query) }}
+    
     <div class="filter">
       <label class="label" for="case_no">MUR number</label>
       <input id="case_no" name="case_no" type="text" value="{{ case_no }}">
@@ -22,61 +24,50 @@
       <label class="label" for="case_respondents">MUR respondents</label>
       <input id="case_respondents" name="case_respondents" type="text" value="{{ case_respondents }}">
     </div>
-    <div class="filter">
+  </div>
+
+  <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
+
+    <button type="button" class="js-accordion-trigger accordion__button">Documents</button>
+    <div class="accordion__content">
+      {{ legal.keyword_search(result_type, query) }}
+
+      <div class="filter">
       <legend class="label">Document Type</legend>
       {% for category_id, category_label in mur_document_categories.items() %}
         <div>
-            <input type="checkbox" id="case_doc_category_id_{{ category_id }}" name="case_doc_category_id" value="{{ category_id }}" {% if category_id in selected_doc_category_ids %}checked{% endif %}>
-            <label for="case_doc_category_id_{{ category_id }}">{{ category_label }}</label>
+          <input type="checkbox" id="case_doc_category_id_{{ category_id }}" name="case_doc_category_id" value="{{ category_id }}" {% if category_id in selected_doc_category_ids %}checked{% endif %}>
+          <label for="case_doc_category_id_{{ category_id }}">{{ category_label }}</label>
         </div>
       {% endfor %}
-    </div>
-    <div class="filter">
-      <legend class="label">Document date range</legend>
-      <div class="range range--date js-date-range">
-        <div class="range__input range__input--min" data-filter="range">
-          <label for="case_min_document_date">Beginning</label>
-          <input id="case_min_document_date" name="case_min_document_date" placeholder="mm/dd/yyyy" value="{{ case_min_document_date }}">
+      </div>
+      <div class="filter">
+        <label class="label t-inline-block">Document date range</label>
+        <div class="tooltip__container" tabindex="0">
+          <button class="tooltip__trigger"><span class="u-visually-hidden">Learn more</span></button>
+          <div class="tooltip tooltip--left tooltip--above">
+            <p class="tooltip__content tooltip__content">Document date range does not search archived cases</p>
+          </div>
         </div>
-        <div class="range__hyphen">-</div>
-        <div class="range__input range__input--max" data-filter="range">
-          <label for="case_max_document_date">Ending</label>
-          <input id="case_max_document_date" name="case_max_document_date" placeholder="mm/dd/yyyy" value="{{ case_max_document_date }}">
+        <div class="range range--date js-date-range">
+          <div class="range__input range__input--min" data-filter="range">
+            <label for="case_min_document_date">Beginning</label>
+            <input id="case_min_document_date" name="case_min_document_date" placeholder="mm/dd/yyyy" value="{{ case_min_document_date }}">
+          </div>
+          <div class="range__hyphen">-</div>
+          <div class="range__input range__input--max" data-filter="range">
+            <label for="case_max_document_date">Ending</label>
+            <input id="case_max_document_date" name="case_max_document_date" placeholder="mm/dd/yyyy" value="{{ case_max_document_date }}">
+          </div>
         </div>
       </div>
     </div>
-    <div class="filter">
-      <legend class="label">Case open date range</legend>
-      <div class="range range--date js-date-range">
-        <div class="range__input range__input--min" data-filter="range">
-          <label for="case_min_open_date">Beginning</label>
-          <input id="case_min_open_date" name="case_min_open_date" placeholder="mm/dd/yyyy" value="{{ case_min_open_date }}">
-        </div>
-        <div class="range__hyphen">-</div>
-        <div class="range__input range__input--max" data-filter="range">
-          <label for="case_max_open_date">Ending</label>
-          <input id="case_max_open_date" name="case_max_open_date" placeholder="mm/dd/yyyy" value="{{ case_max_open_date }}">
-        </div>
-      </div>
-    </div>
-    <div class="filter">
-      <legend class="label">Case close date range</legend>
-      <div class="range range--date js-date-range">
-        <div class="range__input range__input--min" data-filter="range">
-          <label for="case_min_close_date">Beginning</label>
-          <input id="case_min_close_date" name="case_min_close_date" placeholder="mm/dd/yyyy" value="{{ case_min_close_date }}">
-        </div>
-        <div class="range__hyphen">-</div>
-        <div class="range__input range__input--max" data-filter="range">
-          <label for="case_max_close_date">Ending</label>
-          <input id="case_max_close_date" name="case_max_close_date" placeholder="mm/dd/yyyy" value="{{ case_max_close_date }}">
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
+  {# </div> #}
+  {# <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false"> #}
+
     <button type="button" class="js-accordion-trigger accordion__button">Case details</button>
     <div class="accordion__content">
+
       {{ checkbox.checkbox_dropdown_multiple(
         'mur_disposition_category_id',
         'Final disposition',
@@ -86,25 +77,20 @@
         prefix='mur_disposition_category_id',
         show_tooltip_text='Final disposition does not search archived cases'
         ) }}
+      {{ dropdown.select_json(
+        'primary_subject_id',
+        'Case subject',
+        options=constants.primary_subject_ids,
+        default="",
+        show_tooltip_text='Case subject does not search archived cases'
+        ) }}
+      {{ dropdown.select_json_indentation(
+        'secondary_subject_id',
+        'Secondary case subject',
+        options=constants.secondary_subject_placeholder,
+        default=""
+        ) }}
 
-        {{
-          dropdown.select_json(
-              'primary_subject_id',
-              'Case subject',
-              options=constants.primary_subject_ids,
-              default="",
-              show_tooltip_text='Case subject does not search archived cases'
-
-          )
-        }}
-        {{
-          dropdown.select_json_indentation(
-            'secondary_subject_id',
-            'Secondary case subject',
-            options=constants.secondary_subject_placeholder,
-            default=""
-          )
-        }}
       <div class="filter">
         <legend class="label">Penalty amount by respondent</legend>
         <div class="range range--currency">
@@ -119,12 +105,56 @@
           </div>
         </div>
       </div>
+
+      <div class="filter">
+        <legend class="label">Case open date range</legend>
+        <div class="range range--date js-date-range">
+          <div class="range__input range__input--min" data-filter="range">
+            <label for="case_min_open_date">Beginning</label>
+            <input id="case_min_open_date" name="case_min_open_date" placeholder="mm/dd/yyyy" value="{{ case_min_open_date }}">
+          </div>
+          <div class="range__hyphen">-</div>
+          <div class="range__input range__input--max" data-filter="range">
+            <label for="case_max_open_date">Ending</label>
+            <input id="case_max_open_date" name="case_max_open_date" placeholder="mm/dd/yyyy" value="{{ case_max_open_date }}">
+          </div>
+        </div>
+      </div>
+
+      <div class="filter">
+        <legend class="label">Case close date range</legend>
+        <div class="range range--date js-date-range">
+          <div class="range__input range__input--min" data-filter="range">
+            <label for="case_min_close_date">Beginning</label>
+            <input id="case_min_close_date" name="case_min_close_date" placeholder="mm/dd/yyyy" value="{{ case_min_close_date }}">
+          </div>
+          <div class="range__hyphen">-</div>
+          <div class="range__input range__input--max" data-filter="range">
+            <label for="case_max_close_date">Ending</label>
+            <input id="case_max_close_date" name="case_max_close_date" placeholder="mm/dd/yyyy" value="{{ case_max_close_date }}">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {# </div> #}
+  {# <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="false"> #}
+    <button type="button" class="js-accordion-trigger accordion__button">Citations</button>
+
+    <div class="accordion__content">
+      <label>If more than one citation is entered:</label>
+      <input type="radio" id="case_citation_require_all_false" name="case_citation_require_all" value="false"{% if case_citation_require_all != 'true' %} checked{% endif %}>
+      <label for="case_citation_require_all_false">Show cases citing any of them</label>
+      <input type="radio" id="case_citation_require_all_true" name="case_citation_require_all" value="true"{% if case_citation_require_all == 'true' %} checked{% endif %}>
+      <label for="case_citation_require_all_true">Show cases citing all of them</label>
+      {{ typeahead.field('case_regulatory_citation', 'Regulatory citation', False, dataset='caseRegulatoryCitations', allow_text=False) }}
+      {{ typeahead.field('case_statutory_citation', 'Statutory citation', False, dataset='caseStatutoryCitations', allow_text=False) }}
+      
     </div>
   </div>
   <div class="filters__inner">
     <button type="submit" class="button button--cta u-margin--top">Apply filters</button>
   </div>
- 
 {% endblock %}
 
 {% block message %}
@@ -214,6 +244,29 @@
         {% if secondary_subject_id_name %}
           <div data-removable="true" class="tag__item">{{ secondary_subject_id_name }}<button class="button js-close tag__remove" data-tag="secondary_subject_id"><span class="u-visually-hidden">Remove</span></button></div>
         {% endif %}
+        </li>
+      {% endif %}
+      {% if case_regulatory_citation or case_statutory_citation %}
+        <li data-tag-category="case_regulatory_citation" class="tag__category">
+          {% if case_citation_require_all =='true' %}
+          <div data-removable="false" class="tag__item">Cases with all citations</div>
+          {% else %}
+          <div data-removable="false" class="tag__item">Cases with any citations</div>
+          {% endif %}
+        </li>
+      {% endif %}
+      {% if case_regulatory_citation %}
+        <li data-tag-category="case_regulatory_citation" class="tag__category">
+        {% for case_reg_citation in case_regulatory_citation %}
+          <div data-removable="true" class="tag__item">{{ case_reg_citation }}<button class="button js-close tag__remove" data-tag="case_regulatory_citation_{{ loop.index0 }}"><span class="u-visually-hidden">Remove</span></button></div>
+        {% endfor %}
+        </li>
+      {% endif %}
+      {% if case_statutory_citation %}
+        <li data-tag-category="case_statutory_citation" class="tag__category">
+        {% for case_stat_citation in case_statutory_citation %}
+          <div data-removable="true" class="tag__item">{{ case_stat_citation }}<button class="button js-close tag__remove" data-tag="case_statutory_citation_{{ loop.index0 }}"><span class="u-visually-hidden">Remove</span></button></div>
+        {% endfor %}
         </li>
       {% endif %}
     </ul>

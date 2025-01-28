@@ -32,30 +32,29 @@
     position: relative;
 
     &::before {
-      @include heading(h3);
       position: absolute;
       left: 0;
       top: 0;
       counter-increment: agenda;
       content: counters(agenda, '') '.';
+      @include heading(h3);
     }
   }
 
-  a[href$=".pdf"] {
+  a[href$='.pdf'] {
     margin-left: u(6rem);
 
     &::before {
-      @include u-icon($document, $base, 3rem, 3rem, 50%);
       background-position: 0 50%;
       content: '';
       display: inline-block;
       margin-left: u(-3rem);
       vertical-align: middle;
+      @include u-icon($document, $base, 3rem, 3rem, 50%);
     }
   }
 
-  .list--flat-bordered li{
-
+  .list--flat-bordered li {
     &::after {
       content: '';
       padding-left: 0;
@@ -63,7 +62,6 @@
       @include media($med) {
         content: '|';
         padding-left: u(1rem);
-
       }
     }
 
@@ -83,12 +81,12 @@
   margin-left: u(3rem);
 
   &::before {
-    @include u-icon($document, $base, 3rem, 3rem, 50%);
     background-position: 0 50%;
     content: '';
     display: inline-block;
     margin-left: u(-3rem);
     vertical-align: middle;
+    @include u-icon($document, $base, 3rem, 3rem, 50%);
   }
 }
 
@@ -106,9 +104,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
   }
 }
-
-
