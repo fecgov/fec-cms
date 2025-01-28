@@ -143,9 +143,9 @@
 
     <div class="accordion__content">
       <label>If more than one citation is entered:</label>
-      <input type="radio" id="case_citation_require_all_false" name="case_citation_require_all" value="false"{% if not case_citation_require_all %} checked{% endif %}>
+      <input type="radio" id="case_citation_require_all_false" name="case_citation_require_all" value="false"{% if case_citation_require_all != 'true' %} checked{% endif %}>
       <label for="case_citation_require_all_false">Show cases citing any of them</label>
-      <input type="radio" id="case_citation_require_all_true" name="case_citation_require_all" value="true"{% if case_citation_require_all %} checked{% endif %}>
+      <input type="radio" id="case_citation_require_all_true" name="case_citation_require_all" value="true"{% if case_citation_require_all == 'true' %} checked{% endif %}>
       <label for="case_citation_require_all_true">Show cases citing all of them</label>
       {{ typeahead.field('case_regulatory_citation', 'Regulatory citation', False, dataset='caseRegulatoryCitations', allow_text=False) }}
       {{ typeahead.field('case_statutory_citation', 'Statutory citation', False, dataset='caseStatutoryCitations', allow_text=False) }}
@@ -246,9 +246,13 @@
         {% endif %}
         </li>
       {% endif %}
-      {% if case_citation_require_all %}
+      {% if case_regulatory_citation or case_statutory_citation %}
         <li data-tag-category="case_regulatory_citation" class="tag__category">
-          <div data-removable="true" class="tag__item">Cases with all citations<button class="button js-close tag__remove" data-tag="case_citation_require_all"><span class="u-visually-hidden">Remove</span></button></div>
+          {% if case_citation_require_all =='true' %}
+          <div data-removable="false" class="tag__item">Cases with all citations</div>
+          {% else %}
+          <div data-removable="false" class="tag__item">Cases with any citations</div>
+          {% endif %}
         </li>
       {% endif %}
       {% if case_regulatory_citation %}
