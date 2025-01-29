@@ -856,6 +856,7 @@ class CommissionerPage(Page):
         FieldPanel('commissioner_bio'),
         FieldPanel('commissioner_email'),
         FieldPanel('commissioner_phone'),
+        FieldPanel('commissioner_bluesky'),
         FieldPanel('commissioner_twitter'),
     ]
 
