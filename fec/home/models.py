@@ -836,9 +836,11 @@ class CommissionerPage(Page):
     commissioner_phone = models.CharField(max_length=255, null=True, blank=True,
                                           verbose_name="Commissioner phone number")
     commissioner_bluesky = models.CharField(max_length=255, null=True, blank=True,
-                                            verbose_name="Commissioner Bluesky handle")
+                                            verbose_name="Commissioner Bluesky handle",
+                                            help_text='The part after https://bsky.app/profile/')
     commissioner_twitter = models.CharField(max_length=255, null=True, blank=True,
-                                            verbose_name="Commissioner X/Twitter handle")
+                                            verbose_name="Commissioner X/Twitter handle",
+                                            help_text='The part after https://x.com/')
 
     content_panels = Page.content_panels + [
         FieldPanel('first_name'),

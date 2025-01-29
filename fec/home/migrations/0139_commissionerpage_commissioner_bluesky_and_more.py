@@ -13,7 +13,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='commissionerpage',
             name='commissioner_bluesky',
-            field=models.CharField(blank=True, max_length=255, null=True, verbose_name='Commissioner Bluesky handle'),
+            field=models.CharField(blank=True, help_text='The part after https://bsky.app/profile/', max_length=255,
+                                   null=True, verbose_name='Commissioner Bluesky handle'),
         ),
         migrations.AlterField(
             model_name='commissionerpage',
@@ -28,6 +29,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='commissionerpage',
             name='commissioner_twitter',
-            field=models.CharField(blank=True, max_length=255, null=True, verbose_name='Commissioner X/Twitter handle'),
+            field=models.CharField(blank=True, help_text='The part after https://x.com/', max_length=255, null=True,
+                                   verbose_name='Commissioner X/Twitter handle'),
         ),
     ]
