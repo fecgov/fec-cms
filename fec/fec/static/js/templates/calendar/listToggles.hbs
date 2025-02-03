@@ -1,12 +1,12 @@
 <div class="toggles--simple">
   Sort by:
   <button
-    class="toggle js-toggle-view
-      {{#if (eq sortBy 'time')}}is-active{{/if}}"
-    data-trigger-view="{{ duration.intervalUnit }}Time">Date</button>
+    class="toggle js-toggle-list-sort
+      {{#if (eq listEventOrder 'monthTime')}}is-active{{/if}}"
+    data-trigger-sort="monthTime">Date</button>
   |
   <button
-    class="toggle js-toggle-view
-      {{#if (eq sortBy 'category')}}is-active{{/if}}"
-    data-trigger-view="{{ duration.intervalUnit }}Category">Category</button>
+    class="toggle js-toggle-list-sort
+      {{#if (eq listEventOrder 'monthCategory')}}is-active{{/if}}"
+    data-trigger-sort="monthCategory">Category</button>
 </div>

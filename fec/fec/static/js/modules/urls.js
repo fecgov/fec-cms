@@ -12,8 +12,9 @@ import { sanitizeQueryParams } from './helpers.js';
 /**
  * Takes a list of key/value, runs them through {@linkcode nextUrl()} and sets them to the window.history
  * then logs an analytics pageView
- * @param {Object} params - Object of key/value for query params and their values
- * @param {Array} fields - Object TODO
+ * @param {Object} params - Object of key/value for query params and their values.
+ * ex: {data_type: ['processed'], max_date: ['12/31/2000'], min_date: ['01/01/2000']}
+ * @param {Array} fields - Array of allowed filter fields. ex: ['data_type', 'committee_id', 'max_date', 'min_date']
  */
 export function updateQuery(params, fields) {
   const queryString = nextUrl(params, fields);

@@ -110,6 +110,7 @@ export default function TagList(opts) {
  * @param {boolean} [opts.range=false] - If true, will use opts.rangename over opts.name
  * @param {string} [opts.rangeName] - Used as data-tag-category="" if opts.range is true
  * @param {boolean} [opts.nonremovable=false] - determines which template to use. Default: false
+ * @param {string} [opts.value] - The text label
  */
 TagList.prototype.addTag = function(e, opts) {
   const tag = opts.nonremovable
