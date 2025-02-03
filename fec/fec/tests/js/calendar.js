@@ -29,18 +29,14 @@ describe('calendar', function() {
   });
 
   beforeEach(function() {
-    this.$fixture.empty().append(
-      '<div id="calendar"></div>' +
-      '<div id="download"></div>' +
-      '<div id="subscribe"></div>'
-    );
+    this.$fixture.empty().append('<div id="calendar"></div><div id="download"></div><div id="subscribe"></div>');
     this.calendar = new Calendar({
       selector: '#calendar',
       selector_download: '#download',
       selector_subscribe: '#subscribe',
-      url: 'http://test.calendar',
-      exportUrl: 'http://test.calendar/export',
-      subscribeUrl: 'http://test.calendar/export',
+      url_base: 'http://test.calendar',
+      url_export: 'http://test.calendar/export',
+      url_subscribe: 'http://test.calendar/export',
       filterPanel: {
         $form: { on: function() {} }, // eslint-disable-line no-empty-function
         filterSet: {
@@ -58,8 +54,8 @@ describe('calendar', function() {
 
   describe('constructor()', function() {
     it('memorizes options', function() {
-      expect(this.calendar.opts.url).to.equal('http://test.calendar');
-      expect(this.calendar.opts.exportUrl).to.equal('http://test.calendar/export');
+      expect(this.calendar.opts.url_base).to.equal('http://test.calendar');
+      expect(this.calendar.opts.url_export).to.equal('http://test.calendar/export');
     });
 
     it('finds dom nodes', function() {
@@ -209,7 +205,7 @@ describe('calendar', function() {
       this.calendar.handleEventClick({}, { target: target });
       expect(calendarTooltip.CalendarTooltip).to.have.been.called;
     });
-    
+
     it('does not make a tooltip if there is one', function() {
       var target = '<a><span class="fc-content"></span></a><div class="tooltip"></div>';
       this.calendar.handleEventClick({}, { target: target });
@@ -233,10 +229,7 @@ describe('calendar', function() {
 
 describe('calendar tooltip', function() {
   beforeEach(function() {
-    var dom =
-    '<div class="fc-event-container">' +
-      '<a class="cal-event" tabindex="0"></a>' +
-    '</div>';
+    var dom = '<div class="fc-event-container"><a class="cal-event" tabindex="0"></a></div>';
     $(document.body).append($(dom));
     var $container = $('.cal-event');
     var content = tooltipContent({});
@@ -271,9 +264,9 @@ describe('calendar tooltip', function() {
 });
 
 describe('helpers', function() {
-  describe('getGoogleUrl()', function() {
+  describe('getGoogleUrl_moment()', function() {
     it('builds the correct Google url', function() {
-      var googleUrl = calendarHelpers.getGoogleUrl({
+      var googleUrl = calendarHelpers.getGoogleUrl_moment({
         title: 'the big one',
         summary: 'vote today',
         end: moment('2016-11-01'),
@@ -290,40 +283,37 @@ describe('helpers', function() {
     });
 
     it('builds the correct subscribe url', function() {
-      var subscribeUrl = calendarHelpers.getUrl('calendar', { category: 'election' }, 'sub');
-      expect(subscribeUrl).to.equal('/v1/calendar/?api_key=67890&per_page=500&category=election');
-    
+      var url_subscribe = calendarHelpers.getUrl('calendar', { category: 'election' }, 'sub');
+      expect(url_subscribe).to.equal('/v1/calendar/?api_key=67890&per_page=500&category=election');
+
     });
 
   });
 
   describe('calendar.updateLinks()', function() {
       it('builds the correct, encoded googleSubscribe url', function() {
-      var subscribeUrl = calendarHelpers.getUrl('calendar-dates/export', { category: 'election' }, 'sub').toString();
-       var googleSubscribe =
-      'https://calendar.google.com/calendar/render?cid=' + 
-      encodeURIComponent(
-        subscribeUrl
-          .toString()
-      );  
-      expect(googleSubscribe).to.equal('https://calendar.google.com/calendar/render?cid=%2Fv1%2Fcalendar-dates%2Fexport%2F%3Fapi_key%3D67890%26per_page%3D500%26category%3Delection')
-     });
-   });
+      var url_subscribe = calendarHelpers.getUrl('calendar-dates/export', { category: 'election' }, 'sub').toString();
+      var googleSubscribe =
+        'https://calendar.google.com/calendar/render?cid=' +
+        encodeURIComponent(url_subscribe.toString());
+      expect(googleSubscribe).to.equal('https://calendar.google.com/calendar/render?cid=%2Fv1%2Fcalendar-dates%2Fexport%2F%3Fapi_key%3D67890%26per_page%3D500%26category%3Delection');
+    });
+  });
 
   describe('className()', function() {
     it('adds a multi-day class for multi-day events', function() {
-      var multiEvent = {
-        start_date: moment('2012-11-02'),
-        end_date: moment('2012-11-03')
-      };
-      var singleEvent = {
-        start_date: moment('2012-11-02'),
-        end_date: moment('2012-11-02')
-      };
+      var multiEvent = { start_date: moment('2012-11-02'), end_date: moment('2012-11-03') };
+      var singleEvent = { start_date: moment('2012-11-02'), end_date: moment('2012-11-02') };
       var multiDayClass = calendarHelpers.className(multiEvent);
       var singleDayClass = calendarHelpers.className(singleEvent);
       expect(multiDayClass).to.equal('fc-multi-day');
       expect(singleDayClass).to.not.equal('fc-multi-day');
     });
+  });
+});
+
+describe('calendar date functions', function() {
+  it('should work properly', function() {
+    expect(true).to.be(false);
   });
 });

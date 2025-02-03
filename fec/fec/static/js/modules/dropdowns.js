@@ -16,6 +16,7 @@ const defaultOpts = {
  * @constructor
  * @param {string} selector - CSS selector for the fieldset that contains everything
  * @param {Object} opts - Options
+ * @param {boolean} opts.checkboxes
  */
 export default function Dropdown(selector, opts) {
   this.opts = $.extend({}, defaultOpts, opts);
@@ -171,6 +172,12 @@ Dropdown.prototype.handleCheckboxRemoval = function($input) {
   }
 };
 
+/**
+ *
+ * @param {JQuery.Events} e
+ * @param {Object} opts
+ * @param {string} opts.key
+ */
 Dropdown.prototype.handleRemoveClick = function(e, opts) {
   let $input = $(e.target)
     .parent()

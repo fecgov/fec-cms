@@ -27,6 +27,126 @@ function dateString(dateToParse, format, adjustmentHours) {
 }
 
 /**
+ * @enum {Object} - Returns an object with settings for various datetime formats. 
+ * For dates, use .toLocaleDateString('en-US', {}), for time use .toLocaleTimeString('en-US', {});
+ * Converts all dates to U.S. Eastern (i.e. 'America/New_York')
+ * For ISO dates (i.e. 1970-01-01), use only .toISOString();
+ * @see https://moment.github.io/luxon/#/formatting?id=presets
+ */
+export const dateTimeFormatOptions = {
+  /** @example '1/1/1970' (This is the default for en-US) */
+  DATE_SHORT: {},
+
+  /** @example '01/01/1970' */
+  DATE_SHORT_01: { month: '2-digit', day: '2-digit', year: 'numeric' },
+
+  /** @example 'January 1, 1970' */
+  DATE_FULL: { month: 'long', day: 'numeric', year: 'numeric' },
+
+  /** @example 'January 01, 1970' */
+  DATE_FULL_01: { month: 'long', day: '2-digit', year: 'numeric' },
+
+  /** @example 'January 1 */
+  DATE_FULL_MONTH_DAY: { month: 'long', day: '2-digit' },
+
+  /** @example 'Wednesday' */
+  WEEKDAY_FULL: { weekday: 'long' },
+
+  /** @example '1:30 PM' */
+  TIME_SIMPLE: { hour: "numeric", minute: "2-digit" },
+
+  /** @example '13:30' */
+  TIME_24_SIMPLE: {},
+};
+
+/**
+ * @param {Object} event - {start: '', end: '', title: '', summary: ''}
+ * @param {string} event.start
+ * @param {string} [event.end]
+ * @param {string} [event.title]
+ * @param {string} [event.summary]
+ * @returns {string}
+ */
+export function getGoogleUrl(event) {
+  console.log('getGoogleUrl(event): ', event);
+  let datesString;
+
+  if (event.end) {
+    datesString = `${convertDateForGoogle(event.start, true)}/${convertDateForGoogle(event.end, true)}`;
+
+  } else {
+    const startDateObj = new Date(event.start);
+    startDateObj.setHours(startDateObj.getHours() + 24);
+    const fakeEndDate = startDateObj.toISOString();
+    const startEndComboString = `${convertDateForGoogle(event.start, false).substring(0,10)}/${convertDateForGoogle(fakeEndDate, false)}`;
+    datesString = startEndComboString;
+  }
+
+  const toReturn = 
+  URI('https://calendar.google.com/calendar/render')
+    .addQuery({
+      action: 'TEMPLATE',
+      text: event.title,
+      details: event.summary,
+      dates: datesString
+    })
+    .toString();
+
+  console.log('  toReturn: ', toReturn);
+
+  return toReturn;
+}
+
+export function getMs365Url(event) {
+  console.log('getMs365Url(event): ', event);
+  let datesString;
+
+  if (event.end) {
+    datesString = `${convertDateForGoogle(event.start, true)}/${convertDateForGoogle(event.end, true)}`;
+
+  } else {
+    const startDateObj = new Date(event.start);
+    startDateObj.setHours(startDateObj.getHours() + 24);
+    const fakeEndDate = startDateObj.toISOString();
+    const startEndComboString = `${convertDateForGoogle(event.start, false).substring(0,10)}/${convertDateForGoogle(fakeEndDate, false)}`;
+    datesString = startEndComboString;
+  }
+
+  const toReturn = 
+  URI('https://outlook.office.com/calendar/0/deeplink/compose')
+    .addQuery({
+      allday: true,
+      body: event.summary,
+      enddt: '2025-01-31',
+      location: '',
+      // path: '',
+      // rru: '',
+      startdt: '2025-01-30',
+      subject: event.title
+      // action: 'TEMPLATE',
+      // text: event.title,
+      // details: event.summary,
+      // dates: datesString
+    })
+    .toString();
+  console.log('  toReturn: ', toReturn);
+
+  return toReturn;
+}
+
+/**
+ * Takes a Date object, removes the dashes and colon
+ * @param {string} input -sdf
+ * @param {boolean} [includeTime=true] - Whether the returned string should be 200012311945 or 20001231
+ * @returns {string}
+ */
+function convertDateForGoogle(input, includeTime = true) {
+  // const passedDate = new Date(input);
+  const toReturn = input.replaceAll(/[-:.]/g, '');
+  return includeTime ? toReturn : toReturn.substring(0, 7);
+}
+
+/**
  * @param {Object} event - {start: '', end: '', title: '', summary: ''}
  * @param {Moment} [event.start]
  * @param {Moment} [event.end]
@@ -34,33 +154,20 @@ function dateString(dateToParse, format, adjustmentHours) {
  * @param {string} [event.summary]
  * @returns {string}
  */
-export function getGoogleUrl(event) {
+export function getGoogleUrl_moment(event) {
   let fmt, dates;
-  // TODO: remove this .format check after Moment has been removed
-  if (event.start.format) {
-    // If we're dealing with a Moment date (i.e. it has a .format() )
-    if (event.end) {
-      fmt = 'YYYYMMDD[T]HHmmss';
-      dates = event.start.format(fmt) + '/' + event.end.format(fmt);
-    } else {
-      fmt = 'YYYYMMDD';
-      dates =
-        event.start.format(fmt) +
-        '/' +
-        event.start
-          .clone()
-          .add(1, 'day')
-          .format(fmt);
-    }
+  if (event.end) {
+    fmt = 'YYYYMMDD[T]HHmmss';
+    dates = event.start.format(fmt) + '/' + event.end.format(fmt);
   } else {
-    // Otherwise, if we have a native date
-
-    if (event.end) {
-      dates = `${dateString(event.start, 'YYYYMMDD[T]HHmmss')}/${dateString(event.end, 'YYYYMMDD[T]HHmmss')}`;
-
-    } else {
-      dates = `${dateString(event.start, 'YYYYMMDD')}/${dateString(event.start, 'YYYYMMDD', 24)}`;
-    }
+    fmt = 'YYYYMMDD';
+    dates =
+      event.start.format(fmt) +
+      '/' +
+      event.start
+        .clone()
+        .add(1, 'day')
+        .format(fmt);
   }
   return URI('https://calendar.google.com/calendar/render')
     .addQuery({
@@ -77,7 +184,9 @@ export function getGoogleUrl(event) {
  * @param {Object} params - key-value pairs on an Object
  * @returns {string} a string like '/v1/path/?param1key=param1val&param2key=param2val'
  */
-export function calendarDownload(path, params) {
+// export function calendarDownload(path, params) {
+export function getDownloadUrl(path, params) {
+  console.log('getDownloadUrl(path, params): ', path, params);
   const url = URI(window.API_LOCATION)
     .path(Array.prototype.concat(window.API_VERSION, path || [], '').join('/'))
     .addQuery({
@@ -91,6 +200,13 @@ export function calendarDownload(path, params) {
   return URI.decode(url);
 }
 
+/**
+ * Builds a URL from the parameters provided plus API_LOCATION and API_VERSION
+ * @param {string[]} path - An array of strings to be combined to build the path. ex: ['data', 'path'] will become 'data/path'
+ * @param {Object} params - Key/value pairs to add after the ? in the full URL
+ * @param {string} [type] - Adds the public key or, if 'sub', uses the calendar public key
+ * @returns {string}
+ */
 export function getUrl(path, params, type) {
   //if 'type' arg is present and set to 'sub', use API_KEY_PUBLIC_CALENDAR as api_key, otherwise use API_KEY_PUBLIC;
   const apiKey =
