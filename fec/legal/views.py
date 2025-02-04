@@ -268,7 +268,8 @@ def legal_doc_search_ao(request):
     ao_max_issue_date = request.GET.get('ao_max_issue_date', '')
     ao_min_request_date = request.GET.get('ao_min_request_date', '')
     ao_max_request_date = request.GET.get('ao_max_request_date', '')
-    ao_entity_name = request.GET.get('ao_entity_name', '')
+    ao_commenter = request.GET.get('ao_commenter', '')
+    ao_representative = request.GET.get('ao_representative', '')
     ao_doc_category_ids = request.GET.getlist('ao_doc_category_id', [])
     ao_requestor_type_ids = request.GET.getlist('ao_requestor_type', [])
     ao_regulatory_citation = request.GET.get('ao_regulatory_citation', '')
@@ -292,7 +293,8 @@ def legal_doc_search_ao(request):
         ao_max_issue_date=ao_max_issue_date,
         ao_min_request_date=ao_min_request_date,
         ao_max_request_date=ao_max_request_date,
-        ao_entity_name=ao_entity_name,
+        ao_commenter=ao_commenter,
+        ao_representative=ao_representative,
         ao_doc_category_id=ao_doc_category_ids,
         ao_regulatory_citation=ao_regulatory_citation,
         ao_statutory_citation=ao_statutory_citation,
@@ -350,7 +352,8 @@ def legal_doc_search_ao(request):
         'ao_max_issue_date': ao_max_issue_date,
         'ao_min_request_date': ao_min_request_date,
         'ao_max_request_date': ao_max_request_date,
-        'ao_entity_name': ao_entity_name,
+        'ao_commenter': ao_commenter,
+        'ao_representative': ao_representative,
         'query': query,
         'ao_regulatory_citation': ao_regulatory_citation,
         'ao_statutory_citation': ao_statutory_citation,
