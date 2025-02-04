@@ -17,7 +17,7 @@ class AuthorSnippetView(SnippetViewSet):
     list_display = ('name', 'title', 'email')
     list_filter = ()
     search_fields = ('name', 'title', 'email')
-    add_to_admin_menu = True  # When set to false, with wagtail5 this shows under snippet menu
+    add_to_admin_menu = True  # When set to false, with wagtail this shows under snippet menu
 
 
 @hooks.register('get_updates_id(')

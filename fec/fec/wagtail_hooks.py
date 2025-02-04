@@ -133,7 +133,7 @@ def draftail_js():
     return assets[key] if key in assets else key
 
 
-@hooks.register('insert_editor_css')
+@hooks.register('insert_global_admin_css')
 def editor_css():
     return format_html(
         '<link rel="stylesheet" href="/static/css/customize-editor.css">'

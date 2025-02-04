@@ -41,7 +41,7 @@
         {% endif %}
       </div>
 
-      {% if self.commissioner_email or self.commissioner_phone or self.commissioner_twitter %}
+      {% if self.commissioner_email or self.commissioner_phone or self.commissioner_bluesky or self.commissioner_twitter %}
       <div class="t-sans t-bold t-upper">Contact</div>
 
       <ul class="list--spacious">
@@ -64,6 +64,17 @@
           <div class="contact-item__content">
             <div class="t-bold">Phone</div>
             <span class="t-block">{{ self.commissioner_phone }}</span>
+          </div>
+        </li>
+      {% endif %}
+      {% if self.commissioner_bluesky %}
+        <li>
+          <div class="contact-item__icon">
+            <img src="{% static "img/i-bluesky--primary.svg" %}" alt="Bluesky icon">
+          </div>
+          <div class="contact-item__content">
+            <div class="t-bold">Bluesky</div>
+            <span class="t-block"><a href="https://bsky.app/profile/{{ self.commissioner_bluesky }}">@{{ self.commissioner_bluesky }}</a></span>
           </div>
         </li>
       {% endif %}
