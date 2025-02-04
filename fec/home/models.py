@@ -832,9 +832,15 @@ class CommissionerPage(Page):
         ('paragraph', blocks.RichTextBlock())
     ], null=True, blank=True)
 
-    commissioner_email = models.CharField(max_length=255, blank=True)
-    commissioner_phone = models.CharField(max_length=255, null=True, blank=True)
-    commissioner_twitter = models.CharField(max_length=255, null=True, blank=True)
+    commissioner_email = models.CharField(max_length=255, blank=True, verbose_name="Commissioner email address")
+    commissioner_phone = models.CharField(max_length=255, null=True, blank=True,
+                                          verbose_name="Commissioner phone number")
+    commissioner_bluesky = models.CharField(max_length=255, null=True, blank=True,
+                                            verbose_name="Commissioner Bluesky handle",
+                                            help_text='The part after https://bsky.app/profile/')
+    commissioner_twitter = models.CharField(max_length=255, null=True, blank=True,
+                                            verbose_name="Commissioner X/Twitter handle",
+                                            help_text='The part after https://x.com/')
 
     content_panels = Page.content_panels + [
         FieldPanel('first_name'),
@@ -850,6 +856,7 @@ class CommissionerPage(Page):
         FieldPanel('commissioner_bio'),
         FieldPanel('commissioner_email'),
         FieldPanel('commissioner_phone'),
+        FieldPanel('commissioner_bluesky'),
         FieldPanel('commissioner_twitter'),
     ]
 
@@ -1425,10 +1432,10 @@ class ReportingDatesTable(Page):
                             blank=True)
 
     content_panels = Page.content_panels + [
-        FieldPanel('reporting_dates_table', help_text='Zebra-striping tip: To add additional row classes for more granular control over zebra stripes, wrap \
-                   the election name text in first column/first cell with an <election> html tag. \
-                   Put any footnote tildes at the very end. \
-                   Example (including a footnote tilde): <election class="fl1">Florida 1st Congressional District Special Primary</election> ~*'),
+        FieldPanel('reporting_dates_table', help_text='Zebra-striping tip: To add additional row classes for more \
+                   granular control over zebra stripes, wrap the election name text in first column/first cell with \
+                   an <election> html tag. Put any footnote tildes at the very end. Example (including a footnote \
+                   tilde): <election class="fl1">Florida 1st Congressional District Special Primary</election> ~*'),
         FieldPanel('footnotes'),
         FieldPanel('citations')
     ]
