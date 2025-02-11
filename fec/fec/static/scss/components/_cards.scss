@@ -219,9 +219,13 @@
   border: 2px solid transparent;
 
   .card__image__container {
-    float: none;
-    vertical-align: middle;
     @include span-columns(4, table-cell);
+
+    & { // Special one-off because putting span-columns after these breaks the cards' icons
+      display: table-cell;
+      float: none;
+      vertical-align: middle;
+    }
   }
 
   .card__image {

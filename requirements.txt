@@ -4,11 +4,11 @@ dj-database-url==0.4.2
 django-libsass==0.7
 gunicorn==22.0.0
 gevent==24.11.1
-psycopg==3.1.8
+psycopg==3.1.20
 requests==2.32.3
 urllib3==2.2.2
 whitenoise==5.2.0
-wagtail==5.2.6
+wagtail==6.3.0
 Jinja2==3.1.4
 django_jinja==2.11.0
 CacheControl==0.11.5
