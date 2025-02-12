@@ -11,28 +11,28 @@
 //
 
 .slab {
-  @include clearfix();
   padding: u(2rem 0);
+  @include clearfix;
 }
 
 // Neutral gray background with base accents and type (default)
 .slab--neutral {
-  @include u-bg--neutral();
+  @include u-bg--neutral;
 }
 
 // Primary background with primary-contrast accents and type
 .slab--primary {
-  @include u-bg--primary();
+  @include u-bg--primary;
 }
 
 // Secondary background with secondary-contrast accents and type
 .slab--secondary {
-  @include u-bg--secondary();
+  @include u-bg--secondary;
 }
 
 // Dark gray background with gray-lightest accents and type
 .slab--dark {
-  @include u-bg--dark();
+  @include u-bg--dark;
 }
 
 .slab--spacious {
@@ -54,8 +54,8 @@
   }
 
   .slab--inline .container {
-    @include span-columns(10);
     padding-left: u(2rem);
+    @include span-columns(10);
   }
 }
 

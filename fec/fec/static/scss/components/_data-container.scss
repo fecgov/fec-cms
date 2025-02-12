@@ -5,9 +5,9 @@
 //
 
 .data-container {
-  @include clearfix();
   position: relative;
   width: 100%;
+  @include clearfix;
 }
 
 .is-showing-filters {
@@ -15,14 +15,14 @@
 }
 
 .data-container__widgets {
-  @include clearfix();
   border-bottom: 2px solid $primary;
   font-family: $sans-serif;
+  @include clearfix;
 }
 
 .data-container__action {
-  @include clearfix();
   float: right;
+  @include clearfix;
 }
 
 .data-container__share {
@@ -43,9 +43,9 @@
 }
 
 .data-container__head {
-  @include clearfix();
   border-bottom: 1px solid $gray;
   padding: u(1rem);
+  @include clearfix;
 }
 
 .data-container__title {
@@ -61,8 +61,8 @@
 }
 
 .data-container__tags {
-  @include clearfix();
   padding: u(1rem);
+  @include clearfix;
 }
 
 .data-container__message {
@@ -74,9 +74,9 @@
 }
 
 .panel__controls {
-  @include clearfix();
   clear: both;
-  padding-top: u(.5rem);
+  padding-top: u(0.5rem);
+  @include clearfix;
 }
 
 // BREAKPOINT: LARGE
@@ -117,17 +117,16 @@
   }
 
   .data-container__action {
-    @include span-columns(5);
-    float: right;
+    float: right !important; // overriding span-columns()
     text-align: right;
+    @include span-columns(5, block);
   }
 
   .data-container__share {
-    @include u-icon-button($share, right);
-    padding-left: u(2rem);
     text-indent: 0;
     width: auto;
     margin-right: u(1rem);
+    @include u-icon-button($share, right, 1.5rem, padding-left u(2rem));
   }
 
   .data-container__export {
@@ -170,15 +169,14 @@
   }
 }
 
-
-//Responsive behavior for datatables in tab pannels on profile pages (committee, candidate, election)
+//Responsive behavior for datatables in tab panels on profile pages (committee, candidate, election)
 @media screen and (max-width: 940px) {
   .data-container__wrapper .main__content--right-full {
-    display: block
-   }
+    display: block;
+  }
 
   .data-container__wrapper .side-nav-alt {
     display: block;
-    width:auto;
+    width: auto;
   }
 }
