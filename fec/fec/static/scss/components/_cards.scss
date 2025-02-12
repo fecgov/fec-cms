@@ -7,18 +7,18 @@
 
 // Base style
 .card {
-  @include clearfix();
   background-color: $neutral;
   border-radius: 4px;
   font-size: u(1.6rem);
   padding: u(2rem);
   text-align: center;
   width: 100%;
+  @include clearfix;
 }
 
 .card--secondary-contrast {
-  @include u-font-color($inverse);
   background-color: $bright-red;
+  @include u-font-color($inverse);
 }
 
 .card--neutral-base {
@@ -26,8 +26,9 @@
   @include u-font-color($base);
 
   .card__image__container {
-    @include clearfix();
-    /*background-color: $primary;*/
+    @include clearfix;
+
+    /* background-color: $primary; */
   }
   .card__icon {
     &.i-election {
@@ -75,8 +76,7 @@
   text-align: left;
 
   .card__image {
-    @include span-columns(1 of 3);
-    display: table-cell;
+    @include span-columns(1 of 3, table-cell);
   }
 
   .card__image__container {
@@ -111,7 +111,7 @@
     font-family: $sans-serif;
     font-weight: normal;
     line-height: 1.2;
-    letter-spacing: -.3px;
+    letter-spacing: -0.3px;
     clear: both;
   }
 
@@ -141,11 +141,11 @@
   text-align: left;
 
   .card__image__container {
-    @include clearfix();
     background-color: $primary;
     border-radius: 4px 4px 0 0;
     padding: u(1rem);
     text-align: center;
+    @include clearfix;
 
     .card__title {
       float: left;
@@ -183,11 +183,10 @@
   }
 
   @include media($lg) {
-
     .card__image__container {
-      @include span-columns(2 of 6);
       border-radius: 4px 0 0 4px;
       padding: u(3rem);
+      @include span-columns(2 of 6);
 
       .card__title {
         display: none;
@@ -196,8 +195,8 @@
     }
 
     .card__content {
-      @include span-columns(4 of 6);
       padding-left: 0;
+      @include span-columns(4 of 6);
 
       .card__title {
         display: block;
@@ -220,10 +219,13 @@
   border: 2px solid transparent;
 
   .card__image__container {
-    @include span-columns(4);
-    display: table-cell;
-    float: none;
-    vertical-align: middle;
+    @include span-columns(4, table-cell);
+
+    & { // Special one-off because putting span-columns after these breaks the cards' icons
+      display: table-cell;
+      float: none;
+      vertical-align: middle;
+    }
   }
 
   .card__image {
@@ -261,7 +263,6 @@
   &:focus {
     border: 2px solid $focus;
   }
-
 }
 
 // Stacked cards, when there's more than one in a vertical column
@@ -272,7 +273,7 @@
 
 // For lists of links, such as on data landing page cards
 .card__links {
-  letter-spacing: -.3px;
+  letter-spacing: -0.3px;
   font-family: $sans-serif;
   font-weight: normal;
   margin-bottom: u(2rem);
@@ -313,10 +314,11 @@
 }
 
 .card--primary {
-  @include u-bg--primary();
-  @include u-font-color($gray-lightest);
-  font-weight: bold;
   border: 2px solid transparent;
+  font-weight: bold;
+
+  @include u-bg--primary;
+  @include u-font-color($gray-lightest);
 
   &:hover {
     background-color: $navy;
@@ -329,9 +331,9 @@
 
   .card__icon {
     &.i-candidate {
-      @include u-icon-bg($candidate, $primary-contrast);
       background-position: 60% 50%;
       background-size: 40%;
+      @include u-icon-bg($candidate, $primary-contrast);
     }
 
     &.i-committee {
@@ -375,8 +377,8 @@
     }
 
     &.i-external {
-      @include u-icon-bg($share, $primary-contrast);
       background-size: 45%;
+      @include u-icon-bg($share, $primary-contrast);
     }
 
     &.i-filings {
@@ -388,13 +390,13 @@
     }
 
     &.i-loans {
-      @include u-icon-bg($hand-money, $primary-contrast);
       background-size: 70%;
+      @include u-icon-bg($hand-money, $primary-contrast);
     }
 
     &.i-mallet {
-      @include u-icon-bg($mallet, $primary-contrast);
       background-size: 75%;
+      @include u-icon-bg($mallet, $primary-contrast);
     }
 
     &.i-committee-audit {
@@ -402,18 +404,18 @@
     }
 
     &.i-shield {
-      @include u-icon-bg($shield, $primary-contrast);
       background-size: 75%;
+      @include u-icon-bg($shield, $primary-contrast);
     }
 
     &.i-shield-scales {
-      @include u-icon-bg($shield-scales, $primary-contrast);
       background-size: 60%;
+      @include u-icon-bg($shield-scales, $primary-contrast);
     }
 
     &.i-exclamation-bubble {
-      @include u-icon-bg($exclamation-bubble, $primary-contrast);
       background-size: 60%;
+      @include u-icon-bg($exclamation-bubble, $primary-contrast);
     }
 
     // In fec/fec/static/scss/_icon-variables.scss, $shield-star is empty.
@@ -424,33 +426,33 @@
     // }
 
     &.i-arrow-target {
-      @include u-icon-bg($arrow-target, $primary-contrast);
       background-size: 70%;
+      @include u-icon-bg($arrow-target, $primary-contrast);
     }
 
     &.i-org-chart {
-      @include u-icon-bg($org-chart, $primary-contrast);
       background-size: 75%;
+      @include u-icon-bg($org-chart, $primary-contrast);
     }
 
     &.i-clipboard-checklist {
-      @include u-icon-bg($clipboard-checklist, $primary-contrast);
       background-size: 60%;
+      @include u-icon-bg($clipboard-checklist, $primary-contrast);
     }
 
     &.i-magnifying-glass {
-      @include u-icon-bg($magnifying-glass, $primary-contrast);
       background-size: 60%;
+      @include u-icon-bg($magnifying-glass, $primary-contrast);
     }
 
     &.i-decree {
-      @include u-icon-bg($decree, $primary-contrast);
       background-size: 65%;
+      @include u-icon-bg($decree, $primary-contrast);
     }
 
     &.i-direction-sign {
-      @include u-icon-bg($direction-sign, $primary-contrast);
       background-size: 75%;
+      @include u-icon-bg($direction-sign, $primary-contrast);
     }
 
     &.i-scale {
@@ -458,32 +460,33 @@
     }
 
     &.i-usc {
-      @include u-icon-bg($usc, $primary-contrast);
       background-size: 70%;
+      @include u-icon-bg($usc, $primary-contrast);
     }
 
     &.i-cfr {
-      @include u-icon-bg($cfr, $primary-contrast);
       background-size: 70%;
+      @include u-icon-bg($cfr, $primary-contrast);
     }
 
     &.i-compass {
-      @include u-icon-bg($compass, $primary-contrast);
       background-size: 65%;
+      @include u-icon-bg($compass, $primary-contrast);
     }
 
     &.i-checklist-2 {
-      @include u-icon-bg($checklist-2, $primary-contrast);
       background-size: 65%;
+      @include u-icon-bg($checklist-2, $primary-contrast);
     }
   }
 }
 
 .card--secondary {
-  @include u-bg--secondary();
-  @include u-font-color($gray-lightest);
-  font-weight: bold;
   border: 2px solid transparent;
+  font-weight: bold;
+
+  @include u-bg--secondary;
+  @include u-font-color($gray-lightest);
 
   &:hover {
     background-color: $deep-red;
@@ -496,46 +499,47 @@
 
   .card__icon {
     &.i-calendar {
-      @include u-icon-bg($calendar, $secondary-contrast);
       background-position: 50% 50%;
       background-size: 60%;
+      @include u-icon-bg($calendar, $secondary-contrast);
     }
 
     &.i-document {
-      @include u-icon-bg($document, $secondary-contrast);
       background-position: 50% 50%;
       background-size: 50%;
+      @include u-icon-bg($document, $secondary-contrast);
     }
 
     &.i-training {
-      @include u-icon-bg($training, $secondary-contrast);
       background-size: 60%;
+      @include u-icon-bg($training, $secondary-contrast);
     }
 
     &.i-data-flag {
-      @include u-icon-bg($data-flag, $secondary-contrast);
       background-size: 60%;
+      @include u-icon-bg($data-flag, $secondary-contrast);
     }
 
     &.i-updates {
-      @include u-icon-bg($updates, $secondary-contrast);
       background-size: 60%;
+      @include u-icon-bg($updates, $secondary-contrast);
     }
 
     &.i-question-bubble {
-      @include u-icon-bg($question-bubble, $secondary-contrast);
       background-size: 80%;
+      @include u-icon-bg($question-bubble, $secondary-contrast);
     }
 
     &.i-notebook {
-      @include u-icon-bg($notebook, $secondary-contrast);
       background-size: 50%;
+      @include u-icon-bg($notebook, $secondary-contrast);
     }
   }
 }
 
 .card--neutral {
   background-color: $neutral;
+
   @include u-font-color($base);
 
   a {
@@ -543,21 +547,20 @@
   }
 
   .card__image__container {
-    @include clearfix();
     display: inline-block;
+    @include clearfix;
   }
   .card__icon {
-      height: 5.8rem;
-      width: 5.8rem;
+    height: 5.8rem;
+    width: 5.8rem;
 
     &.i-graph-horizontal-ordered {
-      @include u-icon-bg($graph-horizontal-ordered, $inverse);
       background-color: $primary;
       background-size: 50%;
+      @include u-icon-bg($graph-horizontal-ordered, $inverse);
     }
   }
 }
-
 
 // Major cards
 // Style used when the cards are the primary feature of a layout,
@@ -569,7 +572,7 @@
   display: block;
   padding: u(2rem 1.5rem);
   position: relative;
-  transition: border-top-color .2s ease-out;
+  transition: border-top-color 0.2s ease-out;
 
   @include media($med) {
     min-height: u(20rem);
