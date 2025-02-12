@@ -279,6 +279,9 @@ LegalSearchAo.prototype.getResults = function(e) {
   // Set the sort param value according to this.sortOrder
   serializedFilters.sort = this.sortOrder == 'asc' ? 'ao_no' : '-ao_no';
 
+  // If we're getting new results, let's reset the page offset (go back to page 1)
+  serializedFilters['offset'] = 0;
+
   // Then update the URL with currently params
   updateQuery(serializedFilters, filterFields);
 
@@ -295,7 +298,23 @@ LegalSearchAo.prototype.getResults = function(e) {
       delete fetchParams[param];
 
     if (param == 'search') {
-      fetchParams['q'] = fetchParams['search'];
+      // We need to divide any 'search' value into q and q_exclude, split on ` -`
+      const qStrings = [];
+      const qExcludeStrings = [];
+      if (fetchParams['search'].indexOf(' -') >= 0) {
+        const allTerms = fetchParams['search'].split(' ');
+        allTerms.forEach(term => {
+          if (term.startsWith('-'))
+            qExcludeStrings.push(term.substring(1));
+          else qStrings.push(term);
+        });
+        if (qStrings.length > 0)
+          fetchParams['q'] = qStrings.join(' ');
+        if (qExcludeStrings.length > 0)
+          fetchParams['q_exclude'] = qExcludeStrings.join(' ');
+      } else
+        fetchParams['q'] = fetchParams['search'];
+
       delete fetchParams['search'];
     }
   }
@@ -604,7 +623,7 @@ LegalSearchAo.prototype.updatePagination = function(resultsCount) {
   if (totalNumberOfPages <= maxButtonsOnScreen) {
     // Yay! We can just use every button
     for (let i = 0; i < totalNumberOfPages; i++) {
-      pageNumbers.push(i + 1);
+      pageNumbers.push(i);
     }
   } else {
     const buttonsBeforeCurrent = Math.floor(maxButtonsOnScreen / 2);

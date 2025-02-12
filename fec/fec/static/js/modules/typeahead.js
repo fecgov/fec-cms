@@ -76,11 +76,18 @@ function getUrl_names(resource) {
 }
 
 function getUrl_legal(resource) {
+  // Which parameters do we know we're going to query?
+  const queryParams = {
+    api_key: window.API_KEY_PUBLIC
+  };
+
+  // If there's a doc_type, let's add that to the query
+  const docTypeInput = document.querySelector('input[name="doc_type"]');
+  if (docTypeInput && docTypeInput.value != '') queryParams.doc_type = docTypeInput.value;
+
   return URI(window.API_LOCATION)
     .path([window.API_VERSION, 'legal', resource, encodeURIComponent('%QUERY')].join('/'))
-    .query({
-      api_key: window.API_KEY_PUBLIC
-    })
+    .query(queryParams)
     .readable();
 }
 
@@ -342,6 +349,42 @@ const aoStatutoryCitationDataset = {
   }
 };
 
+const caseRegulatoryCitationDataset = {
+  name: 'caseRegulatoryCitation',
+  display: 'name',
+  limit: 10,
+  source: citationRegulationEngine,
+  templates: {
+    header: '<span class="tt-suggestion__header">Select a citation:</span>',
+    pending:
+      '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
+    notFound: compileHBS(''), // This has to be empty to not show anything
+    suggestion: function(datum) {
+      return (
+        '<span>' + datum.name + '</span>'
+      );
+    }
+  }
+};
+
+const caseStatutoryCitationDataset = {
+  name: 'caseStatutoryCitation',
+  display: 'name',
+  limit: 10,
+  source: citationStatuteEngine,
+  templates: {
+    header: '<span class="tt-suggestion__header">Select a citation:</span>',
+    pending:
+      '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
+    notFound: compileHBS(''), // This has to be empty to not show anything
+    suggestion: function(datum) {
+      return (
+        '<span>' + datum.name + '</span>'
+      );
+    }
+  }
+};
+
 export const datasets = {
   candidates: candidateDataset,
   committees: committeeDataset,
@@ -350,6 +393,8 @@ export const datasets = {
   regulations: regulationDataset,
   aoRegulatoryCitations: aoRegulatoryCitationDataset,
   aoStatutoryCitations: aoStatutoryCitationDataset,
+  caseRegulatoryCitations: caseRegulatoryCitationDataset,
+  caseStatutoryCitations: caseStatutoryCitationDataset,
   allData: [candidateDataset, committeeDataset],
   all: [candidateDataset, committeeDataset, individualDataset, siteDataset, legalDataset]
 };
