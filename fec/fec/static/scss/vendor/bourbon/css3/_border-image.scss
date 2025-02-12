@@ -10,44 +10,36 @@
     @if $border-type == string or list {
       $border-str: if($border-type == list, nth($border, 1), $border);
 
-      $url-str:       str-slice($border-str, 0, 3);
+      $url-str: str-slice($border-str, 0, 3);
       $gradient-type: str-slice($border-str, 0, 6);
 
-      @if $url-str == "url" {
+      @if $url-str == 'url' {
         $webkit-border: $border;
-        $spec-border:   $border;
-      }
-
-      @else if $gradient-type == "linear" {
-        $gradients: _linear-gradient-parser("#{$border}");
+        $spec-border: $border;
+      } @else if $gradient-type == 'linear' {
+        $gradients: _linear-gradient-parser('#{$border}');
         $webkit-border: map-get($gradients, webkit-image);
-        $spec-border:   map-get($gradients, spec-image);
-      }
-
-      @else if $gradient-type == "radial" {
-        $gradients: _radial-gradient-parser("#{$border}");
+        $spec-border: map-get($gradients, spec-image);
+      } @else if $gradient-type == 'radial' {
+        $gradients: _radial-gradient-parser('#{$border}');
         $webkit-border: map-get($gradients, webkit-image);
-        $spec-border:   map-get($gradients, spec-image);
-      }
-
-      @else {
+        $spec-border: map-get($gradients, spec-image);
+      } @else {
         $webkit-border: $border;
-        $spec-border:   $border;
+        $spec-border: $border;
       }
-    }
-
-    @else {
+    } @else {
       $webkit-border: $border;
-      $spec-border:   $border;
+      $spec-border: $border;
     }
 
     $webkit-borders: append($webkit-borders, $webkit-border, comma);
-    $spec-borders:   append($spec-borders,   $spec-border,   comma);
+    $spec-borders: append($spec-borders, $spec-border, comma);
   }
 
   -webkit-border-image: $webkit-borders;
-          border-image: $spec-borders;
-          border-style: solid;
+  border-image: $spec-borders;
+  border-style: solid;
 }
 
 //Examples:
