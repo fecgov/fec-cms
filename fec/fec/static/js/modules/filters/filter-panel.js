@@ -2,7 +2,7 @@ import { default as FilterSet } from './filter-set.js';
 import { removeTabindex, restoreTabindex } from '../accessibility.js';
 import { BREAKPOINTS, getWindowWidth, isLargeScreen } from '../helpers.js';
 
-/** @enum */
+/** @enum {string} */
 const defaultOptions = {
   body: '.filters',
   content: '.filters__content',

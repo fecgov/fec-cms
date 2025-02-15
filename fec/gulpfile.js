@@ -29,7 +29,7 @@ gulp.task('_css-compile', function() {
     gulp
       .src('./fec/static/scss/*.scss')
       // compiles sass
-      .pipe(sass().on('error', sass.logError))
+      .pipe(sass.sync().on('error', sass.logError))
       // minifies css
       .pipe(csso())
       // sourcemaps for local to back-trace source of scss
@@ -82,7 +82,7 @@ gulp.task('_widgets-compile-sass', function() {
     gulp
       .src('./fec/static/scss/widgets/*.scss')
       // compiles sass
-      .pipe(sass().on('error', sass.logError))
+      .pipe(sass.sync().on('error', sass.logError))
       // minifies css
       .pipe(csso())
       // sourcemaps for local to back-trace source of scss

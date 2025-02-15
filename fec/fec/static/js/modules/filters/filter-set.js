@@ -27,7 +27,7 @@ export default function FilterSet(elm) {
   this.$body.on('filters:validation', this.handleValidation.bind(this));
   this.efiling = this.$body.data('efiling-filters') || false;
 
-  /** Array of names of filter/API var name IDs {@example ['committee_id', 'form_line_number']} */
+  /** Array of names of filter/API var name IDs ex. ['committee_id', 'form_line_number'] */
   this.fields = [];
   this.isValid = true;
   this.firstLoad = true;

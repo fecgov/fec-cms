@@ -564,6 +564,7 @@ ElectionSearch.prototype.formatName = function(result) {
 /**
  * Get the date of the general election for a two-year period
  * @param {Object} result
+ * @param {number} result.cycle
  * @returns {string} - In the `MMMM Do, YYYY` format
  * (i.e. Full month name + ordinal date + four-digit year e.g. August 8th 2008)
  */

@@ -9,7 +9,7 @@
     {% include 'partials/meta-tags-preconnects.html' %}
     {% endif %}
 
-    <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | FEC {% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
+    <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }} | FEC{% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
 
     {% if not request.is_preview %}{% include 'partials/google-tag-manager-script.html' %}{% endif %}
 
