@@ -1,37 +1,82 @@
+{% import 'macros/filters/dropdown-json.jinja' as dropdown %}
 <div class="js-keyword-modal modal" id="keyword-modal" aria-hidden="true">
   <div tabindex="-1" class="modal__overlay" data-a11y-dialog-hide></div>
   <div role="dialog" class="modal__content" aria-labelledby="spending-modal-title">
     <div role="document" class="keyword-modal">
-      <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide title="Close this dialog window"></button>
       <h2 id="spending-modal-title" class="heading--section">Find documents with...</h2>
-      <div class="row u-padding--top">
-        <form class="modal__form" action="">
-          <p>Use these search boxes to refine your search. Only words with letters, numbers, spaces, and hyphens (such as in-kind) are accepted:</p>
+      <div class="modal__form  search-controls__either" style="width:44% !important">
+        <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide
+          title="Close this dialog window"></button>
+        <form action="">
+          <p>Use these search boxes to refine your search. Only words with letters, numbers, spaces, and hyphens (such
+            as in-kind) are accepted:
+          </p>
           <div class="filter">
             <label class="label" for="keywords-any">Any of these words</label>
             <input type="text" id="keywords-any" data-operator="or">
-            <span class="t-note t-sans">Entering <span class="t-underline">text message</span> will search <span class="t-underline">text</span> or <span class="t-underline">message</span></span>
+            <span class="t-note t-sans">Entering <span class="t-underline">text message</span> will search <span
+              class="t-underline">text</span> or <span class="t-underline">message</span></span>
           </div>
           <div class="filter">
             <label class="label" for="keywords-all">All of these words</label>
             <input type="text" id="keywords-all" data-operator="and">
-            <span class="t-note t-sans">Entering <span class="t-underline">text message</span> will search <span class="t-underline">text</span> and <span class="t-underline">message</span></span>
+            <span class="t-note t-sans">Entering <span class="t-underline">text message</span> will search <span
+              class="t-underline">text</span> and <span class="t-underline">message</span></span>
           </div>
           <div class="filter">
             <label class="label" for="keywords-exact">This exact phrase</label>
             <input type="text" id="keywords-exact" data-operator="exact">
-            <span class="t-note t-sans">Entering <span class="t-underline">text message</span> will search <span class="t-underline">"text message"</span></span>
+            <span class="t-note t-sans">Entering <span class="t-underline">text message</span> will search <span
+              class="t-underline">"text message"</span></span>
           </div>
           <div class="filter">
             <label class="label" for="keywords-none">None of these words</label>
             <input type="text" id="keywords-none" data-operator="exclude">
-            <span class="t-note t-sans">Entering <span class="t-underline">text message</span> will exclude <span class="t-underline">text</span> and <span class="t-underline">message</span></span>
-            <div>
-              <button class="u-margin--top button button--cta button--search--text" type="submit">Search</button>
-            </div>
-          </div>
-        </form>
+            <span class="t-note t-sans">Entering <span class="t-underline">text message</span> will exclude <span
+              class="t-underline">text</span> and <span class="t-underline">message</span></span>
+          <div>
+        </div>
+        </div>
       </div>
+      <div class="search-controls__or search-controls__or--vertical">or</div>
+      <div class="modal__form  search-controls__either" style="width:44% !important">
+      
+      <p>Use these search boxes to refine your search. Only words with letters, numbers, spaces, and hyphens (such as
+      in-kind) are accepted:</p>
+      <div class="filter">
+      <div class="q-proximity-fields">
+      <label class="label" for="q_proximity">Primary keyword or phrase</label>
+      <input type="text" id="q_proximity" name="q_proximity" required data-operator="and">
+      </div>
+      <button class="u-margin--top button button--add" type="button" id="js-add-input">&nbsp;&nbsp;Add another</button>
+      </div>
+      <div class="filter">
+      <label class="label" for="max_gaps">Maximum proximity between all keywords or phrases</label>
+      <input type="text" id="max_gaps" name="max_gaps" required data-operator="and">
+      <span class="t-note t-sans">Example: 0, 3, 50, 400</span>
+      </div>
+ 
+
+
+   <div class="fiter range">
+            <div class="range__input range__input--min js-filter" data-filter="range" style="width: 63%; vertical-align: baseline;">
+                <label class="label" for="proximity_filter_term">Secondary keyword or phrase (optional)</label>
+                <input id="proximity_filter_term" type="text" name="proximity_filter_term" data-range="min" data-prefix="$" data-suffix="or more" tabindex="0">
+            </div>
+            
+            <div class="range__input range__input--max js-filter" data-filter="range" style=" width: 35%; vertical-align: baseline;">
+      <label class="label" for="proximity_filter">Appears</label>
+
+      {{ dropdown.select_single_flat_list( 'proximity_filter', '', label_help='false', options={'after':'After all primary terms','before':'Before all primary terms'}) }}
+            </div>
+        
+   </div>
+      
+
+
+      </div>
+      <button class="u-margin--top button button--cta button--search--text" type="submit">Search</button>
+      </form>
     </div>
   </div>
 </div>

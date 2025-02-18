@@ -275,6 +275,12 @@ def legal_doc_search_ao(request):
     ao_statutory_citation = request.GET.get('ao_statutory_citation', '')
     ao_citation_require_all = request.GET.get('ao_citation_require_all', '')
 
+    q_proximitys = request.GET.getlist('q_proximity', '')
+    max_gaps = request.GET.get('max_gaps', '')
+    proximity_filter_term = request.GET.get('proximity_filter_term', '')
+    proximity_filter = request.GET.get('proximity_filter', '')
+
+
     query, query_exclude = parse_query(original_query)
 
     # Call the function and unpack its return values
@@ -297,6 +303,11 @@ def legal_doc_search_ao(request):
         ao_regulatory_citation=ao_regulatory_citation,
         ao_statutory_citation=ao_statutory_citation,
         ao_citation_require_all=ao_citation_require_all,
+
+        q_proximity = q_proximitys,
+        max_gaps = max_gaps,
+        proximity_filter_term = proximity_filter_term,
+        proximity_filter = proximity_filter,
     )
 
     # Define AO document categories dictionary
@@ -362,6 +373,11 @@ def legal_doc_search_ao(request):
         'selected_ao_requestor_type_ids': ao_requestor_type_ids,
         'selected_ao_requestor_type_names': ao_requestor_type_names,
         'is_loading': True,  # Indicate that the page is loading initially
+        'q_proximitys': q_proximitys,
+        'max_gaps': max_gaps,
+        'proximity_filter_term':proximity_filter_term,
+        'proximity_filter': proximity_filter,
+        
     })
 
 
@@ -387,6 +403,11 @@ def legal_doc_search_mur(request):
     case_statutory_citation = request.GET.getlist('case_statutory_citation', [])
     primary_subject_id = request.GET.get('primary_subject_id', '')
     secondary_subject_id = request.GET.get('secondary_subject_id', '')
+
+    q_proximitys = request.GET.getlist('q_proximity', '')
+    max_gaps = request.GET.get('max_gaps', '')
+    proximity_filter_term = request.GET.get('proximity_filter_term', '')
+    proximity_filter = request.GET.get('proximity_filter', '')
 
     query, query_exclude = parse_query(original_query)
 
@@ -421,6 +442,11 @@ def legal_doc_search_mur(request):
         mur_disposition_category_id=mur_disposition_category_ids,
         primary_subject_id=primary_subject_id,
         secondary_subject_id=secondary_subject_id,
+
+        q_proximity = q_proximitys,
+        max_gaps = max_gaps,
+        proximity_filter_term = proximity_filter_term,
+        proximity_filter = proximity_filter,
     )
 
     # Define MUR document categories dictionary
@@ -515,6 +541,11 @@ def legal_doc_search_mur(request):
         'case_citation_require_all': case_citation_require_all,
         'case_regulatory_citation': case_regulatory_citation,
         'case_statutory_citation': case_statutory_citation,
+        'q_proximitys': q_proximitys,
+        'max_gaps': max_gaps,
+        'proximity_filter_term':proximity_filter_term,
+        'proximity_filter': proximity_filter,
+        
     })
 
 
@@ -535,6 +566,11 @@ def legal_doc_search_adr(request):
     case_max_close_date = request.GET.get('case_max_close_date', '')
     case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
 
+    q_proximitys = request.GET.getlist('q_proximity', '')
+    max_gaps = request.GET.get('max_gaps', '')
+    proximity_filter_term = request.GET.get('proximity_filter_term', '')
+    proximity_filter = request.GET.get('proximity_filter', '')
+
     query, query_exclude = parse_query(original_query)
 
     results = api_caller.load_legal_search_results(
@@ -554,6 +590,11 @@ def legal_doc_search_adr(request):
         case_min_close_date=case_min_close_date,
         case_max_close_date=case_max_close_date,
         case_doc_category_id=case_doc_category_ids,
+        
+        q_proximity = q_proximitys,
+        max_gaps = max_gaps,
+        proximity_filter_term = proximity_filter_term,
+        proximity_filter = proximity_filter,
     )
 
     # Define ADR document categories dictionary
@@ -596,6 +637,10 @@ def legal_doc_search_adr(request):
         'selected_doc_category_ids': case_doc_category_ids,
         'selected_doc_category_names': adr_document_category_names,
         'is_loading': True,  # Indicate that the page is loading initially
+        'q_proximitys': q_proximitys,
+        'max_gaps': max_gaps,
+        'proximity_filter_term':proximity_filter_term,
+        'proximity_filter': proximity_filter,
     })
 
 
@@ -610,6 +655,12 @@ def legal_doc_search_af(request):
     case_max_penalty_amount = request.GET.get('case_max_penalty_amount', '')
     case_min_document_date = request.GET.get('case_min_document_date', '')
     case_max_document_date = request.GET.get('case_max_document_date', '')
+
+    q_proximitys = request.GET.getlist('q_proximity', '')
+    max_gaps = request.GET.get('max_gaps', '')
+    proximity_filter_term = request.GET.get('proximity_filter_term', '')
+    proximity_filter = request.GET.get('proximity_filter', '')
+
     query, query_exclude = parse_query(original_query)
 
     results = api_caller.load_legal_search_results(
@@ -624,6 +675,11 @@ def legal_doc_search_af(request):
         case_max_penalty_amount=case_max_penalty_amount,
         case_min_document_date=case_min_document_date,
         case_max_document_date=case_max_document_date,
+
+        q_proximity = q_proximitys,
+        max_gaps = max_gaps,
+        proximity_filter_term = proximity_filter_term,
+        proximity_filter = proximity_filter,
     )
 
     return render(request, 'legal-search-results-afs.jinja', {
@@ -639,6 +695,11 @@ def legal_doc_search_af(request):
         'query': original_query,
         'social_image_identifier': 'legal',
         'is_loading': True,  # Indicate that the page is loading initially
+
+        'q_proximitys': q_proximitys,
+        'max_gaps': max_gaps,
+        'proximity_filter_term':proximity_filter_term,
+        'proximity_filter': proximity_filter,
     })
 
 
@@ -685,8 +746,21 @@ def legal_doc_search_statutes(request):
     query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
 
-    results = api_caller.load_legal_search_results(query, '', 'statutes',
-                                                   offset=offset)
+    q_proximitys = request.GET.getlist('q_proximity', '')
+    max_gaps = request.GET.get('max_gaps', '')
+    proximity_filter_term = request.GET.get('proximity_filter_term', '')
+    proximity_filter = request.GET.get('proximity_filter', '')
+
+    results = api_caller.load_legal_search_results(
+        query, '', 
+       'statutes',
+        offset=offset,
+        q_proximity = q_proximitys,
+        max_gaps = max_gaps,
+        proximity_filter_term = proximity_filter_term,
+        proximity_filter = proximity_filter,
+        
+        )
 
     return render(request, 'legal-search-results-statutes.jinja', {
         'parent': 'legal',
@@ -694,6 +768,11 @@ def legal_doc_search_statutes(request):
         'result_type': 'statutes',
         'query': query,
         'social_image_identifier': 'legal',
+
+        'q_proximitys': q_proximitys,
+        'max_gaps': max_gaps,
+        'proximity_filter_term':proximity_filter_term,
+        'proximity_filter': proximity_filter,
     })
 
 

@@ -564,3 +564,17 @@
     @include u-icon-bg($minus-circle, $primary);
   }
 }
+
+.button--add {
+  
+  background-size: u(2rem);
+  /*background-position: 95% 50%;*/
+  margin: -21px 0 -1px;
+  background-color: $gray-light;
+  background-position: 2px 5px;
+  font-size: u(1.4rem);
+  font-weight: bold;
+  letter-spacing: -0.3px;
+  @include u-icon-bg($plus,$neutral-contrast );
+
+}
