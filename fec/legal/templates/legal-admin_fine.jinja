@@ -79,7 +79,7 @@
               {% for item in admin_fine.disposition_items[item] %}
                 <tr class="{{ itemloop.cycle('row-color-normal', 'row-color-contrast') }}">
                   <td>{{ item.disposition_description | replace('RTB', 'Reason to believe')}}</td>
-                  <td>{{ item.amount  | currency or 'Not applicable' }}</td>
+                  <td>{{ item.penalty  | currency or 'Not applicable' }}</td>
                   <td>{{ item.disposition_date | date(fmt='%m/%d/%Y') }}</td>
                 </tr>
               {% endfor %}
