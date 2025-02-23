@@ -14,6 +14,10 @@
   padding: u(5rem 2rem 2rem 2rem);
   @include clearfix;
 
+  .message--white {
+    background-color: #fff
+  }
+
   p:last-child {
     margin-bottom: 0;
   }
