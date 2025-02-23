@@ -3,38 +3,12 @@
 // Styles for the Calendar page, which uses fullcalendar
 //
 
-.fc-view-container {
-  font-family: $sans-serif;
-  padding: u(0 2rem 2rem 2rem);
-}
-
-.fc-bg {
-  z-index: -1;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-
-  .fc-day {
-    font-weight: bold;
-    padding: u(0.7rem 1rem 0 2rem);
-  }
-}
-
-.fc-row {
-  position: relative;
-}
-
-// Controls
-.fc-toolbar {
-  padding: u(1rem);
-  @include clearfix;
-}
-
+// Before the calendar starts 
 .calendar__head {
   border-bottom: 1px solid $neutral;
   padding: u(1rem);
-  @include clearfix;
+
+  // @include clearfix();
 
   .data-container__action {
     margin-top: u(1rem);
@@ -48,200 +22,489 @@
   }
 }
 
-.fc-view-controls {
-  padding: u(2rem);
-  width: 100%;
-  @include clearfix;
+
+// Header toolbar (prev, next, This Month, Sort by, List, Grid)
+.fc-header-toolbar {
+  font-family: $sans-serif;
+  padding: 1rem;
+  // @include clearfix();
 }
-
-.fc-left {
-  float: left;
-
-  .fc-button-group {
-    float: left;
-    margin-right: u(1rem);
-  }
-
-  .fc-today-button {
-    margin-left: u(1rem);
-  }
-
+.fc-toolbar-start {
   .fc-prev-button,
   .fc-next-button {
+    background-position: center;
     margin-right: 1px;
+    padding: u(.8rem 1rem);
     text-indent: -9999px;
-    padding: u(0.8rem 1rem);
+    @extend .button--standard;
 
     &::after {
-      left: u(0.5rem);
-      right: u(0.5rem);
+      left: u(.5rem);
+      right: u(.5rem);
+    }
+  }
+  .fc-prev-button {
+    @extend .button--previous;
+  }
+  .fc-next-button {
+    @extend .button--next;
+  }
+  .fc-today-button {
+    margin-left: u(1rem);
+    @extend .button--alt;
+  }
+}
+.fc-toolbar-center {
+  display: none;
+  flex-grow: 1;
+  text-align: right;
+
+  @include media($med) {
+    display: block;
+  }
+
+  .toggle:last-child {
+    margin-right: 0;
+  }
+}
+.fc-toolbar-end {
+  display: none;
+
+  .btn-group {
+    @extend .toggles--buttons;
+  }
+  .btn {
+    background-position: center;
+    padding: 8px 2rem;
+    text-indent: -9999px;
+    width: 4rem;
+
+    &.active {
+      @extend .is-active;
+    }
+  }
+  .fc-fecList-button {
+    @extend .button--list;
+    @extend .button--alt;
+  }
+  .fc-dayGridMonth-button {
+    @extend .button--grid;
+    @extend .button--alt;
+  }
+  @include media($med) {
+    display: block;
+  }
+}
+
+
+// fullcalendar/bootstrap overrides
+.fc {
+  font-family: $sans-serif;
+  gap: 1rem;
+
+  .fc-view-outer {
+    padding: u(0 2rem 2rem 2rem);
+  }
+  
+  // overrides specifically for our custom list view
+  &[data-fec-view="list"] {
+    display: block; // Overriding fc defaults
+    
+    .fc-view-outer {
+      padding: 0 2rem 2rem !important;
+      position: relative;
+    }
+    .fc-fecList-view {
+      display: block;
+      position: relative;
+    }
+    .fc-list-day {
+      display: block;
+      padding: 0;
     }
   }
 }
 
-.fc-prev-button {
-  border-radius: 2px 0 0 2px;
+.fc-theme-bootstrap5 {
+  line-height: inherit;
 }
 
-.fc-next-button {
-  border-radius: 0 2px 2px 0;
-}
-
-.fc-state-active.button--alt {
-  @extend .button--alt, .is-active;
-}
-
-.fc-right {
-  display: none;
-}
-
-.fc-center {
-  text-align: left;
-
-  h2 {
-    margin: 0;
+// Only applies to the grid
+.fc-daygrid-header {
+  .fc-day {
+    color: $primary;
+    font-weight: normal;
+    padding-top: u(.5rem);
   }
 }
 
-// Body
-
-.fc-day-header {
-  color: $primary;
-  font-weight: normal;
-  padding-top: u(0.5rem);
+.fc-daygrid {
+  padding: 0 1rem;
 }
-
-.fc-content-skeleton {
-  height: 100%;
-
-  table {
-    min-height: u(12rem);
-  }
-}
-
-.fc-other-month {
-  &.fc-day-top,
-  &.fc-day {
-    opacity: 0.5;
-  }
-}
-
-.fc-week {
-  td:not(.fc-day-top) {
-    border-width: 0 2px;
-    border-style: solid;
-    border-color: $neutral;
-    border-top: none;
-  }
-
-  &:last-child {
-    border-bottom: 2px solid $neutral;
-  }
-}
-
-.fc-day-top {
-  border: 2px solid $neutral;
-  border-bottom: none;
-  color: $primary;
+.fc-daygrid-day-header {
+  flex-direction: row;
   font-weight: bold;
-  padding: u(0.3rem 1rem);
+  min-height: 3rem;
+  overflow-x: hidden;
+  width: 100%;
 }
-
-.fc-day-number.fc-today {
-  background-color: $primary;
-  color: $inverse;
-}
-
-.fc-event-container {
+.fc-daygrid-day-body {
   padding: 2px;
-  vertical-align: top;
+}
+.fc-daygrid-day {
+  border: 1px solid $neutral;
+  min-height: 12rem;
+  padding: 0;
+
+  &.fc-day-today {
+    background: transparent;
+  }
+
+  &[data-date$="-01"] .fc-daygrid-day-number::after {
+    display: inline-block;
+    position: absolute;
+    left: 1.33em;
+  }
+  &[data-date$="-01-01"] .fc-daygrid-day-number::after {
+    content: 'January';
+  }
+  &[data-date$="-02-01"] .fc-daygrid-day-number::after {
+    content: 'February';
+  }
+  &[data-date$="-03-01"] .fc-daygrid-day-number::after {
+    content: 'March';
+  }
+  &[data-date$="-04-01"] .fc-daygrid-day-number::after {
+    content: 'April';
+  }
+  &[data-date$="-05-01"] .fc-daygrid-day-number::after {
+    content: 'May';
+  }
+  &[data-date$="-06-01"] .fc-daygrid-day-number::after {
+    content: 'June';
+  }
+  &[data-date$="-07-01"] .fc-daygrid-day-number::after {
+    content: 'July';
+  }
+  &[data-date$="-08-01"] .fc-daygrid-day-number::after {
+    content: 'August';
+  }
+  &[data-date$="-09-01"] .fc-daygrid-day-number::after {
+    content: 'September';
+  }
+  &[data-date$="-10-01"] .fc-daygrid-day-number::after {
+    content: 'October';
+  }
+  &[data-date$="-11-01"] .fc-daygrid-day-number::after {
+    content: 'November';
+  }
+  &[data-date$="-12-01"] .fc-daygrid-day-number::after {
+    content: 'December';
+  }
+
+  .fc-daygrid-day-number {
+    padding: .5em 1rem;
+  }
 }
 
-.fc-more {
-  margin: 0 4px;
+// GRID CALENDAR ENTRIES
+// UNDO - First, strictly undoing the defaults
+// Overriding the awful event absolute positioning
+.fc-daygrid-day-events {
+  height: auto !important;
+
+  .fc-abs {
+    position: relative !important;
+    left: initial !important;
+    right: initial !important;
+    top: initial !important;
+  }
 }
 
-.fc-content {
-  white-space: nowrap;
-  overflow: hidden;
-  background: none;
-  color: $primary;
+.fc-daygrid-event {
   font-size: u(1.4rem);
   line-height: 1.2;
-  padding: 2px 4px;
-  position: relative;
 
-  &::before {
-    content: '';
-    display: block;
-    width: u(0.6rem);
-    height: u(0.6rem);
-    background-color: $primary;
-    border-radius: u(0.8rem);
-    float: left;
-    margin: 5px 5px 5px 0;
+  @include media($lg) {
+    font-size: 1.6rem;
   }
 
-  &::after {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    width: u(3rem);
-    @include linear-gradient(90deg, rgba($gray-lightest, 0), $gray-lightest);
+  &:focus {
+    box-shadow: none;
   }
-}
+  &:hover {
+    cursor: pointer;
 
-.fc-multi-day {
-  .fc-content {
-    border: 1px solid $gray;
-    border-radius: 2px;
-    padding-left: 2px;
+    .fc-event-inner {
+      background-color: $gray-lightest;
+    }
+  }
 
-    &::before {
-      display: none;
+  &.visible-tooltip {
+    pointer-events: none;
+
+    .fc-event-inner {
+      background-color: $federal-blue;
+      border-radius: 4px;
+      color: $inverse; /* (white) */
+
+      &::before {
+        background-color: $inverse;
+      }
+      &::after {
+        display: none;
+      }
     }
   }
 }
 
-.is-active {
-  .fc-content {
-    background-color: $primary;
-    border-radius: 4px;
-    color: $inverse;
+.fc-h-event {
+  background-color: inherit;
+  border: none;
+
+  .fc-event-inner {
+    color: unset;
+    padding: 2px 4px;
 
     &::before {
-      background-color: $inverse;
+      background-color: $primary;
+      border-radius: u(.8rem);
+      content: '';
+      display: block;
+      float: left;
+      height: u(.6rem);
+      margin: 5px 5px 5px 0;
+      width: u(.6rem);
     }
 
     &::after {
+      bottom: 0;
+      content: '';
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 2rem;
+      @include linear-gradient(90deg, rgba($gray-lightest, 0), $inverse);
+    }
+  }
+}
+.fc-daygrid-block-event {
+  .fc-event-time {
+    font-weight: inherit;
+    padding: 0;
+  }
+  .fc-event-title {
+    padding: 0;
+  }
+}
+
+// Overriding the default flex and absolute garbage
+.fc-view-outer-aspect-ratio {
+  padding-bottom: 0 !important;
+}
+.fc-view-outer-aspect-ratio > .fc-view.fc-dayGridMonth-view {
+  position: relative;
+  display: block;
+}
+
+.fc-popover {
+  background: $neutral;
+  border: 2px solid $neutral;
+  position: absolute;
+  width: u(22rem);
+
+  // .fc-close {
+  //   // cursor: pointer;
+  //   float: right;
+  //   @include u-icon($x, $primary, 2rem, 2rem, 100%);
+  // }
+
+  // .fc-event-container {
+  //   padding: u(.5rem);
+  // }
+
+  // .fc-content {
+  //   margin-bottom: u(.5rem);
+  // }
+  .fc-event {
+    margin-bottom: .5rem;
+  }
+  .fc-event-title {
+    font-weight: bold;
+  }
+}
+.fc-popover-header {
+  padding: u(3px .5rem);
+}
+.fc-popover-title {
+  font-weight: bold;
+  height: auto;
+  line-height: u(2rem);
+  width: auto;
+}
+.fc-popover-body {
+  background-color: transparent;
+}
+
+.cal-list {
+  letter-spacing: -.3px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cal-list__title {
+  background-color: $gray-light;
+  border-left: .5rem solid $primary;
+  display: block;
+  font-family: $sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.6;
+  margin: u(2rem 0 0 0);
+  padding: u(1rem);
+}
+.cal-list__toggles {
+  font-family: $sans-serif;
+}
+.cal-list__event {
+  border-bottom: 1px solid $neutral;
+  display: block;
+  float: left;
+  padding: u(2rem 0);
+  width: 100%;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  @include media($lg) {
+    padding: 2rem;
+  }
+}
+.cal-list__event-title {
+  margin: 0;
+}
+.cal-list__date {
+  float: left;
+  font-weight: bold;
+  width: calc(100% -  15rem);
+}
+.cal-list__time {
+  display: inline-block;
+  width: 15rem;
+}
+.cal-list__details {
+  margin-bottom: u(1rem);
+  @include span-columns(8);
+  
+  @include media($lg) {
+    font-size: 1.6rem;
+    @include span-columns(10);
+  }
+  // large sizes for and inside this element
+  @include media($lg) {
+    
+    margin-bottom: 0;
+
+    .cal-list__date {
       display: none;
-      background-color: transparent;
+    }
+    .cal-list__time {
+      float: left;
+      width: 7rem;
+    }
+    .cal-list__info {
+      float: left;
+      margin: 0;
+      padding: 0 1rem 0;
+      width: calc(70% - 7rem);
+    }
+    .cal-list__category {
+      float: right;
+      width: calc(30%);
+    }
+  }
+}
+.cal-list__add {
+  @include span-columns(4);
+
+  @include media($lg) {
+    float: right;
+    @include span-columns(2);
+  }
+
+  .button {
+    float: right;
+  }
+}
+.cal-list__summary {
+  display: block;
+  font-weight: bold;
+  line-height: 1.2;
+  margin: 0 0 .5rem 0;
+}
+
+.cal-list__info {
+  padding-top: u(2rem);
+  @include span-columns(8 of 8);
+
+  p {
+    font-size: u(1.4rem);
+
+    @include media($lg) {
+      font-size: 1.6rem;
     }
   }
 }
 
-.fc-title {
-  display: inline-block;
-  vertical-align: top;
+.cal-list__category {
+  float: left;
 }
 
-.fc-time {
-  display: inline-block;
-}
-
-.fc-limited {
-  display: none;
-}
-
-.cal__category {
+.cal-list__category-title {
+  flex-direction: row;
+  align-items: center;
+  border-color: $primary;
   border-radius: 3px;
-  padding: u(0.5rem);
+  border: 1px solid;
+  display: inline-flex;
+  font-size: u(1.4rem);
+  padding: u(.5rem);
+
+  .tooltip__trigger {
+    margin: 0;
+  }
+  .tooltip__trigger-text {
+    border-right: 1px solid $primary;
+    display: table-cell;
+    margin-right: .5rem;
+    padding-right: .5rem;
+    vertical-align: middle;
+  }
+
+  .tooltip__container {
+    height: unset;
+    margin: 0;
+    width: unset;
+  }
+
+  .list--bulleted li:last-child {
+    margin-bottom: 0;
+  }
 }
 
-// Event details
+.cal-list__location {
+  display: block;
+
+  @include media($lg) {
+    font-size: 1.6rem;
+  }
+}
+
+
 .cal-details {
   font-size: u(1.4rem);
   left: auto !important;
@@ -267,43 +530,16 @@
   }
 }
 
-.fc-event-container:nth-child(1) {
-  .cal-details {
-    margin-left: unset;
-
-    &::before {
-      right: auto;
-      left: u(2rem);
-    }
-  }
-}
-
-.fc-event-container:nth-child(7) {
-  .cal-details {
-    right: 0;
-
-    &::before {
-      left: auto;
-      right: u(1rem);
-    }
-
-    &::after {
-      left: auto;
-      right: u(1.2rem);
-    }
-  }
-}
-
 .cal-details__date {
   display: block;
-  padding-bottom: u(0.5rem);
+  padding-bottom: u(.5rem);
 }
 
 .cal-details__title {
   display: block;
   font-weight: bold;
   line-height: 1.4;
-  padding-bottom: u(0.5rem);
+  padding-bottom: u(.5rem);
 }
 
 .cal-details__summary {
@@ -316,345 +552,41 @@
 .cal-details__description {
   display: block;
   line-height: 1.2;
-  padding-bottom: u(0.5rem);
+  padding-bottom: u(.5rem);
 }
 
 .cal-details__location {
   display: block;
   line-height: 1.2;
-  padding-bottom: u(0.5rem);
+  padding-bottom: u(.5rem);
 }
 
 .cal-details__add {
   margin-top: u(1rem);
 }
+.fc-day:nth-child(1) {
+  .cal-details {
+    margin-left: unset;
 
-.fc-popup {
-  background: $inverse;
-  border: 2px solid $neutral;
-  position: absolute;
-  max-width: u(20rem);
+    &::before {
+      right: auto;
+      left: u(2rem);
+    }
+  }
+}
 
-  .button {
-    position: absolute;
-    top: 0;
+.fc-day:nth-child(7) {
+  .cal-details {
     right: 0;
-    width: u(3rem);
-    height: u(3rem);
-  }
-}
 
-.fc-popup__header {
-  background: $neutral;
-  color: $primary;
-  font-weight: bold;
-  padding: 4px;
-  position: relative;
-}
-
-// Week view
-.fc-time-grid-container {
-  overflow: scroll;
-}
-
-.fc-time-grid {
-  position: relative;
-
-  .fc-content-skeleton {
-    border-bottom: 2px solid $neutral;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-}
-
-.fc-slats {
-  td {
-    height: u(1.5rem);
-  }
-
-  tr {
-    border: 2px solid $neutral;
-    border-bottom: none;
-  }
-
-  .fc-minor {
-    border-bottom: none;
-    border-top: none;
-  }
-}
-
-.fc-agenda-view {
-  .fc-bg {
-    display: none; // Temporary hack to remove mis-aligned background in agenda view
-  }
-
-  .fc-axis {
-    padding: u(0.5rem 1rem 0 1rem);
-    text-align: right;
-    vertical-align: middle;
-    white-space: nowrap;
-  }
-
-  .fc-divider {
-    display: none;
-  }
-
-  .fc-week {
-    border-top: 2px solid $neutral;
-  }
-}
-
-.cal-view__toggles {
-  float: right;
-  padding-left: u(1rem);
-}
-
-// List view
-.cal-list__toggles {
-  float: left;
-  font-family: $sans-serif;
-  padding-top: u(0.5rem);
-}
-
-.cal-list {
-  letter-spacing: -0.3px;
-}
-
-.cal-list__title {
-  background-color: $gray-light;
-  border-left: 0.5rem solid $primary;
-  font-family: $sans-serif;
-  letter-spacing: 0;
-  margin: u(2rem 0 0 0);
-  padding: u(1rem);
-}
-
-.cal-list__event {
-  border-bottom: 1px solid $neutral;
-  padding: u(2rem 0);
-  @include clearfix;
-
-  &:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-}
-
-.cal-list__details {
-  margin-bottom: u(1rem);
-  @include span-columns(8);
-}
-
-.cal-list__add {
-  @include span-columns(4);
-
-  .button {
-    float: right;
-  }
-}
-
-.cal-list__summary {
-  display: block;
-  font-weight: bold;
-  line-height: 1.2;
-  margin: 0 0 0.5rem;
-}
-
-.cal-list__date {
-  font-weight: bold;
-  @include span-columns(4 of 8);
-}
-
-.cal-list__time {
-  margin-right: 0 !important; // overriding omega()
-  @include span-columns(4 of 8);
-  @include omega;
-}
-
-.cal-list__info {
-  padding-top: u(2rem);
-  @include span-columns(8 of 8);
-
-  p {
-    font-size: u(1.4rem);
-  }
-}
-
-.cal-list__category {
-  float: left;
-}
-
-.cal-list__category-title {
-  display: table;
-  border: 1px solid;
-  border-color: $primary;
-  font-size: u(1.4rem);
-  padding: u(0.5rem);
-  border-radius: 3px;
-  @include clearfix;
-
-  .tooltip__trigger-text {
-    border-right: 1px solid $primary;
-    display: table-cell;
-    padding-right: 0.5rem;
-    line-height: 1.2;
-    vertical-align: middle;
-  }
-
-  .tooltip__container {
-    display: table-cell;
-    vertical-align: middle;
-    padding-left: 0.5rem;
-  }
-
-  .list--bulleted li:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.cal-list__event-title {
-  margin: 0;
-}
-
-.cal-list__location {
-  display: block;
-}
-
-// Popover
-.fc-popover {
-  background-color: $inverse;
-  border: 2px solid $neutral;
-  position: absolute;
-  width: u(22rem);
-
-  .fc-header {
-    background: $neutral;
-    padding: u(3px 0.5rem);
-    @include clearfix;
-
-    .fc-title {
-      font-weight: bold;
-      height: auto;
-      line-height: u(2rem);
-      width: auto;
-    }
-  }
-
-  .fc-close {
-    cursor: pointer;
-    float: right;
-    @include u-icon($x, $primary, 2rem, 2rem, 100%);
-  }
-
-  .fc-event-container {
-    padding: u(0.5rem);
-  }
-
-  .fc-content {
-    margin-bottom: u(0.5rem);
-  }
-}
-
-.fc-clear {
-  clear: both;
-}
-
-// BREAKPOINT: MEDIUM
-// - Navigation buttons on the left
-// - Title in the center
-// - View buttons on the right
-
-@include media($med) {
-  .calendar__head {
-    padding: u(1rem 2rem);
-  }
-
-  .fc-clear {
-    display: none;
-  }
-
-  .fc-center {
-    float: left;
-    text-align: center;
-  }
-
-  .fc-right {
-    display: block;
-    float: right;
-
-    .fc-button-group {
-      float: right;
+    &::before {
+      left: auto;
+      right: u(1rem);
     }
 
-    .button {
-      background-position: 50% 50%;
-      padding-left: u(2rem);
-      text-indent: -9999px;
-      width: u(4rem);
+    &::after {
+      left: auto;
+      right: u(1.2rem);
     }
-  }
-
-  .cal-list__toggles {
-    float: right;
-  }
-}
-
-// BREAKPOINT: LARGE
-// - List events line up horizontally
-
-@include media($lg) {
-  .cal-list {
-    font-size: u(1.6rem);
-
-    p {
-      font-size: u(1.6rem);
-    }
-  }
-
-  .cal-list--time {
-    .cal-list__date {
-      display: none;
-    }
-  }
-
-  .cal-list--category {
-    .cal-list__category {
-      visibility: hidden;
-    }
-  }
-
-  .cal-list__event {
-    padding: u(2rem);
-    @include clearfix;
-  }
-
-  .cal-list__details {
-    margin-bottom: 0;
-    @include span-columns(10);
-  }
-
-  .cal-list__add {
-    font-size: u(1.4rem);
-    @include span-columns(2);
-  }
-
-  .cal-list__date {
-    font-weight: bold;
-    @include span-columns(2 of 10);
-  }
-
-  .cal-list__time {
-    @include span-columns(1 of 10);
-  }
-
-  .cal-list__info {
-    padding-top: 0;
-    @include span-columns(6 of 10);
-  }
-
-  .cal-list__category {
-    @include span-columns(3 of 10);
   }
 }
