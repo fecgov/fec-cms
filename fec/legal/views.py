@@ -276,7 +276,7 @@ def legal_doc_search_ao(request):
     ao_citation_require_all = request.GET.get('ao_citation_require_all', '')
 
     q_proximitys = request.GET.getlist('q_proximity', '')
-    max_gaps = request.GET.get('max_gaps', '')
+    max_gaps = request.GET.get('max_gaps', '0')
     proximity_filter_term = request.GET.get('proximity_filter_term', '')
     proximity_filter = request.GET.get('proximity_filter', '')
 
@@ -404,8 +404,8 @@ def legal_doc_search_mur(request):
     primary_subject_id = request.GET.get('primary_subject_id', '')
     secondary_subject_id = request.GET.get('secondary_subject_id', '')
 
-    q_proximitys = request.GET.getlist('q_proximity', '')
-    max_gaps = request.GET.get('max_gaps', '')
+    q_proximitys = request.GET.getlist('q_proximity', [])
+    max_gaps = request.GET.get('max_gaps', '0')
     proximity_filter_term = request.GET.get('proximity_filter_term', '')
     proximity_filter = request.GET.get('proximity_filter', '')
 
@@ -567,7 +567,7 @@ def legal_doc_search_adr(request):
     case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
 
     q_proximitys = request.GET.getlist('q_proximity', '')
-    max_gaps = request.GET.get('max_gaps', '')
+    max_gaps = request.GET.get('max_gaps', '0')
     proximity_filter_term = request.GET.get('proximity_filter_term', '')
     proximity_filter = request.GET.get('proximity_filter', '')
 
@@ -657,7 +657,7 @@ def legal_doc_search_af(request):
     case_max_document_date = request.GET.get('case_max_document_date', '')
 
     q_proximitys = request.GET.getlist('q_proximity', '')
-    max_gaps = request.GET.get('max_gaps', '')
+    max_gaps = request.GET.get('max_gaps', '0')
     proximity_filter_term = request.GET.get('proximity_filter_term', '')
     proximity_filter = request.GET.get('proximity_filter', '')
 
@@ -747,7 +747,7 @@ def legal_doc_search_statutes(request):
     offset = request.GET.get('offset', 0)
 
     q_proximitys = request.GET.getlist('q_proximity', '')
-    max_gaps = request.GET.get('max_gaps', '')
+    max_gaps = request.GET.get('max_gaps', '0')
     proximity_filter_term = request.GET.get('proximity_filter_term', '')
     proximity_filter = request.GET.get('proximity_filter', '')
 

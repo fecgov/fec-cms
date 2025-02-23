@@ -127,3 +127,38 @@
   margin: u(2rem 0 0 0);
   padding: u(1rem);
 }
+
+#proximity_form {
+
+  input.invalid_border,
+  select.invalid_border,
+  textarea.invalid_border,
+  checkbox.invalid_border,
+  label.invalid_border {
+    border-color: $error !important;
+  }
+
+  input:focus:invalid,
+  select:focus:invalid,
+  textarea:focus:invalid,
+  label:focus:invalid {
+    outline: none;
+  }
+
+  span.error {
+    display: block;
+    color: $error;
+    margin-top: u(-3rem);
+
+    &::after {
+      content: '';
+      display:block;
+      height: u(1rem)
+    }
+  }
+
+}
+
+.q-proximity-fields input, #max_gaps {
+  margin-bottom: u(3rem) !important;
+}

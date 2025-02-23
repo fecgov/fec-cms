@@ -39,35 +39,39 @@
         </div>
       </div>
       <div class="search-controls__or search-controls__or--vertical">or</div>
-      <div class="modal__form  search-controls__either" style="width:44% !important">
+      <div id="proximity_form" class="modal__form  search-controls__either" style="width:44% !important">
       
       <p>Use these search boxes to refine your search. Only words with letters, numbers, spaces, and hyphens (such as
       in-kind) are accepted:</p>
       <div class="filter">
-      <div class="q-proximity-fields">
+      <div class="q-proximity-fields u-padding--bottom--med">
       <label class="label" for="q_proximity">Primary keyword or phrase</label>
-      <input type="text" id="q_proximity" name="q_proximity" required data-operator="and">
+      <input type="text" id="q_proximity" name="q_proximity" required>
+      <input type="text" id="q_proximity-1" name="q_proximity" required>
       </div>
-      <button class="u-margin--top button button--add" type="button" id="js-add-input">&nbsp;&nbsp;Add another</button>
+      <button id="js-add-input" class="u-margin--top button button--add" type="button">&nbsp;&nbsp;Add another</button>
       </div>
       <div class="filter">
       <label class="label" for="max_gaps">Maximum proximity between all keywords or phrases</label>
-      <input type="text" id="max_gaps" name="max_gaps" required data-operator="and">
-      <span class="t-note t-sans">Example: 0, 3, 50, 400</span>
+      <input type="text" id="max_gaps" name="max_gaps" required value="0">
+      <span class="t-note t-sans u-padding--top">Example: 0, 3, 50, 400</span>
       </div>
  
 
 
    <div class="fiter range">
-            <div class="range__input range__input--min js-filter" data-filter="range" style="width: 63%; vertical-align: baseline;">
+            <div class="filter range__input range__input--min js-filter" data-filter="range" style="width: 63%; vertical-align: baseline;">
                 <label class="label" for="proximity_filter_term">Secondary keyword or phrase (optional)</label>
-                <input id="proximity_filter_term" type="text" name="proximity_filter_term" data-range="min" data-prefix="$" data-suffix="or more" tabindex="0">
+                <input id="proximity_filter_term" type="text" name="proximity_filter_term" data-range="min">
             </div>
             
-            <div class="range__input range__input--max js-filter" data-filter="range" style=" width: 35%; vertical-align: baseline;">
-      <label class="label" for="proximity_filter">Appears</label>
-
-      {{ dropdown.select_single_flat_list( 'proximity_filter', '', label_help='false', options={'after':'After all primary terms','before':'Before all primary terms'}) }}
+            <div class="filter range__input range__input--max js-filter" data-filter="range" style=" width: 35%; vertical-align: baseline;">
+            <label class="label" for="proximity_filter">Appears</label>
+            <select id="proximity_filter" name="proximity_filter" data-filter-change="true" data-removeable-filter="true" class="dropdown">
+            <option value="after" data-line-type="">After all primary terms</option>
+            <option value="before" data-line-type="">Before all primary terms</option>
+            </select>
+            {# {{ dropdown.select_single_flat_list( 'proximity_filter', '', label_help='false', options={'after':'After all primary terms','before':'Before all primary terms'}) }} #}
             </div>
         
    </div>

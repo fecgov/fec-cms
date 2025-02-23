@@ -270,20 +270,31 @@
         </li>
       {% endif %}
       
-
-      {% if q_proximitys %}
-        <li data-tag-category="q_proximity" class="tag__category">
+      {% if q_proximitys and q_proximitys | reject('equalto', none) | list %}
+        <li data-tag-category="q_proximity" class="tag__category tag__category--and">
         Proximity keyword or phrase: 
         {% for q_proximity in q_proximitys %}
           <div data-removable="true" class="tag__item">{{ q_proximity }}<button class="button js-close tag__remove" data-tag="q_proximity_{{ loop.index0 }}"><span class="u-visually-hidden">Remove</span></button></div>
         {% endfor %}
+       
+      {% endif %}
+
+      {% if max_gaps and q_proximitys %}
+        
+      maximum proximity of: 
+          <div data-removable="true" class="tag__item">{{ max_gaps }}<button class="button js-close tag__remove" data-tag="{{ max_gaps }}"><span class="u-visually-hidden">Remove</span></button></div>
         </li>
       {% endif %}
 
-      {% if max_gaps %}
-        <li data-tag-category="max_gaps" class="tag__category">
-        Maximum proximity: 
-          <div data-removable="true" class="tag__item">{{ max_gaps }}<button class="button js-close tag__remove" data-tag="{{ max_gaps }}"><span class="u-visually-hidden">Remove</span></button></div>
+      {% if proximity_filter_term and proximity_filter %}
+        <li data-tag-category="proximity_filter_term" class="tag__category tag__category__range--date">
+        Proximity secondary keyword or phrase: 
+          <div data-removable="true" class="tag__item">{{ proximity_filter_term }}<button class="button js-close tag__remove" data-tag="{{  proximity_filter_term }}"><span class="u-visually-hidden">Remove</span></button></div>
+        Appears 
+          <div data-removable="true" class="tag__item">{{ proximity_filter }}
+        all primary terms
+          <button class="button js-close tag__remove" data-tag="{{  proximity_filter }}"> 
+          <span class="u-visually-hidden">Remove</span></button></div>
         </li>
       {% endif %}
 

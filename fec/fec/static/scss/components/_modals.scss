@@ -44,6 +44,12 @@
   top: u(1rem);
 }
 
+.modal__remove-field {
+  position: absolute;
+  right: u(-3.5rem);
+  top: u(-1rem);
+}
+
 .modal__form {
   @include span-columns(6);
 }

@@ -20,111 +20,43 @@ export default function KeywordModal() {
   this.$fields = this.$elm.find(
     '#keywords-any, #keywords-all, #keywords-exact' 
   )
+  // this.$proximity_fields = this.$elm.find('input[name="q_proximity"], input[name="proximity_filter_term"], select[name="proximity_filter"], input[name="max_gaps"]'
+  //   // '#q_proximity, #max_gaps, #proximity_filter_term, #proximity_filter' 
+  //  );
 
-  ///// NEW //////
-
-  // this.$proximity_fields = this.$elm.find('input[name*="proximity"], #max_gaps'
-  //  // '#q_proximity, #max_gaps, #proximity_filter_term, #proximity_filter' 
-  // );
-  //console.log('this.$proximity_fields: ',  this.$proximity_fields)
-
-  //console.log(localStorage.getItem("q_proximity"));
-  //const q_prox_value = (localStorage.getItem("q_proximity"));
-
-  //const formData = new FormData(this.$elm.find('form')[0]);
-  //formData.append("q_proximity", q_prox_value);
-
-  // for (const [key, value] of formData.entries()) {
-  //   const input = document.querySelector(`[name="${key}"]`);
-  //   console.log('INPUT', input)
-  //   if (input) {
-  //     console.log('VALUE', value)
-  //     input.value = value;
-  //   }
-  // }
-
-  //console.log('formData: ',formData)
-  //const fieldEntries = localStorage.getItem("formData");
-
-  //console.log('formData: ',fieldEntries.get('q_proximity'));
+   console.log('window.location.search', window.location.search)
 
 
-  // console.log('this.proximity_fields',this.$proximity_fields)
-  // console.log('this.proximity_fieldsARR',Array.from(this.$proximity_fields))
-  // console.log('this.proximity_fieldsVAL',Array.from(this.$proximity_fields)[0])
-  //*****  NOTE:  Use 'formData()' to populatr form from url querysyring ****
 
-
-/////// SESSION STORAGE //////
-
-  console.log('sessionStorage: ', sessionStorage)
-
-  this.$proximity_fields_pop = this.$elm.find('input[name*="proximity"],select[name*="proximity"], #max_gaps'
-    // '#q_proximity, #max_gaps, #proximity_filter_term, #proximity_filter' 
-   );
-   this.$proximity_fields_pop.each(function() {
-    const $input = $(this);
-  $input.val(sessionStorage.getItem($input.attr('id')))
-
-   })
-   
-   /////// END SESSION STORAGE //////
-
-   /////// validation //////
-
-   //const q_proximity_fields  = document.querySelectorAll('input[name="q_proximity"]')
-   const q_proximity_field  = document.getElementById("q_proximity")
-   const maxgaps_field  = document.getElementById("max_gaps")
-   q_proximity_field.addEventListener("mouseenter", function() { 
-    
-    //validateQProximityFirst() 
-    if (!(maxgaps_field.value)) {
-      console.log('NO VALUE')
-      maxgaps_field.style="border-color:red"
-      maxgaps_field.setCustomValidity('A proximity value is required');
-    }
-    else {
-      maxgaps_field.style="border-color:#aeb0b5"
-    }
-  });
-   
-  //  q_proximity_fields.forEach(function (field) {
-  //    field.addEventListener('click', validateQProximity(field));
-
-  //  })
-
-  function test() {
-    alert('test')
-  }
-
-   function validateQProximity(field) {
-    console.log('X:',field.value)
-    if (field.value) {
-      field.setCustomValidity('');
-    } else {
-      field.setCustomValidity('You must provide a value in max gaps field below to search primary keyword or phrase');
-    }
-    field.reportValidity();
-   }
-
-   function validateQProximityFirst() {
-    //alert('clicked')
-    console.log('X:',q_proximity_field.value)
-    if (!(maxgaps_field.value)) {
-      console.log('NO VALUE')
-      maxgaps_field.setCustomValidity('A proximity value is required');
-    } else {
-      maxgaps_field.setCustomValidity('');
-    }
-    //q_proximity_field.reportValidity();
-    maxgaps_field.reportValidity();
-    
-   }
   
 
-   ///// end validation //////
+  
+   const proximity_form  = document.querySelector('#proximity_form');
+   const req_fields = proximity_form.querySelectorAll('[required]');
+   const self = this;
+   //let req_fields = proximity_form.find('[required]');
+   console.log('req_fields: ' ,req_fields)
+   //Array.from(req_fields).Foreach(function(req_field) {
+   for (const req_field of req_fields) {
+    req_field.insertAdjacentHTML(
+      'afterend',
+      '<span class="error ' + req_field.id + '" aria-live="polite"></span>'
+    );
+        // Bind showError() to blur event on required fields
+        req_field.addEventListener('blur', function() {
+          self.showError(req_field);
+        });
+        // Clear error once user starts typing
+        req_field.addEventListener('input', function() {  
+            self.clearError(req_field);
+        });
+   }
 
-///////  END NEW //////
+
+
+
+
+
 
 
 
@@ -135,7 +67,12 @@ export default function KeywordModal() {
 
   this.$addInput = this.$elm.find('#js-add-input');
   this.$addInput.on('click', this.addQproximityField.bind(this));
-
+  this.$removeInput = this.$elm.find('#js-rm-input');
+  this.$removeInput.on('click', this.removeQproximityField.bind(this));
+  // Using on JQuery on event here because element does not exist on page-load
+  $(document).on('click','#js-rm-input', function(event){
+    $(event.target).parent().remove()
+  })
 
 
 
@@ -152,7 +89,33 @@ export default function KeywordModal() {
   this.$elm.on('dialog:hide', function() {
     $('body').css('overflow', 'scroll');
   });
+
+
 }
+
+KeywordModal.prototype.showError = function(req) {
+  this.messages = {
+    'q_proximity': 'Please provide a keyword or phrase',
+    'q_proximity-1': 'Please provide a keyword or phrase',
+    'max_gaps': 'Please provide a proximity gap value',
+  };
+
+  const field_id = req.getAttribute('id');
+  const error_field = 'span.' + field_id;
+  const req_fieldError = document.querySelector(error_field);
+  const msg = this.messages[field_id];
+
+  req.classList.add('invalid_border');
+  
+
+  if (!req.validity.valid) {
+      req.classList.add('invalid_border');
+      req_fieldError.textContent = msg;
+  } else {
+    req.classList.remove('invalid_border');
+    req_fieldError.textContent = '';
+  }
+};
 
 /**
  * Handle a click event on the submit button
@@ -163,10 +126,11 @@ export default function KeywordModal() {
 KeywordModal.prototype.handleSubmit = function(e) {
   e.preventDefault();
   const searchQuery = this.generateQueryString();
-  const proxiimityQuery = this.generateProximityQueryString();
+  const proximityQuery = this.generateProximityQueryString();
   let query = URI(window.location.search)
+    .removeSearch('q_proximity').removeSearch('max_gaps').removeSearch('proximity_filter_term').removeSearch('proximity_filter')
     .removeSearch('search')
-    .addSearch('search', searchQuery);
+    .addSearch('search', searchQuery)
 
   this.dialog.hide();
   // Event record for GTM
@@ -176,7 +140,9 @@ KeywordModal.prototype.handleSubmit = function(e) {
   //localStorage.setItem('formData', formData);
 
 
-  window.location = this.$form.attr('action') + query.toString() + proxiimityQuery.toString();
+  
+  //document.forms["category-filters"].submit();
+  window.location = this.$form.attr('action') + query.toString() + proximityQuery.toString();
 };
 
 /**
@@ -207,30 +173,55 @@ KeywordModal.prototype.generateQueryString = function() {
 
 ///////// NEW ////////
 KeywordModal.prototype.generateProximityQueryString = function() {
-  this.$proximity_fields = this.$elm.find('input[name*="proximity"],select[name*="proximity"], #max_gaps'
-    // '#q_proximity, #max_gaps, #proximity_filter_term, #proximity_filter' 
-   );
-   console.log('this.$proximity_fields: ',  this.$proximity_fields)
+  let $q_proximity_fields = this.$elm.find('input[name="q_proximity"], input[name="max_gaps"]')
+  let $optional_proximity_fields = this.$elm.find('input[name="proximity_filter_term"], select[name="proximity_filter"]')
 
-  let proxiimityQuery = '';
+    // '#q_proximity, #max_gaps, #proximity_filter_term, #proximity_filter' 
+  
+   //console.log('this.$proximity_fields: ',  this.$proximity_fields)
+  //let q_proximity_fields = $('#q_proximity, #q_proximity_1', '#max_gaps')
+
+  let proximityQueryString = '';
   const self = this;
 
-  this.$proximity_fields.each(function() {
+  if ($('#q_proximity').val() && $('#q_proximity-1').val()) {
+    $q_proximity_fields.each(function() {
     const $input = $(this);
-    if ($input.val()) {
-      proxiimityQuery += `&${$input.attr('name')}=${$input.val()}`
-      sessionStorage.setItem(`${$input.attr('id')}`, `${$input.val()}`);
+    //if ($input.val()) {
+      proximityQueryString += `&${$input.attr('name')}=${$input.val()}`
+      console.log('&${$input.attr("name")}: ',  `${$input.attr('name')}`)
+      //sessionStorage.setItem(`${$input.attr('id')}`, `${$input.val()}`);
+     //}
+    });
+  }
+  if ($('#proximity_filter_term').val()) {
+     $optional_proximity_fields.each(function() {
+        const $input = $(this);
+        //if ($input.val()) {
+          proximityQueryString += `&${$input.attr('name')}=${$input.val()}`
+          console.log('&${$input.attr("name")}: ',  `${$input.attr('name')}`)
+          //sessionStorage.setItem(`${$input.attr('id')}`, `${$input.val()}`);
+         //}
+        });
     }
-  });
-  var queryString = proxiimityQuery;
-  return queryString;
+  return proximityQueryString;
 };
 
 KeywordModal.prototype.addQproximityField = function() {
-      const fields = document.getElementsByClassName('q-proximity-fields')[0]
-      let childInputs = fields.querySelectorAll('input').length
-      fields.insertAdjacentHTML('beforeend',`<input type="text" id="q_proximity-${childInputs+1}" name="q_proximity" required data-operator="and">`)
-      // <button class="u-margin--top button button--close--base" type="button" id="js-remove-input"></button>
+      const fields = document.getElementsByClassName('q-proximity-fields')[0];
+      let childInputs = fields.querySelectorAll('input').length - 1;
+      fields.insertAdjacentHTML('beforeend',
+        `<div class="input--removable ">
+        <input type="text" id="q_proximity-${childInputs+1}" name="q_proximity"><button id="js-rm-input" class="u-margin--top button button--close--base modal__remove-field" type="button"></button>
+        </div>`)
+
+}
+
+KeywordModal.prototype.removeQproximityField = function(event) {
+  let field = event.target.previousElementSibling
+  console.log('field: ', field)
+  field.remove()
+
 
 }
 
