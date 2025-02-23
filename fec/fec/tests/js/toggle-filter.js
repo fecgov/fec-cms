@@ -60,7 +60,7 @@ describe('toggle filters', function() {
   });
 
   it('calls handleChange() on change', function() {
-    this.filter.$elm.find('#efiling').prop('checked', true).change(); // TODO: jQuery deprecation
+    this.filter.$elm.find('#efiling').prop('checked', true).trigger('change');
     expect(this.handleChange).to.have.been.called;
   });
 
@@ -94,7 +94,7 @@ describe('toggle filters', function() {
     });
 
     it('triggers rename event on changing the toggle', function() {
-      this.$fixture.find('#efiling').prop('checked', true).change(); // TODO: jQuery deprecation
+      this.$fixture.find('#efiling').prop('checked', true).trigger('change');
       expect(this.trigger).to.have.been.calledWith('filter:renamed', [
         {
           key: 'data_type-toggle',
