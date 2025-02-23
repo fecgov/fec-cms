@@ -56,13 +56,6 @@
     }
   }
 
-  &.is-successful {
-    &::after {
-      right: 0;
-      @include u-icon-button($check, left, 1.5rem, background-position u(1.25rem) 50%, background-size 18px, padding-left u(2.5rem));
-    }
-  }
-
   &.button--alt-primary::after,
   &.button--alt-secondary::after {
     border-left: 1px solid $inverse;
