@@ -145,6 +145,10 @@
     outline: none;
   }
 
+  input:required {
+    margin-bottom: u(3rem) !important;
+  }
+
   span.error {
     display: block;
     color: $error;
@@ -156,9 +160,6 @@
       height: u(1rem)
     }
   }
-
+  
 }
 
-.q-proximity-fields input, #max_gaps {
-  margin-bottom: u(3rem) !important;
-}

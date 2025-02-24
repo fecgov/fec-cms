@@ -16,27 +16,16 @@ export default function KeywordModal() {
   this.elm = document.querySelector('.js-keyword-modal');
   this.$elm = $(this.elm);
   this.$form = this.$elm.find('form');
-  console.log('this.$form: ',this.$form )
   this.$fields = this.$elm.find(
-    '#keywords-any, #keywords-all, #keywords-exact' 
-  )
+    '#keywords-any, #keywords-all, #keywords-exact'
+  );
   // this.$proximity_fields = this.$elm.find('input[name="q_proximity"], input[name="proximity_filter_term"], select[name="proximity_filter"], input[name="max_gaps"]'
-  //   // '#q_proximity, #max_gaps, #proximity_filter_term, #proximity_filter' 
+  //   // '#q_proximity, #max_gaps, #proximity_filter_term, #proximity_filter'
   //  );
 
-   console.log('window.location.search', window.location.search)
-
-
-
-  
-
-  
-   const proximity_form  = document.querySelector('#proximity_form');
+   const proximity_form = document.querySelector('#proximity_form');
    const req_fields = proximity_form.querySelectorAll('[required]');
    const self = this;
-   //let req_fields = proximity_form.find('[required]');
-   console.log('req_fields: ' ,req_fields)
-   //Array.from(req_fields).Foreach(function(req_field) {
    for (const req_field of req_fields) {
     req_field.insertAdjacentHTML(
       'afterend',
@@ -47,19 +36,10 @@ export default function KeywordModal() {
           self.showError(req_field);
         });
         // Clear error once user starts typing
-        req_field.addEventListener('input', function() {  
+        req_field.addEventListener('input', function() {
             self.clearError(req_field);
         });
    }
-
-
-
-
-
-
-
-
-
 
   this.$excludeField = this.$elm.find('#keywords-none');
   this.$submit = this.$elm.find('button[type="submit"]');
@@ -71,10 +51,8 @@ export default function KeywordModal() {
   this.$removeInput.on('click', this.removeQproximityField.bind(this));
   // Using on JQuery on event here because element does not exist on page-load
   $(document).on('click','#js-rm-input', function(event){
-    $(event.target).parent().remove()
-  })
-
-
+    $(event.target).parent().remove();
+  });
 
   this.dialog = new A11yDialog(this.elm);
 
@@ -90,14 +68,13 @@ export default function KeywordModal() {
     $('body').css('overflow', 'scroll');
   });
 
-
 }
 
 KeywordModal.prototype.showError = function(req) {
   this.messages = {
-    'q_proximity': 'Please provide a keyword or phrase',
+    'q_proximity-0': 'Please provide a keyword or phrase',
     'q_proximity-1': 'Please provide a keyword or phrase',
-    'max_gaps': 'Please provide a proximity gap value',
+    max_gaps: 'Please provide a proximity gap value'
   };
 
   const field_id = req.getAttribute('id');
@@ -106,7 +83,6 @@ KeywordModal.prototype.showError = function(req) {
   const msg = this.messages[field_id];
 
   req.classList.add('invalid_border');
-  
 
   if (!req.validity.valid) {
       req.classList.add('invalid_border');
@@ -124,26 +100,35 @@ KeywordModal.prototype.showError = function(req) {
  * Hides the modal after execution.
  */
 KeywordModal.prototype.handleSubmit = function(e) {
+  const self=this;
   e.preventDefault();
   const searchQuery = this.generateQueryString();
   const proximityQuery = this.generateProximityQueryString();
   let query = URI(window.location.search)
     .removeSearch('q_proximity').removeSearch('max_gaps').removeSearch('proximity_filter_term').removeSearch('proximity_filter')
     .removeSearch('search')
-    .addSearch('search', searchQuery)
+    .addSearch('search', searchQuery);
+
+  // TODO: STILL NEED TO FIGUTE OUT NOT REQUIRING FIELDS/STOPPING SUBMIT IF ANY KEYWORD SEARCH FIELDS HAVE A VALUE ENTERED
+  // Submit validation for proximity fields
+  let $q_proximity_fields = this.$elm.find('input[id="q_proximity-0"], input[id="q_proximity-1"], input[id="max_gaps"]');
+
+    if (!($('#q_proximity-0').val()) || !($('#q_proximity-1').val()) || !($('#max_gaps').val()) ){
+    for (const req_field of $q_proximity_fields) {
+    self.showError(req_field);
+    }
+    // /END Submit validation for proximity fields
+  } else {
 
   this.dialog.hide();
   // Event record for GTM
   this.fireEvent('Keyword modal query: ' + searchQuery);
-   
-  //const formData = new FormData(this.$elm.find('form')[0]);
-  //localStorage.setItem('formData', formData);
 
-
-  
   //document.forms["category-filters"].submit();
   window.location = this.$form.attr('action') + query.toString() + proximityQuery.toString();
-};
+  }
+
+ };
 
 /**
  * Converts the keyword modal value into a formatted search query string
@@ -170,26 +155,18 @@ KeywordModal.prototype.generateQueryString = function() {
   return queryString;
 };
 
-
 ///////// NEW ////////
 KeywordModal.prototype.generateProximityQueryString = function() {
-  let $q_proximity_fields = this.$elm.find('input[name="q_proximity"], input[name="max_gaps"]')
-  let $optional_proximity_fields = this.$elm.find('input[name="proximity_filter_term"], select[name="proximity_filter"]')
-
-    // '#q_proximity, #max_gaps, #proximity_filter_term, #proximity_filter' 
-  
-   //console.log('this.$proximity_fields: ',  this.$proximity_fields)
-  //let q_proximity_fields = $('#q_proximity, #q_proximity_1', '#max_gaps')
+  let $q_proximity_fields = this.$elm.find('input[name="q_proximity"], input[name="max_gaps"]');
+  let $optional_proximity_fields = this.$elm.find('input[name="proximity_filter_term"], select[name="proximity_filter"]');
 
   let proximityQueryString = '';
-  const self = this;
 
-  if ($('#q_proximity').val() && $('#q_proximity-1').val()) {
+  if ($('#q_proximity-0').val() && $('#q_proximity-1').val()) {
     $q_proximity_fields.each(function() {
     const $input = $(this);
     //if ($input.val()) {
-      proximityQueryString += `&${$input.attr('name')}=${$input.val()}`
-      console.log('&${$input.attr("name")}: ',  `${$input.attr('name')}`)
+      proximityQueryString += `&${$input.attr('name')}=${$input.val()}`;
       //sessionStorage.setItem(`${$input.attr('id')}`, `${$input.val()}`);
      //}
     });
@@ -198,8 +175,7 @@ KeywordModal.prototype.generateProximityQueryString = function() {
      $optional_proximity_fields.each(function() {
         const $input = $(this);
         //if ($input.val()) {
-          proximityQueryString += `&${$input.attr('name')}=${$input.val()}`
-          console.log('&${$input.attr("name")}: ',  `${$input.attr('name')}`)
+          proximityQueryString += `&${$input.attr('name')}=${$input.val()}`;
           //sessionStorage.setItem(`${$input.attr('id')}`, `${$input.val()}`);
          //}
         });
@@ -213,22 +189,17 @@ KeywordModal.prototype.addQproximityField = function() {
       fields.insertAdjacentHTML('beforeend',
         `<div class="input--removable ">
         <input type="text" id="q_proximity-${childInputs+1}" name="q_proximity"><button id="js-rm-input" class="u-margin--top button button--close--base modal__remove-field" type="button"></button>
-        </div>`)
+        </div>`);
 
-}
+};
 
 KeywordModal.prototype.removeQproximityField = function(event) {
-  let field = event.target.previousElementSibling
-  console.log('field: ', field)
-  field.remove()
+  let field = event.target.previousElementSibling;
+  field.remove();
 
-
-}
-
-
+};
 
 ////// END NEW //////
-
 
 /**
  * Parses the values of the individual input, combining the words with
@@ -257,11 +228,6 @@ KeywordModal.prototype.parseValue = function($input) {
       .join('');
   }
 };
-
-
-
-
-
 
 /**
  * Fire an event to GTM

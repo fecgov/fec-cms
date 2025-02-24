@@ -162,6 +162,31 @@
               // Add all but this element back to the URL
               if (i != index) url.searchParams.append('case_statutory_citation', cite);
             });
+          // PROXIMITY
+          } else if (tag && tag.startsWith('q_proximity')) {
+            // Get the 0-indexed position of this item
+            const index = tag.split('-').at(-1);
+            // Hold all the 'q_proximity' from the URL
+            const q_proximity = url.searchParams.getAll('q_proximity');
+            // Remove all of the 'q_proximity' from the URL
+            url.searchParams.delete('q_proximity');
+            // If after removing one q-proximity param, the length would still be >= to required 2, add the remaining back 
+            if (q_proximity.length -1 >= 2) {
+            q_proximity.forEach((qprox, i) => {
+              // Add all but this element back to the URL
+              if (i != index) url.searchParams.append('q_proximity', qprox);
+             })
+            } else {
+              url.searchParams.delete('max_gaps');
+            }
+          } else if (tag && tag == 'proximity_filter_term') { // Check if tag is not null or undefined
+            // Remove 'proximity_filter_term' from the URL
+            url.searchParams.delete('proximity_filter_term');
+            url.searchParams.delete('proximity_filter');
+          
+          
+          // END  PROXIMITY
+          
           } else {
             url.searchParams.delete(tag);
           }
