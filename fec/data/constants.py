@@ -3,6 +3,13 @@ import operator
 
 from data import utils
 
+# Updating END_YEAR, DEFAULT_ELECTION_YEAR, or DISTRICT_MAP_CUTOFF
+# affects transaction tables and raising/spending visualizations.
+# Also update related visualization logic in:
+#   - fec/data/views.py: def raising, office; def spending, office
+#   - home/templatetags/top_entities.py: def raising_spending, office
+#   - homes/templates/home/home_page.html: officeSelector.value; yearSelector.value
+
 START_YEAR = 1979
 END_YEAR = 2026  # Change at the beginning of the year
 DEFAULT_TIME_PERIOD = 2024  # Change after the April quarterly report (4/15/25)
