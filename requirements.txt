@@ -1,4 +1,4 @@
-Django==4.2.17
+Django==4.2.18
 cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
@@ -9,7 +9,7 @@ requests==2.32.3
 urllib3==2.2.2
 whitenoise==5.2.0
 wagtail==6.3.0
-Jinja2==3.1.4
+Jinja2==3.1.5
 django_jinja==2.11.0
 CacheControl==0.11.5
 cachetools==1.0.2

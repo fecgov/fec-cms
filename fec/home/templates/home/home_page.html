@@ -121,12 +121,12 @@
     });
     {# Handle Chrome inconsistency with History API #}
     const officeSelector = document.querySelector('.js-office');
-    if (officeSelector) officeSelector.value = 'P';
+    if (officeSelector) officeSelector.value = 'S';
     // $('.js-office').val('P');
     {# This should be changed with /fec/home/templates_tags/top_entites.py #}
     {# TODO: make this more elegant #}
     const yearSelector = document.querySelector('.js-election-year');
-    if (yearSelector) yearSelector.value = '2024';
+    if (yearSelector) yearSelector.value = '2026';
     // $('.js-election-year').val('2024');
     const chartToggleReceipts = document.querySelector('.js-chart-toggle [value=receipts]');
     if (chartToggleReceipts) chartToggleReceipts.setAttribute('checked', true);
