@@ -9,7 +9,7 @@ register = template.Library()
 
 @register.inclusion_tag('partials/raising-spending.html')
 def raising_spending(request):
-    office = request.GET.get('office', 'P')  # Sets the default office for the homepage feature
+    office = request.GET.get('office', 'S')  # Sets the default office for the homepage feature
     # If changing this, look at line 130 in /fec/home/templates/home/home_page.html
     # TODO: make this more elegant
 
