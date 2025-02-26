@@ -638,20 +638,21 @@ class CustomPage(Page):
     sidebar = stream_factory(null=True, blank=True)
     related_topics = StreamField([
         ('related_topics', blocks.ListBlock(
-            blocks.PageChooserBlock(label="Related topic")
-        ))
-    ], null=True, blank=True)
+            blocks.PageChooserBlock(label='Related topic')
+        ))],
+        null=True, blank=True)
     citations = StreamField([
         ('citations', blocks.ListBlock(CitationsBlock()))],
         null=True, blank=True)
     record_articles = StreamField([
         ('record_articles', blocks.ListBlock(
             blocks.PageChooserBlock(target_model=RecordPage)
-        ))
-    ], null=True, blank=True)
+        ))],
+        null=True, blank=True)
     continue_learning = StreamField([
-        ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty')),
-    ], null=True, blank=True)
+            ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty')),
+        ],
+        null=True, blank=True)
     show_contact_link = models.BooleanField(
         max_length=255, default=True, null=False, blank=False,
         choices=[
@@ -775,6 +776,7 @@ class DocumentFeedPage(ContentPage):
 class ReportsLandingPage(ContentPage, UniqueModel):
     page_description = 'Unique landing page - Reports'
     subpage_types = ['DocumentFeedPage']
+    parent_page_types = ['AboutLandingPage']
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
     ], null=True)
@@ -904,7 +906,6 @@ class CollectionPage(Page):
     page_description = 'Template used for each receipts/disbursement etc. section of H4CC'
     body = stream_factory(null=True, blank=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
-
     related_pages = StreamField([
         ('related_pages', blocks.ListBlock(blocks.PageChooserBlock()))
     ], null=True, blank=True)
@@ -1088,13 +1089,14 @@ class MeetingPage(Page):
         choices=MEETING_TYPE_CHOICES,
         default=OPEN
     )
-    additional_information = models.TextField(blank=True, help_text='This field\
-        accepts html')
-    info_message = StreamField([
-        ('informational_message', SnippetChooserBlock(
-            'home.EmbedSnippet',
-            required=False, template='blocks/embed-info-message.html', icon='warning')),
-    ], null=True, blank=True)
+    additional_information = models.TextField(blank=True, help_text='This field accepts html')
+    info_message = StreamField(
+        [
+            ('informational_message', SnippetChooserBlock(
+                'home.EmbedSnippet', required=False, template='blocks/embed-info-message.html', icon='warning'
+            )),
+        ], null=True, blank=True
+    )
     draft_minutes_links = models.TextField(
         blank=True, help_text='URLs separated by a newline')
     approved_minutes_date = models.DateField(null=True, blank=True)
@@ -1106,14 +1108,12 @@ class MeetingPage(Page):
 
     imported_html = StreamField(
         [('html_block', blocks.RawHTMLBlock())],
-        null=True,
-        blank=True
+        null=True, blank=True
     )
 
     sunshine_act_doc_upld = StreamField(
         [('sunshine_act_upld', DocumentChooserBlock(required=False))],
-        null=True,
-        blank=True
+        null=True, blank=True
     )
 
     full_video_url = models.URLField(blank=True)
@@ -1220,14 +1220,15 @@ class ExamplePage(Page):
     ])
 
     body = StreamField([
-        ('paragraph', blocks.RichTextBlock()),
-        ('example_image', ExampleImage()),
-        ('reporting_example_cards', ReportingExampleCards()),
-        ('internal_button', InternalButtonBlock()),
-        ('external_button', ExternalButtonBlock()),
-        ('image', ImageChooserBlock()),
-        ('html', blocks.RawHTMLBlock()),
-    ], null=True)
+            ('paragraph', blocks.RichTextBlock()),
+            ('example_image', ExampleImage()),
+            ('reporting_example_cards', ReportingExampleCards()),
+            ('internal_button', InternalButtonBlock()),
+            ('external_button', ExternalButtonBlock()),
+            ('image', ImageChooserBlock()),
+            ('html', blocks.RawHTMLBlock()),
+        ], null=True
+    )
 
     related_media_title = models.CharField(blank=True, null=True, max_length=255)
     related_media = StreamField([
@@ -1278,17 +1279,20 @@ class ContactPage(Page):
     page_description = 'Page template for the Contact page'
     parent_page_types = ['HomePage']
     contact_items = StreamField([
-        ('contact_items', ContactInfoBlock())
-    ])
+            ('contact_items', ContactInfoBlock())
+        ]
+    )
     info_message = StreamField([
         ('informational_message', SnippetChooserBlock(
             'home.EmbedSnippet',
             required=False, template='blocks/embed-info-message.html', icon='warning')),
-    ], null=True, blank=True)
+        ], null=True, blank=True
+    )
     services_title = models.TextField()
     services = StreamField([
-        ('services', blocks.RichTextBlock())
-    ])
+            ('services', blocks.RichTextBlock())
+        ]
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel('contact_items'),
@@ -1306,9 +1310,11 @@ class FullWidthPage(ContentPage):
     page_description = 'Page template for special cases where we donʼt need a right column or left nav column'
     formatted_title = models.CharField(
         max_length=255, null=True, blank=True, default='',
-        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
-    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
-                            null=True, blank=True)
+        help_text='Use if you need italics in the title. e.g. <em>Italicized words</em>')
+    citations = StreamField(
+        [('citations', blocks.ListBlock(CitationsBlock()))],
+        null=True, blank=True
+    )
 
     template = 'home/full_width_page.html'
     content_panels = ContentPage.content_panels + [
@@ -1340,27 +1346,24 @@ class OigLandingPage(Page):
             ('table', TableBlock(table_options=core_table_options)),
             ('custom_table', CustomTableBlock()),
         ],
-        null=True, blank=True,
-        help_text='If this section is empty, the logo will be shown (for screens larger than phones)'
+        help_text='If this section is empty, the logo will be shown (for screens larger than phones)',
+        null=True, blank=True
     )
 
     recent_reports_url = models.URLField(max_length=255, blank=True, verbose_name='All reports URL')
     resources = StreamField(
         [('html', blocks.RawHTMLBlock(label='OIG resources'))],
-        null=True,
-        blank=True
+        null=True, blank=True
     )
 
     you_might_also_like = StreamField(
-        blocks.StreamBlock([
-            ('group', blocks.ListBlock(LinkBlock(), icon='list-ul', label='Group/column'))
-        ],
+        blocks.StreamBlock(
+            [('group', blocks.ListBlock(LinkBlock(), icon='list-ul', label='Group/column'))],
             max_num=3,
             required=False
         ),
-        null=True,
-        blank=True,
-        help_text='Expects three groups/columns but will accept fewer'
+        help_text='Expects three groups/columns but will accept fewer',
+        null=True, blank=True
     )
 
     content_panels = Page.content_panels + [
@@ -1456,9 +1459,10 @@ class ReportingDatesTable(Page):
             ])))
         ], blank=True))
     ], blank=True)
-    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
-                            null=True,
-                            blank=True)
+    citations = StreamField(
+        [('citations', blocks.ListBlock(CitationsBlock()))],
+        null=True, blank=True
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel('reporting_dates_table', help_text='Zebra-striping tip: To add additional row classes for more \
