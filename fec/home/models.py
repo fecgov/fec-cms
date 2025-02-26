@@ -38,7 +38,6 @@ logger = logging.getLogger(__name__)
 
 """options for wagtail default table_block """
 core_table_options = {
-
     'renderer': 'html',
 }
 
@@ -165,9 +164,9 @@ def log_user_save(sender, **kwargs):
     print(sender.id, '15')
     '''
     if kwargs.get('update_fields'):
-        logger.info("User {0} logged in".format(kwargs.get('instance').get_username()))
+        logger.info('User {0} logged in'.format(kwargs.get('instance').get_username()))
     else:
-        logger.info("User change: username {0} by instance {1}".format(kwargs.get('instance').get_username(),
+        logger.info('User change: username {0} by instance {1}'.format(kwargs.get('instance').get_username(),
                                                                        kwargs.get('instance')))
 
 
@@ -192,7 +191,7 @@ def user_groups_changed(sender, **kwargs):
     if kwargs.get('action').split('_')[0] == 'post':
         for kwarg in kwargs.get('pk_set'):
             action = 'to' if kwargs.get('action').split('_')[1] == 'add' else 'from'
-            logger.info("User change: User {0} was {1} {2} group {3}".format(kwargs.get('instance').get_username(),
+            logger.info('User change: User {0} was {1} {2} group {3}'.format(kwargs.get('instance').get_username(),
                         action_map[kwargs.get('action')],
                         action, group_map[kwarg]))
 
@@ -219,7 +218,7 @@ class Author(models.Model):
         max_length=255,
         choices=constants.author_groups.items(),
         blank=True,
-        help_text="Not required: Only choose this if you want this author to show up as part an official author group")
+        help_text='Not required: Only choose this if you want this author to show up as part an official author group')
 
     panels = [
         FieldPanel('name'),
@@ -230,8 +229,8 @@ class Author(models.Model):
         FieldPanel('bio'),
         MultiFieldPanel([
             FieldPanel('author_group')],
-            heading="Author Groups - Not required (For admin use only)",
-            classname="collapsible collapsed")
+            heading='Author Groups - Not required (For admin use only)',
+            classname='collapsible collapsed')
     ]
 
     def __str__(self):
@@ -276,7 +275,7 @@ class RecordPageTag(TaggedItemBase):
 class RecordPage(ContentPage):
     formatted_title = models.CharField(
         max_length=255, null=True, blank=True, default='',
-        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
+        help_text='Use if you need italics in the title. e.g. <em>Italicized words</em>')
     date = models.DateField(default=datetime.date.today)
     category = models.CharField(
         max_length=255,
@@ -336,7 +335,7 @@ class RecordPage(ContentPage):
             FieldPanel('homepage_pin_expiration'),
             FieldPanel('homepage_hide')
         ],
-            heading="Home page feed"
+            heading='Home page feed'
         )
     ]
 
@@ -374,7 +373,7 @@ class DigestPage(ContentPage):
 
     content_panels = ContentPage.content_panels + [
         FieldPanel('date'),
-        InlinePanel('authors', label="Authors"),
+        InlinePanel('authors', label='Authors'),
         PageChooserPanel('read_next'),
     ]
 
@@ -413,7 +412,7 @@ class PressReleasePage(ContentPage):
     date = models.DateField(default=datetime.date.today)
     formatted_title = models.CharField(
         max_length=255, null=True, blank=True, default='',
-        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
+        help_text='Use if you need italics in the title. e.g. <em>Italicized words</em>')
     category = models.CharField(
         max_length=255, choices=constants.press_release_page_categories.items())
     read_next = models.ForeignKey(
@@ -429,7 +428,7 @@ class PressReleasePage(ContentPage):
     content_panels = ContentPage.content_panels + [
         FieldPanel('formatted_title'),
         FieldPanel('date'),
-        InlinePanel('authors', label="Authors"),
+        InlinePanel('authors', label='Authors'),
         FieldPanel('category'),
         PageChooserPanel('read_next'),
     ]
@@ -441,7 +440,7 @@ class PressReleasePage(ContentPage):
             FieldPanel('homepage_pin_expiration'),
             FieldPanel('homepage_hide')
         ],
-            heading="Home page feed"
+            heading='Home page feed'
         )
     ]
 
@@ -501,7 +500,7 @@ class TipsForTreasurersPage(ContentPage):
     #         FieldPanel('homepage_pin_expiration'),
     #         FieldPanel('homepage_hide')
     #     ],
-    #     heading="Home page feed"
+    #     heading='Home page feed'
     #     )
     # ]
 
@@ -552,7 +551,7 @@ class HomePageBannerAnnouncement(Page):
             FieldPanel('date_inactive'),
             FieldPanel('active'),
         ],
-            heading="Home page banner announcement"
+            heading='Home page banner announcement'
         )
     ]
 
@@ -582,11 +581,11 @@ class AlertForEmergencyUseOnly(Page):
             FieldPanel('alert_date_inactive'),
             FieldPanel('alert_active'),
         ],
-            heading="This 'alert for emergency use only' feature \
+            heading='This ‘alert for emergency use only’ feature \
             is used exclusively for an agency shutdown, or emergency \
             event in which the agency as a whole cannot assist the \
             regulated community or the public. The use of this feature \
-            requires approval by Amy Kort or Wei Luo prior to deployment."
+            requires approval by Amy Kort or Wei Luo prior to deployment.'
         )
     ]
 
@@ -662,8 +661,8 @@ class CustomPage(Page):
             FieldPanel('record_articles'),
             FieldPanel('show_contact_link'),
         ],
-            heading="Sidebar",
-            classname="collapsible"
+            heading='Sidebar',
+            classname='collapsible'
         )
     ]
 
@@ -832,14 +831,14 @@ class CommissionerPage(Page):
         ('paragraph', blocks.RichTextBlock())
     ], null=True, blank=True)
 
-    commissioner_email = models.CharField(max_length=255, blank=True, verbose_name="Commissioner email address")
+    commissioner_email = models.CharField(max_length=255, blank=True, verbose_name='Commissioner email address')
     commissioner_phone = models.CharField(max_length=255, null=True, blank=True,
-                                          verbose_name="Commissioner phone number")
+                                          verbose_name='Commissioner phone number')
     commissioner_bluesky = models.CharField(max_length=255, null=True, blank=True,
-                                            verbose_name="Commissioner Bluesky handle",
+                                            verbose_name='Commissioner Bluesky handle',
                                             help_text='The part after https://bsky.app/profile/')
     commissioner_twitter = models.CharField(max_length=255, null=True, blank=True,
-                                            verbose_name="Commissioner X/Twitter handle",
+                                            verbose_name='Commissioner X/Twitter handle',
                                             help_text='The part after https://x.com/')
 
     content_panels = Page.content_panels + [
@@ -908,7 +907,8 @@ class CollectionPage(Page):
         choices=[
             (True, 'Show contact card'),
             (False, 'Do not show contact card')
-        ])
+        ]
+    )
     content_panels = Page.content_panels + [
         FieldPanel('body'),
         FieldPanel('sidebar_title'),
@@ -938,14 +938,14 @@ class ResourcePage(Page):
     date = models.DateField(default=datetime.date.today)
     formatted_title = models.CharField(
         max_length=255, null=True, blank=True, default='',
-        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
+        help_text='Use if you need italics in the title. e.g. <em>Italicized words</em>')
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock()),
         ('informational_message', SnippetChooserBlock(
             'home.EmbedSnippet',
             template='blocks/embed-info-message.html',
             icon='warning',
-            help_text="Use for an info or alert message banner")),
+            help_text='Use for an info or alert message banner')),
     ], null=True, blank=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
     related_pages = StreamField([
@@ -960,7 +960,7 @@ class ResourcePage(Page):
     ], null=True, blank=True)
     related_topics = StreamField([
         ('related_topics', blocks.ListBlock(
-            blocks.PageChooserBlock(label="Related topic")
+            blocks.PageChooserBlock(label='Related topic')
         ))
     ], null=True, blank=True)
     category = models.CharField(
@@ -1235,8 +1235,8 @@ class EmbedSnippet(models.Model):
     banner_icon = models.TextField(
         blank=True,
         default='info',
-        help_text="This field applies to informational-message snippets only. \
-            Input 'info' or 'alert'. Default is 'info'")
+        help_text='This field applies to informational-message snippets only. \
+            Input `info` or `alert`. Default is `info`')
 
     panels = [
         FieldPanel('title'),
