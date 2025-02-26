@@ -704,6 +704,7 @@ class PressLandingPage(Page):
     subpage_types = ['CollectionPage', 'DigestPage', 'PressReleasePage']
     hero = stream_factory(null=True, blank=True)
     release_intro = stream_factory(null=True, blank=True)
+    digest_intro = stream_factory(null=True, blank=True)
 
     option_blocks = StreamField([
         ('option_blocks', OptionBlock())
