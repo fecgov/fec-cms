@@ -414,6 +414,7 @@ def get_previous_press_release_page():
 
 class PressReleasePage(ContentPage):
     page_description = 'Commission news and journalist resource'
+    parent_page_types = ['PressLandingPage']
     date = models.DateField(default=datetime.date.today)
     formatted_title = models.CharField(
         max_length=255, null=True, blank=True, default='',
@@ -535,6 +536,7 @@ class TipsForTreasurersPage(ContentPage):
 
 class HomePageBannerAnnouncement(Page):
     page_description = 'Homepage announcement banners, to be used only on the ‘Home page: Banners’ page'
+    parent_page_types = ['HomePage', 'CustomPage']
     description = models.CharField(max_length=255, blank=True)
     link_title = models.CharField(max_length=255, blank=True)
     link_url = models.URLField(max_length=255, blank=True)
@@ -567,6 +569,7 @@ class HomePageBannerAnnouncement(Page):
 
 class AlertForEmergencyUseOnly(Page):
     page_description = 'Larger banner for emergency alerts on the home page'
+    parent_page_types = ['HomePage', 'CustomPage']
     alert_description = models.CharField(max_length=255, blank=True)
     alert_link_title = models.CharField(max_length=255, blank=True)
     alert_link_url = models.URLField(max_length=255, blank=True)
@@ -696,6 +699,8 @@ class CustomPage(Page):
 
 class PressLandingPage(Page):
     page_description = 'Unique landing page - Press'
+    parent_page_types = ['HomePage']
+    subpage_types = ['CollectionPage', 'DigestPage', 'PressReleasePage']
     hero = stream_factory(null=True, blank=True)
     release_intro = stream_factory(null=True, blank=True)
 
@@ -790,6 +795,8 @@ class ReportsLandingPage(ContentPage, UniqueModel):
 
 class AboutLandingPage(Page):
     page_description = 'Unique landing page - About FEC'
+    parent_page_types = ['HomePage']
+    subpage_types = ['ReportsLandingPage', 'ResourcePage']
     hero = stream_factory(null=True, blank=True)
     sections = StreamField([
         ('sections', OptionBlock())
@@ -1025,6 +1032,7 @@ class ResourcePage(Page):
 
 class LegalResourcesLandingPage(ContentPage, UniqueModel):
     page_description = 'Unique landing page - Legal Resources'
+    parent_page_types = ['HomePage']
     subpage_types = ['ResourcePage']
     template = 'home/legal/legal_resources_landing.html'
 
@@ -1036,6 +1044,7 @@ class LegalResourcesLandingPage(ContentPage, UniqueModel):
 class ServicesLandingPage(ContentPage, UniqueModel):
     page_description = 'Unique landing page - Services / Help for Candidates and Committees main landing pages for \
         Candidates, SSF, Nonconnected and Party sections'
+    parent_page_types = ['HomePage']
     subpage_types = ['CollectionPage', 'ResourcePage', 'CustomPage']
     template = 'home/candidate-and-committee-services/services_landing_page.html'
 
@@ -1267,6 +1276,7 @@ class EmbedSnippet(models.Model):
 
 class ContactPage(Page):
     page_description = 'Page template for the Contact page'
+    parent_page_types = ['HomePage']
     contact_items = StreamField([
         ('contact_items', ContactInfoBlock())
     ])
@@ -1316,6 +1326,7 @@ class FullWidthPage(ContentPage):
 
 class OigLandingPage(Page):
     page_description = 'Unique landing page - OIG'
+    parent_page_types = ['HomePage']
     intro_message = RichTextField(features=['bold', 'italic', 'link'], null=True)
     complaint_url = models.URLField(max_length=255, blank=True, verbose_name='Complaint URL')
     show_info_message = models.BooleanField(help_text='☑︎ display informational message | ☐ hide message')
