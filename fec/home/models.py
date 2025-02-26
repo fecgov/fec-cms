@@ -200,7 +200,9 @@ m2m_changed.connect(user_groups_changed, sender=User.groups.through)
 
 
 class HomePage(ContentPage, UniqueModel):
-    """Unique home page."""
+    page_description = 'The Homepage'
+    parent_page_types = []
+
     @property
     def content_section(self):
         return ''
@@ -528,7 +530,6 @@ class TipsForTreasurersPage(ContentPage):
 
 
 class HomePageBannerAnnouncement(Page):
-    # Home page banner announcement
     description = models.CharField(max_length=255, blank=True)
     link_title = models.CharField(max_length=255, blank=True)
     link_url = models.URLField(max_length=255, blank=True)
@@ -560,7 +561,6 @@ class HomePageBannerAnnouncement(Page):
 
 
 class AlertForEmergencyUseOnly(Page):
-    # Home page banner alert
     alert_description = models.CharField(max_length=255, blank=True)
     alert_link_title = models.CharField(max_length=255, blank=True)
     alert_link_url = models.URLField(max_length=255, blank=True)
@@ -594,7 +594,6 @@ class AlertForEmergencyUseOnly(Page):
 
 
 class CustomPage(Page):
-    """Flexible customizable page."""
     author = models.CharField(max_length=255)
     date = models.DateField('Creation date')
     body = StreamField([
@@ -690,7 +689,6 @@ class CustomPage(Page):
 class PressLandingPage(Page):
     hero = stream_factory(null=True, blank=True)
     release_intro = stream_factory(null=True, blank=True)
-    digest_intro = stream_factory(null=True, blank=True)
 
     option_blocks = StreamField([
         ('option_blocks', OptionBlock())
@@ -934,7 +932,6 @@ class CollectionPage(Page):
 
 
 class ResourcePage(Page):
-    # Class for pages that include a side nav, multiple sections and citations
     date = models.DateField(default=datetime.date.today)
     formatted_title = models.CharField(
         max_length=255, null=True, blank=True, default='',
@@ -1020,10 +1017,6 @@ class LegalResourcesLandingPage(ContentPage, UniqueModel):
 
 
 class ServicesLandingPage(ContentPage, UniqueModel):
-    """
-    Page model for the Help for Candidates and Committees landing page
-    """
-
     subpage_types = ['CollectionPage', 'ResourcePage', 'CustomPage']
     template = 'home/candidate-and-committee-services/services_landing_page.html'
 
@@ -1187,8 +1180,6 @@ class MeetingPage(Page):
 
 
 class ExamplePage(Page):
-    """Page template for "how to report" and "example scenario" pages
-    Always within the Help section"""
     featured_image = models.ForeignKey(
         'wagtailimages.Image', blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
 
@@ -1300,7 +1291,6 @@ class FullWidthPage(ContentPage):
 
 
 class OigLandingPage(Page):
-    """OIG's landing page"""
     intro_message = RichTextField(features=['bold', 'italic', 'link'], null=True)
     complaint_url = models.URLField(max_length=255, blank=True, verbose_name='Complaint URL')
     show_info_message = models.BooleanField(help_text='☑︎ display informational message | ☐ hide message')
