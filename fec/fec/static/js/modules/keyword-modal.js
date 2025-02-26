@@ -27,10 +27,12 @@ export default function KeywordModal() {
    const req_fields = proximity_form.querySelectorAll('[required]');
    const self = this;
    for (const req_field of req_fields) {
+    if (req_field.id != 'max_gaps') {
     req_field.insertAdjacentHTML(
       'afterend',
       '<span class="error ' + req_field.id + '" aria-live="polite"></span>'
     );
+   }
         // Bind showError() to blur event on required fields
         req_field.addEventListener('blur', function() {
           self.showError(req_field);
@@ -49,10 +51,23 @@ export default function KeywordModal() {
   this.$addInput.on('click', this.addQproximityField.bind(this));
   this.$removeInput = this.$elm.find('#js-rm-input');
   this.$removeInput.on('click', this.removeQproximityField.bind(this));
-  // Using on JQuery on event here because element does not exist on page-load
+   // Using on JQuery on event here because element does not exist on page-load- DO I NEED THIS OR JUST CALL THE FUNC LIKE THIS:
+  //$(document).on('click','#js-rm-input', this.removeQproximityField.bind(this));
   $(document).on('click','#js-rm-input', function(event){
     $(event.target).parent().remove();
   });
+  //this.$step_button = document.getElementById("stepup");
+  this.$stepup_button = this.$elm.find('#increment_max_gaps');
+  this.$stepdown_button = this.$elm.find('#decrement_max_gaps');
+  this.$stepButtons = document.querySelectorAll('.js-step-button');
+  //console.log('this.$stepButtons:', this.$stepButtons)
+  //this.$stepup_button.on('click', this.stepUpDown.bind(this));
+  //this.$stepdown_button.on('click', this.stepUpDown.bind(this));
+
+    for (const btn of this.$stepButtons) {
+      let self = this;
+    $(btn).on('click', self.stepUpDown.bind(this));
+  }
 
   this.dialog = new A11yDialog(this.elm);
 
@@ -73,8 +88,8 @@ export default function KeywordModal() {
 KeywordModal.prototype.showError = function(req) {
   this.messages = {
     'q_proximity-0': 'Please provide a keyword or phrase',
-    'q_proximity-1': 'Please provide a keyword or phrase',
-    max_gaps: 'Please provide a proximity gap value'
+    'q_proximity-1': 'Please provide a keyword or phrase'
+    //'max_gaps': 'Please provide a proximity gap value'
   };
 
   const field_id = req.getAttribute('id');
@@ -86,10 +101,10 @@ KeywordModal.prototype.showError = function(req) {
 
   if (!req.validity.valid) {
       req.classList.add('invalid_border');
-      req_fieldError.textContent = msg;
+      if (req_fieldError) req_fieldError.textContent = msg;
   } else {
     req.classList.remove('invalid_border');
-    req_fieldError.textContent = '';
+    if (req_fieldError) req_fieldError.textContent = '';
   }
 };
 
@@ -109,7 +124,7 @@ KeywordModal.prototype.handleSubmit = function(e) {
     .removeSearch('search')
     .addSearch('search', searchQuery);
 
-  // TODO: STILL NEED TO FIGUTE OUT NOT REQUIRING FIELDS/STOPPING SUBMIT IF ANY KEYWORD SEARCH FIELDS HAVE A VALUE ENTERED
+  // TODO: STILL NEED TO FIGURE OUT NOT REQUIRING FIELDS/STOPPING SUBMIT IF ANY KEYWORD SEARCH FIELDS HAVE A VALUE ENTERED
   // Submit validation for proximity fields
   let $q_proximity_fields = this.$elm.find('input[id="q_proximity-0"], input[id="q_proximity-1"], input[id="max_gaps"]');
 
@@ -197,6 +212,31 @@ KeywordModal.prototype.removeQproximityField = function(event) {
   let field = event.target.previousElementSibling;
   field.remove();
 
+};
+
+KeywordModal.prototype.stepUpDown = function(event) {
+
+  let input = event.target.closest('.step_container').querySelector('input');
+
+  if (event.target.previousElementSibling == input) {
+    //input.stepUp(1);
+    input.value ++;
+  }
+  else if (event.target.nextElementSibling == input) {
+    ///input.stepDown(1);
+    if (input.value >= 1) {
+    input.value --;
+    }
+  }
+
+  // if (event.target.classList.contains("stepup")) {
+  //   let input = event.target.previousElementSibling
+  //   input.stepUp(1);
+  // }
+  // else if (event.target.classList.contains("stepdown")){
+  //   let input = event.target.nextElementSibling
+  //   input.stepDown(1);
+  // }
 };
 
 ////// END NEW //////

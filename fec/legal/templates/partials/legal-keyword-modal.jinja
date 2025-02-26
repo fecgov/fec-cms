@@ -53,13 +53,39 @@
       </div>
       <div class="filter">
       <label class="label" for="max_gaps">Maximum proximity between all keywords or phrases</label>
-      <input type="text" id="max_gaps" name="max_gaps" required value="0">
-      <span class="t-note t-sans">Example: 0, 3, 50, 400</span>
-      </div>
+<div class='step_container'style="
+    position: relative;
+    /* grid-auto-columns: 1fr 12fr 1fr; */
+    display: grid;
+    width: 48%;
+    justify-content: start;
+"><button id="decrement_max_gaps" class="accordion__button stepdown  js-step-button" type="button" aria-expanded="true" style="
+    grid-column: 1;
+    width: 21px;
+    padding: 0;
+    background-position: 0px 50%;
+    /* grid-column-end: auto; */
+"></button> 
+<input id="max_gaps" name="max_gaps" class="step_input" type="number" value="0" min="0" style="
+    width: 75%;
+    margin: 0 10px;
+    display: inline-block;
+">
+<button id="increment_max_gaps" class="accordion__button stepup js-step-button" type="button" style="
+    border: 0;
+    grid-column: 3;
+    width: 21px;
+    /* padding: 0 15px  0 15px; */
+    background-position: 0px 50%;
+"></button>
+</div>
+<span class="t-note t-sans">Example: 0, 3, 50, 400</span>
+</div>
+
  
 
 
-   <div class="fiter range">
+   <div class="fiter u-margin--top">
             <div class="filter range__input range__input--min js-filter" data-filter="range" style="width: 63%; vertical-align: baseline;">
                 <label class="label" for="proximity_filter_term">Secondary keyword or phrase (optional)</label>
                 <input id="proximity_filter_term" type="text" name="proximity_filter_term" data-range="min">
