@@ -21,11 +21,11 @@
     }
     
     @include media($med) {
-      &:nth-child(odd) {
+      &.odd {
         border-right: 1px solid #f1f1f1;
         padding-right: 1rem;
       }
-      &:nth-child(even) {
+      &.even {
         padding-left: 1rem;
       }
     }

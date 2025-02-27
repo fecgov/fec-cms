@@ -246,7 +246,8 @@ export function modalRenderFactory(template, fetch) {
 
             newChildRow.show();
             $row.addClass('row-active');
-            row.child().addClass('dt-isChild row-active');
+            const parentRowsEvenOddClass = e.currentTarget.classList.contains('even') ? 'even' : 'odd';
+            row.child().addClass(`${parentRowsEvenOddClass} dt-isChild row-active`);
             // Aria link the normal row and its child/details row
             row.child().attr('id', `details-for-tr-${index}`);
             $row.attr('aria-details', `details-for-tr-${index}`);
