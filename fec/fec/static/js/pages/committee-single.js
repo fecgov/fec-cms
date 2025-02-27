@@ -160,9 +160,9 @@ const disbursementRecipientColumns = [
     className: 'all',
     orderable: false,
     render: function ( data ) {
-      if(data) {
+      if (data) {
         return data + '%';
-      } else{
+      } else {
         return 'Could not calculate';
       }
     }
@@ -412,6 +412,18 @@ const nationalPartySpendingColumns = [
   })
 ];
 
+const inauguralTotalsByDonorsColumns = [
+  {
+    data: 'contributor_name',
+    className: 'all',
+    orderable: false
+  },
+  currencyColumn({
+    data: 'total_donation',
+    className: 'min-desktop hide-panel column--number t-mono'
+  })
+];
+
 const aggregateCallbacks = {
   afterRender: barsAfterRender.bind(undefined, undefined)
 };
@@ -607,6 +619,58 @@ $(function() {
           })
         );
         break;
+      case 'inaugural-donations':
+        path = ['schedules', 'schedule_a'];
+        // For raising/spending tabs, use previous cycle if provided
+        cycle = window.context.cycle || $table.attr('data-cycle');
+        DataTable_FEC.defer(
+          $table,
+          _extend({}, tableOpts, {
+            path: path,
+            query: {
+              committee_id: committeeId,
+              two_year_transaction_period: cycle
+              // is_individual: true
+            },
+            columns: individualContributionsColumns,
+            callbacks: aggregateCallbacks,
+            order: [[3, 'desc']],
+            useExport: true,
+            singleEntityItemizedExport: true,
+            paginator: SeekPaginator,
+            hideEmptyOpts: {
+              dataType: 'inaugural donations', // helps build `We don't have ${dataType} for ${cycle}`
+              name: window.context.name,
+              timePeriod: window.context.timePeriod,
+              reason: missingDataReason('contributions')
+            }
+          })
+        );
+        break;
+        case 'inaugural-donations-by-donor':
+          path = ['totals', 'inaugural_committees', 'by_contributor'];
+          // For raising/spending tabs, use previous cycle if provided
+          cycle = window.context.cycle || $table.attr('data-cycle');
+          DataTable_FEC.defer(
+            $table,
+            _extend({}, tableOpts, {
+              path: path,
+              query: _extend(query, {
+                committee_id: committeeId,
+                cycle: cycle
+              }),
+              columns: inauguralTotalsByDonorsColumns,
+              callbacks: aggregateCallbacks,
+              order: [[1, 'desc']],
+              hideEmptyOpts: {
+                dataType: 'inaugural donations',
+                name: window.context.name,
+                timePeriod: window.context.timePeriod,
+                reason: missingDataReason('contributions')
+              }
+            })
+          );
+          break;
       case 'disbursements-by-recipient':
         path = ['schedules', 'schedule_b', 'by_recipient'];
         // For raising/spending tabs, use previous cycle if provided
