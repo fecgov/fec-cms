@@ -933,7 +933,7 @@ def house_senate_overview(request, office, cycle=None):
 
 
 def raising(request):
-    office = request.GET.get("office", "P")  # The default for features like Who is raising the most
+    office = request.GET.get("office", "S")  # The default for features like Who is raising the most
 
     election_year = int(
         request.GET.get("election_year", constants.DEFAULT_ELECTION_YEAR)
@@ -957,7 +957,7 @@ def raising(request):
 
 
 def spending(request):
-    office = request.GET.get("office", "P")  # The default for features like Who is spending the most
+    office = request.GET.get("office", "S")  # The default for features like Who is spending the most
 
     election_year = int(
         request.GET.get("election_year", constants.DEFAULT_ELECTION_YEAR)
