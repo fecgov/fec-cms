@@ -13,7 +13,7 @@ export const availableDates = [
   {
     value: 'latest',
     label: 'I haven’t been assessed a fine',
-    summary: 'I haven’t been assessed: using latest fine amounts'
+    summary: 'I haven’t been assessed'
   },
   {
     value: '2025',
