@@ -1,76 +1,76 @@
 {{!--
-Template for national party accounts disbursements datatable details panel
+Template for national party accounts disbursements datatable details row
 --}}
-<div class="panel__row">
-  <h4 class="panel__title">Source information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Name"}}
-      {{#if contributor_id}}{{! If there's a contributor_id}}
-        {{#if (stringsMatch entity_type 'IND')}}{{! If this is an individual and not a committee }}
+    <caption>Source information</caption>
+    {{#dtDetailsTableRow "Name"~}}
+      {{#if contributor_id~}}{{! If there's a contributor_id }}
+        {{#if (stringsMatch entity_type 'IND')~}}{{! If this is an individual and not a committee }}
         {{contributor_name}}{{! Don't link the name }}
-        {{else}}{{! Otherwise, if it's not an individual, }}
+        {{else~}}{{! Otherwise, if it's not an individual, }}
         <a href="/data/committee/{{contributor_id}}/">{{contributor_name}}</a>{{! Link the name }}
         {{/if}}
-      {{else}}{{! Otherwise, if there's no contributor_id, }}
+      {{else~}}{{! Otherwise, if there's no contributor_id, }}
         {{contributor_name}}{{! There's no id to link }}
       {{/if}}
-    {{/panelRow}}
-    {{#panelRow "City, state and ZIP code"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "City, state and ZIP code"~}}
       {{contributor_city}}, {{contributor_state}}  {{zipCode contributor_zip}}
-    {{/panelRow}}
-    {{#panelRow "Occupation"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Occupation"~}}
       {{contributor_occupation}}
-    {{/panelRow}}
-    {{#panelRow "Employer"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Employer"~}}
       {{contributor_employer}}
-    {{/panelRow}}
-    {{#panelRow "Year to date"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Year to date"~}}
       {{{currency contributor_aggregate_ytd}}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">Receipt information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Amount"}}
+    <caption>Receipt information</caption>
+    {{#dtDetailsTableRow "Amount"~}}
       {{{currency contribution_receipt_amount}}}
-    {{/panelRow}}
-    {{#panelRow "Receipt date"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Receipt date"~}}
       {{{datetime contribution_receipt_date format="pretty"}}}
-    {{/panelRow}}
-    {{#panelRow "Report year"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Report year"~}}
       {{report_year}}
-    {{/panelRow}}
-    {{#panelRow "Receipt type"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Receipt type"~}}
       {{receipt_type_desc}}
-    {{/panelRow}}
-    {{#panelRow "Memo"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Memo"~}}
       {{memo_text}}
-    {{/panelRow}}
-    {{#panelRow "Reported on"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Reported on"~}}
       {{filing_form}} on Line {{line_num}}
-    {{/panelRow}}
-    {{#panelRow "Election type"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Election type"~}}
       {{fec_election_type_desc}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">Recipient information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Committee"}}
+    <caption>Recipient information</caption>
+    {{#dtDetailsTableRow "Committee"~}}
       <a href="{{entityUrl this type="committee"}}">{{committee_name}}</a>
-    {{/panelRow}}
-    {{#panelRow "Political party"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Political party"~}}
       {{party_full}}
-    {{/panelRow}}
-    {{#panelRow "Type"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Type"~}}
       {{recipient_committee_type_full}}
-    {{/panelRow}}
-    {{#panelRow "State"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "State"~}}
         {{state_full}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
