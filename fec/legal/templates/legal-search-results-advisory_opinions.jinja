@@ -47,7 +47,7 @@
     </div>
     {{ date.field('document_date', 'Document date', id_prefix='ao_') }}
   </div>
-  <button type="button" class="js-accordion-trigger accordion__button">Citations</button>
+  <button type="button" class="js-accordion-trigger accordion__button">Final opinion footnote citations</button>
   <div class="accordion__content">
     <label>If more than one citation is entered:</label>
     <input type="radio" id="ao_citation_require_all_false" name="ao_citation_require_all" value="false"{% if ao_citation_require_all != 'true' %} checked{% endif %}>
