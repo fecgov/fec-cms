@@ -119,10 +119,11 @@
               href="#section-3">Raising</a>
               {% if committee_type not in ['C', 'E', 'I'] %}
               <ul>
-                <li><a href="#total-receipts">Total receipts</a></li>
                 {% if is_inaugural %}
+                <li><a href="#total-receipts">Total donations</a></li>
                 <li><a href="#donations">Donations</a></li>
                 {% else %}
+                <li><a href="#total-receipts">Total receipts</a></li>
                 <li><a href="#individual-contribution-transactions">Individual contribution transactions</a></li>
                 {% endif %}
                 {% if FEATURES.nat_party_acct_rec_single and totals_national_party %}
