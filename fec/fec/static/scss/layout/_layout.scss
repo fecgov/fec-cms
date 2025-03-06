@@ -11,10 +11,14 @@
   padding: u(0 2rem);
   @include outer-container;
 
-  // There's a point early in $xl where we still want the side padding
-  // 20 px on each side
-  @media (min-width: calc(1088px + 2rem) ) {
+  @include media($lg) {
     padding: 0;
+  }
+}
+// Keep content off the side of the browser in these in-between widths as soon as we get into $lg
+@media screen and (min-width: 860px) and (max-width: 990px) {
+  .container {
+    max-width: calc(100vw - 4rem); // 2rem on each side
   }
 }
 
