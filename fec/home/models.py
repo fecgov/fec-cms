@@ -38,7 +38,6 @@ logger = logging.getLogger(__name__)
 
 """options for wagtail default table_block """
 core_table_options = {
-
     'renderer': 'html',
 }
 
@@ -165,9 +164,9 @@ def log_user_save(sender, **kwargs):
     print(sender.id, '15')
     '''
     if kwargs.get('update_fields'):
-        logger.info("User {0} logged in".format(kwargs.get('instance').get_username()))
+        logger.info('User {0} logged in'.format(kwargs.get('instance').get_username()))
     else:
-        logger.info("User change: username {0} by instance {1}".format(kwargs.get('instance').get_username(),
+        logger.info('User change: username {0} by instance {1}'.format(kwargs.get('instance').get_username(),
                                                                        kwargs.get('instance')))
 
 
@@ -192,7 +191,7 @@ def user_groups_changed(sender, **kwargs):
     if kwargs.get('action').split('_')[0] == 'post':
         for kwarg in kwargs.get('pk_set'):
             action = 'to' if kwargs.get('action').split('_')[1] == 'add' else 'from'
-            logger.info("User change: User {0} was {1} {2} group {3}".format(kwargs.get('instance').get_username(),
+            logger.info('User change: User {0} was {1} {2} group {3}'.format(kwargs.get('instance').get_username(),
                         action_map[kwargs.get('action')],
                         action, group_map[kwarg]))
 
@@ -201,7 +200,9 @@ m2m_changed.connect(user_groups_changed, sender=User.groups.through)
 
 
 class HomePage(ContentPage, UniqueModel):
-    """Unique home page."""
+    page_description = 'The Homepage'
+    parent_page_types = []
+
     @property
     def content_section(self):
         return ''
@@ -219,7 +220,7 @@ class Author(models.Model):
         max_length=255,
         choices=constants.author_groups.items(),
         blank=True,
-        help_text="Not required: Only choose this if you want this author to show up as part an official author group")
+        help_text='Not required: Only choose this if you want this author to show up as part an official author group')
 
     panels = [
         FieldPanel('name'),
@@ -230,8 +231,8 @@ class Author(models.Model):
         FieldPanel('bio'),
         MultiFieldPanel([
             FieldPanel('author_group')],
-            heading="Author Groups - Not required (For admin use only)",
-            classname="collapsible collapsed")
+            heading='Author Groups - Not required (For admin use only)',
+            classname='collapsible collapsed')
     ]
 
     def __str__(self):
@@ -274,9 +275,10 @@ class RecordPageTag(TaggedItemBase):
 
 
 class RecordPage(ContentPage):
+    page_description = 'Used to show the latest updates and information about the Commission and campaign finance law'
     formatted_title = models.CharField(
         max_length=255, null=True, blank=True, default='',
-        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
+        help_text='Use if you need italics in the title. e.g. <em>Italicized words</em>')
     date = models.DateField(default=datetime.date.today)
     category = models.CharField(
         max_length=255,
@@ -336,7 +338,7 @@ class RecordPage(ContentPage):
             FieldPanel('homepage_pin_expiration'),
             FieldPanel('homepage_hide')
         ],
-            heading="Home page feed"
+            heading='Home page feed'
         )
     ]
 
@@ -367,6 +369,7 @@ def get_previous_digest_page():
 
 
 class DigestPage(ContentPage):
+    page_description = 'Child page from Updates and displays what took place at the Agency for the week'
     date = models.DateField(default=datetime.date.today)
     read_next = models.ForeignKey('DigestPage', blank=True, null=True,
                                   default=get_previous_digest_page,
@@ -374,7 +377,7 @@ class DigestPage(ContentPage):
 
     content_panels = ContentPage.content_panels + [
         FieldPanel('date'),
-        InlinePanel('authors', label="Authors"),
+        InlinePanel('authors', label='Authors'),
         PageChooserPanel('read_next'),
     ]
 
@@ -410,10 +413,12 @@ def get_previous_press_release_page():
 
 
 class PressReleasePage(ContentPage):
+    page_description = 'Commission news and journalist resource'
+    parent_page_types = ['HomePage', 'PressLandingPage']
     date = models.DateField(default=datetime.date.today)
     formatted_title = models.CharField(
         max_length=255, null=True, blank=True, default='',
-        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
+        help_text='Use if you need italics in the title. e.g. <em>Italicized words</em>')
     category = models.CharField(
         max_length=255, choices=constants.press_release_page_categories.items())
     read_next = models.ForeignKey(
@@ -429,7 +434,7 @@ class PressReleasePage(ContentPage):
     content_panels = ContentPage.content_panels + [
         FieldPanel('formatted_title'),
         FieldPanel('date'),
-        InlinePanel('authors', label="Authors"),
+        InlinePanel('authors', label='Authors'),
         FieldPanel('category'),
         PageChooserPanel('read_next'),
     ]
@@ -441,7 +446,7 @@ class PressReleasePage(ContentPage):
             FieldPanel('homepage_pin_expiration'),
             FieldPanel('homepage_hide')
         ],
-            heading="Home page feed"
+            heading='Home page feed'
         )
     ]
 
@@ -482,6 +487,7 @@ def get_previous_tips_page():
 
 
 class TipsForTreasurersPage(ContentPage):
+    page_description = 'Weekly short paragraph of helpful information targeted to Treasurers - Child page from Updates'
     date = models.DateField(default=datetime.date.today)
     read_next = models.ForeignKey('TipsForTreasurersPage', blank=True, null=True,
                                   default=get_previous_tips_page,
@@ -501,7 +507,7 @@ class TipsForTreasurersPage(ContentPage):
     #         FieldPanel('homepage_pin_expiration'),
     #         FieldPanel('homepage_hide')
     #     ],
-    #     heading="Home page feed"
+    #     heading='Home page feed'
     #     )
     # ]
 
@@ -529,7 +535,8 @@ class TipsForTreasurersPage(ContentPage):
 
 
 class HomePageBannerAnnouncement(Page):
-    # Home page banner announcement
+    page_description = 'Homepage announcement banners, to be used only on the ‘Home page: Banners’ page'
+    parent_page_types = ['HomePage', 'CustomPage']
     description = models.CharField(max_length=255, blank=True)
     link_title = models.CharField(max_length=255, blank=True)
     link_url = models.URLField(max_length=255, blank=True)
@@ -552,7 +559,7 @@ class HomePageBannerAnnouncement(Page):
             FieldPanel('date_inactive'),
             FieldPanel('active'),
         ],
-            heading="Home page banner announcement"
+            heading='Home page banner announcement'
         )
     ]
 
@@ -561,7 +568,8 @@ class HomePageBannerAnnouncement(Page):
 
 
 class AlertForEmergencyUseOnly(Page):
-    # Home page banner alert
+    page_description = 'Larger banner for emergency alerts on the home page'
+    parent_page_types = ['HomePage', 'CustomPage']
     alert_description = models.CharField(max_length=255, blank=True)
     alert_link_title = models.CharField(max_length=255, blank=True)
     alert_link_url = models.URLField(max_length=255, blank=True)
@@ -582,11 +590,11 @@ class AlertForEmergencyUseOnly(Page):
             FieldPanel('alert_date_inactive'),
             FieldPanel('alert_active'),
         ],
-            heading="This 'alert for emergency use only' feature \
+            heading='This ‘alert for emergency use only’ feature \
             is used exclusively for an agency shutdown, or emergency \
             event in which the agency as a whole cannot assist the \
             regulated community or the public. The use of this feature \
-            requires approval by Amy Kort or Wei Luo prior to deployment."
+            requires approval by Amy Kort or Wei Luo prior to deployment.'
         )
     ]
 
@@ -595,7 +603,8 @@ class AlertForEmergencyUseOnly(Page):
 
 
 class CustomPage(Page):
-    """Flexible customizable page."""
+    page_description = 'Content pages that cover a single topic and do not need separate sections or \
+        left-hand navigation'
     author = models.CharField(max_length=255)
     date = models.DateField('Creation date')
     body = StreamField([
@@ -629,20 +638,21 @@ class CustomPage(Page):
     sidebar = stream_factory(null=True, blank=True)
     related_topics = StreamField([
         ('related_topics', blocks.ListBlock(
-            blocks.PageChooserBlock(label="Related topic")
-        ))
-    ], null=True, blank=True)
+            blocks.PageChooserBlock(label='Related topic')
+        ))],
+        null=True, blank=True)
     citations = StreamField([
         ('citations', blocks.ListBlock(CitationsBlock()))],
         null=True, blank=True)
     record_articles = StreamField([
         ('record_articles', blocks.ListBlock(
             blocks.PageChooserBlock(target_model=RecordPage)
-        ))
-    ], null=True, blank=True)
+        ))],
+        null=True, blank=True)
     continue_learning = StreamField([
-        ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty')),
-    ], null=True, blank=True)
+            ('continue_learning', blocks.ListBlock(ThumbnailBlock(), icon='doc-empty')),
+        ],
+        null=True, blank=True)
     show_contact_link = models.BooleanField(
         max_length=255, default=True, null=False, blank=False,
         choices=[
@@ -662,8 +672,8 @@ class CustomPage(Page):
             FieldPanel('record_articles'),
             FieldPanel('show_contact_link'),
         ],
-            heading="Sidebar",
-            classname="collapsible"
+            heading='Sidebar',
+            classname='collapsible'
         )
     ]
 
@@ -689,6 +699,9 @@ class CustomPage(Page):
 
 
 class PressLandingPage(Page):
+    page_description = 'Unique landing page - Press'
+    parent_page_types = ['HomePage']
+    subpage_types = ['CollectionPage', 'DigestPage', 'PressReleasePage']
     hero = stream_factory(null=True, blank=True)
     release_intro = stream_factory(null=True, blank=True)
     digest_intro = stream_factory(null=True, blank=True)
@@ -709,6 +722,7 @@ class PressLandingPage(Page):
 
 
 class DocumentPage(ContentPage):
+    page_description = 'Page for linking a PDF to a document feed page'
     date = models.DateField(default=datetime.date.today)
     year_only = models.BooleanField(default=False)
     file_url = models.URLField(blank=True)
@@ -739,6 +753,7 @@ class DocumentPage(ContentPage):
 
 
 class DocumentFeedPage(ContentPage):
+    page_description = 'When users need to scan or browse a collection of documents in a single parent category'
     subpage_types = ['DocumentPage', 'ResourcePage']
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
@@ -760,7 +775,9 @@ class DocumentFeedPage(ContentPage):
 
 
 class ReportsLandingPage(ContentPage, UniqueModel):
+    page_description = 'Unique landing page - Reports'
     subpage_types = ['DocumentFeedPage']
+    parent_page_types = ['AboutLandingPage']
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
     ], null=True)
@@ -780,6 +797,9 @@ class ReportsLandingPage(ContentPage, UniqueModel):
 
 
 class AboutLandingPage(Page):
+    page_description = 'Unique landing page - About FEC'
+    parent_page_types = ['HomePage']
+    subpage_types = ['ReportsLandingPage', 'ResourcePage']
     hero = stream_factory(null=True, blank=True)
     sections = StreamField([
         ('sections', OptionBlock())
@@ -798,6 +818,7 @@ class AboutLandingPage(Page):
 
 
 class CommissionerPage(Page):
+    page_description = 'For every FEC commissioner’s bio page'
     first_name = models.CharField(max_length=255, default='', blank=False)
     middle_initial = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, default='', blank=False)
@@ -832,14 +853,14 @@ class CommissionerPage(Page):
         ('paragraph', blocks.RichTextBlock())
     ], null=True, blank=True)
 
-    commissioner_email = models.CharField(max_length=255, blank=True, verbose_name="Commissioner email address")
+    commissioner_email = models.CharField(max_length=255, blank=True, verbose_name='Commissioner email address')
     commissioner_phone = models.CharField(max_length=255, null=True, blank=True,
-                                          verbose_name="Commissioner phone number")
+                                          verbose_name='Commissioner phone number')
     commissioner_bluesky = models.CharField(max_length=255, null=True, blank=True,
-                                            verbose_name="Commissioner Bluesky handle",
+                                            verbose_name='Commissioner Bluesky handle',
                                             help_text='The part after https://bsky.app/profile/')
     commissioner_twitter = models.CharField(max_length=255, null=True, blank=True,
-                                            verbose_name="Commissioner X/Twitter handle",
+                                            verbose_name='Commissioner X/Twitter handle',
                                             help_text='The part after https://x.com/')
 
     content_panels = Page.content_panels + [
@@ -883,9 +904,9 @@ class CommissionerPage(Page):
 
 
 class CollectionPage(Page):
+    page_description = 'Template used for each receipts/disbursement etc. section of H4CC'
     body = stream_factory(null=True, blank=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
-
     related_pages = StreamField([
         ('related_pages', blocks.ListBlock(blocks.PageChooserBlock()))
     ], null=True, blank=True)
@@ -908,7 +929,8 @@ class CollectionPage(Page):
         choices=[
             (True, 'Show contact card'),
             (False, 'Do not show contact card')
-        ])
+        ]
+    )
     content_panels = Page.content_panels + [
         FieldPanel('body'),
         FieldPanel('sidebar_title'),
@@ -934,18 +956,18 @@ class CollectionPage(Page):
 
 
 class ResourcePage(Page):
-    # Class for pages that include a side nav, multiple sections and citations
+    page_description = 'Class for pages that include a side nav, multiple sections and citations'
     date = models.DateField(default=datetime.date.today)
     formatted_title = models.CharField(
         max_length=255, null=True, blank=True, default='',
-        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
+        help_text='Use if you need italics in the title. e.g. <em>Italicized words</em>')
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock()),
         ('informational_message', SnippetChooserBlock(
             'home.EmbedSnippet',
             template='blocks/embed-info-message.html',
             icon='warning',
-            help_text="Use for an info or alert message banner")),
+            help_text='Use for an info or alert message banner')),
     ], null=True, blank=True)
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
     related_pages = StreamField([
@@ -960,7 +982,7 @@ class ResourcePage(Page):
     ], null=True, blank=True)
     related_topics = StreamField([
         ('related_topics', blocks.ListBlock(
-            blocks.PageChooserBlock(label="Related topic")
+            blocks.PageChooserBlock(label='Related topic')
         ))
     ], null=True, blank=True)
     category = models.CharField(
@@ -1011,6 +1033,8 @@ class ResourcePage(Page):
 
 
 class LegalResourcesLandingPage(ContentPage, UniqueModel):
+    page_description = 'Unique landing page - Legal Resources'
+    parent_page_types = ['HomePage']
     subpage_types = ['ResourcePage']
     template = 'home/legal/legal_resources_landing.html'
 
@@ -1020,10 +1044,9 @@ class LegalResourcesLandingPage(ContentPage, UniqueModel):
 
 
 class ServicesLandingPage(ContentPage, UniqueModel):
-    """
-    Page model for the Help for Candidates and Committees landing page
-    """
-
+    page_description = 'Unique landing page - Services / Help for Candidates and Committees main landing pages for \
+        Candidates, SSF, Nonconnected and Party sections'
+    parent_page_types = ['HomePage']
     subpage_types = ['CollectionPage', 'ResourcePage', 'CustomPage']
     template = 'home/candidate-and-committee-services/services_landing_page.html'
 
@@ -1048,6 +1071,7 @@ class ServicesLandingPage(ContentPage, UniqueModel):
 
 
 class MeetingPage(Page):
+    page_description = 'Open meeting pages; Public hearing pages; Executive session pages'
     OPEN = 'O'
     EXECUTIVE = 'E'
     HEARING = 'H'
@@ -1066,13 +1090,14 @@ class MeetingPage(Page):
         choices=MEETING_TYPE_CHOICES,
         default=OPEN
     )
-    additional_information = models.TextField(blank=True, help_text='This field\
-        accepts html')
-    info_message = StreamField([
-        ('informational_message', SnippetChooserBlock(
-            'home.EmbedSnippet',
-            required=False, template='blocks/embed-info-message.html', icon='warning')),
-    ], null=True, blank=True)
+    additional_information = models.TextField(blank=True, help_text='This field accepts html')
+    info_message = StreamField(
+        [
+            ('informational_message', SnippetChooserBlock(
+                'home.EmbedSnippet', required=False, template='blocks/embed-info-message.html', icon='warning'
+            )),
+        ], null=True, blank=True
+    )
     draft_minutes_links = models.TextField(
         blank=True, help_text='URLs separated by a newline')
     approved_minutes_date = models.DateField(null=True, blank=True)
@@ -1084,14 +1109,12 @@ class MeetingPage(Page):
 
     imported_html = StreamField(
         [('html_block', blocks.RawHTMLBlock())],
-        null=True,
-        blank=True
+        null=True, blank=True
     )
 
     sunshine_act_doc_upld = StreamField(
         [('sunshine_act_upld', DocumentChooserBlock(required=False))],
-        null=True,
-        blank=True
+        null=True, blank=True
     )
 
     full_video_url = models.URLField(blank=True)
@@ -1187,8 +1210,7 @@ class MeetingPage(Page):
 
 
 class ExamplePage(Page):
-    """Page template for "how to report" and "example scenario" pages
-    Always within the Help section"""
+    page_description = 'Page template for “how to report” and “example scenario” pages. Always within the Help section'
     featured_image = models.ForeignKey(
         'wagtailimages.Image', blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
 
@@ -1199,14 +1221,15 @@ class ExamplePage(Page):
     ])
 
     body = StreamField([
-        ('paragraph', blocks.RichTextBlock()),
-        ('example_image', ExampleImage()),
-        ('reporting_example_cards', ReportingExampleCards()),
-        ('internal_button', InternalButtonBlock()),
-        ('external_button', ExternalButtonBlock()),
-        ('image', ImageChooserBlock()),
-        ('html', blocks.RawHTMLBlock()),
-    ], null=True)
+            ('paragraph', blocks.RichTextBlock()),
+            ('example_image', ExampleImage()),
+            ('reporting_example_cards', ReportingExampleCards()),
+            ('internal_button', InternalButtonBlock()),
+            ('external_button', ExternalButtonBlock()),
+            ('image', ImageChooserBlock()),
+            ('html', blocks.RawHTMLBlock()),
+        ], null=True
+    )
 
     related_media_title = models.CharField(blank=True, null=True, max_length=255)
     related_media = StreamField([
@@ -1229,14 +1252,15 @@ class ExamplePage(Page):
 
 @register_snippet
 class EmbedSnippet(models.Model):
+    page_description = 'Snippet inserted into a content page that normally contains a chart or html text'
     title = models.TextField()
     description = models.TextField()
     text = models.TextField()
     banner_icon = models.TextField(
         blank=True,
         default='info',
-        help_text="This field applies to informational-message snippets only. \
-            Input 'info' or 'alert'. Default is 'info'")
+        help_text='This field applies to informational-message snippets only. \
+            Input `info` or `alert`. Default is `info`')
 
     panels = [
         FieldPanel('title'),
@@ -1253,18 +1277,23 @@ class EmbedSnippet(models.Model):
 
 
 class ContactPage(Page):
+    page_description = 'Page template for the Contact page'
+    parent_page_types = ['HomePage']
     contact_items = StreamField([
-        ('contact_items', ContactInfoBlock())
-    ])
+            ('contact_items', ContactInfoBlock())
+        ]
+    )
     info_message = StreamField([
         ('informational_message', SnippetChooserBlock(
             'home.EmbedSnippet',
             required=False, template='blocks/embed-info-message.html', icon='warning')),
-    ], null=True, blank=True)
+        ], null=True, blank=True
+    )
     services_title = models.TextField()
     services = StreamField([
-        ('services', blocks.RichTextBlock())
-    ])
+            ('services', blocks.RichTextBlock())
+        ]
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel('contact_items'),
@@ -1279,11 +1308,14 @@ class ContactPage(Page):
 
 
 class FullWidthPage(ContentPage):
+    page_description = 'Page template for special cases where we donʼt need a right column or left nav column'
     formatted_title = models.CharField(
         max_length=255, null=True, blank=True, default='',
-        help_text="Use if you need italics in the title. e.g. <em>Italicized words</em>")
-    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
-                            null=True, blank=True)
+        help_text='Use if you need italics in the title. e.g. <em>Italicized words</em>')
+    citations = StreamField(
+        [('citations', blocks.ListBlock(CitationsBlock()))],
+        null=True, blank=True
+    )
 
     template = 'home/full_width_page.html'
     content_panels = ContentPage.content_panels + [
@@ -1300,7 +1332,8 @@ class FullWidthPage(ContentPage):
 
 
 class OigLandingPage(Page):
-    """OIG's landing page"""
+    page_description = 'Unique landing page - OIG'
+    parent_page_types = ['HomePage']
     intro_message = RichTextField(features=['bold', 'italic', 'link'], null=True)
     complaint_url = models.URLField(max_length=255, blank=True, verbose_name='Complaint URL')
     show_info_message = models.BooleanField(help_text='☑︎ display informational message | ☐ hide message')
@@ -1314,27 +1347,24 @@ class OigLandingPage(Page):
             ('table', TableBlock(table_options=core_table_options)),
             ('custom_table', CustomTableBlock()),
         ],
-        null=True, blank=True,
-        help_text='If this section is empty, the logo will be shown (for screens larger than phones)'
+        help_text='If this section is empty, the logo will be shown (for screens larger than phones)',
+        null=True, blank=True
     )
 
     recent_reports_url = models.URLField(max_length=255, blank=True, verbose_name='All reports URL')
     resources = StreamField(
         [('html', blocks.RawHTMLBlock(label='OIG resources'))],
-        null=True,
-        blank=True
+        null=True, blank=True
     )
 
     you_might_also_like = StreamField(
-        blocks.StreamBlock([
-            ('group', blocks.ListBlock(LinkBlock(), icon='list-ul', label='Group/column'))
-        ],
+        blocks.StreamBlock(
+            [('group', blocks.ListBlock(LinkBlock(), icon='list-ul', label='Group/column'))],
             max_num=3,
             required=False
         ),
-        null=True,
-        blank=True,
-        help_text='Expects three groups/columns but will accept fewer'
+        help_text='Expects three groups/columns but will accept fewer',
+        null=True, blank=True
     )
 
     content_panels = Page.content_panels + [
@@ -1362,6 +1392,7 @@ class OigLandingPage(Page):
 
 
 class OfficePage(Page):
+    page_description = 'Describes to the user a particular office and its function'
     offices = StreamField([
         ('office', blocks.StructBlock([
             ('office_title', blocks.CharBlock(required=True, blank=True, null=True, help_text='Required')),
@@ -1407,6 +1438,8 @@ class OfficePage(Page):
 
 
 class ReportingDatesTable(Page):
+    page_description = 'For coordinated communication, electioneering communication, federal election activity, \
+        independent expenditure, and pre-election (prior notice) reporting pages'
     reporting_dates_table = StreamField([
         ('paragraph', blocks.RichTextBlock(blank=True)),
         ('html', blocks.RawHTMLBlock()),
@@ -1427,9 +1460,10 @@ class ReportingDatesTable(Page):
             ])))
         ], blank=True))
     ], blank=True)
-    citations = StreamField([('citations', blocks.ListBlock(CitationsBlock()))],
-                            null=True,
-                            blank=True)
+    citations = StreamField(
+        [('citations', blocks.ListBlock(CitationsBlock()))],
+        null=True, blank=True
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel('reporting_dates_table', help_text='Zebra-striping tip: To add additional row classes for more \
