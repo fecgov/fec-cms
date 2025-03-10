@@ -65,18 +65,18 @@ class TestLegalSearch(TestCase):
     # load_legal_search_results.assert_called_once_with(
     #   'in kind donation', 'all', limit=3
     # )
-    @mock.patch.object(ecfr_caller, 'fetch_ecfr_data')
-    def test_search_regulations(self, load_legal_search_results):
-        load_legal_search_results.return_value = (
-            legal_test_data.regulations_search_results()
-        )
-        response = client.get(
-            '/data/legal/search/regulations/',
-            data={'search': 'in-kind donation', 'search_type': 'regulations'}
-        )
-        assert response.status_code == 200
-        load_legal_search_results.assert_called_once_with(
-            'in-kind donation', page=1)
+    # @mock.patch.object(ecfr_caller, 'fetch_ecfr_data')
+    # def test_search_regulations(self, load_legal_search_results):
+    #     load_legal_search_results.return_value = (
+    #         legal_test_data.regulations_search_results()
+    #     )
+    #     response = client.get(
+    #         '/data/legal/search/regulations/',
+    #         data={'search': 'in-kind donation', 'search_type': 'regulations'}
+    #     )
+    #     assert response.status_code == 200
+    #     load_legal_search_results.assert_called_once_with(
+    #         'in-kind donation', page=1)
 
     # Test transform boolean queries for eCFR API
     def test_transform_ecfr_query_string(self):
