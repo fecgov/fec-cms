@@ -83,24 +83,24 @@ export default function KeywordModal() {
     $('body').css('overflow', 'scroll');
   });
 
-  const edit_tag = document.querySelector('#js-edit-tag')
+  const edit_tag = document.querySelector('#js-edit-tag');
   if (edit_tag) {
     edit_tag.addEventListener('click', function() {
-   $('button[data-a11y-dialog-show="keyword-modal"]').trigger('click')
-    })
+   $('button[data-a11y-dialog-show="keyword-modal"]').trigger('click');
+    });
     }
 
   ////  FOR EDIT PROXIMTY TAGS, DD I NEED TO MAKE IT A KeywordModal.prototype... ? ////
-  
+
     //   const edit_tag = document.querySelector('#js-edit-tag')
 
     //   console.log(Object.keys(sessionStorage).join(', '))
     //   if (edit_tag) {
     //   edit_tag.addEventListener('click', function() {
     //   $('button[data-a11y-dialog-show="keyword-modal"]').trigger('click')
-    
+
     //   for (const $input of Object.keys(sessionStorage)) {
-      
+
     //   console.log('$input.id: ', $($input).attr('id'))
     //   // If the input exists on the default form - or else is it one of the user-added q_proximity fields
     //   if ($($input).attr('id')) {
@@ -136,9 +136,9 @@ export default function KeywordModal() {
   window.addEventListener('load', function() {
     setLoadingState(false);
   });
- })
+ });
 
-}  // end KeywordModal 
+} // end KeywordModal
 
 KeywordModal.prototype.showError = function(req) {
   this.messages = {
@@ -282,12 +282,11 @@ KeywordModal.prototype.stepUpDown = function(event) {
     ///input.stepDown(1);
     if (input.value >= 1) {
     input.value --;
-    } 
+    }
   }
 
   const disabled = input.value == 0 ? 'disabled' : '';
-  input.previousElementSibling.disabled = disabled
-
+  input.previousElementSibling.disabled = disabled;
 
   // if (event.target.classList.contains("stepup")) {
   //   let input = event.target.previousElementSibling
