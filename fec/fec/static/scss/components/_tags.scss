@@ -151,6 +151,18 @@
   }
 }
 
+.tag__category--edit {
+  padding-right: u(4rem);
+  position: relative;
+
+  button {
+    position: absolute;
+    bottom: u(0rem);
+    right: u(0rem);
+  }
+
+}
+
 .tag__remove {
   background-size: u(1.4rem);
   background-position: 100% 45%;

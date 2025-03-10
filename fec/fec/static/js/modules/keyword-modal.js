@@ -83,7 +83,62 @@ export default function KeywordModal() {
     $('body').css('overflow', 'scroll');
   });
 
-}
+  const edit_tag = document.querySelector('#js-edit-tag')
+  if (edit_tag) {
+    edit_tag.addEventListener('click', function() {
+   $('button[data-a11y-dialog-show="keyword-modal"]').trigger('click')
+    })
+    }
+
+  ////  FOR EDIT PROXIMTY TAGS, DD I NEED TO MAKE IT A KeywordModal.prototype... ? ////
+  
+    //   const edit_tag = document.querySelector('#js-edit-tag')
+
+    //   console.log(Object.keys(sessionStorage).join(', '))
+    //   if (edit_tag) {
+    //   edit_tag.addEventListener('click', function() {
+    //   $('button[data-a11y-dialog-show="keyword-modal"]').trigger('click')
+    
+    //   for (const $input of Object.keys(sessionStorage)) {
+      
+    //   console.log('$input.id: ', $($input).attr('id'))
+    //   // If the input exists on the default form - or else is it one of the user-added q_proximity fields
+    //   if ($($input).attr('id')) {
+    //     $($input).val(sessionStorage.getItem($input))
+    //     console.log('here')
+    //   }
+    //   else {
+    //     const fields = document.getElementsByClassName('q-proximity-fields')[0];
+    //     let childInputs = fields.querySelectorAll('input').length - 1;
+    //     let clean_id = $input.replace('#', '')
+    //     fields.insertAdjacentHTML('beforeend',
+    //       `<div class="input--removable ">
+    //       <input type="text" id="${clean_id}" name="q_proximity" value=${sessionStorage.getItem($input)}><button id="js-rm-input" class="u-margin--top button button--close--base modal__remove-field" type="button"></button>
+    //       </div>`);
+    //         //$($input).val(sessionStorage.getItem($input))
+    //   }
+    //   }
+    // })
+    // }
+ ////// /END  FOR EDIT PROXIMTY TAGS  /////
+
+ document.addEventListener('DOMContentLoaded', function() {
+
+  var overlayContainer = document.querySelector('.overlay.is-loading');
+
+  function setLoadingState(isLoading) {
+    if (isLoading) {
+      overlayContainer.style.display = 'block';
+    } else {
+      overlayContainer.style.display = 'none';
+    }
+  }
+  window.addEventListener('load', function() {
+    setLoadingState(false);
+  });
+ })
+
+}  // end KeywordModal 
 
 KeywordModal.prototype.showError = function(req) {
   this.messages = {
@@ -176,23 +231,24 @@ KeywordModal.prototype.generateProximityQueryString = function() {
   let $optional_proximity_fields = this.$elm.find('input[name="proximity_filter_term"], select[name="proximity_filter"]');
 
   let proximityQueryString = '';
+  sessionStorage.clear();
 
   if ($('#q_proximity-0').val() && $('#q_proximity-1').val()) {
     $q_proximity_fields.each(function() {
     const $input = $(this);
-    //if ($input.val()) {
+    if ($input.val()) {
       proximityQueryString += `&${$input.attr('name')}=${$input.val()}`;
-      //sessionStorage.setItem(`${$input.attr('id')}`, `${$input.val()}`);
-     //}
+      sessionStorage.setItem(`#${$input.attr('id')}`, `${$input.val()}`);
+     }
     });
   }
   if ($('#proximity_filter_term').val()) {
      $optional_proximity_fields.each(function() {
         const $input = $(this);
-        //if ($input.val()) {
+        if ($input.val()) {
           proximityQueryString += `&${$input.attr('name')}=${$input.val()}`;
-          //sessionStorage.setItem(`${$input.attr('id')}`, `${$input.val()}`);
-         //}
+          sessionStorage.setItem(`#${$input.attr('id')}`, `${$input.val()}`);
+         }
         });
     }
   return proximityQueryString;
@@ -200,10 +256,10 @@ KeywordModal.prototype.generateProximityQueryString = function() {
 
 KeywordModal.prototype.addQproximityField = function() {
       const fields = document.getElementsByClassName('q-proximity-fields')[0];
-      let childInputs = fields.querySelectorAll('input').length - 1;
+      let childInputs = fields.querySelectorAll('input').length ;
       fields.insertAdjacentHTML('beforeend',
-        `<div class="input--removable ">
-        <input type="text" id="q_proximity-${childInputs+1}" name="q_proximity"><button id="js-rm-input" class="u-margin--top button button--close--base modal__remove-field" type="button"></button>
+        `<div class="input--removable">
+        <input type="text" id="q_proximity-${childInputs}" name="q_proximity"><button id="js-rm-input" class="u-margin--top button button--close--base modal__remove-field" type="button"></button>
         </div>`);
 
 };
@@ -216,7 +272,7 @@ KeywordModal.prototype.removeQproximityField = function(event) {
 
 KeywordModal.prototype.stepUpDown = function(event) {
 
-  let input = event.target.closest('.step_container').querySelector('input');
+  let input = event.target.closest('.increment-decrement__container').querySelector('input');
 
   if (event.target.previousElementSibling == input) {
     //input.stepUp(1);
@@ -226,8 +282,12 @@ KeywordModal.prototype.stepUpDown = function(event) {
     ///input.stepDown(1);
     if (input.value >= 1) {
     input.value --;
-    }
+    } 
   }
+
+  const disabled = input.value == 0 ? 'disabled' : '';
+  input.previousElementSibling.disabled = disabled
+
 
   // if (event.target.classList.contains("stepup")) {
   //   let input = event.target.previousElementSibling

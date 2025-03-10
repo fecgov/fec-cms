@@ -8,6 +8,7 @@
         <button type="button" class="modal__close button--close--primary" data-a11y-dialog-hide
           title="Close this dialog window"></button>
         <form action="">
+        <h3 class="u-margin--bottom--small">Boolean filters</h3>
           <p>Use these search boxes to refine your search. Only words with letters, numbers, spaces, and hyphens (such
             as in-kind) are accepted:
           </p>
@@ -40,67 +41,51 @@
       </div>
       <div class="search-controls__or search-controls__or--vertical">or</div>
       <div id="proximity_form" class="modal__form  search-controls__either" style="width:44% !important">
-      
-      <p>Use these search boxes to refine your search. Only words with letters, numbers, spaces, and hyphens (such as
-      in-kind) are accepted:</p>
-      <div class="filter">
-      <div class="q-proximity-fields u-padding--bottom--med">
-      <label class="label" for="q_proximity">Primary keyword or phrase</label>
-      <input type="text" id="q_proximity-0" name="q_proximity" required>
-      <input type="text" id="q_proximity-1" name="q_proximity" required>
-      </div>
-      <button id="js-add-input" class="u-margin--top button button--add" type="button">&nbsp;&nbsp;Add another</button>
-      </div>
-      <div class="filter">
-      <label class="label" for="max_gaps">Maximum proximity between all keywords or phrases</label>
-<div class='step_container'style="
-    position: relative;
-    /* grid-auto-columns: 1fr 12fr 1fr; */
-    display: grid;
-    width: 48%;
-    justify-content: start;
-"><button id="decrement_max_gaps" class="accordion__button stepdown  js-step-button" type="button" aria-expanded="true" style="
-    grid-column: 1;
-    width: 21px;
-    padding: 0;
-    background-position: 0px 50%;
-    /* grid-column-end: auto; */
-"></button> 
-<input id="max_gaps" name="max_gaps" class="step_input" value="0" min="0" style="
-    width: 75%;
-    margin: 0 10px;
-    display: inline-block;
-">
-<button id="increment_max_gaps" class="accordion__button stepup js-step-button" type="button" style="
-    border: 0;
-    grid-column: 3;
-    width: 21px;
-    /* padding: 0 15px  0 15px; */
-    background-position: 0px 50%;
-"></button>
-</div>
-<span class="t-note t-sans">Example: 0, 3, 50, 400</span>
-</div>
+        <h3 class="u-margin--bottom--small">Proximity filter</h3>
+        <p>Search the maximum proximity between primary keywords or phrases in one or more fields. Proximity terms will not be highlighted in search results. Order is ignored for primary keywords or phrases. Can be combined with boolean filters.</p>
+        <div class="filter">
+          <div class="q-proximity-fields u-padding--bottom--med">
+          <label class="label" for="q_proximity">Primary keyword or phrase</label>
+          <input type="text" id="q_proximity-0" name="q_proximity" required value="{{ q_proximitys[0] | default('')}}">
+          <input type="text" id="q_proximity-1" name="q_proximity" required value="{{ q_proximitys[1] | default('') }}">
+          {% if q_proximitys | length > 2 %}
+           {% for q_proximity in q_proximitys[2:] %}
+           <div class="input--removable">
+           <input type="text" id="q_proximity-{{ loop.index + 1}}" name="q_proximity" required value="{{ q_proximity }}"><button id="js-rm-input" class="u-margin--top button button--close--base modal__remove-field" type="button"></button>
+           </div>
+           {% endfor %}
 
- 
-
-
-   <div class="fiter u-margin--top">
-            <div class="filter range__input range__input--min js-filter" data-filter="range" style="width: 63%; vertical-align: baseline;">
-                <label class="label" for="proximity_filter_term">Secondary keyword or phrase (optional)</label>
-                <input id="proximity_filter_term" type="text" name="proximity_filter_term" data-range="min">
-            </div>
-            
-            <div class="filter range__input range__input--max js-filter" data-filter="range" style=" width: 35%; vertical-align: baseline;">
-            <label class="label" for="proximity_filter">Appears</label>
-            <select id="proximity_filter" name="proximity_filter" data-filter-change="true" data-removeable-filter="true" class="dropdown">
-            <option value="after" data-line-type="">After all primary terms</option>
-            <option value="before" data-line-type="">Before all primary terms</option>
-            </select>
-            {# {{ dropdown.select_single_flat_list( 'proximity_filter', '', label_help='false', options={'after':'After all primary terms','before':'Before all primary terms'}) }} #}
-            </div>
-        
-   </div>
+          {% endif %}
+          </div>
+          <button id="js-add-input" class="u-margin--top button button--add" type="button">&nbsp;&nbsp;Add another</button>
+        </div>
+        <div class="filter">
+          <label class="label" for="max_gaps">Maximum proximity between all keywords or phrases</label>
+          <div class="increment-decrement__container">
+          
+            <button id="decrement_max_gaps" class="button--decrement js-step-button" type="button" {% if (max_gaps) == '0'%}disabled{% endif %}></button> 
+            <input id="max_gaps" name="max_gaps" class="step_input"  min="0" required value="{{ max_gaps | default('0') }}">
+            <button id="increment_max_gaps" class="button--increment js-step-button" type="button"></button>
+          </div>
+          <span class="t-note t-sans">Example: 0, 3, 50, 400</span>
+        </div>
+        <div class="fiter u-margin--top">
+              <div class="filter range__input range__input--min js-filter" data-filter="range" style="width: 63%; vertical-align: baseline;">
+                  <label class="label" for="proximity_filter_term">Secondary keyword or phrase (optional)</label>
+                  <input id="proximity_filter_term" type="text" name="proximity_filter_term" value="{{ proximity_filter_term | default('') }}">
+              </div>
+              
+              <div class="filter range__input range__input--max js-filter" data-filter="range" style=" width: 35%; vertical-align: baseline;">
+                <label class="label" for="proximity_filter">Appears</label>
+                <select id="proximity_filter" name="proximity_filter" data-filter-change="true" data-removeable-filter="true" class="dropdown" value="{{ proximity_filter | default('after') }}">
+                {# {% set proximity_filter = (proximity_filter) %} #}
+                <option value="after" {{ "selected='selected'" if proximity_filter == 'after' else "" }}>After all primary terms</option>
+                <option value="before" {{ "selected='selected'" if proximity_filter == 'before' else "" }}>Before all primary terms</option>
+    
+                </select>
+                {# {{ dropdown.select_single_flat_list( 'proximity_filter', '', label_help='false', options={'after':'After all primary terms','before':'Before all primary terms'}) }} #}
+              </div>
+         </div>
       
 
 

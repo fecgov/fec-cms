@@ -456,3 +456,35 @@ $filter-button-width: u(4.6rem);
     margin: 0;
   }
 }
+
+//increment-decrement field with plus(+)/minus(-) buttons
+
+// <div class="increment-decrement__container">  
+//   <button class="button--decrement js-step-button" type="button"></button> 
+//   <input id="" name="" class="" min="" max="" value=""">
+//   <button class="button--increment js-step-button" type="button"></button>
+// </div>
+
+.increment-decrement__container {
+  display: grid;
+  justify-content: start;
+  position: relative;
+  width: auto;
+
+  input {
+    grid-column: 2;
+    margin: 0 10px;
+    width: 50px;
+  }
+
+  button {
+  width: 21px;
+
+  &:first-child {
+    grid-column: 1;
+  }
+  &:last-child {
+    grid-column: 3;
+  } 
+ }
+}

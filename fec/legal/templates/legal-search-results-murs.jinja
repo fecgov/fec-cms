@@ -270,7 +270,7 @@
         </li>
       {% endif %}
       
-      {% if q_proximitys and q_proximitys | reject('equalto', none) | list %}
+{#       {% if q_proximitys and q_proximitys | reject('equalto', none) | list %}
         <li data-tag-category="q_proximity" class="tag__category tag__category--and">
         Proximity keyword or phrase: 
         {% for q_proximity in q_proximitys %}
@@ -294,8 +294,46 @@
           <div data-removable="true" class="tag__item">{{ proximity_filter }}
         all primary terms
         </li>
-      {% endif %}
+      {% endif %} #}
+      
+        {% if q_proximitys and q_proximitys | reject('equalto', none) | list and q_proximitys | length >1 %}
+        
+          <li class="tag__category tag__category--edit">
+            <ul>
+            <li data-tag-category="q_proximity" class="tag__category tag__category--and">
+            Primary keywords: 
+            {% for q_proximity in q_proximitys %}
+              <div data-removable="true" class="tag__item">{{ q_proximity }}</div>
+            {% endfor %}
+            </li>
+          
+            {% if max_gaps and q_proximitys %}
+              <li data-tag-category="max_gaps" class="tag__category">
+            with max proximity 
+                <div data-removable="true" class="tag__item">{{ max_gaps }}</div>
+              </li>
+            {% endif %}
+          </ul>
+        
+        
+        {% if proximity_filter_term and proximity_filter %}
+        <ul>
+          <li data-tag-category="proximity_filter_term" class="tag__category">
+          Secondary keyword: 
+            <div data-removable="true" class="tag__item">{{ proximity_filter_term }}</div>
+          </li>
+          <li data-tag-category="proximity_filter" class="tag__category">
+          appears 
+            <div data-removable="true" class="tag__item">{{ proximity_filter }}
+          all primary words
+          </li>
+        </ul>
+        {% endif %}
+       
+       <button id="js-edit-tag" class="button button--pencil button__tag-edit" type="button" data-tag="proximity_filter_term"><span class="u-visually-hidden">Edit</span></button>
+     </li>
     </ul>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
@@ -365,9 +403,9 @@
       }
     });
 /* 
- Checks the checkboxes for the chosen items because the existing JS does not do it as expected.
- This is specific to this particular filter, but could be extended to handle all checkbox-dropdown 
- filters on a page as we do in tables.js with the checkFromQuery() function.
+ Checks the checkboxes for the chosen items in our custom checkbox dropdowns because the existing JS does not do it as expected.
+ This is specific to this particular filter (mur_disposition_category_id), but could be extended to handle all if more checkbox-dropdowns are added.
+ Borrowed from the tables.js, checkFromQuery() function.
 */
   // Get the context vars from the view to use in JS
   window.context = {{ context_vars|to_json|safe }};

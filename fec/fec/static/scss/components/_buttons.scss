@@ -565,8 +565,12 @@
   }
 }
 
+.button--pencil {
+  border: none;
+  @include u-icon($pencil, $base);
+}
+
 .button--add {
-  
   background-size: u(2rem);
   /*background-position: 95% 50%;*/
   margin: -21px 0 -1px;
@@ -574,7 +578,18 @@
   background-position: 2px 5px;
   font-size: u(1.4rem);
   font-weight: bold;
-  letter-spacing: -0.3px;
   @include u-icon-bg($plus,$neutral-contrast );
+}
 
+.button--increment {
+  /* padding: 0 15px  0 15px; */
+  background-position: 0px 50%;
+  @include u-icon-bg($plus-circle, $primary);
+
+}
+
+.button--decrement {
+  background-position: 0px 50%;
+  // padding: 0;
+  @include u-icon-bg($minus-circle, $primary);
 }

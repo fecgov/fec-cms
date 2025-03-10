@@ -94,6 +94,8 @@
       // Select all elements with the class 'tag__remove'
       const removeButtons = document.querySelectorAll('.tag__remove');
 
+       console.log('sessionStorage.getItem("q_proximity"):',sessionStorage.getItem('q_proximity-0'))
+
       // Iterate over each remove button and add a click event listener
       removeButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -200,6 +202,48 @@
           window.location = url.toString();
         });
       });
+
+     //// NEW FOR EDIT BUTTONS // ASLO SEE: https://stackoverflow.com/questions/42406520/populate-an-html-form-from-a-formdata-object
+       
+//   const edit_tag = document.querySelector('#js-edit-tag')
+//   //const $proximity_fields = $('#proximity_form').find('input[id*="q_proximity-"], input[name="max_gaps"],input[name="proximity_filter_term"], select[name="proximity_filter"]');
+  
+//   //const $proximity_fields = $('#proximity_form').find(Object.keys(sessionStorage).join(', '));
+//   //console.log('$proximity_fields: ', $proximity_fields)
+//   console.log(Object.keys(sessionStorage).join(', '))
+//   if (edit_tag) {
+//    edit_tag.addEventListener('click', function() {
+//   $('button[data-a11y-dialog-show="keyword-modal"]').trigger('click')
+  
+//   //for (const $input of $proximity_fields) {
+
+//   // console.log('$input.id: ', $input.id)
+//   //  $input.value = (sessionStorage.getItem(`#${$input.id}`))
+//   //}
+ 
+//   for (const $input of Object.keys(sessionStorage)) {
+  
+//    console.log('$input.id: ', $($input).attr('id'))
+//    if ($($input).attr('id')) {
+//     $($input).val(sessionStorage.getItem($input))
+//     console.log('here')
+//    }
+//    else {
+     
+//  const fields = document.getElementsByClassName('q-proximity-fields')[0];
+//  let childInputs = fields.querySelectorAll('input').length - 1;
+//  let clean_id = $input.replace('#', '')
+//  fields.insertAdjacentHTML('beforeend',
+//    `<div class="input--removable ">
+//    <input type="text" id="${clean_id}" name="q_proximity" value=${sessionStorage.getItem($input)}><button id="js-rm-input" class="u-margin--top button button--close--base modal__remove-field" type="button"></button>
+//    </div>`);
+//     //$($input).val(sessionStorage.getItem($input))
+//    }
+//   }
+//  })
+//  }
+      
+      ///// END NEW FOT EDIT TAGS ///
 
       // Handle 'ao_regulatory_citation' when checkboxes are checked or unchecked
       const regulationsField = document.querySelector('#regulations-field ul.dropdown__selected');
