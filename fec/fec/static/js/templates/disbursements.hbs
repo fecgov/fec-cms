@@ -1,79 +1,79 @@
-<div class="panel__row">
-  <h4 class="panel__title">Recipient information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Recipient name"}}
-      {{#if recipient}}
+    <caption>Recipient information</caption>
+    {{#dtDetailsTableRow "Recipient name"~}}
+      {{#if recipient~}}
         <a href="{{basePath}}/committee/{{recipient.committee_id}}">{{recipient.name}}</a>
-      {{else}}
+      {{else~}}
         {{recipient_name}}
       {{/if}}
-    {{/panelRow}}
-    {{#panelRow "Recipient city, state and ZIP code"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Recipient city, state and ZIP code"~}}
       {{recipient_city}}, {{recipient_state}}  {{zipCode recipient_zip}}
-    {{/panelRow}}
-    {{#panelRow "Beneficiary committee name"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Beneficiary committee name"~}}
       {{beneficiary_committee_name}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">Transaction information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Amount"}}
+    <caption>Transaction information</caption>
+    {{#dtDetailsTableRow "Amount"~}}
       {{{currency disbursement_amount}}}
-    {{/panelRow}}
-    {{#panelRow "Disbursement date"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Disbursement date"~}}
       {{{datetime disbursement_date format="pretty"}}}
-    {{/panelRow}}
-    {{#panelRow "Report year"}}
-      {{{ report_year }}}
-    {{/panelRow}}
-    {{#panelRow "Filing date"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Report year"~}}
+      {{{report_year}}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Filing date"~}}
       {{{datetime receipt_date format="pretty"}}}
-    {{/panelRow}}
-    {{#panelRow "Description"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Description"~}}
       {{disbursement_description}}
-    {{/panelRow}}
-    {{#panelRow "Purpose category"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Purpose category"~}}
       {{disbursement_purpose_category}}
-    {{/panelRow}}
-    {{#panelRow "Memo"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Memo"~}}
       {{memo_text}}
-    {{/panelRow}}
-    {{#panelRow "Memo code"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Memo code"~}}
       {{memoed_subtotal}}
-    {{/panelRow}}
-    {{#panelRow "Reported on"}}
-      Form {{formNumber filing_form }} on line {{line_number}}
-    {{/panelRow}}    
-    {{#if election_type_full }}
-      {{#panelRow "Election type"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Reported on"~}}
+      Form {{formNumber filing_form}} on line {{line_number}}
+    {{/dtDetailsTableRow}}    
+    {{#if election_type_full}}
+      {{#dtDetailsTableRow "Election type"~}}
         {{election_type_full}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">Committee information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Name"}}
+    <caption>Committee information</caption>
+    {{#dtDetailsTableRow "Name"~}}
       <a href="{{basePath}}/committee/{{committee_id}}">{{committee.name}}</a>
-    {{/panelRow}}
-    {{#panelRow "Designation"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Designation"~}}
       {{committee.designation_full}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     {{#if committee.type}}
-      {{#panelRow "Type"}}
+      {{#dtDetailsTableRow "Type"~}}
         {{committee.type_full}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
-    {{#panelRow "Treasurer"}}
+    {{#dtDetailsTableRow "Treasurer"~}}
       {{committee.treasurer_name}}
-    {{/panelRow}}
-    {{#panelRow "Committee city, state and ZIP code"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Committee city, state and ZIP code"~}}
       {{committee.city}}, {{committee.state}}  {{zipCode committee.zip}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>

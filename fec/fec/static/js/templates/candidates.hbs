@@ -1,104 +1,101 @@
-<div class="panel__row">
-  <h4 class="panel__title">
-    <a href="{{entityUrl this type="candidate" query=query}}">{{name}}</a>
-  </h4>
-</div>
-<div class="panel__row">
-  <h4 class="panel__title">Candidate information</h4>
+<h4 class="dt-details__title"><a href="{{entityUrl this type="candidate" query=query}}">{{name}}</a></h4>
+
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Candidate ID"}}
+    <caption>Candidate information</caption>
+    {{#dtDetailsTableRow "Candidate ID"~}}
       {{candidate_id}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     <tr>
-      <td class="panel__term">Election years</td>
-      <td class="panel__data">
+      <th scope="row">Election years</th>
+      <td>
         {{#each election_years}}
           {{! we only have election profile pages starting in 1980}}
-          {{#if (gte this 1980)}}
+          {{#if (gte this 1980)~}}
             <a href="{{electionUrl this parentContext=../this index=@index}}">
               {{this}}</a>{{#unless @last}}, {{/unless}}
-          {{else}}
+          {{else~}}
             {{this}}{{#unless @last}}, {{/unless}}
           {{/if}}
         {{/each}}
-        </ul>
       </td>
     </tr>
-    {{#panelRow "Office sought"}}
+    {{#dtDetailsTableRow "Office sought"~}}
       {{office_full}}
-    {{/panelRow}}
-    {{#panelRow "Political party"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Political party"~}}
       {{party_full}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     {{#unless (eq office 'P')}}
-      {{#panelRow "State"}}
+      {{#dtDetailsTableRow "State"~}}
         {{decodeState state}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/unless}}
     {{#if (eq office 'H')}}
-      {{#panelRow "District"}}
+      {{#dtDetailsTableRow "District"~}}
         {{district}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
+    {{!-- TODO: CHECK committees.principal --}}
     {{#if committees.principal}}
-      {{#panelRow "Principal campaign committees"}}
+      {{#dtDetailsTableRow "Principal campaign committees"~}}
       <ul>
-        {{#each committees.principal}}
+        {{#each committees.principal~}}
           <li>
             <a href="{{entityUrl this type="committee"}}">
-              {{ this.name}}
+              {{this.name}}
             </a>
           </li>
         {{/each}}
       </ul>
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
     {{#if committees.authorized}}
-      {{#panelRow "Authorized campaign committees"}}
-        {{#each committees.authorized}}
+      {{#dtDetailsTableRow "Authorized campaign committees"~}}
+        {{#each committees.authorized~}}
           <li>
             <a href="{{entityUrl this type="committee"}}">
-              {{ this.name}}
+              {{this.name}}
             </a>
           </li>
         {{/each}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
     {{#if first_form_2}}
-      {{#panelRow "First statement of candidacy"}}
+      {{#dtDetailsTableRow "First statement of candidacy"~}}
         <a href="{{first_form_2.pdf_url}}">{{first_form_2.document_description}}</a>
         <span class="t-block">Filed: {{datetime first_form_2.receipt_date format='pretty'}}</span>
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
     {{#if last_form_2}}
-      {{#panelRow "Most recent statement of candidacy"}}
+      {{#dtDetailsTableRow "Most recent statement of candidacy"~}}
         <a href="{{last_form_2.pdf_url}}">{{last_form_2.document_description}}</a>
         <span class="t-block">Filed: {{datetime last_form_2.receipt_date format='pretty'}}</span>
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
-
   </table>
 </div>
+
 {{#if showFinancialTotals}}
-<div class="panel__row">
-  <h4 class="panel__title">Financial totals for {{time_period}}</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Receipts"}}
+    <caption>Financial totals for {{time_period}}</caption>
+    {{#dtDetailsTableRow "Receipts"~}}
       {{{currency receipts}}}
-    {{/panelRow}}
-    {{#panelRow "Disbursements"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Disbursements"~}}
       {{{currency disbursements}}}
-    {{/panelRow}}
-    {{#panelRow "Ending cash on hand"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Ending cash on hand"~}}
       {{{currency cash_on_hand_end_period}}}
-    {{/panelRow}}
-    {{#panelRow "Debts owed by committee"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Debts owed by committee"~}}
       {{{currency debts_owed_by_committee}}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     {{#if (eq office 'P')}}
-      {{#panelRow "Has accepted presidential public funds"}}
+      {{#dtDetailsTableRow "Has accepted presidential public funds"~}}
         {{convertBoolean federal_funds_flag}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
   </table>
 </div>

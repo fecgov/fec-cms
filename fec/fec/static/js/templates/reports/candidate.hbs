@@ -1,6 +1,6 @@
-<div class="panel__row">
-  <div class="panel__heading">
-    <h4 class="panel__title">{{document_description}}
+<div class="dt-details__sect">
+  <div class="dt-details__heading">
+    <h4 class="dt-details__title">{{document_description}}
     {{#if is_amended}}
       (This report has been amended)
     {{/if}}
@@ -12,134 +12,134 @@
     {{{amendment_version}}}
   </div>
   <table>
-    {{#panelRow "Filer"}}
-      <a href="{{basePath}}/committee/{{committee_id}}">{{ committee_name }}</a>
-    {{/panelRow}}
-    {{#panelRow "FEC file number"}}
-      {{ fec_file_id }}
-    {{/panelRow}}
-    {{#panelRow "Report coverage"}}
+    {{#dtDetailsTableRow "Filer"~}}
+      <a href="{{basePath}}/committee/{{committee_id}}">{{committee_name}}</a>
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "FEC file number"~}}
+      {{fec_file_id}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Report coverage"~}}
       {{datetime coverage_start_date format="pretty"}} to {{datetime coverage_end_date format="pretty"}}
-    {{/panelRow}}
-    {{#panelRow "Receipt date"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Receipt date"~}}
       {{datetime receipt_date format="pretty"}}
-    {{/panelRow}}
-    {{#panelRow "Filing method"}}
-      {{ decodeMeans means_filed}}
-    {{/panelRow}}
-    {{#panelRow "Read report"}}
-      {{#if html_url}}
-        <a target="_blank" href="{{ html_url }}">Webpage</a> |
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Filing method"~}}
+      {{decodeMeans means_filed}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Read report"~}}
+      {{#if html_url~}}
+        <a target="_blank" href="{{html_url}}">Webpage</a> |
       {{/if}}
-      {{#if csv_url}}
-      <a target="_blank" href="{{ csv_url }}">.csv</a> |
+      {{#if csv_url~}}
+      <a target="_blank" href="{{csv_url}}">.csv</a> |
       {{/if}}
-      {{#if pdf_url }}
-      <a target="_blank" href="{{ pdf_url }}">.pdf</a>
+      {{#if pdf_url~}}
+      <a target="_blank" href="{{pdf_url}}">.pdf</a>
       {{/if}}
-      {{#if fec_url}}
-      | <a target="_blank" href="{{ fec_url }}">.fec</a>
+      {{#if fec_url~}}
+      | <a target="_blank" href="{{fec_url}}">.fec</a>
       {{/if}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
-<div class="panel__row">
-  <div class="panel__heading">
-    <h4 class="panel__title">Raising</h4>
-  </div>
+
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Total receipts"}}
+    <caption>Raising</caption>
+    {{#dtDetailsTableRow "Total receipts"~}}
       {{{currency total_receipts_period}}}
-    {{/panelRow}}
-    {{#panelRow "Individual contributions"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Individual contributions"~}}
       {{{currency total_individual_contributions_period}}}
-    {{/panelRow}}
-    {{#panelRow "Itemized individual contributions"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Itemized individual contributions"~}}
       {{{currency individual_itemized_contributions_period}}}
-    {{/panelRow}}
-    {{#panelRow "Unitemized individual contributions"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Unitemized individual contributions"~}}
       {{{currency individual_unitemized_contributions_period}}}
-    {{/panelRow}}
-    {{#panelRow "Contributions from PACs"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Contributions from PACs"~}}
       {{{currency political_party_committee_contributions_period}}}
-    {{/panelRow}}
-    {{#panelRow "Total contribution refunds"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Total contribution refunds"~}}
       {{{currency total_contribution_refunds_period}}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     {{#if net_contributions_period}}
-      {{#panelRow "Net contributions period"}}
+      {{#dtDetailsTableRow "Net contributions period"~}}
         {{{currency net_contributions_period}}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{else}}
-      {{#panelRow "Net contributions cycle to date"}}
+      {{#dtDetailsTableRow "Net contributions cycle to date"~}}
         {{{currency net_contributions_cycle_to_date}}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
     {{#if federal_funds_period}}
-      {{#panelRow "Presidential public funds accepted"}}
+      {{#dtDetailsTableRow "Presidential public funds accepted"~}}
         {{{currency federal_funds_period}}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
   </table>
 </div>
-<div class="panel__row">
-  <div class="panel__heading">
-    <h4 class="panel__title">Spending</h4>
+
+<div class="dt-details__sect">
+  <div class="details__heading">
+    <h4 class="details__title">Spending</h4>
   </div>
   <table>
-    {{#panelRow "Total disbursements"}}
+    {{#dtDetailsTableRow "Total disbursements"~}}
       {{{currency total_disbursements_period}}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     {{#if net_operating_expenditures_period}}
-      {{#panelRow "Net operating expenditures period"}}
+      {{#dtDetailsTableRow "Net operating expenditures period"~}}
         {{{currency net_operating_expenditures_period}}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{else}}
-      {{#panelRow "Net operating expenditures cycle to date"}}
+      {{#dtDetailsTableRow "Net operating expenditures cycle to date"~}}
         {{{currency net_operating_expenditures_cycle_to_date}}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
-    {{#panelRow "Transfers to authorized committees"}}
+    {{#dtDetailsTableRow "Transfers to authorized committees"~}}
       {{{currency transfers_to_other_authorized_committee_period}}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
-<div class="panel__row">
-  <div class="panel__heading">
-    <h4 class="panel__title">Cash on hand</h4>
+<div class="dt-details__sect">
+  <div class="details__heading">
+    <h4 class="details__title">Cash on hand</h4>
   </div>
   <table>
-    {{#panelRow "Beginning cash on hand"}}
+    {{#dtDetailsTableRow "Beginning cash on hand"~}}
       {{{currency cash_on_hand_beginning_period}}}
-    {{/panelRow}}
-    {{#panelRow "Ending cash on hand"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Ending cash on hand"~}}
       {{{currency cash_on_hand_end_period}}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
-<div class="panel__row">
-  <div class="panel__heading">
-    <h4 class="panel__title">Debts</h4>
+<div class="dt-details__sect">
+  <div class="details__heading">
+    <h4 class="details__title">Debts</h4>
   </div>
   <table>
-    {{#panelRow "Debts owed by committee"}}
+    {{#dtDetailsTableRow "Debts owed by committee"~}}
       {{{currency debts_owed_by_committee}}}
-    {{/panelRow}}
-    {{#panelRow "Debts owed to committee"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Debts owed to committee"~}}
       {{{currency debts_owed_to_committee}}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
-<div class="panel__row">
-  <div class="panel__heading">
-    <h4 class="panel__title">Loans</h4>
+<div class="dt-details__sect">
+  <div class="details__heading">
+    <h4 class="details__title">Loans</h4>
   </div>
   <table>
-    {{#panelRow "Total loans received"}}
+    {{#dtDetailsTableRow "Total loans received"~}}
       {{{currency total_loans_received_period}}}
-    {{/panelRow}}
-    {{#panelRow "Loan repayments made"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Loan repayments made"~}}
       {{{currency total_loan_repayments_made_period}}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>

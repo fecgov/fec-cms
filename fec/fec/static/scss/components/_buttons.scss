@@ -439,9 +439,15 @@
   padding: 0;
 }
 
-.button--panel {
+.button--dt-details {
+  background-position-y: 5%;
   background-size: 90%;
-  @include u-icon($arrow-right-circle, $gray, 2rem, 2rem, contain);
+  @include u-icon($plus-circle, $primary, 2rem, 2rem, contain);
+}
+tr.dt-hasChild .button--dt-details {
+  background-position-y: 5%;
+  background-size: 90%;
+  @include u-icon($minus-circle, $primary, 2rem, 2rem, contain);
 }
 
 .button--nav-panel {
