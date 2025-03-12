@@ -118,10 +118,7 @@ gulp.task(
         svgmin({
           multipass: true,
           plugins: [
-            {
-              name: 'removeViewBox',
-              active: false
-            },
+            { removeViewBox: false },
             {
               name: 'removeAttrs',
               params: {
