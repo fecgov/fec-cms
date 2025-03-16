@@ -19,9 +19,30 @@ export default function KeywordModal() {
   this.$fields = this.$elm.find(
     '#keywords-any, #keywords-all, #keywords-exact'
   );
-  // this.$proximity_fields = this.$elm.find('input[name="q_proximity"], input[name="proximity_filter_term"], select[name="proximity_filter"], input[name="max_gaps"]'
-  //   // '#q_proximity, #max_gaps, #proximity_filter_term, #proximity_filter'
-  //  );
+  this.$excludeField = this.$elm.find('#keywords-none');
+  this.$submit = this.$elm.find('button[type="submit"]');
+  this.$submit.on('click', this.handleSubmit.bind(this));
+
+  this.$addInput = this.$elm.find('#js-add-input');
+  this.$addInput.on('click', this.addQproximityField.bind(this));
+  this.$removeInput = this.$elm.find('#js-rm-input');
+  this.$removeInput.on('click', this.removeQproximityField.bind(this));
+
+  ///NEW FOR PRESERVING query
+
+  for (const $input of Object.keys(sessionStorage)) {
+    $(`#${$input}`).val(sessionStorage.getItem($input));
+  }
+
+  //console.log('sessionStorage',sessionStorage)
+  this.filter_panel_keywords = document.getElementById('search-input');
+
+  if (sessionStorage.getItem('panel_query')){
+    //console.log('panel query', sessionStorage.getItem('panel_query'))
+    //this.filter_panel_keywords.value = sessionStorage.getItem('panel_keywords');
+  }
+
+  /////// END NEW FOR PRESERVING query
 
    const proximity_form = document.querySelector('#proximity_form');
    const req_fields = proximity_form.querySelectorAll('[required]');
@@ -38,32 +59,19 @@ export default function KeywordModal() {
           self.showError(req_field);
         });
         // Clear error once user starts typing
-        req_field.addEventListener('input', function() {
-            self.clearError(req_field);
-        });
+        // req_field.addEventListener('input', function() {
+        //     self.clearError(req_field);
+        // });
    }
 
-  this.$excludeField = this.$elm.find('#keywords-none');
-  this.$submit = this.$elm.find('button[type="submit"]');
-  this.$submit.on('click', this.handleSubmit.bind(this));
-
-  this.$addInput = this.$elm.find('#js-add-input');
-  this.$addInput.on('click', this.addQproximityField.bind(this));
-  this.$removeInput = this.$elm.find('#js-rm-input');
-  this.$removeInput.on('click', this.removeQproximityField.bind(this));
    // Using on JQuery on event here because element does not exist on page-load- DO I NEED THIS OR JUST CALL THE FUNC LIKE THIS:
   //$(document).on('click','#js-rm-input', this.removeQproximityField.bind(this));
   $(document).on('click','#js-rm-input', function(event){
     $(event.target).parent().remove();
   });
-  //this.$step_button = document.getElementById("stepup");
-  this.$stepup_button = this.$elm.find('#increment_max_gaps');
-  this.$stepdown_button = this.$elm.find('#decrement_max_gaps');
-  this.$stepButtons = document.querySelectorAll('.js-step-button');
-  //console.log('this.$stepButtons:', this.$stepButtons)
-  //this.$stepup_button.on('click', this.stepUpDown.bind(this));
-  //this.$stepdown_button.on('click', this.stepUpDown.bind(this));
 
+  // For incrment/decrement field
+  this.$stepButtons = document.querySelectorAll('.js-step-button');
     for (const btn of this.$stepButtons) {
       let self = this;
     $(btn).on('click', self.stepUpDown.bind(this));
@@ -90,53 +98,22 @@ export default function KeywordModal() {
     });
     }
 
-  ////  FOR EDIT PROXIMTY TAGS, DD I NEED TO MAKE IT A KeywordModal.prototype... ? ////
+ //ATTEMPT AT CONTROLLING LOAFING-GIF FOR MODAL SEARCHES
+//  document.addEventListener('DOMContentLoaded', function() {
 
-    //   const edit_tag = document.querySelector('#js-edit-tag')
+//   var overlayContainer = document.querySelector('.overlay.is-loading');
 
-    //   console.log(Object.keys(sessionStorage).join(', '))
-    //   if (edit_tag) {
-    //   edit_tag.addEventListener('click', function() {
-    //   $('button[data-a11y-dialog-show="keyword-modal"]').trigger('click')
-
-    //   for (const $input of Object.keys(sessionStorage)) {
-
-    //   console.log('$input.id: ', $($input).attr('id'))
-    //   // If the input exists on the default form - or else is it one of the user-added q_proximity fields
-    //   if ($($input).attr('id')) {
-    //     $($input).val(sessionStorage.getItem($input))
-    //     console.log('here')
-    //   }
-    //   else {
-    //     const fields = document.getElementsByClassName('q-proximity-fields')[0];
-    //     let childInputs = fields.querySelectorAll('input').length - 1;
-    //     let clean_id = $input.replace('#', '')
-    //     fields.insertAdjacentHTML('beforeend',
-    //       `<div class="input--removable ">
-    //       <input type="text" id="${clean_id}" name="q_proximity" value=${sessionStorage.getItem($input)}><button id="js-rm-input" class="u-margin--top button button--close--base modal__remove-field" type="button"></button>
-    //       </div>`);
-    //         //$($input).val(sessionStorage.getItem($input))
-    //   }
-    //   }
-    // })
-    // }
- ////// /END  FOR EDIT PROXIMTY TAGS  /////
-
- document.addEventListener('DOMContentLoaded', function() {
-
-  var overlayContainer = document.querySelector('.overlay.is-loading');
-
-  function setLoadingState(isLoading) {
-    if (isLoading) {
-      overlayContainer.style.display = 'block';
-    } else {
-      overlayContainer.style.display = 'none';
-    }
-  }
-  window.addEventListener('load', function() {
-    setLoadingState(false);
-  });
- });
+//   function setLoadingState(isLoading) {
+//     if (isLoading) {
+//       overlayContainer.style.display = 'block';
+//     } else {
+//       overlayContainer.style.display = 'none';
+//     }
+//   }
+//   window.addEventListener('load', function() {
+//     setLoadingState(false);
+//   });
+//  });
 
 } // end KeywordModal
 
@@ -183,6 +160,8 @@ KeywordModal.prototype.handleSubmit = function(e) {
   // Submit validation for proximity fields
   let $q_proximity_fields = this.$elm.find('input[id="q_proximity-0"], input[id="q_proximity-1"], input[id="max_gaps"]');
 
+  //sessionStorage.setItem('panel_keywords', self.filter_panel_keywords.value);
+
     if (!($('#q_proximity-0').val()) || !($('#q_proximity-1').val()) || !($('#max_gaps').val()) ){
     for (const req_field of $q_proximity_fields) {
     self.showError(req_field);
@@ -207,38 +186,57 @@ KeywordModal.prototype.handleSubmit = function(e) {
 KeywordModal.prototype.generateQueryString = function() {
   let includeQuery = '';
   let excludeQuery = '';
+  let has_value='';
+
+  sessionStorage.clear();
   const self = this;
 
   this.$fields.each(function() {
     const $input = $(this);
     if ($input.val() && includeQuery) {
       includeQuery = includeQuery + ' | ' + '(' + self.parseValue($input) + ')';
+
+      sessionStorage.setItem($input.attr('id'), $input.val());
+      has_value = 'true';
+
     } else if ($input.val()) {
       includeQuery = '(' + self.parseValue($input) + ')';
+
+      sessionStorage.setItem($input.attr('id'), $input.val());
+      has_value = 'true';
     }
   });
 
   if (this.$excludeField.val()) {
     excludeQuery = self.parseValue(this.$excludeField);
+    sessionStorage.setItem(this.$excludeField.attr('id'), this.$excludeField.val());
   }
+
+  // If modal keywords field(s) have a value, use that, otherwise, use filter panel keyword value
+  if (has_value=='true') {
   var queryString = includeQuery + excludeQuery;
+
+  } else {
+    queryString = self.filter_panel_keywords.value;
+    sessionStorage.setItem('panel_query', queryString);
+  }
+
   return queryString;
 };
 
-///////// NEW ////////
+////// START NEW //////
+
 KeywordModal.prototype.generateProximityQueryString = function() {
   let $q_proximity_fields = this.$elm.find('input[name="q_proximity"], input[name="max_gaps"]');
   let $optional_proximity_fields = this.$elm.find('input[name="proximity_filter_term"], select[name="proximity_filter"]');
 
   let proximityQueryString = '';
-  sessionStorage.clear();
 
   if ($('#q_proximity-0').val() && $('#q_proximity-1').val()) {
     $q_proximity_fields.each(function() {
     const $input = $(this);
     if ($input.val()) {
       proximityQueryString += `&${$input.attr('name')}=${$input.val()}`;
-      sessionStorage.setItem(`#${$input.attr('id')}`, `${$input.val()}`);
      }
     });
   }
@@ -247,7 +245,6 @@ KeywordModal.prototype.generateProximityQueryString = function() {
         const $input = $(this);
         if ($input.val()) {
           proximityQueryString += `&${$input.attr('name')}=${$input.val()}`;
-          sessionStorage.setItem(`#${$input.attr('id')}`, `${$input.val()}`);
          }
         });
     }
@@ -288,14 +285,6 @@ KeywordModal.prototype.stepUpDown = function(event) {
   const disabled = input.value == 0 ? 'disabled' : '';
   input.previousElementSibling.disabled = disabled;
 
-  // if (event.target.classList.contains("stepup")) {
-  //   let input = event.target.previousElementSibling
-  //   input.stepUp(1);
-  // }
-  // else if (event.target.classList.contains("stepdown")){
-  //   let input = event.target.nextElementSibling
-  //   input.stepDown(1);
-  // }
 };
 
 ////// END NEW //////
