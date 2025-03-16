@@ -34,9 +34,16 @@ export default function KeywordModal() {
     $(`#${$input}`).val(sessionStorage.getItem($input));
   }
 
+  //console.log('sessionStorage',sessionStorage);
+
+  sessionStorage.clear();
+
+  $('#category-filters').on( 'submit', function() {
+    sessionStorage.clear();
+  });
+
   //console.log('sessionStorage',sessionStorage)
   this.filter_panel_keywords = document.getElementById('search-input');
-
   if (sessionStorage.getItem('panel_query')){
     //console.log('panel query', sessionStorage.getItem('panel_query'))
     //this.filter_panel_keywords.value = sessionStorage.getItem('panel_keywords');
