@@ -26,6 +26,7 @@
 }
 .block-table {
   table {
+    table-layout: auto;
     @extend .simple-table-cms;
   }
 }
