@@ -78,7 +78,7 @@
     margin-bottom: u(2rem);
 
     .icon--x-twitter {
-      @include u-icon($x-twitter-circle, $primary, 3rem, 3rem, contain);
+      @include u-icon($x-twitter-circle, $inverse, 3rem, 3rem, contain);
     }
 
     .icon--youtube {
