@@ -414,7 +414,7 @@ def get_previous_press_release_page():
 
 class PressReleasePage(ContentPage):
     page_description = 'Commission news and journalist resource'
-    parent_page_types = ['HomePage', 'PressLandingPage']
+    parent_page_types = ['CustomPage', 'HomePage', 'PressLandingPage']
     date = models.DateField(default=datetime.date.today)
     formatted_title = models.CharField(
         max_length=255, null=True, blank=True, default='',
