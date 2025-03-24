@@ -669,8 +669,8 @@ DataTable_FEC.prototype.checkFromQuery = function() {
     // No Set-timeout needed on datatables without two filter panels…
     // …Also it causes a noticeable intermittent time-lag while populating table on these pages
     } else {
-    // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
-    // ...if they are not already checked
+    // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()…
+    // …if they are not already checked
     for (let box of queryBoxes) {
       if (!($(box).is(':checked'))) {
         $(box).prop('checked', true).change(); // TODO: jQuery deprecation
@@ -1091,6 +1091,10 @@ DataTable_FEC.prototype.hideEmpty = function(response) {
 
 DataTable_FEC.registry = {};
 
+/**
+ * @param {JQuery} $table
+ * @param {Object} opts
+ */
 DataTable_FEC.defer = function($table, opts) {
   tabsOnShow($table, function() {
     new DataTable_FEC($table, opts);
