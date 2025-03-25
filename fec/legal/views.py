@@ -686,7 +686,6 @@ def legal_doc_search_regulations(request):
 def legal_doc_search_statutes(request):
     original_query = request.GET.get('search', '')
     results = {}
-    query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
 
     query, query_exclude = parse_query(original_query)
