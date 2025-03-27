@@ -66,6 +66,15 @@ def web_app_url(path):
     return "{}{}".format(settings.FEC_APP_URL, path)
 
 
+@register.filter(name='remove_title_pre_suf_fix')
+def remove_title_pre_suf_fix(str):
+    """
+    Removes 'FEC | ' prefix and ' - FEC.gov' suffix' from search.gov search result title
+    """
+    str = re.sub(r'(^FEC \| | - FEC\.gov$)', '', str)
+    return str
+
+
 @register.filter()
 def highlight_matches(text):
     """
@@ -214,3 +223,5 @@ def get_file_type(value):
     file_type = "EXCEL" if xl else file_extension
 
     return file_type
+
+
