@@ -7,7 +7,7 @@ import { audit as cols_audit } from '../modules/columns.js';
 import { DataTable_FEC, modalRenderRow } from '../modules/tables.js';
 
 // for sub category filter-tag and results
-$(document).bind( // TODO: jQuery deprecation
+$(document).on(
   'ready ajaxComplete',
   '#sub_category_id',
   showSubCategory

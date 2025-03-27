@@ -235,7 +235,7 @@ export function modalRenderFactory(template, fetch) {
               $modal.find('.js-pdf_url').remove();
             }
             // Set focus on the close button
-            $('.js-hide').focus(); // TODO: jQuery deprecation
+            $('.js-hide').trigger('focus');
 
             // When under $large-screen
             // TODO figure way to share these values with CSS.
@@ -260,7 +260,7 @@ export function modalRenderFactory(template, fetch) {
 }
 
 function hidePanel(api, $modal) {
-  $('.row-active .js-panel-button').focus(); // TODO: jQuery deprecation
+  $('.row-active .js-panel-button').trigger('focus');
   $('.js-panel-toggle tr').toggleClass('row-active', false);
   $('body').toggleClass('panel-active', false);
   $modal.attr('aria-hidden', 'true');
@@ -660,7 +660,7 @@ DataTable_FEC.prototype.checkFromQuery = function() {
       // …if they are not already checked
       for (let box of queryBoxes) {
         if (!($(box).is(':checked'))) {
-          $(box).prop('checked', true).change(); // TODO: jQuery deprecation
+          $(box).prop('checked', true).trigger('change');
         }
        }
       $('button.is-loading, label.is-loading').removeClass('is-loading');
@@ -673,7 +673,7 @@ DataTable_FEC.prototype.checkFromQuery = function() {
     // …if they are not already checked
     for (let box of queryBoxes) {
       if (!($(box).is(':checked'))) {
-        $(box).prop('checked', true).change(); // TODO: jQuery deprecation
+        $(box).prop('checked', true).trigger('change');
       }
     }
   }
