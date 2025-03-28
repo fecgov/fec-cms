@@ -117,6 +117,14 @@
         {%- for case_stat_cite in case_statutory_citation -%}
           case_statutory_citation={{ case_stat_cite }}&
         {%- endfor -%}
+        {%- if q_proximitys -%}
+         {%- for q_proximity in q_proximitys -%}
+          q_proximity={{ q_proximity }}&
+         {%- endfor -%}
+         max_gaps={{ max_gaps }}&
+        {%- endif -%}
+
+
         #results-{{ result_type }}">{{ page }}</a>
       {% elif result_type == 'advisory_opinions' %}
         <a class="paginate_button" href="/data/legal/search/advisory-opinions/?

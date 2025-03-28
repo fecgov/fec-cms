@@ -12,6 +12,20 @@
 <div class="filters__inner">
   {{ legal.keyword_search(result_type, query) }}
   <div class="filter">
+    <legend class="label">Proximity</legend>
+    <p class="filter__message">Search the maximum number of words between keywords or exact phrases. Proximity terms will not be highlighted in search results.</p>
+    <label class="label" for="q_proximity">Keyword or exact phrase</label>
+    <input type="text" id="q_proximity-0" name="q_proximity" required value="{{ q_proximitys[0] | default('')}}">
+    <div class="increment-decrement__container">
+      <span class="t-inline">Within</span><button id="decrement_max_gaps" class="button--decrement js-step-button" type="button" disabled="" tabindex="0"></button> 
+        <input id="max_gaps" name="max_gaps" class="step_input" min="0" value="{{max_gaps}}" tabindex="0">
+        {# {% if max_gaps %} "{{max_gaps}}" {% else %}"#"{% endif %} placeholder="#"  #}
+        <button id="increment_max_gaps" class="button--increment js-step-button" type="button" tabindex="0"></button><span class="t-inline">words of</span>
+    </div>
+    <label class="label" for="q_proximity">Keyword or exact phrase</label>
+    <input type="text" id="q_proximity-1" name="q_proximity" required value="{{ q_proximitys[1] | default('') }}">
+  </div>
+  <div class="filter">
     <label class="label" for="case_no">Administrative fine number</label>
     <input id="case_no" name="case_no" type="text" value="{{ case_no }}">
   </div>
@@ -95,6 +109,17 @@
           {% if case_max_document_date %}
           <div data-removable="true" data-id="max_doc_open_date" class="tag__item">{% if not case_min_document_date %}Ending {% endif %}{{ case_max_document_date }}<button class="button js-close tag__remove" data-tag="case_max_document_date"><span class="u-visually-hidden">Remove</span></button></div>
           {% endif %}
+        </li>
+      {% endif %}
+      {% if q_proximitys and q_proximitys | reject('equalto', none) | list %}
+        <li data-tag-category="q_proximity" class="tag__category tag__category--all">
+        Proximity keywords 
+        {% for q_proximity in q_proximitys %}
+          <div data-removable="true" class="tag__item">{{ q_proximity }}</div>{% if loop.index == 1 %}and{% endif %}
+        {% endfor %}
+        with max proximity
+          <div data-removable="true" class="tag__item">{{ max_gaps }}</div>
+          <button class="button js-close tag__remove" data-tag="q_proximity" data-tag-related="max_gaps"><span class="u-visually-hidden">Remove</span></button>
         </li>
       {% endif %}
     </ul>
