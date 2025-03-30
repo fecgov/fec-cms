@@ -13,17 +13,21 @@
   {{ legal.keyword_search(result_type, query) }}
   <div class="filter">
     <legend class="label">Proximity</legend>
-    <p class="filter__message">Search the maximum number of words between keywords or exact phrases. Proximity terms will not be highlighted in search results.</p>
-    <label class="label" for="q_proximity">Keyword or exact phrase</label>
-    <input type="text" id="q_proximity-0" name="q_proximity" required value="{{ q_proximitys[0] | default('')}}">
+    <p class="t-sans search__example filter__message u-no-margin-top">Search the maximum number of words between keywords or exact phrases. Proximity terms will not be highlighted in search results.</p>
+    <label class="u-no-margin-bottom t-bold" for="q_proximity">Keyword or exact phrase</label>
+    <span class="t-note t-sans">Both keyword fields needed</span>
+    <input type="text" id="q_proximity-0" name="q_proximity" value="{{ q_proximitys[0] | default('')}}">
     <div class="increment-decrement__container">
-      <span class="t-inline">Within</span><button id="decrement_max_gaps" class="button--decrement js-step-button" type="button" disabled="" tabindex="0"></button> 
-        <input id="max_gaps" name="max_gaps" class="step_input" min="0" value="{{max_gaps}}" tabindex="0">
+      <span class="t-inline t-sans">Within</span><button class="button--decrement js-step-button" type="button" {% if max_gaps =='0' %}disabled{% endif %} tabindex="0"></button> 
+        <input id="max_gaps" name="max_gaps" min="0" value="{{max_gaps | default('0') }}"  tabindex="0">
         {# {% if max_gaps %} "{{max_gaps}}" {% else %}"#"{% endif %} placeholder="#"  #}
-        <button id="increment_max_gaps" class="button--increment js-step-button" type="button" tabindex="0"></button><span class="t-inline">words of</span>
+        {# {% if q_proximitys[0] and q_proximitys[1] %} "{{max_gaps}}" {% else %}'0'{% endif %}  #}
+        {# "{{max_gaps | default('0') }}" #}
+        <button class="button--increment js-step-button" type="button" tabindex="0"></button><span class="t-inline t-sans">words of</span>
     </div>
-    <label class="label" for="q_proximity">Keyword or exact phrase</label>
-    <input type="text" id="q_proximity-1" name="q_proximity" required value="{{ q_proximitys[1] | default('') }}">
+    <label class="u-no-margin-bottom t-bold" for="q_proximity">Keyword or exact phrase</label>
+    <span class="t-note t-sans">Both keyword fields needed</span>
+    <input type="text" id="q_proximity-1" name="q_proximity" value="{{ q_proximitys[1] | default('') }}">
   </div>
   <div class="filter">
     <label class="label" for="case_no">Administrative fine number</label>
@@ -111,7 +115,7 @@
           {% endif %}
         </li>
       {% endif %}
-      {% if q_proximitys and q_proximitys | reject('equalto', none) | list %}
+{% if q_proximitys and q_proximitys | reject('equalto', '') | list %}
         <li data-tag-category="q_proximity" class="tag__category tag__category--all">
         Proximity keywords 
         {% for q_proximity in q_proximitys %}

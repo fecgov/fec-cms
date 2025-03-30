@@ -112,7 +112,8 @@ class TestLegalSearch(TestCase):
         assert response.status_code == 200
 
         load_legal_search_results.assert_called_once_with('in kind donation', '',
-                                                          'statutes', offset=0)
+                                                          'statutes', offset=0,
+                                                          limit=20, q_proximity=[], max_gaps='0')
 
     # # Test 6: OK
     @mock.patch.object(api_caller, '_call_api')

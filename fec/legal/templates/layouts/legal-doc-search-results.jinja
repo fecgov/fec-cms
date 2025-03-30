@@ -262,6 +262,16 @@
 
   // For incrment/decrement field
 
+document.querySelector('.increment-decrement__container input').addEventListener("input", function(event) {
+  if (event.target.value == 0){
+    event.target.previousElementSibling.setAttribute('disabled','disabled');
+  }
+  else {
+   event.target.previousElementSibling.removeAttribute('disabled');
+  }
+   });
+
+
 const stepUpDown = function(event) {
 
   let input = event.target.closest('.increment-decrement__container').querySelector('input');

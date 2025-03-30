@@ -705,17 +705,19 @@ def legal_doc_search_regulations(request):
 def legal_doc_search_statutes(request):
     results = {}
     query = request.GET.get('search', '')
+    limit = request.GET.get('limit', 20)
     offset = request.GET.get('offset', 0)
-    # q_proximitys = request.GET.getlist('q_proximity', '')
-    # max_gaps = request.GET.get('max_gaps', '0')
+    q_proximitys = request.GET.getlist('q_proximity', [])
+    max_gaps = request.GET.get('max_gaps', '0')
 
 
     results = api_caller.load_legal_search_results(
         query, '', 
        'statutes',
         offset=offset,
-        # q_proximity = q_proximitys,
-        # max_gaps = max_gaps,
+        limit=limit,
+        q_proximity = q_proximitys,
+        max_gaps = max_gaps,
         
         )
 
@@ -725,8 +727,8 @@ def legal_doc_search_statutes(request):
         'result_type': 'statutes',
         'query': query,
         'social_image_identifier': 'legal',
-        # 'q_proximitys': q_proximitys,
-        # 'max_gaps': max_gaps,
+        'q_proximitys': q_proximitys,
+        'max_gaps': max_gaps,
     })
 
 
