@@ -154,12 +154,16 @@ LegalSearchAo.prototype.initFilters = function() {
  */
 LegalSearchAo.prototype.initTable = function() {
   // Add the functionality for the case (first column) sorting, but only if the table exists
-  const theTh = document.querySelector('#results th[data-sort]');
-  if (theTh) {
-    theTh.setAttribute('aria-controls', 'results');
-    theTh.addEventListener('click', this.handleSortClick.bind(this));
-    updateTableSortColumn(theTh, this.sortOrder);
+  const theThElement = document.querySelectorAll('#results th[data-sort]');
+  console.log("theThElement", theThElement)
+  theThElement.forEach(theThElement => 
+    {
+  if (theThElement) {
+    theThElement.setAttribute('aria-controls', 'results');
+    theThElement.addEventListener('click', this.handleSortClick.bind(this));
+    updateTableSortColumn(theThElement, this.sortOrder);
   }
+  })
 };
 
 /**
@@ -277,8 +281,18 @@ LegalSearchAo.prototype.getResults = function(e) {
   filterFields.push('search', 'sort');
 
   // Set the sort param value according to this.sortOrder
-  serializedFilters.sort = this.sortOrder == 'asc' ? 'ao_no' : '-ao_no';
+  // serializedFilters.sort = this.sortOrder == 'asc' ? 'ao_no' : '-ao_no';
+  console.log('Initial serializedFilters.sort:', serializedFilters.sort);
+  console.log('sortOrder:', this.sortOrder);
+  if (serializedFilters.sort == 'ao_no'){
+    serializedFilters.sort = this.sortOrder == 'asc' ? 'ao_no' : '-ao_no';
+  } else {
+    serializedFilters.sort = this.sortOrder == 'asc' ? 'issue_date' : '-issue_date';
+  // If we're getting new results, let's reset the page offset (go back to page 1)
+  serializedFilters['offset'] = 0;
+  }
 
+  console.log("serializedFilters.sort", serializedFilters.sort)
   // If we're getting new results, let's reset the page offset (go back to page 1)
   serializedFilters['offset'] = 0;
 
@@ -731,7 +745,7 @@ const template_no_table = `<div class="panel__main legal-search-results js-legal
     <thead>
       <tr class="simple-table__header">
         <th class="simple-table__header-cell cell--15 sorting_desc sorting" data-sort="ao_no" aria-controls="results" aria-sort="descending" aria-description="Case: Activate to sort column descending">Case</th>
-        <th class="simple-table__header-cell cell--15">Date issued</th>
+        <th class="simple-table__header-cell cell--15 sorting_desc sorting" data-sort="issue_date" aria-controls="results" aria-sort="descending" aria-description="Data issued: Activate to sort column descending">Date issued</th>
         <th class="simple-table__header-cell">Summary</th>
         <th class="simple-table__header-cell">This opinion is cited by these later opinions</th>
       </tr>
