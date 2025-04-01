@@ -20,9 +20,6 @@
     <div class="increment-decrement__container">
       <span class="t-inline t-sans">Within</span><button class="button--decrement js-step-button" type="button" {% if max_gaps =='0' %}disabled{% endif %} tabindex="0"></button> 
         <input id="max_gaps" name="max_gaps" min="0" value="{{max_gaps | default('0') }}"  tabindex="0">
-        {# {% if max_gaps %} "{{max_gaps}}" {% else %}"#"{% endif %} placeholder="#"  #}
-        {# {% if q_proximitys[0] and q_proximitys[1] %} "{{max_gaps}}" {% else %}'0'{% endif %}  #}
-        {# "{{max_gaps | default('0') }}" #}
         <button class="button--increment js-step-button" type="button" tabindex="0"></button><span class="t-inline t-sans">words of</span>
     </div>
     <label class="u-no-margin-bottom t-bold" for="q_proximity">Keyword or exact phrase</label>
