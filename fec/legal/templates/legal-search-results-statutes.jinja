@@ -11,60 +11,10 @@
 {% block filters %}
   <div class="filters__inner">
     {{ legal.keyword_search(result_type, query) }}
-    <div class="filter">
-      <legend class="label">Proximity</legend>
-      <p class="t-sans search__example filter__message u-no-margin-top">Search the maximum number of words between keywords or exact phrases. Proximity terms will not be highlighted in search results.</p>
-      <label class="u-no-margin-bottom t-bold" for="q_proximity">Keyword or exact phrase</label>
-      <span class="t-note t-sans">Both keyword fields needed</span>
-      <input type="text" id="q_proximity-0" name="q_proximity" value="{{ q_proximitys[0] | default('')}}">
-      <div class="increment-decrement__container">
-        <span class="t-inline t-sans">Within</span><button class="button--decrement js-step-button" type="button" {% if max_gaps =='0' %}disabled{% endif %} tabindex="0"></button> 
-          <input id="max_gaps" name="max_gaps" min="0" value="{{max_gaps | default('0') }}"  tabindex="0">
-          <button class="button--increment js-step-button" type="button" tabindex="0"></button><span class="t-inline t-sans">words of</span>
-      </div>
-      <label class="u-no-margin-bottom t-bold" for="q_proximity">Keyword or exact phrase</label>
-      <span class="t-note t-sans">Both keyword fields needed</span>
-      <input type="text" id="q_proximity-1" name="q_proximity" value="{{ q_proximitys[1] | default('') }}">
-    </div>
-    <div class="filter">
-      <button type="submit" class="button button--cta">Apply filters</button>
-    </div>
   </div>
-{% endblock %}
-{% block message %}
-<div class="data-container__tags u-no-padding-left">
-  <div class="row">
-    <h3 class="tags__title">Viewing <span class="tags__count">{{ results.total_statutes }}</span> filtered results for:</h3>
-  </div>
-  <div class="js-filter-tags data-container__tags u-no-padding-left">
-    <ul class="tags">
-      {% if query %}
-        <li data-tag-category="query" class="tag__category">
-          <div data-removable="true" class="tag__item">{{ query }}<button class="button js-close tag__remove" data-tag="query"><span class="u-visually-hidden">Remove</span></button></div>
-        </li>
-      {% endif %}
-      
-      {% if q_proximitys and q_proximitys | reject('equalto', '') | list %}
-        <li data-tag-category="q_proximity" class="tag__category tag__category--all">
-        Proximity keywords 
-        {% for q_proximity in q_proximitys %}
-          <div data-removable="true" class="tag__item">{{ q_proximity }}</div>{% if loop.index == 1 %}and{% endif %}
-        {% endfor %}
-        with max proximity
-          <div data-removable="true" class="tag__item">{{ max_gaps }}</div>
-          <button class="button js-close tag__remove" data-tag="q_proximity" data-tag-related="max_gaps"><span class="u-visually-hidden">Remove</span></button>
-        </li>
-      {% endif %}
-
-    </ul>
-  </div>
-</div>
 {% endblock %}
 
 {% block results %}
-  {% with results=results %}
-    {% include 'partials/legal-pagination.jinja' %}
-  {% endwith %}
 {% with statutes = results.statutes %}
 <div class="data-container__datatable">
   {% include 'partials/legal-search-results-statute.jinja' %}

@@ -701,34 +701,26 @@ def legal_doc_search_regulations(request):
         'social_image_identifier': 'legal',
     })
 
-
 def legal_doc_search_statutes(request):
+    original_query = request.GET.get('search', '')
     results = {}
-    query = request.GET.get('search', '')
-    limit = request.GET.get('limit', 20)
     offset = request.GET.get('offset', 0)
-    q_proximitys = request.GET.getlist('q_proximity', [])
-    max_gaps = request.GET.get('max_gaps', '0')
 
+    query, query_exclude = parse_query(original_query)
 
     results = api_caller.load_legal_search_results(
-        query, '', 
-       'statutes',
-        offset=offset,
-        limit=limit,
-        q_proximity = q_proximitys,
-        max_gaps = max_gaps,
-        
+            query,
+            query_exclude,
+            'statutes',
+            offset=offset,
         )
 
     return render(request, 'legal-search-results-statutes.jinja', {
         'parent': 'legal',
         'results': results,
         'result_type': 'statutes',
-        'query': query,
+        'query': original_query,
         'social_image_identifier': 'legal',
-        'q_proximitys': q_proximitys,
-        'max_gaps': max_gaps,
     })
 
 
