@@ -153,13 +153,15 @@ LegalSearchAo.prototype.initFilters = function() {
  * Assign event listeners to the sortable column
  */
 LegalSearchAo.prototype.initTable = function() {
-  // Add the functionality for the case (first column) sorting, but only if the table exists
-  const theTh = document.querySelector('#results th[data-sort]');
-  if (theTh) {
-    theTh.setAttribute('aria-controls', 'results');
-    theTh.addEventListener('click', this.handleSortClick.bind(this));
-    updateTableSortColumn(theTh, this.sortOrder);
+  // Update the functionality to sort by one or more columns
+  const theThElements = document.querySelectorAll('#results th[data-sort]');
+  theThElements.forEach(theThElement => {
+  if (theThElement) {
+    theThElement.setAttribute('aria-controls', 'results');
+    theThElement.addEventListener('click', this.handleSortClick.bind(this));
+    updateTableSortColumn(theThElement, this.sortOrder);
   }
+  })
 };
 
 /**
@@ -169,9 +171,10 @@ LegalSearchAo.prototype.initTable = function() {
 LegalSearchAo.prototype.handleSortClick = function(e) {
   e.stopImmediatePropagation();
 
-  this.sortOrder = this.sortOrder == 'asc' ? 'desc' : 'asc';
+  this.sortType = e.target.dataset.sort
+  this.sortOrder =  e.target.classList.contains('sorting_asc') ? 'desc' : 'asc';
 
-  updateTableSortColumn(e.target, this.sortOrder == 'asc' ? 'desc' : 'asc');
+  updateTableSortColumn(e.target, this.sortOrder);
 
   this.lastFilterId = undefined;
   this.debounce(this.getResults.bind(this), 250);
@@ -270,17 +273,21 @@ LegalSearchAo.prototype.getResults = function(e) {
   // Get data from our filters
   const serializedFilters = this.filterSet.serialize();
   const filterFields = this.filterSet.fields;
-
+ 
   // Let's override any filters here
 
   // Make sure search and sort are allowed fields
   filterFields.push('search', 'sort');
 
-  // Set the sort param value according to this.sortOrder
-  serializedFilters.sort = this.sortOrder == 'asc' ? 'ao_no' : '-ao_no';
+  // Set the sort param value according to this.sortType
+  if (this.sortType == 'ao_no'){
+    serializedFilters.sort = this.sortOrder == 'asc' ? 'ao_no' : '-ao_no';
+  } else {
+    serializedFilters.sort = this.sortOrder == 'asc' ? 'issue_date' : '-issue_date';
+  }
 
-  // If we're getting new results, let's reset the page offset (go back to page 1)
-  serializedFilters['offset'] = 0;
+    // If we're getting new results, let's reset the page offset (go back to page 1)
+    serializedFilters['offset'] = 0;
 
   // Then update the URL with currently params
   updateQuery(serializedFilters, filterFields);
@@ -731,7 +738,7 @@ const template_no_table = `<div class="panel__main legal-search-results js-legal
     <thead>
       <tr class="simple-table__header">
         <th class="simple-table__header-cell cell--15 sorting_desc sorting" data-sort="ao_no" aria-controls="results" aria-sort="descending" aria-description="Case: Activate to sort column descending">Case</th>
-        <th class="simple-table__header-cell cell--15">Date issued</th>
+        <th class="simple-table__header-cell cell--15 sorting_desc sorting" data-sort="issue_date" aria-controls="results" aria-sort="descending" aria-description="Data issued: Activate to sort column descending">Date issued</th>
         <th class="simple-table__header-cell">Summary</th>
         <th class="simple-table__header-cell">This opinion is cited by these later opinions</th>
       </tr>

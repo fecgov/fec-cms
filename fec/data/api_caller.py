@@ -389,12 +389,12 @@ def _get_sorted_documents(ao):
     )
     sorted_documents = sorted(sorted_documents, key=itemgetter("date"), reverse=True)
 
-    # # Sort by document date unless it's a final opinion. Final opinion uses issue date.
-    # sorted_documents = sorted(
-    #     sorted_documents,
-    #     key=lambda doc: doc.get("date") if doc.get("ao_doc_category_id") != 'F' else ao.get("issue_date"),
-    #     reverse=True
-    # )
+    # Sort by document date unless it's a final opinion. Final opinion uses issue date.
+    sorted_documents = sorted(
+        sorted_documents,
+        key=lambda doc: doc.get("date") if doc.get("ao_doc_category_id") != 'F' else ao.get("issue_date"),
+        reverse=True
+    )
 
     return sorted_documents
 
