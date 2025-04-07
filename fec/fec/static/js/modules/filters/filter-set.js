@@ -8,6 +8,7 @@ import { default as URI } from 'urijs';
 import { default as CheckboxFilter } from './checkbox-filter.js';
 import { default as DateFilter } from './date-filter.js';
 import { default as ElectionFilter } from './election-filter.js';
+import { default as KeywordProximityFilter } from './keyword-proximity-filter.js';
 import { default as MultiFilter } from './multi-filter.js';
 import { default as RangeFilter } from './range-filter.js';
 import { default as SelectFilter } from './select-filter.js';
@@ -36,6 +37,11 @@ export default function FilterSet(elm) {
   this.processedFilters = {};
 }
 
+/**
+ * @enum
+ * A filter type lookup, read from an HTMLElement's data-filter attribute.
+ * ex: data-filter="text" would return TextFilter
+*/
 const filterMap = {
   text: TextFilter,
   checkbox: CheckboxFilter,
@@ -45,7 +51,8 @@ const filterMap = {
   multi: MultiFilter,
   select: SelectFilter,
   toggle: ToggleFilter,
-  range: RangeFilter
+  range: RangeFilter,
+  'keyword-proximity': KeywordProximityFilter
 };
 
 FilterSet.prototype.buildFilter = function($elm) {
@@ -162,7 +169,13 @@ FilterSet.prototype.clear = function() {
 FilterSet.prototype.handleTagRemoved = function(e, opts) {
   const $input = $(document.getElementById(opts.key));
 
-  if ($input.length > 0) {
+  // The keyword proximity filter is different because of its three fields and two values
+  if ($input.attr('data-filter') == 'keyword-proximity') {
+    const $proximityFields = $input.find('input[name="q_proximity"]');
+    $proximityFields.val('');
+    $proximityFields.get(0).dispatchEvent(new Event('change', { bubbles: true }));
+
+  } else if ($input.length > 0) {
     const type = $input.get(0).type;
 
     if (type === 'checkbox' || type === 'radio') {
