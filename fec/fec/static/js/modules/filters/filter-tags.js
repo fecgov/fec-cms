@@ -44,6 +44,29 @@ const template_nonremoveableTag = value => `<div data-id="${value.key}" data-rem
     ${value.value}
 </div>`;
 
+
+/**
+ * 
+ * @param {Array} parts 
+ * @returns {string}
+ */
+const template_byElements = opts => {
+  let toReturn = `<div data-id="${opts.key}">`;
+  const parts = opts.tagElements;
+  for (let i = 0; i < parts.length; i++) {
+    toReturn += parts[i].label
+    ? parts[i].label
+    : `<div data-id="${parts[i].value}" class="tag__item inline">${parts[i].value}</div>`;
+  }
+
+  if (opts.nonremovable === false)
+    toReturn += `<button data-filter-id="${opts.name}" class="button js-close tag__remove">`;
+    toReturn += `<span class="u-visually-hidden">Remove</span></button>`;
+
+  toReturn += '</div>';
+  return toReturn;
+};
+
 /**
  * TagLists are created by modules/tables.js and calendar-page.js
  * @param {Object} opts
@@ -111,11 +134,16 @@ export default function TagList(opts) {
  * @param {boolean} [opts.range=false] - If true, will use opts.rangename over opts.name
  * @param {string} [opts.rangeName] - Used as data-tag-category="" if opts.range is true
  * @param {boolean} [opts.nonremovable=false] - determines which template to use. Default: false
+ * @param {Array} [opts.tagElements] - Array of Objects to add inside the tag,
+ * ex: [{label:'Proximity keywords'},{value:'kw0'},{label:'and'},{value:'kw1'},{label:'with max prox'},{value:3}]
  */
 TagList.prototype.addTag = function(e, opts) {
-  const tag = opts.nonremovable
-    ? template_nonremoveableTag(opts)
-    : template_tag(opts);
+  let tag;
+  // If there's an opts.tagElements, we're going to string those together
+  // (mostly for the keyword-proximity filter that combines three values across two variables/keys)
+  if (opts.tagElements) tag = template_byElements(opts);
+  else tag = opts.nonremovable ? template_nonremoveableTag(opts) : template_tag(opts);
+
   const name = opts.range ? opts.rangeName : opts.name;
   const $tagCategory = this.$list.find('[data-tag-category="' + name + '"]');
   this.removeTag(opts.key, false);
@@ -167,7 +195,11 @@ TagList.prototype.addTagItem = function($tagCategory, tag, opts) {
 TagList.prototype.removeTagElement = function($tag, emit) {
   // This handles the actual removal of the DOM elements
   const $tagCategory = $tag.parent();
-  const key = $tag.data('id');
+  let key = $tag.data('id');
+
+  // If there's no key, look for the data-tag-category
+  if (!key) key = $tag.attr('data-tag-category');
+
   if (emit) {
     $tag.trigger('tag:removed', [{ key: key }]);
   }
@@ -189,7 +221,10 @@ TagList.prototype.removeTagElement = function($tag, emit) {
  * @param {boolean} forceRemove
  */
 TagList.prototype.removeTag = function(key, emit, forceRemove) {
-  const $tag = this.$list.find('[data-id="' + key + '"]');
+  let $tag = this.$list.find('[data-id="' + key + '"]');
+  // If we didn't find the tag by its data-id, use the data-tag-category instead (for keyword-proximity)
+  if ($tag.length === 0) $tag = this.$list.find(`[data-tag-category="${key}"]`);
+
   if ($tag.length > 0) {
     // If the tag exists, remove the element if it's removable
     if ($tag.attr('data-removable') !== 'false') {
@@ -301,9 +336,13 @@ TagList.prototype.removeTagEvt = function(e, opts) {
  * @param {jQuery.Event} e
  */
 TagList.prototype.removeTagDom = function(e) {
-  const key = $(e.target)
+  let key = $(e.target)
     .closest('.tag__item')
     .data('id');
+
+  // If we've used template_byElements(), the individual tag__item elements don't have id values (keyword-proximity),
+  // so let's use the data-filter-id from the remove button (e.target)
+  if (!key) key = e.target.dataset.filterId;
   this.removeTag(key, true);
 };
 
@@ -315,10 +354,14 @@ TagList.prototype.removeTagDom = function(e) {
  * @param {} opts.nonremovable
  */
 TagList.prototype.renameTag = function(e, opts) {
-  const tag = opts.nonremovable
-    ? template_nonremoveableTag(opts)
-    : template_tag(opts);
-  const $tag = this.$list.find('[data-id="' + opts.key + '"]');
+  let tag;
+  // If there's an opts.tagElements, we're going to string those together
+  // (mostly for the keyword-proximity filter that combines three values across two variables/keys)
+  if (opts.tagElements) tag = template_byElements(opts);
+  else tag = opts.nonremovable ? template_nonremoveableTag(opts) : template_tag(opts);
+
+  let $tag = this.$list.find('[data-id="' + opts.key + '"]');
+
   if ($tag.length) {
     $tag.replaceWith(tag);
   }
