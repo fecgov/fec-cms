@@ -482,7 +482,7 @@ $filter-button-width: u(4.6rem);
     display: inline-grid;
     justify-content: start;
     align-items: center;
-    }
+  }
 
   input {
     grid-column: 3;
@@ -493,7 +493,8 @@ $filter-button-width: u(4.6rem);
   }
 
   button {
-  width: 20px;
+    width: 20px;
+  }
  }
 
 
@@ -517,12 +518,12 @@ $filter-button-width: u(4.6rem);
     padding-left: 0;
     width: 2rem;
 
-      .icon.i-minus-circle {
-        @include u-icon-bg($minus-circle, $primary);
-      }
-      .icon.i-plus-circle {
-        @include u-icon-bg($plus-circle, $primary);
-      }
+    .icon.i-minus-circle {
+      @include u-icon-bg($minus-circle, $primary);
+    }
+    .icon.i-plus-circle {
+      @include u-icon-bg($plus-circle, $primary);
+    }
   }
 
   #keyword-proximity-distance {
