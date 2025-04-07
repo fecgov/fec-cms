@@ -282,6 +282,11 @@ $filter-button-width: u(4.6rem);
   padding: u(0.5rem);
 }
 
+.filter__explanation {
+  line-height: 1.3em;
+  margin-bottom: 1rem;
+}
+
 .filter__message {
   font-family: $sans-serif;
   font-size: u(1.4rem);
@@ -492,4 +497,70 @@ $filter-button-width: u(4.6rem);
  }
 
 
+.keyword-proximity-filter {
+
+  label {
+    margin-bottom: 0.5rem;
+
+    &:has(#keyword-proximity-distance) {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      gap: .5em;
+      margin-bottom: 1rem;
+    }
+  }
+
+  button {
+    display: inline-block;
+    height: 2rem;
+    padding-left: 0;
+    width: 2rem;
+
+      .icon.i-minus-circle {
+        @include u-icon-bg($minus-circle, $primary);
+      }
+      .icon.i-plus-circle {
+        @include u-icon-bg($plus-circle, $primary);
+      }
+  }
+
+  #keyword-proximity-distance {
+    appearance: textfield;
+    display: inline-block;
+    margin: 0;
+    padding-left: .25em;
+    padding-right: .25em;
+    text-align: center;
+    width: 3.6rem;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      display: none;
+      margin: 0;
+    }
+  }
+  &:invalid {
+    border-color: red !important;
+  }
+
+  // fieldset {
+  //   position: relative;
+  //   &:after {
+  //     width: 0;
+  //   }
+  // }
+  // &.waiting {
+  //   fieldset:after {
+  //     content: " ";
+  //     display: block;
+  //     width: 100%;
+  //     background: darkgray;
+  //     height: 2px;
+  //     position: absolute;
+  //     bottom: 0;
+  //     left: 0;
+  //     transition: width 2s;
+  //   }
+  // }
 }

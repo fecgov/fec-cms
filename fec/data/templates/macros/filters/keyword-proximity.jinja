@@ -1,0 +1,55 @@
+{% macro field(name, title='Proximity') %}
+<div
+  class="filter js-filter keyword-proximity-filter"
+  data-filter="keyword-proximity"
+  data-name="{{ name }}"
+  id="{{ name }}"
+  >
+  {# This element's tag should look something like
+  <li data-tag-category="ao_no" class="tag__category">
+    Proximity keywords
+    <div data-id="ao_no1" class="tag__item">primary</div>
+    and
+    <div data-id="ao_no2" class="tag__item">secondary</div>
+    with max proximity 
+    <div data-id="ao_no3" data-removable="true" class="tag__item">3</div>
+    <button class="button js-close tag__remove"><span class="u-visually-hidden">Remove</span></button>
+  </li>
+  #}
+  <fieldset>
+    <legend class="label">{{ title }}</legend>
+
+  {% if helper_text %}
+    <label class="label--help u-margin--top">{{ helper_text }}</label>
+  {% endif %}
+
+  <p class="filter__explanation">Search the maximum number of words between keywords or exact phrases.
+    Proximity terms will not be highlighted in search results.</p>
+
+    <div class="" data-filter="q_proximity">
+      <label for="proximity-keyword-0">Keyword or exact phrase</label>
+      <input type="text" id="proximity-keyword-0" name="q_proximity" class="js-keyword">
+    </div>
+  
+    <div class="" data-filter="max_gaps">
+      <label class="distance-lockup">Within
+        <button class="button--decrement" aria-controls="keyword-proximity-distance" data-step-dir="decrement">
+          <i class="icon i-minus-circle"></i>
+        </button>
+        <input type="number" size="2" min="1" max="999" step="1" id="keyword-proximity-distance" name="max_gaps" class="js-max-gaps">
+        <button class="button--increment" aria-controls="keyword-proximity-distance" data-step-dir="increment">
+          <i class="icon i-plus-circle"></i>
+        </button>
+        words of
+      </label>
+    </div>
+
+    <div class="" data-filter="q_proximity">
+      <label for="proximity-keyword-1">Keyword or exact phrase</label>
+      <input type="text" id="proximity-keyword-1" name="q_proximity" class="js-keyword">
+    </div>
+
+    <div class="filter__message filter__message--error" aria-hidden="true"><strong>(FPO)</strong> Keyword proximity search requires two terms and a distance</div>
+  </fieldset>
+</div>
+{% endmacro %}
