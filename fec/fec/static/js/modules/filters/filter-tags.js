@@ -107,6 +107,7 @@ export default function TagList(opts) {
  * @param {Object} opts
  * @param {string} opts.key
  * @param {string} opts.name - Used for data-tag-category=""
+ * @param {string} opts.value - The main part of the tag—the user-requested filter value
  * @param {boolean} [opts.range=false] - If true, will use opts.rangename over opts.name
  * @param {string} [opts.rangeName] - Used as data-tag-category="" if opts.range is true
  * @param {boolean} [opts.nonremovable=false] - determines which template to use. Default: false

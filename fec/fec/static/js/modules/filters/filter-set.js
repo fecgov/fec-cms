@@ -156,7 +156,7 @@ FilterSet.prototype.clear = function() {
 /**
  * Removes the checkboxes in the panel that show whats been selected when you remove the tag from
  * the tags panel at the top of the table
- * @param {jQuery.event} e
+ * @param {jQuery.Event} e
  * @param {Object} opts - settings object like { key: value } where value is the clicked tag's data-id
  */
 FilterSet.prototype.handleTagRemoved = function(e, opts) {
