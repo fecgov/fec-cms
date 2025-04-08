@@ -33,6 +33,13 @@ export default function LegalSearchAo() {
   this.sortOrder = 'desc';
   this.tagList;
 
+  if (window.context.sort) {
+    this.sortOrder = window.context.sort.includes('-') ? 'desc' : 'asc'
+  }
+  else {
+    this.sortOrder = 'desc';
+  }
+
   this.widgetsElement = document.querySelector('.data-container__widgets');
   this.initPageParts();
   this.initFilters();

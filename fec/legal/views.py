@@ -261,6 +261,7 @@ def legal_doc_search_ao(request):
     original_query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
     limit = request.GET.get('limit', 20)
+    sort = request.GET.get('sort', '')
     ao_no = request.GET.getlist('ao_no', [])
     ao_requestor = request.GET.get('ao_requestor', '')
     ao_is_pending = request.GET.get('ao_is_pending', '')
@@ -286,6 +287,7 @@ def legal_doc_search_ao(request):
         offset=offset,
         limit=limit,
         ao_no=ao_no,
+        sort=sort,
         ao_requestor=ao_requestor,
         ao_requestor_type=ao_requestor_type_ids,
         ao_is_pending=ao_is_pending,
@@ -339,12 +341,19 @@ def legal_doc_search_ao(request):
     # Return the selected requestor type name, when "Any" is selected, clear the value
     ao_requestor_type_names = [ao_requestor_types.get(id) for id in ao_requestor_type_ids if id != 0]
 
+    # For Javascript
+    context_vars = {
+        'sort': sort,
+    }
+
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
         'parent': 'legal',
         'results': results,
         'ao_document_categories': ao_document_categories,
         'result_type': 'advisory_opinions',
         'ao_no': ao_no,
+        'sort': sort,
+        'context_vars': context_vars,
         'ao_requestor': ao_requestor,
         'ao_requestor_types': ao_requestor_types,
         'ao_is_pending': ao_is_pending,
