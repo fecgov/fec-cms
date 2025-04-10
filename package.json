@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "cd fec && webpack --mode development && gulp build-sass && gulp build-widgets-sass && gulp purgecss && gulp build-webp-files",
-    "build-icons": "cd fec && gulp minify-icons && gulp consolidate-icons",
+    "build-icons": "cd fec && gulp minify-icons && gulp consolidate-icons && gulp build-sass",
     "build-webp": "cd fec && gulp build-webp-files",
     "build-sass": "cd fec && gulp build-sass && gulp build-widgets-sass && gulp purgecss",
     "build-widgets-sass": "cd fec && gulp build-widgets-sass",

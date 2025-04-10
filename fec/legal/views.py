@@ -684,18 +684,24 @@ def legal_doc_search_regulations(request):
 
 
 def legal_doc_search_statutes(request):
+    original_query = request.GET.get('search', '')
     results = {}
-    query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
 
-    results = api_caller.load_legal_search_results(query, '', 'statutes',
-                                                   offset=offset)
+    query, query_exclude = parse_query(original_query)
+
+    results = api_caller.load_legal_search_results(
+            query,
+            query_exclude,
+            'statutes',
+            offset=offset,
+        )
 
     return render(request, 'legal-search-results-statutes.jinja', {
         'parent': 'legal',
         'results': results,
         'result_type': 'statutes',
-        'query': query,
+        'query': original_query,
         'social_image_identifier': 'legal',
     })
 
