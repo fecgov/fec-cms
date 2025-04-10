@@ -356,4 +356,18 @@ KeywordProximityFilter.prototype.setValue = function(queryVars) {
 
   if (queryVars.max_gaps)
     this.$maxGaps.val(parseInt(queryVars.max_gaps)).trigger('change');
+KeywordProximityFilter.prototype.showWarning = function() {
+  if (!this.showingWarning) {
+    const warning = '<div class="filter__message filter__message--error">' +
+      '<strong>(FPO)</strong> Keyword proximity search requires two terms and a distance</div>';
+    $('[data-filter="q_proximity"]').last().after(warning);
+    this.showingWarning = true;
+  }
+};
+
+KeywordProximityFilter.prototype.hideWarning = function() {
+  if (this.showingWarning) {
+    this.$elm.find('.filter__message').remove();
+    this.showingWarning = false;
+  }
 };
