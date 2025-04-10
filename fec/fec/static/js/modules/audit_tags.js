@@ -20,12 +20,12 @@ export default function auditTags() {
     $('.tag__item.sub').contents()[0].nodeValue = `Sub Category: ${current_sub}`;
   });
 
-  $('.js-close_sub').click(function() { // TODO: jQuery deprecation
+  $('.js-close_sub').on('click', function() {
     $('#primary_category_id').trigger('change');
     $('#sub_category_id').val('all');
   });
 
-  $('.js-close_primary').click(function() { // TODO: jQuery deprecation
+  $('.js-close_primary').on('click', function() {
     $('#primary_category_id').val('all');
     $('#primary_category_id').trigger('change');
     $('.tag__item.primary button').hide();

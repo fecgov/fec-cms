@@ -82,7 +82,7 @@ describe('Contact form', function() {
     $('#id_u_committee').val('12345');
     $('#id_u_other_reason').val('Some other reason');
     $('select').val('other');
-    this.form.$cancel.click(); // TODO: jQuery deprecation
+    this.form.$cancel.trigger('click');
     expect(this.form.committeeId.val()).to.equal('');
     expect($('select').val()).to.equal(null);
     expect($('#id_u_other_reason').val()).to.equal('');
