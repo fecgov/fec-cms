@@ -81,9 +81,10 @@ KeywordProximityFilter.prototype.handleInputInput = function(e) {
 };
 
 /**
- *
+ * Cancels a current setTimeout and adds the 'waiting' class
  */
 KeywordProximityFilter.prototype.cancelMaxGapsDelay = function() {
+  document.querySelector('[data-filter="max_gaps"]').classList.remove('waiting');
   if (this.timer_decInc) {
     clearTimeout(this.timer_decInc);
     delete this.timer_decInc;
@@ -91,10 +92,14 @@ KeywordProximityFilter.prototype.cancelMaxGapsDelay = function() {
 };
 
 /**
- *
+ * Cancels previous setTimeout, adds the 'waiting' class, and starts a new setTimeout
  */
 KeywordProximityFilter.prototype.waitForMaxGapsChanges = function() {
   this.cancelMaxGapsDelay();
+  function addWaitingClass() {
+    document.querySelector('[data-filter="max_gaps"]').classList.add('waiting');
+  }
+  requestAnimationFrame(addWaitingClass); // We need a tiny delay or the class/animation doesn't reset
   this.timer_decInc = setTimeout(this.handleNumberChange.bind(this), 2000);
 };
 
@@ -143,6 +148,9 @@ KeywordProximityFilter.prototype.bubbleTheChangeEvent = function() {
  * @param {(jQuery.Event|Object)} [e]
  */
 KeywordProximityFilter.prototype.handleInputChange = function(e) {
+  // Reset the 'waiting' css animation
+  document.querySelector('[data-filter="max_gaps"]').classList.remove('waiting');
+
   const wasValid = this.validationState == validationStates.valid;
   this.validateValues();
   const isValid = this.validationState == validationStates.valid;
