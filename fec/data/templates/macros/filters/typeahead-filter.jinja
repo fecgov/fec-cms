@@ -1,11 +1,19 @@
-{% macro field(name, title, instructions=False, dataset='committees', allow_text=False, id_suffix='', minor_label_text=False, helper_text=False) %}
+{% macro field(name, title, instructions=False, dataset='committees', allow_text=False, id_suffix='', minor_label_text=False, helper_text=False, show_tooltip_text='') %}
 <div
   class="filter js-filter typeahead-filter"
   data-filter="typeahead"
   data-name="{{ name }}"
   id="{{ name }}-field{{id_suffix}}"
   data-dataset="{{ dataset }}" {% if allow_text %}data-allow-text{% endif %}>
-  {% if minor_label_text %}
+  {% if show_tooltip_text != '' %}
+    <label class="label t-inline-block" for="{{ name }}{{id_suffix}}">{{ title }}</label>
+    <div class="tooltip__container" tabindex="0">
+      <button class="tooltip__trigger" tabindex="0"><span class="u-visually-hidden">Learn more</span></button>
+      <div class="tooltip tooltip--left tooltip--above">
+        <p class="tooltip__content tooltip__content">{{show_tooltip_text}}</p>
+      </div>
+    </div>
+  {% elif minor_label_text %}
     <label for="{{ name }}{{id_suffix}}">{{ title }}</label>
   {% else %}
     <label class="label" for="{{ name }}{{id_suffix}}">{{ title }}</label>

@@ -418,13 +418,6 @@
       @include u-icon-bg($exclamation-bubble, $primary-contrast);
     }
 
-    // In fec/fec/static/scss/_icon-variables.scss, $shield-star is empty.
-    // Doesn't seem like `i-shield-star` is being used anywhere else in the repo
-    // &.i-shield-star {
-    //   @include u-icon-bg($shield-star, $primary-contrast);
-    //   background-size: 75%;
-    // }
-
     &.i-arrow-target {
       background-size: 70%;
       @include u-icon-bg($arrow-target, $primary-contrast);

@@ -32,9 +32,8 @@
               <label for="zip" class="label">Find by ZIP code</label>
               <input type="text" inputmode="numeric" id="zip" name="zip" class="combo__input">
               <button class="combo__button button--search button--standard" type="submit">
-                  <span class="u-visually-hidden">Search</span>
+                <span class="u-visually-hidden">Search</span>
               </button>
-
               <span class="t-note t-sans search__example">Example: 90210</span>
             </div>
           </div>
@@ -61,7 +60,7 @@
               </select>
             </div>
             <div class="search-controls__submit">
-                <button type="submit" class="button--search--text button--standard">Search</button>
+              <button type="submit" class="button--search--text button--standard">Search</button>
             </div>
           </fieldset>
         </div>
@@ -73,8 +72,8 @@
       <div class="usa-width-one-half">
         <div class="js-accordion accordion--neutral u-padding--bottom" data-content-prefix="2022-redistricting">
           <button type="button" class="js-accordion-trigger accordion__button" aria-controls="2022-redistricting-content-0" aria-expanded="false">Information about redistricting and the 2020 Decennial Census</button>
-            <div class="accordion__content" id="2022-redistricting-content-0" aria-hidden="true">
-              <p>Following the 2020 Census, some states have redrawn their district maps. The FEC has updated its map to reflect the new congressional districts and boundaries.</p>
+          <div class="accordion__content" id="2022-redistricting-content-0" aria-hidden="true">
+            <p>Following the 2020 Census, some states have redrawn their district maps. The FEC has updated its map to reflect the new congressional districts and boundaries.</p>
           </div>
         </div>
         <div class="heading--section js-results-heading">
@@ -82,9 +81,9 @@
         {% if FEATURES.house_senate_overview %}
         </div>
         <div class="u-padding--top">
-         <span class="heading__subtitle">All Elections</span>
-           <h3  class="u-no-margin-bottom u-margin--top"><span class="icon i-star icon--inline--left"></span><a href="/data/elections/senate/">All Senate elections</a></h3>
-           <h3><span class="icon i-star icon--inline--left"></span><a href="/data/elections/house/">All House elections</a></h3>
+          <span class="heading__subtitle">All Elections</span>
+          <h3 class="u-no-margin-bottom u-margin--top"><span class="icon i-star icon--inline--left"></span><a href="/data/elections/senate/">All Senate elections</a></h3>
+          <h3><span class="icon i-star icon--inline--left"></span><a href="/data/elections/house/">All House elections</a></h3>
         </div>
         <div class="result u-padding--bottom--small u-negative--bottom--margin">
         {% endif %}
@@ -94,8 +93,8 @@
           <div class="js-accordion accordion--neutral pa-message" data-content-prefix="pa-redistricting">
             <button type="button" class="js-accordion-trigger accordion__button" aria-controls="pa-redistricting-content-0" aria-expanded="false">Information about 2018 Pennsylvania redistricting</button>
             <div class="accordion__content" id="pa-redistricting-content-0" aria-hidden="true">
-                <p>On February 19, 2018, Pennsylvania's Supreme Court released a new congressional map for Pennsylvania. Some candidates subsequently amended their registration forms to reflect new district numbers. Candidates are listed using
-                    information from their registration forms and may be running in different districts than in the past.</p>
+              <p>On February 19, 2018, Pennsylvania's Supreme Court released a new congressional map for Pennsylvania. Some candidates subsequently amended their registration forms to reflect new district numbers. Candidates are listed using
+                information from their registration forms and may be running in different districts than in the past.</p>
             </div>
           </div>
         </div>
@@ -103,13 +102,30 @@
           <div class="js-results-items"></div>
         </div>
       </div>
-      <div class="usa-width-one-half">
-        <div class="election-map"></div>
-        <div class="t-italic js-map-approx-message">
-            <p>District maps on this page are approximate.</p>
+      <div class="usa-width-one-half toggle-election-search-map">
+      {% if FEATURES.hide_election_search_map %}
+      {# When this flag goes away, remove the toggle-* class from the div above, and remove the tabindex="-1" here #}
+        <style>
+          .toggle-election-search-map {
+            .election-map, .js-map-approx-message, .message--info {
+              border: 0;
+              height: 0;
+              margin: 0 !important;
+              opacity: 0;
+              padding: 0 !important;
+            }
+            .js-upcoming-presidential .slab--inline {
+              margin-top: 0;
+            }
+          }
+        </style>
+      {% endif %}
+        <div class="election-map" tabindex="-1"></div>
+        <div class="t-italic js-map-approx-message" tabindex="-1">
+          <p>District maps on this page are approximate.</p>
         </div>
-        <div class="message message--info js-map-message" aria-hidden="true">
-            Election maps and ZIP code search are only available for elections in {{ constants.DISTRICT_MAP_CUTOFF }} and future election years.
+        <div class="message message--info js-map-message" aria-hidden="true" tabindex="-1">
+          Election maps and ZIP code search are only available for elections in {{ constants.DISTRICT_MAP_CUTOFF }} and future election years.
         </div>
         <div class="js-upcoming-presidential"></div>
       </div>
