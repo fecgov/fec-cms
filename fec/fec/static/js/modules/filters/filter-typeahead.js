@@ -161,7 +161,7 @@ FilterTypeahead.prototype.handleSelected = function(e, datum) {
 
   this.$elm.find('label[for="' + id + '"]').addClass('is-loading');
 
-  this.$button.focus().addClass('is-loading');
+  this.$button.trigger('focus').addClass('is-loading');
 };
 
 FilterTypeahead.prototype.handleAutocomplete = function(e, datum) {

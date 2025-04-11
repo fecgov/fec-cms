@@ -34,6 +34,6 @@ CalendarTooltip.prototype.close = function() {
   this.$content.remove();
   this.exportDropdown.destroy();
   this.$container.removeClass('is-active');
-  this.$container.focus(); // TODO: jQuery deprecation
+  this.$container.trigger('focus');
   this.events.clear();
 };
