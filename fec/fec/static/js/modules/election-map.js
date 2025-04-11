@@ -166,7 +166,7 @@ ElectionMap.prototype.drawBackgroundDistricts = function(districts) {
     .map(function(district) {
       return Math.floor(district / 100);
     })
-    .sortUnique()
+    .unique()
     .value();
   var stateDistricts = _filter(districtFeatures.features, function(
     feature
