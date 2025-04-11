@@ -8,7 +8,7 @@ use(sinonChai);
 
 import SkipNav from '../../static/js/modules/skip-nav.js';
 
-const DOM = '<a class="skip-nav">Skip</a><main><h1>Welcome</h1></main>';
+const DOM = '<a class="skip-nav" tabindex="0">Skip</a><main><h1>Welcome</h1></main>';
 
 describe('Skip nav link', function() {
   before(function() {
