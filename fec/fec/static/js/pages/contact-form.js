@@ -44,7 +44,7 @@ ContactForm.prototype.initTypeahead = function() {
     //...another field, Attempts to focusout, or focus onto body, did not work.
     $('#id_u_contact_title')
       .focus() // TODO: jQuery deprecation
-      .blur(); // TODO: jQuery deprecation
+      .trigger('blur');
   });
 };
 
