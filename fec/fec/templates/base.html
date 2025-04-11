@@ -34,7 +34,7 @@
     {% if not request.is_preview %}{% include 'partials/google-tag-manager-noscript.html' %}{% endif %}
 
     {% wagtailuserbar %}
-    <a href="#main" class="skip-nav">skip navigation</a>
+    <a href="#main" class="skip-nav" tabindex="0">skip navigation</a>
     {# env-specific banner #} 
     {% include 'partials/env-banner.html' %}
     {# .gov banner #}
