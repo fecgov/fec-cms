@@ -34,7 +34,8 @@ describe('Skip nav link', function() {
   });
 
   it('focuses on the target when enter pressed', function() {
-    var e = { keyCode: 13, preventDefault: function() {} }; // eslint-disable-line no-empty-function
+    // TODO: keyCode has been deprecated
+    var e = { keyCode: 13, which: 13, preventDefault: function() {} }; // eslint-disable-line no-empty-function
     this.skipNav.focusOnTarget(e);
     expect($(document.activeElement).is(this.skipNav.$target)).to.be.true;
   });
