@@ -338,6 +338,24 @@ KeywordProximityFilter.prototype.setValue = function(queryVars) {
 };
 
 /**
+ * TODO ?
+ * @param {*} e
+ * @param {*} opts
+ */
+KeywordProximityFilter.prototype.handleModifyEvent = function(e, opts) {
+  // TODO ?
+};
+
+/**
+ * TODO ?
+ * @param {*} e
+ * @param {*} opts
+ */
+KeywordProximityFilter.prototype.handleRemoveAll = function(e, opts) {
+  // TODO ?
+};
+
+/**
  * Appends the warning message to the DOM (after keyword1) if it doesn't currently exist
  */
 KeywordProximityFilter.prototype.showWarning = function() {
