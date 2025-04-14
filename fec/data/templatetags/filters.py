@@ -139,7 +139,7 @@ def date_filter(value, fmt='%m/%d/%Y'):
 @library.filter
 def ao_document_date(value):
     date = date_filter(value)
-    return 'Not dated' if date == '01/01/1900' else date
+    return '' if date is None else date
 
 
 @library.filter
