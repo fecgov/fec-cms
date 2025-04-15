@@ -94,6 +94,9 @@
 {% endblock %}
 
 {% block results %}
+  {% with results=results %}
+    {% include 'partials/legal-pagination.jinja' %}
+  {% endwith %}
   {% with advisory_opinions = results.advisory_opinions %}
     {% include 'partials/legal-search-results-advisory-opinion.jinja' %}
   {% endwith %}
@@ -104,4 +107,7 @@
 
 {% block scripts %}
   {{ tags_for_js_chunks('legal-search-ao.js', '')|safe }}
+  <script>
+  window.context = {{ context_vars|to_json|safe }};
+  </script>
 {% endblock %}
