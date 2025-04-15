@@ -211,22 +211,12 @@ KeywordProximityFilter.prototype.handleInputChange = function(e) {
  */
 KeywordProximityFilter.prototype.handleIncDecClick = function(e) {
   e.preventDefault();
-  const datasetStepDirElm = e.target.dataset.stepDir ? e.target : e.target.closest('[data-step-dir]');
-  const stepDir = datasetStepDirElm ? datasetStepDirElm.dataset.stepDir : null;
 
-  // If the gaps field doesn't have a value, set it to 1
-  if (!this.$maxGaps.val()) this.$maxGaps.val(1);
+  // While the click target is the <i>, we'll need to check the ancestor button
+  if (e.target.closest('button') == this.buttonIncr) this.$maxGaps.get(0).stepUp();
+  else if (e.target.closest('button') == this.buttonDecr) this.$maxGaps.get(0).stepDown();
 
-  const currentGapValue = parseInt(this.$maxGaps.val());
-  let nextGapVal;
-
-  if (stepDir == 'increment')
-    nextGapVal = Math.min(currentGapValue + 1, parseInt(this.$maxGaps.attr('max')));
-  else if (stepDir == 'decrement')
-    nextGapVal = Math.max(1, currentGapValue - 1);
-  else
-    return; // If it's not increment or decrement, stop here
-  this.$maxGaps.val(nextGapVal);
+  this.validateValues(); // This handles the class names, too
 
   if (this.validationState == validationStates.valid) this.waitForMaxGapsChanges();
 };
