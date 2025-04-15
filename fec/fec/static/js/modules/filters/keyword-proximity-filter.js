@@ -311,18 +311,28 @@ KeywordProximityFilter.prototype.fromQuery = function(queryVars) {
 };
 
 /**
- * Called on initial load, then calls validateValues
- * @param {Object} queryVars
+ * Called on initial load. Puts value(s) into field(s), triggers the change, then calls validateValues.
+ * There's a tricky part where queryVals could be an Array (object) or a string.
+ * If it's a string, use it all—do not use only [0] and [1]!
+ * @param {(Array|string)} queryVals
  */
-KeywordProximityFilter.prototype.setValue = function(queryVars) {
-  if (queryVars.q_proximity[0])
-    this.$keyword0.val(queryVars.q_proximity[0]).trigger('change');
+KeywordProximityFilter.prototype.setValue = function(queryVals) {
+  let kw0 = '';
+  let kw1 = '';
 
-  if (queryVars.q_proximity[1])
-    this.$keyword1.val(queryVars.q_proximity[1]).trigger('change');
+  // If q_proximity is a string, then there's only one q_proximity value so we'll leave kw1 blank.
+  // If it's an Array then we have two values so we're all set
+  if (typeof queryVals.q_proximity == 'string') kw0 = queryVals.q_proximity;
+  else {
+    kw0 = queryVals.q_proximity[0];
+    kw1 = queryVals.q_proximity[1];
+  }
 
-  if (queryVars.max_gaps)
-    this.$maxGaps.val(parseInt(queryVars.max_gaps)).trigger('change');
+  this.$keyword0.val(kw0).trigger('change');
+  this.$keyword1.val(kw1).trigger('change');
+
+  if (queryVals.max_gaps)
+    this.$maxGaps.val(parseInt(queryVals.max_gaps)).trigger('change');
 
   this.validateValues();
 };
