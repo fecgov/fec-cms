@@ -402,7 +402,7 @@
 }
 
 .button--previous {
-  @include u-icon-button($arrow-left, left, 1rem, background-position 50% 50%);
+  @include u-icon-button($arrow-left, left, 1rem, background-position 50% 50% !important);
 }
 
 .button--next {
