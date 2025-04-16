@@ -30,7 +30,7 @@ export default function LegalSearchAo() {
   this.noResultsMessage;
   this.paginationElement;
   this.resultsTable;
-  this.sortOrder = 'desc';
+  this.sortOrder;
   this.sortType;
   this.tagList;
 
@@ -730,6 +730,12 @@ LegalSearchAo.prototype.updatePagination = function(resultsCount) {
     );
   }
   buttonsParent.appendChild(newNextButton);
+
+  // Clone the updated pagination element into div.pagination_holder after the table
+  const paginationClone = this.paginationElement.cloneNode(true);
+  const paginationHolder = document.querySelector('.pagination_holder')
+  paginationHolder.replaceChildren(paginationClone);
+
 };
 
 // The bare-minimum html for the results table

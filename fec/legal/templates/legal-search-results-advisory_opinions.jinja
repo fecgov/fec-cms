@@ -100,9 +100,7 @@
   {% with advisory_opinions = results.advisory_opinions %}
     {% include 'partials/legal-search-results-advisory-opinion.jinja' %}
   {% endwith %}
-  {% with results=results %}
-    {% include 'partials/legal-pagination.jinja' %}
-  {% endwith %}
+  <div class="pagination_holder"></div>
 {% endblock %}
 
 {% block scripts %}
