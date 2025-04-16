@@ -39,6 +39,19 @@ def prev_offset(limit, next_offset):
         return 0
 
 
+def results_range(current_offset, next_offset, total_results):
+    """
+    Helper function to return "x-xx" results count messages.
+    current_offset is 0-based, i.e. a current_offset of 0 is the first result, current_offset 10 is the eleventh
+    """
+    first_result_num = int(current_offset) + 1
+    if next_offset:
+        last_result_num = max(first_result_num, int(next_offset))
+    else:
+        last_result_num = total_results
+    return '-'.join([str(first_result_num), str(last_result_num)])
+
+
 def parse_icon(path):
     """
     Parse which icon to show by checking if the URL is at /data/
@@ -76,8 +89,10 @@ def process_site_results(results, limit=0, offset=0):
         },
         'meta': {
             'count': web_results['total'],
+            'current_offset': int(offset),
             'next_offset': web_results['next_offset'],
-            'prev_offset': prev_offset(limit, int(offset))
+            'prev_offset': prev_offset(limit, int(offset)),
+            'results_range': results_range(offset, web_results['next_offset'], web_results['total']),
         }
     }
 
