@@ -406,7 +406,7 @@
 }
 
 .button--next {
-  @include u-icon-button($arrow-right, right, 1rem, background-position 50% 50%);
+  @include u-icon-button($arrow-right, right, 1rem, background-position 50% 50% !important);
 }
 
 .button--close--base {
