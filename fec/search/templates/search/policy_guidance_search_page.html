@@ -72,8 +72,8 @@
           <p>Try changing your search term.</p>
         </div>
       {% elif policy_search_error %}
-      <div class="message message--alert">
-         <p>{{policy_search_error | safe }}</p>
+      <div class="message message--small message--alert">
+         {{policy_search_error | safe }}
          </div>
       {% endif %}
     </div>

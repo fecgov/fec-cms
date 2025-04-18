@@ -114,6 +114,7 @@ def search_site(query, limit=0, offset=0):
         return process_site_results(r.json(), limit=limit, offset=offset)
     except (Exception) as ex:
         logger.error('search_site:' + ex.__class__.__name__)
+
         return None
 
 
@@ -130,6 +131,17 @@ def search(request):
     results = {}
     results['count'] = 0
 
+
+    search_error_message = """
+        <h3>Something went wrong</h3>
+        <p>This section failed to load. Check FEC.gov status page to see if we are experiencing a temporary outage.
+        If not, please try again and thanks for you patience.</p>
+        <p class="u-padding--bottom">
+            <a href="https://www.fec.gov" class="button--standard button--cta">Return home</a>&nbsp;&nbsp;
+            <a href="https://fecgov.statuspage.io" class="button--standard">FEC.gov status page</a>&nbsp;&nbsp;
+            <a href="https://www.fec.gov/contact" class="button--standard">Contact us</a>
+        </p>
+        """
     site_search_error = ''
     cand_search_error = ''
     comm_search_error = ''
@@ -139,21 +151,21 @@ def search(request):
         if results['candidates']:
             results['count'] += len(results['candidates']['results'])
         else:
-            cand_search_error = 'We were unable to search <strong>Candidates</strong> because that FEC API endpoint is currently not responding. Please try again later.'
-
+            cand_search_error = search_error_message
+          
     if 'committees' in search_type and search_query:
         results['committees'] = search_committees(search_query)
         if results['committees']:
             results['count'] += len(results['committees']['results'])
         else:
-            comm_search_error = 'We were unable to search <strong>Committees</strong> because that FEC API endpoint is currently not responding. Please try again later.'
+            comm_search_error = search_error_message
 
     if 'site' in search_type and search_query:
         results['site'] = search_site(search_query, limit=limit, offset=offset)
         if results['site']:
             results['count'] += len(results['site']['results'])
         else:
-            site_search_error = 'We were unable to search <strong>Other pages</strong> because search.gov is currently not responding. Please try again later.'
+            site_search_error = search_error_message
 
     return render(request, 'search/search.html', {
         'search_query': search_query,
@@ -209,7 +221,17 @@ def policy_guidance_search(request):
             num_pages = math.ceil(int(results['meta']['count']) / limit)
             total_count = results['meta']['count'] + results['best_bets']['count']
         else:
-            policy_search_error = 'We were unable to search <strong>Policy and Other Guidance</strong> because search.gov is currently not responding. Please try again later.'
+            policy_search_error =  """
+            <h3>Something went wrong</h3>
+            <p>This section failed to load. Check FEC.gov status page to see if we are experiencing a temporary outage.
+            If not, please try again and thanks for you patience.</p>
+            <p class="u-padding--bottom">
+                <a href="https://www.fec.gov" class="button--standard button--cta">Return home</a>&nbsp;&nbsp;
+                <a href="https://fecgov.statuspage.io" class="button--standard">FEC.gov status page</a>&nbsp;&nbsp;
+                <a href="https://www.fec.gov/contact" class="button--standard">Contact us</a>
+            </p>
+            """
+            
 
     resultset = {}
     resultset['search_query'] = search_query

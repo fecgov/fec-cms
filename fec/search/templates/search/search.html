@@ -58,7 +58,7 @@
               {% endif %}
             </ul>
           </nav>
-          <aside class="sidebar sidebar--primary">
+          <aside class="sidebar sidebar--primary sidebar--left side-nav">
             <h4 class="sidebar__title">Other search tools</h4>
               <div class="sidebar__content">
                 <ul class="sidebar__related-links">
@@ -182,19 +182,22 @@
               </div>
             </section>
           {% endif %}
-          {% if site_search_error %}
-          <div class="message message--small message--alert">
-            <p>{{ site_search_error | safe }} </p>
-            </div>
-          {% endif %}
           {% if cand_search_error %}
-          <div class="message message--small message--alert">
-            <p>{{ cand_search_error | safe }} </p>
+            <h2 class="u-border-top-base u-padding--top">Candidates</h2>
+            <div class="message message--small message--alert">
+              <p>{{ cand_search_error | safe }} </p>
             </div>
           {% endif %}
           {% if comm_search_error %}
-          <div class="message message--small message--alert">
-            <p>{{ comm_search_error | safe }} </p>
+            <h2 class="u-border-top-base u-padding--top">Committees</h2>
+            <div class="message message--small message--alert">
+             <p>{{ comm_search_error | safe }} </p>
+            </div>
+          {% endif %}
+          {% if site_search_error %}
+          <h2 class="u-border-top-base u-padding--top">Other pages</h2>
+            <div class="message message--small message--alert">
+              {{ site_search_error | safe }}
             </div>
           {% endif %}
         {% elif results.count == 0 %}
@@ -202,32 +205,34 @@
             <h2>No results</h2>
             {% if site_search_error or cand_search_error or comm_search_error %}
               <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong> in:</p>
-               <ul  class="list--bulleted">
+               
               {% if 'candidates' in type and not cand_search_error %}
-                <li><strong>Candidates</strong></li>
+              <h2 class="u-border-top-base u-padding--top">Candidates</h2>
               {% endif %}
               {% if 'committees' in type and not comm_search_error %}
-                <li><strong>Committees</strong></li>
+              <h2 class="u-border-top-base u-padding--top">Committees</h2>
               {% endif %}
               {% if 'site' in type and not site_search_error %}
-                <li><strong>Other pages</strong></li>
-              {% endif %}
-              </ul>
-              {% if site_search_error %}
-              <div class="message message--white message--small message--alert">
-                <p>{{ site_search_error | safe }} </p>
-                </div>
+              <h2 class="u-border-top-base u-padding--top">Other pages</h2>
               {% endif %}
               {% if cand_search_error %}
-              <div class="message message--white message--small message--alert">
-                <p>{{ cand_search_error | safe }}</p>
+              <h2 class="u-border-top-base u-padding--top">Candidates</h2>
+                <div class="message message--white message--small message--alert">
+                  {{ cand_search_error | safe }}
                 </div>
               {% endif %}
               {% if comm_search_error %}
-              <div class="message message--white message--small message--alert">
-                <p>{{ comm_search_error | safe }}</p>
+              <h2 class="u-border-top-base u-padding--top">Committees</h2>
+                <div class="message message--white message--small message--alert">
+                 {{ comm_search_error | safe }}
                 </div>
               {% endif %}
+              {% if site_search_error %}
+              <h2 class="u-border-top-base u-padding--top">Other pages</h2>
+              <div class="message message--white message--small message--alert">
+               {{ site_search_error | safe }}
+              </div>
+            {% endif %}
             {% else %}
               <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong></p>
             {% endif %}
