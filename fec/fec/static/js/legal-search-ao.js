@@ -184,7 +184,15 @@ LegalSearchAo.prototype.handleSortClick = function(e) {
   e.stopImmediatePropagation();
 
   this.sortType = e.target.dataset.sort
+
+  // Only toggle the sort direction when existing sort direction exists on the column
+  if (e.target.classList.contains('sorting_asc') || e.target.classList.contains('sorting_desc')) {
   this.sortOrder =  e.target.classList.contains('sorting_asc') ? 'desc' : 'asc';
+  }
+  // Otherwise always start descending by default. When activating the column for sort.
+  else {
+    this.sortOrder = 'desc'
+  }
 
   updateTableSortColumn(e.target, this.sortOrder, this.sortType );
 
