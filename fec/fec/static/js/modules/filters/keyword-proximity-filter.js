@@ -10,6 +10,10 @@ import { default as Filter } from './filter-base.js';
  ✅ WHY ISN'T THE NO-RESULTS GOING AWAY WHEN THERE ARE RESULTS
  ✅ maybe related: pagination "showing __ results" isn't updating
  ✅ make the tag work
+ ✅ maxGaps minimum should 0, not 1
+ ☑️ look at input events for autocomplete/events
+ ✅ bring back the FPO message if there's one word and it's kw1 instead of only kw0
+ ✅ don't split a single q_proximity string into letters and discard [2]+
  ☑️
  */
 
@@ -125,7 +129,9 @@ KeywordProximityFilter.prototype.handleNumberChange = function(e) {
       }
     } else {
       e.stopPropagation();
-      this.waitForMaxGapsChanges();
+      if (this.validationState == validationStates.valid) {
+        this.waitForMaxGapsChanges();
+      }
     }
   }
 };
@@ -258,13 +264,15 @@ KeywordProximityFilter.prototype.validateValues = function() {
   // invalid: submission attempted but failed
 
   // Check if max_gaps are in-range
-  const currentGaps = parseInt(Math.max(1, this.$maxGaps.val()));
+  if (!this.$maxGaps.val()) this.$maxGaps.val(0);
+
+  const currentGaps = parseInt(Math.max(0, parseInt(this.$maxGaps.val())));
 
   this.buttonDecr.classList.remove('is-active-filter');
   this.buttonIncr.classList.remove('is-active-filter');
 
   // activate/deactivate buttons if we're at the max values
-  if (currentGaps <= 1) this.buttonDecr.classList.add('is-disabled');
+  if (currentGaps === 0) this.buttonDecr.classList.add('is-disabled');
   else this.buttonDecr.classList.remove('is-disabled');
 
   if (currentGaps >= 999) this.buttonIncr.classList.add('is-disabled');
@@ -277,7 +285,7 @@ KeywordProximityFilter.prototype.validateValues = function() {
   ) {
     this.validationState = validationStates.empty;
 
-  } else if (this.$keyword0.val().length > 0 && this.$keyword1.val().length > 0 && this.$maxGaps.val() > 0) {
+  } else if (this.$keyword0.val().length > 0 && this.$keyword1.val().length > 0 && this.$maxGaps.val() >= 0) {
     this.validationState = validationStates.valid;
 
   } else {
