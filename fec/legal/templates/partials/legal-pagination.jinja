@@ -78,6 +78,7 @@
         {%- for category_id in selected_ao_doc_category_ids %}ao_doc_category_id={{ category_id }}&{% endfor -%}
         {%- for q_proximity in q_proximities %}q_proximity={{ q_proximity }}&{% endfor -%}
         {%- if max_gaps %}max_gaps={{ max_gaps }}&{% endif -%}
+        {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
         &offset={{ offset - limit }}&limit={{ limit }}#results-{{ result_type }}">Previous</a>
     {% else %}
       <span class="paginate_button previous is-disabled">Previous</span>
@@ -135,6 +136,7 @@
           {%- for category_id in selected_ao_doc_category_ids %}ao_doc_category_id={{ category_id }}&{% endfor -%}
           {%- for q_proximity in q_proximities %}q_proximity={{ q_proximity }}&{% endfor -%}
           {%- if max_gaps %}max_gaps={{ max_gaps }}&{% endif -%}
+          {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
           &offset={{ page_offset }}&limit={{ limit }}#results-{{ result_type }}">{{ page }}</a>
       {% endif %}
     {% endfor %}
@@ -187,6 +189,7 @@
         {%- for category_id in selected_ao_doc_category_ids %}ao_doc_category_id={{ category_id }}&{% endfor -%}
         {%- for q_proximity in q_proximities %}q_proximity={{ q_proximity }}&{% endfor -%}
         {%- if max_gaps %}max_gaps={{ max_gaps }}&{% endif -%}
+        {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
         &offset={{ offset + limit }}&limit={{ limit }}#results-{{ result_type }}">Next</a>
     {% else %}
       <span class="paginate_button next is-disabled">Next</span>
