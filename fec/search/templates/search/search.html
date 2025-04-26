@@ -203,46 +203,49 @@
         {% elif results.count == 0 %}
           <div class="message message--info">
             <h2>No results</h2>
-            {% if site_search_error or cand_search_error or comm_search_error %}
-              <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong> in:</p>
-               
-              {% if 'candidates' in type and not cand_search_error %}
-              <h2 class="u-border-top-base u-padding--top">Candidates</h2>
+            <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong>
+              {% if site_search_error or cand_search_error or comm_search_error %}
+                for
+                {% if 'candidates' in type and not cand_search_error %}
+                  Candidates
+                {% endif %}
+                {% if 'committees' in type and not comm_search_error %}
+                  {% if not cand_search_error %}
+                    or
+                  {% endif %}
+                  Committees
+                {% endif %}
+                {% if 'site' in type and not site_search_error %}
+                  {% if not comm_search_error or not cand_search_error  %}
+                    or
+                  {% endif %}
+                  Other pages
+                {% endif %}
               {% endif %}
-              {% if 'committees' in type and not comm_search_error %}
-              <h2 class="u-border-top-base u-padding--top">Committees</h2>
-              {% endif %}
-              {% if 'site' in type and not site_search_error %}
-              <h2 class="u-border-top-base u-padding--top">Other pages</h2>
-              {% endif %}
-              {% if cand_search_error %}
-              <h2 class="u-border-top-base u-padding--top">Candidates</h2>
-                <div class="message message--white message--small message--alert">
-                  {{ cand_search_error | safe }}
-                </div>
-              {% endif %}
-              {% if comm_search_error %}
-              <h2 class="u-border-top-base u-padding--top">Committees</h2>
-                <div class="message message--white message--small message--alert">
-                 {{ comm_search_error | safe }}
-                </div>
-              {% endif %}
-              {% if site_search_error %}
-              <h2 class="u-border-top-base u-padding--top">Other pages</h2>
+            </p>
+            <p class="u-border-top-base u-padding--top">Think this was a mistake?<br>Please let us know.</p>
+            <p>
+              <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}" class="button--standard">Email our team</a>&nbsp;&nbsp; <a href="https://github.com/fecgov/fec/issues/new" class="button--standard">File an issue</a></p>
+            </p>
+          </div>
+          {% if cand_search_error %}
+            <h2 class="u-border-top-base u-padding--top">Candidates</h2>
               <div class="message message--white message--small message--alert">
-               {{ site_search_error | safe }}
+                {{ cand_search_error | safe }}
               </div>
             {% endif %}
-            {% else %}
-              <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong></p>
+            {% if comm_search_error %}
+            <h2 class="u-border-top-base u-padding--top">Committees</h2>
+              <div class="message message--white message--small message--alert">
+                {{ comm_search_error | safe }}
+              </div>
             {% endif %}
-            <div class="message--alert__bottom">
-              <p>Think this was a mistake?<br>Try one of the other search tools or submit feedback.</p>
-              <p>
-                <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}" class="button--standard">Email our team</a>&nbsp;&nbsp; <a href="https://github.com/fecgov/fec/issues/new" class="button--standard">File an issue</a></p>
-              </p>
+            {% if site_search_error %}
+            <h2 class="u-border-top-base u-padding--top">Other pages</h2>
+            <div class="message message--white message--small message--alert">
+              {{ site_search_error | safe }}
             </div>
-          </div>
+          {% endif %}
         {% endif %}
       </div>
     </div>
