@@ -114,7 +114,7 @@ h3 + .simple-table {
   .simple-table__row {
     padding: u(1rem);
 
-    &:nth-child(even) {
+    &.even {
       background-color: rgba($gray-lightest, 0.5);
     }
   }
