@@ -545,6 +545,26 @@ $filter-button-width: u(4.6rem);
     border-color: red !important;
   }
 
+  [data-filter="max_gaps"] {
+    position: relative;
+
+    &::before {
+      background: rgba(255,255,255,0.5);
+      content: " ";
+      display: block;
+      height: 100%;
+      opacity: 0;
+      position: absolute;
+      width: 0%;
+    }
+
+    &.waiting::before {
+      opacity: 1;
+      width: 100%;
+      transition: width 2s;
+    }
+  }
+
   // fieldset {
   //   position: relative;
   //   &:after {

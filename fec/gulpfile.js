@@ -104,11 +104,20 @@ gulp.task(
 
 // clear icons output folder to clean old icons
 gulp.task('clean-output-icons', function() {
-  // TODO: bring back read:false
-  // return gulp.src('./fec/static/icons/output', { read: false, allowEmpty: true }).pipe(clean());
-  return gulp.src('./fec/static/icons/output', { read: true, allowEmpty: true }).pipe(clean());
+  return gulp.src('./fec/static/icons/output', { read: false, allowEmpty: true }).pipe(clean());
 });
 
+/**
+ * 1. Empties fec/fec/static/icons/output/
+ * 2. Takes the SVG files in fec/fec/static/icons/input/ and minifies them to fec/fec/static/icons/output/,
+ *    removing bulk like <title> but also every element's fill and fill-rule parameters, and
+ *    simplifies and makes values uniform (e.g. '#000000' to "#000")
+ * Next: consolidate-icons is usually called next
+ * Next: build-sass should be called after consolidate-icons
+ * NOTE:
+ * The files in icons/input/ should be simple because sass is going to add a fill color to the root <svg>.
+ * Because of becoming <svg fill="{color}">, any strokes, masks, etc may break.
+ */
 gulp.task(
   'minify-icons',
   gulp.series('clean-output-icons', function() {
@@ -118,10 +127,7 @@ gulp.task(
         svgmin({
           multipass: true,
           plugins: [
-            {
-              name: 'removeViewBox',
-              active: false
-            },
+            { removeViewBox: false },
             {
               name: 'removeAttrs',
               params: {
@@ -137,6 +143,13 @@ gulp.task(
   })
 );
 
+/**
+* Takes the SVG files in fec/fec/static/icons/output/ and
+*  - url-encodes them into data:image values for css (e.g. converting spaces to %20)
+*  - builds _icon-variables.scss from those values, based on icon-template.scss
+* Prev: minify-icons should be called before consolidate-icons
+* Next: build-sass should be called after consolidate-icons
+*/
 gulp.task('consolidate-icons', function() {
   function getSVGs() {
     return _(fs.readdirSync('./fec/static/icons/output/'))
