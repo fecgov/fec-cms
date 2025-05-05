@@ -68,7 +68,8 @@
               <div class="tag__item">Coverage dates: {{totals.coverage_start_date|date}} to {{transaction_end|date}}</div>
             </div>
             {% endif %}
-            <button type="button" class="u-float-right js-export button button--cta button--export" data-export-for="receipts-by-donor">Export</button>
+            <button type="button" class="u-float-right js-export button button--cta button--export" data-export-for="inaugural-donations-by-donor">Export</button>
+            <div class="message message--info message--mini t-left-aligned data-container__message" data-export-message-for="inaugural-donations-by-donor" aria-hidden="true"></div>
           </div>
           <table
               class="data-table data-table--heading-borders"
@@ -91,8 +92,8 @@
             </div>
             {% endif %}
             <div class="u-float-right">
-              <button type="button" class="js-export button button--cta button--export" data-export-for="itemized-receipts">Export</button>
-              <div class="message message--info message--mini t-left-aligned data-container__message" data-export-message-for="itemized-receipts" aria-hidden="true"></div>
+              <button type="button" class="js-export button button--cta button--export" data-export-for="inaugural-donations">Export</button>
+              <div class="message message--info message--mini t-left-aligned data-container__message" data-export-message-for="inaugural-donations" aria-hidden="true"></div>
             </div>
           </div>
           <table
