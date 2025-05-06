@@ -961,6 +961,12 @@ DataTable_FEC.prototype.isPending = function() {
   return isPending(url);
 };
 
+/**
+ * @param {*} data
+ * @param {boolean} paginate
+ * @param {boolean} download
+ * @returns {string}
+ */
 DataTable_FEC.prototype.buildUrl = function(data, paginate, download) {
   let query = _extend(
     { sort_hide_null: false, sort_nulls_last: true }, // eslint-disable-line camelcase
