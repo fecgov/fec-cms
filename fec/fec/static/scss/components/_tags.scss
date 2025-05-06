@@ -103,6 +103,15 @@
         display: none;
       }
     }
+
+    &.inline {
+      margin-left: .5em;
+      margin-right: .5em;
+    
+      &::after {
+        display: none;
+      }
+    }
   }
 }
 
