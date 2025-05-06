@@ -175,7 +175,7 @@ describe('dropdown', function() {
 
     it('hides on ESC', function(){
       this.dropdown.show();
-      this.dropdown.handleKeyup({ keyCode: 27 });
+      this.dropdown.handleKeyup({ keyCode: 27, which: 27 }); // TODO: keyCode has been deprecated
       expect(isClosed(this.dropdown)).to.be.true;
     });
   });
