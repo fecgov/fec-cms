@@ -145,7 +145,7 @@ Dropdown.prototype.handleDropdownItemClick = function(e) {
   const $input = this.$selected.find('#' + $button.data('label'));
 
   if (!$button.hasClass('is-checked')) {
-    $input.click(); // TODO: jQuery deprecation
+    $input.trigger('click');
   }
 };
 
