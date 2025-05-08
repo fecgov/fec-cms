@@ -344,7 +344,7 @@ def legal_doc_search_ao(request):
     # For Javascript
     context_vars = {
         'sort': sort,
-        'sortType':sort.replace('-','')
+        'sortType': sort.replace('-', '')
     }
 
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
