@@ -318,7 +318,7 @@ def legal_doc_search_ao(request):
 
     # Define AO requestor types dictionary
     ao_requestor_types = {
-        "0": "Any",
+        # "0": "Any",
         "1": "Federal candidate/candidate committee/officeholder",
         "2": "Publicly funded candidates/committees",
         "3": "Party committee, national",
