@@ -276,6 +276,7 @@ def legal_doc_search_ao(request):
     ao_regulatory_citation = request.GET.get('ao_regulatory_citation', '')
     ao_statutory_citation = request.GET.get('ao_statutory_citation', '')
     ao_citation_require_all = request.GET.get('ao_citation_require_all', '')
+    ao_year = request.GET.get('ao_year', '')
 
     query, query_exclude = parse_query(original_query)
 
@@ -301,6 +302,7 @@ def legal_doc_search_ao(request):
         ao_regulatory_citation=ao_regulatory_citation,
         ao_statutory_citation=ao_statutory_citation,
         ao_citation_require_all=ao_citation_require_all,
+        ao_year=ao_year,
     )
 
     # Define AO document categories dictionary
@@ -334,6 +336,13 @@ def legal_doc_search_ao(request):
         "15": "Individual",
         "16": "Other",
     }
+
+    # Possible values for the ao_year filter
+    # We want 1975+ but not the future, so limit the range to > 1974
+    all_ao_years = list(range(datetime.datetime.now().year, 1974, -1))
+    ao_year_opts = {}
+    for year in all_ao_years:
+        ao_year_opts[year] = year
 
     # Return the selected document category name
     ao_document_category_names = [ao_document_categories.get(id) for id in ao_doc_category_ids]
@@ -374,6 +383,8 @@ def legal_doc_search_ao(request):
         'selected_ao_doc_category_names': ao_document_category_names,
         'selected_ao_requestor_type_ids': ao_requestor_type_ids,
         'selected_ao_requestor_type_names': ao_requestor_type_names,
+        'ao_year': ao_year,
+        'ao_year_opts': ao_year_opts,
         'is_loading': True,  # Indicate that the page is loading initially
     })
 
