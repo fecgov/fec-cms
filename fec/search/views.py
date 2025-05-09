@@ -133,7 +133,7 @@ def search(request):
 
 
     search_error_message = """
-        <h3>Something went wrong</h3>
+        <h2>Something went wrong</h2>
         <p>This section failed to load. Check FEC.gov status page to see if we are experiencing a temporary outage.
         If not, please try again and thanks for you patience.</p>
         <p class="u-border-top-base u-padding--top">Need to contact our team? Use the feedback box at the bottom of any page to report this issue or visit our Contact page to find more ways to reach us.</p>
