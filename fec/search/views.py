@@ -110,7 +110,7 @@ def search_site(query, limit=0, offset=0):
         'offset': offset
     }
     try:
-        r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14y', params=params)
+        r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14yX', params=params)
         return process_site_results(r.json(), limit=limit, offset=offset)
     except (Exception) as ex:
         logger.error('search_site:' + ex.__class__.__name__)
@@ -135,7 +135,7 @@ def search(request):
     search_error_message = """
         <h2>Something went wrong</h2>
         <p>This section failed to load. Check FEC.gov status page to see if we are experiencing a temporary outage.
-        If not, please try again and thanks for you patience.</p>
+        If not, please try again and thanks for your patience.</p>
         <p class="u-border-top-base u-padding--top">Need to contact our team? Use the feedback box at the bottom of any page to report this issue or visit our Contact page to find more ways to reach us.</p>
         <p class="u-padding--bottom">
             <a href="https://www.fec.gov" class="button--standard button--cta">Return home</a>&nbsp;&nbsp;
