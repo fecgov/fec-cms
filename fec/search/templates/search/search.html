@@ -184,19 +184,19 @@
           {% endif %}
           {% if cand_search_error %}
             <h2 class="u-border-top-base u-padding--top">Candidates</h2>
-            <div class="message message--small message--alert">
+            <div class="message  message--alert">
               <p>{{ cand_search_error | safe }} </p>
             </div>
           {% endif %}
           {% if comm_search_error %}
             <h2 class="u-border-top-base u-padding--top">Committees</h2>
-            <div class="message message--small message--alert">
+            <div class="message message--alert">
              <p>{{ comm_search_error | safe }} </p>
             </div>
           {% endif %}
           {% if site_search_error %}
           <h2 class="u-border-top-base u-padding--top">Other pages</h2>
-            <div class="message message--small message--alert">
+            <div class="message message--alert">
               {{ site_search_error | safe }}
             </div>
           {% endif %}
@@ -230,19 +230,19 @@
           </div>
           {% if cand_search_error %}
             <h2 class="u-border-top-base u-padding--top">Candidates</h2>
-              <div class="message message--white message--small message--alert">
+              <div class="message message--alert">
                 {{ cand_search_error | safe }}
               </div>
             {% endif %}
             {% if comm_search_error %}
             <h2 class="u-border-top-base u-padding--top">Committees</h2>
-              <div class="message message--white message--small message--alert">
+              <div class="message  message--alert">
                 {{ comm_search_error | safe }}
               </div>
             {% endif %}
             {% if site_search_error %}
             <h2 class="u-border-top-base u-padding--top">Other pages</h2>
-            <div class="message message--white message--small message--alert">
+            <div class="message  message--alert">
               {{ site_search_error | safe }}
             </div>
           {% endif %}
