@@ -21,7 +21,7 @@ def search_candidates(query):
         r = requests.get(url, params={'q': query, 'sort': '-receipts', 'per_page': 3, 'api_key': settings.FEC_API_KEY_PRIVATE})
         return r.json()
     except (Exception) as ex:
-        logger.error('search_canndidates:' + ex.__class__.__name__)
+        logger.error('search_candidates:' + ex.__class__.__name__)
         return None
 
 
@@ -110,7 +110,7 @@ def search_site(query, limit=0, offset=0):
         'offset': offset
     }
     try:
-        r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14yX', params=params)
+        r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14y', params=params)
         return process_site_results(r.json(), limit=limit, offset=offset)
     except (Exception) as ex:
         logger.error('search_site:' + ex.__class__.__name__)
@@ -134,7 +134,7 @@ def search(request):
 
     search_error_message = """
         <h2>Something went wrong</h2>
-        <p class="u-negative--top--margin">This section failed to load. Check FEC.gov status page to see if we are experiencing a temporary outage.
+        <p class="u-negative--top--margin">This section failed to load. Check FEC.gov status page to check if we are experiencing a temporary outage.
         If not, please try again and thanks for your patience.</p>
         <p class="u-border-top-base u-padding--top">Need to contact our team? Use the feedback box at the bottom of any page to report this issue or visit our Contact page to find more ways to reach us.</p>
         <p class="u-padding--bottom">
@@ -224,8 +224,8 @@ def policy_guidance_search(request):
         else:
             policy_search_error =  """
             <h3>Something went wrong</h3>
-            <p>This section failed to load. Check FEC.gov status page to see if we are experiencing a temporary outage.
-            If not, please try again and thanks for you patience.</p>
+            <p>This section failed to load. Check FEC.gov status page to check if we are experiencing a temporary outage.
+            If not, please try again and thanks for your patience.</p>
             <p class="u-padding--bottom">
                 <a href="https://www.fec.gov" class="button--standard button--cta">Return home</a>&nbsp;&nbsp;
                 <a href="https://fecgov.statuspage.io" class="button--standard">FEC.gov status page</a>&nbsp;&nbsp;
