@@ -98,6 +98,8 @@
       removeButtons.forEach(button => {
         button.addEventListener('click', function() {
           const tag = this.getAttribute('data-tag');
+          const tag_related = this.getAttribute('data-tag-related');
+
           const url = new URL(window.location);
 
           // "Remove tags" logic
@@ -164,6 +166,7 @@
             });
           } else {
             url.searchParams.delete(tag);
+            url.searchParams.delete(tag_related);
           }
 
           // Update the URL without reloading the page
@@ -204,8 +207,8 @@
         });
       }
      
-      // JS for subject MUR/ADR selects
-      // The window.context is declared in the child templates (MURm, ADR(maybe later))
+      // JS for subject MUR and ADR(maybe later) selects
+      // The window.context is declared in the child templates (MURm and ADR(maybe later))
       if (window.context && window.context.result_type == 'murs') {
         const secondary_subject_ids = window.context.secondary_subject_ids;
         const primary_subject_id = window.context.primary_subject_id;
@@ -254,6 +257,49 @@
           };
         };
       }
-    });
+   
+    
+
+  // For incrment/decrement field
+
+document.querySelector('.increment-decrement__container input').addEventListener("input", function(event) {
+  if (event.target.value == 0){
+    event.target.previousElementSibling.setAttribute('disabled','disabled');
+  }
+  else {
+   event.target.previousElementSibling.removeAttribute('disabled');
+  }
+   });
+
+
+const stepUpDown = function(event) {
+
+  let input = event.target.closest('.increment-decrement__container').querySelector('input');
+
+  if (event.target.previousElementSibling == input) {
+    //input.stepUp(1);
+    input.value ++;
+  }
+  else if (event.target.nextElementSibling == input) {
+    ///input.stepDown(1);
+    if (input.value >= 1) {
+    input.value --;
+    }
+  }
+
+  const disabled = input.value == 0 ? 'disabled' : '';
+  input.previousElementSibling.disabled = disabled;
+
+};
+
+  this.$stepButtons = document.querySelectorAll('.js-step-button');
+    for (const btn of this.$stepButtons) {
+      let self = this;
+         $(btn).on('click', stepUpDown.bind(this));
+  }
+
+ });
+
+    
   </script>
 {% endblock %}
