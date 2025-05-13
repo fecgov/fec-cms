@@ -276,6 +276,8 @@ def legal_doc_search_ao(request):
     ao_regulatory_citation = request.GET.get('ao_regulatory_citation', '')
     ao_statutory_citation = request.GET.get('ao_statutory_citation', '')
     ao_citation_require_all = request.GET.get('ao_citation_require_all', '')
+    q_proximities = request.GET.getlist('q_proximity', [])
+    max_gaps = request.GET.get('max_gaps', '')
 
     query, query_exclude = parse_query(original_query)
 
@@ -301,6 +303,8 @@ def legal_doc_search_ao(request):
         ao_regulatory_citation=ao_regulatory_citation,
         ao_statutory_citation=ao_statutory_citation,
         ao_citation_require_all=ao_citation_require_all,
+        max_gaps=max_gaps,
+        q_proximity=q_proximities,
     )
 
     # Define AO document categories dictionary
@@ -344,7 +348,7 @@ def legal_doc_search_ao(request):
     # For Javascript
     context_vars = {
         'sort': sort,
-        'sortType':sort.replace('-','')
+        'sortType': sort.replace('-', '')
     }
 
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
@@ -369,6 +373,8 @@ def legal_doc_search_ao(request):
         'ao_statutory_citation': ao_statutory_citation,
         'ao_citation_require_all': ao_citation_require_all,
         'category_order': get_legal_category_order(results, 'advisory_opinions'),
+        'max_gaps': max_gaps,
+        'q_proximities': q_proximities,
         'social_image_identifier': 'legal',
         'selected_ao_doc_category_ids': ao_doc_category_ids,
         'selected_ao_doc_category_names': ao_document_category_names,

@@ -111,7 +111,7 @@ Filter.prototype.formatValue = function($input, value) {
 };
 
 /**
- * @param {jQuery.event} e
+ * @param {jQuery.Event} e
  * @param {Object} opts
  * @returns {Null} Return if irrelevant (opts.name != this.name)
  */
@@ -133,7 +133,7 @@ Filter.prototype.handleAddEvent = function(e, opts) {
 };
 
 /**
- * @param {jQuery.event} e
+ * @param {jQuery.Event} e
  * @param {Object} opts
  * @returns {Null} Return if irrelevant (opts.name != this.name || opts.loadedOnce !== true)
  */
