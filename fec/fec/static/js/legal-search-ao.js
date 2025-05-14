@@ -101,16 +101,6 @@ LegalSearchAo.prototype.initFilters = function() {
     this.updatePagination(this.lastQueryResponse.total_advisory_opinions);
   }
 
-  // Do a quick edit for the Requestor Type field
-  /** @property {HTMLSelectElement} */
-  const requestorSelect = document.querySelector('#ao_requestor_type');
-  // The Jinja template element includes a <option>More</option> that we want to remove
-  // The Python list doesn't like assigning an empty string as its value so we'll do that here
-  if (requestorSelect.options[1].textContent == 'Any') {
-    requestorSelect.removeChild(requestorSelect.options[1]);
-    requestorSelect.options[0].textContent = 'Any';
-  }
-
   this.tagList = new TagList({
     resultType: 'results',
     showResultCount: true,
@@ -147,9 +137,6 @@ LegalSearchAo.prototype.initFilters = function() {
     const searchInputSubmitButton = searchInputField.parentNode.querySelector('[type="submit"]');
     if (searchInputSubmitButton) searchInputSubmitButton.setAttribute('type', 'button');
   }
-
-  const filterTagsElement = document.querySelector('.js-filter-tags');
-  filterTagsElement.addEventListener('click', this.handleRemovingRequestorTypeTag.bind(this));
 
   // Update the window.location based on filters, in case this special template is setting values
   updateQuery(this.filterSet.serialize(), this.filterSet.fields);
@@ -259,18 +246,6 @@ LegalSearchAo.prototype.handleKeywordSearchChange = function(e) {
   } else {
     this.tagList.addTag(null, { key: 'search-input', name: 'search', value: newVal });
   }
-};
-
-/**
- * TODO: FIX THE NEED FOR THIS
- * Removing the filter tag for ao_requestor_type was resetting its <select>,
- * but its 'change' and 'select' events weren't bubbling.
- * This sets getResults to a delay when this single filter tag is removed.
- * @param {PointerEvent} e
- */
-LegalSearchAo.prototype.handleRemovingRequestorTypeTag = function(e) {
-  if (e.target.closest('[data-id="ao_requestor_type"]'))
-    this.debounce(this.getResults.bind(this), 250);
 };
 
 /**
