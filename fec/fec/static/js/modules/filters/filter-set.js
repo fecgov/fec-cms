@@ -154,9 +154,9 @@ FilterSet.prototype.clear = function() {
 };
 
 /**
- * Removes the checkboxes in the panel that show whats been selected when you remove the tag from
- * the tags panel at the top of the table
- * @param {jQuery.event} e
+ * Removes the checkboxes in the panel that show what's been selected when you remove the tag from
+ * the tags panel above the table
+ * @param {jQuery.Event} e
  * @param {Object} opts - settings object like { key: value } where value is the clicked tag's data-id
  */
 FilterSet.prototype.handleTagRemoved = function(e, opts) {
@@ -167,13 +167,9 @@ FilterSet.prototype.handleTagRemoved = function(e, opts) {
 
     if (type === 'checkbox' || type === 'radio') {
       $input.click(); // TODO: jQuery deprecation
-    } else if (type === 'text') {
+    } else if (type === 'text' || type === 'select-one') {
       $input.val('');
       $input.get(0).dispatchEvent(new Event('change', { bubbles: true }));
-    } else if (type === 'select-one') {
-      // Find the option with no value and set it to selected
-      $input.find('option[value=""]').attr('selected', true);
-      $input.trigger('change');
     }
   }
 };

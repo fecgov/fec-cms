@@ -378,7 +378,7 @@
     // ...if they are not already checked
     for (let box of queryBoxes) {
       if (!($(box).is(':checked'))) {
-            $(box).trigger('click');   
+        $(box).prop('checked', true).trigger('change') 
       }
     }
    })();

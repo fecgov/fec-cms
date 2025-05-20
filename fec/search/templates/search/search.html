@@ -170,9 +170,9 @@
                 {% endfor %}
               </ul>
               <div class="results-info">
-                <span class="t-sans">{{ results.site.meta.count }} results</span>
+                <span class="t-sans">Showing {{results.site.meta.results_range}} of {{ results.site.meta.count }} results</span>
                 <div class="u-float-right">
-                  {% if results.site.meta.prev_offset %}
+                  {% if results.site.meta.current_offset > 0 %}
                     <a class="button button--standard button--previous" href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;offset={{ results.site.meta.prev_offset }}"><span class="u-visually-hidden">Previous</span></a>
                   {% endif %}
                   {% if results.site.meta.next_offset %}
