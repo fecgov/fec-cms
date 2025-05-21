@@ -73,7 +73,7 @@ def _detect_space(repo, branch=None, yes=False):
 DEPLOY_RULES = (
     ('prod', _detect_prod),
     ('stage', lambda _, branch: branch.startswith('release')),
-    ('dev', lambda _, branch: branch == 'feature/6775-upgrade-setuptools-78.1.1'),
+    ('dev', lambda _, branch: branch == 'develop'),
     # Uncomment below and adjust branch name to deploy desired feature branch to the feature space
     # ('feature', lambda _, branch: branch == '[BRANCH NAME]'),
 )
