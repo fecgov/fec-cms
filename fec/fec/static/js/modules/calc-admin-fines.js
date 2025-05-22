@@ -355,7 +355,7 @@ Vue.component('frames', {
         return this[q.showIfVar1] === q.showIfVar1ExpectedValue;
       }
     },
-    frameClass: function(frameIndex, addtionalClasses) {
+    frameClass: function(frameIndex, additionalClasses) {
       return [
         'frame',
         {
@@ -363,7 +363,7 @@ Vue.component('frames', {
           current: frameIndex == this.currentFrameNum,
           'next off-screen': frameIndex > this.currentFrameNum
         },
-        addtionalClasses
+        additionalClasses
         // {
         //   viewed: this.frames[navIndex].viewed || navIndex == 0,
         //   current: navIndex == this.currentFrameNum,
@@ -652,7 +652,7 @@ new Vue({
             help: `<p>For election sensitive reports, a committee is a non-filer if it files after this point or doesn't file at all.</p>
             <p>A committee is a late filer if it files the report after the due date, but more than four days before the date of the applicable election.</p>
             <p>For non-election sensitive reports, a committee is a non-filer if it files its report later than that or not at all.</p>
-            <p>A committee will be considerered a late filer if it files its report within 30 days after the due date.</p>`
+            <p>A committee will be considered a late filer if it files its report within 30 days after the due date.</p>`
           }
         ],
         viewed: false
@@ -871,7 +871,7 @@ new Vue({
       } else if (passedTests === true) {
         // If the value is undefined, this is the first time it's being set so let's advance
         let autoStep = this[affectedVmodel] == undefined ? true : false;
-        // …unless we specifially shouldn't autoadvance
+        // …unless we specifically shouldn't autoadvance
         autoStep = frameShouldAutoAdvance;
         //
         this.setBreadCrumbText(frameNum, qNum, q);
