@@ -202,7 +202,10 @@ module.exports = [
     },
     plugins: [
       new webpack.DefinePlugin({
-        context: {}
+        context: {},
+        __VUE_OPTIONS_API__: false,
+        __VUE_PROD_DEVTOOLS__: mode != 'production',
+        __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: mode != 'production'
       }),
       new webpack.ProvidePlugin({
         $: 'jquery',
