@@ -1,4 +1,4 @@
-Django==4.2.20
+Django==5.1.9
 cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
@@ -34,7 +34,7 @@ beautifulsoup4==4.8.2
 django-storages==1.14.2
 boto3==1.34.46
 
-cg-django-uaa==2.1.5
+cg-django-uaa==2.1.8
 
 # Testing
 coverage==7.0.3
