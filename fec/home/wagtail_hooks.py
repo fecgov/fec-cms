@@ -54,7 +54,7 @@ class RecordListingView(PageListingViewSet):
     name = 'fec_record'
 
 class UpdatesViewSetGroup(ViewSetGroup):
-    menu_label = 'News and Updates1'
+    menu_label = 'News and Updates'
     menu_icon = 'table'
     add_to_admin_menu = True
     menu_order = 100
