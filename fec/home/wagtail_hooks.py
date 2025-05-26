@@ -19,11 +19,11 @@ class AuthorModelViewSet(ModelViewSet):
     add_to_admin_menu = True  # When set to false, with wagtail this shows under snippet menu
     name = 'authors'
 
-author_mode_view_set = AuthorModelViewSet("Authors")  # defines /admin/person/ as the base URL
+author_model_view_set = AuthorModelViewSet("authors")
 
 @hooks.register("register_admin_viewset")
 def register_viewset():
-    return author_mode_view_set
+    return author_model_view_set
 
 class PressReleaseListingView(PageListingViewSet):
     menu_label = 'Press releases'
@@ -55,10 +55,9 @@ class RecordListingView(PageListingViewSet):
 
 class UpdatesViewSetGroup(ViewSetGroup):
     menu_label = 'News and Updates'
-    menu_icon = 'table'
+    menu_icon = 'globe'
     add_to_admin_menu = True
     menu_order = 100
-    # You can specify instances or subclasses of `ViewSet` in `items`.
     items = (PressReleaseListingView, DigestListingView, TipsForTreasurersListingView, RecordListingView)
     name = 'News and Updates'
 
