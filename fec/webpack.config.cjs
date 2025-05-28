@@ -72,11 +72,6 @@ const mainEntries = {
     filename: 'legal-search-ao-[contenthash].js',
     dependOn: 'data-init'
   },
-  // 'legal-app': {
-  //   import: `${js}/legal/LegalApp.js`,
-  //   dependOn: 'global'
-  // },
-  // 'calc-admin-fines-modal': `${js}/modules/calc-admin-fines-modal.js`, // Pulled into init.js
   'calc-admin-fines': `${js}/modules/calc-admin-fines.js`,
   'widgets/aggregate-totals-box': {
     import: `${js}/widgets/aggregate-totals-box.js`,
