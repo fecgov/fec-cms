@@ -41,6 +41,7 @@ body:has(#modal-gov-fec-fecfile-eligibility[open]) {
 
   &::backdrop {
     background: rgb(from $color-base r g b / 50%);
+    cursor: pointer;
   }
   
   h2 {

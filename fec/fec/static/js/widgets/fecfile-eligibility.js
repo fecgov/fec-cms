@@ -41,6 +41,7 @@ FecFileEligibility.prototype.init = function() {
 FecFileEligibility.prototype.buildModalDialog = function() {
   this.modalDialog = document.createElement('dialog');
   this.modalDialog.setAttribute('id', `modal-${this.appElSelector}`);
+  this.modalDialog.setAttribute('closedby', 'any');
   this.modalDialog.innerHTML = `
     <div class="modal__content" aria-labelledby="eligibility-modal-title">
       <div role="document">
