@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
 
   <title>{% block title %}{% endblock %} | FEC</title>
@@ -31,11 +31,8 @@
     DEFAULT_TIME_PERIOD = '{{ constants.DEFAULT_TIME_PERIOD }}';
     DEFAULT_PRESIDENTIAL_YEAR = {{ constants.DEFAULT_PRESIDENTIAL_YEAR }};
     DEFAULT_ELECTION_YEAR = {{ constants.DEFAULT_ELECTION_YEAR }};
-    START_YEAR = {{ constants.START_YEAR }};
-    END_YEAR = {{ constants.END_YEAR }};
     DISTRICT_MAP_CUTOFF = '{{ constants.DISTRICT_MAP_CUTOFF }}';
     WEBMANAGER_EMAIL = '{{ WEBMANAGER_EMAIL }}';
-    TRANSITION_URL = '{{ TRANSITION_URL }}';
     {% if election_year %}ELECTION_YEAR = '{{ election_year }}';{% endif %}
 
     {#

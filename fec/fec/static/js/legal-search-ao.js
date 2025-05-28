@@ -30,7 +30,7 @@ export default function LegalSearchAo() {
   this.noResultsMessage;
   this.paginationElement;
   this.resultsTable;
-  this.sortOrder = 'desc';
+  this.sortOrder;
   this.sortType;
   this.tagList;
 
@@ -101,16 +101,6 @@ LegalSearchAo.prototype.initFilters = function() {
     this.updatePagination(this.lastQueryResponse.total_advisory_opinions);
   }
 
-  // Do a quick edit for the Requestor Type field
-  /** @property {HTMLSelectElement} */
-  const requestorSelect = document.querySelector('#ao_requestor_type');
-  // The Jinja template element includes a <option>More</option> that we want to remove
-  // The Python list doesn't like assigning an empty string as its value so we'll do that here
-  if (requestorSelect.options[1].textContent == 'Any') {
-    requestorSelect.removeChild(requestorSelect.options[1]);
-    requestorSelect.options[0].textContent = 'Any';
-  }
-
   this.tagList = new TagList({
     resultType: 'results',
     showResultCount: true,
@@ -148,9 +138,6 @@ LegalSearchAo.prototype.initFilters = function() {
     if (searchInputSubmitButton) searchInputSubmitButton.setAttribute('type', 'button');
   }
 
-  const filterTagsElement = document.querySelector('.js-filter-tags');
-  filterTagsElement.addEventListener('click', this.handleRemovingRequestorTypeTag.bind(this));
-
   // Update the window.location based on filters, in case this special template is setting values
   updateQuery(this.filterSet.serialize(), this.filterSet.fields);
 
@@ -184,7 +171,15 @@ LegalSearchAo.prototype.handleSortClick = function(e) {
   e.stopImmediatePropagation();
 
   this.sortType = e.target.dataset.sort
+
+  // Only toggle the sort direction when existing sort direction exists on the column
+  if (e.target.classList.contains('sorting_asc') || e.target.classList.contains('sorting_desc')) {
   this.sortOrder =  e.target.classList.contains('sorting_asc') ? 'desc' : 'asc';
+  }
+  // Otherwise always start descending by default. When activating the column for sort.
+  else {
+    this.sortOrder = 'desc'
+  }
 
   updateTableSortColumn(e.target, this.sortOrder, this.sortType );
 
@@ -251,18 +246,6 @@ LegalSearchAo.prototype.handleKeywordSearchChange = function(e) {
   } else {
     this.tagList.addTag(null, { key: 'search-input', name: 'search', value: newVal });
   }
-};
-
-/**
- * TODO: FIX THE NEED FOR THIS
- * Removing the filter tag for ao_requestor_type was resetting its <select>,
- * but its 'change' and 'select' events weren't bubbling.
- * This sets getResults to a delay when this single filter tag is removed.
- * @param {PointerEvent} e
- */
-LegalSearchAo.prototype.handleRemovingRequestorTypeTag = function(e) {
-  if (e.target.closest('[data-id="ao_requestor_type"]'))
-    this.debounce(this.getResults.bind(this), 250);
 };
 
 /**
@@ -730,6 +713,12 @@ LegalSearchAo.prototype.updatePagination = function(resultsCount) {
     );
   }
   buttonsParent.appendChild(newNextButton);
+
+  // Clone the updated pagination element into div.pagination_holder after the table
+  const paginationClone = this.paginationElement.cloneNode(true);
+  const paginationHolder = document.querySelector('.pagination_holder')
+  paginationHolder.replaceChildren(paginationClone);
+
 };
 
 // The bare-minimum html for the results table

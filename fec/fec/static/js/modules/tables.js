@@ -660,7 +660,7 @@ DataTable_FEC.prototype.checkFromQuery = function() {
       // …if they are not already checked
       for (let box of queryBoxes) {
         if (!($(box).is(':checked'))) {
-          $(box).prop('checked', true).change(); // TODO: jQuery deprecation
+          $(box).prop('checked', true).trigger('change');
         }
        }
       $('button.is-loading, label.is-loading').removeClass('is-loading');
@@ -673,7 +673,7 @@ DataTable_FEC.prototype.checkFromQuery = function() {
     // …if they are not already checked
     for (let box of queryBoxes) {
       if (!($(box).is(':checked'))) {
-        $(box).prop('checked', true).change(); // TODO: jQuery deprecation
+        $(box).prop('checked', true).trigger('change');
       }
     }
   }
@@ -961,6 +961,12 @@ DataTable_FEC.prototype.isPending = function() {
   return isPending(url);
 };
 
+/**
+ * @param {*} data
+ * @param {boolean} paginate
+ * @param {boolean} download
+ * @returns {string}
+ */
 DataTable_FEC.prototype.buildUrl = function(data, paginate, download) {
   let query = _extend(
     { sort_hide_null: false, sort_nulls_last: true }, // eslint-disable-line camelcase
