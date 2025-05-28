@@ -40,7 +40,7 @@ export default function LegalSearchAo() {
     this.sortOrder = window.context.sort.includes('-') ? 'desc' : 'asc';
     this.sortType = window.context.sortType;
   }
- 
+
   this.widgetsElement = document.querySelector('.data-container__widgets');
   this.initPageParts();
   this.initFilters();
@@ -173,7 +173,7 @@ LegalSearchAo.prototype.initTable = function() {
       updateTableSortColumn(theThElement, this.sortOrder, this.sortType);
     }
   }
-  })
+  });
 };
 
 /**
@@ -183,8 +183,8 @@ LegalSearchAo.prototype.initTable = function() {
 LegalSearchAo.prototype.handleSortClick = function(e) {
   e.stopImmediatePropagation();
 
-  this.sortType = e.target.dataset.sort
-  this.sortOrder =  e.target.classList.contains('sorting_asc') ? 'desc' : 'asc';
+  this.sortType = e.target.dataset.sort;
+  this.sortOrder = e.target.classList.contains('sorting_asc') ? 'desc' : 'asc';
 
   updateTableSortColumn(e.target, this.sortOrder, this.sortType );
 
@@ -206,7 +206,7 @@ function updateTableSortColumn(th, newVal, sortType) {
   th.setAttribute('aria-sort', newVal == 'asc' ? 'ascending' : 'descending');
   th.setAttribute('aria-description',
     `${th.textContent}: Activate to sort column ${newVal == 'asc' ? 'ascending' : 'descending'}`);
-  
+
   // Remove sorting-* class style on the th that us NOT current sortType
   document.querySelector(`#results th[data-sort]:not(th[data-sort="${sortType}"`).classList.remove('sorting_asc','sorting_desc');
 }
@@ -288,7 +288,7 @@ LegalSearchAo.prototype.getResults = function(e) {
   // Get data from our filters
   const serializedFilters = this.filterSet.serialize();
   const filterFields = this.filterSet.fields;
- 
+
   // Let's override any filters here
 
   // Make sure search and sort are allowed fields
