@@ -136,8 +136,8 @@ DateFilter.prototype.fromQuery = function(query) {
 
 DateFilter.prototype.setValue = function(value) {
   value = ensureArray(value);
-  this.$minDate.val(value[0]).change(); // TODO: jQuery deprecation
-  this.$maxDate.val(value[1]).change(); // TODO: jQuery deprecation
+  this.$minDate.val(value[0]).trigger('change');
+  this.$maxDate.val(value[1]).trigger('change');
 };
 
 DateFilter.prototype.handleModifyEvent = function(e, opts) {
@@ -146,12 +146,12 @@ DateFilter.prototype.handleModifyEvent = function(e, opts) {
   if (opts.filterName === this.name) {
     this.maxYear = parseInt(opts.filterValue);
     this.minYear = this.maxYear - 1;
-    this.$minDate.val('01/01/' + this.minYear.toString()).change(); // TODO: jQuery deprecation
+    this.$minDate.val('01/01/' + this.minYear.toString()).trigger('change');
     if (this.maxYear === today.getFullYear()) {
       today = moment(today).format('MM/DD/YYYY');
-      this.$maxDate.val(today).change(); // TODO: jQuery deprecation
+      this.$maxDate.val(today).trigger('change');
     } else {
-      this.$maxDate.val('12/31/' + this.maxYear.toString()).change(); // TODO: jQuery deprecation
+      this.$maxDate.val('12/31/' + this.maxYear.toString()).trigger('change');
     }
     this.validate();
   }

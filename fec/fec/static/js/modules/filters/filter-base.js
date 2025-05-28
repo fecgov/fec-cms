@@ -84,7 +84,7 @@ Filter.prototype.setValue = function(value) {
   const $input = this.$input.data('temp')
     ? this.$elm.find('#' + this.$input.data('temp'))
     : this.$input;
-  $input.val(prepareValue($input, value)).change(); // TODO: jQuery deprecation
+  $input.val(prepareValue($input, value)).trigger('change');
   return this;
 };
 
@@ -111,7 +111,7 @@ Filter.prototype.formatValue = function($input, value) {
 };
 
 /**
- * @param {jQuery.event} e
+ * @param {jQuery.Event} e
  * @param {Object} opts
  * @returns {Null} Return if irrelevant (opts.name != this.name)
  */
@@ -133,7 +133,7 @@ Filter.prototype.handleAddEvent = function(e, opts) {
 };
 
 /**
- * @param {jQuery.event} e
+ * @param {jQuery.Event} e
  * @param {Object} opts
  * @returns {Null} Return if irrelevant (opts.name != this.name || opts.loadedOnce !== true)
  */
