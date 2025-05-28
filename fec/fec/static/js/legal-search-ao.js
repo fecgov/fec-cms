@@ -13,7 +13,7 @@ import { updateQuery } from './modules/urls.js';
 /**
  * @property {FilterPanel} this.filterPanel - The left column's filters panel element
  * @property {HTMLElement} this.resultsTable - The table of results
- * @property {HTMLElement} this.paginationElement - The <div> that holds the pagination
+ * @property {HTMLElement} this.paginationElements - The <div>s that hold the pagination
  * @property {HTMLElement} this.noResultsMessage - The <div> to toggle to show or hide the 'no results' message
  * @property {HTMLElement} widgetsElement - The <div> that holds the header filter tags and message
  * @property {boolean} this.isLoading - Controls appearance and behavior of elements on the screen
@@ -28,7 +28,7 @@ export default function LegalSearchAo() {
   this.isLoading = false;
   this.lastQueryResponse = {};
   this.noResultsMessage;
-  this.paginationElement;
+  this.paginationElements;
   this.resultsTable;
   this.sortOrder = 'desc';
   this.sortType;
@@ -70,7 +70,7 @@ LegalSearchAo.prototype.initPageParts = function() {
 
   // Now that all the parts are created, save 'em
   this.resultsTable = document.querySelector('.js-legal-search-results');
-  this.paginationElement = document.querySelector('.js-legal-search-pagination');
+  this.paginationElements = document.querySelectorAll('.js-legal-search-pagination');
   this.noResultsMessage = document.querySelector('.js-legal-search-no-results');
 };
 
@@ -601,21 +601,25 @@ LegalSearchAo.prototype.updateFiltersOnSuccess = function(changeCount) {
  * @param {number} resultsCount
  */
 LegalSearchAo.prototype.updatePagination = function(resultsCount) {
-  if (!this.paginationElement) return; // If we can't find the pagination holder, no reason to continue
+  if (!this.paginationElements) return; // If we can't find the pagination holder, no reason to continue
 
   // Toggle major components on whether we have results
   if (resultsCount > 0) {
     this.noResultsMessage.setAttribute('aria-hidden', true);
-    this.paginationElement.removeAttribute('aria-hidden');
+    this.paginationElements.forEach(el => {
+      el.removeAttribute('aria-hidden');
+    });
     this.resultsTable.removeAttribute('aria-hidden');
   } else {
     this.noResultsMessage.removeAttribute('aria-hidden');
-    this.paginationElement.setAttribute('aria-hidden', true);
+    this.paginationElements.forEach(el => {
+      el.setAttribute('aria-hidden', true);
+    });
     this.resultsTable.setAttribute('aria-hidden', true);
   }
 
-  const control_count = this.paginationElement.querySelector('.results-length');
-  const summary = this.paginationElement.querySelector('.dataTables_info');
+  const control_count = this.paginationElements[0].querySelector('.results-length');
+  const summary = this.paginationElements[0].querySelector('.dataTables_info');
   const maxButtonsOnScreen = 5;
 
   const resultLimit = parseInt(control_count.value);
@@ -730,6 +734,10 @@ LegalSearchAo.prototype.updatePagination = function(resultsCount) {
     );
   }
   buttonsParent.appendChild(newNextButton);
+
+  // Finally, if we have a second pagination element, set its innerHTML to whatever we set for [0]'s
+  if (this.paginationElements[1])
+    this.paginationElements[1].innerHTML = this.paginationElements[0].innerHTML;
 };
 
 // The bare-minimum html for the results table
