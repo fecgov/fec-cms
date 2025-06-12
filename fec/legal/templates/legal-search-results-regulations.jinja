@@ -16,6 +16,7 @@
 
 {% block results %}
 {% with regulations = results.regulations %}
+{% include 'partials/legal-rulemaking-comments.jinja' %}
 <div class="data-container__datatable">
   {% include 'partials/legal-search-results-regulation.jinja' %}
 </div>
