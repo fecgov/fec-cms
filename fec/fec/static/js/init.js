@@ -59,4 +59,22 @@ $(function() {
     }
     $p.nextAll().remove();
   });
+
+  /**
+   * Check for an in-page element with a classList that contains 'js-launch-fecfile-eligibility'.
+   * If any are found, add the js and css files for it.
+   * fecfile-eligibility.js will activate the launcher button
+   */
+  let eligibilityLauncher = document.querySelector('.js-launch-fecfile-eligibility');
+  if (eligibilityLauncher) {
+    let newScript = document.createElement('script');
+    newScript.src = '/static/js/widgets/fecfile-eligibility.js'; // This could begin with 'https://www.fec.gov/'
+    document.body.append(newScript);
+
+    let eligibilityStyles = document.createElement('link');
+    eligibilityStyles.rel = 'stylesheet';
+    eligibilityStyles.href = '/static/css/widgets/fecfile-eligibility.css'; // This could begin with 'https://www.fec.gov/'
+    document.body.append(eligibilityStyles);
+  }
+  eligibilityLauncher = undefined; // No reason to keep the var
 });
