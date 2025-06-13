@@ -1,0 +1,134 @@
+<div id="upload-status" style="padding: 4rem 4rem 0 4rem; background-color:rgb(191, 250, 230);"></div>
+
+<form id="upload-form" style="padding: 0 4rem 4rem 4rem;">
+  <h2>Submit a rulemaking comment</h2>
+  <label class="label u-margin--top" for="first_name">First Name:</label>
+  <input type="text" id="first-name" name="first_name" required>
+
+  <label class="label u-margin--top" for="last_name">Last Name:</label>
+  <input type="text" id="last-name" name="last_name" required>
+
+  <label class="label u-margin--top" for="email">Email:</label>
+  <input type="email" id="email" name="email" required>
+
+  <label class="label u-margin--top" for="comments">Comments:</label>
+  <textarea id="comments" name="comments" required maxlength="4000" style="height: 10rem;"></textarea>
+  <div id="charCount">4000 characters remaining</div>
+
+  <label class="label u-margin--top" for="docpicker">Upload supporting documents:</label>
+  <input type="file" id="docpicker" multiple accept=".doc, .docx, .pdf, .rtf, .txt" style="padding-bottom: 3rem;" />
+  <button class="button button--cta u-margin--top" type="submit">Submit</button>
+</form>
+
+<script>
+  const MAX_FILE_SIZE = 5000000; // 5MB
+  const uploadForm = document.getElementById("upload-form");
+  const fileInput = document.getElementById("docpicker");
+  const uploadStatus = document.getElementById("upload-status");
+  const commentsInput = document.getElementById("comments");
+  const charCount = document.getElementById("charCount");
+
+  // Restrict comments to be 4000 chars with counter
+  commentsInput.addEventListener("input", () => {
+    const remaining = 4000 - commentsInput.value.length;
+    charCount.textContent = `${remaining} characters remaining`;
+  });
+
+  // Create the JSON submission record from the upload-form data
+  async function createSubmissionRecord(formData, fileNames) {
+    const payload = {
+      first_name: formData.get("first_name"),
+      last_name: formData.get("last_name"),
+      email: formData.get("email"),
+      comments: formData.get("comments"),
+      files: fileNames
+    };
+
+    // Format as JSON
+    const res = await fetch("/data/legal/api/create-submission/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || "Failed to create submission record.");
+    }
+
+    return res.json();
+  }
+
+  // Upload files to presigned URLs. 
+  // TODO: A presigned URL is assigned per file.
+  //       But if the filename is the same from a different dir, 
+  //       not sure what will happen.
+  async function uploadFileWithPresignedUrl(file, presigned) {
+    const formData = new FormData();
+    Object.entries(presigned.fields).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    formData.append("file", file);
+
+    const res = await fetch(presigned.url, {
+      method: "POST",
+      body: formData
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to upload ${file.name}`);
+    }
+  }
+
+  uploadForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    uploadStatus.innerHTML = "";
+    
+    const formData = new FormData(uploadForm);
+    const files = fileInput.files;
+    const fileNames = Array.from(files).map((file) => file.name);
+
+    try {
+      const submissionResult = await createSubmissionRecord(formData, fileNames);
+      const presignedUrls = submissionResult.presigned_urls;
+
+      for (const file of files) {
+        if (file.size > MAX_FILE_SIZE) {
+          uploadStatus.innerHTML += `<p>❌ ${file.name} is too large (max 5MB).</p>`;
+          continue;
+        }
+
+        const presigned = presignedUrls[file.name];
+        if (!presigned) {
+          uploadStatus.innerHTML += `<p>❌ No presigned URL for ${file.name}.</p>`;
+          continue;
+        }
+
+        await uploadFileWithPresignedUrl(file, presigned);
+        uploadStatus.innerHTML += `<p>✅ ${file.name} uploaded successfully.</p>`;
+      }
+
+      uploadStatus.innerHTML += `<p>🎉 Submission complete. Submission ID: ${submissionResult.submission_id}</p>`;
+
+    } catch (err) {
+      uploadStatus.innerHTML += `<p>❌ ${err.message}</p>`;
+    }
+  });
+
+function getCookie(name) {
+  return document.cookie
+    .split('; ')
+    .find(row => row.startsWith(name + '='))
+    ?.split('=')[1]
+    ? decodeURIComponent(document.cookie
+      .split('; ')
+      .find(row => row.startsWith(name + '='))
+      .split('=')[1])
+    : null;
+}
+
+const csrftoken = getCookie('csrftoken');
+</script>
