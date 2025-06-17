@@ -21,6 +21,19 @@
     <div class="grid--2-wide grid--flex">
       <div class="grid__item">
         <h2>Compare candidates</h2>
+        {% if FEATURES.hide_election_search_map %}
+        <div class="card card--neutral">
+          <a href="/data/raising-bythenumbers/" title="Raising: by the numbers">
+            <div class="card__image__container">
+              <span class="card__icon i-graph-horizontal-ordered"><span class="u-visually-hidden">Icon of a graph</span></span>
+            </div>
+            <div class="card__content">
+              <h3>Raising &raquo;</h3>
+              <p>Discover which candidates are raising the most</p>
+            </div>
+          </a>
+        </div>
+        {% else %}
         <div id="election-lookup" class="search--election-mini">
           <div class="usa-width-one-half">
             <form action="/data/elections/" class="content__section">
@@ -54,7 +67,24 @@
           </div>
           <div class="election-map dormant election-map--small usa-width-one-half" title="click to activate the interactive map"></div>
         </div>
+        {% endif %}
       </div>
+      {% if FEATURES.hide_election_search_map %}
+      <div class="grid__item">
+        <h2>&nbsp;</h2>
+        <div class="card card--neutral">
+          <a href="/data/spending-bythenumbers/" title="Spending: by the numbers">
+            <div class="card__image__container">
+              <span class="card__icon i-graph-horizontal-ordered"><span class="u-visually-hidden">Icon of a graph</span></span>
+            </div>
+            <div class="card__content">
+              <h3>Spending &raquo;</h3>
+              <p>Discover which candidates are spending the most</p>
+            </div>
+          </a>
+        </div>
+      </div>
+      {% else %}
       <div class="grid__item example--primary callout-holder">
         <h2>&nbsp;</h2>
         <div class="grid grid--2-wide">  
@@ -86,6 +116,7 @@
           </div>
         </div>
       </div>
+      {% endif %}
     </div>
   </section>
 

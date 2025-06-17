@@ -119,7 +119,7 @@ TopEntities.prototype.updateElectionYearOptions = function(office) {
     if (currentOption.css('display') == 'none') {
       $('#election-year')
         .val(minFutureYear)
-        .change(); // TODO: jQuery deprecation
+        .trigger('change');
     }
   } else {
     // show all options/enable for Safari!

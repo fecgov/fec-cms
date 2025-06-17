@@ -71,6 +71,7 @@ FEATURES = {
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
     'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),
+    'hide_election_search_map': bool(env.get_credential('FEC_HIDE_ELECTION_SEARCH_MAP', '')),
     'h4_allocated_disbursements': bool(env.get_credential('FEC_FEATURE_H4_ALLOCATED_DISBURSEMENTS', True)),
     'house_senate_overview': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW', '')),
     'house_senate_overview_methodology': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_METHODOLOGY', '')),
@@ -246,7 +247,6 @@ LANGUAGES = (
 )
 TIME_ZONE = 'America/New_York'
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 

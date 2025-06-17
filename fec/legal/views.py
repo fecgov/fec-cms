@@ -261,6 +261,7 @@ def legal_doc_search_ao(request):
     original_query = request.GET.get('search', '')
     offset = request.GET.get('offset', 0)
     limit = request.GET.get('limit', 20)
+    sort = request.GET.get('sort', '')
     ao_no = request.GET.getlist('ao_no', [])
     ao_requestor = request.GET.get('ao_requestor', '')
     ao_is_pending = request.GET.get('ao_is_pending', '')
@@ -274,6 +275,7 @@ def legal_doc_search_ao(request):
     ao_regulatory_citation = request.GET.get('ao_regulatory_citation', '')
     ao_statutory_citation = request.GET.get('ao_statutory_citation', '')
     ao_citation_require_all = request.GET.get('ao_citation_require_all', '')
+    ao_year = request.GET.get('ao_year', '')
     query, query_exclude = parse_query(original_query)
 
     # Call the function and unpack its return values
@@ -284,6 +286,7 @@ def legal_doc_search_ao(request):
         offset=offset,
         limit=limit,
         ao_no=ao_no,
+        sort=sort,
         ao_requestor=ao_requestor,
         ao_requestor_type=ao_requestor_type_ids,
         ao_is_pending=ao_is_pending,
@@ -296,6 +299,7 @@ def legal_doc_search_ao(request):
         ao_regulatory_citation=ao_regulatory_citation,
         ao_statutory_citation=ao_statutory_citation,
         ao_citation_require_all=ao_citation_require_all,
+        ao_year=ao_year,
     )
 
     # Define AO document categories dictionary
@@ -311,7 +315,7 @@ def legal_doc_search_ao(request):
 
     # Define AO requestor types dictionary
     ao_requestor_types = {
-        "0": "Any",
+        # "0": "Any",
         "1": "Federal candidate/candidate committee/officeholder",
         "2": "Publicly funded candidates/committees",
         "3": "Party committee, national",
@@ -330,11 +334,21 @@ def legal_doc_search_ao(request):
         "16": "Other",
     }
 
+    # Possible values for the ao_year filter
+    # We want 1975+ but not the future, so limit the range to > 1974
+    ao_year_opts = {year: year for year in range(datetime.datetime.now().year, 1974, -1)}
+
     # Return the selected document category name
     ao_document_category_names = [ao_document_categories.get(id) for id in ao_doc_category_ids]
 
     # Return the selected requestor type name, when "Any" is selected, clear the value
     ao_requestor_type_names = [ao_requestor_types.get(id) for id in ao_requestor_type_ids if id != 0]
+
+    # For Javascript
+    context_vars = {
+        'sort': sort,
+        'sortType': sort.replace('-', '')
+    }
 
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
         'parent': 'legal',
@@ -342,6 +356,8 @@ def legal_doc_search_ao(request):
         'ao_document_categories': ao_document_categories,
         'result_type': 'advisory_opinions',
         'ao_no': ao_no,
+        'sort': sort,
+        'context_vars': context_vars,
         'ao_requestor': ao_requestor,
         'ao_requestor_types': ao_requestor_types,
         'ao_is_pending': ao_is_pending,
@@ -360,6 +376,8 @@ def legal_doc_search_ao(request):
         'selected_ao_doc_category_names': ao_document_category_names,
         'selected_ao_requestor_type_ids': ao_requestor_type_ids,
         'selected_ao_requestor_type_names': ao_requestor_type_names,
+        'ao_year': ao_year,
+        'ao_year_opts': ao_year_opts,
         'is_loading': True,  # Indicate that the page is loading initially
         
     })
