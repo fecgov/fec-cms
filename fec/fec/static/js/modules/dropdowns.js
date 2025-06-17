@@ -85,7 +85,7 @@ Dropdown.prototype.toggle = function(e) {
 Dropdown.prototype.show = function() {
   restoreTabindex(this.$panel);
   this.$panel.attr('aria-hidden', 'false');
-  this.$panel.find('input[type="checkbox"]:first').focus(); // TODO: jQuery deprecation (:first and .focus)
+  this.$panel.find('input[type="checkbox"]').first().trigger('focus');
   this.$button.addClass('is-active');
   this.isOpen = true;
 };
@@ -117,7 +117,7 @@ Dropdown.prototype.handleFocusAway = function(e) {
 };
 
 Dropdown.prototype.handleKeyup = function(e) {
-  if (e.keyCode === KEYCODE_ESC) {
+  if (e.which === KEYCODE_ESC) {
     if (this.isOpen) {
       this.hide();
       this.$button.focus(); // TODO: jQuery deprecation
@@ -126,7 +126,7 @@ Dropdown.prototype.handleKeyup = function(e) {
 };
 
 Dropdown.prototype.handleCheckKeyup = function(e) {
-  if (e.keyCode === KEYCODE_ENTER) {
+  if (e.which === KEYCODE_ENTER) {
     $(e.target)
       .prop('checked', true)
       .trigger('change');
