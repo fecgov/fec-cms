@@ -85,7 +85,7 @@ Dropdown.prototype.toggle = function(e) {
 Dropdown.prototype.show = function() {
   restoreTabindex(this.$panel);
   this.$panel.attr('aria-hidden', 'false');
-  this.$panel.find('input[type="checkbox"]:first').focus(); // TODO: jQuery deprecation (:first and .focus)
+  this.$panel.find('input[type="checkbox"]').first().trigger('focus');
   this.$button.addClass('is-active');
   this.isOpen = true;
 };
@@ -120,7 +120,7 @@ Dropdown.prototype.handleKeyup = function(e) {
   if (e.keyCode === KEYCODE_ESC) {
     if (this.isOpen) {
       this.hide();
-      this.$button.focus(); // TODO: jQuery deprecation
+      this.$button.trigger('focus');
     }
   }
 };
@@ -221,14 +221,14 @@ Dropdown.prototype.selectItem = function($input) {
     if (next.length) {
       $(next[0])
         .find('input[type="checkbox"]')
-        .focus(); // TODO: jQuery deprecation
+        .trigger('focus');
     } else if (prev.length) {
       $(prev[0])
         .find('input[type="checkbox"]')
-        .focus(); // TODO: jQuery deprecation
+        .trigger('focus');
     }
   } else {
-    this.$selected.find('input[type="checkbox"]').focus(); // TODO: jQuery deprecation
+    this.$selected.find('input[type="checkbox"]').trigger('focus');
   }
 };
 
