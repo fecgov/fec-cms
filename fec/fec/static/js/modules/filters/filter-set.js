@@ -167,7 +167,7 @@ FilterSet.prototype.handleTagRemoved = function(e, opts) {
 
     if (type === 'checkbox' || type === 'radio') {
       $input.trigger('click');
-    } else if (type === 'text') {
+    } else if (type === 'text' || type === 'select-one') {
       $input.val('');
       $input.get(0).dispatchEvent(new Event('change', { bubbles: true }));
     } else if (type === 'select-one') {
