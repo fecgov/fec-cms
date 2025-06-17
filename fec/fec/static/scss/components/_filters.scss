@@ -470,6 +470,7 @@ $filter-button-width: u(4.6rem);
   justify-items: center;
   position: relative;
   width: auto;
+  max-width: 260px;
   grid-template-columns: 2fr 1fr 1fr 1fr 2fr;
   margin: 2rem 0 2rem 0;
 

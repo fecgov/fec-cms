@@ -425,6 +425,7 @@ def legal_doc_search_mur(request):
         secondary_subject_id=secondary_subject_id,
         q_proximity = q_proximitys,
         max_gaps = max_gaps,
+        
 
     )
 
@@ -644,6 +645,10 @@ def legal_doc_search_af(request):
         max_gaps = max_gaps,
 
     )
+    for af in results['admin_fines']:
+        for index, doc in enumerate(af['documents']):
+            # Checks for document keyword text match
+            doc['text_match'] = str(index) in af['document_highlights']
 
     return render(request, 'legal-search-results-afs.jinja', {
         'parent': 'legal',

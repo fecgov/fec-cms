@@ -11,37 +11,102 @@
     </thead>
     <tbody>
       {% for admin_fine in results.admin_fines %}
-      <tr class="simple-table__row">
-        <td class="simple-table__cell">
-          <div class="t-sans">
-            <i class="icon i-folder icon--inline--left"></i>
-            <a class="t-bold" title="{{ admin_fine.name }}" href="/data/legal/administrative-fine/{{ admin_fine.no }}/">AF #{{ admin_fine.no }}</a><br />
-              {{ admin_fine.name.upper() }}
-            {% if admin_fine.highlights %}
-              <div class="t-sans u-padding--top">Keyword match:</div>
-              <div class="legal-search-result__hit u-padding--left">
-                {% for highlight in admin_fine.highlights %}
-                  <span class="t-serif t-italic">
-                      {{ highlight|safe }} &hellip;
-                  </span>
-                {% endfor %}
+        <tr class="simple-table__row">
+          <td class="simple-table__cell">
+            <div class="t-sans">
+              <i class="icon i-folder icon--inline--left"></i>
+              <a class="t-bold" title="{{ admin_fine.name }}" href="/data/legal/administrative-fine/{{ admin_fine.no }}/">AF #{{ admin_fine.no }}</a><br />
+                {{ admin_fine.name.upper() }}
+            </div>
+            {% if admin_fine.document_highlights or admin_fine.source %}
+              <div class="legal-search-result__hit u-padding--left--small u-margin--top u-negative--left--margin split__cell">
+                {# Check for set keyword queries #}
+                {% set filters_keyword = query | length > 0 %}
+                {# Only show documents when keywords are set #}
+                {% if filters_keyword %}
+                  {% for document in admin_fine.documents %}
+                          {# When including this template in legal-search-results.jinja #}
+                          {% if nested_in_global_search %}
+                            {# Only show documents that have keyword matches #}
+                            {% set show_document =  admin_fine.document_highlights[loop.index0 | string] %}   
+                          {% else %}
+                            {# Only show documents that have keyword matches #}
+                            {% set show_document = (filters_keyword and document.text_match)  %}
+                          {% endif %}
+                    {% if show_document %}
+                      <div class="post--icon u-padding--top u-margin--left">
+                        <span class="icon icon--inline--left i-document"></span>
+                        <a href="{{document.url}}">
+                          {{ document.description }}
+                        </a>
+                      </div>
+                      {% set query_highlight = admin_fine.document_highlights[loop.index0 | string] %}
+                      {% if(query_highlight) %}
+                    
+                        <div class="legal-search-result__hit u-margin--left u-margin--right u-padding--bottom">
+                        {# show only first document highlight result #}
+                        <ul>
+                            <li class="post--icon t-serif t-italic u-padding--top--med">
+                              &#8230;{{ query_highlight[0] | safe }}&#8230;
+                            </li>
+                        </ul>
+                          {# show additional document highlight results, if any #}
+                          {% if(query_highlight|length > 1) %}
+                              <div class="js-accordion u-margin--top" data-content-prefix="additional-result-{{ admin_fine.no }}-{{loop.index0}}">
+                              <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ admin_fine.no }}-{{loop.index0}}" aria-expanded="false">
+                                {% if(query_highlight|length == 2) %}
+                                  1 more match
+                                {% elif(query_highlight|length > 2)  %}
+                                  {{ query_highlight|length -1 }} more matches
+                                {% endif %}
+                              </button>
+                              <div class="accordion__content results__content" aria-hidden="true">
+                                  <ul>
+                                    {% for highlight in query_highlight %}
+                                      {% if(loop.index0 != 0) %}
+                                        <li class="t-serif t-italic">&#8230;{{ highlight | safe }}&#8230;</li>
+                                      {% endif %}
+                                    {% endfor %}
+                                  </ul>
+                              </div>
+                            </div>
+                          {% endif %}
+                      {% endif %}
+                      <ul class="tags u-padding--bottom">
+                        <li class="tag__category tag__category--doc">
+                          <div class="tag tag--primary">{{ document.category }}</div>
+                        </li>
+                      </ul>
+                    {% endif %}
+                  {% endfor %}
+                  </div>
+                {% else %}
+                    {% for document in admin_fine.source %}
+                      <div class="legal-search-result__hit u-margin--left u-margin--right u-padding--bottom u-padding--top">
+                        <span class="icon icon--inline--left i-document"></span>
+                          <a class="row" href="{{document.url}}">
+                            {{ document.description }}
+                          </a>
+                          <div class="tag tag--primary">{{ document.category }}</div>
+                      </div>
+                    {% endfor %}
+                {% endif %}
               </div>
             {% endif %}
-          </div>
-        </td>
-        <td class="simple-table__cell">
-          <div class="t-sans">
-              {{ admin_fine.report_year }} {%if constants.report_type_full[admin_fine.report_type] %}{{ constants.report_type_full[admin_fine.report_type] }} {% else %} {{ admin_fine.report_type }}
-              {% endif %}
-          </div>
-        </td>
-        <td class="simple-table__cell">
-          <div class="t-sans">{{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') }}</div>
-        </td>
-        <td class="simple-table__cell">
-            <div class="t-sans">{{ "${:,.2f}".format(admin_fine.final_determination_amount) }}</div>
-        </td>
-      </tr>
+          </td>
+          <td class="simple-table__cell">
+            <div class="t-sans">
+                {{ admin_fine.report_year }} {%if constants.report_type_full[admin_fine.report_type] %}{{ constants.report_type_full[admin_fine.report_type] }} {% else %} {{ admin_fine.report_type }}
+                {% endif %}
+            </div>
+          </td>
+          <td class="simple-table__cell">
+            <div class="t-sans">{{ admin_fine.final_determination_date | date(fmt='%m/%d/%Y') }}</div>
+          </td>
+          <td class="simple-table__cell">
+              <div class="t-sans">{{ "${:,.2f}".format(admin_fine.final_determination_amount) }}</div>
+          </td>
+        </tr>
       {% endfor %}
     </tbody>
   </table>
