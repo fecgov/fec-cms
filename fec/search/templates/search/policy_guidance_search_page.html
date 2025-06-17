@@ -29,7 +29,7 @@
 {% block feed %}
   <div class="row" id="results-container">
     <div class="main">
-      {% if results.results %}
+      {% if results.meta.count > 0  %}
         <section id="site">
           <div class="heading--section" class="row">
             <h2 class="u-float-left u-no-margin">Results</h2>
@@ -65,12 +65,16 @@
             {% endif %}
           </div>
         </section>
-      {% elif results.meta.count == 0 %}
+      {% elif results.meta.count == 0 and not policy_search_error %}
         <div class="message message--info">
           <h2>No results</h2>
           <p>We didn’t find any results matching <strong>&ldquo;{{search_query}}&rdquo;</strong>.</p>
           <p>Try changing your search term.</p>
         </div>
+      {% elif policy_search_error %}
+      <div class="message message--small message--alert">
+         {{policy_search_error | safe }}
+         </div>
       {% endif %}
     </div>
   </div>

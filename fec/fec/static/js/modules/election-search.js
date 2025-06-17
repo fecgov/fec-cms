@@ -220,7 +220,7 @@ ElectionSearch.prototype.getUpcomingElections = function() {
  * Handle a change event on the zip code fields
  */
 ElectionSearch.prototype.handleZipChange = function() {
-  this.$state.val('').change(); // TODO: jQuery deprecation
+  this.$state.val('').trigger('change');
   this.$district.val('');
 };
 

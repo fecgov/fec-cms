@@ -276,7 +276,7 @@ FilterTypeahead.prototype.appendCheckbox = function(opts) {
   } else {
     const checkbox = $(template_checkbox(data));
     checkbox.appendTo(this.$selected);
-    checkbox.find('input').change(); // TODO: jQuery deprecation
+    checkbox.find('input').trigger('change');
     this.clearInput();
   }
 };
