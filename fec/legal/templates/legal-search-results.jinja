@@ -134,7 +134,7 @@
                     {% endif %}
                 {% else %}
                     {% if results["total_" + category] %}
-                        {% with admin_fines = results[category] %}
+                        {% with admin_fines = results[category], nested_in_global_search=true %}
                         {% include 'partials/legal-search-results-afs.jinja' %}
                         {% endwith %}
                         <div class="results-info">
