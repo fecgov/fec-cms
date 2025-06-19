@@ -123,8 +123,14 @@
 }
 
 .tag__category--all {
+  font-weight: bold;
+  padding: u(.35rem 1rem);
+  vertical-align: bottom;
+
   .tag__item {
+    font-weight: normal;
     margin: u(0 1rem);
+    padding: u(.15rem .5rem);
 
     &::after {
       content: '';

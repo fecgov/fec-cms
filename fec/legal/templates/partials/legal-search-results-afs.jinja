@@ -19,7 +19,7 @@
                 {{ admin_fine.name.upper() }}
             </div>
             {% if admin_fine.document_highlights or admin_fine.source %}
-              <div class="legal-search-result__hit u-padding--left--small u-margin--top u-negative--left--margin split__cell">
+              <div class="legal-search-result__hit u-padding--left--small u-margin--top u-negative--left--margin u-negative--right--margin split__cell">
                 {# Check for set keyword queries #}
                 {% set filters_keyword = query | length > 0 %}
                 {# Only show documents when keywords are set #}
