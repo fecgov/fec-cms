@@ -348,9 +348,29 @@ def legal_doc_search_ao(request):
     # For Javascript
     context_vars = {
         'sort': sort,
-        'sortType': sort.replace('-', '')
+        'sortType': sort.replace('-', ''),
     }
 
+    """ for ao in results['advisory_opinions']:
+        for index, doc in enumerate(ao['documents']):
+            # Checks if the selected document category filters matching the document categories
+            doc['category_match'] = str(doc['ao_doc_category_id']) in ao_doc_category_ids
+            # Checks for document keyword text match
+            doc['text_match'] = str(index) in ao['document_highlights'] 
+    """
+
+    for ao in results['advisory_opinions']:
+        for index, doc in enumerate(ao['documents']):
+            # Checks if the selected document category filters matching the document categories
+            doc['category_match'] = str(doc['ao_doc_category_id']) in ao_doc_category_ids
+            # Checks for document keyword text match
+            doc['text_match'] = str(index) in ao['document_highlights']
+            doc['highlight_index'] =  str(index)
+            # if doc['ao_doc_category_id'] == "F":
+            #     fp = ao['documents'].pop(index)
+            #     print(fp)
+            #     ao['documents'].insert(0, fp)
+        
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
         'parent': 'legal',
         'results': results,

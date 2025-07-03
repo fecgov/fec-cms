@@ -111,5 +111,12 @@
   {{ tags_for_js_chunks('legal-search-ao.js', '')|safe }}
   <script>
   window.context = {{ context_vars|to_json|safe }};
+  $(document).on('click','.accordion-trigger-on',  function(e){ 
+  let exp = $(this).attr('aria-expanded') == 'false' ? 'true' : 'false'
+  $(this).attr('aria-expanded', exp)
+  //let hid = $(this).next('div').attr('aria-hidden') == 'true' ? 'false' : 'false'
+  $(this).next('div').attr('aria-hidden', exp == 'true' ? 'false' : 'true')
+
+  })
   </script>
 {% endblock %}

@@ -9,6 +9,7 @@ import { default as TagList } from './modules/filters/filter-tags.js';
 import { buildUrl, SUCCESS_DELAY } from './modules/helpers.js';
 import KeywordModal from './modules/keyword-modal.js';
 import { updateQuery } from './modules/urls.js';
+import { Accordion } from 'aria-accordion';
 
 /**
  * @property {FilterPanel} this.filterPanel - The left column's filters panel element
@@ -129,7 +130,7 @@ LegalSearchAo.prototype.initFilters = function() {
 
   this.filterPanel = new FilterPanel();
   this.filterSet = this.filterPanel.filterSet;
-
+  
   const categoryFiltersFormElement = document.querySelector('#category-filters');
   categoryFiltersFormElement.addEventListener('change', this.handleFiltersChanged.bind(this));
 
@@ -153,6 +154,7 @@ LegalSearchAo.prototype.initFilters = function() {
 
   // Update the window.location based on filters, in case this special template is setting values
   updateQuery(this.filterSet.serialize(), this.filterSet.fields);
+  console.log('this.filterSet.serialize()', this.filterSet.serialize())
 
   document.querySelector('#search-input').addEventListener('change', this.handleKeywordSearchChange.bind(this));
 };
@@ -373,6 +375,7 @@ LegalSearchAo.prototype.refreshTable = function(response) {
   // Update the table itself
   const tableBodyRows = [];
   response.advisory_opinions.forEach(advisory_opinion => {
+    let sd = this.showDocs(advisory_opinion)
     let newRow = `<tr class="simple-table__row">`;
     newRow += `
           <td class="simple-table__cell">
@@ -397,12 +400,6 @@ LegalSearchAo.prototype.refreshTable = function(response) {
           </td>`;
     newRow += `
           <td class="simple-table__cell">
-            <div class="t-sans">
-              ${advisory_opinion.summary}
-            </div>
-          </td>`;
-    newRow += `
-          <td class="simple-table__cell">
             <div class="t-sans">`;
     if (advisory_opinion.aos_cited_by.length > 0) {
       advisory_opinion.aos_cited_by.forEach(citation => {
@@ -412,13 +409,23 @@ LegalSearchAo.prototype.refreshTable = function(response) {
       newRow += `This advisory opinion is not cited by other advisory opinions`;
     }
     newRow += `
+    <td class="simple-table__cell">
+      <div class="t-sans">
+        ${advisory_opinion.summary}
+      </div>
+      ${this.showDocs(advisory_opinion)}
+    </td>`;
+    newRow += `
             </div>
           </td>
         </tr>`;
 
     tableBodyRows.push(newRow);
+    //let elm = document.getElementsByClassName('js-accordion');
+    //new Accordion('.js-accordion' , {trigger: '.js-accordion-trigger'}, '');
   });
   resultsTableBody.innerHTML = tableBodyRows.join('');
+
 };
 
 /**
@@ -786,3 +793,99 @@ const template_no_pagination = `<div class="results-info u-border-top-base">
   </div>
   <div class="dataTables_info">Showing 0 results</div>
 </div>`;
+
+LegalSearchAo.prototype.showDocs = function(ao) {
+  console.log('this.filterSet.serialize()', this.filterSet.serialize())
+  let filters = this.filterSet.serialize()
+
+  let filters_category_type = 'ao_doc_category_id' in filters
+  let filters_keyword = 'search' in filters
+  console.log('filters_keyword:',filters_keyword)
+  let filters_proximity = 'q_proximity' in filters && filters.q_proximity.length == 2
+  console.log('filters_proximity: ', filters_proximity )
+  let proximity_only = filters_proximity && !filters_keyword
+  console.log('proximity_only: ', proximity_only)
+
+  let documents_div =
+  //TODO: Can I remove thie extraneous div level?
+    `<div>`
+  // If any of these conditions are true, we will be showing documents, so add new ruled-div
+  if (ao.document_highlights || ao.source || ao.ao_doc_category_id) {
+    documents_div += 
+      `<div class="legal-search-result__hit u-padding--left--small u-margin--top u-negative--left--margin split__cell">`
+    if ((filters_category_type || filters_keyword) && !proximity_only) {                                                                                                                 
+        for (const [index, document] of ao.documents.entries()) { 
+          console.log ('index: ', index)
+          console.log ('document: ', document)
+          /*This will show documents in all 3 scenarios:
+            - When there is a keyword query and selected document categories
+            - When there are selected document categories and no keyword query
+            - When there is a keyword query and no selected document categories */
+          // TODO: These two could be short circuits like above
+          let category_match = filters.ao_doc_category_id.includes(document.ao_doc_category_id) || !filters_category_type ? true : false
+          let text_match = index in ao.document_highlights || !filters_keyword ? true : false
+          let show_document = category_match && text_match
+          console.log('category_match:'+ category_match +' : '+ document.ao_doc_category_id )
+          console.log('text_match:'+ text_match +' : '+ index )
+          if (show_document) {
+              documents_div += `
+                    <div class="post--icon u-padding--top">
+                      <span class="icon icon--inline--left i-document"></span>
+                      <a href="${document.url}">
+                        ${document.description}
+                      </a>
+                    </div>`
+            if (ao.document_highlights[index]) {
+              //TODO: Can I remove the below and just use the above wrapping like is does now?
+              if (ao.document_highlights[index].length) {
+                documents_div += `
+                    <ul>
+                      <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${ao.document_highlights[index][0]}&#8230;
+                      </li>
+                    </ul>`
+              }
+              if (ao.document_highlights[index].length > 1) {
+                documents_div += `
+                    <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${ao.no}-${index}">
+                      <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${ao.no}-${index}" aria-expanded="false">
+                        ${ao.document_highlights[index].length > 2 ? ao.document_highlights[index].length -1 + " more matches" : "1 more mtach"}
+                      </button>
+                      <div class="accordion__content results__content" aria-hidden="true">
+                        <ul>`
+                        for (let i = 1; i <= ao.document_highlights[index].length -1; i++) {
+                          documents_div += `<li class="t-serif t-italic">&#8230;${ao.document_highlights[index][i]}&#8230;</li>`
+                        }
+                documents_div += `
+                        </ul>
+                      </div>
+                    </div>`        
+              }
+            }
+                documents_div += `
+                    <ul class="tags u-padding--bottom">
+                      <li class="tag__category tag__category--doc">
+                        <div class="tag tag--primary">${document.category}</div>
+                      </li>
+                    </ul>`
+          }  
+        } 
+    } else if (proximity_only) {
+       
+      for (const document of ao.source) {
+                documents_div += `
+                    <div class="post--icon u-padding--top u-padding--bottom">
+                      <span class="icon icon--inline--left i-document"></span>
+                      <a class="row" href="${document.url}">
+                        ${document.description}
+                      </a>
+                      <div class="tag tag--primary">${document.category}</div>
+                    </div>`
+      }
+    }
+    documents_div += `
+      </div>
+    </div>`
+  }
+
+  return documents_div 
+}
