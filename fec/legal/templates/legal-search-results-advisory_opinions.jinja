@@ -16,6 +16,9 @@
 
 {% block filters %}
 <input id="doc_type" type="hidden" name="doc_type" value="advisory_opinions">
+<div class="filters__aside">
+  <button type="button" class="button--notebook u-margin--top">Use the legal search guide to learn more about <a href="/legal-resources/how-to-use-fec-legal-search-systems/">how to use FEC legal search systems</a>.</button>
+</div>
 <div class="filters__inner">
   {{ text.field('ao_no', 'AO number') }}
   {{ text.field('ao_requestor', 'Requestor name (or AO name)', select_qty='single') }}
