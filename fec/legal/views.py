@@ -3,10 +3,107 @@ from django.http import Http404
 
 import datetime
 import re
+import boto3
+import uuid
+import json
+from botocore.client import Config
+from datetime import timezone
 
 from data import api_caller
 from data import ecfr_caller
 from data import constants
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from fec import settings
+
+
+def get_s3_client():
+    return boto3.client(
+        's3',
+        config=Config(signature_version="s3v4"),
+        aws_access_key_id=settings.FEC_RULEMAKING_S3_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.FEC_RULEMAKING_S3_SECRET_ACCESS_KEY,
+        region_name=settings.FEC_RULEMAKING_S3_REGION_NAME,
+    )
+
+
+# TODO: Get CSRF working in cloud environments
+@csrf_exempt
+def create_submission(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST required'}, status=405)
+
+    try:
+        data = json.loads(request.body)
+    except Exception:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+    # Extract and validate fields
+    first_name = (data.get("first_name") or "").strip()
+    last_name = (data.get("last_name") or "").strip()
+    email = (data.get("email") or "").strip()
+    comments = (data.get("comments") or "").strip()
+    files = data.get("files", [])
+
+    if first_name.strip() == "":
+        print("Empty field")
+
+    if not all([first_name, last_name, email, comments]):
+        return JsonResponse({'error': 'Missing required fields'}, status=400)
+
+    if len(comments) > 4000:
+        return JsonResponse({'error': 'Comment is too long.'}, status=400)
+
+    # Submission ID is used later to associate folders and files together
+    # Uses submission time prefixes in YYYYMMDDHHMMSS format for easier sorting
+    submission_id = str(uuid.uuid4())
+    submit_time = datetime.datetime.now(timezone.utc)
+    formatted_submission_time = submit_time.strftime('%Y%m%d%H%M%S')
+    submitted_at = submit_time.isoformat()
+    bucket = settings.FEC_RULEMAKING_BUCKET_NAME
+
+    # Generate JSON content for submission file
+    submission_record = {
+        "submission_id": submission_id,
+        "submitted_at": submitted_at,
+        "first_name": first_name,
+        "last_name": last_name,
+        "email": email,
+        "comments": comments,
+        "files": files
+    }
+
+    s3_client = get_s3_client()
+    prefix = f"rulemaking-submissions/{formatted_submission_time}-{submission_id}"
+    key = f"{prefix}/{submission_id}-comment_submission_data.json"
+
+    s3_client.put_object(
+        Bucket=bucket,
+        Key=key,
+        Body=json.dumps(submission_record, indent=2).encode("utf-8"),
+        ContentType="application/json"
+    )
+
+    # Generate presigned URLs for files
+    presigned_urls = {}
+    for filename in files:
+        presigned = s3_client.generate_presigned_post(
+            Bucket=bucket,
+            Key=f"{prefix}/{submission_id}-{filename}",
+            Fields={"acl": "private"},
+            Conditions=[
+                {"acl": "private"},
+                ["starts-with", "$key", f"{prefix}/"],
+                ["content-length-range", 0, 5000000],
+            ],
+            ExpiresIn=60,  # 1 minutes
+        )
+        presigned_urls[filename] = presigned
+
+    return JsonResponse({
+        "submission_id": submission_id,
+        "presigned_urls": presigned_urls,
+    })
 
 
 def parse_query(q):

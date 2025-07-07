@@ -1,12 +1,18 @@
+import os
+
 from django.utils.deprecation import MiddlewareMixin
 from django.conf import settings
+
+
+FEC_RULEMAKING_BUCKET_NAME = os.getenv("FEC_RULEMAKING_BUCKET_NAME", "")
+FEC_RULEMAKING_S3_REGION_NAME = os.getenv("FEC_RULEMAKING_S3_REGION_NAME", "")
+AWS_S3_BUCKET_URL = f"https://{FEC_RULEMAKING_BUCKET_NAME}.s3.{FEC_RULEMAKING_S3_REGION_NAME}.amazonaws.com"
 
 
 class AddSecureHeaders(MiddlewareMixin):
     """Add secure headers to each response"""
 
     def process_response(self, request, response):
-
         content_security_policy = {
             # 'data:' is like 'http:'
             "default-src": [
@@ -19,6 +25,11 @@ class AddSecureHeaders(MiddlewareMixin):
                 "*.fec.gov",
                 "*.app.cloud.gov",
                 "https://www.google-analytics.com",
+                AWS_S3_BUCKET_URL,
+            ],
+            "form-action": [
+                "'self'",
+                AWS_S3_BUCKET_URL,
             ],
             "font-src": ["'self'"],
             "frame-src": [
