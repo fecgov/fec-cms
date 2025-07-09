@@ -92,7 +92,7 @@
 
     &:last-child {
       margin-right: 0;
-
+    
       &::after {
         content: '';
       }
@@ -121,6 +121,28 @@
     }
   }
 }
+
+.tag__category--all {
+  font-weight: bold;
+  padding: u(.35rem 1rem);
+  vertical-align: bottom;
+
+  .tag__item {
+    font-weight: normal;
+    margin: u(0 1rem);
+    padding: u(.15rem .5rem);
+
+    &::after {
+      content: '';
+    }
+
+    &:nth-child(3) {
+      margin-right: 0;
+    }
+  }
+}
+
+
 .tag__category__range--election,
 .tag__category__range--amount,
 .tag__category__range--date {
