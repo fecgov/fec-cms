@@ -10,25 +10,6 @@
       </tr>
     </thead>
     <tbody>
-     {% for advisory_opinion in results.advisory_opinions %}
-        <ul>  {% for type, docs in advisory_opinion.documents|groupby("category") %}
-        <li>
-        
-          <ul>{% for doc in docs if (doc.text_match == true and doc.category_match == true) %}
-          
-          
-            <li>
-            {% if  loop.index0 ==0 %}<b>{{ doc.category }}</b><br> {% endif %}
-            &nbsp;&nbsp;{{ doc.url }} 
-            
-            
-          {% endfor %}</ul>
-        </li>
-      {% endfor %}
-      
-      </ul>
-      --------------------
-      {% endfor %}
       {% for advisory_opinion in results.advisory_opinions %}
       <tr class="simple-table__row">
         <td class="simple-table__cell">
@@ -67,12 +48,12 @@
             {% endif %}
           </div>
         </td>
-        <td class="simple-table__cell" style="padding: 0 !important;">
-          <div class="t-sans" style="display: flex;padding: 1rem;">
+        <td class="simple-table__cell">
+          <div class="t-sans">
             {{ advisory_opinion.summary }}
           </div>
           {% if advisory_opinion.document_highlights or advisory_opinion.source or selected_ao_doc_category_ids %}
-            <div class="legal-search-result__hit u-margin--top u-negative--left--margin split__cell">
+            <div class="legal-search-result__hit u-margin--top">
               {# Check for set document categories #}
               {% set filters_category_type = selected_ao_doc_category_ids | length > 0 %}
               {# fc{{ filters_category_type }} #}
@@ -88,8 +69,10 @@
               {# Only show documents when categories or keywords are set #}
               {% if (filters_category_type or filters_keyword) and not proximity_only %}
                 {# https://jinja.palletsprojects.com/en/stable/templates/#jinja-filters.groupby #}
-                {% for type, documents in advisory_opinion.documents|groupby("category") %}
-                  {% for document in documents if (document.text_match == true or document.category_match == true) %}
+                {# {% for type, documents in advisory_opinion.documents|groupby("category") %} #}
+                  {# {% for document in documents %} #}
+                  {% set categories_shown = [] %}
+                  {% for document in advisory_opinion.documents %}
                     {# When including this template in legal-search-results.jinja #}
                     {% if nested_in_global_search %}
                       {# Only show documents that have keyword matches #}
@@ -102,14 +85,18 @@
                       {% set category_match = (filters_category_type and document.category_match) or not filters_category_type %}
                       {% set keyword_match = (filters_keyword and document.text_match) or not filters_keyword %}
                       {% set show_document = category_match and keyword_match %}
-                      {# SHOW DOC{{ show_document }} #}
                     {% endif %}
-                    
                     {% if show_document %}
-                    <div class="" style="display: flex; margin-left: 0; padding: 0;{% if loop.index0 == 0 %}border-top: 1px solid #ccc{% endif %}">
-                    <div class="" style="display: table-cell;border-right: 1px solid #ccc;width: 25%;vertical-align: top; padding:1rem">{{ document.category }}</div>
-                    {# <div class="" style="display: table-cell;border-right: 1px solid #ccc;width: 25%;vertical-align: top; padding:1rem">{% if  loop.index0 == 0 %}{{ document.category }} {% endif %}</div> #}
-                      <div style="display: table-cell;width:75%;vertical-align: top;padding: 1rem;">
+                      <div class="document-container">
+                        <div class="document-category 
+                              {%- if document.ao_doc_category_id not in categories_shown %} u-border-top-nuetral">
+                                {{ document.category|trim }}
+                                {% do categories_shown.append(document.ao_doc_category_id) %}
+                              {%- else -%}
+                              ">
+                              {%- endif -%}
+                        </div>
+                        <div class="document_details u-border-top-nuetral">
                           <div class="post--icon">
                             <span class="icon icon--inline--left i-document"></span>
                             <a href="{{document.url}}">
@@ -127,42 +114,55 @@
                             {# show additional document highlight results, if any #}
                             {% if(query_highlight|length > 1) %}
                               <div class="js-accordion u-margin--top" data-content-prefix="additional-result-{{ advisory_opinion.no }}-{{loop.index0}}">
-                              <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ advisory_opinion.no }}-{{loop.index0}}" aria-expanded="false">
-                                {% if(query_highlight|length == 2) %}
-                                  1 more match
-                                {% elif(query_highlight|length > 2)  %}
-                                  {{ query_highlight|length -1 }} more matches
-                                {% endif %}
-                              </button>
-                              <div class="accordion__content results__content" aria-hidden="true">
-                                  <ul>
-                                    {% for highlight in query_highlight %}
-                                      {% if(loop.index0 != 0) %}
-                                        <li class="t-serif t-italic">&#8230;{{ highlight | safe }}&#8230;</li>
-                                      {% endif %}
-                                    {% endfor %}
-                                  </ul>
+                                <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ advisory_opinion.no }}-{{loop.index0}}" aria-expanded="false">
+                                  {% if(query_highlight|length == 2) %}
+                                    1 more match
+                                  {% elif(query_highlight|length > 2)  %}
+                                    {{ query_highlight|length -1 }} more matches
+                                  {% endif %}
+                                </button>
+                                <div class="accordion__content results__content" aria-hidden="true">
+                                    <ul>
+                                      {% for highlight in query_highlight %}
+                                        {% if(loop.index0 != 0) %}
+                                          <li class="t-serif t-italic">&#8230;{{ highlight | safe }}&#8230;</li>
+                                        {% endif %}
+                                      {% endfor %}
+                                    </ul>
+                                </div>
                               </div>
-                            </div>
                             {% endif %}
                           {% endif %}
-                            </div>
                         </div>
-                        {% else %}
+                      </div>
+                      {% else %}
                         {# documents we skip #}
-                        {% endif %}
+                    {% endif %}
                   {% endfor %}  
-                {% endfor %}
+                {# {% endfor %} #}
               {% elif proximity_only %}
-                    {# The advisory_opinion.source list contains docs that meet the proximity search parameters, 
+                   {# The advisory_opinion.source list contains docs that meet the proximity search parameters, 
                     optionally filtered for any ao_doc_category_ids #}
+                      {% set categories_shown = [] %}
                       {% for document in advisory_opinion.source %}
-                        <div class="post--icon u-padding--top u-padding--bottom">
-                          <span class="icon icon--inline--left i-document"></span>
-                          <a class="row" href="{{document.url}}">
-                            {{ document.description }}
-                          </a>
-                          <div class="tag tag--primary">{{ document.category }}</div>
+                        <div class="document-container">
+                          <div class="document-category 
+                              {%- if document.ao_doc_category_id not in categories_shown %} u-border-top-nuetral">
+                                {{ document.category|trim }}
+                                {% do categories_shown.append(document.ao_doc_category_id) %}
+                              {%- else -%}
+                                ">
+                              {%- endif -%}
+
+                          </div>
+                          <div class="document_details u-border-top-nuetral">
+                            <div class="post--icon">
+                                <span class="icon icon--inline--left i-document"></span>
+                                <a href="{{document.url}}">
+                                  {{ document.description }}
+                                </a>
+                            </div>
+                          </div>
                         </div>
                       {% endfor %}
               {% endif %}

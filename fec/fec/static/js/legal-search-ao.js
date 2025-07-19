@@ -154,7 +154,6 @@ LegalSearchAo.prototype.initFilters = function() {
 
   // Update the window.location based on filters, in case this special template is setting values
   updateQuery(this.filterSet.serialize(), this.filterSet.fields);
-  console.log('this.filterSet.serialize()', this.filterSet.serialize())
 
   document.querySelector('#search-input').addEventListener('change', this.handleKeywordSearchChange.bind(this));
 };
@@ -375,7 +374,6 @@ LegalSearchAo.prototype.refreshTable = function(response) {
   // Update the table itself
   const tableBodyRows = [];
   response.advisory_opinions.forEach(advisory_opinion => {
-    let sd = this.showDocs(advisory_opinion)
     let newRow = `<tr class="simple-table__row">`;
     newRow += `
           <td class="simple-table__cell">
@@ -413,7 +411,7 @@ LegalSearchAo.prototype.refreshTable = function(response) {
       <div class="t-sans">
         ${advisory_opinion.summary}
       </div>
-      ${this.showDocs(advisory_opinion)}
+      ${this.showDocuments(advisory_opinion)}
     </td>`;
     newRow += `
             </div>
@@ -794,98 +792,115 @@ const template_no_pagination = `<div class="results-info u-border-top-base">
   <div class="dataTables_info">Showing 0 results</div>
 </div>`;
 
-LegalSearchAo.prototype.showDocs = function(ao) {
-  console.log('this.filterSet.serialize()', this.filterSet.serialize())
-  let filters = this.filterSet.serialize()
+LegalSearchAo.prototype.showDocuments = function(ao) {
+  
+  let filters = this.filterSet.serialize();
+  let filters_category_type = 'ao_doc_category_id' in filters;
+  let filters_keyword = 'search' in filters;
+  let filters_proximity = 'q_proximity' in filters && filters.q_proximity.length == 2;
+  let proximity_only = filters_proximity && !filters_keyword;
 
-  let filters_category_type = 'ao_doc_category_id' in filters
-  let filters_keyword = 'search' in filters
-  console.log('filters_keyword:',filters_keyword)
-  let filters_proximity = 'q_proximity' in filters && filters.q_proximity.length == 2
-  console.log('filters_proximity: ', filters_proximity )
-  let proximity_only = filters_proximity && !filters_keyword
-  console.log('proximity_only: ', proximity_only)
-
-  let documents_div =
-  //TODO: Can I remove thie extraneous div level?
-    `<div>`
-  // If any of these conditions are true, we will be showing documents, so add new ruled-div
+   // Opening div tags are lined up with their closing divs below
+  let document_content = ''
   if (ao.document_highlights || ao.source || ao.ao_doc_category_id) {
-    documents_div += 
-      `<div class="legal-search-result__hit u-padding--left--small u-margin--top u-negative--left--margin split__cell">`
-    if ((filters_category_type || filters_keyword) && !proximity_only) {                                                                                                                 
+    document_content += 
+   `<div class="legal-search-result__hit u-margin--top">`;
+    if ((filters_category_type || filters_keyword) && !proximity_only) {  
+        let category_shown = '';                                                                                                            
         for (const [index, document] of ao.documents.entries()) { 
-          console.log ('index: ', index)
-          console.log ('document: ', document)
+
           /*This will show documents in all 3 scenarios:
             - When there is a keyword query and selected document categories
             - When there are selected document categories and no keyword query
             - When there is a keyword query and no selected document categories */
           // TODO: These two could be short circuits like above
-          let category_match = filters.ao_doc_category_id.includes(document.ao_doc_category_id) || !filters_category_type ? true : false
-          let text_match = index in ao.document_highlights || !filters_keyword ? true : false
-          let show_document = category_match && text_match
-          console.log('category_match:'+ category_match +' : '+ document.ao_doc_category_id )
-          console.log('text_match:'+ text_match +' : '+ index )
+
+          let category_match = filters.ao_doc_category_id.includes(document.ao_doc_category_id) || !filters_category_type ? true : false;
+          let text_match = index in ao.document_highlights || !filters_keyword ? true : false;
+          let show_document = category_match && text_match;  
           if (show_document) {
-              documents_div += `
-                    <div class="post--icon u-padding--top">
-                      <span class="icon icon--inline--left i-document"></span>
-                      <a href="${document.url}">
-                        ${document.description}
-                      </a>
-                    </div>`
+            let top_border_class = '';
+            let show_category = '';
+            let current_category = document.ao_doc_category_id;
+            if (category_shown != current_category) {
+                  top_border_class = "u-border-top-nuetral";
+                  show_category = document.category;
+                  category_shown = current_category;
+              }
+              else {
+                show_category = '';
+              }
+            document_content += `
+                  <div class="document-container">
+                    <div class="document-category ${top_border_class}">${show_category}</div>
+                    <div class="document_details u-border-top-nuetral">
+                      <div class="post--icon">
+                        <span class="icon icon--inline--left i-document"></span>
+                        <a href="${document.url}">
+                          ${document.description}
+                        </a>
+                      </div>`;       
             if (ao.document_highlights[index]) {
-              //TODO: Can I remove the below and just use the above wrapping like is does now?
               if (ao.document_highlights[index].length) {
-                documents_div += `
-                    <ul>
-                      <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${ao.document_highlights[index][0]}&#8230;
-                      </li>
-                    </ul>`
+                  document_content += `
+                      <ul>
+                        <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${ao.document_highlights[index][0]}&#8230;
+                        </li>
+                      </ul>`;
               }
               if (ao.document_highlights[index].length > 1) {
-                documents_div += `
-                    <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${ao.no}-${index}">
-                      <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${ao.no}-${index}" aria-expanded="false">
-                        ${ao.document_highlights[index].length > 2 ? ao.document_highlights[index].length -1 + " more matches" : "1 more mtach"}
-                      </button>
-                      <div class="accordion__content results__content" aria-hidden="true">
-                        <ul>`
-                        for (let i = 1; i <= ao.document_highlights[index].length -1; i++) {
-                          documents_div += `<li class="t-serif t-italic">&#8230;${ao.document_highlights[index][i]}&#8230;</li>`
-                        }
-                documents_div += `
-                        </ul>
-                      </div>
-                    </div>`        
+                  document_content += `
+                      <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${ao.no}-${index}">
+                        <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${ao.no}-${index}" aria-expanded="false">
+                          ${ao.document_highlights[index].length > 2 ? ao.document_highlights[index].length -1 + " more matches" : "1 more mtach"}
+                        </button>
+                        <div class="accordion__content results__content" aria-hidden="true">
+                          <ul>`;
+                          for (let i = 1; i <= ao.document_highlights[index].length -1; i++) {
+                            document_content += `<li class="t-serif t-italic">&#8230;${ao.document_highlights[index][i]}&#8230;</li>`;
+                          }
+                            document_content += `
+                          </ul>
+                        </div>
+                      </div>`;       
               }
             }
-                documents_div += `
-                    <ul class="tags u-padding--bottom">
-                      <li class="tag__category tag__category--doc">
-                        <div class="tag tag--primary">${document.category}</div>
-                      </li>
-                    </ul>`
-          }  
+            document_content += `
+                    </div> 
+                  </div>`;
+          } 
         } 
     } else if (proximity_only) {
-       
-      for (const document of ao.source) {
-                documents_div += `
-                    <div class="post--icon u-padding--top u-padding--bottom">
-                      <span class="icon icon--inline--left i-document"></span>
-                      <a class="row" href="${document.url}">
-                        ${document.description}
-                      </a>
-                      <div class="tag tag--primary">${document.category}</div>
-                    </div>`
-      }
+      let category_shown = '';
+        for (const document of ao.source) {
+              let top_border_class = '';
+              let show_category = '';
+              let current_category = document.ao_doc_category_id;
+                if (category_shown != current_category) {
+                    top_border_class = "u-border-top-nuetral";
+                    show_category = document.category;
+                    category_shown = current_category;
+                }
+                else {
+                  show_category = '';
+                }
+                  document_content += `
+                    <div class="document-container">
+                      <div class="document-category ${top_border_class}">${show_category}</div>
+                      <div class="document_details u-border-top-nuetral">
+                        <div class="post--icon">
+                          <span class="icon icon--inline--left i-document"></span>
+                          <a href="${document.url}">
+                            ${document.description}
+                          </a>
+                        </div>
+                      </div>
+                    </div>`;
+        }
     }
-    documents_div += `
-      </div>
-    </div>`
+    document_content += `
+    </div>`;
   }
 
-  return documents_div 
+  return document_content;
 }
