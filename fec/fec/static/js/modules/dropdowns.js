@@ -129,7 +129,7 @@ Dropdown.prototype.handleCheckKeyup = function(e) {
   if (e.keyCode === KEYCODE_ENTER) {
     $(e.target)
       .prop('checked', true)
-      .change(); // TODO: jQuery deprecation
+      .trigger('change');
   }
 };
 
@@ -145,7 +145,7 @@ Dropdown.prototype.handleDropdownItemClick = function(e) {
   const $input = this.$selected.find('#' + $button.data('label'));
 
   if (!$button.hasClass('is-checked')) {
-    $input.click(); // TODO: jQuery deprecation
+    $input.trigger('click');
   }
 };
 

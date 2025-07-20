@@ -402,11 +402,11 @@
 }
 
 .button--previous {
-  @include u-icon-button($arrow-left, left, 1rem, background-position 50% 50%);
+  @include u-icon-button($arrow-left, left, 1rem, background-position 50% 50% !important);
 }
 
 .button--next {
-  @include u-icon-button($arrow-right, right, 1rem, background-position 50% 50%);
+  @include u-icon-button($arrow-right, right, 1rem, background-position 50% 50% !important);
 }
 
 .button--close--base {
@@ -564,3 +564,17 @@
     @include u-icon-bg($minus-circle, $primary);
   }
 }
+
+.button--increment {
+  /* padding: 0 15px  0 15px; */
+  background-position: 0px 50%;
+  @include u-icon-bg($plus-circle, $primary);
+
+}
+
+.button--decrement {
+  background-position: 0px 50%;
+  // padding: 0;
+  @include u-icon-bg($minus-circle, $primary);
+}
+
