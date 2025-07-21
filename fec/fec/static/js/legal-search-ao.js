@@ -827,7 +827,7 @@ LegalSearchAo.prototype.showDocuments = function(ao) {
                   document_content += `
                       <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${ao.no}-${index}">
                         <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${ao.no}-${index}" aria-expanded="false">
-                          ${ao.document_highlights[index].length > 2 ? ao.document_highlights[index].length -1 + " more matches" : "1 more mtach"}
+                          ${ao.document_highlights[index].length > 2 ? ao.document_highlights[index].length -1 + " more keyword matches" : "1 more keyword match"}
                         </button>
                         <div class="accordion__content results__content" aria-hidden="true">
                           <ul>`;

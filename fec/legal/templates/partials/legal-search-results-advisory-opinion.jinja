@@ -116,9 +116,9 @@
                               <div class="js-accordion u-margin--top" data-content-prefix="additional-result-{{ advisory_opinion.no }}-{{loop.index0}}">
                                 <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ advisory_opinion.no }}-{{loop.index0}}" aria-expanded="false">
                                   {% if(query_highlight|length == 2) %}
-                                    1 more match
+                                    1 more keyword match
                                   {% elif(query_highlight|length > 2)  %}
-                                    {{ query_highlight|length -1 }} more matches
+                                    {{ query_highlight|length -1 }} more keyword matches
                                   {% endif %}
                                 </button>
                                 <div class="accordion__content results__content" aria-hidden="true">
@@ -153,7 +153,6 @@
                               {%- else -%}
                                 ">
                               {%- endif -%}
-
                           </div>
                           <div class="document_details u-border-top-nuetral">
                             <div class="post--icon">
