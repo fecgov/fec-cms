@@ -14,6 +14,7 @@ from wagtail.models import Orderable, Page, Revision
 from wagtail.fields import RichTextField, StreamField
 from wagtail import blocks
 from wagtail.admin.panels import (
+    HelpPanel,
     InlinePanel,
     MultiFieldPanel,
     PageChooserPanel,
@@ -1472,4 +1473,68 @@ class ReportingDatesTable(Page):
                    tilde): <election class="fl1">Florida 1st Congressional District Special Primary</election> ~*'),
         FieldPanel('footnotes'),
         FieldPanel('citations')
+    ]
+
+
+class FecTimelinePage(Page):
+    verbose_name = "FEC historical timeline page"
+    page_description = 'Unique page - Timeline of FECʼs History'
+    parent_page_types = ['HomePage']
+    body = stream_factory(null=True, blank=True)
+    timeline_entries = StreamField(
+        [('year', blocks.StructBlock([
+            ('year_number', blocks.IntegerBlock(min_value=1960, max_value=2050, disable_comments=True)),
+            ('entries', blocks.StreamBlock([
+                ('entry', blocks.StructBlock([
+                    ('entry_date', blocks.DateBlock(format='%Y-%m-%d', disable_comments=True)),
+                    ('summary', blocks.RawHTMLBlock(label='Summary', form_classname='timeline-summary')),
+                    ('content', blocks.RawHTMLBlock(label='Content')),
+                    ('categories', blocks.MultipleChoiceBlock(
+                        required=False,
+                        choices=[
+                            ('commission', 'Commission'),
+                            ('disclosure', 'Disclosure'),
+                            ('enforcement', 'Enforcement'),
+                            ('legislation', 'Legislation'),
+                            ('litigation', 'Litigation'),
+                            ('outreach', 'Outreach'),
+                            ('public_funding', 'Public funding'),
+                            ('regulations', 'Regulations'),
+                            ('', 'none'),
+                        ]
+                    )),
+                    ('start_open', blocks.BooleanBlock(
+                        required=False, disable_comments=True, form_classname="single-line-checkbox"
+                    )),
+                ]))
+            ],
+                collapsed=True)
+            )
+        ]))],
+        collapsed=True,
+        null=True, blank=True
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('body'),
+        FieldPanel('timeline_entries', disable_comments=True, help_text='Scroll to the bottom for special notes'),
+        HelpPanel('<strong>Special notes for this page</strong>:\
+            <ul class="timeline-help"> \
+                <li>The &ldquo;Year number&rdquo; fields are the blue year tags</li>\
+                <li>The &ldquo;Summary&rdquo; fields are the part of each entry thatʼs always visible;<br>\
+                    the Content is what gets toggled</li>\
+                <li>Wrap dates in a <pre>&lt;time datetime="2025-12-31"&gt;&lt;/time&gt;</pre> where \
+                    <pre>datetime</pre> is an ISO-8601 date. i.e. <pre>yyyy</pre> or <pre>yyyy-mm-dd</pre></li>\
+                <li>To prevent the linebreak before the first <pre>&lt;time&gt;</pre> in a summary,<br>\
+                    add <pre> class="inline"</pre> to the first <pre>&lt;time&gt;</pre></li>\
+                <li>Photos inside the Content should be structured like<br>\
+                    <pre>&lt;figure&gt;</pre><br>\
+                    <pre>&nbsp;&nbsp;&lt;img src="url" alt=""&gt;</pre><br>\
+                    <pre>&nbsp;&nbsp;&lt;figcaption&gt;Caption content&lt;/figcaption&gt;</pre><br>\
+                    <pre>&lt;/figure&gt;</pre></li>\
+                <li>The default layout for content is for images to float to the right and text to flow around them \
+                  on the left. To change that, add <pre> class="float-left"</pre> to the <pre>&lt;figure&gt;</pre>.\
+                  (<pre>float-right</pre> is defined, too, but itʼs the default)</li>\
+                <li>If &ldquo;Start open&rdquo; is checked, this entry will be open on page load</li>\
+            </ul>'),
     ]
