@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load filters %}
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+{% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
+<link defer rel="stylesheet" type="text/css" href="{% path_for_css 'fec-timeline.css' %}">
+<article class="main">
+  <div class="container">
+    <header class="heading--main offices-heading--main">
+      <h1>{{ self.title }}</h1>
+    </header>
+    <div class="main__content">
+    {% comment %}
+      Wagtail did away with the .rich-text wrapper
+      but we still have some style rules that rely on it
+      so we're adding it back for blocks defined in models.py as RichTextBlock
+    {% endcomment %}
+    {% for block in self.body %}
+      <div class="block-{{ block.block_type }}">
+        {% if block.block_type == 'paragraph' %}
+        <div class="rich-text">{{ block }}</div>
+        {% else %}
+        {{ block }}
+        {% endif %}
+      </div>
+    {% endfor %}
+    <div id="fec-timeline" class="timeline-container">
+      <ol>
+        {% for year in self.timeline_entries %}
+        <li>
+          <time datetime="{{ year.value.year_number }}">{{ year.value.year_number }}</time>
+          {% for entry in year.value.entries %}
+          <details id="a{{ year.value.year_number }}-{{ forloop.counter }}"
+            data-categories="{% for cat in entry.value.categories %}{{cat}},{% endfor %}"
+            {% if entry.value.start_open %} open{% endif %}>
+            <summary>{{ entry.value.summary }}</summary>
+            <div>
+              {{ entry.value.content }}
+            </div>
+          </details>
+          {% endfor %}
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+</article>
+<script type="text/javascript" src="{% path_for_js 'modules/fec-timeline.js' %}"></script>
+{% endblock %}
