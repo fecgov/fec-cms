@@ -185,6 +185,12 @@ $filter-button-width: u(4.6rem);
   }
 }
 
+.filters__aside {
+  width: 100%;
+  border-bottom: 1px solid $gray;
+  padding: u(2rem);
+}
+
 .filter {
   border-bottom: 1px solid darken($neutral, 10%);
   margin-top: u(1.5rem);
@@ -232,6 +238,8 @@ $filter-button-width: u(4.6rem);
       background-position: 50%;
     }
   }
+
+
 
   label {
     max-width: 90%;
