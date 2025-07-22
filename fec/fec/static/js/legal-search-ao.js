@@ -769,11 +769,11 @@ const template_no_pagination = `<div class="results-info u-border-top-base">
 
 LegalSearchAo.prototype.showDocuments = function(ao) {
   
-  let filters = this.filterSet.serialize();
-  let filters_category_type = 'ao_doc_category_id' in filters;
-  let filters_keyword = 'search' in filters;
-  let filters_proximity = 'q_proximity' in filters && filters.q_proximity.length == 2;
-  let proximity_only = filters_proximity && !filters_keyword;
+  const filters = this.filterSet.serialize();
+  const filters_category_type = 'ao_doc_category_id' in filters;
+  const filters_keyword = 'search' in filters;
+  const filters_proximity = 'q_proximity' in filters && filters.q_proximity.length == 2;
+  const proximity_only = filters_proximity && !filters_keyword;
 
    // Opening div tags are lined up with their closing divs below
   let document_content = ''
@@ -790,7 +790,7 @@ LegalSearchAo.prototype.showDocuments = function(ao) {
             - When there is a keyword query and no selected document categories */
           // TODO: These two could be short circuits like above
 
-          let category_match = filters.ao_doc_category_id.includes(document.ao_doc_category_id) || !filters_category_type ? true : false;
+          let category_match = !filters_category_type || filters.ao_doc_category_id.includes(document.ao_doc_category_id) ? true : false;
           let text_match = index in ao.document_highlights || !filters_keyword ? true : false;
           let show_document = category_match && text_match;  
           if (show_document) {
