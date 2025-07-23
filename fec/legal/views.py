@@ -208,6 +208,8 @@ def transform_ecfr_query_string(query_string):
 
 def legal_search(request):
     original_query = request.GET.get('search', '')
+    q_proximities = request.GET.get('q_proximity', '')
+    q_proximitys = request.GET.get('q_proximity', '')
     updated_ecfr_query_string = transform_ecfr_query_string(original_query)
     result_type = request.GET.get('search_type', 'all')
     results = {}
@@ -245,6 +247,8 @@ def legal_search(request):
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
         'query': original_query,
+        'q_proximities': q_proximities,
+        'q_proximitys': q_proximitys,
         'results': results,
         'result_type': result_type,
         'category_order': get_legal_category_order(results, result_type),
@@ -355,25 +359,12 @@ def legal_doc_search_ao(request):
         'sortType': sort.replace('-', '')
     }
 
-    """ for ao in results['advisory_opinions']:
-        for index, doc in enumerate(ao['documents']):
-            # Checks if the selected document category filters matching the document categories
-            doc['category_match'] = str(doc['ao_doc_category_id']) in ao_doc_category_ids
-            # Checks for document keyword text match
-            doc['text_match'] = str(index) in ao['document_highlights'] 
-    """
-
     for ao in results['advisory_opinions']:
         for index, doc in enumerate(ao['documents']):
             # Checks if the selected document category filters matching the document categories
             doc['category_match'] = str(doc['ao_doc_category_id']) in ao_doc_category_ids
             # Checks for document keyword text match
             doc['text_match'] = str(index) in ao['document_highlights']
-            doc['highlight_index'] =  str(index)
-            # if doc['ao_doc_category_id'] == "F":
-            #     fp = ao['documents'].pop(index)
-            #     print(fp)
-            #     ao['documents'].insert(0, fp)
         
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
         'parent': 'legal',

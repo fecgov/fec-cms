@@ -76,7 +76,7 @@
                     {# When including this template in legal-search-results.jinja #}
                     {% if nested_in_global_search %}
                       {# Only show documents that have keyword matches #}
-                      {% set show_document =  advisory_opinion.document_highlights[loop.index0 | string] %}  
+                      {% set show_document = advisory_opinion.document_highlights[loop.index0 | string] %}  
                     {% else %}
                       {# This will show documents in all 3 scenarios:
                         - When there is a keyword query and selected document categories
@@ -103,7 +103,8 @@
                               {{ document.description }}
                             </a>
                           </div>
-                          {% set query_highlight = advisory_opinion.document_highlights[document.highlight_index]%}
+                         {#  {% set query_highlight = advisory_opinion.document_highlights[document.highlight_index]%} #}
+                          {% set query_highlight = advisory_opinion.document_highlights[loop.index0 | string] %}
                           {% if(query_highlight) %}
                             {# show only first document highlight result #}
                             <ul>
