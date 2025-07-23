@@ -800,13 +800,13 @@ class ReportsLandingPage(ContentPage, UniqueModel):
 class AboutLandingPage(Page):
     page_description = 'Unique landing page - About FEC'
     parent_page_types = ['HomePage']
-    subpage_types = ['ReportsLandingPage', 'ResourcePage']
+    subpage_types = [
+        'CustomPage', 'DocumentFeedPage', 'OfficePage', 'ReportsLandingPage', 'ResourcePage', 'FecTimelinePage'
+    ]
     hero = stream_factory(null=True, blank=True)
     sections = StreamField([
         ('sections', OptionBlock())
     ], null=True)
-
-    subpage_types = ['ResourcePage', 'DocumentFeedPage', 'ReportsLandingPage', 'OfficePage', 'CustomPage']
 
     content_panels = Page.content_panels + [
         FieldPanel('hero'),
@@ -1387,6 +1387,9 @@ class OigLandingPage(Page):
         FieldPanel('you_might_also_like'),
     ]
 
+    class Meta:
+        verbose_name = 'OIG landing page'
+
     @property
     def category_filters(self):
         return constants.report_category_groups['oig']
@@ -1477,10 +1480,19 @@ class ReportingDatesTable(Page):
 
 
 class FecTimelinePage(Page):
-    verbose_name = "FEC historical timeline page"
     page_description = 'Unique page - Timeline of FECʼs History'
-    parent_page_types = ['HomePage']
+    parent_page_types = ['AboutLandingPage']
     body = stream_factory(null=True, blank=True)
+    category_options = [
+        ('commission', 'Commission'),
+        ('disclosure', 'Disclosure'),
+        ('enforcement', 'Enforcement'),
+        ('legislation', 'Legislation'),
+        ('litigation', 'Litigation'),
+        ('outreach', 'Outreach'),
+        ('public_funding', 'Public funding'),
+        ('regulations', 'Regulations'),
+    ]
     timeline_entries = StreamField(
         [('year', blocks.StructBlock([
             ('year_number', blocks.IntegerBlock(min_value=1960, max_value=2050, disable_comments=True)),
@@ -1491,17 +1503,7 @@ class FecTimelinePage(Page):
                     ('content', blocks.RawHTMLBlock(label='Content')),
                     ('categories', blocks.MultipleChoiceBlock(
                         required=False,
-                        choices=[
-                            ('commission', 'Commission'),
-                            ('disclosure', 'Disclosure'),
-                            ('enforcement', 'Enforcement'),
-                            ('legislation', 'Legislation'),
-                            ('litigation', 'Litigation'),
-                            ('outreach', 'Outreach'),
-                            ('public_funding', 'Public funding'),
-                            ('regulations', 'Regulations'),
-                            ('', 'none'),
-                        ]
+                        choices=category_options
                     )),
                     ('start_open', blocks.BooleanBlock(
                         required=False, disable_comments=True, form_classname="single-line-checkbox"
@@ -1520,9 +1522,10 @@ class FecTimelinePage(Page):
         FieldPanel('timeline_entries', disable_comments=True, help_text='Scroll to the bottom for special notes'),
         HelpPanel('<strong>Special notes for this page</strong>:\
             <ul class="timeline-help"> \
-                <li>The &ldquo;Year number&rdquo; fields are the blue year tags</li>\
-                <li>The &ldquo;Summary&rdquo; fields are the part of each entry thatʼs always visible;<br>\
-                    the Content is what gets toggled</li>\
+                <li><em>Year number</em>: the blue year tags</li>\
+                    <em>Summary</em>: the part of each entry thatʼs always visible;<br>\
+                    <em>Content</em>: the toggled content.</li>\
+                <li><em>Summary</em> and <em>Content</em> are html fields.</li>\
                 <li>Wrap dates in a <pre>&lt;time datetime="2025-12-31"&gt;&lt;/time&gt;</pre> where \
                     <pre>datetime</pre> is an ISO-8601 date. i.e. <pre>yyyy</pre> or <pre>yyyy-mm-dd</pre></li>\
                 <li>To prevent the linebreak before the first <pre>&lt;time&gt;</pre> in a summary,<br>\
@@ -1533,8 +1536,14 @@ class FecTimelinePage(Page):
                     <pre>&nbsp;&nbsp;&lt;figcaption&gt;Caption content&lt;/figcaption&gt;</pre><br>\
                     <pre>&lt;/figure&gt;</pre></li>\
                 <li>The default layout for content is for images to float to the right and text to flow around them \
-                  on the left. To change that, add <pre> class="float-left"</pre> to the <pre>&lt;figure&gt;</pre>.\
-                  (<pre>float-right</pre> is defined, too, but itʼs the default)</li>\
-                <li>If &ldquo;Start open&rdquo; is checked, this entry will be open on page load</li>\
+                    on the left. To change that, add <pre> class="float-left"</pre> to the <pre>&lt;figure&gt;</pre>.\
+                    (<pre>float-right</pre> is defined, too, but itʼs the default)</li>\
+                <li>If <em>Start open</em> is checked, this entry will be open on page load</li>\
+                <li>If launch YouTube links in the modal on this page, add <pre> data-media="url"</pre> to a link or \
+                    other element. The url should be in a format like <pre>youtube.com/embed/[videoid]</pre>,\
+                    <pre>youtu.be/[videoid]</pre>, or <pre>v=[videoid]</pre>.</li>\
             </ul>'),
     ]
+
+    class Meta:
+        verbose_name = 'FEC historical timeline page'
