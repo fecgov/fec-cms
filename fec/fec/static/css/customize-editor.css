@@ -91,11 +91,15 @@ li.sequence-member .sequence-member-inner .sequence-type-list .sequence-containe
 input[name^="timeline_entries"] + .w-field__comment-button.w-field__comment-button--add {
   display: none !important;
 }
+/* Some single-line label/input pairs */
+[data-contentpath="year_number"],
+[data-contentpath="entry_date"],
 [data-contentpath="start_open"] {
   align-items: center;
   display: flex;
   flex-direction: row;
   float: none;
+  margin-bottom: 1rem;
 
   & > label {
     order: 2;
@@ -104,11 +108,13 @@ input[name^="timeline_entries"] + .w-field__comment-button.w-field__comment-butt
     margin-bottom: 0;
     order: 1;
     padding-bottom: 0;
-    width: 2rem;
-
-    .w-field__input {
-      margin-top: 0;
-    }
+  }
+  .w-field__input {
+    margin-right: .75rem;
+    margin-top: 0;
+  }
+  input {
+    margin-right: 0rem;
   }
 }
 ul.timeline-help {
