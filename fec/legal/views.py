@@ -208,6 +208,8 @@ def transform_ecfr_query_string(query_string):
 
 def legal_search(request):
     original_query = request.GET.get('search', '')
+    q_proximities = request.GET.get('q_proximity', '')
+    q_proximitys = request.GET.get('q_proximity', '')
     updated_ecfr_query_string = transform_ecfr_query_string(original_query)
     result_type = request.GET.get('search_type', 'all')
     results = {}
@@ -245,6 +247,8 @@ def legal_search(request):
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
         'query': original_query,
+        'q_proximities': q_proximities,
+        'q_proximitys': q_proximitys,
         'results': results,
         'result_type': result_type,
         'category_order': get_legal_category_order(results, result_type),
