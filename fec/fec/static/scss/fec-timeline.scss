@@ -96,9 +96,14 @@
       font-style: italic;
       white-space: nowrap;
     }
+
     figure {
       clear: both;
-      max-width: 50%;
+      max-width: 100%;
+
+      @media screen and (min-width: 640px) {
+        max-width: 50%;
+      }
 
       &, &.float-right {
         float: right;

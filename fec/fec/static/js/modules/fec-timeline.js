@@ -32,6 +32,12 @@ class ExpandingDetail {
       });
     });
   }
+  static filter(category) {
+    ExpandingDetail.instances.forEach(instance => {
+      let hide = !category ? false : instance.details.dataset.categories.indexOf(category) < 0;
+      instance.details.classList.toggle('filtered-out', hide);
+    });
+  }
 
   _handleClick(e) {
     e.preventDefault();
@@ -91,7 +97,6 @@ class ExpandingDetail {
     this.animation.onfinish = () => this._finishAnimations(false);
   }
   _finishAnimations(finalOpenAttribute) {
-    // this.details.open = finalOpenAttribute;
     this.animation = null;
     this.details.removeAttribute('style');
 
@@ -111,17 +116,58 @@ const handleYearClick = function(e) {
   if (newState == 'open') ExpandingDetail.open(thisYearsDetailsItems_all);
   else ExpandingDetail.close(thisYearsDetailsItems_all);
 };
+
 // Listen for every year's click event
 yearElements.forEach(yearEl => {
   yearEl.addEventListener('click', handleYearClick);
 });
-//
-/* const startOpened = ['#a19741015', '#a19750414', '#a19750602'];
-for (let i = 0; i < startOpened.length; i++) {
-  const toOpen = document.querySelector(startOpened[i]);
-  toOpen.open = true;
-}*/
-//
+
+// Activate all <details><summary>
 summaryElements.forEach(el => {
   new ExpandingDetail(el);
 });
+
+// Handle the linked media (videos) to be launched in the modal
+function handleLaunchMediaClick(e, urlOverride = false) {
+  e.preventDefault();
+  let clickUrl = urlOverride || e.target.dataset.media;
+  if (!clickUrl) clickUrl = e.target.closest('[data-media]').dataset.media;
+  let mediaID = '';
+  let iframeUrl = 'https://www.youtube.com/embed/';
+
+  if (clickUrl.indexOf('be.com/embed/') > 0) iframeUrl = clickUrl; // And leave mediaID as ''
+  else if (clickUrl.indexOf('v=') > 0) mediaID = clickUrl.match(/v=([A-z\d]+)/gi)[0].substring(2);
+  else if (clickUrl.indexOf('youtu.be/') >= 0) mediaID = clickUrl.match(/\.be\/([A-z\d]+)/gi)[0].substring(4);
+
+  let mediaModal = document.querySelector('#media-modal');
+  mediaModal.innerHTML = `<button type="button" class="modal__close button--close--primary"
+    title="Close this dialog window"></button>
+    <iframe id="ytplayer" type="text/html" width="640" height="360" src="${iframeUrl}${mediaID}" frameborder="0"
+    allow="accelerometer; gyroscope; picture-in-picture; fullscreen"></iframe>`;
+  document.querySelector('dialog .modal__close').addEventListener('click', closeModal);
+  openModal();
+}
+function openModal() {
+  let mediaModal = document.querySelector('#media-modal');
+  mediaModal.showModal();
+}
+function closeModal() {
+  let mediaModal = document.querySelector('#media-modal');
+  mediaModal.close();
+}
+
+let linkedMedia = document.querySelectorAll('[data-media]');
+linkedMedia.forEach(el => {
+  el.addEventListener('click', handleLaunchMediaClick.bind(this));
+  el.setAttribute('style', 'cursor:pointer');
+});
+
+document.querySelector('#media-modal').addEventListener('close', () => {
+  let mediaModal = document.querySelector('#media-modal');
+  mediaModal.innerHTML = '';
+});
+
+let handleFiltersChange = function(e) {
+  ExpandingDetail.filter(e.target.value);
+};
+document.querySelector('#timeline-category').addEventListener('change', handleFiltersChange);
