@@ -72,11 +72,6 @@ const mainEntries = {
     filename: 'legal-search-ao-[contenthash].js',
     dependOn: 'data-init'
   },
-  // 'legal-app': {
-  //   import: `${js}/legal/LegalApp.js`,
-  //   dependOn: 'global'
-  // },
-  // 'calc-admin-fines-modal': `${js}/modules/calc-admin-fines-modal.js`, // Pulled into init.js
   'calc-admin-fines': `${js}/modules/calc-admin-fines.js`,
   'widgets/aggregate-totals-box': {
     import: `${js}/widgets/aggregate-totals-box.js`,
@@ -87,6 +82,10 @@ const mainEntries = {
     import: `${js}/widgets/contributions-by-state-box.js`,
     filename: 'widgets/contributions-by-state-box.js',
     dependOn: 'bythenumbers'
+  },
+  'widgets/fecfile-eligibility': {
+    import: `${js}/widgets/fecfile-eligibility.js`,
+    filename: 'widgets/fecfile-eligibility.js'
   },
   'widgets/pres-finance-map-box': {
     import: `${js}/widgets/pres-finance-map-box.js`,
@@ -202,7 +201,10 @@ module.exports = [
     },
     plugins: [
       new webpack.DefinePlugin({
-        context: {}
+        context: {},
+        __VUE_OPTIONS_API__: true,
+        __VUE_PROD_DEVTOOLS__: mode == 'production' ? false : true,
+        __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: mode == 'production' ? false : true
       }),
       new webpack.ProvidePlugin({
         $: 'jquery',
