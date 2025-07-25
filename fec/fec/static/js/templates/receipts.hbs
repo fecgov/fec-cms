@@ -1,83 +1,81 @@
-<div class="panel__row">
-  <h4 class="panel__title">Source information</h4>
+<div class="dt-details__sect">
   <table>
-    <tr>
-      {{#panelRow "Name"}}
-        {{#if contributor}}
-          {{#if (isEarmarked receipt_type) }}
-           {{contributor_name}}
-          {{else }}
-            <a href="{{basePath}}/committee/{{contributor.committee_id}}">{{contributor.name}}</a>
-          {{/if}}
-        {{else}}
+    <caption>Source information</caption>
+    {{#dtDetailsTableRow "Name"~}}
+      {{#if contributor~}}
+        {{#if (isEarmarked receipt_type)~}}
           {{contributor_name}}
-        {{/if}}
-      {{/panelRow}}
-    </tr>
-    {{#if contributor}}
-      {{#if (isEarmarked receipt_type) }}
-        {{#panelRow "Earmarked by"}}
+        {{else~}}
           <a href="{{basePath}}/committee/{{contributor.committee_id}}">{{contributor.name}}</a>
-        {{/panelRow}}
+        {{/if}}
+      {{else~}}
+        {{contributor_name}}
+      {{/if}}
+    {{/dtDetailsTableRow}}
+    {{#if contributor~}}
+      {{#if (isEarmarked receipt_type)~}}
+        {{#dtDetailsTableRow "Earmarked by"~}}
+          <a href="{{basePath}}/committee/{{contributor.committee_id}}">{{contributor.name}}</a>
+        {{/dtDetailsTableRow}}
       {{/if}}
     {{/if}}
-    {{#panelRow "City, state and ZIP code"}}
+    {{#dtDetailsTableRow "City, state and ZIP code"~}}
       {{contributor_city}}, {{contributor_state}} {{zipCode contributor_zip}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     {{#if is_individual}}
-      {{#panelRow "Occupation"}}
+      {{#dtDetailsTableRow "Occupation"~}}
         {{contributor_occupation}}
-      {{/panelRow}}
-      {{#panelRow "Employer"}}
+      {{/dtDetailsTableRow}}
+      {{#dtDetailsTableRow "Employer"~}}
         {{contributor_employer}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
-    {{#panelRow "Year to date"}}
+    {{#dtDetailsTableRow "Year to date"~}}
       {{{currency contributor_aggregate_ytd}}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">Receipt information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Amount"}}
+    <caption>Receipt information</caption>
+    {{#dtDetailsTableRow "Amount"~}}
       {{{currency contribution_receipt_amount}}}
-    {{/panelRow}}
-    {{#panelRow "Receipt date"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Receipt date"~}}
       {{{datetime contribution_receipt_date format="pretty"}}}
-    {{/panelRow}}
-    {{#panelRow "Report year"}}
-      {{{ report_year }}}
-    {{/panelRow}}
-    {{#panelRow "Memo"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Report year"~}}
+      {{{report_year}}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Memo"~}}
       {{memo_text}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     {{#if filing_form}}
-      {{#panelRow "Reported on"}}
-        Form {{formNumber filing_form }} on line {{line_number}}
-      {{/panelRow}}
+      {{#dtDetailsTableRow "Reported on"~}}
+        Form {{formNumber filing_form}} on line {{line_number}}
+      {{/dtDetailsTableRow}}
     {{/if}}
-    {{#panelRow "Election type"}}
+    {{#dtDetailsTableRow "Election type"~}}
       {{fec_election_type_desc}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">Recipient information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Committee"}}
-      <a href="{{basePath}}/committee/{{ committee.committee_id }}/">{{ committee.name }}</a>
-    {{/panelRow}}
-    {{#panelRow "Political party"}}
+    <caption>Recipient information</caption>
+    {{#dtDetailsTableRow "Committee"~}}
+      <a href="{{basePath}}/committee/{{committee.committee_id}}/">{{committee.name}}</a>
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Political party"~}}
       {{committee.party_full}}
-    {{/panelRow}}
-    {{#panelRow "Type"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Type"~}}
       {{committee.committee_type_full}}
-    {{/panelRow}}
-    {{#panelRow "State"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "State"~}}
       {{committee.state_full}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>

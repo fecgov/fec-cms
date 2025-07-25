@@ -9,9 +9,6 @@ use(sinonChai);
 import { default as URI } from 'urijs';
 import { default as _extend } from 'underscore/modules/extend.js';
 
-// require('datatables.net')();
-// require('datatables.net-responsive')();
-
 import { candidateColumn, committeeColumn, supportOpposeColumn } from '../../static/js/modules/columns.js';
 import { buildTotalLink } from '../../static/js/modules/column-helpers.js';
 import { buildUrl } from '../../static/js/modules/helpers.js';

@@ -1,3 +1,14 @@
+/**
+ * tables.js contains three classes:
+ *
+ * DataTable_FEC - A custom class that extends datatables.net-responsive-dt
+ *   across the site, every time "datatables" is referenced, it's DataTable_FEC, not datatables.net*
+ *
+ * OffsetPaginator -
+ *
+ * SeekPaginator -
+ */
+
 import { default as _chain } from 'underscore/modules/chain.js';
 import { default as _clone } from 'underscore/modules/clone.js';
 import { default as _debounce } from 'underscore/modules/debounce.js';
@@ -13,7 +24,7 @@ import { default as _pairs } from 'underscore/modules/pairs.js';
 import { default as _pluck } from 'underscore/modules/pluck.js';
 import 'datatables.net-responsive-dt';
 
-import { removeTabindex, restoreTabindex } from './accessibility.js';
+// import { removeTabindex, restoreTabindex } from './accessibility.js';
 import { sizeColumns, stateColumns } from './column-helpers.js';
 import { download, isPending, pendingCount } from './download.js';
 import Dropdown from './dropdowns.js';
@@ -120,7 +131,7 @@ export function getCycle(value, meta) {
  *
  * @param {*} order
  * @param {*} column
- * @returns
+ * @returns {string}
  */
 export function mapSort(order, column) {
   return _map(order, function(item) {
@@ -132,6 +143,11 @@ export function mapSort(order, column) {
   });
 }
 
+/**
+ * Returns the number of results if <= 500K, otherwise rounds to the nearest 1K
+ * @param {*} response
+ * @returns {number} Number of real or estimated results
+ */
 function getCount(response) {
   let pagination_count = response.pagination.count; // eslint-disable-line camelcase
 
@@ -167,19 +183,19 @@ function identity(value) {
   return value;
 }
 
-/** Selector class name for the modal trigger */
-export const MODAL_TRIGGER_CLASS = 'js-panel-trigger';
+/** Selector class name for the details trigger */
+export const DETAILS_TRIGGER_CLASS = 'js-dt-details-trigger';
 
 /** String of html that becomes the 'Toggle details' button */
 export const MODAL_TRIGGER_HTML =
-  `<button class="js-panel-button button--panel"><span class="u-visually-hidden">Toggle details</span></button>`;
+  `<button class="button--dt-details"><span class="u-visually-hidden">Toggle details</span></button>`;
 
 /**
  * Adds MODAL_TRIGGER_CLASS and `row--has-panel` classes to the given element
  * @param {HTMLTableRowElement} row
  */
 export function modalRenderRow(row) {
-  row.classList.add(MODAL_TRIGGER_CLASS, 'row--has-panel');
+  row.classList.add(DETAILS_TRIGGER_CLASS, 'row--has-details');
 }
 
 /**
@@ -193,18 +209,13 @@ export function modalRenderFactory(template, fetch) {
 
   return function(api, data, response) {
     const $table = $(api.table().node());
-    const $modal = $('#datatable-modal');
-    const $main = $table.closest('.panel__main');
-    // Move the modal to the results div.
-    $modal.appendTo($main);
-    $modal.css('display', 'block');
 
     // Add a class to the .dataTables_wrapper
     $table.closest('.dataTables_wrapper').addClass('dataTables_wrapper--panel');
 
     $table.off(
       'click keypress',
-      '.js-panel-toggle tr.' + MODAL_TRIGGER_CLASS,
+      `.js-panel-toggle tr.${DETAILS_TRIGGER_CLASS}`,
       callback
     );
     callback = function(e) {
@@ -216,66 +227,47 @@ export function modalRenderFactory(template, fetch) {
         if ($target.is('a')) {
           return true;
         }
+
         if (!$target.closest('td').hasClass('dataTables_empty')) {
-          const index = api.row($row).index();
+          const row = api.row($row);
+          const index = row.index();
+
+          if (row.child.isShown()) {
+            row.child.hide();
+            $row.removeClass('row-active');
+            $row.removeAttr('aria-details');
+            return;
+          }
+
           $.when(fetch(response.results[index])).done(function(fetched) {
-            $modal.find('.js-panel-content').html(template(fetched));
-            $modal.attr('aria-hidden', 'false');
-            $row.siblings().toggleClass('row-active', false);
-            $row.toggleClass('row-active', true);
-            $('body').toggleClass('panel-active', true);
-            restoreTabindex($modal);
-            const hideColumns = api.columns('.hide-panel');
-            hideColumns.visible(false);
+            const newChildRowContent = template(fetched);
+            const newChildRowHtml = childRow(newChildRowContent);
+            const newChildRow = row.child(newChildRowHtml);
 
-            // Populate the pdf button if there is one
-            if (fetched.pdf_url) {
-              $modal.find('.js-pdf_url').attr('href', fetched.pdf_url);
-            } else {
-              $modal.find('.js-pdf_url').remove();
-            }
-            // Set focus on the close button
-            $('.js-hide').focus(); // TODO: jQuery deprecation
-
-            // When under $large-screen
-            // TODO figure way to share these values with CSS.
-            if ($(document).width() < 980) {
-              api.columns('.hide-panel-tablet').visible(false);
-            }
+            newChildRow.show();
+            $row.addClass('row-active');
+            const parentRowsEvenOddClass = e.currentTarget.classList.contains('even') ? 'even' : 'odd';
+            row.child().addClass(`${parentRowsEvenOddClass} dt-isChild row-active`);
+            // Aria link the normal row and its child/details row
+            row.child().attr('id', `details-for-tr-${index}`);
+            $row.attr('aria-details', `details-for-tr-${index}`);
+            const newChildRowPdfButton = $row.next().find('.js-pdf_url');
+            if (fetched.pdf_url)
+              newChildRowPdfButton.attr('href', fetched.pdf_url);
+            else
+              newChildRowPdfButton.remove();
           });
         }
       }
     };
     $table.on(
       'click keypress',
-      '.js-panel-toggle tr.' + MODAL_TRIGGER_CLASS,
+      `.js-panel-toggle tr.${DETAILS_TRIGGER_CLASS}`,
       callback
     );
-
-    $modal.on('click', '.js-panel-close', function(e) {
-      e.preventDefault();
-      hidePanel(api, $modal);
-    });
   };
 }
 
-function hidePanel(api, $modal) {
-  $('.row-active .js-panel-button').focus(); // TODO: jQuery deprecation
-  $('.js-panel-toggle tr').toggleClass('row-active', false);
-  $('body').toggleClass('panel-active', false);
-  $modal.attr('aria-hidden', 'true');
-
-  if ($(document).width() > 640) {
-    api.columns('.hide-panel-tablet').visible(true);
-    api.columns('.hide-panel.min-tablet').visible(true);
-  }
-
-  if ($(document).width() > 980) {
-    api.columns('.hide-panel').visible(true);
-  }
-
-  removeTabindex($modal);
-}
 /**
  *
  * @param {?string} template
@@ -323,7 +315,6 @@ export function barsAfterRender(template, api) {
 function updateOnChange($form, api) {
   function onChange(e) {
     e.preventDefault();
-    hidePanel(api, $('#datatable-modal'));
     api.ajax.reload();
 
     updateChangedEl = e.target;
@@ -853,7 +844,7 @@ DataTable_FEC.prototype.fetch = function(data, callback) {
         .addClass('is-active-filter')
         .removeClass('is-disabled-filter');
 
-      // Datatables that should have limits and reached the maxiumum
+      // Datatables that should have limits and reached the maximum
       // filter limit should display the field's error message
       // and disable that field's filter
       if (
@@ -1127,7 +1118,7 @@ DataTable_FEC.prototype.handleSwitch = function(e, opts) {
 
 /**
  * Used for…
- * @param {string} className - Selector text, including the leading period (ex: `.data-table` instead of `data-table`)
+ * @param {string} tableElementSelector - Selector text, including the leading period (ex: `.data-table` instead of `data-table`)
  * @param {Object} pageContext - The window.context data object
  * @param {string} pageContext.candidateID
  * @param {number} pageContext.cycle
@@ -1137,8 +1128,8 @@ DataTable_FEC.prototype.handleSwitch = function(e, opts) {
  * @param {string} pageContext.timePeriod - In the format of `2023-2024`
  * @param {Object} options - spendingTableOpts from {@link /fec/fec/static/js/pages/elections.js}
  */
-export function initSpendingTables(className, pageContext, options) {
-  $(className).each(function(index, table) {
+export function initSpendingTables(tableElementSelector, pageContext, options) {
+  $(tableElementSelector).each(function(index, table) {
     const $table = $(table);
     const dataType = $table.attr('data-type');
     const opts = options[dataType];
@@ -1370,4 +1361,20 @@ function drawContributionsByStateTable(selected, pageContext) {
       )
     );
   });
+}
+
+/**
+ * Build the HTML for the child row / details row
+ * @param {string} contents
+ * @returns {string} a string to be used as the innerHTML of the child/details row
+ */
+function childRow(contents) {
+  return `<div class="dt-details">
+    <div class="dt-details__nav">
+      <a class="dt-details__link button--small button--standard js-pdf_url" target="_blank">Open image</a>
+    </div>
+    <div class="dt-details__content">
+      ${contents}
+    </div>
+  </div>`;
 }

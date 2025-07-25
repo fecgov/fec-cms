@@ -112,7 +112,7 @@
     border-bottom: 1px solid $neutral;
 
     &.row-color-contrast,
-    &:nth-child(even) {
+    &.even {
       background-color: rgba($gray-lightest, 0.5);
     }
 
@@ -235,8 +235,9 @@
 }
 
 // Special styles for rows that trigger panels
-.row--has-panel {
+.row--has-details {
   cursor: pointer;
+
   @include transition(border-left-width, 0.2s);
 }
 

@@ -1,17 +1,17 @@
-<div class="panel__row">
-  <h4 class="panel__title">Disbursement information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Spender"}}
+    <caption class="details__title">Disbursement information</caption>
+    {{#dtDetailsTableRow "Spender"~}}
       <a href="{{basePath}}/committee/{{committee_id}}">{{committee_name}}</a>
-    {{/panelRow}}
-    {{#panelRow "Amount"}}
-      {{ currency disbursement_amount }}
-    {{/panelRow}}
-    {{#panelRow "Number of candidates mentioned"}}
-      {{ number_of_candidates }}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Amount"~}}
+      {{currency disbursement_amount}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Number of candidates mentioned"~}}
+      {{number_of_candidates}}
+    {{/dtDetailsTableRow}}
     <tr>
-      <td class="panel__term">
+      <th scope="row">
         <span>Amount per candidate</span>
         <div class="tooltip__container">
           <button class="tooltip__trigger" type="button"><span class="u-visually-hidden">Learn more</span></button>
@@ -19,44 +19,44 @@
             <p class="tooltip__content">To help users work with this data, we divide each itemized disbursement amount by the number of federal candidates named in connection with that disbursement. The resulting amount is listed here.</p>
           </div>
         </div>
-      </td>
-      <td class="panel__data">
-        {{ currency calculated_candidate_share }}
+      </th>
+      <td>
+        {{currency calculated_candidate_share}}
       </td>
     </tr>
-    {{#panelRow "Report year"}}
-      {{ report_year }}
-    {{/panelRow}}
-    {{#panelRow "Disbursement date"}}
-      {{ datetime disbursement_date format=pretty }}
-    {{/panelRow}}
-    {{#panelRow "Communication date"}}
-      {{ datetime communication_date format=pretty }}
-    {{/panelRow}}
-    {{#panelRow "Purpose description"}}
-      {{ purpose_description }}
-    {{/panelRow}}
+    {{#dtDetailsTableRow "Report year"~}}
+      {{report_year}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Disbursement date"~}}
+      {{datetime disbursement_date format=pretty}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Communication date"~}}
+      {{datetime communication_date format=pretty}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Purpose description"~}}
+      {{purpose_description}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">Candidate information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Candidate"}}
+    <caption class="details__title">Candidate information</caption>
+    {{#dtDetailsTableRow "Candidate"~}}
       <a href="{{basePath}}/candidate/{{candidate_id}}/">{{candidate_name}}</a>
-    {{/panelRow}}
-    {{#panelRow "Office"}}
-      {{ decodeOffice candidate_office }}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Office"~}}
+      {{decodeOffice candidate_office}}
+    {{/dtDetailsTableRow}}
     {{#if candidate_state}}
-      {{#panelRow "State"}}
+      {{#dtDetailsTableRow "State"~}}
         {{decodeState candidate_state}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
-    {{#unless (eq candidate_district '00') }}
-      {{#panelRow "District"}}
+    {{#unless (eq candidate_district '00')}}
+      {{#dtDetailsTableRow "District"~}}
         {{candidate_district}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/unless}}
   </table>
 </div>
