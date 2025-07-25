@@ -369,7 +369,7 @@ KeywordProximityFilter.prototype.handleRemoveAll = function(e, opts) {
 KeywordProximityFilter.prototype.showWarning = function() {
   if (!this.showingWarning) {
     const warning = '<div class="filter__message filter__message--error">' +
-      '<strong>(FPO)</strong> Keyword proximity search requires two terms and a distance</div>';
+      'Keyword proximity search requires two terms and a distance</div>';
     $('[data-filter="q_proximity"]').last().after(warning);
     this.showingWarning = true;
   }
