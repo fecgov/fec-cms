@@ -1030,6 +1030,31 @@ class ResourcePage(Page):
     @property
     def content_section(self):
         return get_content_section(self)
+    
+
+class CourtCasePage(Page):
+    docket_number = models.CharField(max_length=50, blank=True)
+    case_name = models.CharField(max_length=255)
+    court = models.CharField(max_length=255, blank=True)
+    decision_date = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=100, choices=[
+        ('active', 'Active'),
+        ('closed', 'Closed'),
+    ])
+    opinions = RichTextField(blank=True)
+    summary = RichTextField(blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('case_name'),
+        FieldPanel('docket_number'),
+        FieldPanel('court'),
+        FieldPanel('decision_date'),
+        FieldPanel('status'),
+        FieldPanel('opinions'),
+        FieldPanel('summary'),
+    ]
+
+    parent_page_types = ['CourtCaseIndexPage']    
 
 
 class LegalResourcesLandingPage(ContentPage, UniqueModel):
@@ -1473,3 +1498,36 @@ class ReportingDatesTable(Page):
         FieldPanel('footnotes'),
         FieldPanel('citations')
     ]
+
+
+class CourtCaseIndexPage(Page):
+    intro = RichTextField(blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('intro'),
+    ]
+
+    def get_context(self, request):
+        # Get the default context from the superclass
+        context = super().get_context(request)
+
+        # Get live, published court case children of this index page
+        cases = CourtCasePage.objects.live().descendant_of(self).order_by('case_name')
+
+        # Optional search filter
+        query = request.GET.get('q')
+        if query:
+            cases = cases.filter(case_name__icontains=query)
+
+        # Group cases by first letter
+        grouped_cases = {}
+        for case in cases:
+            letter = case.case_name[0].upper()
+            grouped_cases.setdefault(letter, []).append(case)
+
+        # Add variables to the context for the template
+        context['cases'] = cases
+        context['grouped_cases'] = dict(sorted(grouped_cases.items()))
+
+        return context
+

@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load static %}
+{% load filters %}
+
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+{% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
+
+<article class="main">
+  <div class="container">
+    <header class="heading--main">
+      <h1>{{ self.title }}</h1>
+    </header>
+
+    <div class="row">
+      <div class="main__content">
+        {% for block in self.body %}
+        <div class="block-{{ block.block_type }}">
+          {% if block.block_type == 'paragraph' %}
+            <div class="rich-text">{{ block }}</div>
+          {% else %}
+            {{ block }}
+          {% endif %}
+        </div>
+        {% endfor %}
+
+        {# 🔍 Search Form #}
+        <form class="court-case-search u-padding--top" method="get">
+          <label for="search" class="label t-bold">Filter by court case name</label>
+          <div class="combo combo--search combo--inline">
+            <input
+              type="text"
+              name="q"
+              id="search"
+              class="combo__input"
+              value="{{ request.GET.q }}"
+              placeholder="Case name keyword"
+            >
+            <button class="button--standard combo__button button--search" type="submit">
+              <span class="u-visually-hidden">Search</span>
+            </button>
+          </div>
+        </form>
+
+        {# Alphabetical court case listing #}
+        <nav class="alphabet-nav u-padding--top">
+          <p class="t-sans t-bold u-padding--bottom">Jump to:</p>
+          {% for letter in grouped_cases.keys %}
+            <a class="u-margin--right" href="#{{ letter|slugify }}">{{ letter }}</a>
+          {% endfor %}
+        </nav>
+
+        {% for letter, cases in grouped_cases.items %}
+          <section class="u-padding--top" id="{{ letter|slugify }}">
+            <h3 class="t-ruled--bold">{{ letter }}</h3>
+            <table class="data-table u-padding--top">
+              <thead>
+                <tr>
+                  <th width="30%"><h5>Case name</h5></th>
+                  <th width="70%"><h5>Opinions</h5></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for case in cases %}
+                <tr>
+                  <td><a href="{{ case.url }}">{{ case.case_name }}</a></td>
+                  <td>
+                    {% if case.opinions %}
+                      <div class="rich-text">{{ case.opinions|richtext }}</div>
+                    {% else %}
+                      <em>None</em>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p class="u-padding--top"><a href="#top">Back to top</a></p>
+          </section>
+        {% endfor %}
+      </div>
+
+      <div class="sidebar-container">
+        {% if self.sidebar %}
+        <aside class="sidebar sidebar--secondary">
+          {% for block in self.sidebar %}
+            {% if block.block_type == 'heading' %}
+              <h4 class="sidebar__title">{{ block }}</h4>
+            {% else %}
+              <div class="sidebar__content">
+                {% if block.block_type == 'paragraph' %}
+                  <div class="rich-text">{{ block }}</div>
+                {% else %}
+                  {{ block }}
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </aside>
+        {% endif %}
+
+        {% if self.record_articles %}
+        <div class="sidebar__related-links">
+          <h4 class="label sidebar__record-title">From the FEC Record</h4>
+          {{ self.record_articles }}
+        </div>
+        {% endif %}
+
+        {% if self.show_contact_link %}
+        <div class="sidebar__related-links">
+          <h4 class="label sidebar__question">Need help?</h4>
+          <a href="/contact/">Get help from the FEC by phone or email</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if self.continue_learning %}
+    <div class="content__section--ruled content__section">
+      <h3>Continue learning about this topic</h3>
+      <div class="grid grid--4-wide">
+        {% for blocks in self.continue_learning %}
+          {% with blocks.value as blocks %}
+            {% for block in blocks %}
+              <div class="grid__item">
+                {% image block.image width-200 %}
+                {% if block.media_type %}
+                  <span class="label">{{ block.media_type }}</span>
+                {% endif %}
+                <p><a href="{{ block.url }}">{{ block.text }}</a></p>
+              </div>
+            {% endfor %}
+          {% endwith %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if self.related_topics %}
+    <h2>Related topics</h2>
+    <div class="grid grid--4-wide">
+      {% for block in self.related_topics %}
+        {% with topics=block.value %}
+          {% for topic in topics %}
+            <div class="grid__item">
+              <a href="{{ topic.url }}">
+                <aside class="card card--horizontal card--primary">
+                  <div class="card__content">
+                    {{ topic }}
+                  </div>
+                </aside>
+              </a>
+            </div>
+          {% endfor %}
+        {% endwith %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if self.citations %}
+    <div id="legal-citations" class="sidebar--secondary t-sans">
+      <h4 class="sidebar__title">Legal citations</h4>
+      <div class="sidebar__content">
+        <div class="grid grid--2-wide">
+        {% for citation in self.citations %}
+          {% for block in citation.value %}
+            <div class="grid__item">
+              <p class="t-bold">{{ block.label }}</p>
+              <div class="rich-text">{{ block.content }}</div>
+            </div>
+          {% endfor %}
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</article>
+
+{% include 'partials/disclaimer.html' %}
+{% endblock %}
+
+{% block extra_js %}
+  {% if self.conditional_js %}
+    <script type="text/javascript" src="{% path_for_js self.get_conditional_js_display %}"></script>
+  {% endif %}
+{% endblock %}
