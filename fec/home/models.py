@@ -1030,7 +1030,7 @@ class ResourcePage(Page):
     @property
     def content_section(self):
         return get_content_section(self)
-    
+
 
 class CourtCasePage(Page):
     docket_number = models.CharField(max_length=50, blank=True)
@@ -1054,7 +1054,7 @@ class CourtCasePage(Page):
         FieldPanel('summary'),
     ]
 
-    parent_page_types = ['CourtCaseIndexPage']    
+    parent_page_types = ['CourtCaseIndexPage']
 
 
 class LegalResourcesLandingPage(ContentPage, UniqueModel):
@@ -1530,4 +1530,3 @@ class CourtCaseIndexPage(Page):
         context['grouped_cases'] = dict(sorted(grouped_cases.items()))
 
         return context
-
