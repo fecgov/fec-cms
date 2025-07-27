@@ -98,7 +98,7 @@
                     {% endif %}
                 {% elif category == "advisory_opinions" %}
                     {% if results["total_" + category] %}
-                        {% with advisory_opinions = results[category] %}
+                        {% with advisory_opinions = results[category], nested_in_global_search=true %}
                         {% include 'partials/legal-search-results-advisory-opinion.jinja' %}
                         {% endwith %}
                         <div class="results-info">

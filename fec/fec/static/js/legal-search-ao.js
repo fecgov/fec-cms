@@ -9,11 +9,12 @@ import { default as TagList } from './modules/filters/filter-tags.js';
 import { buildUrl, SUCCESS_DELAY } from './modules/helpers.js';
 import KeywordModal from './modules/keyword-modal.js';
 import { updateQuery } from './modules/urls.js';
+import { Accordion } from 'aria-accordion';
 
 /**
  * @property {FilterPanel} this.filterPanel - The left column's filters panel element
  * @property {HTMLElement} this.resultsTable - The table of results
- * @property {HTMLElement} this.paginationElement - The <div> that holds the pagination
+ * @property {HTMLElement} this.paginationElements - The <div>s that hold the pagination
  * @property {HTMLElement} this.noResultsMessage - The <div> to toggle to show or hide the 'no results' message
  * @property {HTMLElement} widgetsElement - The <div> that holds the header filter tags and message
  * @property {boolean} this.isLoading - Controls appearance and behavior of elements on the screen
@@ -28,7 +29,7 @@ export default function LegalSearchAo() {
   this.isLoading = false;
   this.lastQueryResponse = {};
   this.noResultsMessage;
-  this.paginationElement;
+  this.paginationElements;
   this.resultsTable;
   this.sortOrder;
   this.sortType;
@@ -40,7 +41,7 @@ export default function LegalSearchAo() {
     this.sortOrder = window.context.sort.includes('-') ? 'desc' : 'asc';
     this.sortType = window.context.sortType;
   }
- 
+
   this.widgetsElement = document.querySelector('.data-container__widgets');
   this.initPageParts();
   this.initFilters();
@@ -70,7 +71,7 @@ LegalSearchAo.prototype.initPageParts = function() {
 
   // Now that all the parts are created, save 'em
   this.resultsTable = document.querySelector('.js-legal-search-results');
-  this.paginationElement = document.querySelector('.js-legal-search-pagination');
+  this.paginationElements = document.querySelectorAll('.js-legal-search-pagination');
   this.noResultsMessage = document.querySelector('.js-legal-search-no-results');
 };
 
@@ -119,7 +120,7 @@ LegalSearchAo.prototype.initFilters = function() {
 
   this.filterPanel = new FilterPanel();
   this.filterSet = this.filterPanel.filterSet;
-
+  
   const categoryFiltersFormElement = document.querySelector('#category-filters');
   categoryFiltersFormElement.addEventListener('change', this.handleFiltersChanged.bind(this));
 
@@ -160,7 +161,7 @@ LegalSearchAo.prototype.initTable = function() {
       updateTableSortColumn(theThElement, this.sortOrder, this.sortType);
     }
   }
-  })
+  });
 };
 
 /**
@@ -170,16 +171,8 @@ LegalSearchAo.prototype.initTable = function() {
 LegalSearchAo.prototype.handleSortClick = function(e) {
   e.stopImmediatePropagation();
 
-  this.sortType = e.target.dataset.sort
-
-  // Only toggle the sort direction when existing sort direction exists on the column
-  if (e.target.classList.contains('sorting_asc') || e.target.classList.contains('sorting_desc')) {
-  this.sortOrder =  e.target.classList.contains('sorting_asc') ? 'desc' : 'asc';
-  }
-  // Otherwise always start descending by default. When activating the column for sort.
-  else {
-    this.sortOrder = 'desc'
-  }
+  this.sortType = e.target.dataset.sort;
+  this.sortOrder = e.target.classList.contains('sorting_asc') ? 'desc' : 'asc';
 
   updateTableSortColumn(e.target, this.sortOrder, this.sortType );
 
@@ -201,7 +194,7 @@ function updateTableSortColumn(th, newVal, sortType) {
   th.setAttribute('aria-sort', newVal == 'asc' ? 'ascending' : 'descending');
   th.setAttribute('aria-description',
     `${th.textContent}: Activate to sort column ${newVal == 'asc' ? 'ascending' : 'descending'}`);
-  
+
   // Remove sorting-* class style on the th that us NOT current sortType
   document.querySelector(`#results th[data-sort]:not(th[data-sort="${sortType}"`).classList.remove('sorting_asc','sorting_desc');
 }
@@ -271,7 +264,7 @@ LegalSearchAo.prototype.getResults = function(e) {
   // Get data from our filters
   const serializedFilters = this.filterSet.serialize();
   const filterFields = this.filterSet.fields;
- 
+
   // Let's override any filters here
 
   // Make sure search and sort are allowed fields
@@ -380,12 +373,6 @@ LegalSearchAo.prototype.refreshTable = function(response) {
           </td>`;
     newRow += `
           <td class="simple-table__cell">
-            <div class="t-sans">
-              ${advisory_opinion.summary}
-            </div>
-          </td>`;
-    newRow += `
-          <td class="simple-table__cell">
             <div class="t-sans">`;
     if (advisory_opinion.aos_cited_by.length > 0) {
       advisory_opinion.aos_cited_by.forEach(citation => {
@@ -395,13 +382,23 @@ LegalSearchAo.prototype.refreshTable = function(response) {
       newRow += `This advisory opinion is not cited by other advisory opinions`;
     }
     newRow += `
+    <td class="simple-table__cell">
+      <div class="t-sans">
+        ${advisory_opinion.summary}
+      </div>
+      ${this.showDocuments(advisory_opinion)}
+    </td>`;
+    newRow += `
             </div>
           </td>
         </tr>`;
 
     tableBodyRows.push(newRow);
+    //let elm = document.getElementsByClassName('js-accordion');
+    //new Accordion('.js-accordion' , {trigger: '.js-accordion-trigger'}, '');
   });
   resultsTableBody.innerHTML = tableBodyRows.join('');
+
 };
 
 /**
@@ -584,21 +581,25 @@ LegalSearchAo.prototype.updateFiltersOnSuccess = function(changeCount) {
  * @param {number} resultsCount
  */
 LegalSearchAo.prototype.updatePagination = function(resultsCount) {
-  if (!this.paginationElement) return; // If we can't find the pagination holder, no reason to continue
+  if (!this.paginationElements) return; // If we can't find the pagination holder, no reason to continue
 
   // Toggle major components on whether we have results
   if (resultsCount > 0) {
     this.noResultsMessage.setAttribute('aria-hidden', true);
-    this.paginationElement.removeAttribute('aria-hidden');
+    this.paginationElements.forEach(el => {
+      el.removeAttribute('aria-hidden');
+    });
     this.resultsTable.removeAttribute('aria-hidden');
   } else {
     this.noResultsMessage.removeAttribute('aria-hidden');
-    this.paginationElement.setAttribute('aria-hidden', true);
+    this.paginationElements.forEach(el => {
+      el.setAttribute('aria-hidden', true);
+    });
     this.resultsTable.setAttribute('aria-hidden', true);
   }
 
-  const control_count = this.paginationElement.querySelector('.results-length');
-  const summary = this.paginationElement.querySelector('.dataTables_info');
+  const control_count = this.paginationElements[0].querySelector('.results-length');
+  const summary = this.paginationElements[0].querySelector('.dataTables_info');
   const maxButtonsOnScreen = 5;
 
   const resultLimit = parseInt(control_count.value);
@@ -714,11 +715,9 @@ LegalSearchAo.prototype.updatePagination = function(resultsCount) {
   }
   buttonsParent.appendChild(newNextButton);
 
-  // Clone the updated pagination element into div.pagination_holder after the table
-  const paginationClone = this.paginationElement.cloneNode(true);
-  const paginationHolder = document.querySelector('.pagination_holder')
-  paginationHolder.replaceChildren(paginationClone);
-
+  // Finally, if we have a second pagination element, set its innerHTML to whatever we set for [0]'s
+  if (this.paginationElements[1])
+    this.paginationElements[1].innerHTML = this.paginationElements[0].innerHTML;
 };
 
 // The bare-minimum html for the results table
@@ -767,3 +766,116 @@ const template_no_pagination = `<div class="results-info u-border-top-base">
   </div>
   <div class="dataTables_info">Showing 0 results</div>
 </div>`;
+
+LegalSearchAo.prototype.showDocuments = function(ao) {
+  
+  const filters = this.filterSet.serialize();
+  const filters_category_type = 'ao_doc_category_id' in filters;
+  const filters_keyword = 'search' in filters;
+  const filters_proximity = 'q_proximity' in filters && filters.q_proximity.length == 2;
+  const proximity_only = filters_proximity && !filters_keyword;
+
+   // Opening div tags are lined up with their closing divs below
+  let document_content = ''
+  if (ao.document_highlights || ao.source || ao.ao_doc_category_id) {
+    document_content += 
+   `<div class="legal-search-result__hit u-margin--top">`;
+    if ((filters_category_type || filters_keyword) && !proximity_only) {  
+        let category_shown = '';                                                                                                            
+        for (const [index, document] of ao.documents.entries()) { 
+
+          /*This will show documents in all 3 scenarios:
+            - When there is a keyword query and selected document categories
+            - When there are selected document categories and no keyword query
+            - When there is a keyword query and no selected document categories */
+          // TODO: These two could be short circuits like above
+
+          let category_match = !filters_category_type || filters.ao_doc_category_id.includes(document.ao_doc_category_id) ? true : false;
+          let text_match = index in ao.document_highlights || !filters_keyword ? true : false;
+          let show_document = category_match && text_match;  
+          if (show_document) {
+            let top_border_class = '';
+            let show_category = '';
+            let current_category = document.ao_doc_category_id;
+            if (category_shown != current_category) {
+                  top_border_class = "u-border-top-nuetral";
+                  show_category = document.category;
+                  category_shown = current_category;
+              }
+              else {
+                show_category = '';
+              }
+            document_content += `
+                  <div class="document-container">
+                    <div class="document-category ${top_border_class}">${show_category}</div>
+                    <div class="document_details u-border-top-nuetral">
+                      <div class="post--icon">
+                        <span class="icon icon--inline--left i-document"></span>
+                        <a href="${document.url}">
+                          ${document.description}
+                        </a>
+                      </div>`;       
+            if (ao.document_highlights[index]) {
+              if (ao.document_highlights[index].length) {
+                  document_content += `
+                      <ul>
+                        <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${ao.document_highlights[index][0]}&#8230;
+                        </li>
+                      </ul>`;
+              }
+              if (ao.document_highlights[index].length > 1) {
+                  document_content += `
+                      <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${ao.no}-${index}">
+                        <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${ao.no}-${index}" aria-expanded="false">
+                          ${ao.document_highlights[index].length > 2 ? ao.document_highlights[index].length -1 + " more keyword matches" : "1 more keyword match"}
+                        </button>
+                        <div class="accordion__content results__content" aria-hidden="true">
+                          <ul>`;
+                          for (let i = 1; i <= ao.document_highlights[index].length -1; i++) {
+                            document_content += `<li class="t-serif t-italic">&#8230;${ao.document_highlights[index][i]}&#8230;</li>`;
+                          }
+                            document_content += `
+                          </ul>
+                        </div>
+                      </div>`;       
+              }
+            }
+            document_content += `
+                    </div> 
+                  </div>`;
+          } 
+        } 
+    } else if (proximity_only) {
+      let category_shown = '';
+        for (const document of ao.source) {
+              let top_border_class = '';
+              let show_category = '';
+              let current_category = document.ao_doc_category_id;
+                if (category_shown != current_category) {
+                    top_border_class = "u-border-top-nuetral";
+                    show_category = document.category;
+                    category_shown = current_category;
+                }
+                else {
+                  show_category = '';
+                }
+                  document_content += `
+                    <div class="document-container">
+                      <div class="document-category ${top_border_class}">${show_category}</div>
+                      <div class="document_details u-border-top-nuetral">
+                        <div class="post--icon">
+                          <span class="icon icon--inline--left i-document"></span>
+                          <a href="${document.url}">
+                            ${document.description}
+                          </a>
+                        </div>
+                      </div>
+                    </div>`;
+        }
+    }
+    document_content += `
+    </div>`;
+  }
+
+  return document_content;
+}
