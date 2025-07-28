@@ -1,0 +1,472 @@
+{% extends 'layouts/legal-main.jinja' %}
+{% import 'macros/breadcrumbs.jinja' as breadcrumb %}
+{% import 'macros/legal.jinja' as legal %}
+{% set breadcrumb_links=[('', 'Rulemakings')] %}
+
+{% block title %}Submit rulemaking comments{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ path_for_css('legal-common.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ path_for_css('rulemakings-commenting.css') }}" />
+{% endblock %}
+
+{% block body %}
+<header class="page-header slab slab--primary">
+  {{ breadcrumb.breadcrumbs('Submit rulemaking comments', breadcrumb_links) }}
+</header>
+
+<div class="main container">
+  <header class="heading--main">
+    <h1>{{ title }}</h1>
+  </header>
+  <div class="main__content--full">
+    <div class="row">
+      <div class="main__content">
+        <h2>{{ reg_no }}: {{ reg_name }}</h2>
+        <p><strong>IMPORTANT</strong>: All comments will be made available to the public. Comments sent by online form or email will be posted to the FEC website. Comments sent via paper will be converted to PDF and then posted to the FEC website. The FEC does not remove personally identifiable information such as home address, phone number, email address or Social Security number from submissions before posting comments to the FEC website. The FEC encourages commenters to submit only information that they wish to make publicly available.</p>
+        <p>Finally, comments will not be considered submitted until all required information is completed and the commenter has received the confirmation message.</p>
+      </div>
+    </div>
+    <div class="row" id="rulemakings-comments">
+      <nav class="topnav">
+        <!-- {'complete': th is.currentFrameNum == frames . length - 1}" -->
+        <meter value="this.currentFrameNum" max="frames.length - 1" class="hidden" min="0"></meter>
+        <i class="i i-check"></i>
+        <ul class="breadcrumbs">
+          <li class="breadcrumbs__item">
+            <a class="breadcrumbs__link">Submitting</a>
+          </li>
+          <li class="breadcrumbs__item">
+            <a class="breadcrumbs__link">Submitter information</a>
+          </li>
+          <li class="breadcrumbs__item">
+            <a class="breadcrumbs__link">Commenter information</a>
+          </li>
+          <li class="breadcrumbs__item">
+            <a class="breadcrumbs__link">Comments</a>
+          </li>
+          <li class="breadcrumbs__item">
+            <a class="breadcrumbs__link">Final review</a>
+          </li>
+          <li class="breadcrumbs__item">
+            <a class="breadcrumbs__link">response</a>
+          </li>
+        </ul>
+      </nav>
+      <div class="js-help hidden" id="help">
+        <svg
+          class="pointer"
+          height="40"
+          style="'top:' + helpPointerY + 'px'"
+          viewBox="-20 -40 20 40"
+          width="20">
+          <path d="M 0 -40 l -20 20 l 20 20" stroke="#112e51" fill="white"></path>
+        </svg>
+        <h3 class="help_title">{helpTitle}</h3>
+        <button class="filters__toggle" click="handleCloseClick" type="button"></button>
+        <div class="help_scroller">
+          <div class="ps-scrollbar-y-rail"><div class="ps-scrollbar-y"></div></div>
+          <div class="help_content">{helpContent}</div>
+        </div>
+      </div>
+      <form class="js-rulemakings-comments">
+        <h3>Submit comments on rulemaking</h3>
+        <h2>REG {{ reg_no }} {{ reg_name }}</h2>
+
+        <input type="hidden" value="{{ reg_name }}" name="reg_name">
+        <input type="hidden" value="{{ reg_no }}" name="reg_no">
+
+        <div id="frames-holder" class="frames">
+          <fieldset id="frame-representedEntityType" class="frame" data-validated="false">
+            <label class="group-label">I am submitting these comments:</label>
+
+            <fieldset class="field-label-combo">
+              <input type="radio" value="self" id="representedEntityType-self" name="representedEntityType" required>
+              <label for="representedEntityType-self">On behalf of myself</label>
+            </fieldset>
+
+            <fieldset class="field-label-combo">
+              <input type="radio" value="counsel" id="representedEntityType-counsel" name="representedEntityType" required>
+              <label for="representedEntityType-counsel">As counsel to another person, group or organization</label>
+              <button class="tooltip__trigger" data-tooltip-title="Are you counsel?" data-tooltip="Select counsel if you are an attorney providing comments and acting on behalf of a client." type="button"></button>
+            </fieldset>
+            
+            <fieldset class="field-label-combo">
+              <input type="radio" value="rep" id="representedEntityType-rep" name="representedEntityType" required>
+              <label for="representedEntityType-rep">As an officer, representative or member of a group of individuals or group of organizations</label>
+              <button class="tooltip__trigger" data-tooltip-title="Are you an officer, representative or member?" data-tooltip="Select officer, representative or member if you are otherwise acting on behalf of any person in a non-attorney capacity." type="button"></button>
+            </fieldset>
+
+            <fieldset class="field-label-combo">
+              <input type="radio" value="other" id="representedEntityType-other" name="representedEntityType" data-toggles="submitter_commenter_relationship" required>
+              <label for="representedEntityType-other">Other (provide explanation)</label>
+            </fieldset>
+
+            <fieldset class="field-label-combo ux-indented" data-show-if-var="representedEntityType" data-show-if-val="other" aria-hidden="true">
+              <div class="grid grid--2-wide">
+                <div class="grid__item">
+                  <span class="ux-inline"><label for="representedEntityRelationship">Explain your relationship to the commenter</label><button class="tooltip__trigger" data-tooltip-title="FPO?" data-tooltip="FPO FPO FPO FPO FPO FPO FPO FPO FPO FPO FPO FPO FPO FPO FPO FPO FPO FPO FPO FPO"></button></span>
+                  <input type="text" id="representedEntityRelationship" name="representedEntityRelationship" minlength="3">
+                </div>
+              </div>
+            </fieldset>
+          </fieldset>{# close #frame-representedEntityType #}
+          <fieldset id="frame-submitterInfo" class="frame" data-validated="false">
+
+            <label class="group-label">
+              <span data-show-if-var="representedEntityType" data-show-if-val="self">Your</span>
+              <span data-show-if-var="representedEntityType" data-show-if-val="counsel">Counsel</span>
+              <span data-show-if-var="representedEntityType" data-show-if-val="rep">Officer/Representative/Member</span>
+              <span data-show-if-var="representedEntityType" data-show-if-val="other">Commenter</span>
+              information</label>
+
+            <div id="contact-info-template" class="commenter-block">
+
+              <label class="" data-index-0="false">Commenter #0</label>
+
+              <label for="commenters_0_.commenterType" data-index-0="false">Commenter type</label>
+              <select id="commenters_0_.commenterType" name="commenters_0_.commenterType" class="grid__item--2-wide" data-index-0="false" size="1" required>
+                <option value="">--Select--</option>
+                <option value="individual">Individual</option>
+                <option value="organization">Organization</option>
+              </select>
+              <span class="error" data-index-0="false">What role is this commenter?</span>
+
+              <div class="grid grid--2-wide" data-toggle="individual">
+                <div class="grid__item">
+                  <label for="commenters_0_.firstName">First name</label>
+                  <input type="text" id="commenters_0_.firstName" name="commenters_0_.firstName" required>
+                  <label class="error" for="commenters_0_.firstName">A first name is required</label>
+                </div>
+                <div class="grid__item">
+                  <label for="commenters_0_.lastName">Last name</label>
+                  <input id="commenters_0_.lastName" name="commenters_0_.lastName" title="Maximum length is 40" type="text" value="" size="20" maxlength="40" minlength="2" required>
+                  <label class="error" for="commenters_0_.lastName">Last name is a required field</label>
+                </div>
+              </div>
+              <div class="grid grid--2-wide" data-toggle="organization" data-index-0="false">
+                <div class="grid__item">
+                  <label for="commenters_0_.orgName">Organization name</label>
+                  <input type="text" id="commenters_0_.orgName" name="commenters_0_.orgName" required>
+                  <label class="error" for="commenters_0_.orgName">An organization name is required</label>
+                </div>
+                <div class="grid__item">&nbsp;</div>
+              </div>
+
+              <hr>
+
+              <label for="commenters_0_.addressType">Address type</label>
+              <select id="commenters_0_.addressType" name="commenters_0_.addressType" size="1" required>
+                <option value="">--Select--</option>
+                <option value="Home">Home</option>
+                <option value="Office">Office</option>
+                <option value="Headquarters">Headquarters</option>
+                <option value="Branch">Branch</option>
+                <option value="Other">Other</option>
+              </select>
+              <label class="error" for="commenters_0_.addressType">What type of address is this?</label>
+
+              <div class="grid grid--2-wide">
+                <div class="grid__item">
+                  <label for="commenters_0_.mailingCity">City</label>
+                  <input id="commenters_0_.mailingCity" name="commenters_0_.mailingCity" title="Maximum length is 100" type="text" value="" size="20" maxlength="100" required>
+                  <label class="error" for="">Please enter a city name</label>
+                </div>
+                <div class="grid__item">
+                  <label for="commenters_0_.mailingState">State</label>
+                  <select id="commenters_0_.mailingState" name="commenters_0_.mailingState" size="1" required>
+                    <option value="">Select state</option>
+                    {% for value, label in constants.states.items() %}
+                      <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                  </select>
+                  <label class="error" for="">Required</label>
+                </div>
+              </div>
+
+              <label for="commenters_0_.mailingCountry">Country</label>
+              <select id="commenters_0_.mailingCountry" name="commenters_0_.mailingCountry" size="1" required>
+                <option value="AFG">Afghanistan</option><option value="ALB">Albania</option><option value="DZA">Algeria</option><option value="ASM">American Samoa</option><option value="AND">Andorra</option><option value="AGO">Angola</option><option value="AIA">Anguilla</option><option value="ATA">Antarctica</option><option value="ATG">Antigua and Barbuda</option><option value="ARG">Argentina</option><option value="ARM">Armenia</option><option value="ABW">Aruba</option><option value="ASC">Ascension</option><option value="AUS">Australia</option><option value="AUT">Austria</option><option value="AZE">Azerbaijan</option><option value="BHS">Bahamas</option><option value="BHR">Bahrain</option><option value="BGD">Bangladesh</option><option value="BRB">Barbados</option><option value="BLR">Belarus</option><option value="BEL">Belgium</option><option value="BLZ">Belize</option><option value="BEN">Benin</option><option value="BMU">Bermuda</option><option value="BTN">Bhutan</option><option value="BOL">Bolivia</option><option value="BIH">Bosnia and Herzegovina</option><option value="BWA">Botswana</option><option value="BRA">Brazil</option><option value="VGB">British Virgin Islands</option><option value="BRN">Brunei</option><option value="BGR">Bulgaria</option><option value="BFA">Burkina Faso</option><option value="MMR">Burma</option><option value="BDI">Burundi</option><option value="KHM">Cambodia</option><option value="CMR">Cameroon</option><option value="CAN">Canada</option><option value="CPV">Cape Verde</option><option value="CYM">Cayman Islands</option><option value="CAF">Central African Republic</option><option value="TCD">Chad</option><option value="45">Chatham Island (New Zealand)</option><option value="CHL">Chile</option><option value="CHN">China</option><option value="CXR">Christmas Island</option><option value="CCK">Cocos (Keeling) Islands</option><option value="COL">Colombia</option><option value="COM">Comoros</option><option value="COK">Cook Islands</option><option value="CRC">Costa Rica</option><option value="HRV">Croatia</option><option value="CUB">Cuba</option><option value="CYP">Cyprus</option><option value="CZE">Czech Republic</option><option value="DNK">Denmark</option><option value="61">Diego Garcia</option><option value="DJI">Djibouti</option><option value="DMA">Dominica</option><option value="DOM">Dominican Republic</option><option value="ECU">Ecuador</option><option value="EGY">Egypt</option><option value="SLV">El Salvador</option><option value="GNQ">Equatorial Guinea</option><option value="ERI">Eritrea</option><option value="EST">Estonia</option><option value="ETH">Ethiopia</option><option value="FLK">Falkland Islands</option><option value="FRO">Faroe (Faeroe) Islands (Denmark)</option><option value="FJI">Fiji</option><option value="FIN">Finland</option><option value="FRA">France</option><option value="PYF">French Polynesia</option><option value="GAB">Gabon</option><option value="GMB">Gambia</option><option value="GEO">Georgia</option><option value="DEU">Germany</option><option value="GHA">Ghana</option><option value="GIB">Gibraltar</option><option value="GRC">Greece</option><option value="GRL">Greenland</option><option value="GRD">Grenada</option><option value="GUM">Guam</option><option value="94">Guantanamo Bay</option><option value="GTM">Guatemala</option><option value="GIN">Guinea</option><option value="GNB">Guinea-Bissau</option><option value="GUY">Guyana</option><option value="HTI">Haiti</option><option value="HND">Honduras</option><option value="HKG">Hong Kong</option><option value="HUN">Hungary</option><option value="IS">Iceland</option><option value="IND">India</option><option value="IDN">Indonesia</option><option value="IRN">Iran</option><option value="IRQ">Iraq</option><option value="IRL">Ireland</option><option value="ISR">Israel</option><option value="ITA">Italy</option><option value="CIV">Ivory Coast (Cote D'Ivoire)</option><option value="JAM">Jamaica</option><option value="JPN">Japan</option><option value="JOR">Jordan</option><option value="KAZ">Kazakhstan</option><option value="KEN">Kenya</option><option value="KIR">Kiribati</option><option value="KWT">Kuwait</option><option value="KGZ">Kyrgystan</option><option value="LAO">Laos</option><option value="LVA">Latvia</option><option value="LBN">Lebanon</option><option value="LSO">Lesotho</option><option value="LBR">Liberia</option><option value="LBY">Libya</option><option value="LIE">Liechtenstein</option><option value="LTU">Lithuania</option><option value="LUX">Luxembourg</option><option value="MAC">Macau</option><option value="MKD">Macedonia</option><option value="MDG">Madagascar</option><option value="MWI">Malawi</option><option value="MYS">Malaysia</option><option value="MDV">Maldives</option><option value="MLI">Mali</option><option value="MLT">Malta</option><option value="MHL">Marshall Islands</option><option value="MRT">Mauritania</option><option value="MUS">Mauritius</option><option value="MYT">Mayotte</option><option value="MEX">Mexico</option><option value="FSM">Micronesia (Federated States of Polynesi</option><option value="MDA">Moldova</option><option value="MCO">Monaco</option><option value="MNG">Mongolia</option><option value="MSR">Montserrat</option><option value="MAR">Morocco</option><option value="MOZ">Mozambique</option><option value="NAM">Namibia</option><option value="NRU">Nauru</option><option value="NPL">Nepal</option><option value="NLD">Netherlands</option><option value="ANT">Netherlands Antilles</option><option value="NCL">New Calcedonia</option><option value="NZL">New Zealand</option><option value="NIC">Nicaragua</option><option value="NER">Niger</option><option value="NGA">Nigeria</option><option value="NIU">Niue</option><option value="NFK">Norfolk Island</option><option value="PRK">North Korea</option><option value="NOR">Norway</option><option value="OMN">Oman</option><option value="PAK">Pakistan</option><option value="PLW">Palau</option><option value="PAN">Panama</option><option value="PNG">Papua New Guinea</option><option value="PRY">Paraguay</option><option value="PER">Peru</option><option value="PHL">Philippines</option><option value="POL">Poland</option><option value="PRT">Portugal</option><option value="PRI">Puerto Rico</option><option value="QAT">Qatar</option><option value="ROU">Romania</option><option value="RUS">Russia</option><option value="RWA">Rwanda</option><option value="SHN">Saint Helena</option><option value="KNA">Saint Kitts and Nevis</option><option value="LCA">Saint Lucia</option><option value="SPM">Saint Pierre and Miquelon</option><option value="VCT">Saint Vincent</option><option value="STP">Sao Tome and Principe</option><option value="SAU">Saudi Arabia</option><option value="SEN">Senegal Republic</option><option value="SYC">Seychelles</option><option value="SLE">Sierra Leone</option><option value="SGP">Singapore</option><option value="SVK">Slovak Republic</option><option value="SVN">Slovenia</option><option value="SLB">Solomon Islands</option><option value="SOM">Somalia</option><option value="ZAF">South Africa</option><option value="KOR">South Korea</option><option value="ESP">Spain</option><option value="LKA">Sri Lanka</option><option value="SDN">Sudan</option><option value="SUR">Suriname</option><option value="SWZ">Swaziland</option><option value="SWE">Sweden</option><option value="CHE">Switzerland</option><option value="SYR">Syria</option><option value="TWN">Taiwan</option><option value="TJK">Tajikistan</option><option value="TZA">Tanzania</option><option value="THA">Thailand</option><option value="TGO">Togo</option><option value="TKL">Tokelau</option><option value="TON">Tonga</option><option value="TTO">Trinidad and Tobago</option><option value="TKM">Trukmenistan</option><option value="TUN">Tunisia</option><option value="TUR">Turkey</option><option value="TCA">Turks and Caicos Islands</option><option value="TUV">Tuvalu</option><option value="UGA">Uganda</option><option value="UKR">Ukraine</option><option value="ARE">United Arab Emirates</option><option value="GBR">United Kingdom</option><option value="USA" selected="selected">United States</option><option value="URY">Uruguay</option><option value="UZB">Uzbekistan</option><option value="VUT">Vanuatu</option><option value="VEN">Vatican City</option><option value="VNM">Vietnam, Socialist Republic of</option><option value="WLF">Wallis &amp; Futuna Islands</option><option value="YEM">Yemen</option><option value="244">Yugoslavia</option><option value="ZMB">Zambia</option><option value="ZWE">Zimbabwe</option>
+              </select>
+              <label class="error" for="">Please select a country</label>
+
+              <hr>
+
+              <label for="commenters_0_.emailAddress">Email</label>
+              <input type="email" id="commenters_0_.emailAddress" name="commenters_0_.emailAddress" title="Maximum length is 100" size="35" maxlength="100" required>
+              <label class="error" for="">An email address is required</label>
+
+              <fieldset class="commenter-controls" data-index-0="false">
+                <button class="button--alt remove-commenter" data-command="remove-commenter" type="button">Remove this commenter</button>
+                <hr>
+                <button class="button--alt add-commenter" data-command="add-commenter" type="button">Add joint commenter</button>
+              </fieldset>
+            </div>{# close #contact-info-template #}
+
+            {# <input type="checkbox" id="createAccount" name="createAccount" value="true" aria-hidden="true" disabled>
+            <label for="createAccount">Save this information for later and create an account</label>
+
+            <fieldset class="" data-show-if-var="createAccount" data-show-if-val="true" aria-hidden="true">
+              <label for="user.password">Create a password</label>
+              <input type="password" id="user.password" name="user.password" autocomplete="false"><button class="button--cta button--go is-disabled" data-action="save-password">Save</button>
+            </fieldset>#}
+
+            <fieldset class="" data-show-if-var="representedEntityType" data-show-if-val="counsel" aria-hidden="true">
+              <hr>
+              <input type="checkbox" id="lawfirm" name="lawfirm" value="true">
+              <label for="lawfirm">Include information about your associated law firm</label>
+            </fieldset>
+
+            <fieldset class="ux-indented" data-show-if-var="lawfirm" data-show-if-val="true" aria-hidden="true">
+
+              <label class="group-label">Law firm information</label>
+
+              <label for="commenters_0_.representedEntity.orgName">Law firm name</label>
+              <input id="commenters_0_.representedEntity.orgName" name="commenters_0_.representedEntity.orgName" type="text" value="" size="40" maxlength="40" required>
+
+              <hr>
+
+              <label for="commenters_0_.representedEntity.addressType">Address type</label>
+              <select id="commenters_0_.representedEntity.addressType" name="commenters_0_.representedEntity.addressType" size="1" required>
+                <option value="">--Select--</option>
+                <option value="Home">Home</option>
+                <option value="Office">Office</option>
+                <option value="Headquarters">Headquarters</option>
+                <option value="Branch">Branch</option>
+                <option value="Other">Other</option>
+              </select>
+
+              <label for="commenters_0_.representedEntity.mailingAddressStreet">Street address and apt/ste #</label>
+              <input type="text" id="commenters_0_.representedEntity.mailingAddressStreet" name="commenters_0_.representedEntity.mailingAddressStreet" value="">
+
+              <label>City</label>
+              <input id="commenters_0_.representedEntity.mailingCity" name="commenters_0_.representedEntity.mailingCity" type="text" value="" size="20" maxlength="28">
+
+              <fieldset class="grid grid--2-wide">
+                <div class="grid__item">
+                  <label>State</label>
+                  <select id="commenters_0_.representedEntity.mailingState" name="commenters_0_.representedEntity.mailingState" size="1">
+                    <option value="">Select state</option>
+                    {% for value, label in constants.states.items() %}
+                      <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="grid__item">
+                  <label for="commenters_0_.representedEntity.mailingZip">ZIP</label>
+                  <input type="text" id="commenters_0_.representedEntity.mailingZip" name="commenters_0_.representedEntity.mailingZip" pattern="^\d{5}(-\d{4}){0,1}$" size="5" maxlength="10">
+                </div>
+              </fieldset>
+
+
+              <label for="commenters_0_.representedEntity.mailingCountry">Country</label>
+              <select id="commenters_0_.representedEntity.mailingCountry" name="commenters_0_.representedEntity.mailingCountry"></select>
+
+              <hr>
+
+              <label for="commenters_0_.representedEntity.emailAddress">Email<span class="label__optional"> (optional)</span></label>
+              <input id="commenters_0_.representedEntity.emailAddress" name="commenters_0_.representedEntity.emailAddress" type="text" value="" size="35" maxlength="40">
+            </fieldset>{# close law firm info #}
+            <fieldset class="commenter-controls" aria-hidden="true">
+              <button class="button--alt add-commenter" type="button" disabled>Add joint commenter</button>
+              <button class="button--alt remove-commenter" type="button" disabled>Remove this one</button>
+            </fieldset>
+          </fieldset>{# close #frame-submitterInfo #}
+          <fieldset id="frame-commentersInfo" class="frame" data-validated="false">
+            <label class="group-label">Add commenter information</label>
+
+            <div id="commenters-holder" class="commenters-block">
+              {# JavaScript populates these with the innerHTML from #contact-info-template #}
+            </div>
+            <fieldset class="commenters-controls" aria-hidden="true">
+              <button class="button--alt add-commenter" type="button" disabled>Add joint commenter</button>
+              <button class="button--alt remove-commenter" type="button" disabled>Remove this one</button>
+            </fieldset>
+              
+
+            {# <input type="checkbox" id="createAccount" name="createAccount" value="true" aria-hidden="true" disabled>
+            <label for="createAccount">Save this information for later and create an account</label>
+
+            <fieldset class="" data-show-if-var="createAccount" data-show-if-val="true" aria-hidden="true">
+              <label for="user.password">Create a password</label>
+              <input type="password" id="user.password" name="user.password" autocomplete="false"><button class="button--cta button--go is-disabled" data-action="save-password">Save</button>
+            </fieldset>#}
+            
+            
+          </fieldset>{# close #frame-commentersInfo #}
+          <fieldset id="frame-comments" class="frame" data-validated="false">
+            Add comments or upload files to submit
+            <p>Comments will be reviewed for inappropriate material before they are posted to FEC.gov. Commenters can attach files, provide text comments, or both.</p>
+
+            <label>Attach file</label>
+            <p class="u-no-margin">You may attach up to three (3) files up to five (5) MB each. Accepted file types are Microsoft Word (.doc or .docx extensions), Microsoft Excel (.xls or .xlsx extensions), text (.text or .rtf extensions) and PDF (.pdf extension) files.</p>
+
+            <div id="files-holder" class="">
+              <fieldset class="field-label-combo">
+                <input
+                type="file"
+                id="files_0_"
+                name="files_0_"
+                accept=".doc, .docx, .pdf, .rtf, .txt" />
+                <!-- #docpicker.files returns a FileList object, which is kind of an Array of files
+                  FileList_0_ has .name, .lastModified, .size, .type
+                -->
+                {# <input type="button" name="continue" value="Attach Selected File" onclick="javascript:upload_attachment(this.form);"> #}
+                <button type="button" class="button--cancel" data-commandfor="files_0_"></button>
+              </fieldset>
+              <fieldset class="field-label-combo">
+                <input
+                type="file"
+                id="files_1_"
+                name="files_1_"
+                accept=".doc, .docx, .pdf, .rtf, .txt" />
+                <button type="button" class="button--cancel" data-commandfor="files_1_"></button>
+              </fieldset>
+              <fieldset class="field-label-combo">
+                <input
+                type="file"
+                id="files_2_"
+                name="files_2_"
+                accept=".doc, .docx, .pdf, .rtf, .txt" />
+                <button type="button" class="button--cancel" data-commandfor="files_2_"></button>
+              </fieldset>
+            </div>
+
+            <hr>
+            <label>Provide text comments</label>
+            <p>Do not duplicate content provided in attachments.</p>
+            <textarea id="comments" name="comments" rows="10" maxlength="4000" spellcheck="true"></textarea>
+            <label for="comments">Available characters remaining: <span id="comments-length-remaining">4,000</span></label>
+
+          </fieldset>{# close #frame-comments #}
+          <fieldset id="frame-summary" class="frame">
+            <table class="summary-table">
+              <tbody>
+                {# this summary table populated by JavaScript #}
+              </tbody>
+            </table>
+          </fieldset>{# close #frame-summary #}
+          <fieldset id="frame-confirmation" class="frame">
+            <div class="message message--alert" data-status="submitting">
+              <h2 class="message__title" tabindex="0">Transmitting</h2>
+              We&apos;re transmitting your comments.
+            </div>
+            <div class="message message--alert" data-status="error">
+              <h2 class="message__title">Error: Could not submit</h2>
+              <p>We had trouble processing your request. Please try reloading the page.</p>
+              <div class="message--alert__bottom">
+                  <p>Still not working?</p>
+                  <ul class="list--buttons">
+                    <li><button class="button--standard" href="https://github.com/fecgov/fec-cms/issues/">File an issue</button></li>
+                  </ul>
+              </div>
+            </div>
+            <div class="message message--success" data-status="success">
+              <h2 class="message__title">Success!</h2>
+              <p>commenters_0_.lastName, commenters_0_.firstName has submitted comments
+              on behalf of commenters[1].orgName and commenters[2].orgName for ${regName} on <time datetime="yyyy-mm-dd hh:mmT-4">D, Mm d, yyyy, at h:mm TimeZone</time>.</p>
+              <div class="message--alert__bottom">
+                  <ul class="list--buttons">
+                    <li><button class="button--standard" href="#">Explore all rulemakings</button></li>
+                  </ul>
+              </div>
+            </div>
+            <p data-status="success">Comments will be reviewed for inappropriate material before they are posted to FEC.gov</p>
+          </fieldset>
+
+        </div>{# close #frames-holder #}
+        <nav class="frames-footer-nav">
+          <button class="button--alt button--back" data-command="back" type="button">Back</button>
+          <button class="button--cta button--go" data-command="next" type="button">Next</button>
+          <button class="button--cta hidden is-disabled" data-command="submit" type="button">Submit</button>
+          <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+          <p class="t-note t-sans">Next step: Provide your comments</p>
+          <!-- mine: 6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv -->
+          <div id="commenting-recaptcha-badge" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-size="invisible"></div>
+        </nav>
+      </form>
+    </div>
+
+<!--
+      <div class="js-accordion accordion--neutral" data-content-prefix="contact" data-open-first="true">
+         <button class="accordion__button js-accordion-trigger">Submit a question</button>
+         <div class="accordion__content row">
+            <form class="js-contact-form contact-form" id="id_contact_form" action="" method="post" novalidate>
+               {# {% csrf_token %} #}
+               <div class="contact-form__element">
+                  <h2>Your contact information</h2>
+               </div>
+               {% for field in form %}
+               {% if field.is_hidden %}
+               {{ field }}
+               {% else %}
+               <div class="contact-form__element {% if field.errors %}is-erroring{% endif %}">
+                  {% if field.id_for_label == 'id_committee_name' %}
+                  <hr class="hr--light">
+                  {% endif %}
+                  {% if field.id_for_label == 'id_u_category' %}
+                  <hr class="hr--dark">
+                  <h2>Your question</h2>
+                  {% endif %}
+                  {% if field.id_for_label == 'id_u_contact_title' %}
+                     <label class="label" for="{{ field.id_for_label }}">{{ field.label }}<span class="label__optional"> (optional)</span></label>
+                  <div class="row">
+                     {{ field }}
+                     <span class="t-note t-sans">Examples: Treasurer; Counsel</span>
+                  </div>
+                  {{ field.errors }}
+                  {% elif field.id_for_label == 'id_u_description' %}
+                     <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  <div class="row">
+                     <span class="t-note t-sans">Please be as detailed as possible</span>
+                     {{ field }}
+                  </div>
+                  {{ field.errors }}
+                  {% elif field.id_for_label == 'id_u_committee_member_certification' %}
+                  <p><a href="/about/privacy-and-security-policy/" class="t-sans">How FEC.gov keeps personal information private</a></p>
+                  <p class="t-italic">Submitting a question on this page is not a response to a Request for Additional Information (RFAI), a Notice of Failure to File or a response to any other written communication from the FEC.</p>
+                  <p class="t-italic">To respond to an official FEC communication, follow the instructions provided in that letter or email.</p>
+                  <p class="t-bold t-italic">By submitting this inquiry, I certify that I’m an authorized  representative of the indicated committee or filing entity.</p>
+                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  {{ field }}
+                  {{ field.errors }}
+                  {% else %}
+                     <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  <div class="row">
+                     {{ field }}
+                  </div>
+                  {{ field.errors }}
+                  {% endif %}
+               </div>
+               {% endif %}
+               {% endfor %}
+               <div class="g-recaptcha" data-sitekey="6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv"></div>
+               <div class="contact-form__element">
+                  <button class="js-submit button button--cta">Submit</button>
+                  <span class="contact-form__reset t-sans">Or <button type="button" class="js-cancel button--unstyled">cancel submission and clear form</button></span>
+               </div>
+            </form>
+         </div>
+      </div>
+
+        <footer>
+          <button class="button--alt">Back</button>
+          <button class="button--cta">Next</button>
+          Next step: Provide your personal information
+        </footer>
+      </form>
+      <input
+        type="file"
+        id="docpicker"
+        multiple="true"
+        accept=".doc, .docx, .pdf, .rtf, .txt" />
+        <!-- #docpicker.files returns a FileList object, which is kind of an Array of files
+          FileList_0_ has .name, .lastModified, .size, .type
+        -->
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ tags_for_js_chunks('rulemakings-commenting.js', '')|safe }}
+{% endblock %}

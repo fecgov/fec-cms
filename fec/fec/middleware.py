@@ -25,8 +25,13 @@ class AddSecureHeaders(MiddlewareMixin):
                 "*.fec.gov",
                 "*.app.cloud.gov",
                 "https://www.google-analytics.com",
+                AWS_S3_BUCKET_URL,
             ],
             "font-src": ["'self'"],
+            "form-action": [
+                "'self'",
+                AWS_S3_BUCKET_URL,
+            ],
             "frame-src": [
                 "'self'",
                 "https://www.google.com/recaptcha/",
