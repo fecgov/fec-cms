@@ -1,5 +1,11 @@
 from django.utils.deprecation import MiddlewareMixin
 from django.conf import settings
+import os
+
+
+FEC_RULEMAKING_BUCKET_NAME = os.getenv("FEC_RULEMAKING_BUCKET_NAME", "")
+FEC_RULEMAKING_S3_REGION_NAME = os.getenv("FEC_RULEMAKING_S3_REGION_NAME", "")
+AWS_S3_BUCKET_URL = f"https://{FEC_RULEMAKING_BUCKET_NAME}.s3.{FEC_RULEMAKING_S3_REGION_NAME}.amazonaws.com"
 
 
 class AddSecureHeaders(MiddlewareMixin):
