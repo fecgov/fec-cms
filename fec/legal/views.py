@@ -245,6 +245,8 @@ def legal_search(request):
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
         'query': original_query,
+        'q_proximities': None,
+        'q_proximitys': None,
         'results': results,
         'result_type': result_type,
         'category_order': get_legal_category_order(results, result_type),
@@ -276,6 +278,9 @@ def legal_doc_search_ao(request):
     ao_statutory_citation = request.GET.get('ao_statutory_citation', '')
     ao_citation_require_all = request.GET.get('ao_citation_require_all', '')
     ao_year = request.GET.get('ao_year', '')
+    q_proximities = request.GET.getlist('q_proximity', [])
+    max_gaps = request.GET.get('max_gaps', '')
+
     query, query_exclude = parse_query(original_query)
 
     # Call the function and unpack its return values
@@ -300,6 +305,8 @@ def legal_doc_search_ao(request):
         ao_statutory_citation=ao_statutory_citation,
         ao_citation_require_all=ao_citation_require_all,
         ao_year=ao_year,
+        max_gaps=max_gaps,
+        q_proximity=q_proximities,
     )
 
     # Define AO document categories dictionary
@@ -350,6 +357,13 @@ def legal_doc_search_ao(request):
         'sortType': sort.replace('-', '')
     }
 
+    for ao in results['advisory_opinions']:
+        for index, doc in enumerate(ao['documents']):
+            # Checks if the selected document category filters matching the document categories
+            doc['category_match'] = str(doc['ao_doc_category_id']) in ao_doc_category_ids
+            # Checks for document keyword text match
+            doc['text_match'] = str(index) in ao['document_highlights']
+        
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
         'parent': 'legal',
         'results': results,
@@ -371,6 +385,8 @@ def legal_doc_search_ao(request):
         'ao_statutory_citation': ao_statutory_citation,
         'ao_citation_require_all': ao_citation_require_all,
         'category_order': get_legal_category_order(results, 'advisory_opinions'),
+        'max_gaps': max_gaps,
+        'q_proximities': q_proximities,
         'social_image_identifier': 'legal',
         'selected_ao_doc_category_ids': ao_doc_category_ids,
         'selected_ao_doc_category_names': ao_document_category_names,
