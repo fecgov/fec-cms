@@ -1,11 +1,11 @@
-Django==5.1.10
+Django==5.1.9
 cfenv==0.5.2
 dj-database-url==0.4.2
 django-libsass==0.7
 gunicorn==23.0.0
 gevent==25.5.1
 psycopg==3.1.20
-requests==2.32.4
+requests==2.32.3
 urllib3==2.2.2
 whitenoise==5.2.0
 wagtail==6.3.0
