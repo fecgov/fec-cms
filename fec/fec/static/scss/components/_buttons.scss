@@ -541,6 +541,44 @@
   }
 }
 
+.button--notebook {
+  font-size: u(1.6rem);
+  line-height: u(2.1rem);
+  margin-left: u(3.7rem);
+  margin-top: u(2.5rem);
+  padding: 0;
+  position: relative;
+  text-align: left;
+
+
+  &::before {
+    content: '';
+    background-size: 100%;
+    display: block;
+    height: u(3.7rem);
+    left: u(-2.3em);
+    position: absolute;
+    top: u(.5rem);
+    width: u(2.7rem);
+    @include u-icon-bg($notebook, $primary);
+  }
+}
+
+.filters__aside .button--notebook {
+  font-size: u(1.09rem);
+  line-height: u(1.5rem);
+  margin-left: u(2.5rem);
+  margin-top: 0;
+  max-width: 260px;
+  padding-left: u(.3rem);
+  
+    &::before { 
+    height: u(3rem);
+    top: u(.4rem);
+    width: u(2rem);
+  }
+}
+
 //For internal/external button widgets in Wagtail
 .block-internal_button .button--primary,
 .block-external_button .button--primary {
@@ -564,3 +602,17 @@
     @include u-icon-bg($minus-circle, $primary);
   }
 }
+
+.button--increment {
+  /* padding: 0 15px  0 15px; */
+  background-position: 0px 50%;
+  @include u-icon-bg($plus-circle, $primary);
+
+}
+
+.button--decrement {
+  background-position: 0px 50%;
+  // padding: 0;
+  @include u-icon-bg($minus-circle, $primary);
+}
+

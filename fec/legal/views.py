@@ -376,6 +376,8 @@ def transform_ecfr_query_string(query_string):
 
 def legal_search(request):
     original_query = request.GET.get('search', '')
+    q_proximities = request.GET.get('q_proximity', '')
+    q_proximitys = request.GET.get('q_proximity', '')
     updated_ecfr_query_string = transform_ecfr_query_string(original_query)
     result_type = request.GET.get('search_type', 'all')
     results = {}
@@ -413,6 +415,8 @@ def legal_search(request):
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
         'query': original_query,
+        'q_proximities': q_proximities,
+        'q_proximitys': q_proximitys,
         'results': results,
         'result_type': result_type,
         'category_order': get_legal_category_order(results, result_type),
@@ -437,15 +441,13 @@ def legal_doc_search_ao(request):
     ao_max_issue_date = request.GET.get('ao_max_issue_date', '')
     ao_min_request_date = request.GET.get('ao_min_request_date', '')
     ao_max_request_date = request.GET.get('ao_max_request_date', '')
-    ao_commenter = request.GET.get('ao_commenter', '')
-    ao_representative = request.GET.get('ao_representative', '')
+    ao_entity_name = request.GET.get('ao_entity_name', '')
     ao_doc_category_ids = request.GET.getlist('ao_doc_category_id', [])
     ao_requestor_type_ids = request.GET.getlist('ao_requestor_type', [])
     ao_regulatory_citation = request.GET.get('ao_regulatory_citation', '')
     ao_statutory_citation = request.GET.get('ao_statutory_citation', '')
     ao_citation_require_all = request.GET.get('ao_citation_require_all', '')
     ao_year = request.GET.get('ao_year', '')
-
     query, query_exclude = parse_query(original_query)
 
     # Call the function and unpack its return values
@@ -464,8 +466,7 @@ def legal_doc_search_ao(request):
         ao_max_issue_date=ao_max_issue_date,
         ao_min_request_date=ao_min_request_date,
         ao_max_request_date=ao_max_request_date,
-        ao_commenter=ao_commenter,
-        ao_representative=ao_representative,
+        ao_entity_name=ao_entity_name,
         ao_doc_category_id=ao_doc_category_ids,
         ao_regulatory_citation=ao_regulatory_citation,
         ao_statutory_citation=ao_statutory_citation,
@@ -536,8 +537,7 @@ def legal_doc_search_ao(request):
         'ao_max_issue_date': ao_max_issue_date,
         'ao_min_request_date': ao_min_request_date,
         'ao_max_request_date': ao_max_request_date,
-        'ao_commenter': ao_commenter,
-        'ao_representative': ao_representative,
+        'ao_entity_name': ao_entity_name,
         'query': query,
         'ao_regulatory_citation': ao_regulatory_citation,
         'ao_statutory_citation': ao_statutory_citation,
@@ -551,6 +551,7 @@ def legal_doc_search_ao(request):
         'ao_year': ao_year,
         'ao_year_opts': ao_year_opts,
         'is_loading': True,  # Indicate that the page is loading initially
+        
     })
 
 
@@ -576,6 +577,8 @@ def legal_doc_search_mur(request):
     case_statutory_citation = request.GET.getlist('case_statutory_citation', [])
     primary_subject_id = request.GET.get('primary_subject_id', '')
     secondary_subject_id = request.GET.get('secondary_subject_id', '')
+    q_proximitys = request.GET.getlist('q_proximity', [])
+    max_gaps = request.GET.get('max_gaps', '0')
 
     query, query_exclude = parse_query(original_query)
 
@@ -610,6 +613,10 @@ def legal_doc_search_mur(request):
         mur_disposition_category_id=mur_disposition_category_ids,
         primary_subject_id=primary_subject_id,
         secondary_subject_id=secondary_subject_id,
+        q_proximity = q_proximitys,
+        max_gaps = max_gaps,
+        
+
     )
 
     # Define MUR document categories dictionary
@@ -704,6 +711,8 @@ def legal_doc_search_mur(request):
         'case_citation_require_all': case_citation_require_all,
         'case_regulatory_citation': case_regulatory_citation,
         'case_statutory_citation': case_statutory_citation,
+        'q_proximitys': q_proximitys,
+        'max_gaps': max_gaps,      
     })
 
 
@@ -723,6 +732,8 @@ def legal_doc_search_adr(request):
     case_min_close_date = request.GET.get('case_min_close_date', '')
     case_max_close_date = request.GET.get('case_max_close_date', '')
     case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
+    q_proximitys = request.GET.getlist('q_proximity', [])
+    max_gaps = request.GET.get('max_gaps', '0')
 
     query, query_exclude = parse_query(original_query)
 
@@ -743,6 +754,8 @@ def legal_doc_search_adr(request):
         case_min_close_date=case_min_close_date,
         case_max_close_date=case_max_close_date,
         case_doc_category_id=case_doc_category_ids,
+        q_proximity = q_proximitys,
+        max_gaps = max_gaps,
     )
 
     # Define ADR document categories dictionary
@@ -785,6 +798,8 @@ def legal_doc_search_adr(request):
         'selected_doc_category_ids': case_doc_category_ids,
         'selected_doc_category_names': adr_document_category_names,
         'is_loading': True,  # Indicate that the page is loading initially
+        'q_proximitys': q_proximitys,
+        'max_gaps': max_gaps,
     })
 
 
@@ -799,6 +814,9 @@ def legal_doc_search_af(request):
     case_max_penalty_amount = request.GET.get('case_max_penalty_amount', '')
     case_min_document_date = request.GET.get('case_min_document_date', '')
     case_max_document_date = request.GET.get('case_max_document_date', '')
+    q_proximitys = request.GET.getlist('q_proximity', [])
+    max_gaps = request.GET.get('max_gaps', '0')
+
     query, query_exclude = parse_query(original_query)
 
     results = api_caller.load_legal_search_results(
@@ -813,7 +831,14 @@ def legal_doc_search_af(request):
         case_max_penalty_amount=case_max_penalty_amount,
         case_min_document_date=case_min_document_date,
         case_max_document_date=case_max_document_date,
+        q_proximity = q_proximitys,
+        max_gaps = max_gaps,
+
     )
+    for af in results['admin_fines']:
+        for index, doc in enumerate(af['documents']):
+            # Checks for document keyword text match
+            doc['text_match'] = str(index) in af['document_highlights']
 
     return render(request, 'legal-search-results-afs.jinja', {
         'parent': 'legal',
@@ -828,6 +853,9 @@ def legal_doc_search_af(request):
         'query': original_query,
         'social_image_identifier': 'legal',
         'is_loading': True,  # Indicate that the page is loading initially
+
+        'q_proximitys': q_proximitys,
+        'max_gaps': max_gaps,
     })
 
 
@@ -867,7 +895,6 @@ def legal_doc_search_regulations(request):
         'query': query,
         'social_image_identifier': 'legal',
     })
-
 
 def legal_doc_search_statutes(request):
     original_query = request.GET.get('search', '')
