@@ -381,88 +381,10 @@
           <button class="button--cta hidden is-disabled" data-command="submit" type="button">Submit</button>
           <script src="https://www.google.com/recaptcha/api.js" async defer></script>
           <p class="t-note t-sans">Next step: Provide your comments</p>
-          <!-- mine: 6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv -->
           <div id="commenting-recaptcha-badge" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-size="invisible"></div>
         </nav>
       </form>
     </div>
-
-<!--
-      <div class="js-accordion accordion--neutral" data-content-prefix="contact" data-open-first="true">
-         <button class="accordion__button js-accordion-trigger">Submit a question</button>
-         <div class="accordion__content row">
-            <form class="js-contact-form contact-form" id="id_contact_form" action="" method="post" novalidate>
-               {# {% csrf_token %} #}
-               <div class="contact-form__element">
-                  <h2>Your contact information</h2>
-               </div>
-               {% for field in form %}
-               {% if field.is_hidden %}
-               {{ field }}
-               {% else %}
-               <div class="contact-form__element {% if field.errors %}is-erroring{% endif %}">
-                  {% if field.id_for_label == 'id_committee_name' %}
-                  <hr class="hr--light">
-                  {% endif %}
-                  {% if field.id_for_label == 'id_u_category' %}
-                  <hr class="hr--dark">
-                  <h2>Your question</h2>
-                  {% endif %}
-                  {% if field.id_for_label == 'id_u_contact_title' %}
-                     <label class="label" for="{{ field.id_for_label }}">{{ field.label }}<span class="label__optional"> (optional)</span></label>
-                  <div class="row">
-                     {{ field }}
-                     <span class="t-note t-sans">Examples: Treasurer; Counsel</span>
-                  </div>
-                  {{ field.errors }}
-                  {% elif field.id_for_label == 'id_u_description' %}
-                     <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                  <div class="row">
-                     <span class="t-note t-sans">Please be as detailed as possible</span>
-                     {{ field }}
-                  </div>
-                  {{ field.errors }}
-                  {% elif field.id_for_label == 'id_u_committee_member_certification' %}
-                  <p><a href="/about/privacy-and-security-policy/" class="t-sans">How FEC.gov keeps personal information private</a></p>
-                  <p class="t-italic">Submitting a question on this page is not a response to a Request for Additional Information (RFAI), a Notice of Failure to File or a response to any other written communication from the FEC.</p>
-                  <p class="t-italic">To respond to an official FEC communication, follow the instructions provided in that letter or email.</p>
-                  <p class="t-bold t-italic">By submitting this inquiry, I certify that I’m an authorized  representative of the indicated committee or filing entity.</p>
-                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                  {{ field }}
-                  {{ field.errors }}
-                  {% else %}
-                     <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                  <div class="row">
-                     {{ field }}
-                  </div>
-                  {{ field.errors }}
-                  {% endif %}
-               </div>
-               {% endif %}
-               {% endfor %}
-               <div class="g-recaptcha" data-sitekey="6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv"></div>
-               <div class="contact-form__element">
-                  <button class="js-submit button button--cta">Submit</button>
-                  <span class="contact-form__reset t-sans">Or <button type="button" class="js-cancel button--unstyled">cancel submission and clear form</button></span>
-               </div>
-            </form>
-         </div>
-      </div>
-
-        <footer>
-          <button class="button--alt">Back</button>
-          <button class="button--cta">Next</button>
-          Next step: Provide your personal information
-        </footer>
-      </form>
-      <input
-        type="file"
-        id="docpicker"
-        multiple="true"
-        accept=".doc, .docx, .pdf, .rtf, .txt" />
-        <!-- #docpicker.files returns a FileList object, which is kind of an Array of files
-          FileList_0_ has .name, .lastModified, .size, .type
-        -->
   </div>
 </div>
 {% endblock %}
