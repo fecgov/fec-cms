@@ -24,6 +24,7 @@ urlpatterns = [
     re_path(r'^data/legal/search/regulations/$',
             views.legal_doc_search_regulations),
     re_path(r'^data/legal/search/statutes/$', views.legal_doc_search_statutes),
+    re_path(r'^data/legal/api/create-submission/', views.create_submission, name='create_submission'),
 ]
 
 if settings.FEATURES['adrs']:
