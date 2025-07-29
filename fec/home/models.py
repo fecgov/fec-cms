@@ -14,6 +14,7 @@ from wagtail.models import Orderable, Page, Revision
 from wagtail.fields import RichTextField, StreamField
 from wagtail import blocks
 from wagtail.admin.panels import (
+    HelpPanel,
     InlinePanel,
     MultiFieldPanel,
     PageChooserPanel,
@@ -799,13 +800,13 @@ class ReportsLandingPage(ContentPage, UniqueModel):
 class AboutLandingPage(Page):
     page_description = 'Unique landing page - About FEC'
     parent_page_types = ['HomePage']
-    subpage_types = ['ReportsLandingPage', 'ResourcePage']
+    subpage_types = [
+        'CustomPage', 'DocumentFeedPage', 'OfficePage', 'ReportsLandingPage', 'ResourcePage', 'FecTimelinePage'
+    ]
     hero = stream_factory(null=True, blank=True)
     sections = StreamField([
         ('sections', OptionBlock())
     ], null=True)
-
-    subpage_types = ['ResourcePage', 'DocumentFeedPage', 'ReportsLandingPage', 'OfficePage', 'CustomPage']
 
     content_panels = Page.content_panels + [
         FieldPanel('hero'),
@@ -1386,6 +1387,9 @@ class OigLandingPage(Page):
         FieldPanel('you_might_also_like'),
     ]
 
+    class Meta:
+        verbose_name = 'OIG landing page'
+
     @property
     def category_filters(self):
         return constants.report_category_groups['oig']
@@ -1473,3 +1477,73 @@ class ReportingDatesTable(Page):
         FieldPanel('footnotes'),
         FieldPanel('citations')
     ]
+
+
+class FecTimelinePage(Page):
+    page_description = 'Unique page - Timeline of FECʼs History'
+    parent_page_types = ['AboutLandingPage']
+    body = stream_factory(null=True, blank=True)
+    category_options = [
+        ('commission', 'Commission'),
+        ('disclosure', 'Disclosure'),
+        ('enforcement', 'Enforcement'),
+        ('legislation', 'Legislation'),
+        ('litigation', 'Litigation'),
+        ('outreach', 'Outreach'),
+        ('public_funding', 'Public funding'),
+        ('regulations', 'Regulations'),
+    ]
+    timeline_entries = StreamField(
+        [('year', blocks.StructBlock([
+            ('year_number', blocks.IntegerBlock(min_value=1960, max_value=2050, disable_comments=True)),
+            ('entries', blocks.StreamBlock([
+                ('entry', blocks.StructBlock([
+                    ('entry_date', blocks.DateBlock(format='%Y-%m-%d', disable_comments=True)),
+                    ('summary', blocks.RawHTMLBlock(label='Summary', form_classname='timeline-summary')),
+                    ('content', blocks.RawHTMLBlock(label='Content')),
+                    ('categories', blocks.MultipleChoiceBlock(
+                        required=False,
+                        choices=category_options
+                    )),
+                    ('start_open', blocks.BooleanBlock(
+                        required=False, disable_comments=True, form_classname="single-line-checkbox"
+                    )),
+                ]))
+            ],
+                collapsed=True)
+            )
+        ]))],
+        collapsed=True,
+        null=True, blank=True
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('body'),
+        FieldPanel('timeline_entries', disable_comments=True, help_text='Scroll to the bottom for special notes'),
+        HelpPanel('<strong>Special notes for this page</strong>:\
+            <ul class="timeline-help"> \
+                <li><em>Year number</em>: the blue year tags</li>\
+                    <em>Summary</em>: the part of each entry thatʼs always visible;<br>\
+                    <em>Content</em>: the toggled content.</li>\
+                <li><em>Summary</em> and <em>Content</em> are html fields.</li>\
+                <li>Wrap dates in a <pre>&lt;time datetime="2025-12-31"&gt;&lt;/time&gt;</pre> where \
+                    <pre>datetime</pre> is an ISO-8601 date. i.e. <pre>yyyy</pre> or <pre>yyyy-mm-dd</pre></li>\
+                <li>To prevent the linebreak before the first <pre>&lt;time&gt;</pre> in a summary,<br>\
+                    add <pre> class="inline"</pre> to the first <pre>&lt;time&gt;</pre></li>\
+                <li>Photos inside the Content should be structured like<br>\
+                    <pre>&lt;figure&gt;</pre><br>\
+                    <pre>&nbsp;&nbsp;&lt;img src="url" alt=""&gt;</pre><br>\
+                    <pre>&nbsp;&nbsp;&lt;figcaption&gt;Caption content&lt;/figcaption&gt;</pre><br>\
+                    <pre>&lt;/figure&gt;</pre></li>\
+                <li>The default layout for content is for images to float to the right and text to flow around them \
+                    on the left. To change that, add <pre> class="float-left"</pre> to the <pre>&lt;figure&gt;</pre>.\
+                    (<pre>float-right</pre> is defined, too, but itʼs the default)</li>\
+                <li>If <em>Start open</em> is checked, this entry will be open on page load</li>\
+                <li>If launch YouTube links in the modal on this page, add <pre> data-media="url"</pre> to a link or \
+                    other element. The url should be in a format like <pre>youtube.com/embed/[videoid]</pre>,\
+                    <pre>youtu.be/[videoid]</pre>, or <pre>v=[videoid]</pre>.</li>\
+            </ul>'),
+    ]
+
+    class Meta:
+        verbose_name = 'FEC historical timeline page'

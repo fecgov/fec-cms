@@ -80,3 +80,54 @@ li.sequence-member .sequence-member-inner .sequence-type-list .sequence-containe
 .richtext ol ol ol li {
   list-style-type: lower-roman;
 }
+
+/*
+ * Specials for editing the FEC timeline
+ */
+.timeline-summary textarea {
+  height: 6.5rem;
+}
+/* Switch off comment buttons when editing the timeline entries */
+input[name^="timeline_entries"] + .w-field__comment-button.w-field__comment-button--add {
+  display: none !important;
+}
+/* Some single-line label/input pairs */
+[data-contentpath="year_number"],
+[data-contentpath="entry_date"],
+[data-contentpath="start_open"] {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  float: none;
+  margin-bottom: 1rem;
+
+  & > label {
+    order: 2;
+  }
+  & > .w-field__wrapper {
+    margin-bottom: 0;
+    order: 1;
+    padding-bottom: 0;
+  }
+  .w-field__input {
+    margin-right: .75rem;
+    margin-top: 0;
+  }
+  input {
+    margin-right: 0rem;
+  }
+}
+ul.timeline-help {
+  li {
+    list-style-type: initial;
+  }
+  pre {
+    display: inline-block;
+    font-size: 90%;
+    margin: 0;
+    opacity: .66;
+  }
+}
+/*
+ * End of specials for editing the FEC timeline
+ */
