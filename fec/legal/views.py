@@ -249,7 +249,6 @@ def legal_search(request):
         'parent': 'legal',
         'query': original_query,
         'q_proximities': None,
-        'q_proximities': None,
         'results': results,
         'result_type': result_type,
         'category_order': get_legal_category_order(results, result_type),
