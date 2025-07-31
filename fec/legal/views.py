@@ -246,7 +246,6 @@ def legal_search(request):
         'parent': 'legal',
         'query': original_query,
         'q_proximities': None,
-        'q_proximitys': None,
         'results': results,
         'result_type': result_type,
         'category_order': get_legal_category_order(results, result_type),
@@ -421,7 +420,7 @@ def legal_doc_search_mur(request):
     case_statutory_citation = request.GET.getlist('case_statutory_citation', [])
     primary_subject_id = request.GET.get('primary_subject_id', '')
     secondary_subject_id = request.GET.get('secondary_subject_id', '')
-    q_proximitys = request.GET.getlist('q_proximity', [])
+    q_proximities = request.GET.getlist('q_proximity', [])
     max_gaps = request.GET.get('max_gaps', '0')
 
     query, query_exclude = parse_query(original_query)
@@ -457,7 +456,7 @@ def legal_doc_search_mur(request):
         mur_disposition_category_id=mur_disposition_category_ids,
         primary_subject_id=primary_subject_id,
         secondary_subject_id=secondary_subject_id,
-        q_proximity = q_proximitys,
+        q_proximity = q_proximities,
         max_gaps = max_gaps,
         
 
@@ -555,7 +554,7 @@ def legal_doc_search_mur(request):
         'case_citation_require_all': case_citation_require_all,
         'case_regulatory_citation': case_regulatory_citation,
         'case_statutory_citation': case_statutory_citation,
-        'q_proximitys': q_proximitys,
+        'q_proximities': q_proximities,
         'max_gaps': max_gaps,      
     })
 
@@ -576,7 +575,7 @@ def legal_doc_search_adr(request):
     case_min_close_date = request.GET.get('case_min_close_date', '')
     case_max_close_date = request.GET.get('case_max_close_date', '')
     case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
-    q_proximitys = request.GET.getlist('q_proximity', [])
+    q_proximities = request.GET.getlist('q_proximity', [])
     max_gaps = request.GET.get('max_gaps', '0')
 
     query, query_exclude = parse_query(original_query)
@@ -598,7 +597,7 @@ def legal_doc_search_adr(request):
         case_min_close_date=case_min_close_date,
         case_max_close_date=case_max_close_date,
         case_doc_category_id=case_doc_category_ids,
-        q_proximity = q_proximitys,
+        q_proximity = q_proximities,
         max_gaps = max_gaps,
     )
 
@@ -642,7 +641,7 @@ def legal_doc_search_adr(request):
         'selected_doc_category_ids': case_doc_category_ids,
         'selected_doc_category_names': adr_document_category_names,
         'is_loading': True,  # Indicate that the page is loading initially
-        'q_proximitys': q_proximitys,
+        'q_proximities': q_proximities,
         'max_gaps': max_gaps,
     })
 
@@ -658,7 +657,7 @@ def legal_doc_search_af(request):
     case_max_penalty_amount = request.GET.get('case_max_penalty_amount', '')
     case_min_document_date = request.GET.get('case_min_document_date', '')
     case_max_document_date = request.GET.get('case_max_document_date', '')
-    q_proximitys = request.GET.getlist('q_proximity', [])
+    q_proximities = request.GET.getlist('q_proximity', [])
     max_gaps = request.GET.get('max_gaps', '0')
 
     query, query_exclude = parse_query(original_query)
@@ -675,7 +674,7 @@ def legal_doc_search_af(request):
         case_max_penalty_amount=case_max_penalty_amount,
         case_min_document_date=case_min_document_date,
         case_max_document_date=case_max_document_date,
-        q_proximity = q_proximitys,
+        q_proximity = q_proximities,
         max_gaps = max_gaps,
 
     )
@@ -698,7 +697,7 @@ def legal_doc_search_af(request):
         'social_image_identifier': 'legal',
         'is_loading': True,  # Indicate that the page is loading initially
 
-        'q_proximitys': q_proximitys,
+        'q_proximities': q_proximities,
         'max_gaps': max_gaps,
     })
 

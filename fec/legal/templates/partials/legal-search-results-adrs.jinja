@@ -36,7 +36,7 @@
               {# Check for set keyword queries #}
               {% set filters_keyword = query | length > 0 %}
               {# Check for set proximity queries #}
-              {% set filters_proximity = q_proximitys[0] != '' and q_proximitys[1] != '' and max_gaps != '' %}
+              {% set filters_proximity = q_proximities[0] != '' and q_proximities[1] != '' and max_gaps != '' %}
               {# Check for proximity-only queries #}
               {% set proximity_only = filters_proximity and not filters_keyword %}
               {# Only show documents when categories or keywords are set #}
