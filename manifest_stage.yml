@@ -1,7 +1,7 @@
 ---
 applications:
   - name: cms
-    instances: 1
+    instances: 2
     memory: 512M
     disk_quota: 1G
     stack: cflinuxfs4
