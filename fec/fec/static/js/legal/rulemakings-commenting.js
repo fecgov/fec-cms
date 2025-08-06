@@ -235,32 +235,29 @@ RulemakingsCommenting.prototype.updateHeightForCurrentFrame = function() {
 };
 
 /**
- * Will build or update "next" frames as needed
+ * Will build or update "next" frames as needed.
+ * e.g. if moving from frame 0 to 1, will toggle fields for frame 1 based on values from frame 0
  */
 RulemakingsCommenting.prototype.updateLaterFrames = function() {
-  console.log('updateLaterFrames()');
-
   if (this.currentFrameNum === 1) {
-    console.log('  frame 1');
     if (this.representedEntityType == 'self') {
       //
     }
   } else if (this.currentFrameNum === 2) {
     // 2 is the commenter info
-    let commentersHolder = this.formEl.querySelector('#commenters-holder');
+    const commentersHolder = this.formEl.querySelector('#commenters-holder');
     if (!commentersHolder.childElementCount) {
       this.addCommenter();
     }
 
   } else if (this.currentFrameNum === 4) {
-    console.log('  summary!');
 
     if (!this.validateEntireForm()) {
       console.log('SHOULD GO BACK TO PREVIOUS PAGE!');
     }
 
-    let formData = new FormData(this.formEl);
-    let summaryTable = this.frame4.querySelector('table tbody');
+    const formData = new FormData(this.formEl);
+    const summaryTable = this.frame4.querySelector('table tbody');
     let newInnerHtml = '';
 
     // TODO: REMOVE THIS
@@ -348,6 +345,7 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
       newInnerHtml += `<tr><td>Attachment:</td><td>${formData.get('files_2_').name}</td></tr>`;
 
     newInnerHtml += `<tr><td colspan="2"><hr></td></tr>`;
+
     // Comments are saved as \n but those don't display here so we'll replace \n with <br> to display here only
     const commentsWithNewlines = formData.get('comments');
     const commentsWithBreaks = commentsWithNewlines.replaceAll('\n', '<br>'); //
@@ -356,7 +354,6 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
     summaryTable.innerHTML = newInnerHtml;
 
   } else if (this.currentFrameNum === 5) {
-    console.log('CONFIRMATION PAGE');
     // Confirmation page!
 
     // If we have a success response, let's put those details into the page
@@ -430,10 +427,10 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
 };
 
 /**
+ * Validates every field in this.formEl
  * @returns {boolean}
  */
 RulemakingsCommenting.prototype.validateEntireForm = function() {
-  console.log('validateEntireForm()');
   let toReturn = true;
   let formData = new FormData(this.formEl);
 
@@ -508,30 +505,26 @@ RulemakingsCommenting.prototype.validateEntireForm = function() {
       toReturn = false;
   }
 
-  console.log('  toReturn: ', toReturn);
   return toReturn;
 };
 
 /**
- * 
+ * Validates a single field
  * @param {(string|HTMLElement)} elOrSelector - HTML element or a string to select it
  * @param {boolean} [requireValue=false]
- * @returns {boolean} whether the field is validated
+ * @returns {boolean} whether the field is valid
  */
 RulemakingsCommenting.prototype.validateField = function(elOrSelector, requireValue = false) {
-  console.log('validateField(elOrSelector, requireValue): ', elOrSelector, requireValue);
   const theField = typeof elOrSelector === 'string'
     ? this.formEl.querySelector(elOrSelector)
     : elOrSelector;
   const fieldName = theField.name;
   const formData = new FormData(this.formEl);
   let toReturn = true;
-  console.log('  theField: ', theField);
-  console.log('  fieldName: ', fieldName);
 
   // Testing a state field, it needs to be exactly two letters if for the USA. Otherwise optional.
   if (fieldName.indexOf('State') > 0) {
-    let theCountry = formData.get(fieldName.replace('State', 'Country'));
+    const theCountry = formData.get(fieldName.replace('State', 'Country'));
     if (theCountry === 'USA' && !formData.get(fieldName).length !== 2) {
       if (requireValue) theField.classList.add('invalid');
       toReturn = false;
@@ -539,7 +532,7 @@ RulemakingsCommenting.prototype.validateField = function(elOrSelector, requireVa
 
   // ZIP Codes in the USA should be five numbers then optionally a dash and four numbers. Optional outside the US
   } else if (fieldName.indexOf('Zip') > 0) {
-    let theCountry = formData.get(fieldName.replace('Zip', 'Country'));
+    const theCountry = formData.get(fieldName.replace('Zip', 'Country'));
     const zipRegex = /\d{5}(-\d{4}){0,1}$/;
     if (theCountry === 'USA' && !zipRegex.test(formData.get(fieldName))) {
       if (requireValue) theField.classList.add('invalid');
@@ -554,6 +547,7 @@ RulemakingsCommenting.prototype.validateField = function(elOrSelector, requireVa
 };
 
 /**
+ * Starts with this.commenterTemplate, removes appropriate fields, numbers it, then returns the new commenter element.
  * @returns {HTMLElement} Returns the new commenter/div created
  */
 RulemakingsCommenting.prototype.addCommenter = function() {
@@ -582,18 +576,17 @@ RulemakingsCommenting.prototype.addCommenter = function() {
 
   commentersHolder.appendChild(newCommenter);
 
-  console.log('  this.formEl: ', this.formEl);
   this.formEl.dispatchEvent(new Event('change')); // For the height resize
 
   return newCommenter;
 };
 
 /**
- * 
+ * Removes the commenter (el) and re-numbers those remaining.
  * @param {HTMLElement} el
  */
 RulemakingsCommenting.prototype.removeCommenter = function(el) {
-  let commentersHolder = this.formEl.querySelector('#commenters-holder');
+  const commentersHolder = this.formEl.querySelector('#commenters-holder');
   // If we won't be removing the only commenter, do it
   el.remove();
 
@@ -601,19 +594,16 @@ RulemakingsCommenting.prototype.removeCommenter = function(el) {
   if (commentersHolder.childElementCount < 1) this.addCommenter();
 
   // Re-number the remaining commenters
-  let commenters = [...commentersHolder.children];
+  const commenters = [...commentersHolder.children];
   commenters.forEach((commenter, i) => {
-    let i1 = i + 1;
-    let elementsToUpdate = commenter.querySelectorAll('input, select, label');
+    const i1 = i + 1;
+    const elementsToUpdate = commenter.querySelectorAll('input, select, label');
     elementsToUpdate.forEach(elToUpdate => {
-      console.log('  elToUpdate: ', elToUpdate);
       if (elToUpdate.name) elToUpdate.setAttribute('name', elToUpdate.name.replace(/(\[\d+\])/, `[${i1}]`));
       if (elToUpdate.id) elToUpdate.setAttribute('id', elToUpdate.id.replace(/(\[\d+\])/, `[${i1}]`));
       if (elToUpdate.for) elToUpdate.setAttribute('for', elToUpdate.for.replace(/(\[\d+\])/, `[${i1}]`));
-      console.log('    elToUpdate: ', elToUpdate);
     });
-    let commenterNumberLabel = commenter.querySelector('label:first-of-type');
-    console.log('  commenterNumberLabel: ', commenterNumberLabel);
+    const commenterNumberLabel = commenter.querySelector('label:first-of-type');
     commenterNumberLabel.innerHTML = `Commenter #${(i1)}`;
   });
 
@@ -626,11 +616,11 @@ RulemakingsCommenting.prototype.removeCommenter = function(el) {
  * @param {InputEvent} e
  */
 RulemakingsCommenting.prototype.handlePhoneInput = function(e) {
-  let field = e.target;
-  let digitsStr = field.value.replaceAll(/\D/g, '').substring(0,10);
-  let area = digitsStr.substring(0,3);
-  let prefix = digitsStr.substring(3,6);
-  let line = digitsStr.substring(6,10);
+  const field = e.target;
+  const digitsStr = field.value.replaceAll(/\D/g, '').substring(0,10);
+  const area = digitsStr.substring(0,3);
+  const prefix = digitsStr.substring(3,6);
+  const line = digitsStr.substring(6,10);
   // I like these being >5 and >2 but then it's impossible to backspace from line to prefix or from prefix to area
   if (digitsStr.length > 6) field.value = `(${area}) ${prefix}-${line}`;
   else if (digitsStr.length > 3) field.value = `(${area}) ${prefix}`;
@@ -638,10 +628,10 @@ RulemakingsCommenting.prototype.handlePhoneInput = function(e) {
 };
 
 /**
- *
+ * Handles all click events on a commenter, then calls addCommenter() or removeCommenter() as needed.
+ * Both events are here to minimizes adding and removing listeners when adding & removing commenters.
  */
 RulemakingsCommenting.prototype.handleCommenterClick = function(e) {
-  console.log('handleCommenterClick(e): ', e);
   e.preventDefault();
   if (e.target.dataset.command == 'add-commenter') {
     this.addCommenter();
@@ -653,27 +643,24 @@ RulemakingsCommenting.prototype.handleCommenterClick = function(e) {
 };
 
 /**
- *
+ * Called when someone clicks the ⓧ to remove an attached file, clears the file
+ * then dispatches a change event to be handled by handleFormChange.
  * @param {PointerEvent} e
  */
 RulemakingsCommenting.prototype.handleFileCancelClick = function(e) {
-  console.log('handleFileCancelClick(e): ', e);
   e.preventDefault();
 
   // Find the linked <input> element, clear its value and remove the has-file class
-  let linkedInput = this.formEl.querySelector(`#${e.target.dataset.commandfor}`);
-  console.log('. linkedInput: ', linkedInput);
-  // linkedInput.type = ''; // Change it to not-a-file because we can't set the .value or .files
-  // linkedInput.type = 'file'; // Change it back to a file selector
+  const linkedInput = this.formEl.querySelector(`#${e.target.dataset.commandfor}`);
   linkedInput.value = '';
   linkedInput.classList.remove('has-file');
+  // Trigger the change event so the form will update its validation requirements
+  linkedInput.dispatchEvent(new Event('change', { bubbles: true }));
 };
 
 /**
  * @param {HTMLElement}
 */
-RulemakingsCommenting.prototype.toggleCommenterFields = function(targetEl) {
-  // /*console.log('toggleCommenterFields(targetEl): ', targetEl);
 /*RulemakingsCommenting.prototype.toggleCommenterFields = function(targetEl) {
   console.log('toggleCommenterFields(targetEl): ', targetEl);
   let commenterBlock = targetEl.closest('.commenter');
@@ -694,25 +681,24 @@ RulemakingsCommenting.prototype.toggleCommenterFields = function(targetEl) {
 };*/
 
 /**
- * 
+ * Adds or removes elements based on their [data-show-if-var] and [data-show-if-val] values
+ * then calls updateHeightForCurrentFrame
  */
 RulemakingsCommenting.prototype.toggleElementsByVars = function() {
   console.log('toggleElementsByVars()');
-  let elementsToToggle = this.formEl.querySelectorAll('[data-show-if-var][data-show-if-val]');
+  const elementsToToggle = this.formEl.querySelectorAll('[data-show-if-var][data-show-if-val]');
   elementsToToggle.forEach(elToToggle => {
-    console.log('\n  forEach');
-    let varName = elToToggle.dataset.showIfVar; // Which variable/input are we checking?
-    let varValue = elToToggle.dataset.showIfVal; // What value is the display value?
+    const varName = elToToggle.dataset.showIfVar; // Which variable/input are we checking?
+    const varValue = elToToggle.dataset.showIfVal; // What value is the display value?
     //
     // We want :checked elements tied to the same elements
     // let selectorString = `[name="${varName}"]:checked, [name="${varName}"]:not([type="checkbox"], [type="radio"])`;
-    let selectorString = `[name="${varName}"]:checked`;
-    // console.log('    selectorString: ', selectorString);
+    const selectorString = `[name="${varName}"]:checked`;
 
-    let controllerInput = this.formEl.querySelector(selectorString);
+    const controllerInput = this.formEl.querySelector(selectorString);
     let shouldShow = false;
     if (controllerInput) {
-      let matchedInputValue = controllerInput.value;
+      const matchedInputValue = controllerInput.value;
       shouldShow = matchedInputValue == varValue;
     }
 
@@ -720,7 +706,7 @@ RulemakingsCommenting.prototype.toggleElementsByVars = function() {
     else elToToggle.setAttribute('aria-hidden', true);
 
     // Make child elements required or not, based on whether its parent is visible
-    let innerInputs = elToToggle.querySelectorAll('select,input:not([type="checkbox"])');
+    const innerInputs = elToToggle.querySelectorAll('select,input:not([type="checkbox"])');
     innerInputs.forEach(input => {
       if (shouldShow) input.setAttribute('required', '');
       else input.removeAttribute('required');
@@ -734,25 +720,22 @@ RulemakingsCommenting.prototype.toggleElementsByVars = function() {
  * Updates the meter and links in the topnav
  */
 RulemakingsCommenting.prototype.updateTopNav = function() {
-  console.log('updateTopNav()');
-  console.log('  this.currentFrameNum: ', this.currentFrameNum);
-
   if (this.currentFrameNum === 5) {
     this.topNav.classList.add('hidden');
     return;
   }
 
-  let theMeter = this.topNav.querySelector('meter');
+  const theMeter = this.topNav.querySelector('meter');
 
   if (!this.representedEntityType) return; // If we don't have a type, don't show self
 
   // Where are we now?
   theMeter.value = this.currentFrameNum + 1;
-  let totalFrames = 5;//this.representedEntityType === 'self' ? 4 : 5;
+  const totalFrames = 5;//this.representedEntityType === 'self' ? 4 : 5;
   theMeter.setAttribute('max', totalFrames);
   theMeter.setAttribute('value', this.currentFrameNum + 1);
 
-  let navLabels = this.topNav.querySelectorAll('li a');
+  const navLabels = this.topNav.querySelectorAll('li a');
   if (['self'].includes(this.representedEntityType)) {
     navLabels[0].textContent = 'Submitting on behalf of myself';
     navLabels[1].textContent = 'Your information';
@@ -796,12 +779,11 @@ RulemakingsCommenting.prototype.updateTopNav = function() {
  * @param {('next'|'incomplete'|'submit')} frameState
  */
 RulemakingsCommenting.prototype.updateBottomNav = function(state = 'incomplete') {
-  console.log('updateBottonNav(state): ', state);
-
-  console.log('  this.currentFrameNum: ', this.currentFrameNum);
-  if (this.currentFrameNum === 5) {
+  if (this.currentFrameNum === 5 && this.submissionStatus === 'success') {
     this.bottomNav.classList.add('hidden');
     return;
+  } else if (this.currentFrameNum === 5 && this.submissionStatus === 'error') {
+    // TODO?
   }
 
   this.formEl.querySelector('[data-command="next"]').classList.toggle('is-inactive', state === 'incomplete');
@@ -836,6 +818,7 @@ RulemakingsCommenting.prototype.updateBottomNav = function(state = 'incomplete')
 };
 
 /**
+ * On <form> changes, toggleElementsByVars(), clean up values, toggle required states, then validateCurrentFrame()
  * @param {Event} e
  */
 RulemakingsCommenting.prototype.handleFormChange = function(e) {
@@ -843,17 +826,28 @@ RulemakingsCommenting.prototype.handleFormChange = function(e) {
   // Maybe later: this.formEl.removeAttribute('data-has-been-active');
   this.toggleElementsByVars();
 
-  // let formData = new FormData(this.formEl);
-
+  // Trim text inputs
   // If it's a text-type element, first trim off any leading or trailing spaces
-  if (['text', 'email'].includes(e.target.type))
+  if (['text', 'email', 'textarea'].includes(e.target.type))
     e.target.value = e.target.value.trim();
 
+  // Handle the file inputs
   if (e.target.type == 'file') {
     // Add/remove the has-file class to toggle the X button, which will let css show additional pickers
     e.target.classList.toggle('has-file', e.target.files);
     // let filesHolder = this.formEl.querySelectorAll('#files-holder fieldset');
   }
+
+  // If we have files attached or comments, the other isn't required
+  const fileInputs = this.formEl.querySelectorAll('input[type="file"]');
+  const commentsField = this.formEl.querySelector('textarea[name="comments"]');
+  let commentsAreRequired = true;
+  fileInputs.forEach(input => {
+    console.log('fileInputs.forEach input.files: ', input.files);
+    if (input.files.length > 0) commentsAreRequired = false;
+  });
+  if (commentsAreRequired) commentsField.setAttribute('required', '');
+  else commentsField.removeAttribute('required');
 
   // The first frame has an 'other' field to toggle
   if (e.target.name === 'representedEntityType' || e.target.name === 'representedEntityConnection') {
@@ -863,15 +857,14 @@ RulemakingsCommenting.prototype.handleFormChange = function(e) {
 
     if (e.target.name === 'representedEntityType')
       this.representedEntityType = e.target.value;
-      console.log('  this.representedEntityType: ', this.representedEntityType);
 
     // TODO: If the type is anything other than 'other', skip anything leftover in the relationship field
   }
 
   // If we've changed the country, we'll toggle whether state and ZIP are required (req for US/USA)
   if (e.target.name.indexOf('.mailingCountry') > 0) {
-    let elementNameRoot = e.target.name.substring(0, e.target.name.lastIndexOf('.'));
-    let zipAndStateFields = this.formEl.querySelectorAll(
+    const elementNameRoot = e.target.name.substring(0, e.target.name.lastIndexOf('.'));
+    const zipAndStateFields = this.formEl.querySelectorAll(
       `[name="${elementNameRoot}.mailingState"], [name="${elementNameRoot}.mailingZip"]`
     );
     zipAndStateFields.forEach(field => {
@@ -885,12 +878,12 @@ RulemakingsCommenting.prototype.handleFormChange = function(e) {
   // If we've changed the commenter type, let's toggle the required name <input>s (i.e. first+last or org name)
   if (e.target.name.indexOf('.commenterType') > 0) {
     // The type of commenter
-    let commType = e.target.value;
-    let parentEl = e.target.closest('.commenter');
+    const commType = e.target.value;
+    const parentEl = e.target.closest('.commenter');
     // required fields are inputs inside the matching data-toggle
     // non-required are inputs inside elements with data-toggle but the data-toggle that doesn't match
-    let requiredEls = parentEl.querySelectorAll(`[data-toggle="${commType}"] input`);
-    let nonReqEls = parentEl.querySelectorAll(`[data-toggle]:not([data-toggle="${commType}"]) input`);
+    const requiredEls = parentEl.querySelectorAll(`[data-toggle="${commType}"] input`);
+    const nonReqEls = parentEl.querySelectorAll(`[data-toggle]:not([data-toggle="${commType}"]) input`);
     requiredEls.forEach(el => { el.setAttribute('required', ''); });
     nonReqEls.forEach(el => { el.removeAttribute('required'); });
   }
@@ -908,22 +901,17 @@ RulemakingsCommenting.prototype.handleFormChange = function(e) {
  * @param {number} [validationType=1] - Optional. For a 'force' value:
  */
 RulemakingsCommenting.prototype.validateCurrentFrame = function(validationType = 0) {
-  console.log('validateCurrentFrame(validationType): ', validationType);
   let isValidated = true;
-  let currentFrame = this.frames[this.currentFrameNum];
+  const currentFrame = this.frames[this.currentFrameNum];
 
   // Put the larger of the current or new validation type
   // (because we don't want to force all of the errors on and then fixing one relaxes them all)
   currentFrame.dataset.validation = Math.max(validationType, parseInt(currentFrame.dataset.validation));
 
-  let invalidFrameInputs = currentFrame.querySelectorAll('input:invalid, select:invalid, textarea:invalid');
+  const invalidFrameInputs = currentFrame.querySelectorAll('input:invalid, select:invalid, textarea:invalid');
   isValidated = invalidFrameInputs.length === 0;
 
-  console.log('  invalidFrameInputs: ', invalidFrameInputs);
-
   let bottomNavState = isValidated === true ? 'next' : 'incomplete';
-  // TODO: remove this
-  // bottomNavState = 'next';
 
   if (this.currentFrameNum === 4) bottomNavState = 'submit';
   else if (this.currentFrameNum === 5) bottomNavState = 'confirmation';
@@ -934,21 +922,18 @@ RulemakingsCommenting.prototype.validateCurrentFrame = function(validationType =
 };
 
 /**
- * 
+ * Calls this.toggleHelp();
  * @param {PointerEvent} e
  */
 RulemakingsCommenting.prototype.handleTooltipClick = function(e) {
-  console.log('handleTooltipClick(e): ', e);
   this.toggleHelp(e.target);
 };
 
 /**
- * 
+ * Handler for clicking the back, next, and submit buttons, then calls goToFrame() or startSubmitting()
  * @param {PointerEvent} e
  */
 RulemakingsCommenting.prototype.handleBottomNavClick = function(e) {
-  console.log('handleBottomNavClick(e): ', e);
-
   e.preventDefault();
 
   if (e.target.dataset.command == 'next') {
@@ -972,8 +957,8 @@ RulemakingsCommenting.prototype.toggleHelp = function(targetEl) {
     this.help.classList.remove('show');
 
   } else {
-    let titleEl = this.help.querySelector('.help_title');
-    let contentEl = this.help.querySelector('.help_content');
+    const titleEl = this.help.querySelector('.help_title');
+    const contentEl = this.help.querySelector('.help_content');
 
     // If we're supposed to show different content, or
     // if the content isn't changing but it's currently hidden, show it
@@ -983,7 +968,7 @@ RulemakingsCommenting.prototype.toggleHelp = function(targetEl) {
       this.help.classList.add('show');
       this.help.classList.remove('hidden');
 
-      let newPointerY = targetEl.getBoundingClientRect().top - this.help.getBoundingClientRect().top - 10;
+      const newPointerY = targetEl.getBoundingClientRect().top - this.help.getBoundingClientRect().top - 10;
       this.help.querySelector('.pointer').style = `top:${newPointerY}px`;
 
     } else { // Otherwise, hide it
@@ -1105,7 +1090,7 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
 };
 
 /**
- * 
+ * Called after the fetches have resolved, then sends us to the confirmation page
  */
 RulemakingsCommenting.prototype.handleSubmissionResponse = function (response) {
   console.log('handleSubmissionResponse(response): ', response);
