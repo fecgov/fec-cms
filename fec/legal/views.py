@@ -43,7 +43,7 @@ def submit_rulemaking_comments(request):
         'reg_name': data.get('reg_name', '').strip(),
         'reg_no': data.get('reg_no', '').strip(),
 
-        'representedEntityRelationship': (data.get('representedEntityRelationship') or '').strip(),
+        'representedEntityConnection': (data.get('representedEntityConnection') or '').strip(),
         'representedEntityType': (data.get('representedEntityType') or '').strip(),
 
         'commenters_0_.firstName': (data.get('commenters_0_.firstName') or '').strip(),

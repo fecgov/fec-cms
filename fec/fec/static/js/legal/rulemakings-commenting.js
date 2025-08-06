@@ -276,7 +276,7 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
       newInnerHtml += `<tr><th colspan="2">Officer/Representative/Member</th></tr>`;
 
     else if (this.representedEntityType === 'other')
-      newInnerHtml += `<tr><th colspan="2">${formData.get('representedEntityRelationship')}</th></tr>`;
+      newInnerHtml += `<tr><th colspan="2">${formData.get('representedEntityConnection')}</th></tr>`;
 
     // Everyone: first commenter's info
     newInnerHtml += `<tr><td>Name:</td><td>${formData.get('commenters_0_.firstName')} ${formData.get('commenters_0_.lastName')}</td></tr>`;
@@ -302,7 +302,7 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
       }
 
       // COMMENTER LOOP
-      // /counsel fot another person group or org
+      // /counsel for another person group or org
       for (let i = 1;
         formData.has('commenters_' + i + '_.firstName') ||
         formData.has('commenters_' + i + '_.orgName');
@@ -446,7 +446,7 @@ RulemakingsCommenting.prototype.validateEntireForm = function() {
 
   // For 'other' relationships, record how they label the relationship
   if (this.representedEntityType === 'other')
-    requiredFieldNames.push('representedEntityRelationship');
+    requiredFieldNames.push('representedEntityConnection');
 
   // Fields required only for counsel AND if they've chosen to include law firm information
   if (this.representedEntityType === 'counsel' && formData.get('lawfirm') === true) {
@@ -810,7 +810,7 @@ RulemakingsCommenting.prototype.handleFormChange = function(e) {
   }
 
   // The first frame has an 'other' field to toggle
-  if (e.target.name === 'representedEntityType' || e.target.name === 'representedEntityRelationship') {
+  if (e.target.name === 'representedEntityType' || e.target.name === 'representedEntityConnection') {
     // For the first frame, there's been activity so let's restrict leaving the page and losing data
     this.formEl.dataset.hasBeenActive = true;
     // formData.set(e.target.name, e.target.value);
