@@ -54,6 +54,12 @@ def submit_rulemaking_comments(request):
         'commenters_0_.mailingCountry': (data.get('commenters_0_.mailingCountry') or '').strip(),
         'commenters_0_.emailAddress': (data.get('commenters_0_.emailAddress') or '').strip(),
     }
+
+    # If they'd like to testify, save that and their phone number
+    if data.get('commenters_0_.testify'):
+        to_submit['commenters_0_.testify'].push(data.get('commenters_0_.testify'))
+        to_submit['commenters_0_.phone'].push(data.get('commenters_0_.phone'))
+
     # If we're including law firm information, add those
     if data.get('lawfirm'):
         to_submit['commenters_0_.representedEntity.orgName'] = \
@@ -345,11 +351,11 @@ def forces_page(request):
     # if not admin_fine:
     #     raise Http404()
     return render(request, 'rulemakings-comments.jinja', {
-        # 'admin_fine': admin_fine,
         'reg_no': '2024-06',
         'reg_name': 'Requests to modify or Redact Contributor Information',
         'parent': 'legal',
         'social_image_identifier': 'legal',
+        'could_testify': True,
     })
 
 

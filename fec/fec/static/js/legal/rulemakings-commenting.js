@@ -143,6 +143,9 @@ RulemakingsCommenting.prototype.init = function() {
     button.addEventListener('click', this.handleFileCancelClick.bind(this));
   });
 
+  let phoneInput = this.formEl.querySelector('[name="commenters_0_.phone"]');
+  if (phoneInput) phoneInput.addEventListener('input', this.handlePhoneInput.bind(this));
+
   let tooltipTriggers = this.formEl.querySelectorAll('.tooltip__trigger');
   tooltipTriggers.forEach(button => {
     button.addEventListener('click', this.handleTooltipClick.bind(this));
@@ -448,6 +451,10 @@ RulemakingsCommenting.prototype.validateEntireForm = function() {
   if (this.representedEntityType === 'other')
     requiredFieldNames.push('representedEntityConnection');
 
+  // For those who'd like to testify
+  if (formData.get('commenters_0_.testify') === true)
+    requiredFieldNames.push('commenters_0_.phone');
+
   // Fields required only for counsel AND if they've chosen to include law firm information
   if (this.representedEntityType === 'counsel' && formData.get('lawfirm') === true) {
     requiredFieldNames.push(
@@ -558,6 +565,14 @@ RulemakingsCommenting.prototype.addCommenter = function() {
   newInnerHtml = newInnerHtml.replaceAll('0', newChildIndex);
   newCommenter.innerHTML = newInnerHtml;
 
+  // Remove any of the possible "I'd like to testify" fields that should only be included for the submitter
+  let testifyEls = newCommenter.querySelectorAll(
+    'fieldset[data-show-if-var$=".testify"], fieldset:has(input[name$=".testify"])'
+  );
+  testifyEls.forEach(el => {
+    newCommenter.removeChild(el);
+  });
+
   // Add button listeners
   newCommenter.querySelectorAll('.commenter-controls button').forEach(button => {
     button.addEventListener('click', this.handleCommenterClick.bind(this));
@@ -604,6 +619,21 @@ RulemakingsCommenting.prototype.removeCommenter = function(el) {
 
 };
 
+/**
+ * Called when anything is typed into the phone field, saves non-digits and displays them in a US phone format
+ * @param {InputEvent} e
+ */
+RulemakingsCommenting.prototype.handlePhoneInput = function(e) {
+  let field = e.target;
+  let digitsStr = field.value.replaceAll(/\D/g, '').substring(0,10);
+  let area = digitsStr.substring(0,3);
+  let prefix = digitsStr.substring(3,6);
+  let line = digitsStr.substring(6,10);
+  // I like these being >5 and >2 but then it's impossible to backspace from line to prefix or from prefix to area
+  if (digitsStr.length > 6) field.value = `(${area}) ${prefix}-${line}`;
+  else if (digitsStr.length > 3) field.value = `(${area}) ${prefix}`;
+  else if (digitsStr.length > 0) field.value = `(${area}`;
+};
 /**
  *
  */

@@ -196,6 +196,21 @@
               <input type="email" id="commenters_0_.emailAddress" name="commenters_0_.emailAddress" title="Maximum length is 100" size="35" maxlength="100" required>
               <label class="error" for="">An email address is required</label>
 
+              {% if could_testify %}
+              <hr>
+
+              <fieldset class="">
+                <input type="checkbox" id="commenters_0_.testify" name="commenters_0_.testify" value="true">
+                <label for="commenters_0_.testify">I request to testify should the Commission hold a hearing on this matter.</label>
+              </fieldset>
+
+              <fieldset class="" data-show-if-var="commenters_0_.testify" data-show-if-val="true" aria-hidden="true">
+                <label for="commenters_0_.phone">Phone number:</label>
+                <input type="text" id="commenters_0_.phone" name="commenters_0_.phone" placeholder="(xxx) xxx-xxxx" pattern="\(\d{3}\) \d{3}-\d{4}">
+                <label class="error" for="">A phone number is required</label>
+              </fieldset>
+              {% endif %}
+
               <fieldset class="commenter-controls" data-index-0="false">
                 <button class="button--alt remove-commenter" data-command="remove-commenter" type="button">Remove this commenter</button>
                 <hr>
