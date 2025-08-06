@@ -77,7 +77,7 @@
         <input type="hidden" value="{{ reg_no }}" name="reg_no">
 
         <div id="frames-holder" class="frames">
-          <fieldset id="frame-representedEntityType" class="frame" data-validated="false">
+          <fieldset id="frame-representedEntityType" class="frame" data-validation="0">
             <label class="group-label">I am submitting these comments:</label>
 
             <fieldset class="field-label-combo">
@@ -98,7 +98,7 @@
             </fieldset>
 
             <fieldset class="field-label-combo">
-              <input type="radio" value="other" id="representedEntityType-other" name="representedEntityType" data-toggles="submitter_commenter_relationship" required>
+              <input type="radio" value="other" id="representedEntityType-other" name="representedEntityType" data-toggles="submitter_commenter_connection" required>
               <label for="representedEntityType-other">Other (provide explanation)</label>
             </fieldset>
 
@@ -111,7 +111,7 @@
               </div>
             </fieldset>
           </fieldset>{# close #frame-representedEntityType #}
-          <fieldset id="frame-submitterInfo" class="frame" data-validated="false">
+          <fieldset id="frame-submitterInfo" class="frame" data-validation="0">
 
             <label class="group-label">
               <span data-show-if-var="representedEntityType" data-show-if-val="self">Your</span>
@@ -135,7 +135,7 @@
               <div class="grid grid--2-wide" data-toggle="individual">
                 <div class="grid__item">
                   <label for="commenters_0_.firstName">First name</label>
-                  <input type="text" id="commenters_0_.firstName" name="commenters_0_.firstName" required>
+                  <input type="text" id="commenters_0_.firstName" name="commenters_0_.firstName" minlength="1" required>
                   <label class="error" for="commenters_0_.firstName">A first name is required</label>
                 </div>
                 <div class="grid__item">
@@ -164,7 +164,7 @@
                 <option value="Branch">Branch</option>
                 <option value="Other">Other</option>
               </select>
-              <label class="error" for="commenters_0_.addressType">What type of address is this?</label>
+              <label class="error" for="commenters_0_.addressType">Required</label>
 
               <div class="grid grid--2-wide">
                 <div class="grid__item">
@@ -180,7 +180,7 @@
                       <option value="{{ value }}">{{ label }}</option>
                     {% endfor %}
                   </select>
-                  <label class="error" for="">Required</label>
+                  <label class="error" for="">Which state?</label>
                 </div>
               </div>
 
@@ -238,6 +238,7 @@
 
               <label for="commenters_0_.representedEntity.orgName">Law firm name</label>
               <input id="commenters_0_.representedEntity.orgName" name="commenters_0_.representedEntity.orgName" type="text" value="" size="40" maxlength="40" required>
+              <label class="error" for="commenters_0_.representedEntity.orgName">The law firm name is required</label>
 
               <hr>
 
@@ -250,32 +251,38 @@
                 <option value="Branch">Branch</option>
                 <option value="Other">Other</option>
               </select>
+              <label class="error" for="commenters_0_.representedEntity.addressType">Required</label>
 
               <label for="commenters_0_.representedEntity.mailingAddressStreet">Street address and apt/ste #</label>
               <input type="text" id="commenters_0_.representedEntity.mailingAddressStreet" name="commenters_0_.representedEntity.mailingAddressStreet" value="">
+              <label class="error" for="commenters_0_.representedEntity.mailingAddressStreet">A street address is required</label>
 
               <label>City</label>
               <input id="commenters_0_.representedEntity.mailingCity" name="commenters_0_.representedEntity.mailingCity" type="text" value="" size="20" maxlength="28">
+              <label class="error" for="commenters_0_.representedEntity.mailingCity">Which city?</label>
 
               <fieldset class="grid grid--2-wide">
                 <div class="grid__item">
                   <label>State</label>
-                  <select id="commenters_0_.representedEntity.mailingState" name="commenters_0_.representedEntity.mailingState" size="1">
+                  <select id="commenters_0_.representedEntity.mailingState" name="commenters_0_.representedEntity.mailingState" size="1" required>
                     <option value="">Select state</option>
                     {% for value, label in constants.states.items() %}
                       <option value="{{ value }}">{{ label }}</option>
                     {% endfor %}
                   </select>
+                  <label class="error" for="commenters_0_.representedEntity.mailingState">Required</label>
                 </div>
                 <div class="grid__item">
                   <label for="commenters_0_.representedEntity.mailingZip">ZIP</label>
                   <input type="text" id="commenters_0_.representedEntity.mailingZip" name="commenters_0_.representedEntity.mailingZip" pattern="^\d{5}(-\d{4}){0,1}$" size="5" maxlength="10">
+                  <label class="error" for="commenters_0_.representedEntity.mailingZip">Required</label>
                 </div>
               </fieldset>
 
 
               <label for="commenters_0_.representedEntity.mailingCountry">Country</label>
               <select id="commenters_0_.representedEntity.mailingCountry" name="commenters_0_.representedEntity.mailingCountry"></select>
+              <label class="error" for="commenters_0_.representedEntity.mailingCountry">Which country?</label>
 
               <hr>
 
@@ -287,7 +294,7 @@
               <button class="button--alt remove-commenter" type="button" disabled>Remove this one</button>
             </fieldset>
           </fieldset>{# close #frame-submitterInfo #}
-          <fieldset id="frame-commentersInfo" class="frame" data-validated="false">
+          <fieldset id="frame-commentersInfo" class="frame" data-validation="0">
             <label class="group-label">Add commenter information</label>
 
             <div id="commenters-holder" class="commenters-block">
@@ -309,7 +316,7 @@
             
             
           </fieldset>{# close #frame-commentersInfo #}
-          <fieldset id="frame-comments" class="frame" data-validated="false">
+          <fieldset id="frame-comments" class="frame" data-validation="0">
             Add comments or upload files to submit
             <p>Comments will be reviewed for inappropriate material before they are posted to FEC.gov. Commenters can attach files, provide text comments, or both.</p>
 
@@ -363,7 +370,7 @@
           </fieldset>{# close #frame-summary #}
           <fieldset id="frame-confirmation" class="frame">
             <div class="message message--alert" data-status="submitting">
-              <h2 class="message__title" tabindex="0">Transmitting</h2>
+              <h2 class="message__title">Transmitting</h2>
               We&apos;re transmitting your comments.
             </div>
             <div class="message message--alert" data-status="error">

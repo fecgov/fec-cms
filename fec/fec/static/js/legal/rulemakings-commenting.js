@@ -264,7 +264,7 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
     let newInnerHtml = '';
 
     // TODO: REMOVE THIS
-    formData = this.fakeTheData(formData);
+    // formData = this.fakeTheData(formData);
     // TODO: REMOVE THIS
 
     newInnerHtml += `<tr><th colspan="2">Confirm information</th></tr>`;
@@ -348,8 +348,10 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
       newInnerHtml += `<tr><td>Attachment:</td><td>${formData.get('files_2_').name}</td></tr>`;
 
     newInnerHtml += `<tr><td colspan="2"><hr></td></tr>`;
-
-    newInnerHtml += `<tr><td>Text comment:</td><td>${formData.get('comments')}</td></tr>`;
+    // Comments are saved as \n but those don't display here so we'll replace \n with <br> to display here only
+    const commentsWithNewlines = formData.get('comments');
+    const commentsWithBreaks = commentsWithNewlines.replaceAll('\n', '<br>'); //
+    newInnerHtml += `<tr><td>Text comment:</td><td>${commentsWithBreaks}</td></tr>`;
 
     summaryTable.innerHTML = newInnerHtml;
 
@@ -362,7 +364,7 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
       // If we have a response, we need to fill in some fields
       console.log('  RESPONSE: ', this.submissionResponse);
       let formData = new FormData(this.formEl);
-      formData = this.fakeTheData(formData);
+      // formData = this.fakeTheData(formData);
 
       let now = new Date();
       let datetimeStamp = new Date(this.submissionResponse.submitted_at);// 'yyyy-mm-dd hh:mmT-4';
@@ -634,6 +636,7 @@ RulemakingsCommenting.prototype.handlePhoneInput = function(e) {
   else if (digitsStr.length > 3) field.value = `(${area}) ${prefix}`;
   else if (digitsStr.length > 0) field.value = `(${area}`;
 };
+
 /**
  *
  */
@@ -645,9 +648,8 @@ RulemakingsCommenting.prototype.handleCommenterClick = function(e) {
   } else if (e.target.dataset.command == 'remove-commenter') {
     this.removeCommenter(e.target.closest('.commenter'));
   }
-
   // If the type was clicked, toggle the fields in this commenter
-  if (e.target.name.indexOf('.commenterType') ) this.toggleCommenterFields(e.target);
+  // if (e.target.name.indexOf('.commenterType') > 0) this.toggleCommenterFields(e.target);
 };
 
 /**
@@ -672,11 +674,24 @@ RulemakingsCommenting.prototype.handleFileCancelClick = function(e) {
 */
 RulemakingsCommenting.prototype.toggleCommenterFields = function(targetEl) {
   // /*console.log('toggleCommenterFields(targetEl): ', targetEl);
+/*RulemakingsCommenting.prototype.toggleCommenterFields = function(targetEl) {
+  console.log('toggleCommenterFields(targetEl): ', targetEl);
   let commenterBlock = targetEl.closest('.commenter');
   console.log('  commenterBlock: ', commenterBlock);
   console.log('  commenterBlock.children: ', commenterBlock.children);
+  console.log('  commenterBlock children')
   let commenterType = commenterBlock.querySelector('[id$=".commenterType"]').value;
-};
+
+  // let commType = e.target.value;
+  // let parentEl = e.target.closest('.commenter');
+  // console.log('  parentEl: ', parentEl);
+  // let requiredEls = parentEl.querySelectorAll(`[data-toggle="${commType}"] input`);
+  // console.log('  requiredEls: ', requiredEls);
+  // let nonReqEls = parentEl.querySelectorAll(`[data-toggle!="${commType}"] input`);
+  // console.log('  nonReqEls: ', nonReqEls);
+  // requiredEls.forEach(el => { el.setAttribute('required', ''); });
+  // nonReqEls.forEach(el => { el.removeAttribute('required'); });
+};*/
 
 /**
  * 
@@ -705,9 +720,10 @@ RulemakingsCommenting.prototype.toggleElementsByVars = function() {
     else elToToggle.setAttribute('aria-hidden', true);
 
     // Make child elements required or not, based on whether its parent is visible
-    let innerInputs = elToToggle.querySelectorAll('input:not([type="checkbox"])');
+    let innerInputs = elToToggle.querySelectorAll('select,input:not([type="checkbox"])');
     innerInputs.forEach(input => {
-      input.required = shouldShow;
+      if (shouldShow) input.setAttribute('required', '');
+      else input.removeAttribute('required');
     });
   });
   // if we've toggled anything, we need to adjust the height again
@@ -825,6 +841,7 @@ RulemakingsCommenting.prototype.updateBottomNav = function(state = 'incomplete')
 RulemakingsCommenting.prototype.handleFormChange = function(e) {
   console.log('handleFormChange(e): ', e);
   // Maybe later: this.formEl.removeAttribute('data-has-been-active');
+  this.toggleElementsByVars();
 
   // let formData = new FormData(this.formEl);
 
@@ -833,7 +850,6 @@ RulemakingsCommenting.prototype.handleFormChange = function(e) {
     e.target.value = e.target.value.trim();
 
   if (e.target.type == 'file') {
-
     // Add/remove the has-file class to toggle the X button, which will let css show additional pickers
     e.target.classList.toggle('has-file', e.target.files);
     // let filesHolder = this.formEl.querySelectorAll('#files-holder fieldset');
@@ -860,49 +876,54 @@ RulemakingsCommenting.prototype.handleFormChange = function(e) {
     );
     zipAndStateFields.forEach(field => {
       if (e.target.value === 'USA' || e.target.value == 'US')
-        field.setAttribute('required', true);
+        field.setAttribute('required', '');
       else
         field.removeAttribute('required');
     });
   }
 
-  this.toggleElementsByVars();
+  // If we've changed the commenter type, let's toggle the required name <input>s (i.e. first+last or org name)
+  if (e.target.name.indexOf('.commenterType') > 0) {
+    // The type of commenter
+    let commType = e.target.value;
+    let parentEl = e.target.closest('.commenter');
+    // required fields are inputs inside the matching data-toggle
+    // non-required are inputs inside elements with data-toggle but the data-toggle that doesn't match
+    let requiredEls = parentEl.querySelectorAll(`[data-toggle="${commType}"] input`);
+    let nonReqEls = parentEl.querySelectorAll(`[data-toggle]:not([data-toggle="${commType}"]) input`);
+    requiredEls.forEach(el => { el.setAttribute('required', ''); });
+    nonReqEls.forEach(el => { el.removeAttribute('required'); });
+  }
+
   this.validateCurrentFrame();
 };
 
 /**
- *
- * @param {string} [validationType='soft'] - Optional. For a 'force' value:
- * - all required fields must have a value
- * - all fields must pass validation
- * - any field validation errors will be shown
+ * Validates the current frame's fields and sets validationType as into the .frame as ['data-validation']
+ * frame['data-validation'] {
+ *   0 (default) - no hints, no errors, still waiting for any input, no attempts to move on
+ *   1 - a soft validation, user has started entering values—show warnings on blur, clear warnings on input
+ *   2 - attempted to move to the next frame. Show alerts for all required/erring fields
+ * }
+ * @param {number} [validationType=1] - Optional. For a 'force' value:
  */
-RulemakingsCommenting.prototype.validateCurrentFrame = function(validationType = 'soft') {
+RulemakingsCommenting.prototype.validateCurrentFrame = function(validationType = 0) {
   console.log('validateCurrentFrame(validationType): ', validationType);
-  // console.log('  this.formData: ', this.formData);
   let isValidated = true;
-  // let frameErrorMessages = 'none';
-  // none - initial state
-  // errors - show error messages for invalid fields only (let the empties be empty)
-  // all - show every error message, including empties
   let currentFrame = this.frames[this.currentFrameNum];
-  let currentFrameInputs = currentFrame.querySelectorAll('input, select');
 
-  currentFrameInputs.forEach(input => {
-    // console.log('  input: ', input);
-    // console.log('  input.checkValidity(): ', input.checkValidity());
+  // Put the larger of the current or new validation type
+  // (because we don't want to force all of the errors on and then fixing one relaxes them all)
+  currentFrame.dataset.validation = Math.max(validationType, parseInt(currentFrame.dataset.validation));
 
-    // If a field isn't valid,
-    if (!input.checkValidity()) {
-      // Note it for the .frame class
-      isValidated = false;
-    }
+  let invalidFrameInputs = currentFrame.querySelectorAll('input:invalid, select:invalid, textarea:invalid');
+  isValidated = invalidFrameInputs.length === 0;
 
-  });
+  console.log('  invalidFrameInputs: ', invalidFrameInputs);
 
-  let bottomNavState = isValidated ? 'next' : 'incomplete';
+  let bottomNavState = isValidated === true ? 'next' : 'incomplete';
   // TODO: remove this
-  bottomNavState = 'next';
+  // bottomNavState = 'next';
 
   if (this.currentFrameNum === 4) bottomNavState = 'submit';
   else if (this.currentFrameNum === 5) bottomNavState = 'confirmation';
@@ -932,7 +953,7 @@ RulemakingsCommenting.prototype.handleBottomNavClick = function(e) {
 
   if (e.target.dataset.command == 'next') {
     // If the user clicks next before the form is valid, let's light up the error messages
-    if (e.target.classList.contains('is-inactive')) this.validateCurrentFrame(true);
+    if (e.target.classList.contains('is-inactive')) this.validateCurrentFrame(2);
     else this.goToFrame('next');
   } else if (e.target.dataset.command == 'back') {
     this.goToFrame('back');
@@ -991,7 +1012,7 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
   // setTimeout(this.handleSubmissionResponse.bind(this), 5000, { status: 200 });
   // TODO
   let formData = new FormData(this.formEl);
-  formData = this.fakeTheData(formData);
+  // formData = this.fakeTheData(formData);
 
   // Build the payloads for submission
   const dataPayload = {};
@@ -1039,13 +1060,8 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
            * where [0] is the field name and [1] is the attached file
            */
           (attachedFile, i) => {
-            // TODO: Pat, what d'you think about not referring to them by names but by index?
-            // TODO: or by the field name?
-            console.log('  attachedFile[1].name: ', attachedFile[1].name);
             let indexedName = `${i}-${attachedFile[1].name}`;
-            console.log('  indexedName: ', indexedName);
             let presignedDataObj = presignedURLs[indexedName];
-            console.log('  presignedDataObj: ', presignedDataObj);
 
             let fileUploadBody = new FormData();
             Object.entries(presignedDataObj.fields).forEach(([key, value]) => {
@@ -1053,8 +1069,6 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
             });
             fileUploadBody.append('file', attachedFile[1]);
 
-            // console.log('  attachedFile.files: ', attachedFile.files);
-            console.log('  presignedDataObj.url: ', presignedDataObj.url);
             fetch(presignedDataObj.url, {
               method: 'POST',
               body: fileUploadBody
@@ -1080,7 +1094,6 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
         //      * @param {string} fileUploadVars.fields.x-amz-date
         //      * @param {string} fileUploadVars.fields.x-amz-signature
         //      */
-        console.log('YAY! all done');
         this.handleSubmissionResponse();
     })
     .catch(error => {
@@ -1098,6 +1111,8 @@ RulemakingsCommenting.prototype.handleSubmissionResponse = function (response) {
   console.log('handleSubmissionResponse(response): ', response);
 
   this.submissionStatus = this.submissionResponse.submitted_at ? 'success' : 'error';
+  // TODO: HANDLE THE ERROR RESPONSE
+  // TODO: revive the top nav? Offer a back button on the lower nav—maybe it takes them back to the beginning?
   this.goToFrame('confirmation');
 };
 
