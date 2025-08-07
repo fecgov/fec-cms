@@ -342,7 +342,7 @@ def admin_fine_page(request, admin_fine_no):
     })
 
 
-def forces_page(request):
+def forces_add_comments(request):
     # admin_fine = api_caller.load_legal_admin_fines(admin_fine_no)
     # If report code not found in report_type_full dict, then use report code
     # report_type_full = (constants.report_type_full.get(
