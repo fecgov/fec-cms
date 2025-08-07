@@ -21,6 +21,7 @@ export default function RulemakingsCommenting() {
   this.representedEntityType;
   this.submissionStatus;
   this.submissionResponse;
+  this.recapWidgetId;
   this.init();
 }
 
@@ -76,6 +77,9 @@ RulemakingsCommenting.prototype.init = function() {
     button.addEventListener('click', this.handleTooltipClick.bind(this));
   });
 
+  let helpCloseButton = document.querySelector('.js-help button.filters__toggle');
+  helpCloseButton.addEventListener('click', () => { this.toggleHelp(); });
+
   let bottomNavButtons = this.bottomNav.querySelectorAll('button');
   bottomNavButtons.forEach(button => {
     button.addEventListener('click', this.handleBottomNavClick.bind(this));
@@ -95,6 +99,23 @@ RulemakingsCommenting.prototype.init = function() {
   window.addEventListener('beforeunload', this.handleBeforeUnload.bind(this));
 
   this.goToFrame(0);
+};
+
+RulemakingsCommenting.prototype.initRecap = function() {
+  console.log('initRecap()');
+  this.recapWidgetId = grecaptcha.render('commenting-recaptcha', {
+    callback: this.handleRecapCheck.bind(this),
+    'expired-callback': this.handleRecapExpiration.bind(this)
+  }, true);
+};
+RulemakingsCommenting.prototype.handleRecapCheck = function() {
+  console.log('handleRecapCheck()');
+  if (this.currentFrameNum === 4) this.updateBottomNav('submit');
+};
+RulemakingsCommenting.prototype.handleRecapExpiration = function() {
+  console.log('handleRecapExpiration()');
+  this.recapWidgetId = null;
+  if (this.currentFrameNum === 4) this.updateBottomNav('submit-wait');
 };
 
 /**
@@ -277,6 +298,9 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
     newInnerHtml += `<tr><td>Text comment:</td><td>${commentsWithBreaks}</td></tr>`;
 
     summaryTable.innerHTML = newInnerHtml;
+
+    // Start the reCAPTCHA
+    this.initRecap();
 
   } else if (this.currentFrameNum === 5) {
     // Confirmation page!
@@ -704,6 +728,7 @@ RulemakingsCommenting.prototype.updateTopNav = function() {
  * @param {('next'|'incomplete'|'submit')} frameState
  */
 RulemakingsCommenting.prototype.updateBottomNav = function(state = 'incomplete') {
+  console.log('updateButtonNav(state): ', state);
   if (this.currentFrameNum === 5 && this.submissionStatus === 'success') {
     this.bottomNav.classList.add('hidden');
     return;
@@ -712,8 +737,8 @@ RulemakingsCommenting.prototype.updateBottomNav = function(state = 'incomplete')
   }
 
   this.formEl.querySelector('[data-command="next"]').classList.toggle('is-inactive', state === 'incomplete');
-  this.formEl.querySelector('[data-command="next"]').classList.toggle('hidden', state === 'submit');
-  this.formEl.querySelector('[data-command="submit"]').classList.toggle('hidden', state != 'submit');
+  this.formEl.querySelector('[data-command="next"]').classList.toggle('hidden', state.indexOf('submit') >= 0);
+  this.formEl.querySelector('[data-command="submit"]').classList.toggle('hidden', state.indexOf('submit') < 0);
 
   let tipForNextButton = '';
   if (this.currentFrameNum === 0)
@@ -729,13 +754,9 @@ RulemakingsCommenting.prototype.updateBottomNav = function(state = 'incomplete')
 
   this.bottomNav.querySelector('.t-note').innerHTML = tipForNextButton;
 
-  // If we're on the submit page, let's activate the submit button, but only after a delay to prevent accidental clicks.
-  // Otherwise, disable it
+  // If we're on the submit page, let's show the submit button, but keep it deactivated if reCAPTCHA isn't ready
   if (state === 'submit') {
-    grecaptcha.render('commenting-recaptcha-badge', {}, true);
-    setTimeout(() => {
-      this.formEl.querySelector('[data-command="submit"]').classList.remove('is-disabled');
-    }, 2000);
+    this.formEl.querySelector('[data-command="submit"]').classList.remove('is-disabled');
   } else {
     this.formEl.querySelector('[data-command="submit"]').classList.add('is-disabled');
     // this.formEl.querySelector('.g-recaptcha').classList.add('hidden');
@@ -838,8 +859,10 @@ RulemakingsCommenting.prototype.validateCurrentFrame = function(validationType =
 
   let bottomNavState = isValidated === true ? 'next' : 'incomplete';
 
-  if (this.currentFrameNum === 4) bottomNavState = 'submit';
-  else if (this.currentFrameNum === 5) bottomNavState = 'confirmation';
+  if (this.currentFrameNum === 4) {
+    bottomNavState = 'submit';
+    if (!grecaptcha.getResponse(this.recapWidgetId)) bottomNavState += '-wait';
+  } else if (this.currentFrameNum === 5) bottomNavState = 'confirmation';
 
   this.updateBottomNav(bottomNavState);
 
@@ -904,7 +927,7 @@ RulemakingsCommenting.prototype.toggleHelp = function(targetEl) {
 };
 
 /**
- *
+ * 
  */
 RulemakingsCommenting.prototype.startSubmitting = function() {
   console.log('  startSubmitting()');
@@ -916,7 +939,7 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
   //   console.log('  get(submissionStatus): ', this.submissionStatus);
     this.submissionStatus = 'submitting';
   //   console.log('    get(submissionStatus): ', this.submissionStatus);
-    this.goToFrame('confirmation');
+    // this.goToFrame('confirmation');
   // }
   // TODO: TEMP
   // setTimeout(this.handleSubmissionResponse.bind(this), 5000, { status: 200 });

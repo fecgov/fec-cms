@@ -4,8 +4,9 @@ from django.http import Http404
 import datetime
 import re
 import boto3  # rulemaking comments
-import uuid  # rulemaking comments
 import json  # rulemaking comments
+import uuid  # rulemaking comments
+import requests  # reCAPTCHA for rulemaking comments
 from botocore.client import Config  # rulemaking comments
 from datetime import timezone  # rulemaking comments
 
@@ -30,140 +31,162 @@ def get_s3_client():
 # TODO: Get CSRF working in cloud environments
 @csrf_exempt
 def submit_rulemaking_comments(request):
+    # If not 'post', reject
     if request.method != 'POST':
         return JsonResponse({'error': 'POST required'}, status=405)
+
+    # Test for valid data format, return if invalid json
     try:
         data = json.loads(request.body)
     except Exception:
         print('Exception: ', Exception)
         return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-    # Start with the common, shared, required values
-    to_submit = {
-        'reg_name': data.get('reg_name', '').strip(),
-        'reg_no': data.get('reg_no', '').strip(),
-
-        'representedEntityConnection': (data.get('representedEntityConnection') or '').strip(),
-        'representedEntityType': (data.get('representedEntityType') or '').strip(),
-
-        'commenters_0_.firstName': (data.get('commenters_0_.firstName') or '').strip(),
-        'commenters_0_.lastName': (data.get('commenters_0_.lastName') or '').strip(),
-        'commenters_0_.addressType': (data.get('commenters_0_.addressType') or '').strip(),
-        'commenters_0_.mailingCity': (data.get('commenters_0_.mailingCity') or '').strip(),
-        'commenters_0_.mailingState': (data.get('commenters_0_.mailingState') or '').strip(),
-        'commenters_0_.mailingCountry': (data.get('commenters_0_.mailingCountry') or '').strip(),
-        'commenters_0_.emailAddress': (data.get('commenters_0_.emailAddress') or '').strip(),
-    }
-
-    # If they'd like to testify, save that and their phone number
-    if data.get('commenters_0_.testify'):
-        to_submit['commenters_0_.testify'].push(data.get('commenters_0_.testify'))
-        to_submit['commenters_0_.phone'].push(data.get('commenters_0_.phone'))
-
-    # If we're including law firm information, add those
-    if data.get('lawfirm'):
-        to_submit['commenters_0_.representedEntity.orgName'] = \
-            (data.get('commenters_0_.representedEntity.orgName') or '').strip()
-        to_submit['commenters_0_.representedEntity.addressType'] = \
-            (data.get('commenters_0_.representedEntity.addressType') or '').strip()
-        to_submit['commenters_0_.representedEntity.mailingAddressStreet'] = \
-            (data.get('commenters_0_.representedEntity.mailingAddressStreet') or '').strip()
-        to_submit['commenters_0_.representedEntity.mailingCity'] = \
-            (data.get('commenters_0_.representedEntity.mailingCity') or '').strip()
-        to_submit['commenters_0_.representedEntity.mailingState'] = \
-            (data.get('commenters_0_.representedEntity.mailingState') or '').strip()
-        to_submit['commenters_0_.representedEntity.mailingZip'] = \
-            (data.get('commenters_0_.representedEntity.mailingZip') or '').strip()
-        to_submit['commenters_0_.representedEntity.mailingCountry'] = \
-            (data.get('commenters_0_.representedEntity.mailingCountry') or '').strip()
-        to_submit['commenters_0_.representedEntity.emailAddress'] = \
-            (data.get('commenters_0_.representedEntity.emailAddress') or '').strip()
-
-    # For an unlimited number of commenters,
-    i = 1
-    while data.get('commenters_' + str(i) + '_.commenterType'):
-        prefix = 'commenters_' + str(i) + '_'
-        to_submit[prefix + '.commenterType'] = (data.get(prefix + '.commenterType') or '').strip()
-        to_submit[prefix + '.firstName'] = (data.get(prefix + '.firstName') or '').strip()
-        to_submit[prefix + '.lastName'] = (data.get(prefix + '.lastName') or '').strip()
-        to_submit[prefix + '.orgName'] = (data.get(prefix + '.orgName') or '').strip()
-        to_submit[prefix + '.addressType'] = (data.get(prefix + '.addressType') or '').strip()
-        to_submit[prefix + '.mailingCity'] = (data.get(prefix + '.mailingCity') or '').strip()
-        to_submit[prefix + '.mailingState'] = (data.get(prefix + '.mailingState') or '').strip()
-        to_submit[prefix + '.mailingCountry'] = (data.get(prefix + '.mailingCountry') or '').strip()
-        to_submit[prefix + '.emailAddress'] = (data.get(prefix + '.emailAddress') or '').strip()
-        i += 1
-
-    # Add the comments
-    to_submit['comments'] = data.get('comments', '').strip()
-    to_submit['filenames'] = []
-
-    # Because we can have 0-3 files and they could be in any of the fields, add the ones with values
-    i = 0
-    if data.get('files_0_name'):
-        to_submit['filenames'].append(str(i) + '-' + data.get('files_0_name'))
-        i += 1
-
-    if data.get('files_1_name'):
-        to_submit['filenames'].append(str(i) + '-' + data.get('files_1_name'))
-        i += 1
-
-    if data.get('files_2_name'):
-        to_submit['filenames'].append(str(i) + '-' + data.get('files_2_name'))
-
-    # TODO: report missing fields
-
-    if to_submit['comments'] and len(to_submit['comments']) > 4000:
-        return JsonResponse({'error': 'Comment is too long.'}, status=400)
-
-    if not to_submit['filenames'] and len(to_submit['comments']) < 2:
-        return JsonResponse({'error': 'Missing comments and files.'}, status=400)
-
-    # Submission ID is used later to keep folders and files together
-    # Uses submission time prefixes in YYYYMMDDHHMMSS format for easier sorting
-    submission_id = str(uuid.uuid4())
-    submit_time = datetime.datetime.now(timezone.utc)
-    formatted_submission_time = submit_time.strftime('%Y%m%d%H%M%S')
-    submitted_at = submit_time.isoformat()
-    bucket = settings.FEC_RULEMAKING_BUCKET_NAME
-
-    # Generate JSON content for submission file
-    # submission_record = {
-    to_submit['submission_id'] = submission_id
-    to_submit['submitted_at'] = submitted_at
-
-    s3_client = get_s3_client()
-    prefix = f'rulemaking-submissions/{formatted_submission_time}-{submission_id}'
-    key = f'{prefix}/{submission_id}-comment_submission_data.json'
-
-    s3_client.put_object(
-        Bucket=bucket,
-        Key=key,
-        Body=json.dumps(to_submit, indent=2).encode('utf-8'),
-        ContentType='application/json'
-    )
-
-    # Generate presigned URLs for files
-    presigned_urls = {}
-    for filename in to_submit['filenames']:
-        presigned_url = s3_client.generate_presigned_post(
-            Bucket=bucket,
-            Key=f'{prefix}/{submission_id}-{filename}',
-            Fields={'acl': 'private'},
-            Conditions=[
-                {'acl': 'private'},
-                ['starts-with', '$key', f'{prefix}/'],
-                ['content-length-range', 0, 5000000],
-            ],
-            ExpiresIn=60,  # 1 minutes
+    # Checking reCAPTCHA
+    if not data['g-recaptcha-response']:
+        return JsonResponse({'error': 'Invalid reCAPTCHA'}, status=400)
+    else:
+        verifyRecaptcha = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={
+                # TODO: don't use Google's generic, always-passes key
+                'secret': '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',  # settings.FEC_RECAPTCHA_SECRET_KEY,
+                'response': data['g-recaptcha-response'],
+            },
         )
-        presigned_urls[filename] = presigned_url
+        recaptchaResponse = verifyRecaptcha.json()
+        print('recaptchaResponse: ', recaptchaResponse)
 
-    return JsonResponse({
-        'submission_id': submission_id,
-        'presigned_urls': presigned_urls,
-        'submitted_at': submitted_at,
-    })
+        if not recaptchaResponse['success']:
+            # if captcha failed, return failure
+            return JsonResponse({'status': False}, status=500)
+
+        # Start with the common, shared, required values
+        to_submit = {
+            'reg_name': data.get('reg_name', '').strip(),
+            'reg_no': data.get('reg_no', '').strip(),
+
+            'representedEntityConnection': (data.get('representedEntityConnection') or '').strip(),
+            'representedEntityType': (data.get('representedEntityType') or '').strip(),
+
+            'commenters_0_.firstName': (data.get('commenters_0_.firstName') or '').strip(),
+            'commenters_0_.lastName': (data.get('commenters_0_.lastName') or '').strip(),
+            'commenters_0_.addressType': (data.get('commenters_0_.addressType') or '').strip(),
+            'commenters_0_.mailingCity': (data.get('commenters_0_.mailingCity') or '').strip(),
+            'commenters_0_.mailingState': (data.get('commenters_0_.mailingState') or '').strip(),
+            'commenters_0_.mailingCountry': (data.get('commenters_0_.mailingCountry') or '').strip(),
+            'commenters_0_.emailAddress': (data.get('commenters_0_.emailAddress') or '').strip(),
+        }
+
+        # If they'd like to testify, save that and their phone number
+        if data.get('commenters_0_.testify'):
+            to_submit['commenters_0_.testify'] = data.get('commenters_0_.testify')
+            to_submit['commenters_0_.phone'] = data.get('commenters_0_.phone')
+
+        # If we're including law firm information, add those
+        if data.get('lawfirm'):
+            to_submit['commenters_0_.representedEntity.orgName'] = \
+                (data.get('commenters_0_.representedEntity.orgName') or '').strip()
+            to_submit['commenters_0_.representedEntity.addressType'] = \
+                (data.get('commenters_0_.representedEntity.addressType') or '').strip()
+            to_submit['commenters_0_.representedEntity.mailingAddressStreet'] = \
+                (data.get('commenters_0_.representedEntity.mailingAddressStreet') or '').strip()
+            to_submit['commenters_0_.representedEntity.mailingCity'] = \
+                (data.get('commenters_0_.representedEntity.mailingCity') or '').strip()
+            to_submit['commenters_0_.representedEntity.mailingState'] = \
+                (data.get('commenters_0_.representedEntity.mailingState') or '').strip()
+            to_submit['commenters_0_.representedEntity.mailingZip'] = \
+                (data.get('commenters_0_.representedEntity.mailingZip') or '').strip()
+            to_submit['commenters_0_.representedEntity.mailingCountry'] = \
+                (data.get('commenters_0_.representedEntity.mailingCountry') or '').strip()
+            to_submit['commenters_0_.representedEntity.emailAddress'] = \
+                (data.get('commenters_0_.representedEntity.emailAddress') or '').strip()
+
+        # For an unlimited number of commenters,
+        i = 1
+        while data.get('commenters_' + str(i) + '_.commenterType'):
+            prefix = 'commenters_' + str(i) + '_'
+            to_submit[prefix + '.commenterType'] = (data.get(prefix + '.commenterType') or '').strip()
+            to_submit[prefix + '.firstName'] = (data.get(prefix + '.firstName') or '').strip()
+            to_submit[prefix + '.lastName'] = (data.get(prefix + '.lastName') or '').strip()
+            to_submit[prefix + '.orgName'] = (data.get(prefix + '.orgName') or '').strip()
+            to_submit[prefix + '.addressType'] = (data.get(prefix + '.addressType') or '').strip()
+            to_submit[prefix + '.mailingCity'] = (data.get(prefix + '.mailingCity') or '').strip()
+            to_submit[prefix + '.mailingState'] = (data.get(prefix + '.mailingState') or '').strip()
+            to_submit[prefix + '.mailingCountry'] = (data.get(prefix + '.mailingCountry') or '').strip()
+            to_submit[prefix + '.emailAddress'] = (data.get(prefix + '.emailAddress') or '').strip()
+            i += 1
+
+        # Add the comments
+        to_submit['comments'] = data.get('comments', '').strip()
+        to_submit['filenames'] = []
+
+        # Because we can have 0-3 files and they could be in any of the fields, add the ones with values
+        i = 0
+        if data.get('files_0_name'):
+            to_submit['filenames'].append(str(i) + '-' + data.get('files_0_name'))
+            i += 1
+
+        if data.get('files_1_name'):
+            to_submit['filenames'].append(str(i) + '-' + data.get('files_1_name'))
+            i += 1
+
+        if data.get('files_2_name'):
+            to_submit['filenames'].append(str(i) + '-' + data.get('files_2_name'))
+
+        # TODO: report missing fields?
+
+        if to_submit['comments'] and len(to_submit['comments']) > 4000:
+            return JsonResponse({'error': 'Comment is too long.'}, status=400)
+
+        if not to_submit['filenames'] and len(to_submit['comments']) < 2:
+            return JsonResponse({'error': 'Missing comments and files.'}, status=400)
+
+        # Submission ID is used later to keep folders and files together
+        # Uses submission time prefixes in YYYYMMDDHHMMSS format for easier sorting
+        submission_id = str(uuid.uuid4())
+        submit_time = datetime.datetime.now(timezone.utc)
+        formatted_submission_time = submit_time.strftime('%Y%m%d%H%M%S')
+        submitted_at = submit_time.isoformat()
+        bucket = settings.FEC_RULEMAKING_BUCKET_NAME
+
+        # Generate JSON content for submission file
+        # submission_record = {
+        to_submit['submission_id'] = submission_id
+        to_submit['submitted_at'] = submitted_at
+
+        s3_client = get_s3_client()
+        prefix = f'rulemaking-submissions/{formatted_submission_time}-{submission_id}'
+        key = f'{prefix}/{submission_id}-comment_submission_data.json'
+
+        s3_client.put_object(
+            Bucket=bucket,
+            Key=key,
+            Body=json.dumps(to_submit, indent=2).encode('utf-8'),
+            ContentType='application/json'
+        )
+
+        # Generate presigned URLs for files
+        presigned_urls = {}
+        for filename in to_submit['filenames']:
+            presigned_url = s3_client.generate_presigned_post(
+                Bucket=bucket,
+                Key=f'{prefix}/{submission_id}-{filename}',
+                Fields={'acl': 'private'},
+                Conditions=[
+                    {'acl': 'private'},
+                    ['starts-with', '$key', f'{prefix}/'],
+                    ['content-length-range', 0, 5000000],
+                ],
+                ExpiresIn=60,  # 1 minutes
+            )
+            presigned_urls[filename] = presigned_url
+
+        return JsonResponse({
+            'submission_id': submission_id,
+            'presigned_urls': presigned_urls,
+            'submitted_at': submitted_at,
+        })
 
 
 def parse_query(q):
