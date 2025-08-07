@@ -62,7 +62,7 @@ gulp.task('purgecss', () => {
           './home/templates/purgecss-homepage/navs.html',
           './home/templates/purgecss-homepage/banners.html',
           './home/templates/purgecss-homepage/hero.html',
-          './home/templates/purgecss-homepage/comissioners.html',
+          './home/templates/purgecss-homepage/commissioners.html',
           './home/templates/purgecss-homepage/toggled.html',
           './home/templates/purgecss-homepage/full.html'
         ]
