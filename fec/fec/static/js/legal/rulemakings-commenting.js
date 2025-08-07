@@ -1,11 +1,5 @@
 /**
- * 
- * TODO (NOTE): key values are on dev
- * TODO (NOTE): how to handle duplicate file names if the files come from different directories
- * TODO (NOTE): cf services
- * TODO (NOTE): cf service-key service-name
- * 
- * TODO: on landing on the summary/review page, scroll to the top
+ * TODO: on landing on the summary/review page and the confirmation page, scroll to the top
  */
 export default function RulemakingsCommenting() {
   this.appElId = 'rulemakings-comments'; // How to find the button to launch this
@@ -29,75 +23,6 @@ export default function RulemakingsCommenting() {
   this.submissionResponse;
   this.init();
 }
-
-// TODO
-// TODO: remove this and references to it
-// TODO
-RulemakingsCommenting.prototype.fakeTheData = function(initFormData) {
-  let toReturn = initFormData;
-
-  toReturn.set('representedEntityType', 'counsel');
-
-  toReturn.set('commenters_0_.firstName', 'Johnna');
-  toReturn.set('commenters_0_.lastName', 'Smith');
-  toReturn.set('commenters_0_.addressType', 'Home');
-  toReturn.set('commenters_0_.mailingCity', 'Smithsville');
-  toReturn.set('commenters_0_.mailingState', 'AK');
-  toReturn.set('commenters_0_.mailingCountry', 'USA');
-  toReturn.set('commenters_0_.emailAddress', 'jsmith@email.email');
-
-  toReturn.set('commenters_0_.firstName', 'Johnna');
-  toReturn.set('commenters_0_.lastName', 'Smith');
-  toReturn.set('commenters_0_.addressType', 'Home');
-  toReturn.set('commenters_0_.mailingCity', 'Smithsville');
-  toReturn.set('commenters_0_.mailingState', 'AK');
-  toReturn.set('commenters_0_.mailingCountry', 'USA');
-  toReturn.set('commenters_0_.emailAddress', 'jsmith@email.email');
-
-  toReturn.set('lawfirm', true);
-
-  // Include information for the lawfirm, if checked
-  toReturn.set('commenters_0_.representedEntity.orgName', 'Bob Loblaw Law Firm');
-  toReturn.set('commenters_0_.representedEntity.addressType', 'Branch');
-  toReturn.set('commenters_0_.representedEntity.mailingAddressStreet', 'My Firm Branch Address');
-  toReturn.set('commenters_0_.representedEntity.mailingCity', 'Bobtown');
-  toReturn.set('commenters_0_.representedEntity.mailingState', 'AL');
-  toReturn.set('commenters_0_.representedEntity.mailingZip', '20785-1237');
-  toReturn.set('commenters_0_.representedEntity.mailingCountry', 'CA');
-  toReturn.set('commenters_0_.representedEntity.emailAddress', 'bob@bobloblawlawblog.blog');
-
-  toReturn.set('commenters_1_.commenterType', 'individual');
-  toReturn.set('commenters_1_.firstName', 'John');
-  toReturn.set('commenters_1_.lastName', 'Smith');
-  toReturn.set('commenters_1_.orgName', 'ERROR');
-  toReturn.set('commenters_1_.addressType', 'Office');
-  toReturn.set('commenters_1_.mailingCity', 'Smithstown');
-  toReturn.set('commenters_1_.mailingState', 'AR');
-  toReturn.set('commenters_1_.mailingCountry', 'USA');
-  toReturn.set('commenters_1_.emailAddress', 'jjsmith@email.com');
-
-  toReturn.set('commenters_2_.commenterType', 'individual');
-  toReturn.set('commenters_2_.firstName', 'Johnny');
-  toReturn.set('commenters_2_.lastName', 'Smith');
-  toReturn.set('commenters_2_.orgName', 'ERROR');
-  toReturn.set('commenters_2_.addressType', 'Home');
-  toReturn.set('commenters_2_.mailingCity', 'Smithstown');
-  toReturn.set('commenters_2_.mailingState', 'AR');
-  toReturn.set('commenters_2_.mailingCountry', 'USA');
-  toReturn.set('commenters_2_.emailAddress', 'j3smith@email.com');
-
-  toReturn.set('commenters_3_.commenterType', 'organization');
-  toReturn.set('commenters_3_.firstName', 'ERROR');
-  toReturn.set('commenters_3_.lastName', 'ERROR');
-  toReturn.set('commenters_3_.orgName', 'Smithstown PTA');
-  toReturn.set('commenters_3_.addressType', 'Headquarters');
-  toReturn.set('commenters_3_.mailingCity', 'Smithsburgh');
-  toReturn.set('commenters_3_.mailingState', 'AZ');
-  toReturn.set('commenters_3_.mailingCountry', 'USA');
-  toReturn.set('commenters_3_.emailAddress', 'smithpta@email.org');
-
-  return toReturn;
-};
 
 /**
  * TEMP FUNCTION?
