@@ -2,6 +2,7 @@
 {% import 'macros/filters/checkbox.jinja' as checkbox %}
 {% import 'macros/filters/date.jinja' as date %}
 {% import 'macros/filters/dropdown-json.jinja' as dropdown %}
+{% import 'macros/filters/keyword-proximity.jinja' as proximity %}
 {% import 'macros/filters/text.jinja' as text %}
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/legal.jinja' as legal %}
@@ -29,6 +30,7 @@
   <button type="button" class="js-accordion-trigger accordion__button">Documents</button>
   <div class="accordion__content">
     {{ legal.keyword_search(result_type, query) }}
+    {{ proximity.field('keyword-proximity', 'Proximity') }}
     <div class="filter js-filter" id="ao_is_pending-field" data-filter="checkbox">
       <div>
         <input type="checkbox" id="ao_is_pending" name="ao_is_pending" value="true" {% if ao_is_pending == 'true' %}checked{% endif %}>
@@ -91,7 +93,7 @@
   </div>
   <div class="row">
     <div class="message message--info">
-      <p>The advisory opinion search feature includes all FEC advisory opinions &#40;AOs&#41; to date. You can search all FEC AOs using keywords, AO numbers, names of requestors and more. For additional search filters, you can still search AOs using our legacy <a href="https://saos.fec.gov/saos/searchao" title="Search advisory opinions">AO search</a>.</p>
+      <p>The advisory opinion search feature includes all FEC advisory opinions &#40;AOs&#41; to date. You may search for final opinions and related documents by AO number, keyword, requestor type, document type, the date the opinion was issued, and more. These search options may be used in addition to or in combination with Boolean and proximity search features. <strong>The <a href="https://saos.fec.gov/saos/searchao" title="Legacy search advisory opinions">legacy AO search</a> system, the Searchable Advisory Opinion System, will be decommissioned on August 12, 2025.</strong></p>
     </div>
   </div>
 </div>
@@ -104,12 +106,19 @@
   {% with advisory_opinions = results.advisory_opinions %}
     {% include 'partials/legal-search-results-advisory-opinion.jinja' %}
   {% endwith %}
-  <div class="pagination_holder"></div>
+  <div class="js-legal-search-pagination results-info u-border-top-base"></div>
 {% endblock %}
 
 {% block scripts %}
   {{ tags_for_js_chunks('legal-search-ao.js', '')|safe }}
   <script>
   window.context = {{ context_vars|to_json|safe }};
+  $(document).on('click','.accordion-trigger-on',  function(e){ 
+  let exp = $(this).attr('aria-expanded') == 'false' ? 'true' : 'false'
+  $(this).attr('aria-expanded', exp)
+  //let hid = $(this).next('div').attr('aria-hidden') == 'true' ? 'false' : 'false'
+  $(this).next('div').attr('aria-hidden', exp == 'true' ? 'false' : 'true')
+
+  })
   </script>
 {% endblock %}

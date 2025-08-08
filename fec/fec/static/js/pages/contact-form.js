@@ -65,7 +65,7 @@ ContactForm.prototype.initOtherReason = function() {
 
 /**
  *
- * @param {JQuery.Event} e
+ * @param {jQuery.Event} e
  */
 ContactForm.prototype.toggleOtherReason = function(e) {
   if (e.target.value === 'other') {
@@ -77,7 +77,7 @@ ContactForm.prototype.toggleOtherReason = function(e) {
 
 /**
  *
- * @param {JQuery.Event} e
+ * @param {jQuery.Event} e
  */
 ContactForm.prototype.clearForm = function(e) {
   e.preventDefault();
@@ -136,7 +136,7 @@ AnalystLookup.prototype.fetchAnalyst = function(e, opts) {
 };
 
 /**
- * @param {JQueryCallback} response
+ * @param {jQuery.Callbacks} response
  */
 AnalystLookup.prototype.showAnalyst = function(response) {
   const hasResults = response.results.length > 0;
@@ -167,7 +167,7 @@ AnalystLookup.prototype.hideAnalyst = function() {
 
 /**
  *
- * @param {JQuery.Event} e
+ * @param {jQuery.Event} e
  */
 AnalystLookup.prototype.handleChange = function(e) {
   if (!$(e.target).val()) {

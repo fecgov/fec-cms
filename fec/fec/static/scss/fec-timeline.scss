@@ -1,0 +1,147 @@
+@import 'variables';
+
+#fec-timeline {
+  --minusBg: url('data:image/svg+xml;charset=utf8, %3Csvg%20%20fill%3D%27%23112e51%27%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M10%2020c5.523%200%2010-4.477%2010-10S15.523%200%2010%200%200%204.477%200%2010s4.477%2010%2010%2010zm1.033-9.125h-5.08A.945.945%200%200%201%205%209.937C5%209.42%205.426%209%205.953%209H14.208c.526%200%20.952.42.952.938a.945.945%200%200%201-.952.937h-3.175z%22%2F%3E%3C%2Fsvg%3E');
+  --vertBarUri: url('data:image/svg+xml,%3Csvg%20width%3D%2220px%22%20height%3D%2220px%22%20viewBox%3D%220%200%2020%2020%22%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%3Cg%20id%3D%2220x20%22%20stroke%3D%22none%22%20stroke-width%3D%221%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cpath%20d%3D%22M11.719774%2C11.4769231%20L11.719774%2C15.9384615%20C11.719774%2C16.6777385%2011.1109979%2C17.2769231%2010.359887%2C17.2769231%20C9.60877608%2C17.2769231%209%2C16.6777385%209%2C15.9384615%20L9%2C11.4769231%20L9%2C8.8%20L9%2C4.33846154%20C9%2C3.59918462%209.60877608%2C3%2010.359887%2C3%20C11.1109979%2C3%2011.719774%2C3.59918462%2011.719774%2C4.33846154%20L11.719774%2C8.8%20L11.719774%2C11.4769231%20Z%22%20id%3D%22Path%22%20fill%3D%22%23FFFFFF%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E');
+  margin-top: 2.5rem;
+
+  ol li {
+    list-style-type: none;
+    margin-left: 0;
+
+    & > time { /* The year tags */
+      background-color: $federal-blue;
+      color: $inverse;
+      display: inline-block;
+      font-size: 2rem;
+      font-weight: bold;
+      line-height: 1em;
+      margin-bottom: 1em;
+      padding: 0.5em;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    & {
+      display: none;
+    }
+    &:has(details:not(.filtered-out)) {
+      display: initial;
+    }
+  }
+  details {
+    margin-bottom: 3rem;
+
+    &.filtered-out {
+      margin: 0 !important;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 1s;
+    }
+
+    summary {
+      cursor: pointer;
+      display: block;
+      font-family: 'gandhi';
+      font-size: 2rem;
+      font-weight: bold;
+      line-height: 1.25em;
+      list-style: none;
+      padding-left: 3rem;
+      position: relative;
+    
+      &:before, &:after {
+        background-position: center;
+        background-repeat: no-repeat;
+        content: '';
+        display: block;
+        height: 2rem;
+        left: 0;
+        position: absolute;
+        top: 0.25rem;
+        width: 2rem;
+      }
+      &:before {
+        background-image: var(--minusBg);
+        background-size: 20px 20px;
+      }
+      &:after {
+        background-image: var(--vertBarUri);
+        background-size: 16px;
+        transform-origin: center;
+        transform: rotate(0deg);
+        transition: transform 0.1s ease-out;
+      }
+
+      time:first-of-type:not(.inline)::before {
+        /* Add an 'inline' class to summary>time elements so their ::before isn't forced to the next line */
+        content: ' ';
+        display: block !important;
+        height: 1px;
+        width: 100%;
+      }
+    }
+    &[open] summary:after {
+      transform: rotate(90deg);
+      transition: transform 0.33s ease-in-out;
+    }
+    & > div {
+      font-family: 'gandhi';
+      overflow: hidden;
+      padding: 1rem 0 0 3rem;
+      margin-bottom: 2em;
+    }
+    time {
+      font-style: italic;
+      white-space: nowrap;
+    }
+
+    figure {
+      clear: both;
+      max-width: 100%;
+
+      @media screen and (min-width: 640px) {
+        max-width: 50%;
+      }
+
+      &, &.float-right {
+        float: right;
+        margin-left: 1em;
+      }
+      &.float-left {
+        float: left;
+        margin-right: 1em;
+      }
+      &.width-full {
+        max-width: 100%;
+      }
+
+      img {
+        margin-bottom: 0;
+      }
+      figcaption {
+        border: solid thin $gray-lightest;
+        font-size: 1rem;
+        line-height: 1.1em;
+        padding: 1em;
+        max-height: auto;
+        transition: max-height 1s;
+      }
+    }
+    ul li { list-style: initial; }
+  }
+}
+dialog {
+  border: none;
+
+  &::backdrop {
+    background-color: rgba(33,33,33,.5);
+  }
+  iframe {
+    margin-top: 4rem;
+  }
+}
+body:has(dialog[open]) {
+  overflow: hidden !important;
+}

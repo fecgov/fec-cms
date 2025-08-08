@@ -1,5 +1,6 @@
 /**
  * TODO: on landing on the summary/review page and the confirmation page, scroll to the top
+ * TODO: Going back to change the radio buttons, the top nav options should update, too
  */
 export default function RulemakingsCommenting() {
   this.appElId = 'rulemakings-comments'; // How to find the button to launch this

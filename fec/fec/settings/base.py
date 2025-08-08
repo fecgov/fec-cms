@@ -234,14 +234,18 @@ WSGI_APPLICATION = 'fec.wsgi.application'
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_string(50))
 
 
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
 DATABASES = {
-    # Be sure to set the DATABASE_URL environment variable on your local
-    # development machine so that the local database can be connected to.
     'default': dj_database_url.config()
 }
+
+# Add or update OPTIONS after the config() call
+DATABASES['default'].setdefault('OPTIONS', {})
+DATABASES['default']['OPTIONS'].update({
+    'pool': {
+        'max_size': 50,  # total possible db conn = Workers x Instances x max_size (600, probably too high)
+        'max_idle': 400,  # default is 600 sec
+    }
+})
 
 
 # Internationalization
