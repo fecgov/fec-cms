@@ -350,8 +350,8 @@ Calendar.prototype.managePopoverControl = function(e) {
   $popover
     .find('.fc-close')
     .attr('tabindex', '0')
-    .focus() // TODO: jQuery deprecation
+    .trigger('focus')
     .on('click', function() {
-      $target.focus(); // TODO: jQuery deprecation
+      $target.trigger('focus');
     });
 };
