@@ -78,7 +78,7 @@ const mainEntries = {
   },
   // 'calc-admin-fines-modal': `${js}/modules/calc-admin-fines-modal.js`, // Pulled into init.js
   'calc-admin-fines': `${js}/modules/calc-admin-fines.js`,
-  // 'fec-timeline': `${js}/modules/fec-timeline.js`,
+  'fec-timeline': `${js}/modules/fec-timeline.js`,
   'rulemakings-commenting': `${js}/legal/rulemakings-commenting.js`,
   'widgets/aggregate-totals-box': {
     import: `${js}/widgets/aggregate-totals-box.js`,
