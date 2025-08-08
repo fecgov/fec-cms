@@ -14,6 +14,9 @@ urlpatterns = [
             views.adr_page),
     re_path(r'^data/legal/administrative-fine/(?P<admin_fine_no>[\w-]+)/$',
             views.admin_fine_page),
+
+    re_path(r'^legal/forces/add-comments/$', views.forces_add_comments),  # TODO: RENAME THIS - it's only temporary
+
     re_path(r'^data/legal/statutes/$', views.statutes_landing),
     # Legal search results
     re_path(r'^data/legal/search/$', views.legal_search),
@@ -24,6 +27,8 @@ urlpatterns = [
     re_path(r'^data/legal/search/regulations/$',
             views.legal_doc_search_regulations),
     re_path(r'^data/legal/search/statutes/$', views.legal_doc_search_statutes),
+    re_path(r'^legal/api/submit-rulemaking-comments/',
+            views.submit_rulemaking_comments, name='submit_rulemaking_comments'),
 ]
 
 if settings.FEATURES['adrs']:
