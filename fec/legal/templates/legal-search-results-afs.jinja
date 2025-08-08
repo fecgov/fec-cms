@@ -19,7 +19,7 @@
     <p class="t-sans search__example filter__message u-no-margin-top">Search the maximum number of words between keywords or exact phrases. Proximity terms will not be highlighted in search results.</p>
     <label class="u-no-margin-bottom t-bold" for="q_proximity">Keyword or exact phrase</label>
     <span class="t-note t-sans">Both keyword fields needed</span>
-    <input type="text" id="q_proximity-0" name="q_proximity" value="{{ q_proximitys[0] | default('')}}">
+    <input type="text" id="q_proximity-0" name="q_proximity" value="{{ q_proximities[0] | default('')}}">
     <div class="increment-decrement__container">
       <span class="t-inline t-sans">Within</span><button class="button--decrement js-step-button" type="button" {% if max_gaps =='0' %}disabled{% endif %} tabindex="0"></button> 
         <input id="max_gaps" name="max_gaps" min="0" value="{{max_gaps | default('0') }}"  tabindex="0">
@@ -27,7 +27,7 @@
     </div>
     <label class="u-no-margin-bottom t-bold" for="q_proximity">Keyword or exact phrase</label>
     <span class="t-note t-sans">Both keyword fields needed</span>
-    <input type="text" id="q_proximity-1" name="q_proximity" value="{{ q_proximitys[1] | default('') }}">
+    <input type="text" id="q_proximity-1" name="q_proximity" value="{{ q_proximities[1] | default('') }}">
   </div>
   <div class="filter">
     <label class="label" for="case_no">Administrative fine number</label>
@@ -115,10 +115,10 @@
           {% endif %}
         </li>
       {% endif %}
-{% if q_proximitys and q_proximitys | reject('equalto', '') | list %}
+{% if q_proximities and q_proximities | reject('equalto', '') | list %}
         <li data-tag-category="q_proximity" class="tag__category tag__category--all">
         Proximity keywords 
-        {% for q_proximity in q_proximitys %}
+        {% for q_proximity in q_proximities %}
           <div data-removable="true" class="tag__item">{{ q_proximity }}</div>{% if loop.index == 1 %}and{% endif %}
         {% endfor %}
         with max proximity
