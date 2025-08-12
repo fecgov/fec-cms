@@ -130,7 +130,7 @@ class PoolTimeouts(MiddlewareMixin):
                 # Check if alert was sent recently (1 hour)
                 last_sent = cache.get(self.SLACK_ALERT_CACHE_KEY)
                 if not last_sent:
-                    slack.post_to_slack("Django/Psycopg PoolTimeout", "#test-bot")
+                    slack.post_to_slack("Django/Psycopg PoolTimeout", "#alerts")
                     cache.set(self.SLACK_ALERT_CACHE_KEY, True, timeout=self.THROTTLE_SECONDS)
                 else:
                     pass
