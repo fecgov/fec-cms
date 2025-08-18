@@ -1,4 +1,4 @@
-from django.urls import include, re_path
+from django.urls import include, re_path, path
 from django.conf import settings
 from django.contrib import admin
 from django.views.generic.base import TemplateView
@@ -16,6 +16,7 @@ from search import views as search_views
 
 
 urlpatterns = [
+    path("hold/", home_views.hold_connection),
     re_path(
         r'^documents/(\d+)/(.*)$',
         home_views.serve_wagtail_doc,

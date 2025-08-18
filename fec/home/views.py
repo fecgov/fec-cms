@@ -6,8 +6,9 @@ import logging
 
 from django.conf import settings
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db import connection
 from django.db.models import Q
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from wagtail.documents.models import Document
 
@@ -214,6 +215,12 @@ def updates(request):
 def calendar(request):
     page_context = {"content_section": "calendar", "title": "Calendar"}
     return render(request, "home/calendar.html", {"self": page_context})
+
+
+def hold_connection(request):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT pg_sleep(100);")  # keeps DB connection busy for 10s
+    return HttpResponse("Done sleeping.")
 
 
 def commissioners(request):
