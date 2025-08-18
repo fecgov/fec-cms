@@ -458,10 +458,8 @@ def legal_doc_search_mur(request):
         mur_disposition_category_id=mur_disposition_category_ids,
         primary_subject_id=primary_subject_id,
         secondary_subject_id=secondary_subject_id,
-        q_proximity = q_proximities,
-        max_gaps = max_gaps,
-        
-
+        q_proximity=q_proximities,
+        max_gaps=max_gaps,
     )
 
     # Define MUR document categories dictionary
@@ -557,7 +555,7 @@ def legal_doc_search_mur(request):
         'case_regulatory_citation': case_regulatory_citation,
         'case_statutory_citation': case_statutory_citation,
         'q_proximities': q_proximities,
-        'max_gaps': max_gaps,      
+        'max_gaps': max_gaps,
     })
 
 
@@ -599,8 +597,8 @@ def legal_doc_search_adr(request):
         case_min_close_date=case_min_close_date,
         case_max_close_date=case_max_close_date,
         case_doc_category_id=case_doc_category_ids,
-        q_proximity = q_proximities,
-        max_gaps = max_gaps,
+        q_proximity=q_proximities,
+        max_gaps=max_gaps,
     )
 
     # Define ADR document categories dictionary
@@ -676,8 +674,8 @@ def legal_doc_search_af(request):
         case_max_penalty_amount=case_max_penalty_amount,
         case_min_document_date=case_min_document_date,
         case_max_document_date=case_max_document_date,
-        q_proximity = q_proximities,
-        max_gaps = max_gaps,
+        q_proximity=q_proximities,
+        max_gaps=max_gaps,
 
     )
     for af in results['admin_fines']:

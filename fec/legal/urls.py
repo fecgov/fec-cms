@@ -45,3 +45,8 @@ if settings.FEATURES['afs']:
             r'^data/legal/search/admin-fines/$', views.legal_doc_search_af
         ),
     ]
+
+# Legal document redirect endpoint
+urlpatterns += [
+    re_path(r'^legal/search/documents/$', views.legal_document_redirect, name='legal_document_redirect'),
+]
