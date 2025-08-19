@@ -7,6 +7,9 @@ from django.core.exceptions import ValidationError
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete
 from django.contrib.auth.models import User
+from django.shortcuts import redirect
+from django.utils.text import slugify
+from itertools import groupby
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
@@ -18,13 +21,15 @@ from wagtail.admin.panels import (
     InlinePanel,
     MultiFieldPanel,
     PageChooserPanel,
-    FieldPanel)
+    FieldPanel,
+    FieldRowPanel)
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
 from django.db.models.signals import m2m_changed
 from wagtail.contrib.table_block.blocks import TableBlock
+
 from fec import constants
 
 from home.blocks import (
@@ -1479,11 +1484,9 @@ class ReportingDatesTable(Page):
     ]
 
 
-class FecTimelinePage(Page):
-    page_description = 'Unique page - Timeline of FECʼs History'
-    parent_page_types = ['AboutLandingPage']
-    body = stream_factory(null=True, blank=True)
-    category_options = [
+# The list of categories, builds the list of filtering options for the timeline page and timeline entries/items
+def fec_timeline_categories():
+    return [
         ('commission', 'Commission'),
         ('disclosure', 'Disclosure'),
         ('enforcement', 'Enforcement'),
@@ -1493,57 +1496,112 @@ class FecTimelinePage(Page):
         ('public_funding', 'Public funding'),
         ('regulations', 'Regulations'),
     ]
-    timeline_entries = StreamField(
-        [('year', blocks.StructBlock([
-            ('year_number', blocks.IntegerBlock(min_value=1960, max_value=2050, disable_comments=True)),
-            ('entries', blocks.StreamBlock([
-                ('entry', blocks.StructBlock([
-                    ('entry_date', blocks.DateBlock(format='%Y-%m-%d', disable_comments=True)),
-                    ('summary', blocks.RawHTMLBlock(label='Summary', form_classname='timeline-summary')),
-                    ('content', blocks.RawHTMLBlock(label='Content')),
-                    ('categories', blocks.MultipleChoiceBlock(
-                        required=False,
-                        choices=category_options
-                    )),
-                    ('start_open', blocks.BooleanBlock(
-                        required=False, disable_comments=True, form_classname="single-line-checkbox"
-                    )),
-                ]))
-            ],
-                collapsed=True)
-            )
-        ]))],
-        collapsed=True,
-        null=True, blank=True
+
+
+class FecTimelineItem(Page):
+    page_description = 'Entries for the FECʼs historical timeline'
+    parent_page_types = ['FecTimelinePage']
+    subpage_types = []  # Don't allow child pages
+    entry_date = models.DateField()
+    summary = models.TextField()
+    content = models.TextField()
+    order_tiebreaker = models.IntegerField(default=0, null=True, blank=True)
+    start_open = models.BooleanField(default=False)
+    categories = StreamField(
+        [('category_selections', blocks.MultipleChoiceBlock(
+            required=False,
+            choices=fec_timeline_categories(),
+            search_index=False,
+        ))],
+        block_counts={
+            'category_selections': {'max_num': 1},
+        },
+        null=True, blank=True,
     )
 
-    content_panels = Page.content_panels + [
-        FieldPanel('body'),
-        FieldPanel('timeline_entries', disable_comments=True, help_text='Scroll to the bottom for special notes'),
-        HelpPanel('<strong>Special notes for this page</strong>:\
+    content_panels = [
+        FieldPanel('title', help_text='Strictly for author organization'),
+        FieldPanel('summary', icon='code', help_text='The part thatʼs always visible', heading='Entry title/summary',
+                   classname='timeline-summary', disable_comments=True),
+        FieldRowPanel([
+            FieldPanel('entry_date', help_text='Used while sorting', disable_comments=True),
+            FieldPanel('order_tiebreaker', help_text='If there are date duplicates', classname='timeline-tie-breaker',
+                       disable_comments=True),
+            FieldPanel('start_open', help_text='Start in an open state?', classname='timeline-start-open',
+                       disable_comments=True),
+        ]),
+        FieldPanel('content', icon='code', help_text='The part that collapses. Will be inside a <div></div>',
+                   classname='timeline-content', disable_comments=True),
+        FieldPanel('categories', help_text='Used for filtering (optional)', disable_comments=True),
+        HelpPanel('<strong \
+                style="display:inline-block;font-size:larger;margin:0 0 0.5em -1em">\
+                  Special notes for timeline entries</strong>:\
             <ul class="timeline-help"> \
-                <li><em>Year number</em>: the blue year tags</li>\
-                    <em>Summary</em>: the part of each entry thatʼs always visible;<br>\
-                    <em>Content</em>: the toggled content.</li>\
-                <li><em>Summary</em> and <em>Content</em> are html fields.</li>\
+                <li><em>Summary</em> and <em>Content</em> are html fields</li>\
                 <li>Wrap dates in a <pre>&lt;time datetime="2025-12-31"&gt;&lt;/time&gt;</pre> where \
                     <pre>datetime</pre> is an ISO-8601 date. i.e. <pre>yyyy</pre> or <pre>yyyy-mm-dd</pre></li>\
                 <li>To prevent the linebreak before the first <pre>&lt;time&gt;</pre> in a summary,<br>\
                     add <pre> class="inline"</pre> to the first <pre>&lt;time&gt;</pre></li>\
                 <li>Photos inside the Content should be structured like<br>\
                     <pre>&lt;figure&gt;</pre><br>\
-                    <pre>&nbsp;&nbsp;&lt;img src="url" alt=""&gt;</pre><br>\
+                    <pre>&nbsp;&nbsp;&lt;img src="" alt=""&gt;</pre><br>\
                     <pre>&nbsp;&nbsp;&lt;figcaption&gt;Caption content&lt;/figcaption&gt;</pre><br>\
                     <pre>&lt;/figure&gt;</pre></li>\
                 <li>The default layout for content is for images to float to the right and text to flow around them \
                     on the left. To change that, add <pre> class="float-left"</pre> to the <pre>&lt;figure&gt;</pre>.\
                     (<pre>float-right</pre> is defined, too, but itʼs the default)</li>\
                 <li>If <em>Start open</em> is checked, this entry will be open on page load</li>\
-                <li>If launch YouTube links in the modal on this page, add <pre> data-media="url"</pre> to a link or \
-                    other element. The url should be in a format like <pre>youtube.com/embed/[videoid]</pre>,\
-                    <pre>youtu.be/[videoid]</pre>, or <pre>v=[videoid]</pre>.</li>\
+                <li>To launch YouTube links in the modal on this page, add <pre> data-media="url"</pre> to a link or \
+                    other element. The <pre>href</pre> should be in a format like \
+                  <pre>youtube.com/embed/[videoid]</pre> or <pre>youtu.be/[videoid]</pre>, \
+                  or have <pre>v=[videoid]</pre></li>\
             </ul>'),
     ]
+
+    @property
+    def year(self):
+        return self.entry_date.year
+
+    # When saving, set the slug to `timeline-entry-` plus the title
+    def save(self, *args, **kwargs):
+        self.slug = slugify(f'timeline-entry-{self.title}')
+        super().save(*args, **kwargs)
+
+    # These should all redirect to their parent, the main timeline page
+    def serve(self, request, *args, **kwargs):
+        parent_page = self.get_parent()
+        return redirect(parent_page.url, permanent=True)
+
+    class Meta:
+        verbose_name = 'FEC historical timeline entry'
+        verbose_name_plural = 'FEC historical timeline entries'
+
+
+class FecTimelinePage(Page):
+    page_description = 'Unique page - Timeline of FECʼs History'
+    parent_page_types = ['AboutLandingPage']
+    subpage_types = ['FecTimelineItem']
+    body = stream_factory(null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('body'),
+        HelpPanel('<strong>Timeline entries are child pages of this page</strong>'),
+    ]
+
+    def get_timeline_categories(self):
+        return fec_timeline_categories()
+
+    # Group the (live) child pages by year
+    # returns {
+    #     1974: [FecTimelineItem],
+    #     1975: [FecTimelineItem, FecTimelineItem],
+    #  }
+    def timeline_entries_by_year(self):
+        entries = FecTimelineItem.objects.child_of(self).live().order_by('entry_date', 'order_tiebreaker')
+        year_groups = {}
+        for k, g in groupby(entries, key=lambda x: x.year):
+            year_groups[k] = list(g)
+        return year_groups
 
     class Meta:
         verbose_name = 'FEC historical timeline page'
