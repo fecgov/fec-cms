@@ -5,8 +5,8 @@
       <tr class="simple-table__header">
         <th class="simple-table__header-cell cell--15 sorting sorting_desc" data-sort="ao_no">Case</th>
         <th class="simple-table__header-cell cell--15 sorting" data-sort="issue_date">Date issued</th>
-        <th class="simple-table__header-cell">Summary</th>
-        <th class="simple-table__header-cell">This opinion is cited by these later opinions</th>
+        <th class="simple-table__header-cell cell--15">This opinion is cited by these later opinions</th>
+        <th class="simple-table__header-cell">Summary and documents</th>
       </tr>
     </thead>
     <tbody>
@@ -37,11 +37,6 @@
         </td>
         <td class="simple-table__cell">
           <div class="t-sans">
-            {{ advisory_opinion.summary }}
-          </div>
-        </td>
-        <td class="simple-table__cell">
-          <div class="t-sans">
             {% if advisory_opinion.aos_cited_by|length > 0 %}
               {% for citation in advisory_opinion.aos_cited_by %}
                 <div>
@@ -52,6 +47,127 @@
               This advisory opinion is not cited by other advisory opinions
             {% endif %}
           </div>
+        </td>
+        <td class="simple-table__cell">
+          <div class="t-sans">
+            {{ advisory_opinion.summary }}
+          </div>
+          {% if advisory_opinion.document_highlights or advisory_opinion.source or selected_ao_doc_category_ids %}
+            <div class="legal-search-result__hit u-margin--top">
+              {# Check for set document categories #}
+              {% set filters_category_type = selected_ao_doc_category_ids | length > 0 %}
+              {# fc{{ filters_category_type }} #}
+              {# Check for set keyword queries #}
+              {% set filters_keyword = query | length > 0 %}
+              {# fk{{ filters_keyword }} #}
+              {# Check for set proximity queries #}
+              {% set filters_proximity = q_proximities[0] != '' and q_proximities[1] != '' and max_gaps != '' %}
+              {# fp{{ filters_proximity }} #}
+              {# Check for proximity-only queries #}
+              {% set proximity_only = filters_proximity and not filters_keyword %}
+              {# PO:{{ filters_proximity }}  #}
+              {# Only show documents when categories or keywords are set #}
+              {% if (filters_category_type or filters_keyword) and not proximity_only %}
+                {# https://jinja.palletsprojects.com/en/stable/templates/#jinja-filters.groupby #}
+                {# {% for type, documents in advisory_opinion.documents|groupby("category") %} #}
+                  {# {% for document in documents %} #}
+                  {% set categories_shown = [] %}
+                  {% for document in advisory_opinion.documents %}
+                    {# When including this template in legal-search-results.jinja #}
+                    {% if nested_in_global_search %}
+                      {# Only show documents that have keyword matches #}
+                      {% set show_document = advisory_opinion.document_highlights[loop.index0 | string] %}  
+                    {% else %}
+                      {# This will show documents in all 3 scenarios:
+                        - When there is a keyword query and selected document categories
+                        - When there are selected document categories and no keyword query
+                        - When there is a keyword query and no selected document categories #}
+                      {% set category_match = (filters_category_type and document.category_match) or not filters_category_type %}
+                      {% set keyword_match = (filters_keyword and document.text_match) or not filters_keyword %}
+                      {% set show_document = category_match and keyword_match %}
+                    {% endif %}
+                    {% if show_document %}
+                      <div class="document-container">
+                        <div class="document-category 
+                              {%- if document.ao_doc_category_id not in categories_shown %} u-border-top-nuetral">
+                                {{ document.category|trim }}
+                                {% do categories_shown.append(document.ao_doc_category_id) %}
+                              {%- else -%}
+                              ">
+                              {%- endif -%}
+                        </div>
+                        <div class="document_details u-border-top-nuetral">
+                          <div class="post--icon">
+                            <span class="icon icon--inline--left i-document"></span>
+                            <a href="{{document.url}}">
+                              {{ document.description }}
+                            </a>
+                          </div>
+                         {#  {% set query_highlight = advisory_opinion.document_highlights[document.highlight_index]%} #}
+                          {% set query_highlight = advisory_opinion.document_highlights[loop.index0 | string] %}
+                          {% if(query_highlight) %}
+                            {# show only first document highlight result #}
+                            <ul>
+                                <li class="post--icon t-serif t-italic u-padding--top--med">
+                                  &#8230;{{ query_highlight[0] | safe }}&#8230;
+                                </li>
+                            </ul>
+                            {# show additional document highlight results, if any #}
+                            {% if(query_highlight|length > 1) %}
+                              <div class="js-accordion u-margin--top" data-content-prefix="additional-result-{{ advisory_opinion.no }}-{{loop.index0}}">
+                                <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ advisory_opinion.no }}-{{loop.index0}}" aria-expanded="false">
+                                  {% if(query_highlight|length == 2) %}
+                                    1 more keyword match
+                                  {% elif(query_highlight|length > 2)  %}
+                                    {{ query_highlight|length -1 }} more keyword matches
+                                  {% endif %}
+                                </button>
+                                <div class="accordion__content results__content" aria-hidden="true">
+                                    <ul>
+                                      {% for highlight in query_highlight %}
+                                        {% if(loop.index0 != 0) %}
+                                          <li class="t-serif t-italic">&#8230;{{ highlight | safe }}&#8230;</li>
+                                        {% endif %}
+                                      {% endfor %}
+                                    </ul>
+                                </div>
+                              </div>
+                            {% endif %}
+                          {% endif %}
+                        </div>
+                      </div>
+                      {% else %}
+                        {# documents we skip #}
+                    {% endif %}
+                  {% endfor %}  
+                {# {% endfor %} #}
+              {% elif proximity_only %}
+                   {# The advisory_opinion.source list contains docs that meet the proximity search parameters, 
+                    optionally filtered for any ao_doc_category_ids #}
+                      {% set categories_shown = [] %}
+                      {% for document in advisory_opinion.source %}
+                        <div class="document-container">
+                          <div class="document-category 
+                              {%- if document.ao_doc_category_id not in categories_shown %} u-border-top-nuetral">
+                                {{ document.category|trim }}
+                                {% do categories_shown.append(document.ao_doc_category_id) %}
+                              {%- else -%}
+                                ">
+                              {%- endif -%}
+                          </div>
+                          <div class="document_details u-border-top-nuetral">
+                            <div class="post--icon">
+                                <span class="icon icon--inline--left i-document"></span>
+                                <a href="{{document.url}}">
+                                  {{ document.description }}
+                                </a>
+                            </div>
+                          </div>
+                        </div>
+                      {% endfor %}
+              {% endif %}
+            </div>
+          {% endif %}
         </td>
       </tr>
       {% endfor %}
