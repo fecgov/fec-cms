@@ -117,7 +117,7 @@ def find_legal_document_by_filename(filename):
         filename = filename[:-4]
 
     # Search for the document using the legal search API
-    results = _call_api("legal", "search", filename=f"{filename}.pdf")
+    results = _call_api("legal", "search", filename=filename)
 
     if not results:
         return None
