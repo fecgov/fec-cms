@@ -87,7 +87,7 @@ RulemakingsCommenting.prototype.init = function() {
   });
 
   let commentsTextarea = this.formEl.querySelector('textarea');
-  commentsTextarea.addEventListener('resize', (e) => {
+  commentsTextarea.addEventListener('resize', () => {
     // console.log('resize(e): ', e);
   });
   commentsTextarea.addEventListener('input', () => {
