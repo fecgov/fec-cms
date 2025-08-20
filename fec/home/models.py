@@ -1558,9 +1558,20 @@ class FecTimelineItem(Page):
             </ul>'),
     ]
 
+    # No promote panels
+    promote_panels = []
+
     @property
     def year(self):
         return self.entry_date.year
+
+    @property
+    def selected_cats_list(self):
+        to_return = []
+        for selected_cats in self.categories:
+            for cat in selected_cats.value:
+                to_return.append(cat)
+        return ', '.join(to_return)
 
     # When saving, set the slug to `timeline-entry-` plus the title
     def save(self, *args, **kwargs):

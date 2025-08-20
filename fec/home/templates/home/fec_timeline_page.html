@@ -47,9 +47,7 @@
             {% for entry in entries %}
             {% spaceless %}
             <details id="a{{ entry.entry_date|date:'Ymd' }}-{{ forloop.counter }}"
-              data-categories="{% for catslist in self.categories %}
-              {% for cat in catslist.value %}{{cat}},{% endfor %}
-              {% endfor %}"
+              data-categories="{{entry.selected_cats_list}}"
               {% if entry.start_open %} open{% endif %}
             >
               <summary>{{ entry.summary|richtext }}</summary>
