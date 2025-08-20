@@ -413,8 +413,7 @@ RulemakingsCommenting.prototype.validateEntireForm = function() {
       'commenters_0_.representedEntity.mailingCity',
       'commenters_0_.representedEntity.mailingState',
       'commenters_0_.representedEntity.mailingZip',
-      'commenters_0_.representedEntity.mailingCountry',
-      'commenters_0_.representedEntity.emailAddress'
+      'commenters_0_.representedEntity.mailingCountry'
     );
   }
 
