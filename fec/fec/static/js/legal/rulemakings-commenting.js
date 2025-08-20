@@ -88,7 +88,7 @@ RulemakingsCommenting.prototype.init = function() {
 
   let commentsTextarea = this.formEl.querySelector('textarea');
   commentsTextarea.addEventListener('resize', (e) => {
-    console.log('resize(e): ', e);
+    // console.log('resize(e): ', e);
   });
   commentsTextarea.addEventListener('input', () => {
     let charsAvail = 4000 - commentsTextarea.value.length;
@@ -103,18 +103,18 @@ RulemakingsCommenting.prototype.init = function() {
 };
 
 RulemakingsCommenting.prototype.initRecap = function() {
-  console.log('initRecap()');
+  // console.log('initRecap()');
   this.recapWidgetId = grecaptcha.render('commenting-recaptcha', {
     callback: this.handleRecapCheck.bind(this),
     'expired-callback': this.handleRecapExpiration.bind(this)
   }, true);
 };
 RulemakingsCommenting.prototype.handleRecapCheck = function() {
-  console.log('handleRecapCheck()');
+  // console.log('handleRecapCheck()');
   if (this.currentFrameNum === 4) this.updateBottomNav('submit');
 };
 RulemakingsCommenting.prototype.handleRecapExpiration = function() {
-  console.log('handleRecapExpiration()');
+  // console.log('handleRecapExpiration()');
   this.recapWidgetId = null;
   if (this.currentFrameNum === 4) this.updateBottomNav('submit-wait');
 };
@@ -200,7 +200,7 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
   } else if (this.currentFrameNum === 4) {
 
     if (!this.validateEntireForm()) {
-      console.log('SHOULD GO BACK TO PREVIOUS PAGE!');
+      // console.log('SHOULD GO BACK TO PREVIOUS PAGE!');
     }
 
     const formData = new FormData(this.formEl);
@@ -309,7 +309,7 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
     // If we have a success response, let's put those details into the page
     if (this.submissionResponse && this.submissionStatus == 'success') {
       // If we have a response, we need to fill in some fields
-      console.log('  RESPONSE: ', this.submissionResponse);
+      // console.log('  RESPONSE: ', this.submissionResponse);
       let formData = new FormData(this.formEl);
       // formData = this.fakeTheData(formData);
 
@@ -329,14 +329,14 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
 
         let commentersNames = [];
         for (let i = 1; formData.has('commenters_' + i + '_.commenterType'); i++) {
-          console.log('  for ', i);
+          // console.log('  for ', i);
           commentersNames.push(
             formData.get('commenters_' + i + '_.commenterType') === 'individual'
             ? formData.get('commenters_' + i + '_.firstName') + ' ' + formData.get('commenters_' + i + '_.lastName')
             : formData.get('commenters_' + i + '_.orgName')
           );
         }
-        console.log('  commentersNames: ', commentersNames);
+        // console.log('  commentersNames: ', commentersNames);
 
         // If there are commenters_1_+, we need the "on behalf of" part
         if (commentersNames.length > 0)
@@ -368,9 +368,9 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
     let messageElements = [...this.frame5.children];
     // Toggle HTMLElements based on submissionStats vs data-status=""
     messageElements.forEach(messageEl => {
-      console.log('    messageEl: ', messageEl);
+      // console.log('    messageEl: ', messageEl);
       // console.log('      submissionStatus: ', submissionStatus);
-      console.log('      comparison: ', messageEl.dataset.status != this.submissionStatus);
+      // console.log('      comparison: ', messageEl.dataset.status != this.submissionStatus);
       messageEl.classList.toggle('hidden', messageEl.dataset.status != this.submissionStatus);
     });
   }
@@ -634,7 +634,7 @@ RulemakingsCommenting.prototype.handleFileCancelClick = function(e) {
  * then calls updateHeightForCurrentFrame
  */
 RulemakingsCommenting.prototype.toggleElementsByVars = function() {
-  console.log('toggleElementsByVars()');
+  // console.log('toggleElementsByVars()');
   const elementsToToggle = this.formEl.querySelectorAll('[data-show-if-var][data-show-if-val]');
   elementsToToggle.forEach(elToToggle => {
     const varName = elToToggle.dataset.showIfVar; // Which variable/input are we checking?
@@ -728,7 +728,7 @@ RulemakingsCommenting.prototype.updateTopNav = function() {
  * @param {('next'|'incomplete'|'submit')} frameState
  */
 RulemakingsCommenting.prototype.updateBottomNav = function(state = 'incomplete') {
-  console.log('updateButtonNav(state): ', state);
+  // console.log('updateButtonNav(state): ', state);
   if (this.currentFrameNum === 5 && this.submissionStatus === 'success') {
     this.bottomNav.classList.add('hidden');
     return;
@@ -768,7 +768,7 @@ RulemakingsCommenting.prototype.updateBottomNav = function(state = 'incomplete')
  * @param {Event} e
  */
 RulemakingsCommenting.prototype.handleFormChange = function(e) {
-  console.log('handleFormChange(e): ', e);
+  // console.log('handleFormChange(e): ', e);
   // Maybe later: this.formEl.removeAttribute('data-has-been-active');
   this.toggleElementsByVars();
 
@@ -789,7 +789,7 @@ RulemakingsCommenting.prototype.handleFormChange = function(e) {
   const commentsField = this.formEl.querySelector('textarea[name="comments"]');
   let commentsAreRequired = true;
   fileInputs.forEach(input => {
-    console.log('fileInputs.forEach input.files: ', input.files);
+    // console.log('fileInputs.forEach input.files: ', input.files);
     if (input.files.length > 0) commentsAreRequired = false;
   });
   if (commentsAreRequired) commentsField.setAttribute('required', '');
@@ -927,10 +927,10 @@ RulemakingsCommenting.prototype.toggleHelp = function(targetEl) {
 };
 
 /**
- * 
+ *
  */
 RulemakingsCommenting.prototype.startSubmitting = function() {
-  console.log('  startSubmitting()');
+  // console.log('  startSubmitting()');
 
   // TODO: deactivate bottom nav
   // TODO: VALIDATE FORM DATA
@@ -961,7 +961,8 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
     } else dataPayload[entry[0]] = entry[1];
   });
 
-  let dataSubmission = fetch('/legal/api/submit-rulemaking-comments/', {
+  // let dataSubmission =
+  fetch('/legal/api/submit-rulemaking-comments/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -983,9 +984,9 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
         // Save the response
         this.submissionResponse = dataSubResp;
 
-        console.log('  dataSubResp: ', dataSubResp);
+        // console.log('  dataSubResp: ', dataSubResp);
         const presignedURLs = dataSubResp.presigned_urls;
-        console.log('attachedFiles: ', attachedFiles);
+        // console.log('attachedFiles: ', attachedFiles);
         // For each attached file, we need to upload it with the presigned URLs from dataSubResp
         attachedFiles.forEach(
           /**
@@ -1006,22 +1007,22 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
               method: 'POST',
               body: fileUploadBody
             })
-            .then(fileSubResp => {
-              console.log('  fileSubResp: ', fileSubResp);
+            .then(() => {
+              // console.log('  fileSubResp: ', fileSubResp);
             })
-            .catch(err => {
+            .catch(() => {
               // TODO: handle file upload errors, including telling the user that 1-3 of their files were rejected
-              console.log('file upload error: ', err);
+              // console.log('file upload error: ', err);
             });
           }
         ); // end attachedFiles.forEach
         //     /**
         //      * @param {Object} fileUploadVars - key:value pairs
-        //      * @param {string} fileUploadVars.url - 
-        //      * @param {Object} fileUploadVars.fields - 
-        //      * @param {string} fileUploadVars.fields.acl - 
-        //      * @param {string} fileUploadVars.fields.key - 
-        //      * @param {string} fileUploadVars.fields.policy - 
+        //      * @param {string} fileUploadVars.url -
+        //      * @param {Object} fileUploadVars.fields -
+        //      * @param {string} fileUploadVars.fields.acl -
+        //      * @param {string} fileUploadVars.fields.key -
+        //      * @param {string} fileUploadVars.fields.policy -
         //      * @param {string} fileUploadVars.fields.x-amz-algorithm
         //      * @param {string} fileUploadVars.fields.x-amz-credential
         //      * @param {string} fileUploadVars.fields.x-amz-date
@@ -1029,19 +1030,19 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
         //      */
         this.handleSubmissionResponse();
     })
-    .catch(error => {
+    .catch(() => {
       // TODO: tell users about errors, especially if 1-3 of their files didn't upload
-      console.log(' ERROR:', error);
+      // console.log(' ERROR:', error);
     });
-  console.log('  dataSubmission:', dataSubmission);
+  // console.log('  dataSubmission:', dataSubmission);
 
 };
 
 /**
  * Called after the fetches have resolved, then sends us to the confirmation page
  */
-RulemakingsCommenting.prototype.handleSubmissionResponse = function (response) {
-  console.log('handleSubmissionResponse(response): ', response);
+RulemakingsCommenting.prototype.handleSubmissionResponse = function () {
+  // console.log('handleSubmissionResponse(response): ', response);
 
   this.submissionStatus = this.submissionResponse.submitted_at ? 'success' : 'error';
   // TODO: HANDLE THE ERROR RESPONSE
@@ -1053,7 +1054,7 @@ RulemakingsCommenting.prototype.handleSubmissionResponse = function (response) {
  * If the form has values, offer a change to stay on this page and not lose the data
  * @param {Event} e
  */
-RulemakingsCommenting.prototype.handleBeforeUnload = function(e) {
+RulemakingsCommenting.prototype.handleBeforeUnload = function() {
   // TODO: turn this back on
   // if (this.formEl.dataset.hasBeenActive) {
   //   e.preventDefault();
@@ -1063,8 +1064,8 @@ RulemakingsCommenting.prototype.handleBeforeUnload = function(e) {
 /**
  * @param {Event} e
  */
-RulemakingsCommenting.prototype.handleInputChange = function(e) {
-  console.log('change(e): ', e);
+RulemakingsCommenting.prototype.handleInputChange = function() {
+  // console.log('change(e): ', e);
   // Rules for frame 0/type
   // TODO: do we need this?
 };
@@ -1072,8 +1073,8 @@ RulemakingsCommenting.prototype.handleInputChange = function(e) {
 /**
  * @param {InputEvent} e
  */
-RulemakingsCommenting.prototype.handleInputInput = function(e) {
-  console.log('input(e): ', e);
+RulemakingsCommenting.prototype.handleInputInput = function() {
+  // console.log('input(e): ', e);
   // TODO: do we need this?
 };
 
