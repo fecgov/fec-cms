@@ -1575,7 +1575,7 @@ class FecTimelineItem(Page):
 
     # When saving, set the slug to `timeline-entry-` plus the title
     def save(self, *args, **kwargs):
-        self.slug = slugify(f'timeline-entry-{self.title}')
+        self.slug = slugify(f'timeline-entry-{self.year}-{self.title}')
         super().save(*args, **kwargs)
 
     # These should all redirect to their parent, the main timeline page
