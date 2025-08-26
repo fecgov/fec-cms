@@ -1,82 +1,31 @@
-{% load static compress wagtailuserbar %}
-{% load filters %}
-<!DOCTYPE html>
-<html lang="en-US">
-  <head>
-    {% include './partials/meta-tags.html' %}
+{% extends "base.html" %}
 
-    <title>Website status error | FEC</title>
+{% block title %}Website status error | FEC{% endblock %}
 
-    {% if not request.is_preview %}{% include 'partials/google-tag-manager-script.html' %}{% endif %}
+{% block content %}
+  <!-- Browser Warning (only shows if outdated) -->
+  <div id="browser_warning" style="display: none; background: #f8d7da; color: #721c24; padding: 1rem; margin: 1rem 0; border: 1px solid #f5c6cb;">
+    <h2>Your web browser is not supported</h2>
+    <p>This site uses features that are not supported by this browser. For a better experience, please switch to a modern browser.</p>
+  </div>
 
-    {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% path_for_css 'base.css' %}">
-    {% endblock %}
-  </head>
-
-  <body class="status-mode {% block body_class %}{% endblock %}">
-    <div id="browser_warning" style="display: none;">
-      <h2>Your web browser is not supported</h2>
-      <p>This site uses features that are not supported by this browser. For a better experience, please switch to a modern browser.</p>
-    </div>
-    <script>{# Currently checking for window.fetch and Object.assign #}
+  <script>
+    (function () {
       var browserIsCapable = ('fetch' in window && 'assign' in Object);
       if (!browserIsCapable) {
-        var browserWarningElement = document.getElementById('browser_warning');
-        browserWarningElement.style.display = 'block';
+        var warning = document.getElementById('browser_warning');
+        if (warning) warning.style.display = 'block';
       }
-    </script>
+    })();
+  </script>
 
-    {% if not request.is_preview %}{% include 'partials/google-tag-manager-noscript.html' %}{% endif %}
-
-    {% wagtailuserbar %}
-    {# env-specific banner #} 
-    {% include 'partials/env-banner.html' %}
-    {# .gov banner #}
-    {% include 'partials/usa-banner.html' %}
-    <header class="site-header site-header--homepage">
-      <div class="masthead">
-        <div class="homepage-seal">
-          <img src="{% static 'img/seal.svg' %}" alt="FEC logo" width="160" height="160">
-        </div>
-        <div class="site-title--print"></div>
-        <a title="Home" href="/" class="site-title" rel="home"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
+  <section class="content--blank">
+    <div class="container">
+      <div class="message message--alert message--big">
+        <h1 class="message__title">Server error</h1>
+        <p>We are experiencing technical difficulties. We know this may interrupt your work and are working hard to restore FEC.gov to normal. Please check the <a href="https://secure-stats.pingdom.com/x0blqgj29ogg">FEC.gov status page</a> for current system status availability.</p>
+        <p>If you have any questions or feedback about the website, please contact us at <a href="mailto:webmanager@fec.gov">webmanager@fec.gov</a>. For assistance with questions about the FEC or the federal campaign finance law, please email <a href="mailto:info@fec.gov">info@fec.gov</a> or call 800-424-9530.</p>
       </div>
-    </header>
-
-    <main id="main">
-      {% block content %}
-      <div class="container" style="padding-top: 15rem;">
-        <ul class="grid grid--flex">
-            <li class="grid__item text-centered">
-                <p>We are experiencing technical difficulties. We know this may interrupt your work and are working hard to restore FEC.gov to normal. Please check the <a href="https://secure-stats.pingdom.com/x0blqgj29ogg">FEC.gov status page</a> for current system status availability.</p>
-                <p>If you have any questions or feedback about the website, please contact us at <a href="mailto:webmanager@fec.gov">webmanager@fec.gov</a>. For assistance with questions about the FEC or the federal campaign finance law, please email <a href="mailto:info@fec.gov">info@fec.gov</a> or call 800-424-9530.</p>
-            </li>
-        </ul>
-      </div>
-      {% endblock %}
-    </main>
-
-    {% include './partials/glossary.html' %}
-
-    {% csrf_token %}
-
-    <script>
-      window.BASE_PATH = '/';
-      window.FEC_APP_URL = '{{ settings.FEC_APP_URL }}';
-      window.API_LOCATION = '{{ settings.FEC_API_URL }}';
-    </script>
-
-    {% tags_for_js_chunks 'global.js' '' %}
-    {% tags_for_js_chunks 'init.js' '' %}
-
-    {% block extra_js %}
-    {# Override this in templates to add extra javascript #}
-    {% endblock %}
-
-    {# GSA DAP for Production #}
-    {% if settings.FEC_CMS_ENVIRONMENT == 'PRODUCTION' %}
-    <script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=FEC"></script>
-    {% endif %}
-  </body>
-</html>
+    </div>
+  </section>
+{% endblock %}

@@ -161,6 +161,7 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     # custom response headers
     'fec.middleware.AddSecureHeaders',
+    'fec.middleware.PoolTimeouts',
     'uaa_client.middleware.UaaRefreshMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
