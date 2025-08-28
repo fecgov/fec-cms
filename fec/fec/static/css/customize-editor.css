@@ -93,15 +93,36 @@ li.sequence-member .sequence-member-inner .sequence-type-list .sequence-containe
     order: 1;
   }
 }
-ul.timeline-help {
-  li {
-    list-style-type: initial;
+[data-timeline-help] {
+  
+  h2 {
+    font-weight: bold;
   }
-  pre {
-    display: inline-block;
-    font-size: 90%;
-    margin: 0;
-    opacity: .66;
+  ol {
+    padding-left: 1rem;
+
+    li {
+      list-style-type: auto;
+    }
+  }
+  ul {
+    margin-left: 1rem;
+
+    li {
+      list-style-type: initial;
+    }
+    pre {
+      display: inline-block;
+      font-size: 90%;
+      margin: 0;
+      opacity: .66;
+    }
+  }
+  p:has(+ ol) {
+    margin-bottom: 0;
+  }
+  p + ol {
+    margin-top: 0;
   }
 }
 /*

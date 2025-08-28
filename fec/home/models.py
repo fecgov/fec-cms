@@ -1520,9 +1520,9 @@ class FecTimelineItem(Page):
     )
 
     content_panels = [
-        FieldPanel('title', help_text='Strictly for author organization'),
-        FieldPanel('summary', icon='code', help_text='The part thatʼs always visible', heading='Entry title/summary',
-                   classname='timeline-summary', disable_comments=True),
+        FieldPanel('title', help_text='Strictly for Wagtail organization, never shown to site visitors'),
+        FieldPanel('summary', icon='code', help_text='The (html) content thatʼs always visible',
+                   heading='Entry title/summary', classname='timeline-summary', disable_comments=True),
         FieldRowPanel([
             FieldPanel('entry_date', help_text='Used while sorting', disable_comments=True),
             FieldPanel('order_tiebreaker', help_text='If there are date duplicates', classname='timeline-tie-breaker',
@@ -1530,14 +1530,22 @@ class FecTimelineItem(Page):
             FieldPanel('start_open', help_text='Start in an open state?', classname='timeline-start-open',
                        disable_comments=True),
         ]),
-        FieldPanel('content', icon='code', help_text='The part that collapses. Will be inside a <div></div>',
-                   classname='timeline-content', disable_comments=True),
+        FieldPanel('content', icon='code', classname='timeline-content', disable_comments=True,
+                   help_text='The (html) part that collapses. Will be wrapped inside a <div></div>'),
         FieldPanel('categories', help_text='Used for filtering (optional)', disable_comments=True),
-        HelpPanel('<strong \
-                style="display:inline-block;font-size:larger;margin:0 0 0.5em -1em">\
-                  Special notes for timeline entries</strong>:\
-            <ul class="timeline-help"> \
+        HelpPanel('<h2>Special notes for timeline entries</h2>\
+            <h3>Wagtail</h3>\
+            <ul>\
                 <li><em>Summary</em> and <em>Content</em> are html fields</li>\
+                <li>If <em>Start open</em> is checked, this entry will be open on page load</li>\
+                <li><em>Order tiebreaker</em> comes into play when entries have the same entry date</li>\
+                <li>FEC historical timeline entries will be included on the FEC Historical Timeline page only when\
+                    published.</li>\
+                <li>Timeline entries canʼt be viewed individually, but the preview panel is interactive with some\
+                    visual context included.</li>\
+            </ul>\
+            <h3>HTML / formatting</h3>\
+            <ul>\
                 <li>Wrap dates in a <pre>&lt;time datetime="2025-12-31"&gt;&lt;/time&gt;</pre> where \
                     <pre>datetime</pre> is an ISO-8601 date. i.e. <pre>yyyy</pre> or <pre>yyyy-mm-dd</pre></li>\
                 <li>To prevent the linebreak before the first <pre>&lt;time&gt;</pre> in a summary,<br>\
@@ -1550,12 +1558,11 @@ class FecTimelineItem(Page):
                 <li>The default layout for content is for images to float to the right and text to flow around them \
                     on the left. To change that, add <pre> class="float-left"</pre> to the <pre>&lt;figure&gt;</pre>.\
                     (<pre>float-right</pre> is defined, too, but itʼs the default)</li>\
-                <li>If <em>Start open</em> is checked, this entry will be open on page load</li>\
                 <li>To launch YouTube links in the modal on this page, add <pre> data-media="url"</pre> to a link or \
                     other element. The <pre>href</pre> should be in a format like \
                   <pre>youtube.com/embed/[videoid]</pre> or <pre>youtu.be/[videoid]</pre>, \
                   or have <pre>v=[videoid]</pre></li>\
-            </ul>'),
+            </ul>', attrs={'data-timeline-help': True}),
     ]
 
     # No promote panels
@@ -1583,6 +1590,10 @@ class FecTimelineItem(Page):
         parent_page = self.get_parent()
         return redirect(parent_page.url, permanent=True)
 
+    # Don't let these show up in sitemaps
+    def get_sitemap_urls(self, request=None):
+        return []
+
     class Meta:
         verbose_name = 'FEC historical timeline entry'
         verbose_name_plural = 'FEC historical timeline entries'
@@ -1596,7 +1607,15 @@ class FecTimelinePage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('body'),
-        HelpPanel('<strong>Timeline entries are child pages of this page</strong>'),
+        HelpPanel('<h2>Special notes for this timeline page and its\
+            entries</h2>\
+        <p>Entries must be published/live to be included in this list. (Drafts wonʼt be shown.)</p>\
+        <p>To add a new entry, either create a child page here or</p>\
+        <ol>\
+            <li>go to “News and Updates” in the side panel</li>\
+            <li>choose “FEC Timeline Items”</li>\
+            <li>click “Add FEC historical timeline entry” at the top of the page</li>\
+        </ol>', attrs={'data-timeline-help': True}),
     ]
 
     def get_timeline_categories(self):
