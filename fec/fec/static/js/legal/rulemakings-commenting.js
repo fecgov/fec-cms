@@ -1,6 +1,24 @@
 /**
- * TODO: on landing on the summary/review page and the confirmation page, scroll to the top
- * TODO: Going back to change the radio buttons, the top nav options should update, too
+ * ✅ TODO: add disclaimer for testify-phone: 'Phone number is not made public and is only used for the purpose of contacting participants to testify'
+ * ✅ TODO: summary: include request to testify if needed, then phone number
+ * ✅ TODO: review email address fields' 'required' states, particularly for counsel
+ * ✅ TODO: title should move above topnav
+ * ✅ TODO: phone number field should be limited width
+ * ✅ TODO: error messages' widths should be auto, not necessarily the width of their <input>
+ * ✅ TODO: When the country isn't the US, reset and disable the state <select>
+ * TODO: history/flow
+ *   ✅ TODO: arriving at the summary/review page and the confirmation page, scroll to the top
+ *   ✅ TODO: Going back to change the radio buttons, the top nav options should update, too
+ *   ✅ TODO: Going back from add comments takes us back to 0 instead of the previous frame we were shown
+ * TODO: error checking in JavaScript _and_ Python
+ * TODO: handle errors:
+ *   TODO: filesize too large
+ *   TODO: if we can't save user information for some reason—some generic error
+ *   TODO: saved information, couldn't save attachment(s)
+ *   TODO: include unique ID for when commenters contact FEC
+ *   TODO: ¿saved information, may have saved some attachment(s)?
+ *   TODO: ¿commenting period is about to close?
+ *   TODO: ¿commenting period has closed before comments could be submitted?
  */
 export default function RulemakingsCommenting() {
   this.appElId = 'rulemakings-comments'; // How to find the button to launch this
@@ -23,6 +41,7 @@ export default function RulemakingsCommenting() {
   this.submissionStatus;
   this.submissionResponse;
   this.recapWidgetId;
+
   this.init();
 }
 
@@ -102,21 +121,42 @@ RulemakingsCommenting.prototype.init = function() {
   this.goToFrame(0);
 };
 
-RulemakingsCommenting.prototype.initRecap = function() {
-  // console.log('initRecap()');
-  this.recapWidgetId = grecaptcha.render('commenting-recaptcha', {
-    callback: this.handleRecapCheck.bind(this),
-    'expired-callback': this.handleRecapExpiration.bind(this)
-  }, true);
+/**
+ * builds the reCAPTCHA if it doesn't exist, otherwise resets it
+ * @param {boolean} showRecap - whether the reCAPTCHA should be shown/offered
+ */
+RulemakingsCommenting.prototype.showRecap = function(showRecap) {
+  const recapElId = 'commenting-recaptcha';
+  const recapEl = document.querySelector(`#${recapElId}`);
+
+  // Toggle the recaptcha visibility as needed
+  recapEl.classList.toggle('hidden', !showRecap);
+
+  if (showRecap && !recapEl.childElementCount === 0)
+    grecaptcha.reset(recapElId);
+  else if (showRecap && recapEl.childElementCount === 0) {
+    this.recapWidgetId = grecaptcha.render(recapElId, {
+      callback: this.handleRecapCheck.bind(this),
+      'expired-callback': this.handleRecapExpiration.bind(this)
+      // 'error-callback': (e) => { console.log('errorcallback(e): ', e); }
+    }, true);
+  }
 };
 RulemakingsCommenting.prototype.handleRecapCheck = function() {
-  // console.log('handleRecapCheck()');
-  if (this.currentFrameNum === 4) this.updateBottomNav('submit');
+  if (this.isOnFrame('summary')) this.updateBottomNav('submit');
 };
 RulemakingsCommenting.prototype.handleRecapExpiration = function() {
-  // console.log('handleRecapExpiration()');
-  this.recapWidgetId = null;
-  if (this.currentFrameNum === 4) this.updateBottomNav('submit-wait');
+  if (this.isOnFrame('summary')) this.updateBottomNav('submit-wait');
+};
+
+const framesOrder = ['submitterType', 'submitterInfo', 'commenters', 'comments', 'summary', 'confirmation'];
+/**
+ * Compares currentFrameNum to type of frame
+ * @param {('submitterType'|'submitterInfo'|'commenters'|'comments'|'summary'|'confirmation')} frameType
+ * @returns {boolean}
+ */
+RulemakingsCommenting.prototype.isOnFrame = function(frameType) {
+  return framesOrder[this.currentFrameNum] === frameType;
 };
 
 /**
@@ -131,31 +171,31 @@ RulemakingsCommenting.prototype.goToFrame = function(frameNum) {
   if (frameNum == 'next') {
     // TODO: validate frameset just in case
 
-    // For the 'self' type, we want to skip commenterInfo, _2_
-    if (this.currentFrameNum === 1 && this.representedEntityType === 'self') {
-      this.currentFrameNum = 3;
+    // For the 'self' type, we want to skip commenterInfo (_2_)
+    if (this.representedEntityType === 'self' && this.isOnFrame('submitterInfo')) {
+      this.currentFrameNum += 2;
     } else this.currentFrameNum++;
 
   } else if (frameNum == 'back') {
-    // For the 'self' type, we want to skip commenterInfo, _2_
-    if (this.currentFrameNum === 3 && this.representedEntityType === 'self') {
-      this.currentFrameNum = 1;
+    // For the 'self' type, we want to skip commenterInfo (_2_)
+    if (this.representedEntityType === 'self' && this.isOnFrame('comments')) {
+      this.currentFrameNum -= 2;
 
       // Otherwise, if we're past frame _0_, backup
     } if (this.currentFrameNum > 0) {
       this.currentFrameNum--;
 
     // But for frame _0_, _if there's no data to lose_, go to the previous browser page
-    } else if (this.currentFrameNum === 0) {
+    } else if (this.isOnFrame('submitterType')) {
       // TODO: if there's no data to lose,
       history.back();
     }
-  } else if (frameNum === 'confirmation') {
+  } else if (this.isOnFrame('confirmation')) {
     this.currentFrameNum = this.frames.length - 1;
     this.updateBottomNav('confirmation');
   }
 
-  this.updateLaterFrames();
+  this.buildTheFrame();
 
   // Update the frames' classes
   this.frames.forEach((frame, i) => {
@@ -185,31 +225,25 @@ RulemakingsCommenting.prototype.updateHeightForCurrentFrame = function() {
  * Will build or update "next" frames as needed.
  * e.g. if moving from frame 0 to 1, will toggle fields for frame 1 based on values from frame 0
  */
-RulemakingsCommenting.prototype.updateLaterFrames = function() {
-  if (this.currentFrameNum === 1) {
+RulemakingsCommenting.prototype.buildTheFrame = function() {
+  if (this.isOnFrame('submitterType')) {
     if (this.representedEntityType == 'self') {
       //
     }
-  } else if (this.currentFrameNum === 2) {
-    // 2 is the commenter info
+  } else if (this.isOnFrame('commenters')) {
     const commentersHolder = this.formEl.querySelector('#commenters-holder');
-    if (!commentersHolder.childElementCount) {
-      this.addCommenter();
-    }
+    if (!commentersHolder.childElementCount) this.addCommenter();
 
-  } else if (this.currentFrameNum === 4) {
+  } else if (this.isOnFrame('summary')) {
 
     if (!this.validateEntireForm()) {
+      // TODO ?
       // console.log('SHOULD GO BACK TO PREVIOUS PAGE!');
     }
 
     const formData = new FormData(this.formEl);
     const summaryTable = this.frame4.querySelector('table tbody');
     let newInnerHtml = '';
-
-    // TODO: REMOVE THIS
-    // formData = this.fakeTheData(formData);
-    // TODO: REMOVE THIS
 
     newInnerHtml += `<tr><th colspan="2">Confirm information</th></tr>`;
     newInnerHtml += `<tr><td colspan="2">Verify the following information before clicking submit.</td></tr>`;
@@ -232,6 +266,12 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
     newInnerHtml += `<tr><td>State:</td><td>${formData.get('commenters_0_.mailingState')}</td></tr>`;
     newInnerHtml += `<tr><td>Country:</td><td>${formData.get('commenters_0_.mailingCountry')}</td></tr>`;
     newInnerHtml += `<tr><td>Email:</td><td>${formData.get('commenters_0_.emailAddress')}</td></tr>`;
+
+    if (formData.get('commenters_0_.testify') === 'true') {
+      newInnerHtml += `<tr><td colspan="2"><hr></td></tr>`;
+      newInnerHtml += `<tr><td colspan="2">I request to testify should the Commission hold a hearing on this matter</td></tr>`;
+      newInnerHtml += `<tr><td>Phone:</td><td>${formData.get('commenters_0_.phone')}</td></tr>`;
+    }
 
     if (this.representedEntityType != 'self') { // None of these are for 'self'
 
@@ -300,18 +340,15 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
 
     summaryTable.innerHTML = newInnerHtml;
 
-    // Start the reCAPTCHA
-    this.initRecap();
+    // Scroll to the top
+    // this.topNav.scrollIntoView({ behavior: 'smooth' });
 
-  } else if (this.currentFrameNum === 5) {
-    // Confirmation page!
-
+  } else if (this.isOnFrame('confirmation')) {
     // If we have a success response, let's put those details into the page
     if (this.submissionResponse && this.submissionStatus == 'success') {
       // If we have a response, we need to fill in some fields
       // console.log('  RESPONSE: ', this.submissionResponse);
-      let formData = new FormData(this.formEl);
-      // formData = this.fakeTheData(formData);
+      const formData = new FormData(this.formEl);
 
       const now = new Date();
       const datetimeStamp = new Date(this.submissionResponse.submitted_at);// 'yyyy-mm-dd hh:mmT-4';
@@ -360,6 +397,9 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
       confirmationMessage += `<time datetime="${datetimeStamp}">${datetimeString}</time>.`;
       this.frame5.querySelector('.message--success p').innerHTML = confirmationMessage;
 
+      // Scroll to the top
+      // this.topNav.scrollIntoView({ behavior: 'smooth' });
+
     } else if (this.submissionStatus == 'error') {
       // TODO: If we have an error response
     }
@@ -374,6 +414,24 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
       messageEl.classList.toggle('hidden', messageEl.dataset.status != this.submissionStatus);
     });
   }
+
+  // Show reCAPTCHA if we're on the summary page
+  this.showRecap(this.isOnFrame('summary'));
+
+  this.slideToTop();
+};
+
+/**
+ * 
+ */
+RulemakingsCommenting.prototype.slideToTop = function() {
+  const prefersReducedMotion =
+    window.matchMedia(`(prefers-reduced-motion: reduce)`) === true
+    || window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
+
+  if (prefersReducedMotion) this.topNav.scrollIntoView({ behavior: 'instant' });
+
+  else this.topNav.scrollIntoView({ behavior: 'smooth' });
 };
 
 /**
@@ -391,10 +449,13 @@ RulemakingsCommenting.prototype.validateEntireForm = function() {
     `commenters_0_.lastName`,
     `commenters_0_.addressType`,
     `commenters_0_.mailingCity`,
-    `commenters_0_.mailingState`,
     `commenters_0_.mailingCountry`,
     `commenters_0_.emailAddress`
   ];
+
+  // State is required for the US
+  if (formData.get('commenters_0_.mailingCountry') === 'US')
+    requiredFieldNames.push('commenters_0_.mailingState');
 
   // For 'other' relationships, record how they label the relationship
   if (this.representedEntityType === 'other')
@@ -411,34 +472,42 @@ RulemakingsCommenting.prototype.validateEntireForm = function() {
       'commenters_0_.representedEntity.addressType',
       'commenters_0_.representedEntity.mailingAddressStreet',
       'commenters_0_.representedEntity.mailingCity',
-      'commenters_0_.representedEntity.mailingState',
-      'commenters_0_.representedEntity.mailingZip',
       'commenters_0_.representedEntity.mailingCountry'
     );
+
+    if (formData.get('commenters_0_.representedEntity.mailingCountry') === 'US')
+      requiredFieldNames.push(
+        'commenters_0_.representedEntity.mailingState',
+        'commenters_0_.representedEntity.mailingZip'
+      );
   }
 
   // For non-self commenters, add every commenters[i] element that exists
   if (this.representedEntityType != 'self') {
-    let i;
+    let i = 1;
     while (formData.has(`commenters[${i}].commenterType`)) {
       requiredFieldNames.push(`commenters[${i}].commenterType`);
 
       if (formData.get(`commenters[${i}].commenterType`) === 'organization')
         requiredFieldNames.push(`commenters[${i}].representedEntity.orgName`);
-      else
+      else {
         requiredFieldNames.push(
           `commenters[${i}].representedEntity.firstName`,
           `commenters[${i}].representedEntity.firstName`
         );
+      }
 
       requiredFieldNames.push(
         `commenters[${i}].representedEntity.addressType`,
         `commenters[${i}].representedEntity.mailingAddressStreet`,
         `commenters[${i}].representedEntity.mailingCity`,
-        `commenters[${i}].representedEntity.mailingState`,
-        `commenters[${i}].representedEntity.mailingCountry`,
-        `commenters[${i}].representedEntity.emailAddress`
+        `commenters[${i}].representedEntity.mailingCountry`
       );
+
+      // State is required for the US
+      if (formData.get(`commenters[${i}].representedEntity.mailingCountry`) === 'US')
+        requiredFieldNames.push(`commenters[${i}].representedEntity.mailingState`)
+
       i++;
     }
   }
@@ -474,7 +543,7 @@ RulemakingsCommenting.prototype.validateField = function(elOrSelector, requireVa
   // Testing a state field, it needs to be exactly two letters if for the USA. Otherwise optional.
   if (fieldName.indexOf('State') > 0) {
     const theCountry = formData.get(fieldName.replace('State', 'Country'));
-    if (theCountry === 'USA' && !formData.get(fieldName).length !== 2) {
+    if (theCountry === 'US' && !formData.get(fieldName).length !== 2) {
       if (requireValue) theField.classList.add('invalid');
       toReturn = false;
     }
@@ -483,7 +552,7 @@ RulemakingsCommenting.prototype.validateField = function(elOrSelector, requireVa
   } else if (fieldName.indexOf('Zip') > 0) {
     const theCountry = formData.get(fieldName.replace('Zip', 'Country'));
     const zipRegex = /\d{5}(-\d{4}){0,1}$/;
-    if (theCountry === 'USA' && !zipRegex.test(formData.get(fieldName))) {
+    if (theCountry === 'US' && !zipRegex.test(formData.get(fieldName))) {
       if (requireValue) theField.classList.add('invalid');
       toReturn = false;
     }
@@ -500,8 +569,8 @@ RulemakingsCommenting.prototype.validateField = function(elOrSelector, requireVa
  * @returns {HTMLElement} Returns the new commenter/div created
  */
 RulemakingsCommenting.prototype.addCommenter = function() {
-  let commentersHolder = this.formEl.querySelector('#commenters-holder');
-  let newCommenter = document.createElement('div');
+  const commentersHolder = this.formEl.querySelector('#commenters-holder');
+  const newCommenter = document.createElement('div');
   newCommenter.setAttribute('class', 'commenter');
   // Set its innerHTML
   const newChildIndex = commentersHolder.childElementCount + 1;
@@ -515,7 +584,8 @@ RulemakingsCommenting.prototype.addCommenter = function() {
     'fieldset[data-show-if-var$=".testify"], fieldset:has(input[name$=".testify"])'
   );
   testifyEls.forEach(el => {
-    newCommenter.removeChild(el);
+    // el.parentElement.removeChild(el);
+    el.remove();
   });
 
   // Add button listeners
@@ -587,8 +657,6 @@ RulemakingsCommenting.prototype.handleCommenterClick = function(e) {
   } else if (e.target.dataset.command == 'remove-commenter') {
     this.removeCommenter(e.target.closest('.commenter'));
   }
-  // If the type was clicked, toggle the fields in this commenter
-  // if (e.target.name.indexOf('.commenterType') > 0) this.toggleCommenterFields(e.target);
 };
 
 /**
@@ -602,46 +670,23 @@ RulemakingsCommenting.prototype.handleFileCancelClick = function(e) {
   // Find the linked <input> element, clear its value and remove the has-file class
   const linkedInput = this.formEl.querySelector(`#${e.target.dataset.commandfor}`);
   linkedInput.value = '';
-  linkedInput.classList.remove('has-file');
+  linkedInput.classList.remove('has-file', 'invalid');
+  linkedInput.setCustomValidity('');
   // Trigger the change event so the form will update its validation requirements
   linkedInput.dispatchEvent(new Event('change', { bubbles: true }));
 };
-
-/**
- * @param {HTMLElement}
-*/
-/*RulemakingsCommenting.prototype.toggleCommenterFields = function(targetEl) {
-  console.log('toggleCommenterFields(targetEl): ', targetEl);
-  let commenterBlock = targetEl.closest('.commenter');
-  console.log('  commenterBlock: ', commenterBlock);
-  console.log('  commenterBlock.children: ', commenterBlock.children);
-  console.log('  commenterBlock children')
-  let commenterType = commenterBlock.querySelector('[id$=".commenterType"]').value;
-
-  // let commType = e.target.value;
-  // let parentEl = e.target.closest('.commenter');
-  // console.log('  parentEl: ', parentEl);
-  // let requiredEls = parentEl.querySelectorAll(`[data-toggle="${commType}"] input`);
-  // console.log('  requiredEls: ', requiredEls);
-  // let nonReqEls = parentEl.querySelectorAll(`[data-toggle!="${commType}"] input`);
-  // console.log('  nonReqEls: ', nonReqEls);
-  // requiredEls.forEach(el => { el.setAttribute('required', ''); });
-  // nonReqEls.forEach(el => { el.removeAttribute('required'); });
-};*/
 
 /**
  * Adds or removes elements based on their [data-show-if-var] and [data-show-if-val] values
  * then calls updateHeightForCurrentFrame
  */
 RulemakingsCommenting.prototype.toggleElementsByVars = function() {
-  // console.log('toggleElementsByVars()');
   const elementsToToggle = this.formEl.querySelectorAll('[data-show-if-var][data-show-if-val]');
   elementsToToggle.forEach(elToToggle => {
     const varName = elToToggle.dataset.showIfVar; // Which variable/input are we checking?
     const varValue = elToToggle.dataset.showIfVal; // What value is the display value?
-    //
+
     // We want :checked elements tied to the same elements
-    // let selectorString = `[name="${varName}"]:checked, [name="${varName}"]:not([type="checkbox"], [type="radio"])`;
     const selectorString = `[name="${varName}"]:checked`;
 
     const controllerInput = this.formEl.querySelector(selectorString);
@@ -669,7 +714,7 @@ RulemakingsCommenting.prototype.toggleElementsByVars = function() {
  * Updates the meter and links in the topnav
  */
 RulemakingsCommenting.prototype.updateTopNav = function() {
-  if (this.currentFrameNum === 5) {
+  if (this.isOnFrame('confirmation')) {
     this.topNav.classList.add('hidden');
     return;
   }
@@ -680,7 +725,7 @@ RulemakingsCommenting.prototype.updateTopNav = function() {
 
   // Where are we now?
   theMeter.value = this.currentFrameNum + 1;
-  const totalFrames = 5;//this.representedEntityType === 'self' ? 4 : 5;
+  const totalFrames = 5;
   theMeter.setAttribute('max', totalFrames);
   theMeter.setAttribute('value', this.currentFrameNum + 1);
 
@@ -729,10 +774,10 @@ RulemakingsCommenting.prototype.updateTopNav = function() {
  */
 RulemakingsCommenting.prototype.updateBottomNav = function(state = 'incomplete') {
   // console.log('updateButtonNav(state): ', state);
-  if (this.currentFrameNum === 5 && this.submissionStatus === 'success') {
+  if (this.isOnFrame('confirmation') && this.submissionStatus === 'success') {
     this.bottomNav.classList.add('hidden');
     return;
-  } else if (this.currentFrameNum === 5 && this.submissionStatus === 'error') {
+  } else if (this.isOnFrame('confirmation') && this.submissionStatus === 'error') {
     // TODO?
   }
 
@@ -741,15 +786,15 @@ RulemakingsCommenting.prototype.updateBottomNav = function(state = 'incomplete')
   this.formEl.querySelector('[data-command="submit"]').classList.toggle('hidden', state.indexOf('submit') < 0);
 
   let tipForNextButton = '';
-  if (this.currentFrameNum === 0)
+  if (this.isOnFrame('submitterType'))
     tipForNextButton = 'Next step: Provide your personal information';
-  else if (this.currentFrameNum === 1 && this.representedEntityType == 'self')
+  else if (this.isOnFrame('submitterInfo') && this.representedEntityType == 'self')
     tipForNextButton = 'Next step: Provide your comments';
-  else if (this.currentFrameNum === 1)
+  else if (this.isOnFrame('submitterInfo'))
     tipForNextButton = 'Next step: Provide commenter information';
-  else if (this.currentFrameNum === 2)
+  else if (this.isOnFrame('commenters'))
     tipForNextButton = 'Next step: Provide comments';
-  else if (this.currentFrameNum === 3)
+  else if (this.isOnFrame('comments'))
     tipForNextButton = 'Next step: Review and submit information';
 
   this.bottomNav.querySelector('.t-note').innerHTML = tipForNextButton;
@@ -768,7 +813,6 @@ RulemakingsCommenting.prototype.updateBottomNav = function(state = 'incomplete')
  * @param {Event} e
  */
 RulemakingsCommenting.prototype.handleFormChange = function(e) {
-  // console.log('handleFormChange(e): ', e);
   // Maybe later: this.formEl.removeAttribute('data-has-been-active');
   this.toggleElementsByVars();
 
@@ -780,8 +824,22 @@ RulemakingsCommenting.prototype.handleFormChange = function(e) {
   // Handle the file inputs
   if (e.target.type == 'file') {
     // Add/remove the has-file class to toggle the X button, which will let css show additional pickers
-    e.target.classList.toggle('has-file', e.target.files);
-    // let filesHolder = this.formEl.querySelectorAll('#files-holder fieldset');
+    // It 'has-file' when a file's selected and it's <= 5 MB
+    const hasFile = e.target.files.length > 0;
+    const hasLegitFile = e.target.files.length > 0 && e.target.files[0].size <= 5000000;
+
+    e.target.classList.toggle('has-file', hasFile);
+
+    if (hasFile && !hasLegitFile) {
+      e.target.classList.add('invalid');
+      e.target.setCustomValidity('Files must be smaller than 5 MB each');
+    } else if (!hasFile || hasLegitFile) {
+      e.target.classList.remove('invalid');
+      e.target.setCustomValidity('');
+    }
+
+    // Because attaching and removing files can change the height
+    this.updateHeightForCurrentFrame();
   }
 
   // If we have files attached or comments, the other isn't required
@@ -789,7 +847,6 @@ RulemakingsCommenting.prototype.handleFormChange = function(e) {
   const commentsField = this.formEl.querySelector('textarea[name="comments"]');
   let commentsAreRequired = true;
   fileInputs.forEach(input => {
-    // console.log('fileInputs.forEach input.files: ', input.files);
     if (input.files.length > 0) commentsAreRequired = false;
   });
   if (commentsAreRequired) commentsField.setAttribute('required', '');
@@ -799,7 +856,6 @@ RulemakingsCommenting.prototype.handleFormChange = function(e) {
   if (e.target.name === 'representedEntityType' || e.target.name === 'representedEntityConnection') {
     // For the first frame, there's been activity so let's restrict leaving the page and losing data
     this.formEl.dataset.hasBeenActive = true;
-    // formData.set(e.target.name, e.target.value);
 
     if (e.target.name === 'representedEntityType')
       this.representedEntityType = e.target.value;
@@ -809,19 +865,37 @@ RulemakingsCommenting.prototype.handleFormChange = function(e) {
 
   // If we've changed the country, we'll toggle whether state and ZIP are required (req for US/USA)
   if (e.target.name.indexOf('.mailingCountry') > 0) {
+    const usZoneCodes = ['US', 'AS', 'GU', 'MP', 'PR', 'UM', 'VI'];
     const elementNameRoot = e.target.name.substring(0, e.target.name.lastIndexOf('.'));
     const zipAndStateFields = this.formEl.querySelectorAll(
       `[name="${elementNameRoot}.mailingState"], [name="${elementNameRoot}.mailingZip"]`
     );
     zipAndStateFields.forEach(field => {
-      if (e.target.value === 'USA' || e.target.value == 'US')
+      const isZip = field.name.indexOf('Zip') > 0;
+
+      if (usZoneCodes.includes(e.target.value)) {
         field.setAttribute('required', '');
-      else
+        field.removeAttribute('disabled');
+
+        if (isZip) {
+          // For the ZIP fields, enforce the ZIP Code pattern and change the label
+          field.setAttribute('pattern', `^[0-9]{5}(-[0-9]{4}){0,1}$`);
+          this.formEl.querySelector(`[for="${field.id}"]:not(.error)`).innerText = 'ZIP';
+        }
+      } else {
         field.removeAttribute('required');
+        field.setAttribute('disabled', '');
+        field.value = '';
+
+        if (isZip) { // "ZIP" only applies to USPS addresses
+          field.removeAttribute('pattern');
+          this.formEl.querySelector(`[for="${field.id}"]:not(.error)`).innerText = 'Postal code';
+        }
+      }
     });
   }
 
-  // If we've changed the commenter type, let's toggle the required name <input>s (i.e. first+last or org name)
+  // If we've changed the commenter type, let's toggle the required name <input>s (i.e. [first, last] or [org] name)
   if (e.target.name.indexOf('.commenterType') > 0) {
     // The type of commenter
     const commType = e.target.value;
@@ -859,10 +933,10 @@ RulemakingsCommenting.prototype.validateCurrentFrame = function(validationType =
 
   let bottomNavState = isValidated === true ? 'next' : 'incomplete';
 
-  if (this.currentFrameNum === 4) {
+  if (this.isOnFrame('summary')) {
     bottomNavState = 'submit';
     if (!grecaptcha.getResponse(this.recapWidgetId)) bottomNavState += '-wait';
-  } else if (this.currentFrameNum === 5) bottomNavState = 'confirmation';
+  } else if (this.isOnFrame('confirmation')) bottomNavState = 'confirmation';
 
   this.updateBottomNav(bottomNavState);
 
@@ -961,7 +1035,7 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
   });
 
   // let dataSubmission =
-  fetch('/legal/api/submit-rulemaking-comments/', {
+  fetch('/legal/rulemaking/submit-comments/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1002,7 +1076,7 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
             });
             fileUploadBody.append('file', attachedFile[1]);
 
-            fetch(presignedDataObj.url, {
+            fetch('-x-' + presignedDataObj.url, {
               method: 'POST',
               body: fileUploadBody
             })

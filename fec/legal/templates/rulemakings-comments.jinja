@@ -28,31 +28,6 @@
       </div>
     </div>
     <div class="row" id="rulemakings-comments">
-      <nav class="topnav">
-        <!-- {'complete': th is.currentFrameNum == frames . length - 1}" -->
-        <meter value="this.currentFrameNum" max="frames.length - 1" class="hidden" min="0"></meter>
-        <i class="i i-check"></i>
-        <ul class="breadcrumbs">
-          <li class="breadcrumbs__item">
-            <a class="breadcrumbs__link">Submitting</a>
-          </li>
-          <li class="breadcrumbs__item">
-            <a class="breadcrumbs__link">Submitter information</a>
-          </li>
-          <li class="breadcrumbs__item">
-            <a class="breadcrumbs__link">Commenter information</a>
-          </li>
-          <li class="breadcrumbs__item">
-            <a class="breadcrumbs__link">Comments</a>
-          </li>
-          <li class="breadcrumbs__item">
-            <a class="breadcrumbs__link">Final review</a>
-          </li>
-          <li class="breadcrumbs__item">
-            <a class="breadcrumbs__link">response</a>
-          </li>
-        </ul>
-      </nav>
       <div class="js-help hidden" id="help">
         <svg
           class="pointer"
@@ -71,7 +46,32 @@
       </div>
       <form class="js-rulemakings-comments">
         <h3>Submit comments on rulemaking</h3>
-        <h2>REG {{ reg_no }} {{ reg_name }}</h2>
+        <h2>{{ rm_title }}</h2>
+        <nav class="topnav">
+          <!-- {'complete': th is.currentFrameNum == frames . length - 1}" -->
+          <meter value="this.currentFrameNum" max="frames.length - 1" class="hidden" min="0"></meter>
+          <i class="i i-check"></i>
+          <ul class="breadcrumbs">
+            <li class="breadcrumbs__item">
+              <a class="breadcrumbs__link">Submitting</a>
+            </li>
+            <li class="breadcrumbs__item">
+              <a class="breadcrumbs__link">Submitter information</a>
+            </li>
+            <li class="breadcrumbs__item">
+              <a class="breadcrumbs__link">Commenter information</a>
+            </li>
+            <li class="breadcrumbs__item">
+              <a class="breadcrumbs__link">Comments</a>
+            </li>
+            <li class="breadcrumbs__item">
+              <a class="breadcrumbs__link">Final review</a>
+            </li>
+            <li class="breadcrumbs__item">
+              <a class="breadcrumbs__link">response</a>
+            </li>
+          </ul>
+        </nav>
 
         <input type="hidden" value="{{ rm_in }}" name="rm_id">
         <input type="hidden" value="{{ rm_name }}" name="rm_name">
@@ -204,14 +204,19 @@
 
               <fieldset class="">
                 <input type="checkbox" id="commenters_0_.testify" name="commenters_0_.testify" value="true">
-                <label for="commenters_0_.testify">I request to testify should the Commission hold a hearing on this matter.</label>
+                <label for="commenters_0_.testify" class="t-normal t-no-cap">I request to testify should the Commission hold a hearing on this matter.</label>
               </fieldset>
 
-              <fieldset class="" data-show-if-var="commenters_0_.testify" data-show-if-val="true" aria-hidden="true">
-                <label for="commenters_0_.phone">Phone number:</label>
-                <input type="text" id="commenters_0_.phone" name="commenters_0_.phone" placeholder="(xxx) xxx-xxxx" pattern="\(\d{3}\) \d{3}-\d{4}">
-                <label class="error" for="">A phone number is required</label>
-              </fieldset>
+              <div class="grid grid--2-wide">
+                <div class="grid__item">
+                  <fieldset class="ux-indented" data-show-if-var="commenters_0_.testify" data-show-if-val="true" aria-hidden="true">
+                    <label for="commenters_0_.phone">Phone number</label>
+                    <label class="label--help">Phone number is not made public and is only used for the purpose of contacting participants to testify</label>
+                    <input type="text" id="commenters_0_.phone" name="commenters_0_.phone" placeholder="(xxx) xxx-xxxx" pattern="\(\d{3}\) \d{3}-\d{4}">
+                    <label class="error" for="commenters_0_.phone">A phone number is required</label>
+                  </fieldset>
+                </div>
+              </div>
               {% endif %}
 
               <fieldset class="commenter-controls" data-index-0="false">
@@ -392,7 +397,7 @@
           <!-- Ours: -->
           <!-- <div id="commenting-recaptcha" name="commenting-recaptcha" data-sitekey="6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv"></div> -->
           <!-- Google's generic, always-passes: -->
-          <div id="commenting-recaptcha" name="commenting-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+          <div id="commenting-recaptcha" name="commenting-recaptcha" class="hidden" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
           <button class="button--cta hidden is-disabled" data-command="submit" type="button">Submit</button>
           <p class="t-note t-sans">Next step: Provide your comments</p>
         </nav>
