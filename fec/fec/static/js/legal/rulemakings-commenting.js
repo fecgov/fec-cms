@@ -50,10 +50,10 @@ RulemakingsCommenting.prototype.init = function() {
   this.frames = document.querySelectorAll('fieldset.frame');
 
   // Which block should we use as a template for every commenter?
-  let commenter0block = this.formEl.querySelector('#contact-info-template');
+  const commenter0block = this.formEl.querySelector('#contact-info-template');
   this.commenterTemplate = commenter0block.innerHTML;
   // Remove those elements that shouldn't be in _0_
-  let unwantedNodes = commenter0block.querySelectorAll('[data-index-0="false"]');
+  const unwantedNodes = commenter0block.querySelectorAll('[data-index-0="false"]');
   unwantedNodes.forEach(node => { node.remove(); });
 
   // Populate the lawfirm country <select> with the same values from #commenters_0_.mailingCountry
@@ -65,34 +65,34 @@ RulemakingsCommenting.prototype.init = function() {
   this.formEl.addEventListener('change', this.handleFormChange.bind(this));
   // this.formEl.addEventListener('click', this.handleFormClick.bind(this));
 
-  let fileInputCancelButtons = this.formEl.querySelectorAll('#files-holder fieldset .button--cancel');
+  const fileInputCancelButtons = this.formEl.querySelectorAll('#files-holder fieldset .button--cancel');
   fileInputCancelButtons.forEach(button => {
     button.addEventListener('click', this.handleFileCancelClick.bind(this));
   });
 
-  let phoneInput = this.formEl.querySelector('[name="commenters_0_.phone"]');
+  const phoneInput = this.formEl.querySelector('[name="commenters_0_.phone"]');
   if (phoneInput) phoneInput.addEventListener('input', this.handlePhoneInput.bind(this));
 
-  let tooltipTriggers = this.formEl.querySelectorAll('.tooltip__trigger');
+  const tooltipTriggers = this.formEl.querySelectorAll('.tooltip__trigger');
   tooltipTriggers.forEach(button => {
     button.addEventListener('click', this.handleTooltipClick.bind(this));
   });
 
-  let helpCloseButton = document.querySelector('.js-help button.filters__toggle');
+  const helpCloseButton = document.querySelector('.js-help button.filters__toggle');
   helpCloseButton.addEventListener('click', () => { this.toggleHelp(); });
 
-  let bottomNavButtons = this.bottomNav.querySelectorAll('button');
+  const bottomNavButtons = this.bottomNav.querySelectorAll('button');
   bottomNavButtons.forEach(button => {
     button.addEventListener('click', this.handleBottomNavClick.bind(this));
   });
 
-  let commentsTextarea = this.formEl.querySelector('textarea');
+  const commentsTextarea = this.formEl.querySelector('textarea');
   commentsTextarea.addEventListener('resize', () => {
     // console.log('resize(e): ', e);
   });
   commentsTextarea.addEventListener('input', () => {
-    let charsAvail = 4000 - commentsTextarea.value.length;
-    let output = this.formEl.querySelector('#comments-length-remaining');
+    const charsAvail = 4000 - commentsTextarea.value.length;
+    const output = this.formEl.querySelector('#comments-length-remaining');
     output.textContent = charsAvail.toLocaleString('en-US');
     output.classList.toggle('near-limit', charsAvail < 100);
   });
@@ -176,7 +176,7 @@ RulemakingsCommenting.prototype.goToFrame = function(frameNum) {
  *
  */
 RulemakingsCommenting.prototype.updateHeightForCurrentFrame = function() {
-  let currFrame = this.formEl.querySelector('.frame.current');
+  const currFrame = this.formEl.querySelector('.frame.current');
   if (currFrame)
     this.framesHolder.style.height = `${currFrame.clientHeight}px`;
 };
@@ -313,9 +313,9 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
       let formData = new FormData(this.formEl);
       // formData = this.fakeTheData(formData);
 
-      let now = new Date();
-      let datetimeStamp = new Date(this.submissionResponse.submitted_at);// 'yyyy-mm-dd hh:mmT-4';
-      let datetimeString = now.toLocaleDateString('en-US', {
+      const now = new Date();
+      const datetimeStamp = new Date(this.submissionResponse.submitted_at);// 'yyyy-mm-dd hh:mmT-4';
+      const datetimeString = now.toLocaleDateString('en-US', {
         month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric'
       });
       let confirmationMessage = formData.get('commenters_0_.lastName') + ', ';
@@ -327,7 +327,7 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
       } else if (this.representedEntityType === 'counsel') {
         // counsel org name
 
-        let commentersNames = [];
+        const commentersNames = [];
         for (let i = 1; formData.has('commenters_' + i + '_.commenterType'); i++) {
           // console.log('  for ', i);
           commentersNames.push(
@@ -365,7 +365,7 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
     }
 
     // If we're still submitting, let's show that block
-    let messageElements = [...this.frame5.children];
+    const messageElements = [...this.frame5.children];
     // Toggle HTMLElements based on submissionStats vs data-status=""
     messageElements.forEach(messageEl => {
       // console.log('    messageEl: ', messageEl);
@@ -382,7 +382,7 @@ RulemakingsCommenting.prototype.updateLaterFrames = function() {
  */
 RulemakingsCommenting.prototype.validateEntireForm = function() {
   let toReturn = true;
-  let formData = new FormData(this.formEl);
+  const formData = new FormData(this.formEl);
 
   // Fields that are always required
   const requiredFieldNames = [
@@ -504,14 +504,14 @@ RulemakingsCommenting.prototype.addCommenter = function() {
   let newCommenter = document.createElement('div');
   newCommenter.setAttribute('class', 'commenter');
   // Set its innerHTML
-  let newChildIndex = commentersHolder.childElementCount + 1;
+  const newChildIndex = commentersHolder.childElementCount + 1;
   let newInnerHtml = this.commenterTemplate;
   newInnerHtml = newInnerHtml.replace('data-index-0="false"', '');
   newInnerHtml = newInnerHtml.replaceAll('0', newChildIndex);
   newCommenter.innerHTML = newInnerHtml;
 
   // Remove any of the possible "I'd like to testify" fields that should only be included for the submitter
-  let testifyEls = newCommenter.querySelectorAll(
+  const testifyEls = newCommenter.querySelectorAll(
     'fieldset[data-show-if-var$=".testify"], fieldset:has(input[name$=".testify"])'
   );
   testifyEls.forEach(el => {
@@ -944,8 +944,7 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
   // TODO: TEMP
   // setTimeout(this.handleSubmissionResponse.bind(this), 5000, { status: 200 });
   // TODO
-  let formData = new FormData(this.formEl);
-  // formData = this.fakeTheData(formData);
+  const formData = new FormData(this.formEl);
 
   // Build the payloads for submission
   const dataPayload = {};
@@ -994,8 +993,8 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
            * where [0] is the field name and [1] is the attached file
            */
           (attachedFile, i) => {
-            let indexedName = `${i}-${attachedFile[1].name}`;
-            let presignedDataObj = presignedURLs[indexedName];
+            const indexedName = `${i}-${attachedFile[1].name}`;
+            const presignedDataObj = presignedURLs[indexedName];
 
             let fileUploadBody = new FormData();
             Object.entries(presignedDataObj.fields).forEach(([key, value]) => {
