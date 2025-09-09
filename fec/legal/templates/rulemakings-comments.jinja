@@ -73,8 +73,9 @@
         <h3>Submit comments on rulemaking</h3>
         <h2>REG {{ reg_no }} {{ reg_name }}</h2>
 
-        <input type="hidden" value="{{ reg_name }}" name="reg_name">
-        <input type="hidden" value="{{ reg_no }}" name="reg_no">
+        <input type="hidden" value="{{ rm_in }}" name="rm_id">
+        <input type="hidden" value="{{ rm_name }}" name="rm_name">
+        <input type="hidden" value="{{ rm_no }}" name="rm_no">
 
         <div id="frames-holder" class="frames">
           <fieldset id="frame-representedEntityType" class="frame" data-validation="0">
@@ -170,17 +171,17 @@
                 <div class="grid__item">
                   <label for="commenters_0_.mailingCity">City</label>
                   <input id="commenters_0_.mailingCity" name="commenters_0_.mailingCity" title="Maximum length is 100" type="text" value="" size="20" maxlength="100" required>
-                  <label class="error" for="">Please enter a city name</label>
+                  <label class="error" for="commenters_0_.mailingCity">Please enter a city name</label>
                 </div>
                 <div class="grid__item">
                   <label for="commenters_0_.mailingState">State</label>
                   <select id="commenters_0_.mailingState" name="commenters_0_.mailingState" size="1" required>
                     <option value="">Select state</option>
-                    {% for value, label in constants.states.items() %}
+                    {%- for value, label in constants.states.items() -%}
                       <option value="{{ value }}">{{ label }}</option>
-                    {% endfor %}
+                    {%- endfor -%}
                   </select>
-                  <label class="error" for="">Which state?</label>
+                  <label class="error" for="commenters_0_.mailingState">Which state?</label>
                 </div>
               </div>
 
@@ -190,13 +191,13 @@
                 <option value="{{ value }}"{% if value == 'US'%} selected{% endif %}>{{ label }}</option>
               {%- endfor -%}
               </select>
-              <label class="error" for="">Please select a country</label>
+              <label class="error" for="commenters_0_.mailingCountry">Please select a country</label>
 
               <hr>
 
               <label for="commenters_0_.emailAddress">Email</label>
               <input type="email" id="commenters_0_.emailAddress" name="commenters_0_.emailAddress" title="Maximum length is 100" size="35" maxlength="100" required>
-              <label class="error" for="">An email address is required</label>
+              <label class="error" for="commenters_0_.emailAddress">An email address is required</label>
 
               {% if could_testify %}
               <hr>
@@ -228,7 +229,7 @@
               <input type="password" id="user.password" name="user.password" autocomplete="false"><button class="button--cta button--go is-disabled" data-action="save-password">Save</button>
             </fieldset>#}
 
-            <fieldset class="" data-show-if-var="representedEntityType" data-show-if-val="counsel" aria-hidden="true">
+            <fieldset data-show-if-var="representedEntityType" data-show-if-val="counsel" aria-hidden="true">
               <hr>
               <input type="checkbox" id="lawfirm" name="lawfirm" value="true">
               <label for="lawfirm">Include information about your associated law firm</label>
@@ -276,11 +277,10 @@
                 </div>
                 <div class="grid__item">
                   <label for="commenters_0_.representedEntity.mailingZip">ZIP</label>
-                  <input type="text" id="commenters_0_.representedEntity.mailingZip" name="commenters_0_.representedEntity.mailingZip" pattern="^\d{5}(-\d{4}){0,1}$" size="5" maxlength="10">
+                  <input type="text" id="commenters_0_.representedEntity.mailingZip" name="commenters_0_.representedEntity.mailingZip" pattern="^[0-9]{5}(-[0-9]{4}){0,1}$" size="5" maxlength="10">
                   <label class="error" for="commenters_0_.representedEntity.mailingZip">Required</label>
                 </div>
               </fieldset>
-
 
               <label for="commenters_0_.representedEntity.mailingCountry">Country</label>
               <select id="commenters_0_.representedEntity.mailingCountry" name="commenters_0_.representedEntity.mailingCountry"></select>
@@ -325,33 +325,20 @@
             <label>Attach file</label>
             <p class="u-no-margin">You may attach up to three (3) files up to five (5) MB each. Accepted file types are Microsoft Word (.doc or .docx extensions), Microsoft Excel (.xls or .xlsx extensions), text (.text or .rtf extensions) and PDF (.pdf extension) files.</p>
 
-            <div id="files-holder" class="">
+            <div id="files-holder">
               <fieldset class="field-label-combo">
-                <input
-                type="file"
-                id="files_0_"
-                name="files_0_"
-                accept=".doc, .docx, .pdf, .rtf, .txt" />
-                <!-- #docpicker.files returns a FileList object, which is kind of an Array of files
-                  FileList_0_ has .name, .lastModified, .size, .type
-                -->
-                {# <input type="button" name="continue" value="Attach Selected File" onclick="javascript:upload_attachment(this.form);"> #}
+                <input type="file" id="files_0_" name="files_0_" accept=".doc, .docx, .pdf, .rtf, .txt" />
+                <label class="error" for="files_0_">Files must be smaller than five (5) MB each</label>
                 <button type="button" class="button--cancel" data-commandfor="files_0_"></button>
               </fieldset>
               <fieldset class="field-label-combo">
-                <input
-                type="file"
-                id="files_1_"
-                name="files_1_"
-                accept=".doc, .docx, .pdf, .rtf, .txt" />
+                <input type="file" id="files_1_" name="files_1_" accept=".doc, .docx, .pdf, .rtf, .txt" />
+                <label class="error" for="files_1_">Files must be smaller than five (5) MB each</label>
                 <button type="button" class="button--cancel" data-commandfor="files_1_"></button>
               </fieldset>
               <fieldset class="field-label-combo">
-                <input
-                type="file"
-                id="files_2_"
-                name="files_2_"
-                accept=".doc, .docx, .pdf, .rtf, .txt" />
+                <input type="file" id="files_2_" name="files_2_" accept=".doc, .docx, .pdf, .rtf, .txt" />
+                <label class="error" for="files_2_">Files must be smaller than five (5) MB each</label>
                 <button type="button" class="button--cancel" data-commandfor="files_2_"></button>
               </fieldset>
             </div>
