@@ -40,11 +40,22 @@ KeywordModal.prototype.handleSubmit = function(e) {
   this.dialog.hide();
   // Event record for GTM
   this.fireEvent('Keyword modal query: ' + searchQuery);
-  //handleKeywordSearchChange()
-  //$('input[name="q"]').val(searchQuery)//.trigger('change')
+ // $('input[name="q"]').val(searchQuery)
+//   setTimeout(function() {
+//   handleKeywordSearchChange(e)
+// }, 2000);
+  //handleKeywordSearchChange(e)
+  //.trigger('change')
   //$('#search-input').trigger('change')
+ $('input[name="q"]').val(searchQuery).trigger('change')
 
-  window.location = this.$form.attr('action') + query.toString();
+  //window.location = this.$form.attr('action') + query.toString();
+  
+  // window.history.pushState(
+  //   null,
+  //   '',
+  //   window.location.pathname + query.toString()
+  //   );
 
 };
 

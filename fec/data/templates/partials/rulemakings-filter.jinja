@@ -40,7 +40,9 @@
 
     {# {{ typeahead.field('rm_no', 'Reg number', helper_text='Example: 2016-01', dataset='rulemakingNumber') }} #}
     {{ text.keyword_field('rm_no','Reg Number', helper_text='Example: 2016-01') }}
-    {{ typeahead.field('rm_no', 'Reg name', dataset='rulemakingName') }}
+    {{ typeahead.field('rm_no', 'Reg name', allow_text=False, dataset='rulemakingName') }}
+    {# {{ text.keyword_field('rm_name','Reg Name') }} #}
+
 {#     {{ checkbox.checkbox_dropdown(
       name='rm_year',
       label='Reg year',
