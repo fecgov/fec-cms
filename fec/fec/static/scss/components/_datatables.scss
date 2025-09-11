@@ -178,6 +178,40 @@
         }
       }
     }
+
+    &.column--rulemaking-docs {
+      padding: 0 !important;
+
+      p {
+        padding-bottom: 2rem;
+        margin-left: 1rem !important;
+      }
+      
+      li.document-container {
+        border-top: 1px solid $neutral;
+        display: flex;
+      }
+      
+      div.document-details {
+        border-right: 1px solid $neutral;
+        font-size: 1.6rem;
+        padding: 1rem;
+        width: 75%;
+
+/*         .icon--inline--left{
+          float: left;
+        } */
+
+        .tag.tag--primary {
+           margin: 1.5rem 3rem;
+           padding: .4rem;
+        }
+      }
+      div.document-date {
+        padding: 1.75rem;
+        width: 25%;
+      }
+    }
   }
 
   .sorting_disabled {

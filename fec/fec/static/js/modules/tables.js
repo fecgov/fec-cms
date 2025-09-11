@@ -131,11 +131,23 @@ export function mapSort(order, column) {
     return name;
   });
 }
+let pagination_legal;
+let legal_type;
+export function getCount(response) {
+  //let pagination_count = response.pagination.count; // eslint-disable-line camelcase
+  let pagination_count;
+  if (!response.pagination) {
+     pagination_legal = true;
+     legal_type = Object.keys(response)[0];
+     const legal_type_count = `total_${legal_type}`;
+     pagination_count = response[legal_type_count];
+     console.log('TOTAL: ', pagination_count); // eslint-disable-line no-console
+  }
+  else {
+    pagination_count = response.pagination.count;
+  }
 
-function getCount(response) {
-  let pagination_count = response.pagination.count; // eslint-disable-line camelcase
-
-  if (response.pagination.count > 500000) {
+  if (pagination_count > 500000) {
     pagination_count = Math.round(response.pagination.count / 1000) * 1000; // eslint-disable-line camelcase
   }
 
@@ -153,7 +165,7 @@ export function mapResponse(response) {
   return {
     recordsTotal: pagination_count, // eslint-disable-line camelcase
     recordsFiltered: pagination_count, // eslint-disable-line camelcase
-    data: response.results
+    data: response.results || response[legal_type]
   };
 }
 
@@ -463,10 +475,19 @@ export function OffsetPaginator() {/* */}
  * @returns Object with number values for `per_page` and `page`
  */
 OffsetPaginator.prototype.mapQuery = function(data) {
-  return {
+  console.log('data.start:' , data.start ); // eslint-disable-line no-console
+  if (pagination_legal){
+    return {
+    hits_returned: data.length, // eslint-disable-line camelcase
+    from_hit: Math.floor(data.start)
+     };
+   }
+  else {
+    return {
     per_page: data.length, // eslint-disable-line camelcase
     page: Math.floor(data.start / data.length) + 1
   };
+  }
 };
 
 OffsetPaginator.prototype.handleResponse = function() {}; //eslint-disable-line no-empty-function
@@ -497,14 +518,22 @@ SeekPaginator.prototype.clearIndexes = function() {
   this.indexes = {};
 };
 
+//seek  does not run for rulemakings
 SeekPaginator.prototype.mapQuery = function(data, query) {
   if (!_isEqual(query, this.query)) {
     this.query = _clone(query);
     this.clearIndexes();
   }
   const indexes = this.getIndexes(data.length, data.start);
+  let len;
+  if (pagination_legal){
+    len = { hits_returned: data.length };
+  }
+  else {
+    len = { per_page: data.length };
+  }
   return _extend(
-    { per_page: data.length }, // eslint-disable-line camelcase
+    len,
     _chain(Object.keys(indexes))
       .filter(function(key) {
         return indexes[key];
@@ -611,6 +640,9 @@ DataTable_FEC.prototype.getVars = function() {
 DataTable_FEC.prototype.parseParams = function(querystring){
     // Parse query string
     const params = new URLSearchParams(querystring);
+    // Remove text/boolean search filters whose boolean operator syntax would conflict as the 'i' in [value="${i}"] in 'querybox' constant below
+    params.delete('q');
+    params.delete('search');
     const obj = {};
     // Iterate over all keys
     for (const key of params.keys()) {
@@ -968,22 +1000,33 @@ DataTable_FEC.prototype.isPending = function() {
  * @returns {string}
  */
 DataTable_FEC.prototype.buildUrl = function(data, paginate, download) {
-  let query = _extend(
+  let query;
+  if (pagination_legal){
+    query = _extend(
+    { from_hit: `${data.start}`, hits_returned: `${data.length}` }, // eslint-disable-line camelcase
+    this.filters || {}
+  );
+
+  console.log('data.length-query:', `${data.length}`); // eslint-disable-line no-console
+  console.log('query:', query); // eslint-disable-line no-console
+  } else{
+  query = _extend(
     { sort_hide_null: false, sort_nulls_last: true }, // eslint-disable-line camelcase
     this.filters || {}
   );
+ }
+
   paginate = typeof paginate === 'undefined' ? true : paginate;
   query.sort = mapSort(data.order, this.opts.columns);
 
   if (paginate) {
-    query = _extend(query, this.paginator.mapQuery(data, query));
+  query = _extend(query, this.paginator.mapQuery(data, query));
   }
   if (download) {
     query = _extend(query, {
       api_key: window.DOWNLOAD_API_KEY
     });
   }
-
   return buildUrl(
     this.opts.path,
     _extend({}, query, this.opts.query || {})

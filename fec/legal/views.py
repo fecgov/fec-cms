@@ -762,6 +762,17 @@ def legal_doc_search_statutes(request):
         'social_image_identifier': 'legal',
     })
 
+# def rulemakings(request):
+#         return render(request, 'datatable.jinja', {
+#         #'query':''),
+#         'parent': 'legal',
+#         'result_type': 'rulemakings',
+#         'slug': 'rulemakings',
+#         'title': 'Rulemakings',
+#         'columns': constants.table_columns['rulemakings'],
+#         'social_image_identifier': 'data',
+#     })
+
 
 def get_legal_category_order(results, result_type):
     """ Return categories in pre-defined order, moving categories with empty

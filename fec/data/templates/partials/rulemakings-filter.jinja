@@ -1,0 +1,78 @@
+{% extends 'partials/filters.jinja' %}
+
+{% import 'macros/filters/text.jinja' as text %}
+
+{% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/range.jinja' as range %}
+
+{% import 'macros/filters/keyword-proximity.jinja' as proximity %}
+{% import 'macros/legal.jinja' as legal %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% import 'macros/filters/checkbox.jinja' as checkbox %}
+{% import 'macros/filters/years.jinja' as years %}
+{# {% set years = range(constants.START_YEAR, constants.END_YEAR) %} #}
+
+
+{% block filters %}
+  <div class="filters__inner">
+  {# //TODO: Can maybe make form action="" #}
+  <form action="/legal-resources/rulemakings/">
+    {# <input id="sort" type="hidden" name="sort" value=""> #}
+    {# kinda works BEST SO FAR #}
+    {# {{ text.keyword_search_text(result_type, query, name='Keyword') }} #}
+    {# working on the below - not working#}
+    {{ legal.keyword_search_q(result_type, query, name='Keyword') }}
+    {# {{ text.keyword_field('q','Keyword') }} #}
+{#     <div class="filter" id="q-field-text" data-filter="text>
+      <label class="label" for="q-text">Keyword</label>
+      <div class="combo combo--filter--mini">
+        <input id="q-text" type="text" name="q" class="combo__input"/>
+        <button class="combo__button button--go button--standard is-disabled" type="button">
+          <span class="u-visually-hidden">Search</span>
+        </button>
+      </div>
+    </div> #}
+    {{ proximity.field('keyword-proximity', title='Proximity') }}
+    <div class="filter js-filter" data-filter="checkbox">
+      <input id="is_open_for_comment" name="is_open_for_comment" type="checkbox" value="true">
+      <label class="dropdown__value" for="is_open_for_comment">Show only rulenakings open for comment</label>
+    </div>
+
+    {# {{ typeahead.field('rm_no', 'Reg number', helper_text='Example: 2016-01', dataset='rulemakingNumber') }} #}
+    {{ text.keyword_field('rm_no','Reg Number', helper_text='Example: 2016-01') }}
+    {{ typeahead.field('rm_no', 'Reg name', dataset='rulemakingName') }}
+{#     {{ checkbox.checkbox_dropdown(
+      name='rm_year',
+      label='Reg year',
+      /range(constants.START_YEAR, constants.END_YEAR),
+    ) }} #}
+    {{ years.years('rm_year', 'Reg year') }}
+    {{ checkbox.checkbox_dropdown(
+      name='doc_category_id',
+      label='Document type',
+      options=constants.rulemaking_doc_category_ids,
+      ) 
+    }}
+  </div>
+  <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
+    <button type="button" class="js-accordion-trigger accordion__button">Date</button>
+      <div class="accordion__content">
+        {{ date.field('federal_registry_publish_date', 'Federal Register publication date range') }}
+        {{ date.field('hearing_date', 'Hearing date range') }}
+        {{ date.field('vote_date', 'Vote date range') }}
+      </div>
+    <button type="button" class="js-accordion-trigger accordion__button">Entities</button>
+      <div class="accordion__content">
+        {{ checkbox.checkbox_dropdown(
+          name='entity_role_type',
+          label='Entity role',
+          options=constants.rulemaking_entity_role_types,
+          ) 
+        }}
+        {{ text.keyword_field('entity_name','Entity name') }}
+      </div>
+    </div>
+  </form>
+
+{% endblock %}
+

@@ -11,9 +11,7 @@
 {%- endblock %}
 
 {% block body %}
-
 {{ header.header(breadcrumbs_title, breadcrumbs) }}
-
 <section class="main__content--full data-container__wrapper">
   {% include 'partials/' + slug + '-filter.jinja' %}
     <div class="data-container">
@@ -60,7 +58,7 @@
 </section>
 
 {% include 'partials/datatable-modal.jinja' %}
-
+{% include 'partials/legal-keyword-modal.jinja' %}
 {% endblock %}
 
 {% block scripts %}
