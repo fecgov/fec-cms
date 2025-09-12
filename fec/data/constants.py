@@ -947,27 +947,24 @@ SENATE_CLASSES = {
 # Archived MUR that has the same number as the current MUR
 ARCHIVED_MUR_EXCEPTION = "3620"
 
-
 mur_disposition_category_ids = OrderedDict([
-    ('3', 'Dismiss and Remind'),
-    ('4', 'Dismissed'),
+    ('3', 'Dismiss with Caution'),
+    ('4', 'Dismissed-All'),
     ('5', 'Dismissed-Low Rated'),
     ('6', 'Dismissed-Other'),
     ('7', 'Dismissed-Stale'),
     ('8', 'Dismiss pursuant to prosecutorial discretion'),
-    ('9', 'Dismiss pursuant to prosecutorial discretion, and caution'),
-    ('10', 'Dismiss with Caution'),
-    ('11', 'No Probable Cause to Believe'),
-    ('12', 'No Reason to Believe'),
-    ('13', 'Probable Cause to Believe Finding'),
-    ('14', 'Probable Cause to Believe Finding/No Further Action'),
-    ('16', 'Reason to Believe Finding/No Further Action'),
-    ('17', 'Take No Action'),
-    ('18', 'Take No Further Action'),
+    ('9', 'No Probable Cause to Believe'),
+    ('10', 'No Reason to Believe'),
+    ('11', 'Probable Cause to Believe Finding'),
+    ('12', 'Probable Cause to Believe Finding/No Further Action'),
+    ('14', 'Reason to Believe Finding/No Further Action'),
+    ('15', 'Take No Action'),
+    ('16', 'Take No Further Action'),
 ])
 
 suggested_mur_disposition_category_ids = OrderedDict([
-    ('15', 'Reason to Believe Finding'),
+    ('13', 'Reason to Believe Finding'),
     ('1', 'Conciliation: Pre Probable Cause'),
     ('2', 'Conciliation: Probable Cause'),
 ])
