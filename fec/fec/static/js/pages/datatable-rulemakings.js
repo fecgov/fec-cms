@@ -41,13 +41,7 @@ KeywordModal.prototype.handleSubmit = function(e) {
   // Event record for GTM
   this.fireEvent('Keyword modal query: ' + searchQuery);
   console.log('query', query); // eslint-disable-line no-console
- // $('input[name="q"]').val(searchQuery)
-//   setTimeout(function() {
-//   handleKeywordSearchChange(e)
-// }, 2000);
-  //handleKeywordSearchChange(e)
-  //.trigger('change')
-  //$('#search-input').trigger('change')
+
  $('input[name="q"]').val(searchQuery).trigger('change');
 
   //window.location = this.$form.attr('action') + query.toString();

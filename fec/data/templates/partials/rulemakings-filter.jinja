@@ -18,9 +18,10 @@
   {# //TODO: Can maybe make form action="" #}
   <form action="/legal-resources/rulemakings/">
     {# <input id="sort" type="hidden" name="sort" value=""> #}
-    {# kinda works BEST SO FAR #}
+    {# THE BELOW WORKS AND SHOWS CHANGE IN RESUTS MSG AND QUERY  CHECKBOX ABOVE INPUT #}
     {# {{ text.keyword_search_text(result_type, query, name='Keyword') }} #}
-    {# working on the below - not working#}
+    {# THE BELOW WORKS AND DOES NOT SHOW CHANGE IN RESUTS MSG OR FILTER CHECKBOX ABOVE INPUT BUT
+    PUTS QUERY INTO THE INPUT #}
     {{ legal.keyword_search_q(result_type, query, name='Keyword') }}
     {# {{ text.keyword_field('q','Keyword') }} #}
 {#     <div class="filter" id="q-field-text" data-filter="text>
@@ -41,7 +42,7 @@
     {# {{ typeahead.field('rm_no', 'Reg number', helper_text='Example: 2016-01', dataset='rulemakingNumber') }} #}
     {{ text.keyword_field('rm_no','Reg Number', helper_text='Example: 2016-01') }}
     {{ typeahead.field('rm_no', 'Reg name', allow_text=False, dataset='rulemakingName') }}
-    {# {{ text.keyword_field('rm_name','Reg Name') }} #}
+    {{ text.keyword_field('rm_name','Reg Name') }}
 
 {#     {{ checkbox.checkbox_dropdown(
       name='rm_year',
