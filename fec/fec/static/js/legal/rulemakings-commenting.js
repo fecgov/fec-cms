@@ -105,10 +105,10 @@ async function uploadData(dataPayload) {
  * @param {Object[]} uploadObjects - Objects to upload. The key is the url, the value is the File object (file)
  */
 async function uploadFiles(data) {
-    let BREAK_FIRST_URL = -1; // TODO: REMOVE THE BREAK_FIRST_URL LINES
+    // let BREAK_FIRST_URL = -1; // TODO: REMOVE THE BREAK_FIRST_URL LINES
     const responses = await Promise.all(
       data.map(async file => {
-        BREAK_FIRST_URL++; // TODO: REMOVE THE BREAK_FIRST_URL LINES
+        // BREAK_FIRST_URL++; // TODO: REMOVE THE BREAK_FIRST_URL LINES
         // return fetch(BREAK_FIRST_URL === 0 ? 'break' : file.url, { // TODO: THIS WILL BREAK THE FIRST FILE'S URL
         return fetch(file.url, { // TODO: this is the real line (remove this comment)
           method: 'POST',
