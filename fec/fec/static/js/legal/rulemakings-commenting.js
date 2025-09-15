@@ -71,14 +71,13 @@ RulemakingsCommenting.prototype.init = function() {
   // Which block should we use as a template for every commenter?
   const commenter0block = this.formEl.querySelector('#contact-info-template');
   this.commenterTemplate = commenter0block.innerHTML;
-  // Remove those elements that shouldn't be in _0_
+  // Remove those elements that shouldn't be in [0]
   const unwantedNodes = commenter0block.querySelectorAll('[data-index-0="false"]');
   unwantedNodes.forEach(node => { node.remove(); });
 
-  // Populate the lawfirm country <select> with the same values from #commenters_0_.mailingCountry
-  // console.log('  country: ', this.formEl.querySelector('commenters_0_.representedEntity.mailingCountry'));
-  this.formEl.querySelector('select[name="commenters_0_.representedEntity.mailingCountry"]').innerHTML =
-    this.formEl.querySelector('select[name="commenters_0_.mailingCountry"]').innerHTML;
+  // Dupe the #commenters[0].mailingCountry country <select> to the lawfirm country <select>
+  this.formEl.querySelector('select[name="commenters[0].representedEntity.mailingCountry"]').innerHTML =
+    this.formEl.querySelector('select[name="commenters[0].mailingCountry"]').innerHTML;
 
   // Listen to form events
   this.formEl.addEventListener('change', this.handleFormChange.bind(this));
@@ -89,7 +88,7 @@ RulemakingsCommenting.prototype.init = function() {
     button.addEventListener('click', this.handleFileCancelClick.bind(this));
   });
 
-  const phoneInput = this.formEl.querySelector('[name="commenters_0_.phone"]');
+  const phoneInput = this.formEl.querySelector('[name="commenters[0].phone"]');
   if (phoneInput) phoneInput.addEventListener('input', this.handlePhoneInput.bind(this));
 
   const tooltipTriggers = this.formEl.querySelectorAll('.tooltip__trigger');
@@ -177,7 +176,7 @@ RulemakingsCommenting.prototype.goToFrame = function(frameNum) {
     } else this.currentFrameNum++;
 
   } else if (frameNum == 'back') {
-    // For the 'self' type, we want to skip commenterInfo (_2_)
+    // For the 'self' type, we want to skip commenterInfo ([2])
     if (this.representedEntityType === 'self' && this.isOnFrame('comments')) {
       this.currentFrameNum -= 2;
 
@@ -185,7 +184,7 @@ RulemakingsCommenting.prototype.goToFrame = function(frameNum) {
     } if (this.currentFrameNum > 0) {
       this.currentFrameNum--;
 
-    // But for frame _0_, _if there's no data to lose_, go to the previous browser page
+    // But for frame [0], _if there's no data to lose_, go to the previous browser page
     } else if (this.isOnFrame('submitterType')) {
       // TODO: if there's no data to lose,
       history.back();
@@ -270,7 +269,7 @@ RulemakingsCommenting.prototype.buildTheFrame = function() {
     if (formData.get('commenters_0_.testify') === 'true') {
       newInnerHtml += `<tr><td colspan="2"><hr></td></tr>`;
       newInnerHtml += `<tr><td colspan="2">I request to testify should the Commission hold a hearing on this matter</td></tr>`;
-      newInnerHtml += `<tr><td>Phone:</td><td>${formData.get('commenters_0_.phone')}</td></tr>`;
+      newInnerHtml += `<tr><td>Phone:</td><td>${formData.get('commenters[0].phone')}</td></tr>`;
     }
 
     if (this.representedEntityType != 'self') { // None of these are for 'self'
@@ -291,19 +290,19 @@ RulemakingsCommenting.prototype.buildTheFrame = function() {
       // COMMENTER LOOP
       // /counsel for another person group or org
       for (let i = 1;
-        formData.has('commenters_' + i + '_.firstName') ||
-        formData.has('commenters_' + i + '_.orgName');
+        formData.has(`commenters[${i}].firstName`) ||
+        formData.has(`commenters[${i}].orgName`);
         i++) {
 
         newInnerHtml += `<tr><th colspan="2">Commenter #${i}</th></tr>`;
 
         newInnerHtml += '<tr><td>';
-        if (formData.get('commenters_' + i + '_.commenterType') === 'individual')
+        if (formData.get(`commenters[${i}].commenterType`) === 'individual')
           newInnerHtml += 'Name:</td><td>'
-            + formData.get('commenters_' + i + '_.firstName') + ' '
-            + formData.get('commenters_' + i + '_.lastName');
+            + formData.get(`commenters[${i}].firstName`) + ' '
+            + formData.get(`commenters[${i}].lastName`);
         else
-          newInnerHtml += `Organization:</td><td>${formData.get('commenters_' + i + '_.orgName')}`;
+          newInnerHtml += 'Organization:</td><td>' + formData.get(`commenters[${i}].orgName`);
 
         newInnerHtml += '</td></tr>';
 
@@ -324,12 +323,12 @@ RulemakingsCommenting.prototype.buildTheFrame = function() {
     newInnerHtml += `<tr><td colspan="2"><hr></td></tr>`;
 
     // For everyone
-    if (formData.get('files_0_').name)
-      newInnerHtml += `<tr><td>Attachment:</td><td>${formData.get('files_0_').name}</td></tr>`;
-    if (formData.get('files_1_').name)
-      newInnerHtml += `<tr><td>Attachment:</td><td>${formData.get('files_1_').name}</td></tr>`;
-    if (formData.get('files_2_').name)
-      newInnerHtml += `<tr><td>Attachment:</td><td>${formData.get('files_2_').name}</td></tr>`;
+    if (formData.get('files[0]').name)
+      newInnerHtml += `<tr><td>Attachment:</td><td>${formData.get('files[0]').name}</td></tr>`;
+    if (formData.get('files[1]').name)
+      newInnerHtml += `<tr><td>Attachment:</td><td>${formData.get('files[1]').name}</td></tr>`;
+    if (formData.get('files[2]').name)
+      newInnerHtml += `<tr><td>Attachment:</td><td>${formData.get('files[2]').name}</td></tr>`;
 
     newInnerHtml += `<tr><td colspan="2"><hr></td></tr>`;
 
@@ -365,17 +364,17 @@ RulemakingsCommenting.prototype.buildTheFrame = function() {
         // counsel org name
 
         const commentersNames = [];
-        for (let i = 1; formData.has('commenters_' + i + '_.commenterType'); i++) {
+        for (let i = 1; formData.has(`commenters[${i}].commenterType`); i++) {
           // console.log('  for ', i);
           commentersNames.push(
-            formData.get('commenters_' + i + '_.commenterType') === 'individual'
-            ? formData.get('commenters_' + i + '_.firstName') + ' ' + formData.get('commenters_' + i + '_.lastName')
-            : formData.get('commenters_' + i + '_.orgName')
+            formData.get(`commenters[${i}].commenterType`) === 'individual'
+            ? formData.get(`commenters[${i}].firstName`) + ' ' + formData.get(`commenters[${i}].lastName`)
+            : formData.get(`commenters[${i}].orgName`)
           );
         }
         // console.log('  commentersNames: ', commentersNames);
 
-        // If there are commenters_1_+, we need the "on behalf of" part
+        // If there are commenters[1]+, we need the "on behalf of" part
         if (commentersNames.length > 0)
           confirmationMessage += 'on behalf of ';
 
@@ -445,12 +444,12 @@ RulemakingsCommenting.prototype.validateEntireForm = function() {
   // Fields that are always required
   const requiredFieldNames = [
     'representedEntityType',
-    'commenters_0_.firstName',
-    `commenters_0_.lastName`,
-    `commenters_0_.addressType`,
-    `commenters_0_.mailingCity`,
-    `commenters_0_.mailingCountry`,
-    `commenters_0_.emailAddress`
+    'commenters[0].firstName',
+    `commenters[0].lastName`,
+    `commenters[0].addressType`,
+    `commenters[0].mailingCity`,
+    `commenters[0].mailingCountry`,
+    `commenters[0].emailAddress`
   ];
 
   // State is required for the US
@@ -462,23 +461,23 @@ RulemakingsCommenting.prototype.validateEntireForm = function() {
     requiredFieldNames.push('representedEntityConnection');
 
   // For those who'd like to testify
-  if (formData.get('commenters_0_.testify') === true)
-    requiredFieldNames.push('commenters_0_.phone');
+  if (formData.get('commenters[0].testify') === true)
+    requiredFieldNames.push('commenters[0].phone');
 
   // Fields required only for counsel AND if they've chosen to include law firm information
   if (this.representedEntityType === 'counsel' && formData.get('lawfirm') === true) {
     requiredFieldNames.push(
-      'commenters_0_.representedEntity.orgName',
-      'commenters_0_.representedEntity.addressType',
-      'commenters_0_.representedEntity.mailingAddressStreet',
-      'commenters_0_.representedEntity.mailingCity',
-      'commenters_0_.representedEntity.mailingCountry'
+      'commenters[0].representedEntity.orgName',
+      'commenters[0].representedEntity.addressType',
+      'commenters[0].representedEntity.mailingAddressStreet',
+      'commenters[0].representedEntity.mailingCity',
+      'commenters[0].representedEntity.mailingCountry'
     );
 
     if (formData.get('commenters_0_.representedEntity.mailingCountry') === 'US')
       requiredFieldNames.push(
-        'commenters_0_.representedEntity.mailingState',
-        'commenters_0_.representedEntity.mailingZip'
+        'commenters[0].representedEntity.mailingState',
+        'commenters[0].representedEntity.mailingZip'
       );
   }
 
@@ -517,9 +516,9 @@ RulemakingsCommenting.prototype.validateEntireForm = function() {
     this.validateField(`[name="${fieldName}"]`);
   });
 
-  // Required: a comment or at least one attached file
-  if (!formData.get('files_0_').file && !formData.get('files_1_').file
-    && !formData.get('files_2_').file && !formData.get('comments').length < 1) {
+  // If we have no files attached, and not valid comments, go back to that frame
+  if (!formData.get('files[0]').name && !formData.get('files[1]').name
+    && !formData.get('files[2]').name && formData.get('comments').length < 2) {
       toReturn = false;
   }
 
@@ -1025,10 +1024,10 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
   const attachedFiles = [];
   // For each of the fields in the form,
   formData.entries().forEach(entry => {
-    if (entry[0].indexOf('files_') === 0) {
+    if (entry[0].indexOf('files[') === 0) {
       // If this field is a file, we only want its name for now,
-      // and let's add 'name' to the end so files_0_ becomes files_0_name
-      dataPayload[`${entry[0]}name`] = entry[1].name;
+      // and let's add '.name' to the end so files[0] becomes files[0].name
+      dataPayload[`${entry[0]}.name`] = entry[1].name;
       if (entry[1].name) attachedFiles.push(entry); // Only add it if it has a file name (not if the field's empty)
     // If it's not a file, just use the field name as the key and the value as the value
     } else dataPayload[entry[0]] = entry[1];

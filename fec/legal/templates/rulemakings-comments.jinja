@@ -125,8 +125,8 @@
 
               <label class="" data-index-0="false">Commenter #0</label>
 
-              <label for="commenters_0_.commenterType" data-index-0="false">Commenter type</label>
-              <select id="commenters_0_.commenterType" name="commenters_0_.commenterType" class="grid__item--2-wide" data-index-0="false" size="1" required>
+              <label for="commenters[0].commenterType" data-index-0="false">Commenter type</label>
+              <select id="commenters[0].commenterType" name="commenters[0].commenterType" class="grid__item--2-wide" data-index-0="false" size="1" required>
                 <option value="">--Select--</option>
                 <option value="individual">Individual</option>
                 <option value="organization">Organization</option>
@@ -135,29 +135,29 @@
 
               <div class="grid grid--2-wide" data-toggle="individual">
                 <div class="grid__item">
-                  <label for="commenters_0_.firstName">First name</label>
-                  <input type="text" id="commenters_0_.firstName" name="commenters_0_.firstName" minlength="1" required>
-                  <label class="error" for="commenters_0_.firstName">A first name is required</label>
+                  <label for="commenters[0].firstName">First name</label>
+                  <input type="text" id="commenters[0].firstName" name="commenters[0].firstName" minlength="1" required>
+                  <label class="error" for="commenters[0].firstName">A first name is required</label>
                 </div>
                 <div class="grid__item">
-                  <label for="commenters_0_.lastName">Last name</label>
-                  <input id="commenters_0_.lastName" name="commenters_0_.lastName" title="Maximum length is 40" type="text" value="" size="20" maxlength="40" minlength="2" required>
-                  <label class="error" for="commenters_0_.lastName">Last name is a required field</label>
+                  <label for="commenters[0].lastName">Last name</label>
+                  <input id="commenters[0].lastName" name="commenters[0].lastName" title="Maximum length is 40" type="text" size="20" maxlength="40" minlength="2" required>
+                  <label class="error" for="commenters[0].lastName">Last name is a required field</label>
                 </div>
               </div>
               <div class="grid grid--2-wide" data-toggle="organization" data-index-0="false">
                 <div class="grid__item">
-                  <label for="commenters_0_.orgName">Organization name</label>
-                  <input type="text" id="commenters_0_.orgName" name="commenters_0_.orgName" required>
-                  <label class="error" for="commenters_0_.orgName">An organization name is required</label>
+                  <label for="commenters[0].orgName">Organization name</label>
+                  <input type="text" id="commenters[0].orgName" name="commenters[0].orgName" required>
+                  <label class="error" for="commenters[0].orgName">An organization name is required</label>
                 </div>
                 <div class="grid__item">&nbsp;</div>
               </div>
 
               <hr>
 
-              <label for="commenters_0_.addressType">Address type</label>
-              <select id="commenters_0_.addressType" name="commenters_0_.addressType" size="1" required>
+              <label for="commenters[0].addressType">Address type</label>
+              <select id="commenters[0].addressType" name="commenters[0].addressType" size="1" required>
                 <option value="">--Select--</option>
                 <option value="Home">Home</option>
                 <option value="Office">Office</option>
@@ -165,55 +165,55 @@
                 <option value="Branch">Branch</option>
                 <option value="Other">Other</option>
               </select>
-              <label class="error" for="commenters_0_.addressType">Required</label>
+              <label class="error" for="commenters[0].addressType">Required</label>
 
               <div class="grid grid--2-wide">
                 <div class="grid__item">
-                  <label for="commenters_0_.mailingCity">City</label>
-                  <input id="commenters_0_.mailingCity" name="commenters_0_.mailingCity" title="Maximum length is 100" type="text" value="" size="20" maxlength="100" required>
-                  <label class="error" for="commenters_0_.mailingCity">Please enter a city name</label>
+                  <label for="commenters[0].mailingCity">City</label>
+                  <input id="commenters[0].mailingCity" name="commenters[0].mailingCity" title="Maximum length is 100" type="text" size="20" maxlength="100" required>
+                  <label class="error" for="commenters[0].mailingCity">Please enter a city name</label>
                 </div>
                 <div class="grid__item">
-                  <label for="commenters_0_.mailingState">State</label>
-                  <select id="commenters_0_.mailingState" name="commenters_0_.mailingState" size="1" required>
+                  <label for="commenters[0].mailingState">State</label>
+                  <select id="commenters[0].mailingState" name="commenters[0].mailingState" size="1" required>
                     <option value="">Select state</option>
                     {%- for value, label in constants.states.items() -%}
                       <option value="{{ value }}">{{ label }}</option>
                     {%- endfor -%}
                   </select>
-                  <label class="error" for="commenters_0_.mailingState">Which state?</label>
+                  <label class="error" for="commenters[0].mailingState">Which state?</label>
                 </div>
               </div>
 
-              <label for="commenters_0_.mailingCountry">Country</label>
-              <select id="commenters_0_.mailingCountry" name="commenters_0_.mailingCountry" size="1" required>
+              <label for="commenters[0].mailingCountry">Country</label>
+              <select id="commenters[0].mailingCountry" name="commenters[0].mailingCountry" size="1" required>
               {%- for value, label in constants.countries.items() -%}
                 <option value="{{ value }}"{% if value == 'US'%} selected{% endif %}>{{ label }}</option>
               {%- endfor -%}
               </select>
-              <label class="error" for="commenters_0_.mailingCountry">Please select a country</label>
+              <label class="error" for="commenters[0].mailingCountry">Please select a country</label>
 
               <hr>
 
-              <label for="commenters_0_.emailAddress">Email</label>
-              <input type="email" id="commenters_0_.emailAddress" name="commenters_0_.emailAddress" title="Maximum length is 100" size="35" maxlength="100" required>
-              <label class="error" for="commenters_0_.emailAddress">An email address is required</label>
+              <label for="commenters[0].emailAddress">Email<span class="label__optional"> (optional)</span></label>
+              <input type="email" id="commenters[0].emailAddress" name="commenters[0].emailAddress" title="Maximum length is 100" size="35" maxlength="100" required>
+              <label class="error" for="commenters[0].emailAddress">An email address is required</label>
 
               {% if could_testify %}
               <hr>
 
               <fieldset class="">
-                <input type="checkbox" id="commenters_0_.testify" name="commenters_0_.testify" value="true">
-                <label for="commenters_0_.testify" class="t-normal t-no-cap">I request to testify should the Commission hold a hearing on this matter.</label>
+                <input type="checkbox" id="commenters[0].testify" name="commenters[0].testify" value="true">
+                <label for="commenters[0].testify" class="t-normal t-no-cap">I request to testify should the Commission hold a hearing on this matter.</label>
               </fieldset>
 
               <div class="grid grid--2-wide">
                 <div class="grid__item">
-                  <fieldset class="ux-indented" data-show-if-var="commenters_0_.testify" data-show-if-val="true" aria-hidden="true">
-                    <label for="commenters_0_.phone">Phone number</label>
+                  <fieldset class="ux-indented" data-show-if-var="commenters[0].testify" data-show-if-val="true" aria-hidden="true">
+                    <label for="commenters[0].phone">Phone number</label>
                     <label class="label--help">Phone number is not made public and is only used for the purpose of contacting participants to testify</label>
-                    <input type="text" id="commenters_0_.phone" name="commenters_0_.phone" placeholder="(xxx) xxx-xxxx" pattern="\(\d{3}\) \d{3}-\d{4}">
-                    <label class="error" for="commenters_0_.phone">A phone number is required</label>
+                    <input type="text" id="commenters[0].phone" name="commenters[0].phone" placeholder="(xxx) xxx-xxxx" pattern="\(\d{3}\) \d{3}-\d{4}">
+                    <label class="error" for="commenters[0].phone">A phone number is required</label>
                   </fieldset>
                 </div>
               </div>
@@ -244,14 +244,14 @@
 
               <label class="group-label">Law firm information</label>
 
-              <label for="commenters_0_.representedEntity.orgName">Law firm name</label>
-              <input id="commenters_0_.representedEntity.orgName" name="commenters_0_.representedEntity.orgName" type="text" value="" size="40" maxlength="40" required>
-              <label class="error" for="commenters_0_.representedEntity.orgName">The law firm name is required</label>
+              <label for="commenters[0].representedEntity.orgName">Law firm name</label>
+              <input id="commenters[0].representedEntity.orgName" name="commenters[0].representedEntity.orgName" type="text" value="" size="40" maxlength="40" required>
+              <label class="error" for="commenters[0].representedEntity.orgName">The law firm name is required</label>
 
               <hr>
 
-              <label for="commenters_0_.representedEntity.addressType">Address type</label>
-              <select id="commenters_0_.representedEntity.addressType" name="commenters_0_.representedEntity.addressType" size="1" required>
+              <label for="commenters[0].representedEntity.addressType">Address type</label>
+              <select id="commenters[0].representedEntity.addressType" name="commenters[0].representedEntity.addressType" size="1" required>
                 <option value="">--Select--</option>
                 <option value="Home">Home</option>
                 <option value="Office">Office</option>
@@ -259,42 +259,42 @@
                 <option value="Branch">Branch</option>
                 <option value="Other">Other</option>
               </select>
-              <label class="error" for="commenters_0_.representedEntity.addressType">Required</label>
+              <label class="error" for="commenters[0].representedEntity.addressType">Required</label>
 
-              <label for="commenters_0_.representedEntity.mailingAddressStreet">Street address and apt/ste #</label>
-              <input type="text" id="commenters_0_.representedEntity.mailingAddressStreet" name="commenters_0_.representedEntity.mailingAddressStreet" value="">
-              <label class="error" for="commenters_0_.representedEntity.mailingAddressStreet">A street address is required</label>
+              <label for="commenters[0].representedEntity.mailingAddressStreet">Street address and apt/ste #</label>
+              <input type="text" id="commenters[0].representedEntity.mailingAddressStreet" name="commenters[0].representedEntity.mailingAddressStreet" value="">
+              <label class="error" for="commenters[0].representedEntity.mailingAddressStreet">A street address is required</label>
 
               <label>City</label>
-              <input id="commenters_0_.representedEntity.mailingCity" name="commenters_0_.representedEntity.mailingCity" type="text" value="" size="20" maxlength="28">
-              <label class="error" for="commenters_0_.representedEntity.mailingCity">Which city?</label>
+              <input id="commenters[0].representedEntity.mailingCity" name="commenters[0].representedEntity.mailingCity" type="text" value="" size="20" maxlength="28">
+              <label class="error" for="commenters[0].representedEntity.mailingCity">Which city?</label>
 
               <fieldset class="grid grid--2-wide">
                 <div class="grid__item">
                   <label>State</label>
-                  <select id="commenters_0_.representedEntity.mailingState" name="commenters_0_.representedEntity.mailingState" size="1" required>
+                  <select id="commenters[0].representedEntity.mailingState" name="commenters[0].representedEntity.mailingState" size="1" required>
                     <option value="">Select state</option>
                     {% for value, label in constants.states.items() %}
                       <option value="{{ value }}">{{ label }}</option>
                     {% endfor %}
                   </select>
-                  <label class="error" for="commenters_0_.representedEntity.mailingState">Required</label>
+                  <label class="error" for="commenters[0].representedEntity.mailingState">Required</label>
                 </div>
                 <div class="grid__item">
-                  <label for="commenters_0_.representedEntity.mailingZip">ZIP</label>
-                  <input type="text" id="commenters_0_.representedEntity.mailingZip" name="commenters_0_.representedEntity.mailingZip" pattern="^[0-9]{5}(-[0-9]{4}){0,1}$" size="5" maxlength="10">
-                  <label class="error" for="commenters_0_.representedEntity.mailingZip">Required</label>
+                  <label for="commenters[0].representedEntity.mailingZip">ZIP</label>
+                  <input type="text" id="commenters[0].representedEntity.mailingZip" name="commenters[0].representedEntity.mailingZip" pattern="^[0-9]{5}(-[0-9]{4}){0,1}$" size="5" maxlength="10">
+                  <label class="error" for="commenters[0].representedEntity.mailingZip">Required</label>
                 </div>
               </fieldset>
 
-              <label for="commenters_0_.representedEntity.mailingCountry">Country</label>
-              <select id="commenters_0_.representedEntity.mailingCountry" name="commenters_0_.representedEntity.mailingCountry"></select>
-              <label class="error" for="commenters_0_.representedEntity.mailingCountry">Which country?</label>
+              <label for="commenters[0].representedEntity.mailingCountry">Country</label>
+              <select id="commenters[0].representedEntity.mailingCountry" name="commenters[0].representedEntity.mailingCountry"></select>
+              <label class="error" for="commenters[0].representedEntity.mailingCountry">Which country?</label>
 
               <hr>
 
-              <label for="commenters_0_.representedEntity.emailAddress">Email<span class="label__optional"> (optional)</span></label>
-              <input id="commenters_0_.representedEntity.emailAddress" name="commenters_0_.representedEntity.emailAddress" type="text" value="" size="35" maxlength="40">
+              <label for="commenters[0].representedEntity.emailAddress">Email<span class="label__optional"> (optional)</span></label>
+              <input id="commenters[0].representedEntity.emailAddress" name="commenters[0].representedEntity.emailAddress" type="text" value="" size="35" maxlength="40">
             </fieldset>{# close law firm info #}
             <fieldset class="commenter-controls" aria-hidden="true">
               <button class="button--alt add-commenter" type="button" disabled>Add joint commenter</button>
@@ -332,19 +332,19 @@
 
             <div id="files-holder">
               <fieldset class="field-label-combo">
-                <input type="file" id="files_0_" name="files_0_" accept=".doc, .docx, .pdf, .rtf, .txt" />
-                <label class="error" for="files_0_">Files must be smaller than five (5) MB each</label>
-                <button type="button" class="button--cancel" data-commandfor="files_0_"></button>
+                <input type="file" id="files[0]" name="files[0]" accept=".doc, .docx, .pdf, .rtf, .txt" />
+                <label class="error" for="files[0]">Files must be smaller than five (5) MB each</label>
+                <button type="button" class="button--cancel" data-commandfor="files[0]"></button>
               </fieldset>
               <fieldset class="field-label-combo">
-                <input type="file" id="files_1_" name="files_1_" accept=".doc, .docx, .pdf, .rtf, .txt" />
-                <label class="error" for="files_1_">Files must be smaller than five (5) MB each</label>
-                <button type="button" class="button--cancel" data-commandfor="files_1_"></button>
+                <input type="file" id="files[1]" name="files[1]" accept=".doc, .docx, .pdf, .rtf, .txt" />
+                <label class="error" for="files[1]">Files must be smaller than five (5) MB each</label>
+                <button type="button" class="button--cancel" data-commandfor="files[1]"></button>
               </fieldset>
               <fieldset class="field-label-combo">
-                <input type="file" id="files_2_" name="files_2_" accept=".doc, .docx, .pdf, .rtf, .txt" />
-                <label class="error" for="files_2_">Files must be smaller than five (5) MB each</label>
-                <button type="button" class="button--cancel" data-commandfor="files_2_"></button>
+                <input type="file" id="files[2]" name="files[2]" accept=".doc, .docx, .pdf, .rtf, .txt" />
+                <label class="error" for="files[2]">Files must be smaller than five (5) MB each</label>
+                <button type="button" class="button--cancel" data-commandfor="files[2]"></button>
               </fieldset>
             </div>
 
@@ -379,7 +379,7 @@
             </div>
             <div class="message message--success" data-status="success">
               <h2 class="message__title">Success!</h2>
-              <p>commenters_0_.lastName, commenters_0_.firstName has submitted comments
+              <p>commenters[0].lastName, commenters[0].firstName has submitted comments
               on behalf of commenters[1].orgName and commenters[2].orgName for ${rm_name} on <time datetime="yyyy-mm-dd hh:mmT-4">D, Mm d, yyyy, at h:mm TimeZone</time>.</p>
               <div class="message--alert__bottom">
                   <ul class="list--buttons">
