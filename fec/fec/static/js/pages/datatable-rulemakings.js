@@ -118,7 +118,7 @@ KeywordModal.prototype.handleSubmit = function(e) {
     //query: { },
     order: [[0, 'desc']],
     useFilters: true,
-    useExport: true,
+    useExport: false,
     // Initiate the field value and fire change for keyword if included in link or copy/pasted url
     // TODO: Don't think I need to also add tage here...end uo with two tags one I added trigger('change')
     initComplete: function () {
