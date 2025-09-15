@@ -23,12 +23,12 @@ console.log('q_query:', q_query); // eslint-disable-line no-console
 console.log('DOCK IDS:', docs); // eslint-disable-line no-console
 
  if (params.q) {
-     $('input[name="q"]').val(params.q);//.trigger('change')
+     $('input[name="q"]').val(params.q)//.trigger('change')
   }
 
 //  NOTE TO SELF:
-// search_input fires handleKeywordSearchChange on change with no page reload
-// keyword_modal fires keyworkModal.handleSubmit() on click of button with page reload
+// search_input change fires handleKeywordSearchChange on change with no page reload
+// keyword_modal search_input submit fires keyworkModal.handleSubmit() which fires handleKeywordSearchChange()
 
 //Override KeywordModal.prototype.handleSubmit to look use 'q' parameter instead of 'search' parameter
 KeywordModal.prototype.handleSubmit = function(e) {
@@ -42,6 +42,7 @@ KeywordModal.prototype.handleSubmit = function(e) {
   this.fireEvent('Keyword modal query: ' + searchQuery);
   console.log('query', query); // eslint-disable-line no-console
 
+ // Put value in field and trigger handleKeywordSearchChange() 
  $('input[name="q"]').val(searchQuery).trigger('change');
 
   //window.location = this.$form.attr('action') + query.toString();
@@ -56,16 +57,10 @@ KeywordModal.prototype.handleSubmit = function(e) {
 
  if (document.querySelector('.js-keyword-modal')) {
     new KeywordModal();
-    //const keyWordModal = new KeywordModal();
   }
 
-//change type to button to stop reload - not working to handleSubmit() though
+// Change type to button to disable submit
  $('.modal__form [type="submit"]').attr('type', 'button');
-
-//This attempt does not work to keep it from reloading page or handle submit
-// $('.modal__form button').on('click', function () {
-//     KeywordModal.handleSubmit()
-// });
 
    $('#search-input').on('change', function(e) {
        console.log('RAN on(change)'); // eslint-disable-line no-console
@@ -106,7 +101,7 @@ KeywordModal.prototype.handleSubmit = function(e) {
      .removeSearch('q');
    }
 
-   // window.history.replaceState(
+  // window.history.replaceState(
   window.history.pushState(
       null,
       '',
@@ -114,36 +109,28 @@ KeywordModal.prototype.handleSubmit = function(e) {
       );
 };
 
+
+
   const $table = $('#results');
   new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Rulemakings',
     path: ['rulemaking', 'search'],
     columns: cols_rulemakings,
-    //query: { sort: '-rm_no'},
-    //orderFixed: {
-    //         pre: [2, 'asc'], // Always sort by column 2 ascending first
-    //         post: [[0, 'desc']] // Always sort by column 0 descending last
-    //     },
-    //aaSorting: [[ 2, 'asc' ]],
+    //query: { },
     order: [[0, 'desc']],
     useFilters: true,
     useExport: true,
-    // rowCallback: modalRenderRow,
-    // callbacks: {
-    //   afterRender: modalRenderFactory(loansTemplate)
-    // }
-
-    // Add tag for keyword modal boolean after page reload
+    // Initiate the field value and fire change for keyword if included in link or copy/pasted url 
+    // TODO: Don't think I need to also add tage here...end uo with two tags one I added trigger('change')
     initComplete: function () {
        const queryParams = URI.parseQuery(window.location.search);
       if (queryParams.q) {
-        //tagList.addTag(null, { key: 'search-input', name: 'q', value: queryParams.q });
-        $('input[name="q"]').val(queryParams.q);//.css('background','#f90')
-        $('#search_input').val(queryParams.q);
-        $('.tags').attr('aria-hidden', 'false').append(`<li data-tag-category="q" class="tag__category"><div data-id="search-input" data-removable="true" class="tag__item">${queryParams.q}
-          <button class="button js-close tag__remove"><span class="u-visually-hidden">Remove</span></button>
-          </div></li>`);
+        $('input[name="q"]').val(queryParams.q).trigger('change');
+        //$('#search_input').val(queryParams.q).trigger('change');
+        // $('.tags').attr('aria-hidden', 'false').append(`<li data-tag-category="q" class="tag__category"><div data-id="search-input" data-removable="true" class="tag__item">${queryParams.q}
+        //   <button class="button js-close tag__remove"><span class="u-visually-hidden">Remove</span></button>
+        //   </div></li>`);
       }
       console.log('INIT'); // eslint-disable-line no-console
     }

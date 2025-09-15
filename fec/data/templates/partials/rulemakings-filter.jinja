@@ -10,13 +10,12 @@
 {% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% import 'macros/filters/checkbox.jinja' as checkbox %}
 {% import 'macros/filters/years.jinja' as years %}
-{# {% set years = range(constants.START_YEAR, constants.END_YEAR) %} #}
 
 
 {% block filters %}
   <div class="filters__inner">
   {# //TODO: Can maybe make form action="" #}
-  <form action="/legal-resources/rulemakings/">
+<form action="/legal-resources/rulemakings/">
     {# <input id="sort" type="hidden" name="sort" value=""> #}
     {# THE BELOW WORKS AND SHOWS CHANGE IN RESUTS MSG AND QUERY  CHECKBOX ABOVE INPUT #}
     {# {{ text.keyword_search_text(result_type, query, name='Keyword') }} #}
@@ -24,7 +23,7 @@
     PUTS QUERY INTO THE INPUT #}
     {{ legal.keyword_search_q(result_type, query, name='Keyword') }}
     {# {{ text.keyword_field('q','Keyword') }} #}
-{#     <div class="filter" id="q-field-text" data-filter="text>
+  {# <div class="filter" id="q-field-text" data-filter="text>
       <label class="label" for="q-text">Keyword</label>
       <div class="combo combo--filter--mini">
         <input id="q-text" type="text" name="q" class="combo__input"/>
@@ -41,14 +40,8 @@
 
     {# {{ typeahead.field('rm_no', 'Reg number', helper_text='Example: 2016-01', dataset='rulemakingNumber') }} #}
     {{ text.keyword_field('rm_no','Reg Number', helper_text='Example: 2016-01') }}
-    {{ typeahead.field('rm_no', 'Reg name', allow_text=False, dataset='rulemakingName') }}
+    {# {{ typeahead.field('rm_no', 'Reg name', allow_text=False, dataset='rulemakingName') }} #}
     {{ text.keyword_field('rm_name','Reg Name') }}
-
-{#     {{ checkbox.checkbox_dropdown(
-      name='rm_year',
-      label='Reg year',
-      /range(constants.START_YEAR, constants.END_YEAR),
-    ) }} #}
     {{ years.years('rm_year', 'Reg year') }}
     {{ checkbox.checkbox_dropdown(
       name='doc_category_id',
@@ -64,6 +57,8 @@
         {{ date.field('hearing_date', 'Hearing date range') }}
         {{ date.field('vote_date', 'Vote date range') }}
       </div>
+  </div>
+  <div class="js-accordion accordion--neutral" data-content-prefix="filter1" data-open-first="true">
     <button type="button" class="js-accordion-trigger accordion__button">Entities</button>
       <div class="accordion__content">
         {{ checkbox.checkbox_dropdown(
@@ -74,8 +69,8 @@
         }}
         {{ text.keyword_field('entity_name','Entity name') }}
       </div>
-    </div>
-  </form>
+  </div>
+</form>
 
 {% endblock %}
 
