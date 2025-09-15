@@ -1189,7 +1189,7 @@ export const rulemakings = [
                             ${doc_date}
                             </div>
                            </li>`;
-            }               
+            }
           }
         }
       }

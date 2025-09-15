@@ -23,7 +23,7 @@ console.log('q_query:', q_query); // eslint-disable-line no-console
 console.log('DOCK IDS:', docs); // eslint-disable-line no-console
 
  if (params.q) {
-     $('input[name="q"]').val(params.q)//.trigger('change')
+     $('input[name="q"]').val(params.q);//.trigger('change')
   }
 
 //  NOTE TO SELF:
@@ -42,7 +42,7 @@ KeywordModal.prototype.handleSubmit = function(e) {
   this.fireEvent('Keyword modal query: ' + searchQuery);
   console.log('query', query); // eslint-disable-line no-console
 
- // Put value in field and trigger handleKeywordSearchChange() 
+ // Put value in field and trigger handleKeywordSearchChange()
  $('input[name="q"]').val(searchQuery).trigger('change');
 
   //window.location = this.$form.attr('action') + query.toString();
@@ -109,8 +109,6 @@ KeywordModal.prototype.handleSubmit = function(e) {
       );
 };
 
-
-
   const $table = $('#results');
   new DataTable_FEC($table, {
     autoWidth: false,
@@ -121,7 +119,7 @@ KeywordModal.prototype.handleSubmit = function(e) {
     order: [[0, 'desc']],
     useFilters: true,
     useExport: true,
-    // Initiate the field value and fire change for keyword if included in link or copy/pasted url 
+    // Initiate the field value and fire change for keyword if included in link or copy/pasted url
     // TODO: Don't think I need to also add tage here...end uo with two tags one I added trigger('change')
     initComplete: function () {
        const queryParams = URI.parseQuery(window.location.search);
