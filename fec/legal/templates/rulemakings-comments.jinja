@@ -53,19 +53,19 @@
           <i class="i i-check"></i>
           <ul class="breadcrumbs">
             <li class="breadcrumbs__item">
-              <a class="breadcrumbs__link">Submitting</a>
+              <a class="breadcrumbs__link" data-frame="submitterType">Submitting</a>
             </li>
             <li class="breadcrumbs__item">
-              <a class="breadcrumbs__link">Submitter information</a>
+              <a class="breadcrumbs__link" data-frame="submitterInfo">Submitter information</a>
             </li>
             <li class="breadcrumbs__item">
-              <a class="breadcrumbs__link">Commenter information</a>
+              <a class="breadcrumbs__link" data-frame="commenters">Commenter information</a>
             </li>
             <li class="breadcrumbs__item">
-              <a class="breadcrumbs__link">Comments</a>
+              <a class="breadcrumbs__link" data-frame="comments">Comments</a>
             </li>
             <li class="breadcrumbs__item">
-              <a class="breadcrumbs__link">Final review</a>
+              <a class="breadcrumbs__link" data-frame="summary">Final review</a>
             </li>
             <li class="breadcrumbs__item">
               <a class="breadcrumbs__link">response</a>
@@ -73,16 +73,16 @@
           </ul>
         </nav>
 
-        <input type="hidden" value="{{ rm_in }}" name="rm_id">
-        <input type="hidden" value="{{ rm_name }}" name="rm_name">
-        <input type="hidden" value="{{ rm_no }}" name="rm_no">
+        <input type="hidden" name="rm_id" value="{{ rm_id }}">
+        <input type="hidden" name="rm_name" value="{{ rm_name }}">
+        <input type="hidden" name="rm_no" value="{{ rm_no }}">
 
         <div id="frames-holder" class="frames">
           <fieldset id="frame-representedEntityType" class="frame" data-validation="0">
             <label class="group-label">I am submitting these comments:</label>
 
             <fieldset class="field-label-combo">
-              <input type="radio" value="self" id="representedEntityType-self" name="representedEntityType" required>
+              <input type="radio" value="self" id="representedEntityType-self" name="representedEntityType" required checked>
               <label for="representedEntityType-self">On behalf of myself</label>
             </fieldset>
 
@@ -311,17 +311,6 @@
               <button class="button--alt add-commenter" type="button" disabled>Add joint commenter</button>
               <button class="button--alt remove-commenter" type="button" disabled>Remove this one</button>
             </fieldset>
-              
-
-            {# <input type="checkbox" id="createAccount" name="createAccount" value="true" aria-hidden="true" disabled>
-            <label for="createAccount">Save this information for later and create an account</label>
-
-            <fieldset class="" data-show-if-var="createAccount" data-show-if-val="true" aria-hidden="true">
-              <label for="user.password">Create a password</label>
-              <input type="password" id="user.password" name="user.password" autocomplete="false"><button class="button--cta button--go is-disabled" data-action="save-password">Save</button>
-            </fieldset>#}
-            
-            
           </fieldset>{# close #frame-commentersInfo #}
           <fieldset id="frame-comments" class="frame" data-validation="0">
             Add comments or upload files to submit
@@ -363,13 +352,15 @@
             </table>
           </fieldset>{# close #frame-summary #}
           <fieldset id="frame-confirmation" class="frame">
-            <div class="message message--alert" data-status="submitting">
+            <div class="message message--info" data-status="submitting">
               <h2 class="message__title">Transmitting</h2>
               We&apos;re transmitting your comments.
             </div>
             <div class="message message--alert" data-status="error">
               <h2 class="message__title">Error: Could not submit</h2>
-              <p>We had trouble processing your request. Please try reloading the page.</p>
+              <p>We had trouble processing your request.
+              Go back to submit again, or try reloading the page (reloading will clear the information you've entered
+              here.) If the problem persists.</p>
               <div class="message--alert__bottom">
                   <p>Still not working?</p>
                   <ul class="list--buttons">
@@ -383,7 +374,7 @@
               on behalf of commenters[1].orgName and commenters[2].orgName for ${rm_name} on <time datetime="yyyy-mm-dd hh:mmT-4">D, Mm d, yyyy, at h:mm TimeZone</time>.</p>
               <div class="message--alert__bottom">
                   <ul class="list--buttons">
-                    <li><button class="button--standard" href="#">Explore all rulemakings</button></li>
+                    <li><a class="button--standard" href="/legal/rulemakings/">Explore all rulemakings</a></li>
                   </ul>
               </div>
             </div>

@@ -90,6 +90,10 @@ html, body {
     .label__optional {
       font-weight: normal;
     }
+    /* if the following element is required, hide the optional label */
+    &:has(+[required]) .label__optional {
+      display: none;
+    }
   }
   textarea {
     height: auto;
@@ -376,6 +380,7 @@ html, body {
   .topnav {
     margin-bottom: 1rem;
     min-height: 10rem;
+    position: relative;
     width: 100%;
 
     &.hidden {
@@ -479,7 +484,7 @@ html, body {
           opacity 1s,
           color 0.5s;
       }
-      &::after {
+      &:not(:last-child)::after {
         color: purple; /* forcing browser colors */
         content: ' › ';
         display: inline;

@@ -30,21 +30,21 @@ def get_s3_client():
 
 # TODO: Get CSRF working in cloud environments
 @csrf_exempt
-def submit_rulemaking_comments(request):
+def save_rulemaking_comments(request):
     # If not 'post', reject
     if request.method != 'POST':
-        return JsonResponse({'error': 'POST required'}, status=405)
+        return JsonResponse({'status': 405, 'ok': False, 'message': 'POST required', }, status=405)
 
     # Test for valid data format, return if invalid json
     try:
         data = json.loads(request.body)
     except Exception:
-        print('Exception: ', Exception)
-        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        # print('Exception: ', Exception)
+        return JsonResponse({'status': 400, 'ok': False, 'message': 'Invalid JSON'}, status=400)
 
     # Checking reCAPTCHA
     if not data['g-recaptcha-response']:
-        return JsonResponse({'error': 'Invalid reCAPTCHA'}, status=400)
+        return JsonResponse({'status': 400, 'ok': False, 'message': 'Invalid reCAPTCHA'}, status=400)
     else:
         verifyRecaptcha = requests.post(
             'https://www.google.com/recaptcha/api/siteverify',
@@ -55,57 +55,60 @@ def submit_rulemaking_comments(request):
             },
         )
         recaptchaResponse = verifyRecaptcha.json()
-        print('recaptchaResponse: ', recaptchaResponse)
+        # print('recaptchaResponse: ', recaptchaResponse)
 
         if not recaptchaResponse['success']:
             # if captcha failed, return failure
-            return JsonResponse({'status': False}, status=500)
+            return JsonResponse(
+                {'status': 500, 'ok': False, 'message': 'reCAPTCHA failed', 'recaptcha_error': True},
+                status=500
+            )
 
         # Start with the common, shared, required values
         to_submit = {
-            'reg_name': data.get('reg_name', '').strip(),
-            'reg_no': data.get('reg_no', '').strip(),
+            'rm_name': data.get('rm_name', '').strip(),
+            'rm_no': data.get('rm_no', '').strip(),
 
             'representedEntityConnection': (data.get('representedEntityConnection') or '').strip(),
             'representedEntityType': (data.get('representedEntityType') or '').strip(),
 
-            'commenters_0_.firstName': (data.get('commenters_0_.firstName') or '').strip(),
-            'commenters_0_.lastName': (data.get('commenters_0_.lastName') or '').strip(),
-            'commenters_0_.addressType': (data.get('commenters_0_.addressType') or '').strip(),
-            'commenters_0_.mailingCity': (data.get('commenters_0_.mailingCity') or '').strip(),
-            'commenters_0_.mailingState': (data.get('commenters_0_.mailingState') or '').strip(),
-            'commenters_0_.mailingCountry': (data.get('commenters_0_.mailingCountry') or '').strip(),
-            'commenters_0_.emailAddress': (data.get('commenters_0_.emailAddress') or '').strip(),
+            'commenters[0].firstName': (data.get('commenters[0].firstName') or '').strip(),
+            'commenters[0].lastName': (data.get('commenters[0].lastName') or '').strip(),
+            'commenters[0].addressType': (data.get('commenters[0].addressType') or '').strip(),
+            'commenters[0].mailingCity': (data.get('commenters[0].mailingCity') or '').strip(),
+            'commenters[0].mailingState': (data.get('commenters[0].mailingState') or '').strip(),
+            'commenters[0].mailingCountry': (data.get('commenters[0].mailingCountry') or '').strip(),
+            'commenters[0].emailAddress': (data.get('commenters[0].emailAddress') or '').strip(),
         }
 
         # If they'd like to testify, save that and their phone number
-        if data.get('commenters_0_.testify'):
-            to_submit['commenters_0_.testify'] = data.get('commenters_0_.testify')
-            to_submit['commenters_0_.phone'] = data.get('commenters_0_.phone')
+        if data.get('commenters[0].testify'):
+            to_submit['commenters[0].testify'] = data.get('commenters[0].testify')
+            to_submit['commenters[0].phone'] = data.get('commenters[0].phone')
 
         # If we're including law firm information, add those
         if data.get('lawfirm'):
-            to_submit['commenters_0_.representedEntity.orgName'] = \
-                (data.get('commenters_0_.representedEntity.orgName') or '').strip()
-            to_submit['commenters_0_.representedEntity.addressType'] = \
-                (data.get('commenters_0_.representedEntity.addressType') or '').strip()
-            to_submit['commenters_0_.representedEntity.mailingAddressStreet'] = \
-                (data.get('commenters_0_.representedEntity.mailingAddressStreet') or '').strip()
-            to_submit['commenters_0_.representedEntity.mailingCity'] = \
-                (data.get('commenters_0_.representedEntity.mailingCity') or '').strip()
-            to_submit['commenters_0_.representedEntity.mailingState'] = \
-                (data.get('commenters_0_.representedEntity.mailingState') or '').strip()
-            to_submit['commenters_0_.representedEntity.mailingZip'] = \
-                (data.get('commenters_0_.representedEntity.mailingZip') or '').strip()
-            to_submit['commenters_0_.representedEntity.mailingCountry'] = \
-                (data.get('commenters_0_.representedEntity.mailingCountry') or '').strip()
-            to_submit['commenters_0_.representedEntity.emailAddress'] = \
-                (data.get('commenters_0_.representedEntity.emailAddress') or '').strip()
+            to_submit['commenters[0].representedEntity.orgName'] = \
+                (data.get('commenters[0].representedEntity.orgName') or '').strip()
+            to_submit['commenters[0].representedEntity.addressType'] = \
+                (data.get('commenters[0].representedEntity.addressType') or '').strip()
+            to_submit['commenters[0].representedEntity.mailingAddressStreet'] = \
+                (data.get('commenters[0].representedEntity.mailingAddressStreet') or '').strip()
+            to_submit['commenters[0].representedEntity.mailingCity'] = \
+                (data.get('commenters[0].representedEntity.mailingCity') or '').strip()
+            to_submit['commenters[0].representedEntity.mailingState'] = \
+                (data.get('commenters[0].representedEntity.mailingState') or '').strip()
+            to_submit['commenters[0].representedEntity.mailingZip'] = \
+                (data.get('commenters[0].representedEntity.mailingZip') or '').strip()
+            to_submit['commenters[0].representedEntity.mailingCountry'] = \
+                (data.get('commenters[0].representedEntity.mailingCountry') or '').strip()
+            to_submit['commenters[0].representedEntity.emailAddress'] = \
+                (data.get('commenters[0].representedEntity.emailAddress') or '').strip()
 
         # For an unlimited number of commenters,
         i = 1
-        while data.get('commenters_' + str(i) + '_.commenterType'):
-            prefix = 'commenters_' + str(i) + '_'
+        while data.get('commenters[' + str(i) + '].commenterType'):
+            prefix = 'commenters[' + str(i) + ']'
             to_submit[prefix + '.commenterType'] = (data.get(prefix + '.commenterType') or '').strip()
             to_submit[prefix + '.firstName'] = (data.get(prefix + '.firstName') or '').strip()
             to_submit[prefix + '.lastName'] = (data.get(prefix + '.lastName') or '').strip()
@@ -123,16 +126,16 @@ def submit_rulemaking_comments(request):
 
         # Because we can have 0-3 files and they could be in any of the fields, add the ones with values
         i = 0
-        if data.get('files_0_name'):
-            to_submit['filenames'].append(str(i) + '-' + data.get('files_0_name'))
+        if data.get('files[0].name'):
+            to_submit['filenames'].append(str(i) + '-' + data.get('files[0].name'))
             i += 1
 
-        if data.get('files_1_name'):
-            to_submit['filenames'].append(str(i) + '-' + data.get('files_1_name'))
+        if data.get('files[1].name'):
+            to_submit['filenames'].append(str(i) + '-' + data.get('files[1].name'))
             i += 1
 
-        if data.get('files_2_name'):
-            to_submit['filenames'].append(str(i) + '-' + data.get('files_2_name'))
+        if data.get('files[2].name'):
+            to_submit['filenames'].append(str(i) + '-' + data.get('files[2].name'))
 
         # TODO: report missing fields?
 
@@ -141,6 +144,8 @@ def submit_rulemaking_comments(request):
 
         if not to_submit['filenames'] and len(to_submit['comments']) < 2:
             return JsonResponse({'error': 'Missing comments and files.'}, status=400)
+
+        # too large = 413
 
         # Submission ID is used later to keep folders and files together
         # Uses submission time prefixes in YYYYMMDDHHMMSS format for easier sorting
@@ -178,13 +183,15 @@ def submit_rulemaking_comments(request):
                     ['starts-with', '$key', f'{prefix}/'],
                     ['content-length-range', 0, 5000000],
                 ],
-                ExpiresIn=60,  # 1 minutes
+                ExpiresIn=60,  # 1 minute
             )
             presigned_urls[filename] = presigned_url
 
         return JsonResponse({
-            'submission_id': submission_id,
             'presigned_urls': presigned_urls,
+            'ok': True,
+            'status': 200,
+            'submission_id': submission_id,
             'submitted_at': submitted_at,
         })
 
@@ -365,17 +372,31 @@ def admin_fine_page(request, admin_fine_no):
     })
 
 
-def forces_add_comments(request):
-    # admin_fine = api_caller.load_legal_admin_fines(admin_fine_no)
-    # If report code not found in report_type_full dict, then use report code
-    # report_type_full = (constants.report_type_full.get(
-    #                     admin_fine['report_type'])
-    #                     or admin_fine['report_type'])
-    # if not admin_fine:
-    #     raise Http404()
+def rulemaking_add_comments(request, rm_no):
+
+    # rulemaking = api_caller.load_legal_rulemaking(rm_no)
+    rulemaking = api_caller.load_legal_rulemaking('2024-10')
+    # print('api_caller rulemaking: ' + rulemaking)
+
+    if not rm_no:
+        raise Http404()
+
+    # for rm in rulemaking:
+    #     print('rulemaking[' + rm + ']: ' + str(rulemaking[rm]))
+
+    # rulemaking['description'] = 'REG 2024-10 Civil Monetary Penalties Annual Inflation Adjustments 2025'
+    # rulemaking['rm_id'] = 3479145
+    # rulemaking['rm_name'] = 'Civil Monetary Penalties Annual Inflation Adjustments 2025'
+    # rulemaking['rm_no'] = '2024-06'
+    # rulemaking['rm_number'] = 'REG 2024-10'
+
     return render(request, 'rulemakings-comments.jinja', {
-        'reg_no': '2024-06',
-        'reg_name': 'Requests to modify or Redact Contributor Information',
+        'description': rulemaking['description'],
+        'rm_id': rulemaking['rm_id'],
+        'rm_name': rulemaking['rm_name'],
+        'rm_no': rulemaking['rm_no'],
+        'rm_number': rulemaking['rm_number'],
+        'rm_title': rulemaking['title'],
         'parent': 'legal',
         'social_image_identifier': 'legal',
         'could_testify': True,

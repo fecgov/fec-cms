@@ -27,8 +27,8 @@ urlpatterns = [
     re_path(r'^data/legal/search/regulations/$',
             views.legal_doc_search_regulations),
     re_path(r'^data/legal/search/statutes/$', views.legal_doc_search_statutes),
-    re_path(r'^legal/rulemaking/submit-comments/',
-            views.submit_rulemaking_comments, name='submit_rulemaking_comments'),
+    re_path(r'^legal/rulemaking/save-comments/',
+            views.save_rulemaking_comments, name='save_rulemaking_comments'),
 ]
 
 if settings.FEATURES['adrs']:

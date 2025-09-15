@@ -2,7 +2,9 @@
  * ✅ TODO: add disclaimer for testify-phone: 'Phone number is not made public and is only used for the purpose of contacting participants to testify'
  * ✅ TODO: summary: include request to testify if needed, then phone number
  * ✅ TODO: review email address fields' 'required' states, particularly for counsel
+ * ✅ TODO: email fields' (required) labels should toggle correctly
  * ✅ TODO: title should move above topnav
+ * ✅ TODO: topnav links should work
  * ✅ TODO: phone number field should be limited width
  * ✅ TODO: error messages' widths should be auto, not necessarily the width of their <input>
  * ✅ TODO: When the country isn't the US, reset and disable the state <select>
@@ -10,15 +12,16 @@
  *   ✅ TODO: arriving at the summary/review page and the confirmation page, scroll to the top
  *   ✅ TODO: Going back to change the radio buttons, the top nav options should update, too
  *   ✅ TODO: Going back from add comments takes us back to 0 instead of the previous frame we were shown
- * TODO: error checking in JavaScript _and_ Python
- * TODO: handle errors:
- *   TODO: filesize too large
- *   TODO: if we can't save user information for some reason—some generic error
- *   TODO: saved information, couldn't save attachment(s)
- *   TODO: include unique ID for when commenters contact FEC
- *   TODO: ¿saved information, may have saved some attachment(s)?
- *   TODO: ¿commenting period is about to close?
- *   TODO: ¿commenting period has closed before comments could be submitted?
+ *   TODO: confirmation page should adjust its size
+ * ✅ TODO: error checking in JavaScript _and_ Python
+ * ✅ TODO: handle errors:
+ *   ✅ TODO: filesize too large
+ *   ✅ TODO: if we can't save user information for some reason—some generic error
+ *   ✅ TODO: saved information, couldn't save attachment(s)
+ *   ✅ TODO: include unique ID for when commenters contact FEC
+ *   ✅  TODO: ¿saved information, may have saved some attachment(s)?
+ *   ❌ TODO: ¿commenting period has closed before comments could be submitted? (not a field in the API)
+ *   ❌ TODO: ¿commenting period is about to close? (not a field in the API)
  */
 export default function RulemakingsCommenting() {
   this.appElId = 'rulemakings-comments'; // How to find the button to launch this
@@ -28,7 +31,7 @@ export default function RulemakingsCommenting() {
   this.frames = document.querySelectorAll('.frame');
   this.frame0 = document.querySelector('#frame-representedEntityType');
   this.frame1 = document.querySelector('#frame-submitterInfo');
-  this.frame2 = document.querySelector('#frame-commenterInfo');
+  this.frame2 = document.querySelector('#frame-commentersInfo');
   this.frame3 = document.querySelector('#frame-comments');
   this.frame4 = document.querySelector('#frame-summary');
   this.frame5 = document.querySelector('#frame-confirmation');
@@ -39,11 +42,27 @@ export default function RulemakingsCommenting() {
   this.currentFrameNum;
   this.representedEntityType;
   this.submissionStatus;
-  this.submissionResponse;
+  this.submissionResponses = [];
   this.recapWidgetId;
 
   this.init();
 }
+
+const framesOrder = ['submitterType', 'submitterInfo', 'commenters', 'comments', 'summary', 'confirmation'];
+const submissionStatusMessages = {
+  success: `[$submitter] has submitted comments[$behalfCommenters] for [$rm] on
+    <time datetime="[$datetime]">[$datetimeStr]</time>`,
+  'error-data':
+    `Unfortunately, we couldnʼt process your request. Please click the ◂ Back button to try again,
+    or reload the page to start over.`,
+  'error-files':
+    `Weʼve received your data but couldnʼt process your attachments. Please contact [$team] to submit your
+    files and attach them to your entry. Give them this number:<br>[$randomid]`,
+  '500':
+    `Unfortunately, we had trouble processing your request. Please click the ◂ Back button to try again,
+    or reload the page to start over.`
+};
+const usZoneCodes = ['US', 'AS', 'GU', 'MP', 'PR', 'UM', 'VI'];
 
 /**
  * TEMP FUNCTION?
@@ -60,6 +79,44 @@ function getCookie(name) {
       .find(row => row.startsWith(name + '='))
       .split('=')[1])
     : null;
+}
+
+async function uploadData(dataPayload) {
+  try {
+    const response = await fetch('/legal/rulemaking/save-comments/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+      body: JSON.stringify(dataPayload)
+    });
+
+    const result = await response.json();
+    return result;
+
+  } catch (err) {
+    return err;
+  }
+}
+
+/**
+ *
+ * @param {Object[]} uploadObjects - Objects to upload. The key is the url, the value is the File object (file)
+ */
+async function uploadFiles(data) {
+    let BREAK_FIRST_URL = -1; // TODO: REMOVE THE BREAK_FIRST_URL LINES
+    const responses = await Promise.all(
+      data.map(async file => {
+        BREAK_FIRST_URL++; // TODO: REMOVE THE BREAK_FIRST_URL LINES
+        // return fetch(BREAK_FIRST_URL === 0 ? 'break' : file.url, { // TODO: THIS WILL BREAK THE FIRST FILE'S URL
+        return fetch(file.url, { // TODO: this is the real line (remove this comment)
+          method: 'POST',
+          body: file.fileUploadBody
+        });
+      })
+    );
+    return responses;
 }
 
 /**
@@ -99,6 +156,11 @@ RulemakingsCommenting.prototype.init = function() {
   const helpCloseButton = document.querySelector('.js-help button.filters__toggle');
   helpCloseButton.addEventListener('click', () => { this.toggleHelp(); });
 
+  const topNavLinks = this.topNav.querySelectorAll('a');
+  topNavLinks.forEach(a => {
+    a.addEventListener('click', this.handleTopNavClick.bind(this));
+  });
+
   const bottomNavButtons = this.bottomNav.querySelectorAll('button');
   bottomNavButtons.forEach(button => {
     button.addEventListener('click', this.handleBottomNavClick.bind(this));
@@ -106,6 +168,7 @@ RulemakingsCommenting.prototype.init = function() {
 
   const commentsTextarea = this.formEl.querySelector('textarea');
   commentsTextarea.addEventListener('resize', () => {
+    // TODO: HANDLE RESIZE
     // console.log('resize(e): ', e);
   });
   commentsTextarea.addEventListener('input', () => {
@@ -148,7 +211,6 @@ RulemakingsCommenting.prototype.handleRecapExpiration = function() {
   if (this.isOnFrame('summary')) this.updateBottomNav('submit-wait');
 };
 
-const framesOrder = ['submitterType', 'submitterInfo', 'commenters', 'comments', 'summary', 'confirmation'];
 /**
  * Compares currentFrameNum to type of frame
  * @param {('submitterType'|'submitterInfo'|'commenters'|'comments'|'summary'|'confirmation')} frameType
@@ -168,20 +230,18 @@ RulemakingsCommenting.prototype.goToFrame = function(frameNum) {
   if (this.currentFrameNum == undefined) this.currentFrameNum = 0;
 
   if (frameNum == 'next') {
-    // TODO: validate frameset just in case
-
-    // For the 'self' type, we want to skip commenterInfo (_2_)
+    // For the 'self' type, we want to skip commenterInfo ([2])
     if (this.representedEntityType === 'self' && this.isOnFrame('submitterInfo')) {
-      this.currentFrameNum += 2;
+      this.currentFrameNum = framesOrder.indexOf('comments');
     } else this.currentFrameNum++;
 
   } else if (frameNum == 'back') {
     // For the 'self' type, we want to skip commenterInfo ([2])
     if (this.representedEntityType === 'self' && this.isOnFrame('comments')) {
-      this.currentFrameNum -= 2;
+      this.currentFrameNum = framesOrder.indexOf('submitterInfo');
 
-      // Otherwise, if we're past frame _0_, backup
-    } if (this.currentFrameNum > 0) {
+      // Otherwise, if we're past frame [0], backup
+    } else if (this.currentFrameNum > 0) {
       this.currentFrameNum--;
 
     // But for frame [0], _if there's no data to lose_, go to the previous browser page
@@ -189,9 +249,11 @@ RulemakingsCommenting.prototype.goToFrame = function(frameNum) {
       // TODO: if there's no data to lose,
       history.back();
     }
-  } else if (this.isOnFrame('confirmation')) {
-    this.currentFrameNum = this.frames.length - 1;
+  } else if (frameNum === 'confirmation') {
+    this.currentFrameNum = framesOrder.indexOf('confirmation');
     this.updateBottomNav('confirmation');
+  } else {
+    this.currentFrameNum = frameNum;
   }
 
   this.buildTheFrame();
@@ -235,9 +297,10 @@ RulemakingsCommenting.prototype.buildTheFrame = function() {
 
   } else if (this.isOnFrame('summary')) {
 
-    if (!this.validateEntireForm()) {
-      // TODO ?
-      // console.log('SHOULD GO BACK TO PREVIOUS PAGE!');
+    let entireFormIsValid = this.validateEntireForm();
+    if (!entireFormIsValid) {
+      // validEntireForm() will call goToFrame as needed
+      return;
     }
 
     const formData = new FormData(this.formEl);
@@ -259,14 +322,22 @@ RulemakingsCommenting.prototype.buildTheFrame = function() {
       newInnerHtml += `<tr><th colspan="2">${formData.get('representedEntityConnection')}</th></tr>`;
 
     // Everyone: first commenter's info
-    newInnerHtml += `<tr><td>Name:</td><td>${formData.get('commenters_0_.firstName')} ${formData.get('commenters_0_.lastName')}</td></tr>`;
-    newInnerHtml += `<tr><td>Address type:</td><td>${formData.get('commenters_0_.addressType')}</td></tr>`;
-    newInnerHtml += `<tr><td>City:</td><td>${formData.get('commenters_0_.mailingCity')}</td></tr>`;
-    newInnerHtml += `<tr><td>State:</td><td>${formData.get('commenters_0_.mailingState')}</td></tr>`;
-    newInnerHtml += `<tr><td>Country:</td><td>${formData.get('commenters_0_.mailingCountry')}</td></tr>`;
-    newInnerHtml += `<tr><td>Email:</td><td>${formData.get('commenters_0_.emailAddress')}</td></tr>`;
+    newInnerHtml += `<tr><td>Name:</td><td>${formData.get('commenters[0].firstName')} ${formData.get('commenters[0].lastName')}</td></tr>`;
+    newInnerHtml += `<tr><td>Address type:</td><td>${formData.get('commenters[0].addressType')}</td></tr>`;
+    newInnerHtml += `<tr><td>City:</td><td>${formData.get('commenters[0].mailingCity')}</td></tr>`;
 
-    if (formData.get('commenters_0_.testify') === 'true') {
+    // Include State only for the US
+    let countryCode = formData.get('commenters[0].mailingCountry');
+    let countryName = this.formEl.querySelector(
+      `select[name*="mailingCountry"] option[value="${countryCode}"]`).innerText;
+
+    if (usZoneCodes.includes(countryCode))
+      newInnerHtml += `<tr><td>State:</td><td>${formData.get('commenters[0].mailingState')}</td></tr>`;
+
+    newInnerHtml += `<tr><td>Country:</td><td>${countryCode} - ${countryName}</td></tr>`;
+    newInnerHtml += `<tr><td>Email:</td><td>${formData.get('commenters[0].emailAddress')}</td></tr>`;
+
+    if (formData.get('commenters[0].testify') === 'true') {
       newInnerHtml += `<tr><td colspan="2"><hr></td></tr>`;
       newInnerHtml += `<tr><td colspan="2">I request to testify should the Commission hold a hearing on this matter</td></tr>`;
       newInnerHtml += `<tr><td>Phone:</td><td>${formData.get('commenters[0].phone')}</td></tr>`;
@@ -277,14 +348,21 @@ RulemakingsCommenting.prototype.buildTheFrame = function() {
       if (this.representedEntityType === 'counsel' && formData.get('lawfirm')) {
         // Include information for the lawfirm, if checked
         newInnerHtml += `<tr><th colspan="2">Law firm</th></tr>`;
-        newInnerHtml += `<tr><td>Organization:</td><td>${formData.get('commenters_0_.representedEntity.orgName')}</td></tr>`;
-        newInnerHtml += `<tr><td>Address type:</td><td>${formData.get('commenters_0_.representedEntity.addressType')}</td></tr>`;
-        newInnerHtml += `<tr><td>Street address:</td><td>${formData.get('commenters_0_.representedEntity.mailingAddressStreet')}</td></tr>`;
-        newInnerHtml += `<tr><td>City:</td><td>${formData.get('commenters_0_.representedEntity.mailingCity')}</td></tr>`;
-        newInnerHtml += `<tr><td>State:</td><td>${formData.get('commenters_0_.representedEntity.mailingState')}</td></tr>`;
-        newInnerHtml += `<tr><td>ZIP code:</td><td>${formData.get('commenters_0_.representedEntity.mailingZip')}</td></tr>`;
-        newInnerHtml += `<tr><td>Country:</td><td>${formData.get('commenters_0_.representedEntity.mailingCountry')}</td></tr>`;
-        newInnerHtml += `<tr><td>Email:</td><td>${formData.get('commenters_0_.representedEntity.emailAddress')}</td></tr>`;
+        newInnerHtml += `<tr><td>Organization:</td><td>${formData.get('commenters[0].representedEntity.orgName')}</td></tr>`;
+        newInnerHtml += `<tr><td>Address type:</td><td>${formData.get('commenters[0].representedEntity.addressType')}</td></tr>`;
+        newInnerHtml += `<tr><td>Street address:</td><td>${formData.get('commenters[0].representedEntity.mailingAddressStreet')}</td></tr>`;
+        newInnerHtml += `<tr><td>City:</td><td>${formData.get('commenters[0].representedEntity.mailingCity')}</td></tr>`;
+
+        // Only include state and ZIP for the US
+        countryCode = formData.get('commenters[0].representedEntity.mailingCountry');
+        countryName = this.formEl.querySelector(
+          `select[name*="mailingCountry"] option[value="${countryCode}"]`).innerText;
+        if (usZoneCodes.includes(countryCode)) {
+          newInnerHtml += `<tr><td>State:</td><td>${formData.get('commenters[0].representedEntity.mailingState')}</td></tr>`;
+          newInnerHtml += `<tr><td>ZIP code:</td><td>${formData.get('commenters[0].representedEntity.mailingZip')}</td></tr>`;
+        }
+        newInnerHtml += `<tr><td>Country:</td><td>${countryCode} - ${countryName}</td></tr>`;
+        newInnerHtml += `<tr><td>Email:</td><td>${formData.get('commenters[0].representedEntity.emailAddress')}</td></tr>`;
       }
 
       // COMMENTER LOOP
@@ -306,15 +384,20 @@ RulemakingsCommenting.prototype.buildTheFrame = function() {
 
         newInnerHtml += '</td></tr>';
 
-        const addrType = formData.get('commenters_' + i + '_.addressType');
-        const addrCity = formData.get('commenters_' + i + '_.mailingCity');
-        const addrState = formData.get('commenters_' + i + '_.mailingState');
-        const addrCountry = formData.get('commenters_' + i + '_.mailingCountry');
-        const addrEmail = formData.get('commenters_' + i + '_.emailAddress');
+        const addrType = formData.get(`commenters[${i}].addressType`);
+        const addrCity = formData.get(`commenters[${i}].mailingCity`);
+        const addrState = formData.get(`commenters[${i}].mailingState`) || '';
+        // Only include State for the US
+        countryCode = formData.get(`commenters[${i}].mailingCountry`);
+        countryName = this.formEl.querySelector(
+          `select[name*="mailingCountry"] option[value="${countryCode}"]`).innerText;
+        const addrCountry = `${countryCode} - ${countryName}`;
+        const addrEmail = formData.get(`commenters[${i}].emailAddress`);
 
         newInnerHtml += `<tr><td>Address type:</td><td>${addrType}</td></tr>`;
         newInnerHtml += `<tr><td>City:</td><td>${addrCity}</td></tr>`;
-        newInnerHtml += `<tr><td>State:</td><td>${addrState}</td></tr>`;
+        if (usZoneCodes.includes(countryCode)) // include State only for the US
+          newInnerHtml += `<tr><td>State:</td><td>${addrState}</td></tr>`;
         newInnerHtml += `<tr><td>Country:</td><td>${addrCountry}</td></tr>`;
         newInnerHtml += `<tr><td>Email:</td><td>${addrEmail}</td></tr>`;
       }
@@ -344,20 +427,21 @@ RulemakingsCommenting.prototype.buildTheFrame = function() {
 
   } else if (this.isOnFrame('confirmation')) {
     // If we have a success response, let's put those details into the page
-    if (this.submissionResponse && this.submissionStatus == 'success') {
-      // If we have a response, we need to fill in some fields
-      // console.log('  RESPONSE: ', this.submissionResponse);
+    if (this.submissionStatus === 'success') {
+      // First, vars to include on success screen
       const formData = new FormData(this.formEl);
 
       const now = new Date();
-      const datetimeStamp = new Date(this.submissionResponse.submitted_at);// 'yyyy-mm-dd hh:mmT-4';
-      const datetimeString = now.toLocaleDateString('en-US', {
+      const datetimeStamp = new Date(this.submissionResponses[0].submitted_at);// 'yyyy-mm-dd hh:mmT-4';
+      const datetimeStr = now.toLocaleDateString('en-US', {
         month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric'
       });
-      let confirmationMessage = formData.get('commenters_0_.lastName') + ', ';
-      confirmationMessage += formData.get('commenters_0_.firstName');
-      confirmationMessage += ' has submitted comments ';
 
+      const submitterStr = `${formData.get('commenters[0].lastName')}, ${formData.get('commenters[0].firstName')}`;
+
+      let behalfStr = '';
+
+      // Build the list of "on behalf of" names
       if (this.representedEntityType === 'self') {
         // nothing
       } else if (this.representedEntityType === 'counsel') {
@@ -372,44 +456,55 @@ RulemakingsCommenting.prototype.buildTheFrame = function() {
             : formData.get(`commenters[${i}].orgName`)
           );
         }
-        // console.log('  commentersNames: ', commentersNames);
 
         // If there are commenters[1]+, we need the "on behalf of" part
         if (commentersNames.length > 0)
-          confirmationMessage += 'on behalf of ';
+          behalfStr = ' on behalf of ';
 
         // If there's one commenter, add their name
         if (commentersNames.length === 1)
-          confirmationMessage += commentersNames[0];
+          behalfStr += commentersNames[0];
         // For two commenters, join them with an 'and'
         else if (commentersNames.length === 2)
-          confirmationMessage += commentersNames.join(' and ');
+          behalfStr += commentersNames.join(' and ');
         // For more than two, join with commas and a serial comma because we don't know what names could be
         else
-          confirmationMessage += commentersNames.slice(0, -1).join(', ') + ', and ' + commentersNames.slice(-1);
+          behalfStr += commentersNames.slice(0, -1).join(', ') + ', and ' + commentersNames.slice(-1);
       }
 
-      confirmationMessage += ' for ';
-      confirmationMessage += formData.get('reg_no') + ' ';
-      confirmationMessage += formData.get('reg_name');
-      confirmationMessage += ' on ';
-      confirmationMessage += `<time datetime="${datetimeStamp}">${datetimeString}</time>.`;
+      const rmStr = `${formData.get('rm_no')} ${formData.get('rm_name')}`;
+
+      let confirmationMessage = submissionStatusMessages['success'];
+      confirmationMessage = confirmationMessage.replace('[$submitter]', submitterStr);
+      confirmationMessage = confirmationMessage.replace('[$behalfCommenters]', behalfStr);
+      confirmationMessage = confirmationMessage.replace('[$rm]', rmStr);
+      confirmationMessage = confirmationMessage.replace('[$datetime]', datetimeStamp);
+      confirmationMessage = confirmationMessage.replace('[$datetimeStr]', datetimeStr);
+
       this.frame5.querySelector('.message--success p').innerHTML = confirmationMessage;
 
-      // Scroll to the top
-      // this.topNav.scrollIntoView({ behavior: 'smooth' });
+    } else { // If not successful
 
-    } else if (this.submissionStatus == 'error') {
-      // TODO: If we have an error response
+      // If there were no responses for some reason
+      if (!this.submissionResponses)
+        this.frame5.querySelector('.message--alert p').innerHTML = submissionStatusMessages['500'];
+
+      // else if we contacted the server but the data didn't go through correctly
+      else if (!this.submissionResponses[0].ok)
+        this.frame5.querySelector('.message--alert p').innerHTML = submissionStatusMessages['error-data'];
+
+      // else, there was a problem with 1+ attachments
+      else {// if (failures.includes('file'))
+        let confirmationMessage = submissionStatusMessages['error-files'];
+        confirmationMessage = confirmationMessage.replace('[$team]', 'NEED A TEAM HERE?');
+        confirmationMessage = confirmationMessage.replace('[$randomid]', this.submissionResponses[0].submission_id);
+        this.frame5.querySelector('.message--alert p').innerHTML = confirmationMessage;
+      }
     }
 
-    // If we're still submitting, let's show that block
-    const messageElements = [...this.frame5.children];
     // Toggle HTMLElements based on submissionStats vs data-status=""
+    const messageElements = [...this.frame5.children];
     messageElements.forEach(messageEl => {
-      // console.log('    messageEl: ', messageEl);
-      // console.log('      submissionStatus: ', submissionStatus);
-      // console.log('      comparison: ', messageEl.dataset.status != this.submissionStatus);
       messageEl.classList.toggle('hidden', messageEl.dataset.status != this.submissionStatus);
     });
   }
@@ -421,7 +516,7 @@ RulemakingsCommenting.prototype.buildTheFrame = function() {
 };
 
 /**
- * 
+ *
  */
 RulemakingsCommenting.prototype.slideToTop = function() {
   const prefersReducedMotion =
@@ -434,7 +529,7 @@ RulemakingsCommenting.prototype.slideToTop = function() {
 };
 
 /**
- * Validates every field in this.formEl
+ * Validates every field in this.formEl; fires goToFrame to any invalid fields
  * @returns {boolean}
  */
 RulemakingsCommenting.prototype.validateEntireForm = function() {
@@ -452,9 +547,10 @@ RulemakingsCommenting.prototype.validateEntireForm = function() {
     `commenters[0].emailAddress`
   ];
 
-  // State is required for the US
-  if (formData.get('commenters_0_.mailingCountry') === 'US')
-    requiredFieldNames.push('commenters_0_.mailingState');
+  // State is required for US addresses
+  let country = formData.get(`commenters[0].mailingCountry`);
+  let requireState = usZoneCodes.includes(country);
+  if (requireState) requiredFieldNames.push('commenters[0].mailingState');
 
   // For 'other' relationships, record how they label the relationship
   if (this.representedEntityType === 'other')
@@ -474,7 +570,7 @@ RulemakingsCommenting.prototype.validateEntireForm = function() {
       'commenters[0].representedEntity.mailingCountry'
     );
 
-    if (formData.get('commenters_0_.representedEntity.mailingCountry') === 'US')
+    if (usZoneCodes.includes(formData.get('commenters[0].representedEntity.mailingCountry')))
       requiredFieldNames.push(
         'commenters[0].representedEntity.mailingState',
         'commenters[0].representedEntity.mailingZip'
@@ -488,24 +584,25 @@ RulemakingsCommenting.prototype.validateEntireForm = function() {
       requiredFieldNames.push(`commenters[${i}].commenterType`);
 
       if (formData.get(`commenters[${i}].commenterType`) === 'organization')
-        requiredFieldNames.push(`commenters[${i}].representedEntity.orgName`);
+        requiredFieldNames.push(`commenters[${i}].orgName`);
       else {
         requiredFieldNames.push(
-          `commenters[${i}].representedEntity.firstName`,
-          `commenters[${i}].representedEntity.firstName`
+          `commenters[${i}].firstName`,
+          `commenters[${i}].lastName`,
+          `commenters[${i}].emailAddress` // Email addresses are required for individuals but not organizations
         );
       }
 
       requiredFieldNames.push(
-        `commenters[${i}].representedEntity.addressType`,
-        `commenters[${i}].representedEntity.mailingAddressStreet`,
-        `commenters[${i}].representedEntity.mailingCity`,
-        `commenters[${i}].representedEntity.mailingCountry`
+        `commenters[${i}].addressType`,
+        `commenters[${i}].mailingCity`,
+        `commenters[${i}].mailingCountry`
       );
 
       // State is required for the US
-      if (formData.get(`commenters[${i}].representedEntity.mailingCountry`) === 'US')
-        requiredFieldNames.push(`commenters[${i}].representedEntity.mailingState`)
+      country = formData.get(`commenters[${i}].mailingCountry`);
+      requireState = usZoneCodes.includes(country);
+      if (requireState) requiredFieldNames.push(`commenters[${i}].mailingState`);
 
       i++;
     }
@@ -513,13 +610,22 @@ RulemakingsCommenting.prototype.validateEntireForm = function() {
 
   // Now, on to validating the fields
   requiredFieldNames.forEach(fieldName => {
-    this.validateField(`[name="${fieldName}"]`);
+    const valid = this.validateField(`[name="${fieldName}"]`);
+    if (!valid) {
+      const el = this.formEl.querySelector(`[name="${fieldName}"]`);
+      const elFrame = el.closest('.frame');
+      if (elFrame === this.frame0) this.goToFrame(0);
+      else if (elFrame === this.frame1) this.goToFrame(1);
+      else if (elFrame === this.frame2) this.goToFrame(2);
+      else if (elFrame === this.frame3) this.goToFrame(3);
+    }
   });
 
   // If we have no files attached, and not valid comments, go back to that frame
   if (!formData.get('files[0]').name && !formData.get('files[1]').name
     && !formData.get('files[2]').name && formData.get('comments').length < 2) {
       toReturn = false;
+      this.goToFrame(3);
   }
 
   return toReturn;
@@ -535,15 +641,16 @@ RulemakingsCommenting.prototype.validateField = function(elOrSelector, requireVa
   const theField = typeof elOrSelector === 'string'
     ? this.formEl.querySelector(elOrSelector)
     : elOrSelector;
-  const fieldName = theField.name;
+
+  const fieldName = theField.getAttribute('name');
   const formData = new FormData(this.formEl);
   let toReturn = true;
 
-  // Testing a state field, it needs to be exactly two letters if for the USA. Otherwise optional.
+  // Testing a state <select>, it needs to be exactly two letters if for the USA. Otherwise optional.
   if (fieldName.indexOf('State') > 0) {
-    const theCountry = formData.get(fieldName.replace('State', 'Country'));
-    if (theCountry === 'US' && !formData.get(fieldName).length !== 2) {
-      if (requireValue) theField.classList.add('invalid');
+    const countryCode = formData.get(fieldName.replace('State', 'Country'));
+    if (usZoneCodes.includes(countryCode) && formData.get(fieldName).length !== 2) {
+      theField.classList.add('invalid');
       toReturn = false;
     }
 
@@ -551,7 +658,7 @@ RulemakingsCommenting.prototype.validateField = function(elOrSelector, requireVa
   } else if (fieldName.indexOf('Zip') > 0) {
     const theCountry = formData.get(fieldName.replace('Zip', 'Country'));
     const zipRegex = /\d{5}(-\d{4}){0,1}$/;
-    if (theCountry === 'US' && !zipRegex.test(formData.get(fieldName))) {
+    if (usZoneCodes.includes(theCountry) && !zipRegex.test(formData.get(fieldName))) {
       if (requireValue) theField.classList.add('invalid');
       toReturn = false;
     }
@@ -577,6 +684,14 @@ RulemakingsCommenting.prototype.addCommenter = function() {
   newInnerHtml = newInnerHtml.replace('data-index-0="false"', '');
   newInnerHtml = newInnerHtml.replaceAll('0', newChildIndex);
   newCommenter.innerHTML = newInnerHtml;
+
+  // Remove any of the representedEntity fields that should only exist for [0]
+  const repEntEls = newCommenter.querySelectorAll(
+    '[name*="representedEntity"]', '[for*="representedEntity"]'
+  );
+  repEntEls.forEach(el => {
+    el.remove();
+  });
 
   // Remove any of the possible "I'd like to testify" fields that should only be included for the submitter
   const testifyEls = newCommenter.querySelectorAll(
@@ -667,7 +782,7 @@ RulemakingsCommenting.prototype.handleFileCancelClick = function(e) {
   e.preventDefault();
 
   // Find the linked <input> element, clear its value and remove the has-file class
-  const linkedInput = this.formEl.querySelector(`#${e.target.dataset.commandfor}`);
+  const linkedInput = this.formEl.querySelector(`[id="${e.target.dataset.commandfor}"]`);
   linkedInput.value = '';
   linkedInput.classList.remove('has-file', 'invalid');
   linkedInput.setCustomValidity('');
@@ -699,10 +814,14 @@ RulemakingsCommenting.prototype.toggleElementsByVars = function() {
     else elToToggle.setAttribute('aria-hidden', true);
 
     // Make child elements required or not, based on whether its parent is visible
-    const innerInputs = elToToggle.querySelectorAll('select,input:not([type="checkbox"])');
+    const innerInputs = elToToggle.querySelectorAll('select, input:not([type="checkbox"])');
+
     innerInputs.forEach(input => {
       if (shouldShow) input.setAttribute('required', '');
       else input.removeAttribute('required');
+
+      // Email address is only required for commenters[0]
+      if (input.id.indexOf('.emailAddress') > 0) input.removeAttribute('required');
     });
   });
   // if we've toggled anything, we need to adjust the height again
@@ -713,10 +832,10 @@ RulemakingsCommenting.prototype.toggleElementsByVars = function() {
  * Updates the meter and links in the topnav
  */
 RulemakingsCommenting.prototype.updateTopNav = function() {
-  if (this.isOnFrame('confirmation')) {
-    this.topNav.classList.add('hidden');
-    return;
-  }
+  // if (this.isOnFrame('confirmation')) {
+  //   this.topNav.classList.add('hidden');
+  //   return;
+  // }
 
   const theMeter = this.topNav.querySelector('meter');
 
@@ -729,23 +848,27 @@ RulemakingsCommenting.prototype.updateTopNav = function() {
   theMeter.setAttribute('value', this.currentFrameNum + 1);
 
   const navLabels = this.topNav.querySelectorAll('li a');
-  if (['self'].includes(this.representedEntityType)) {
+
+  // Hide [2] for 'self' but show it again if that changes
+  navLabels[2].closest('li').classList.toggle('hidden', this.representedEntityType === 'self');
+
+  if (this.representedEntityType === 'self') {
     navLabels[0].textContent = 'Submitting on behalf of myself';
     navLabels[1].textContent = 'Your information';
-    navLabels[2].closest('li').classList.add('hidden');
 
-  } else if (['counsel'].includes(this.representedEntityType)) {
+  } else if (this.representedEntityType === 'counsel') {
     navLabels[0].textContent = 'Submitting as counsel to another';
     navLabels[1].textContent = 'Counsel information';
 
-  } else if (['rep'].includes(this.representedEntityType)) {
+  } else if (this.representedEntityType === 'rep') {
     navLabels[0].textContent = 'Submitting as an officer/representative/member';
     navLabels[1].textContent = 'Personal information';
 
-  } else if (['other'].includes(this.representedEntityType)) {
+  } else if (this.representedEntityType === 'other') {
     navLabels[0].textContent = 'Submitting on behalf of another';
     navLabels[1].textContent = 'Personal information';
   }
+
   navLabels[2].textContent = 'Commenter information';
   navLabels[3].textContent = 'Comments';
   navLabels[4].textContent = 'Review';
@@ -763,6 +886,7 @@ RulemakingsCommenting.prototype.updateTopNav = function() {
 
   navLabels.forEach((label, i) => {
     label.closest('li').classList.toggle('current', i === this.currentFrameNum);
+    // Hide labels until currentFrameNum has hit that point.
     if (i <= this.currentFrameNum) label.closest('li').classList.add('viewed');
   });
 };
@@ -772,12 +896,19 @@ RulemakingsCommenting.prototype.updateTopNav = function() {
  * @param {('next'|'incomplete'|'submit')} frameState
  */
 RulemakingsCommenting.prototype.updateBottomNav = function(state = 'incomplete') {
-  // console.log('updateButtonNav(state): ', state);
-  if (this.isOnFrame('confirmation') && this.submissionStatus === 'success') {
-    this.bottomNav.classList.add('hidden');
+  // The confirmation frame has three possible states and special rules
+  if (this.isOnFrame('confirmation')) {
+    if (this.submissionStatus === 'success') {
+      this.bottomNav.classList.add('hidden');
+    } else if (this.submissionStatus === 'error') {
+      this.formEl.querySelector('[data-command="next"]').classList.add('hidden');
+      this.formEl.querySelector('[data-command="submit"]').classList.add('hidden');
+    } else { // if (this.submissionStatus === 'submitting') {
+      this.formEl.querySelector('[data-command="next"]').classList.add('hidden');
+      this.formEl.querySelector('[data-command="back"]').classList.add('is-inactive');
+      this.formEl.querySelector('[data-command="submit"]').classList.add('hidden');
+    }
     return;
-  } else if (this.isOnFrame('confirmation') && this.submissionStatus === 'error') {
-    // TODO?
   }
 
   this.formEl.querySelector('[data-command="next"]').classList.toggle('is-inactive', state === 'incomplete');
@@ -858,13 +989,10 @@ RulemakingsCommenting.prototype.handleFormChange = function(e) {
 
     if (e.target.name === 'representedEntityType')
       this.representedEntityType = e.target.value;
-
-    // TODO: If the type is anything other than 'other', skip anything leftover in the relationship field
   }
 
   // If we've changed the country, we'll toggle whether state and ZIP are required (req for US/USA)
   if (e.target.name.indexOf('.mailingCountry') > 0) {
-    const usZoneCodes = ['US', 'AS', 'GU', 'MP', 'PR', 'UM', 'VI'];
     const elementNameRoot = e.target.name.substring(0, e.target.name.lastIndexOf('.'));
     const zipAndStateFields = this.formEl.querySelectorAll(
       `[name="${elementNameRoot}.mailingState"], [name="${elementNameRoot}.mailingZip"]`
@@ -905,6 +1033,12 @@ RulemakingsCommenting.prototype.handleFormChange = function(e) {
     const nonReqEls = parentEl.querySelectorAll(`[data-toggle]:not([data-toggle="${commType}"]) input`);
     requiredEls.forEach(el => { el.setAttribute('required', ''); });
     nonReqEls.forEach(el => { el.removeAttribute('required'); });
+
+    // email address is available for both types, but only required for individuals
+    const emailField = parentEl.querySelector('[name*="emailAddress"]');
+    if (commType === 'individual') emailField.setAttribute('required', '');
+    else emailField.removeAttribute('required');
+
   }
 
   this.validateCurrentFrame();
@@ -948,6 +1082,16 @@ RulemakingsCommenting.prototype.validateCurrentFrame = function(validationType =
  */
 RulemakingsCommenting.prototype.handleTooltipClick = function(e) {
   this.toggleHelp(e.target);
+};
+
+/**
+ * @param {PointerEvent} e
+ */
+RulemakingsCommenting.prototype.handleTopNavClick = function(e) {
+  e.preventDefault();
+  // We need a frame name. We don't want the links to do anything if we're on the 'success' confirmation page
+  if (e.target.dataset.frame && this.submissionStatus !== 'success')
+    this.goToFrame(framesOrder.indexOf(e.target.dataset.frame));
 };
 
 /**
@@ -1002,21 +1146,17 @@ RulemakingsCommenting.prototype.toggleHelp = function(targetEl) {
 /**
  *
  */
-RulemakingsCommenting.prototype.startSubmitting = function() {
-  // console.log('  startSubmitting()');
-
+RulemakingsCommenting.prototype.startSubmitting = async function() {
   // TODO: deactivate bottom nav
-  // TODO: VALIDATE FORM DATA
 
-  // if (this.validateEntireForm()) {
-  //   console.log('  get(submissionStatus): ', this.submissionStatus);
+  if (this.validateEntireForm()) {
+    this.submissionResponses = [];
     this.submissionStatus = 'submitting';
-  //   console.log('    get(submissionStatus): ', this.submissionStatus);
-    // this.goToFrame('confirmation');
-  // }
-  // TODO: TEMP
-  // setTimeout(this.handleSubmissionResponse.bind(this), 5000, { status: 200 });
-  // TODO
+  } else {
+    // validEntireForm() will call goToFrame as needed
+    return;
+  }
+
   const formData = new FormData(this.formEl);
 
   // Build the payloads for submission
@@ -1033,92 +1173,55 @@ RulemakingsCommenting.prototype.startSubmitting = function() {
     } else dataPayload[entry[0]] = entry[1];
   });
 
-  // let dataSubmission =
-  fetch('/legal/rulemaking/submit-comments/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': getCookie('csrftoken')
-      },
-      body: JSON.stringify(dataPayload)
-    })
-    .then(response => response.json())
-    .then(
-      // Then handle the successful data submission
-      /**
-       * @param {Object} dataSubResp - the response from the data submission
-       * @param {string} dataSubResp.submission_id - hash used in the directory and file name structure
-       * @param {string} dataSubResp.submitted_at - UTC datetime
-       * @param {Object} [dataSubResp.presignedUrls] - key:value pairs where the key is the original file name
-       * and the value is an object of properties for that file
-       */
-      dataSubResp => {
-        // Save the response
-        this.submissionResponse = dataSubResp;
+  this.submissionResponses = [];
 
-        // console.log('  dataSubResp: ', dataSubResp);
-        const presignedURLs = dataSubResp.presigned_urls;
-        // console.log('attachedFiles: ', attachedFiles);
-        // For each attached file, we need to upload it with the presigned URLs from dataSubResp
-        attachedFiles.forEach(
-          /**
-           * @param {Array} attachedFile - [key, value] pair of field name and File
-           * where [0] is the field name and [1] is the attached file
-           */
-          (attachedFile, i) => {
-            const indexedName = `${i}-${attachedFile[1].name}`;
-            const presignedDataObj = presignedURLs[indexedName];
+  // Set up and run the fetch calls
+  const filesToUpload = [];
 
-            let fileUploadBody = new FormData();
-            Object.entries(presignedDataObj.fields).forEach(([key, value]) => {
-              fileUploadBody.append(key, value);
-            });
-            fileUploadBody.append('file', attachedFile[1]);
+  let dataSubmission = await uploadData(dataPayload)
+    .then(response => {
+      const presignedURLs = response.presigned_urls;
 
-            fetch('-x-' + presignedDataObj.url, {
-              method: 'POST',
-              body: fileUploadBody
-            })
-            .then(() => {
-              // console.log('  fileSubResp: ', fileSubResp);
-            })
-            .catch(() => {
-              // TODO: handle file upload errors, including telling the user that 1-3 of their files were rejected
-              // console.log('file upload error: ', err);
-            });
-          }
-        ); // end attachedFiles.forEach
-        //     /**
-        //      * @param {Object} fileUploadVars - key:value pairs
-        //      * @param {string} fileUploadVars.url -
-        //      * @param {Object} fileUploadVars.fields -
-        //      * @param {string} fileUploadVars.fields.acl -
-        //      * @param {string} fileUploadVars.fields.key -
-        //      * @param {string} fileUploadVars.fields.policy -
-        //      * @param {string} fileUploadVars.fields.x-amz-algorithm
-        //      * @param {string} fileUploadVars.fields.x-amz-credential
-        //      * @param {string} fileUploadVars.fields.x-amz-date
-        //      * @param {string} fileUploadVars.fields.x-amz-signature
-        //      */
-        this.handleSubmissionResponse();
-    })
-    .catch(() => {
-      // TODO: tell users about errors, especially if 1-3 of their files didn't upload
-      // console.log(' ERROR:', error);
+      attachedFiles.forEach(
+        /**
+         * @param {Array} attachedFile - [key, value] pair of field name and File
+         * where [0] is the field name and [1] is the attached file
+        */
+        (attachedFile, i) => {
+          const indexedName = `${i}-${attachedFile[1].name}`;
+          const presignedDataObj = presignedURLs[indexedName];
+
+          const fileUploadBody = new FormData();
+          Object.entries(presignedDataObj.fields).forEach(([key, value]) => {
+            fileUploadBody.append(key, value);
+          });
+          fileUploadBody.append('file', attachedFile[1]);
+
+          filesToUpload.push({
+            url: presignedDataObj.url,
+            fileUploadBody: fileUploadBody
+          });
+      });
+      return response;
     });
-  // console.log('  dataSubmission:', dataSubmission);
 
-};
+  this.submissionResponses.push(dataSubmission);
 
-/**
- * Called after the fetches have resolved, then sends us to the confirmation page
- */
-RulemakingsCommenting.prototype.handleSubmissionResponse = function () {
-  // console.log('handleSubmissionResponse(response): ', response);
+  if (filesToUpload.length > 0) {
+    let filesResponses = await uploadFiles(filesToUpload);
+    this.submissionResponses.push(...filesResponses);
+  }
 
-  this.submissionStatus = this.submissionResponse.submitted_at ? 'success' : 'error';
-  // TODO: HANDLE THE ERROR RESPONSE
-  // TODO: revive the top nav? Offer a back button on the lower nav—maybe it takes them back to the beginning?
+  let passed = true;
+  this.submissionResponses.forEach(response => {
+    // We only need one submission to have failed
+    if (response.ok != true) passed = false;
+  });
+
+  this.submissionStatus = passed ? 'success' : 'error';
+
+  this.updateBottomNav();
+
   this.goToFrame('confirmation');
 };
 
