@@ -1,4 +1,4 @@
-/* global API_LOCATION, API_VERSION, API_KEY_PUBLIC */
+/* global API_LOCATION, API_VERSION, API_KEY_PUBLIC, API_KEY_PUBLIC_SCHEDULE_A */
 
 import DOMPurify from 'dompurify';
 import * as Handlebars from 'handlebars/runtime';
@@ -377,9 +377,22 @@ export function buildAppUrl(path, query) {
  * @returns {string} The final URL
  */
 export function buildUrl(path, query) {
+  // Use dedicated schedule_a API key for schedule_a endpoints
+  let isScheduleA = false;
+
+  if (Array.isArray(path)) {
+    // Check if path array contains both 'schedules' and 'schedule_a'
+    isScheduleA = path.includes('schedules') && path.includes('schedule_a');
+  } else {
+    // Check if path string contains 'schedules/schedule_a'
+    isScheduleA = path.includes('schedules/schedule_a');
+  }
+
+  const apiKey = isScheduleA ? API_KEY_PUBLIC_SCHEDULE_A : API_KEY_PUBLIC;
+
   const uri = URI(API_LOCATION)
     .path(Array.prototype.concat(API_VERSION, path, '').join('/'))
-    .addQuery({ api_key: API_KEY_PUBLIC });
+    .addQuery({ api_key: apiKey });
 
   if (query.api_key) {
     // if query provides api_key, use that.
