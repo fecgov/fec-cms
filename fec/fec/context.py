@@ -20,4 +20,7 @@ def api_key(request):
         if settings.FEC_INTERNAL_IP in ip_list:
             api_key = settings.FEC_INTERNAL_API_KEY_PUBLIC
 
-    return {'API_KEY_PUBLIC': api_key}
+    return {
+        'API_KEY_PUBLIC': api_key,
+        'API_KEY_PUBLIC_SCHEDULE_A': settings.FEC_API_KEY_PUBLIC_SCHEDULE_A
+    }
