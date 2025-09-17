@@ -380,15 +380,20 @@ export function buildUrl(path, query) {
   // Use dedicated schedule_a API key for schedule_a endpoints
   let isScheduleA = false;
 
-  if (Array.isArray(path)) {
-    // Check if path array contains both 'schedules' and 'schedule_a'
-    isScheduleA = path.includes('schedules') && path.includes('schedule_a');
-  } else {
-    // Check if path string contains 'schedules/schedule_a'
-    isScheduleA = path.includes('schedules/schedule_a');
+  // Handle undefined/null path
+  if (path) {
+    if (Array.isArray(path)) {
+      // Check if path array contains both 'schedules' and 'schedule_a'
+      isScheduleA = path.includes('schedules') && path.includes('schedule_a');
+    } else if (typeof path === 'string') {
+      // Check if path string contains 'schedules/schedule_a'
+      isScheduleA = path.includes('schedules/schedule_a');
+    }
   }
 
-  const apiKey = isScheduleA ? API_KEY_PUBLIC_SCHEDULE_A : API_KEY_PUBLIC;
+  // Fallback to regular API key if schedule_a key is not defined (e.g., in tests)
+  const scheduleAKey = typeof API_KEY_PUBLIC_SCHEDULE_A !== 'undefined' ? API_KEY_PUBLIC_SCHEDULE_A : API_KEY_PUBLIC;
+  const apiKey = isScheduleA ? scheduleAKey : API_KEY_PUBLIC;
 
   const uri = URI(API_LOCATION)
     .path(Array.prototype.concat(API_VERSION, path, '').join('/'))
