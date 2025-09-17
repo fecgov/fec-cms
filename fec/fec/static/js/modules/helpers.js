@@ -395,6 +395,14 @@ export function buildUrl(path, query) {
   const scheduleAKey = typeof API_KEY_PUBLIC_SCHEDULE_A !== 'undefined' ? API_KEY_PUBLIC_SCHEDULE_A : API_KEY_PUBLIC;
   const apiKey = isScheduleA ? scheduleAKey : API_KEY_PUBLIC;
 
+  // Debug logging (REMOVE AFTER DEBUG)
+  if (isScheduleA) {
+    console.log('Schedule A detected!');
+    console.log('Path:', path);
+    console.log('API_KEY_PUBLIC_SCHEDULE_A available:', typeof API_KEY_PUBLIC_SCHEDULE_A !== 'undefined');
+    console.log('Using key:', apiKey);
+  }
+
   const uri = URI(API_LOCATION)
     .path(Array.prototype.concat(API_VERSION, path, '').join('/'))
     .addQuery({ api_key: apiKey });
