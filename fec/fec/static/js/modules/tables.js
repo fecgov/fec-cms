@@ -134,7 +134,6 @@ export function mapSort(order, column) {
 let pagination_legal;
 let legal_type;
 export function getCount(response) {
-  //let pagination_count = response.pagination.count; // eslint-disable-line camelcase
   let pagination_count;
   if (!response.pagination) {
      pagination_legal = true;
@@ -518,7 +517,6 @@ SeekPaginator.prototype.clearIndexes = function() {
   this.indexes = {};
 };
 
-//seek  does not run for rulemakings
 SeekPaginator.prototype.mapQuery = function(data, query) {
   if (!_isEqual(query, this.query)) {
     this.query = _clone(query);
@@ -779,8 +777,8 @@ DataTable_FEC.prototype.ensureWidgets = function() {
   this.$processing = $('<div class="overlay is-loading"></div>').hide();
   this.$body.before(this.$processing);
 
-  if (this.opts.useExport) {
-    this.$exportWidget = $(exportWidgetTemplate({ title: this.opts.title }));
+  if (this.opts.title || this.opts.useExport ) {
+    this.$exportWidget = $(exportWidgetTemplate({ title: this.opts.title, export: this.opts.useExport }));
     this.$widgets.prepend(this.$exportWidget);
     this.$exportButton = $('.js-export');
     this.$exportMessage = $('.js-export-message');
@@ -1006,7 +1004,6 @@ DataTable_FEC.prototype.buildUrl = function(data, paginate, download) {
     { from_hit: `${data.start}`, hits_returned: `${data.length}` }, // eslint-disable-line camelcase
     this.filters || {}
   );
-
   console.log('data.length-query:', `${data.length}`); // eslint-disable-line no-console
   console.log('query:', query); // eslint-disable-line no-console
   } else{

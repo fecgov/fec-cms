@@ -32,10 +32,10 @@
 
     {#- Previous page button -#}
     {% if result_type != 'advisory_opinions' and current_page > 1 %}
-      <a class="paginate_button previous" href="/data/legal/search/{{ result_type }}/
+      <a class="paginate_button previous" href="/data/legal/search/{{ result_type }}/?
         {%- if offset %}offset={{ offset - limit }}&{% endif -%}
         {%- if limit %}limit={{ limit }}&{% endif -%}
-        {%- if query %}?search={{ query }}&{% endif -%}
+        {%- if query %}search={{ query|urlencode|replace('+','%2B') }}&{% endif -%}
         {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
         {%- if case_respondents %}case_respondents={{ case_respondents }}&{% endif -%}
         {%- for category_id in selected_doc_category_ids -%}
@@ -62,8 +62,8 @@
         {%- for case_stat_cite in case_statutory_citation -%}
           case_statutory_citation={{ case_stat_cite }}&
         {%- endfor -%}
-        {%- if q_proximitys -%}
-         {%- for q_proximity in q_proximitys -%}
+        {%- if q_proximities -%}
+         {%- for q_proximity in q_proximities -%}
           q_proximity={{ q_proximity }}&
          {%- endfor -%}
          max_gaps={{ max_gaps }}&
@@ -99,7 +99,7 @@
         <a class="paginate_button" href="/data/legal/search/{{ result_type }}/?
         {%- if page_offset %}offset={{ page_offset }}&{% endif -%}
         {%- if limit %}limit={{ limit }}&{% endif -%}
-        {%- if query %}search={{ query }}&{% endif -%}
+        {%- if query %}search={{ query|urlencode|replace('+','%2B')}}&{% endif -%}
         {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
         {%- if case_respondents %}case_respondents={{ case_respondents }}&{% endif -%}
         {%- for category_id in selected_doc_category_ids -%}
@@ -126,8 +126,8 @@
         {%- for case_stat_cite in case_statutory_citation -%}
           case_statutory_citation={{ case_stat_cite }}&
         {%- endfor -%}
-        {%- if q_proximitys -%}
-         {%- for q_proximity in q_proximitys -%}
+        {%- if q_proximities -%}
+         {%- for q_proximity in q_proximities -%}
           q_proximity={{ q_proximity }}&
          {%- endfor -%}
          max_gaps={{ max_gaps }}&
@@ -156,9 +156,9 @@
     {#- Next page button -#}
     {% if result_type != 'advisory_opinions' and offset + limit < total_all %}
       <a class="paginate_button next" href="/data/legal/search/{{ result_type }}/?
-      {%- if offset %}offset={{ offset + limit }}&{% endif -%}
+      {%- if offset %}offset={{ offset + limit }}&{% else %}offset={{ limit }}&{% endif -%}
       {%- if limit %}limit={{ limit }}&{% endif -%}
-      {%- if query %}search={{ query }}&{% endif -%}
+      {%- if query %}search={{ query|urlencode|replace('+','%2B') }}&{% endif -%}
       {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
         {%- if case_respondents %}case_respondents={{ case_respondents }}&{% endif -%}
         {%- for category_id in selected_doc_category_ids -%}
@@ -185,8 +185,8 @@
         {%- for case_stat_cite in case_statutory_citation -%}
           case_statutory_citation={{ case_stat_cite }}&
         {%- endfor -%}
-        {%- if q_proximitys -%}
-         {%- for q_proximity in q_proximitys -%}
+        {%- if q_proximities -%}
+         {%- for q_proximity in q_proximities -%}
           q_proximity={{ q_proximity }}&
          {%- endfor -%}
          max_gaps={{ max_gaps }}&
