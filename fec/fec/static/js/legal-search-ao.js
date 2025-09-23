@@ -788,7 +788,6 @@ LegalSearchAo.prototype.showDocuments = function(ao) {
             - When there is a keyword query and selected document categories
             - When there are selected document categories and no keyword query
             - When there is a keyword query and no selected document categories */
-          // TODO: These two could be short circuits like above
 
           let category_match = !filters_category_type || filters.ao_doc_category_id.includes(document.ao_doc_category_id) ? true : false;
           let text_match = index in ao.document_highlights || !filters_keyword ? true : false;
