@@ -7,9 +7,9 @@
 import { default as URI } from 'urijs';
 
 import { rulemakings as cols_rulemakings } from '../modules/columns.js';
+import KeywordProximityFilter from '../modules/filters/keyword-proximity-filter.js';
 import KeywordModal from '../modules/keyword-modal.js';
 import { DataTable_FEC } from '../modules/tables.js';
-import KeywordProximityFilter from '../modules/filters/keyword-proximity-filter.js';
 //import { DataTable_FEC, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 // import { default as Filter } from '../modules/filters/filter-base.js';
 // import { default as FilterPanel } from '../modules/filters/filter-panel.js';
@@ -27,7 +27,6 @@ console.log('DOCK IDS:', docs); // eslint-disable-line no-console
  if (params.q) {
      $('input[name="q"]').val(params.q);//.trigger('change')
   }
-
 
 //  NOTE TO SELF:
 // search_input change fires handleKeywordSearchChange on change with no page reload
@@ -71,13 +70,12 @@ const validationStates = {
   valid: 'VALID'
 };
 
-// Hack - Override the original handleNumberChange to add a change event on $keyword0 to force it to recognize changed max_gaps 
+// Hack - Override the original handleNumberChange to add a change event on $keyword0 to force it to recognize changed max_gaps
 KeywordProximityFilter.prototype.handleNumberChange = function(e) {
-  console.log('RAN handleNumberChangeXXX' )
+  console.log('RAN handleNumberChangeXXX' ); // eslint-disable-line no-console
   // trigger a change on the keyword field to force the table to update because
-  
 
-  //console.log("e.target).data('loaded-once')", $(e.target).data('loaded-once'))
+  //console.log("e.target).data('loaded-once')", $(e.target).data('loaded-once')); // eslint-disable-line no-console
   if (e && !$(e.target).data('loaded-once')){
     this.handleInputChange(e);
   }
@@ -85,33 +83,28 @@ KeywordProximityFilter.prototype.handleNumberChange = function(e) {
     if (!e) {
       this.handleInputChange({ target: this.$maxGaps.get(0) });
       if (this.validationState == validationStates.valid) {
-        console.log('RAN TWOXXX')
+        console.log('RAN TWOXXX'); // eslint-disable-line no-console
         // Force the change event
         this.bubbleTheChangeEvent();
       }
     } else {
       e.stopPropagation();
       if (this.validationState == validationStates.valid) {
-         console.log('RAN THREE')
+         console.log('RAN THREE'); // eslint-disable-line no-console
         this.waitForMaxGapsChanges();
       }
     }
   }
-  this.$keyword0.trigger('change')
+  this.$keyword0.trigger('change');
 };
 
-
-$('#category-filters').on('change', function(e) {
- console.log('FORM CHANGED')
+$('#category-filters').on('change', function() {
+ console.log('FORM CHANGED'); // eslint-disable-line no-console
   //$(this).triggerHandler('change')
 
-})
-
- 
+});
 
 ///// /END NEW FOR MAX-GAPS ////
-
-
 
 // Change type to button to disable native submit
  $('.modal__form [type="submit"]').attr('type', 'button');
