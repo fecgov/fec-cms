@@ -167,11 +167,15 @@
     const pdfViewerFrame = document.querySelector('iframe.embed-viewer');
     // If the objects exist, put the URL and PDF into it/them
     if (pdfViewerObj || pdfViewerFrame) urlHolder.innerHTML = urlHtml;
+
+    // TODO: REMOVE THIS
+    const testURL = url.replace('dev', 'stage');
+
     if (pdfViewerObj) {
       pdfViewerObj.innerHTML = '';//'<span class="ul"></span><span class="ur"></span><span class="ll"></span><span class="lr"></span>';
-      pdfViewerObj.data = url;
+      pdfViewerObj.data = testURL; // url;
     }
-    if (pdfViewerFrame) pdfViewerFrame.src = url;
+    if (pdfViewerFrame) pdfViewerFrame.src = testURL; // url;
 
     // Update this page's URL
     const thisUrl = new URL(location);

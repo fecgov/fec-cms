@@ -27,7 +27,7 @@ class AddSecureHeaders(MiddlewareMixin):
                 "https://www.google-analytics.com",
             ],
             "font-src": ["'self'"],
-            "frame-ancestors": ["*.fec.gov"],
+            "frame-ancestors": ["'self'", "https://stage.fec.gov"],
             "frame-src": [
                 "'self'",
                 "https://www.google.com/recaptcha/",
