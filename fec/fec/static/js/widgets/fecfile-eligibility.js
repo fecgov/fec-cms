@@ -854,8 +854,8 @@ const fullData = {
     },
     {
       navLabel: '',
-      title: 'Does your committee anticipate allocating financial activity between federal and nonfederal\u00A0accounts?',
-      title_example: 'Example: Form 3X for reporting receipts and\u00A0disbursements',
+      title: 'Does your committee anticipate allocating financial activity between federal and nonfederal accounts and/or anticipate receiving bundled contributions from lobbyists and lobbyist/registrant\u00A0PACs?',
+      title_example: '',
       helpTitle: 'What does it mean to allocate between federal and non-federal accounts?',
       help: 'A separate federal account into which funds from either a committee’s federal and nonfederal accounts, \
       or (for party committees) from its federal and Levin accounts, are deposited solely to pay expenses that must \
