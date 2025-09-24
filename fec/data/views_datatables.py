@@ -280,7 +280,7 @@ def reports(request, form_type):
         'columns': constants.table_columns['reports-' + form_type.lower()],
         'social_image_identifier': 'data',
     })
-import json
+
 def rulemaking(request):
     #rulemakings = api_caller._call_api('rulemaking/search')
     return render(request, 'datatable.jinja', {

@@ -3,12 +3,14 @@
  * ---------------------
  *
  */
+
 import { default as URI } from 'urijs';
 
 import { rulemakings as cols_rulemakings } from '../modules/columns.js';
 import KeywordModal from '../modules/keyword-modal.js';
 import { DataTable_FEC } from '../modules/tables.js';
-// import { DataTable_FEC, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
+import KeywordProximityFilter from '../modules/filters/keyword-proximity-filter.js';
+//import { DataTable_FEC, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
 // import { default as Filter } from '../modules/filters/filter-base.js';
 // import { default as FilterPanel } from '../modules/filters/filter-panel.js';
 // import { default as TagList } from '../modules/filters/filter-tags.js';
@@ -26,11 +28,12 @@ console.log('DOCK IDS:', docs); // eslint-disable-line no-console
      $('input[name="q"]').val(params.q);//.trigger('change')
   }
 
+
 //  NOTE TO SELF:
 // search_input change fires handleKeywordSearchChange on change with no page reload
-// keyword_modal search_input submit fires keyworkModal.handleSubmit() which fires handleKeywordSearchChange()
+// keyword_modal search_input submit fires keyworkModal.handleSubmit() which fires handleKeywordSearchChange() with no reload
 
-//Override KeywordModal.prototype.handleSubmit to look use 'q' parameter instead of 'search' parameter
+//Override KeywordModal.prototype.handleSubmit to use 'q' parameter instead of 'search' parameter and not reload page
 KeywordModal.prototype.handleSubmit = function(e) {
   e.preventDefault();
   const searchQuery = this.generateQueryString();
@@ -59,7 +62,58 @@ KeywordModal.prototype.handleSubmit = function(e) {
     new KeywordModal();
   }
 
-// Change type to button to disable submit
+///// NEW FOR MAX-GAPS ISSUE ////
+
+/// WORKS!!
+const validationStates = {
+  empty: 'EMPTY',
+  incomplete: 'INCOMPLETE',
+  valid: 'VALID'
+};
+
+// Hack - Override the original handleNumberChange to add a change event on $keyword0 to force it to recognize changed max_gaps 
+KeywordProximityFilter.prototype.handleNumberChange = function(e) {
+  console.log('RAN handleNumberChangeXXX' )
+  // trigger a change on the keyword field to force the table to update because
+  
+
+  //console.log("e.target).data('loaded-once')", $(e.target).data('loaded-once'))
+  if (e && !$(e.target).data('loaded-once')){
+    this.handleInputChange(e);
+  }
+  else {
+    if (!e) {
+      this.handleInputChange({ target: this.$maxGaps.get(0) });
+      if (this.validationState == validationStates.valid) {
+        console.log('RAN TWOXXX')
+        // Force the change event
+        this.bubbleTheChangeEvent();
+      }
+    } else {
+      e.stopPropagation();
+      if (this.validationState == validationStates.valid) {
+         console.log('RAN THREE')
+        this.waitForMaxGapsChanges();
+      }
+    }
+  }
+  this.$keyword0.trigger('change')
+};
+
+
+$('#category-filters').on('change', function(e) {
+ console.log('FORM CHANGED')
+  //$(this).triggerHandler('change')
+
+})
+
+ 
+
+///// /END NEW FOR MAX-GAPS ////
+
+
+
+// Change type to button to disable native submit
  $('.modal__form [type="submit"]').attr('type', 'button');
 
    $('#search-input').on('change', function(e) {
@@ -101,7 +155,7 @@ KeywordModal.prototype.handleSubmit = function(e) {
      .removeSearch('q');
    }
 
-  // window.history.replaceState(
+  //window.history.replaceState(
   window.history.pushState(
       null,
       '',
@@ -119,8 +173,8 @@ KeywordModal.prototype.handleSubmit = function(e) {
     order: [[0, 'desc']],
     useFilters: true,
     useExport: false,
-    // Initiate the field value and fire change for keyword if included in link or copy/pasted url
-    // TODO: Don't think I need to also add tage here...end uo with two tags one I added trigger('change')
+    // Initiate the field value and fire change for keyword if included in querystring in a link or copy/pasted url
+    // TODO: Don't think I need to also add tags here(commented out)...ends up with two tags once I added trigger('change')
     initComplete: function () {
        const queryParams = URI.parseQuery(window.location.search);
       if (queryParams.q) {
@@ -130,6 +184,8 @@ KeywordModal.prototype.handleSubmit = function(e) {
         //   <button class="button js-close tag__remove"><span class="u-visually-hidden">Remove</span></button>
         //   </div></li>`);
       }
+
+      // Temporrily verify page load/reload or not
       console.log('INIT'); // eslint-disable-line no-console
     }
   });
