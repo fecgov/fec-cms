@@ -188,6 +188,77 @@ def admin_fine_page(request, admin_fine_no):
     })
 
 
+def rulemaking(request, rm_no):
+
+    rulemaking = api_caller.load_legal_rulemaking(rm_no)
+    # rm_no always open for comment: 0033-99
+    # other rm_no: 2024-10, 2024-09, 2024-08, 2024-07
+    # rulemaking = api_caller.load_legal_rulemaking('2024-10')
+
+    if not rm_no:
+        raise Http404()
+
+    key_documents = []
+    for key_doc in rulemaking['key_documents']:
+        key_documents.append({
+            'doc_date': key_doc['doc_date'],
+            'doc_id': key_doc['doc_id'],
+            'label': key_doc['doc_type_label'],  # This is inconsistent
+            # 'label': key_doc['doc_description'],  # This is inconsistent
+            'url': key_doc['url'],
+        })
+
+    documents = []
+    # The base items in 'documents' are grouped by their rulemaking stage. e.g. Notice of Avail, Commencing Doc
+    for stage in rulemaking['documents']:
+        new_rm_stage = {}
+        new_rm_stage['doc_date'] = stage['doc_date']
+        new_rm_stage['doc_id'] = stage['doc_id']
+        new_rm_stage['label'] = stage['doc_type_label']
+        # new_rm_stage['doc_stage'] = stage['doc_type_label']  # e.g. Notice of Avail, Commencing Document
+        new_rm_stage['url'] = stage['url']
+
+        new_rm_stage['doc_entities'] = []
+        for entity in stage['doc_entities']:
+            new_rm_stage['doc_entities'].append({'name': entity['name'], 'role': entity['role']})
+
+        new_rm_stage['secondary_docs'] = []
+        for type in stage['level_2_labels']:
+            sub_doc = {}
+            sub_doc['label'] = type['level_2_label']
+            sub_doc['documents'] = []
+            for doc in type['level_2_docs']:
+                new_sub_doc = {}
+                new_sub_doc['doc_date'] = doc['doc_date']
+                new_sub_doc['doc_id'] = doc['doc_id']
+                new_sub_doc['label'] = doc['doc_type_label']
+                new_sub_doc['url'] = doc['url']
+
+                new_sub_doc['doc_entities'] = []
+                for entity in doc['doc_entities']:
+                    new_sub_doc['doc_entities'].append({'name': entity['name'], 'role': entity['role']})
+
+                sub_doc['documents'].append(new_sub_doc)
+
+            new_rm_stage['secondary_docs'].append(sub_doc)
+
+        documents.append(new_rm_stage)
+
+    return render(request, 'rulemaking.jinja', {
+        'is_open_for_comment': rulemaking['is_open_for_comment'],
+        'comment_close_date': rulemaking['comment_close_date'] or '',
+        'documents': documents,
+        'key_documents': key_documents,
+        'rm_entities': rulemaking['rm_entities'],
+        'rm_name': rulemaking['rm_name'],
+        'rm_no': rulemaking['rm_no'],
+        'rm_number': rulemaking['rm_number'],
+        'parent': 'legal',
+        'social_image_identifier': 'legal',
+        'could_testify': True,
+    })
+
+
 # Transform boolean queries for eCFR API
 # Query string:
 # ((coordinated | communications) | (in-kind AND contributions) |
