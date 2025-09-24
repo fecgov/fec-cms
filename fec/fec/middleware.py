@@ -27,10 +27,12 @@ class AddSecureHeaders(MiddlewareMixin):
                 "https://www.google-analytics.com",
             ],
             "font-src": ["'self'"],
+            "frame-ancestors": ["*.fec.gov"],
             "frame-src": [
                 "'self'",
                 "https://www.google.com/recaptcha/",
                 "https://www.youtube.com/",
+                "*.fec.gov/",
             ],
             "img-src": [
                 "'self'",
@@ -40,6 +42,9 @@ class AddSecureHeaders(MiddlewareMixin):
                 "https://*.ssl.fastly.net",
                 "https://www.google-analytics.com",
                 "https://tiles.stadiamaps.com/tiles/",
+            ],
+            "object-src": [
+                "*.fec.gov",
             ],
             "script-src": [
                 "'self'",
@@ -58,7 +63,6 @@ class AddSecureHeaders(MiddlewareMixin):
                 "'unsafe-inline'",
                 "data:",
             ],
-            "object-src": ["'none'"],
             # Google's requirements found at https://developers.google.com/tag-manager/web/csp
             #
             # TODO: To get away from unsafe-inline, we could look into hashing our inline script elements:
