@@ -5,43 +5,79 @@ from django.conf import settings
 from legal import views
 
 urlpatterns = [
-    re_path(r'^data/legal/advisory-opinions/(?P<ao_no>[\w-]+)/$',
-            views.advisory_opinion_page),
-    re_path(r'^data/legal/advisory-opinions/$', views.advisory_opinions_landing),
-    re_path(r'^data/legal/matter-under-review/(?P<mur_no>[\w-]+)/$',
-            views.mur_page),
-    re_path(r'^data/legal/alternative-dispute-resolution/(?P<adr_no>[\w-]+)/$',
-            views.adr_page),
-    re_path(r'^data/legal/administrative-fine/(?P<admin_fine_no>[\w-]+)/$',
-            views.admin_fine_page),
-    re_path(r'^data/legal/statutes/$', views.statutes_landing),
-    # Legal search results
-    re_path(r'^data/legal/search/$', views.legal_search),
+    # AFs | Admin fines, Administrative fines
+    # TODO: landing page?
+    re_path(r'^legal/admin-fines/(?P<admin_fine_no>[\w-]+)/$', views.admin_fine_page),  # single
+    re_path(r'^legal/administrative-fines/(?P<admin_fine_no>[\w-]+)/$', views.admin_fine_page),  # single
+    re_path(r'^data/legal/administrative-fine/(?P<admin_fine_no>[\w-]+)/$', views.admin_fine_page),
 
-    re_path(r'^data/legal/search/advisory-opinions/$', views.legal_doc_search_ao),
-    re_path(r'^data/legal/search/enforcement/$', views.legal_doc_search_mur),
-    re_path(r'^data/legal/search/murs/$', views.legal_doc_search_mur),
-    re_path(r'^data/legal/search/regulations/$',
-            views.legal_doc_search_regulations),
-    re_path(r'^data/legal/search/statutes/$', views.legal_doc_search_statutes),
+
+    # AOs | Advisory opinions
+    re_path(r'^legal/advisory-opinions/$', views.advisory_opinions_landing),  # landing
+    re_path(r'^data/legal/advisory-opinions/$', views.advisory_opinions_landing),  # TODO: retire this one
+
+    re_path(r'^legal/advisory-opinions/(?P<ao_no>[\w-]+)/$', views.advisory_opinion_page),  # single
+    re_path(r'^data/legal/advisory-opinions/(?P<ao_no>[\w-]+)/$',
+            views.advisory_opinion_page),  # TODO: retire this one
+
+    re_path(r'^legal/search/advisory-opinions/$', views.legal_doc_search_ao),  # search
+    re_path(r'^data/legal/search/advisory-opinions/$', views.legal_doc_search_ao),  # TODO: retire this one
+
+
+    # ADRs | Alternative Dispute Resolutions
+    # TODO: landing page?
+    re_path(r'^legal/alternative-dispute-resolutions/(?P<adr_no>[\w-]+)/$', views.adr_page),  # single
+    re_path(r'^data/legal/alternative-dispute-resolution/(?P<adr_no>[\w-]+)/$',
+            views.adr_page),  # TODO: retire this one
+
+
+    # MURs | Matters Under Review
+    # TODO: landing page?
+    re_path(r'^legal/matters-under-review/(?P<mur_no>[\w-]+)/$', views.mur_page),  # single
+    re_path(r'^data/legal/matter-under-review/(?P<mur_no>[\w-]+)/$', views.mur_page),  # TODO: retire this one
+
+    re_path(r'^legal/search/murs/$', views.legal_doc_search_mur),  # search, datatable
+    re_path(r'^legal/search/matters-under-review/$', views.legal_doc_search_mur),  # search, datatable
+    re_path(r'^data/legal/search/murs/$', views.legal_doc_search_mur),  # TODO: retire this one
+
+    re_path(r'^legal/search/enforcement/$', views.legal_doc_search_mur),
+    re_path(r'^data/legal/search/enforcement/$', views.legal_doc_search_mur),  # TODO: retire this one
+
+
+    # Statutes
+    re_path(r'^legal/statutes/$', views.statutes_landing),  # landing
+    re_path(r'^data/legal/statutes/$', views.statutes_landing),  # TODO: retire this one
+
+    # TODO: single?
+
+    re_path(r'^legal/search/statutes/$', views.legal_doc_search_statutes),  # search
+    re_path(r'^data/legal/search/statutes/$', views.legal_doc_search_statutes),  # TODO: retire this one
+
+    re_path(r'^legal/search/regulations/$', views.legal_doc_search_regulations),
+    re_path(r'^data/legal/search/regulations/$', views.legal_doc_search_regulations),  # TODO: retire this one
+
+
+    # Search
+    re_path(r'^legal/search/$', views.legal_search),  # legal search landing page
+    re_path(r'^data/legal/search/$', views.legal_search),  # TODO: retire this one
 ]
 
+# TODO: do we still need this feature flag?
 if settings.FEATURES['adrs']:
-    urlpatterns += re_path(
-        r'^data/legal/search/adrs/$', views.legal_doc_search_adr
-    ),
+    urlpatterns += re_path(r'^legal/search/adrs/$', views.legal_doc_search_adr),
+    urlpatterns += re_path(r'^data/legal/search/adrs/$', views.legal_doc_search_adr),  # TODO: retire this one
 
+# TODO: do we still need this feature flag?
 if settings.FEATURES['afs']:
     urlpatterns += [
         # Redirect from `admin_fines` to `admin-fines`
         re_path(
             r'^data/legal/search/admin_fines/$',
-            RedirectView.as_view(url='/data/legal/search/admin-fines/', query_string=True)
-        ),
+            RedirectView.as_view(url='/legal/search/admin-fines/', query_string=True)
+        ),  # TODO: do we still need this redirect?
         # The actual `admin-fines` view
-        re_path(
-            r'^data/legal/search/admin-fines/$', views.legal_doc_search_af
-        ),
+        re_path(r'^legal/search/admin-fines/$', views.legal_doc_search_af),  # landing page / datatable
+        re_path(r'^data/legal/search/admin-fines/$', views.legal_doc_search_af),  # TODO: retire this one
     ]
 
 # Legal document redirect endpoint
