@@ -5,5 +5,7 @@ camelcase
 draftail
 Draftail
 labelledby
+rulemaking
+rulemakings
 wagtailcore
 wagtailimages
