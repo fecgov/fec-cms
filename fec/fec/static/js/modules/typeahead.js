@@ -50,22 +50,6 @@ function formatAuditCommittee(result) {
   };
 }
 
-function formatRulemaking(result) {
-  return {
-    name: result.rm_name,
-    id: result.rm_no,
-    type: 'rulemaking'
-  };
-}
-
-function formatRulemakingName(result) {
-  return {
-    name: result.rm_name,
-    id: result.rm_no,
-    type: 'rulemaking'
-  };
-}
-
 function formatAuditCandidate(result) {
   return {
     name: result.name,
@@ -91,26 +75,6 @@ function getUrl_names(resource) {
     .readable();
 }
 
-function getUrl_search(resource) {
-  return URI(window.API_LOCATION)
-    .path([window.API_VERSION, 'rulemaking', resource, ''].join('/'))
-    .query({
-      rm_no: '%QUERY',
-      api_key: window.API_KEY_PUBLIC
-    })
-    .readable();
-}
-
-function getUrl_search_name(resource) {
-  return URI(window.API_LOCATION)
-    .path([window.API_VERSION, 'rulemaking', resource, ''].join('/'))
-    .query({
-      rm_name: '%QUERY',
-      api_key: window.API_KEY_PUBLIC
-    })
-    .readable();
-}
-
 function getUrl_legal(resource) {
   // Which parameters do we know we're going to query?
   const queryParams = {
@@ -128,8 +92,6 @@ function getUrl_legal(resource) {
 }
 
 const engineOpts = {
-  // datumTokenizer: Bloodhound.tokenizers.obj.ngram('value'),
-  // queryTokenizer: Bloodhound.tokenizers.ngram,
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   limit: 10
@@ -165,26 +127,6 @@ const auditCommitteeEngine = createEngine({
     wildcard: '%QUERY',
     transform: function(response) {
       return _map(response.results, formatAuditCommittee);
-    }
-  }
-});
-
-const rulemakingNumberEngine = createEngine({
-  remote: {
-    url: getUrl_search('search'),
-    wildcard: '%QUERY',
-    transform: function(response) {
-      return _map(response.rulemakings, formatRulemaking);
-    }
-  }
-});
-
-const rulemakingNameEngine = createEngine({
-  remote: {
-    url: getUrl_search_name('search'),
-    wildcard: '%QUERY',
-    transform: function(response) {
-      return _map(response.rulemakings, formatRulemakingName);
     }
   }
 });
@@ -265,38 +207,6 @@ const auditCommitteeDataset = {
     header: '<span class="tt-suggestion__header">Select a committee:</span>',
     pending:
       '<span class="tt-suggestion__loading">Loading committees&hellip;</span>',
-    notFound: compileHBS(''), // This has to be empty to not show anything
-    suggestion: compileHBS(
-      '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
-    )
-  }
-};
-
-const rulemakingNumberDataset = {
-  name: 'rulemaking',
-  display: 'id',
-  limit: 10,
-  source: rulemakingNumberEngine,
-  templates: {
-    header: '<span class="tt-suggestion__header">Select a regulation:</span>',
-    pending:
-      '<span class="tt-suggestion__loading">Loading regulations&hellip;</span>',
-    notFound: compileHBS(''), // This has to be empty to not show anything
-    suggestion: compileHBS(
-      '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
-    )
-  }
-};
-
-const rulemakingNameDataset = {
-  name: 'rulemaking',
-  display: 'id',
-  limit: 10,
-  source: rulemakingNameEngine,
-  templates: {
-    header: '<span class="tt-suggestion__header">Select a regulation:</span>',
-    pending:
-      '<span class="tt-suggestion__loading">Loading regulations&hellip;</span>',
     notFound: compileHBS(''), // This has to be empty to not show anything
     suggestion: compileHBS(
       '<span class="tt-suggestion__name">{{ name }} ({{ id }})</span>'
@@ -481,8 +391,6 @@ export const datasets = {
   auditCandidates: auditCandidateDataset,
   auditCommittees: auditCommitteeDataset,
   regulations: regulationDataset,
-  rulemakingNumber: rulemakingNumberDataset,
-  rulemakingName: rulemakingNameDataset,
   aoRegulatoryCitations: aoRegulatoryCitationDataset,
   aoStatutoryCitations: aoStatutoryCitationDataset,
   caseRegulatoryCitations: caseRegulatoryCitationDataset,

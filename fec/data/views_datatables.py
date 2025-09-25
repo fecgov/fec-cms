@@ -284,6 +284,7 @@ def reports(request, form_type):
 def rulemaking(request):
     #rulemakings = api_caller._call_api('rulemaking/search')
     return render(request, 'datatable.jinja', {
+        'has_keyword_modal': True,
         'parent': 'data',
         'result_type': 'rulemakings',
         'slug': 'rulemakings',

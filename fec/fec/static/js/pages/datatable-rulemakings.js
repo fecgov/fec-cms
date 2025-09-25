@@ -1,8 +1,6 @@
 /**
- * Rulemakings datatable page {@link //}
- * ---------------------
- *
- */
+ * Rulemakings datatable page {@link /legal-resources/rulemakings}
+ **/
 
 import { default as URI } from 'urijs';
 
@@ -10,12 +8,6 @@ import { rulemakings as cols_rulemakings } from '../modules/columns.js';
 import KeywordProximityFilter from '../modules/filters/keyword-proximity-filter.js';
 import KeywordModal from '../modules/keyword-modal.js';
 import { DataTable_FEC } from '../modules/tables.js';
-//import { DataTable_FEC, OffsetPaginator, SeekPaginator, modalRenderFactory, modalRenderRow } from '../modules/tables.js';
-// import { default as Filter } from '../modules/filters/filter-base.js';
-// import { default as FilterPanel } from '../modules/filters/filter-panel.js';
-// import { default as TagList } from '../modules/filters/filter-tags.js';
-// import { updateQuery } from '../modules/urls.js';
-//import { default as KeywordModal } from '../legal.js';
 
 $(function() {
 const params = new URLSearchParams(window.location.search);
@@ -28,7 +20,6 @@ console.log('DOCK IDS:', docs); // eslint-disable-line no-console
      $('input[name="q"]').val(params.q);//.trigger('change')
   }
 
-//  NOTE TO SELF:
 // search_input change fires handleKeywordSearchChange on change with no page reload
 // keyword_modal search_input submit fires keyworkModal.handleSubmit() which fires handleKeywordSearchChange() with no reload
 
@@ -47,23 +38,12 @@ KeywordModal.prototype.handleSubmit = function(e) {
  // Put value in field and trigger handleKeywordSearchChange()
  $('input[name="q"]').val(searchQuery).trigger('change');
 
-  //window.location = this.$form.attr('action') + query.toString();
-
-  // window.history.pushState(
-  //   null,
-  //   '',
-  //   window.location.pathname + query.toString()
-  //   );
-
 };
 
  if (document.querySelector('.js-keyword-modal')) {
     new KeywordModal();
   }
 
-///// NEW FOR MAX-GAPS ISSUE ////
-
-/// WORKS!!
 const validationStates = {
   empty: 'EMPTY',
   incomplete: 'INCOMPLETE',
@@ -72,9 +52,7 @@ const validationStates = {
 
 // Hack - Override the original handleNumberChange to add a change event on $keyword0 to force it to recognize changed max_gaps
 KeywordProximityFilter.prototype.handleNumberChange = function(e) {
-  console.log('RAN handleNumberChangeXXX' ); // eslint-disable-line no-console
-  // trigger a change on the keyword field to force the table to update because
-
+  console.log('RAN handleNumberChange NEW' ); // eslint-disable-line no-console
   //console.log("e.target).data('loaded-once')", $(e.target).data('loaded-once')); // eslint-disable-line no-console
   if (e && !$(e.target).data('loaded-once')){
     this.handleInputChange(e);
@@ -83,14 +61,14 @@ KeywordProximityFilter.prototype.handleNumberChange = function(e) {
     if (!e) {
       this.handleInputChange({ target: this.$maxGaps.get(0) });
       if (this.validationState == validationStates.valid) {
-        console.log('RAN TWOXXX'); // eslint-disable-line no-console
+        console.log('RAN TWO NEW'); // eslint-disable-line no-console
         // Force the change event
         this.bubbleTheChangeEvent();
       }
     } else {
       e.stopPropagation();
       if (this.validationState == validationStates.valid) {
-         console.log('RAN THREE'); // eslint-disable-line no-console
+         console.log('RAN THREE NEW'); // eslint-disable-line no-console
         this.waitForMaxGapsChanges();
       }
     }
@@ -100,11 +78,8 @@ KeywordProximityFilter.prototype.handleNumberChange = function(e) {
 
 $('#category-filters').on('change', function() {
  console.log('FORM CHANGED'); // eslint-disable-line no-console
-  //$(this).triggerHandler('change')
 
 });
-
-///// /END NEW FOR MAX-GAPS ////
 
 // Change type to button to disable native submit
  $('.modal__form [type="submit"]').attr('type', 'button');
@@ -136,7 +111,7 @@ $('#category-filters').on('change', function() {
   }
 
    let query;
-   //TODO: just use newVal
+   //TODO: just use newVal?
    const searchQuery = $('input[name="q"]').val();
    if (newVal != '') {
     query = URI(window.location.search)
@@ -156,18 +131,22 @@ $('#category-filters').on('change', function() {
       );
 };
 
+// TODO:Add comment
+$(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity"]', function() {
+   $('input[name="max_gaps"]').attr('placeholder','0').val('');
+});
+
   const $table = $('#results');
   new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Rulemakings',
     path: ['rulemaking', 'search'],
     columns: cols_rulemakings,
-    //query: { },
     order: [[0, 'desc']],
     useFilters: true,
     useExport: false,
     // Initiate the field value and fire change for keyword if included in querystring in a link or copy/pasted url
-    // TODO: Don't think I need to also add tags here(commented out)...ends up with two tags once I added trigger('change')
+    // TODO: DO I NEED THIS AT ALL?, ALSO - If so Don't think I need to also add tags here(commented out)...ends up with two tags once I added trigger('change')
     initComplete: function () {
        const queryParams = URI.parseQuery(window.location.search);
       if (queryParams.q) {
@@ -180,6 +159,7 @@ $('#category-filters').on('change', function() {
 
       // Temporrily verify page load/reload or not
       console.log('INIT'); // eslint-disable-line no-console
+
     }
   });
 

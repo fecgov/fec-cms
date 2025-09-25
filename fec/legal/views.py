@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 
 import datetime
 import re
+import logging
 
 from data import api_caller
 from data import ecfr_caller
 from data import constants
+
+logger = logging.getLogger(__name__)
 
 
 def parse_query(q):
@@ -246,7 +249,6 @@ def legal_search(request):
         'parent': 'legal',
         'query': original_query,
         'q_proximities': None,
-        'q_proximitys': None,
         'results': results,
         'result_type': result_type,
         'category_order': get_legal_category_order(results, result_type),
@@ -363,7 +365,7 @@ def legal_doc_search_ao(request):
             doc['category_match'] = str(doc['ao_doc_category_id']) in ao_doc_category_ids
             # Checks for document keyword text match
             doc['text_match'] = str(index) in ao['document_highlights']
-        
+
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
         'parent': 'legal',
         'results': results,
@@ -395,7 +397,6 @@ def legal_doc_search_ao(request):
         'ao_year': ao_year,
         'ao_year_opts': ao_year_opts,
         'is_loading': True,  # Indicate that the page is loading initially
-        
     })
 
 
@@ -421,7 +422,7 @@ def legal_doc_search_mur(request):
     case_statutory_citation = request.GET.getlist('case_statutory_citation', [])
     primary_subject_id = request.GET.get('primary_subject_id', '')
     secondary_subject_id = request.GET.get('secondary_subject_id', '')
-    q_proximitys = request.GET.getlist('q_proximity', [])
+    q_proximities = request.GET.getlist('q_proximity', [])
     max_gaps = request.GET.get('max_gaps', '0')
 
     query, query_exclude = parse_query(original_query)
@@ -457,10 +458,8 @@ def legal_doc_search_mur(request):
         mur_disposition_category_id=mur_disposition_category_ids,
         primary_subject_id=primary_subject_id,
         secondary_subject_id=secondary_subject_id,
-        q_proximity = q_proximitys,
-        max_gaps = max_gaps,
-        
-
+        q_proximity=q_proximities,
+        max_gaps=max_gaps,
     )
 
     # Define MUR document categories dictionary
@@ -555,8 +554,8 @@ def legal_doc_search_mur(request):
         'case_citation_require_all': case_citation_require_all,
         'case_regulatory_citation': case_regulatory_citation,
         'case_statutory_citation': case_statutory_citation,
-        'q_proximitys': q_proximitys,
-        'max_gaps': max_gaps,      
+        'q_proximities': q_proximities,
+        'max_gaps': max_gaps,
     })
 
 
@@ -576,7 +575,7 @@ def legal_doc_search_adr(request):
     case_min_close_date = request.GET.get('case_min_close_date', '')
     case_max_close_date = request.GET.get('case_max_close_date', '')
     case_doc_category_ids = request.GET.getlist('case_doc_category_id', [])
-    q_proximitys = request.GET.getlist('q_proximity', [])
+    q_proximities = request.GET.getlist('q_proximity', [])
     max_gaps = request.GET.get('max_gaps', '0')
 
     query, query_exclude = parse_query(original_query)
@@ -598,8 +597,8 @@ def legal_doc_search_adr(request):
         case_min_close_date=case_min_close_date,
         case_max_close_date=case_max_close_date,
         case_doc_category_id=case_doc_category_ids,
-        q_proximity = q_proximitys,
-        max_gaps = max_gaps,
+        q_proximity=q_proximities,
+        max_gaps=max_gaps,
     )
 
     # Define ADR document categories dictionary
@@ -642,7 +641,7 @@ def legal_doc_search_adr(request):
         'selected_doc_category_ids': case_doc_category_ids,
         'selected_doc_category_names': adr_document_category_names,
         'is_loading': True,  # Indicate that the page is loading initially
-        'q_proximitys': q_proximitys,
+        'q_proximities': q_proximities,
         'max_gaps': max_gaps,
     })
 
@@ -658,7 +657,7 @@ def legal_doc_search_af(request):
     case_max_penalty_amount = request.GET.get('case_max_penalty_amount', '')
     case_min_document_date = request.GET.get('case_min_document_date', '')
     case_max_document_date = request.GET.get('case_max_document_date', '')
-    q_proximitys = request.GET.getlist('q_proximity', [])
+    q_proximities = request.GET.getlist('q_proximity', [])
     max_gaps = request.GET.get('max_gaps', '0')
 
     query, query_exclude = parse_query(original_query)
@@ -675,8 +674,8 @@ def legal_doc_search_af(request):
         case_max_penalty_amount=case_max_penalty_amount,
         case_min_document_date=case_min_document_date,
         case_max_document_date=case_max_document_date,
-        q_proximity = q_proximitys,
-        max_gaps = max_gaps,
+        q_proximity=q_proximities,
+        max_gaps=max_gaps,
 
     )
     for af in results['admin_fines']:
@@ -698,7 +697,7 @@ def legal_doc_search_af(request):
         'social_image_identifier': 'legal',
         'is_loading': True,  # Indicate that the page is loading initially
 
-        'q_proximitys': q_proximitys,
+        'q_proximities': q_proximities,
         'max_gaps': max_gaps,
     })
 
@@ -740,6 +739,7 @@ def legal_doc_search_regulations(request):
         'social_image_identifier': 'legal',
     })
 
+
 def legal_doc_search_statutes(request):
     original_query = request.GET.get('search', '')
     results = {}
@@ -762,17 +762,6 @@ def legal_doc_search_statutes(request):
         'social_image_identifier': 'legal',
     })
 
-# def rulemakings(request):
-#         return render(request, 'datatable.jinja', {
-#         #'query':''),
-#         'parent': 'legal',
-#         'result_type': 'rulemakings',
-#         'slug': 'rulemakings',
-#         'title': 'Rulemakings',
-#         'columns': constants.table_columns['rulemakings'],
-#         'social_image_identifier': 'data',
-#     })
-
 
 def get_legal_category_order(results, result_type):
     """ Return categories in pre-defined order, moving categories with empty
@@ -788,3 +777,31 @@ def get_legal_category_order(results, result_type):
     category_order.insert(0, category_order.pop(category_order.index(result_type)))
 
     return category_order
+
+
+def legal_document_redirect(request):
+    """
+    Redirects to the appropriate legal document on the main website based on filename.
+    This endpoint is designed to work with proxy redirects from legacy domains.
+
+    Query parameter:
+    - filename: The document filename to search for (without .pdf extension)
+
+    Examples:
+    - /legal/search/documents/?filename=1069112
+    - /legal/search/documents/?filename=00000182
+    - /legal/search/documents/?filename=12190292128
+    """
+    filename = request.GET.get('filename', '').strip()
+    if not filename:
+        raise Http404("Filename parameter is required")
+
+    try:
+        document_url = api_caller.find_legal_document_by_filename(filename)
+        if document_url:
+            return HttpResponseRedirect(document_url)
+        else:
+            raise Http404(f"Document with filename '{filename}' not found")
+    except Exception as e:
+        logger.error(f"Error searching for filename {filename}: {e}")
+        raise Http404("Unable to retrieve document information")
