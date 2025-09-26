@@ -84,6 +84,11 @@ $('#category-filters').on('change', function() {
 // Change type to button to disable native submit
  $('.modal__form [type="submit"]').attr('type', 'button');
 
+ //Need better way to solve this, does not happen on other datatables. Problem: Selected items in checkbox dropdown submit form when clicked
+$(document).on('click', '.dropdown__item--selected.is-checked', function(e) {
+  return false
+})
+
    $('#search-input').on('change', function(e) {
        console.log('RAN on(change)'); // eslint-disable-line no-console
        handleKeywordSearchChange(e);
