@@ -5,7 +5,7 @@
 {% import 'macros/filters/keyword-proximity.jinja' as proximity %}
 {% import 'macros/legal.jinja' as legal %}
 {% import 'macros/filters/checkbox.jinja' as checkbox %}
-{% import 'macros/filters/years.jinja' as years %}
+{% import 'macros/filters/dropdown-json.jinja' as dropdown %}
 
 
 {% block filters %}
@@ -20,7 +20,7 @@
     </div>
     {{ text.field('rm_no','Reg Number', helper_text='Example: 2016-01') }}
     {{ text.field('rm_name','Reg Name') }}
-    {{ years.years('rm_year', 'Reg year') }}
+    {{ dropdown.select_single_flat_list('rm_year', 'Reg year', options=rm_year_opts, hide_help=true, first_opt_no_value_label='Any' )}}
     {{ checkbox.checkbox_dropdown(
       name='doc_category_id',
       label='Document type',

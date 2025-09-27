@@ -7,6 +7,7 @@ from data import api_caller
 from data import constants
 from data import utils
 
+import datetime
 
 def candidates(request):
     candidates = api_caller._call_api('candidates')
@@ -282,7 +283,8 @@ def reports(request, form_type):
     })
 
 def rulemaking(request):
-    #rulemakings = api_caller._call_api('rulemaking/search')
+    rm_year_opts = {year: year for year in range(datetime.datetime.now().year, 1988, -1)}
+   
     return render(request, 'datatable.jinja', {
         'has_keyword_modal': True,
         'parent': 'data',
@@ -290,5 +292,6 @@ def rulemaking(request):
         'slug': 'rulemakings',
         'title': 'Rulemakings',
         'columns': constants.table_columns['rulemakings'],
+        'rm_year_opts': rm_year_opts,
         'social_image_identifier': 'data',
     })
