@@ -178,6 +178,49 @@
         }
       }
     }
+
+// Structure for document list-item (li) in rulemakings table name/documents column:
+
+// <li class="document-container">
+//   <div class="document-details">
+//     <div class="post--icon">
+//       <span class="icon icon--inline--left i-document"></span>
+//       <a href="/files/legal/rulemakings/1990-02/97261/1990-02_V4hearing.pdf" title="Suppl Info from Witness" data-category="Suppl Info from Witness">Suppl Info from Witness</a>
+//     </div>
+//     <div class="tag tag--primary">Hearing</div>
+//   </div>
+//   <div class="document-date">12/19/1990</div>
+// </li>
+
+    &.column--rulemaking-docs {
+      padding: 0 !important;
+
+      p {
+        padding-bottom: u(2rem);
+        margin-left: u(1rem) !important;
+      }
+      
+      li.document-container {
+        border-top: 1px solid $neutral;
+        display: flex;
+      }
+      
+      div.document-details {
+        border-right: 1px solid $neutral;
+        font-size: u(1.6rem);
+        padding: u(1rem);
+        width: 75%;
+
+        .tag.tag--primary {
+           margin: u(1.5rem 3rem);
+           padding: u(.4rem);
+        }
+      }
+      div.document-date {
+        padding: u(1.75rem);
+        width: 25%;
+      }
+    }
   }
 
   .sorting_disabled {

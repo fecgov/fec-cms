@@ -11,9 +11,7 @@
 {%- endblock %}
 
 {% block body %}
-
 {{ header.header(breadcrumbs_title, breadcrumbs) }}
-
 <section class="main__content--full data-container__wrapper">
   {% include 'partials/' + slug + '-filter.jinja' %}
     <div class="data-container">
@@ -60,11 +58,12 @@
 </section>
 
 {% include 'partials/datatable-modal.jinja' %}
-
+{% if has_keyword_modal %}
+  {% include 'partials/legal-keyword-modal.jinja' %}
+{% endif %}
 {% endblock %}
 
 {% block scripts %}
-
 {% if table_context %}
 <script type="text/javascript">
   window.context = {{ table_context|to_json|safe }};

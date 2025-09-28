@@ -443,6 +443,7 @@ table_columns = OrderedDict([
     ('national-party-account-disbursements',
         ['Spender name', 'Recipient', 'Party account', 'Description', 'Date', 'Amount']),
     ('debts', ['Committee name', 'Creditor/Debtor name', 'Beginning balance', 'Ending balance', 'Coverage end date']),
+    ('rulemakings', ['REG Number', 'REG name and documents', 'Open for comments']),
 ])
 
 line_numbers = {
@@ -1022,4 +1023,24 @@ secondary_subject_ids = {
     "17": "Limits",
     "18": "Prohibitions",
   }
+}
+
+
+rulemaking_doc_category_ids = {
+"1": "Open Meeting",
+"2": "Hearing",
+"3": "Agenda Document",
+"4": "Federal Register Document",
+"5": "Comments and Ex Parte Communications",
+"6": "Commencing Document",
+"7": "Votes",
+"8": "Press & Public Guidance",
+}
+
+rulemaking_entity_role_types = {
+"1": "Petitioner",
+"2": "Witness",
+"3": "Counsel",
+"4": "Officer/Representative",
+"5": "Commenter",
 }
