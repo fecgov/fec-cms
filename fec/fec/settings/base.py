@@ -86,7 +86,7 @@ FEATURES = {
     'pac_party': bool(env.get_credential('FEC_FEATURE_PAC_PARTY', '')),
     'pac_snapshot': bool(env.get_credential('FEC_FEATURE_PAC_SNAPSHOT', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
-    'rulemakings': bool(env.get_credential('FEC_FEATURE_RULEMAKING', '')),
+    'rulemakings': bool(env.get_credential('FEC_FEATURE_RULEMAKINGS', '')),
 }
 
 # Set feature flags to True for Feature
