@@ -12,7 +12,7 @@
   <div class="filters__inner">
   {# //TODO: Can maybe make form action="" #}
 <form id="category-filters" action="/legal-resources/rulemakings/">
-    {{ legal.keyword_search_q(result_type, query, name='Keyword') }}
+    {{ legal.keyword_search_q(result_type, query) }}
     {{ proximity.field('keyword-proximity', title='Proximity') }}
     <div class="filter js-filter" data-filter="checkbox">
       <input id="is_open_for_comment" name="is_open_for_comment" type="checkbox" value="true">
