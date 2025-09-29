@@ -3,6 +3,7 @@ from django.views.generic.base import RedirectView
 from django.conf import settings
 
 from legal import views
+from data import views_datatables
 
 urlpatterns = [
     re_path(r'^data/legal/advisory-opinions/(?P<ao_no>[\w-]+)/$',
@@ -24,9 +25,12 @@ urlpatterns = [
     re_path(r'^data/legal/search/regulations/$',
             views.legal_doc_search_regulations),
     re_path(r'^data/legal/search/statutes/$', views.legal_doc_search_statutes),
-    # re_path(r'^legal-resources/rulemakings/$',
-    #         views.rulemakings),
 ]
+
+if settings.FEATURES['rulemakings']:
+    urlpatterns += re_path(
+        r'^legal-resources/rulemakings/$',views_datatables.rulemaking
+    ),
 
 if settings.FEATURES['adrs']:
     urlpatterns += re_path(

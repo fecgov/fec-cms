@@ -1090,8 +1090,6 @@ export const rulemakings = [
     className: 'all column--rulemaking-docs align-top',
     orderable: false,
     render: function (data, type, row) {
-      console.log('data: ', data); // eslint-disable-line no-console
-      console.log('type:' , type); // eslint-disable-line no-console
       let html = `<p><b>${row.rm_name}</b>`;
 
       if (row.key_documents && row.key_documents.length ) {

@@ -134,9 +134,6 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
       if (queryParams.q) {
         $('input[name="q"]').val(queryParams.q).trigger('change');
       }
-      // Temporarily verify page load/reload or not
-      console.log('INIT'); // eslint-disable-line no-console
-
     }
   });
 
