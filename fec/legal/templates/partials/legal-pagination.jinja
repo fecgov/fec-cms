@@ -36,7 +36,7 @@
         {%- if offset %}offset={{ offset - limit }}&{% endif -%}
         {%- if limit %}limit={{ limit }}&{% endif -%}
         {%- if query %}search={{ query|urlencode|replace('+','%2B') }}&{% endif -%}
-        {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
+        {%- if sort %}sort={{ sort }}&{% endif -%}
         {%- if case_respondents %}case_respondents={{ case_respondents }}&{% endif -%}
         {%- for category_id in selected_doc_category_ids -%}
           case_doc_category_id={{ category_id }}&
@@ -84,7 +84,7 @@
         {%- for category_id in selected_ao_doc_category_ids %}ao_doc_category_id={{ category_id }}&{% endfor -%}
         {%- for q_proximity in q_proximities %}q_proximity={{ q_proximity }}&{% endfor -%}
         {%- if max_gaps %}max_gaps={{ max_gaps }}&{% endif -%}
-        {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
+        {%- if sort %}sort={{ sort }}&{% endif -%}
         &offset={{ offset - limit }}&limit={{ limit }}#results-{{ result_type }}">Previous</a>
     {% else %}
       <span class="paginate_button previous is-disabled">Previous</span>
@@ -100,7 +100,7 @@
         {%- if page_offset %}offset={{ page_offset }}&{% endif -%}
         {%- if limit %}limit={{ limit }}&{% endif -%}
         {%- if query %}search={{ query|urlencode|replace('+','%2B')}}&{% endif -%}
-        {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
+        {%- if sort %}sort={{ sort }}&{% endif -%}
         {%- if case_respondents %}case_respondents={{ case_respondents }}&{% endif -%}
         {%- for category_id in selected_doc_category_ids -%}
           case_doc_category_id={{ category_id }}&
@@ -148,18 +148,19 @@
           {%- for category_id in selected_ao_doc_category_ids %}ao_doc_category_id={{ category_id }}&{% endfor -%}
           {%- for q_proximity in q_proximities %}q_proximity={{ q_proximity }}&{% endfor -%}
           {%- if max_gaps %}max_gaps={{ max_gaps }}&{% endif -%}
-          {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
+          {%- if sort %}sort={{ sort }}&{% endif -%}
           &offset={{ page_offset }}&limit={{ limit }}#results-{{ result_type }}">{{ page }}</a>
       {% endif %}
     {% endfor %}
 
     {#- Next page button -#}
+    {%- if query %}search={{ query|urlencode|replace('+','%2B') }}&{% endif -%}
     {% if result_type != 'advisory_opinions' and offset + limit < total_all %}
       <a class="paginate_button next" href="/data/legal/search/{{ result_type }}/?
       {%- if offset %}offset={{ offset + limit }}&{% else %}offset={{ limit }}&{% endif -%}
       {%- if limit %}limit={{ limit }}&{% endif -%}
-      {%- if query %}search={{ query|urlencode|replace('+','%2B') }}&{% endif -%}
-      {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
+      {%- if query %}search={{ urllib.parse.quote_plus(query) }}&{% endif -%}
+      {%- if sort %}sort={{ sort }}&{% endif -%}
         {%- if case_respondents %}case_respondents={{ case_respondents }}&{% endif -%}
         {%- for category_id in selected_doc_category_ids -%}
           case_doc_category_id={{ category_id }}&
@@ -207,7 +208,7 @@
         {%- for category_id in selected_ao_doc_category_ids %}ao_doc_category_id={{ category_id }}&{% endfor -%}
         {%- for q_proximity in q_proximities %}q_proximity={{ q_proximity }}&{% endfor -%}
         {%- if max_gaps %}max_gaps={{ max_gaps }}&{% endif -%}
-        {%- if sort %}sort={{ sort }}& -%}&{% endif -%}
+        {%- if sort %}sort={{ sort }}&{% endif -%}
         &offset={{ offset + limit }}&limit={{ limit }}#results-{{ result_type }}">Next</a>
     {% else %}
       <span class="paginate_button next is-disabled">Next</span>
