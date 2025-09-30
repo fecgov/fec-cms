@@ -125,6 +125,8 @@ async function uploadFiles(data) {
 RulemakingCommenting.prototype.init = function() {
   this.frames = document.querySelectorAll('fieldset.frame');
 
+  // this.representedEntityType = 
+
   // Which block should we use as a template for every commenter?
   const commenter0block = this.formEl.querySelector('#contact-info-template');
   this.commenterTemplate = commenter0block.innerHTML;
@@ -832,11 +834,6 @@ RulemakingCommenting.prototype.toggleElementsByVars = function() {
  * Updates the meter and links in the topnav
  */
 RulemakingCommenting.prototype.updateTopNav = function() {
-  // if (this.isOnFrame('confirmation')) {
-  //   this.topNav.classList.add('hidden');
-  //   return;
-  // }
-
   const theMeter = this.topNav.querySelector('meter');
 
   if (!this.representedEntityType) return; // If we don't have a type, don't show self

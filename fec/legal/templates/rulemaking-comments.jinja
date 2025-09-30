@@ -1,7 +1,7 @@
 {% extends 'layouts/legal-main.jinja' %}
 {% import 'macros/breadcrumbs.jinja' as breadcrumb %}
 {% import 'macros/legal.jinja' as legal %}
-{% set breadcrumb_links=[('', 'Rulemakings')] %}
+{% set breadcrumb_links=[('/legal/rulemakings/', 'Rulemakings'), ('/legal/rulemakings/' + rm_no + '/', rm_number)] %}
 
 {% block title %}Submit rulemaking comments{% endblock %}
 
@@ -23,10 +23,16 @@
     <div class="row">
       <div class="main__content">
         <h2>{{ description }}</h2>
+        {% if not is_open_for_comment %}
+        <p>Unfortunately, {{ rm_number }} is no longer open for comments.</p>
+        <a class="button--standard button--back" href="../">Go to {{ rm_number }}</a>
+        {% else %}
         <p><strong>IMPORTANT</strong>: All comments will be made available to the public. Comments sent by online form or email will be posted to the FEC website. Comments sent via paper will be converted to PDF and then posted to the FEC website. The FEC does not remove personally identifiable information such as home address, phone number, email address or Social Security number from submissions before posting comments to the FEC website. The FEC encourages commenters to submit only information that they wish to make publicly available.</p>
         <p>Finally, comments will not be considered submitted until all required information is completed and the commenter has received the confirmation message.</p>
+        {% endif %}
       </div>
     </div>
+    {% if is_open_for_comment %}
     <div class="row" id="rulemaking-comments">
       <div class="js-help hidden" id="help">
         <svg
@@ -385,20 +391,20 @@
         <nav class="frames-footer-nav">
           <button class="button--alt button--back" data-command="back" type="button">Back</button>
           <button class="button--cta button--go" data-command="next" type="button">Next</button>
-          <!-- Ours: -->
-          <!-- <div id="commenting-recaptcha" name="commenting-recaptcha" data-sitekey="6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv"></div> -->
-          <!-- Google's generic, always-passes: -->
-          <div id="commenting-recaptcha" name="commenting-recaptcha" class="hidden" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+          <div id="commenting-recaptcha" name="commenting-recaptcha" data-sitekey="6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv"></div>
           <button class="button--cta hidden is-disabled" data-command="submit" type="button">Submit</button>
           <p class="t-note t-sans">Next step: Provide your comments</p>
         </nav>
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
       </form>
     </div>
+    {% endif %}{# end if is_open_for_comment #}
   </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
+{% if is_open_for_comment %}
 {{ tags_for_js_chunks('rulemaking-commenting.js', '')|safe }}
+{% endif %}
 {% endblock %}

@@ -55,10 +55,9 @@ def save_rulemaking_comments(request):
             },
         )
         recaptchaResponse = verifyRecaptcha.json()
-        # print('recaptchaResponse: ', recaptchaResponse)
 
         if not recaptchaResponse['success']:
-            # if captcha failed, return failure
+            # if recaptcha failed, return failure
             return JsonResponse(
                 {'status': 500, 'ok': False, 'message': 'reCAPTCHA failed', 'recaptcha_error': True},
                 status=500
@@ -124,18 +123,20 @@ def save_rulemaking_comments(request):
         to_submit['comments'] = data.get('comments', '').strip()
         to_submit['filenames'] = []
 
+        allowed_file_types = ['.doc', '.docx', '.pdf', '.rtf', '.txt', '.xls', '.xlsx']
+
         # Because we can have 0-3 files and they could be in any of the fields, add the ones with values
         i = 0
-        if data.get('files[0].name'):
-            to_submit['filenames'].append(str(i) + '-' + data.get('files[0].name'))
-            i += 1
-
-        if data.get('files[1].name'):
-            to_submit['filenames'].append(str(i) + '-' + data.get('files[1].name'))
-            i += 1
-
-        if data.get('files[2].name'):
-            to_submit['filenames'].append(str(i) + '-' + data.get('files[2].name'))
+        for field_name in ['files[0].name', 'files[1].name', 'files[2].name']:
+            if data.get(field_name):
+                filename = data.get(field_name)
+                ext = filename[filename.rindex('.'):]
+                if ext in allowed_file_types:
+                    to_submit['filenames'].append(str(i) + '-' + filename)
+                    i += 1
+                else:
+                    # If we know one is the wrong extension, reject it before saving the data
+                    return JsonResponse({'status': 400, 'ok': False, 'message': 'Invalid file type'}, status=400)
 
         # TODO: report missing fields?
 
@@ -373,25 +374,21 @@ def admin_fine_page(request, admin_fine_no):
 
 
 def rulemaking_add_comments(request, rm_no):
-
-    # rulemaking = api_caller.load_legal_rulemaking(rm_no)
-    rulemaking = api_caller.load_legal_rulemaking('2024-10')
-    # print('api_caller rulemaking: ' + rulemaking)
-
+    """
+    Data for the rulemaking commenting interface
+    """
     if not rm_no:
         raise Http404()
 
-    # for rm in rulemaking:
-    #     print('rulemaking[' + rm + ']: ' + str(rulemaking[rm]))
+    rulemaking = api_caller.load_legal_rulemaking(rm_no)
 
-    # rulemaking['description'] = 'REG 2024-10 Civil Monetary Penalties Annual Inflation Adjustments 2025'
-    # rulemaking['rm_id'] = 3479145
-    # rulemaking['rm_name'] = 'Civil Monetary Penalties Annual Inflation Adjustments 2025'
-    # rulemaking['rm_no'] = '2024-06'
-    # rulemaking['rm_number'] = 'REG 2024-10'
+    # If load_legal_rulemaking returned [], there was an error
+    if rulemaking == []:
+        raise Http404()
 
     return render(request, 'rulemaking-comments.jinja', {
         'description': rulemaking['description'],
+        'is_open_for_comment': rulemaking['is_open_for_comment'],
         'rm_id': rulemaking['rm_id'],
         'rm_name': rulemaking['rm_name'],
         'rm_no': rulemaking['rm_no'],
