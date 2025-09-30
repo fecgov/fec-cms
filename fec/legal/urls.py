@@ -15,8 +15,6 @@ urlpatterns = [
     re_path(r'^data/legal/administrative-fine/(?P<admin_fine_no>[\w-]+)/$',
             views.admin_fine_page),
 
-    re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/add-comments/$', views.rulemaking_add_comments),
-
     re_path(r'^data/legal/statutes/$', views.statutes_landing),
     # Legal search results
     re_path(r'^data/legal/search/$', views.legal_search),
@@ -27,8 +25,6 @@ urlpatterns = [
     re_path(r'^data/legal/search/regulations/$',
             views.legal_doc_search_regulations),
     re_path(r'^data/legal/search/statutes/$', views.legal_doc_search_statutes),
-    re_path(r'^legal/rulemaking/save-comments/',
-            views.save_rulemaking_comments, name='save_rulemaking_comments'),
 ]
 
 if settings.FEATURES['adrs']:
@@ -47,4 +43,11 @@ if settings.FEATURES['afs']:
         re_path(
             r'^data/legal/search/admin-fines/$', views.legal_doc_search_af
         ),
+    ]
+
+if settings.FEATURES['rulemakings']:
+    urlpatterns += [
+        re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/add-comments/$', views.rulemaking_add_comments),
+        re_path(r'^legal/rulemaking/save-comments/',
+                views.save_rulemaking_comments, name='save_rulemaking_comments'),
     ]

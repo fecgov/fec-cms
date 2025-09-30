@@ -91,6 +91,7 @@ FEATURES = {
     'pac_party': bool(env.get_credential('FEC_FEATURE_PAC_PARTY', '')),
     'pac_snapshot': bool(env.get_credential('FEC_FEATURE_PAC_SNAPSHOT', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
+    'rulemakings': bool(env.get_credential('FEC_FEATURE_RULEMAKINGS', '')),
 }
 
 # Set feature flags to True for Feature
@@ -121,6 +122,7 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['nat_party_acct_disbursements'] = True
     FEATURES['nat_party_acct_rec_single'] = True
     FEATURES['nat_party_acct_dis_single'] = True
+    FEATURES['rulemakings'] = True
 
 # Application definition
 INSTALLED_APPS = (
