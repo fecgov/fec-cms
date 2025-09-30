@@ -125,8 +125,6 @@ async function uploadFiles(data) {
 RulemakingCommenting.prototype.init = function() {
   this.frames = document.querySelectorAll('fieldset.frame');
 
-  // this.representedEntityType = 
-
   // Which block should we use as a template for every commenter?
   const commenter0block = this.formEl.querySelector('#contact-info-template');
   this.commenterTemplate = commenter0block.innerHTML;
@@ -183,6 +181,12 @@ RulemakingCommenting.prototype.init = function() {
   window.addEventListener('beforeunload', this.handleBeforeUnload.bind(this));
 
   this.goToFrame(0);
+
+  // Clearing representedEntityType for a history.back(). If there's a checked representedEntityType, clear it
+  setTimeout(() => {
+    const checkedInput = document.querySelector('input[name="representedEntityType"]:checked');
+    if (checkedInput) checkedInput.checked = false;
+  }, 250);
 };
 
 /**
@@ -423,9 +427,6 @@ RulemakingCommenting.prototype.buildTheFrame = function() {
     newInnerHtml += `<tr><td>Text comment:</td><td>${commentsWithBreaks}</td></tr>`;
 
     summaryTable.innerHTML = newInnerHtml;
-
-    // Scroll to the top
-    // this.topNav.scrollIntoView({ behavior: 'smooth' });
 
   } else if (this.isOnFrame('confirmation')) {
     // If we have a success response, let's put those details into the page
