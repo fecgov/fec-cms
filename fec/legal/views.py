@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 
 import datetime
 import re
@@ -9,6 +9,7 @@ import uuid  # rulemaking comments
 import requests  # reCAPTCHA for rulemaking comments
 from botocore.client import Config  # rulemaking comments
 from datetime import timezone  # rulemaking comments
+import logging
 
 from data import api_caller
 from data import ecfr_caller
@@ -16,6 +17,9 @@ from data import constants
 from django.http import JsonResponse  # rulemaking comments
 from django.views.decorators.csrf import csrf_exempt  # rulemaking comments
 from fec import settings  # rulemaking comments
+
+
+logger = logging.getLogger(__name__)
 
 
 def get_s3_client():
@@ -989,3 +993,31 @@ def get_legal_category_order(results, result_type):
     category_order.insert(0, category_order.pop(category_order.index(result_type)))
 
     return category_order
+
+
+def legal_document_redirect(request):
+    """
+    Redirects to the appropriate legal document on the main website based on filename.
+    This endpoint is designed to work with proxy redirects from legacy domains.
+
+    Query parameter:
+    - filename: The document filename to search for (without .pdf extension)
+
+    Examples:
+    - /legal/search/documents/?filename=1069112
+    - /legal/search/documents/?filename=00000182
+    - /legal/search/documents/?filename=12190292128
+    """
+    filename = request.GET.get('filename', '').strip()
+    if not filename:
+        raise Http404("Filename parameter is required")
+
+    try:
+        document_url = api_caller.find_legal_document_by_filename(filename)
+        if document_url:
+            return HttpResponseRedirect(document_url)
+        else:
+            raise Http404(f"Document with filename '{filename}' not found")
+    except Exception as e:
+        logger.error(f"Error searching for filename {filename}: {e}")
+        raise Http404("Unable to retrieve document information")

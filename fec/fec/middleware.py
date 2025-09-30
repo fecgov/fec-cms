@@ -2,6 +2,12 @@ from django.utils.deprecation import MiddlewareMixin
 from django.conf import settings
 import os
 
+from psycopg_pool import PoolTimeout
+from django.db.utils import OperationalError
+from django.core.cache import cache
+from django.shortcuts import render
+from fec import slack
+
 
 FEC_RULEMAKING_BUCKET_NAME = os.getenv("FEC_RULEMAKING_BUCKET_NAME", "")
 FEC_RULEMAKING_S3_REGION_NAME = os.getenv("FEC_RULEMAKING_S3_REGION_NAME", "")
@@ -120,3 +126,30 @@ class AddSecureHeaders(MiddlewareMixin):
         response["Expect-CT"] = expect_ct_string
 
         return response
+
+
+class PoolTimeouts(MiddlewareMixin):
+    SLACK_ALERT_CACHE_KEY = "slack_pooltimeout_alert_sent"
+    THROTTLE_SECONDS = 3600
+
+    def process_request(self, request):
+        request._pool_timeout_handled = False  # flag to not spam alerts
+
+    def process_exception(self, request, exception):
+        if isinstance(exception, OperationalError) and isinstance(exception.__cause__, PoolTimeout):
+            if not getattr(request, '_pool_timeout_handled', False):
+                # Check if alert was sent recently (1 hour)
+                last_sent = cache.get(self.SLACK_ALERT_CACHE_KEY)
+                if not last_sent:
+                    slack.post_to_slack("Django/Psycopg PoolTimeout", "#alerts")
+                    cache.set(self.SLACK_ALERT_CACHE_KEY, True, timeout=self.THROTTLE_SECONDS)
+                else:
+                    pass
+                request._pool_timeout_handled = True
+
+            # Return 503
+            response = render(request, '503.html')
+            response.status_code = 503
+            return response
+
+        return None  # Unhandled exceptions
