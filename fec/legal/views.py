@@ -440,25 +440,25 @@ def legal_search(request):
             ecfr_results = ecfr_caller.fetch_ecfr_data(updated_ecfr_query_string, limit=3, page=1)
             if 'results' in ecfr_results:
                 regulations = [{
-                    "doc_id": None,
-                    "document_highlights": {},
-                    "highlights": [obj['headings']['part'],
+                    'doc_id': None,
+                    'document_highlights': {},
+                    'highlights': [obj['headings']['part'],
                                    obj['full_text_excerpt']],
-                    "name": obj['headings']['section'],
-                    "no": obj['hierarchy']['section'],
-                    "type": None,
-                    "url": (
-                        "https://www.ecfr.gov/current/title-11/"
+                    'name': obj['headings']['section'],
+                    'no': obj['hierarchy']['section'],
+                    'type': None,
+                    'url': (
+                        'https://www.ecfr.gov/current/title-11/'
                         f"chapter-{obj['hierarchy']['chapter']}/"
                         f"section-{obj['hierarchy']['section']}"
                     )
                 } for obj in ecfr_results['results']]
 
                 results['regulations'] = regulations
-                results["total_regulations"] = ecfr_results.get('meta', {}).get(
+                results['total_regulations'] = ecfr_results.get('meta', {}).get(
                     'total_count', 0)
-                results["regulations_returned"] = ('3' if results["total_regulations"] > 3
-                                                   else results["total_regulations"])
+                results['regulations_returned'] = ('3' if results['total_regulations'] > 3
+                                                   else results['total_regulations'])
 
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
@@ -528,34 +528,34 @@ def legal_doc_search_ao(request):
 
     # Define AO document categories dictionary
     ao_document_categories = {
-        "F": "Final Opinion",
-        "V": "Votes",
-        "D": "Draft Documents",
-        "R": "AO Request, Supplemental Material, and Extensions of Time",
-        "W": "Withdrawal of Request",
-        "C": "Comments and Ex parte Communications",
-        "S": "Commissioner Statements"
+        'F': 'Final Opinion',
+        'V': 'Votes',
+        'D': 'Draft Documents',
+        'R': 'AO Request, Supplemental Material, and Extensions of Time',
+        'W': 'Withdrawal of Request',
+        'C': 'Comments and Ex parte Communications',
+        'S': 'Commissioner Statements'
     }
 
     # Define AO requestor types dictionary
     ao_requestor_types = {
-        # "0": "Any",
-        "1": "Federal candidate/candidate committee/officeholder",
-        "2": "Publicly funded candidates/committees",
-        "3": "Party committee, national",
-        "4": "Party committee, state or local",
-        "5": "Nonconnected political committee",
-        "6": "Separate segregated fund",
-        "7": "Labor Organization",
-        "8": "Trade Association",
-        "9": "Membership Organization, Cooperative, Corporation W/O Capital Stock",
-        "10": "Corporation (including LLCs electing corporate status)",
-        "11": "Partnership (including LLCs electing partnership status)",
-        "12": "Governmental entity",
-        "13": "Research/Public Interest/Educational Institution",
-        "14": "Law Firm",
-        "15": "Individual",
-        "16": "Other",
+        # '0': 'Any',
+        '1': 'Federal candidate/candidate committee/officeholder',
+        '2': 'Publicly funded candidates/committees',
+        '3': 'Party committee, national',
+        '4': 'Party committee, state or local',
+        '5': 'Nonconnected political committee',
+        '6': 'Separate segregated fund',
+        '7': 'Labor Organization',
+        '8': 'Trade Association',
+        '9': 'Membership Organization, Cooperative, Corporation W/O Capital Stock',
+        '10': 'Corporation (including LLCs electing corporate status)',
+        '11': 'Partnership (including LLCs electing partnership status)',
+        '12': 'Governmental entity',
+        '13': 'Research/Public Interest/Educational Institution',
+        '14': 'Law Firm',
+        '15': 'Individual',
+        '16': 'Other',
     }
 
     # Possible values for the ao_year filter
@@ -679,12 +679,12 @@ def legal_doc_search_mur(request):
 
     # Define MUR document categories dictionary
     mur_document_categories = {
-        "1": "Conciliation and Settlement Agreements",
-        "2": "Complaint, Responses, Designation of Counsel and Extensions of Time",
-        "3": "General Counsel Reports, Briefs, Notifications and Responses",
-        "4": "Certifications",
-        "5": "Civil Penalties, Disgorgements and Other Payments",
-        "6": "Statements of Reasons"
+        '1': 'Conciliation and Settlement Agreements',
+        '2': 'Complaint, Responses, Designation of Counsel and Extensions of Time',
+        '3': 'General Counsel Reports, Briefs, Notifications and Responses',
+        '4': 'Certifications',
+        '5': 'Civil Penalties, Disgorgements and Other Payments',
+        '6': 'Statements of Reasons'
     }
 
     # Return the selected document category name
@@ -728,7 +728,7 @@ def legal_doc_search_mur(request):
 
         for index, doc in enumerate(mur['documents']):
             # Checks if the selected document category filters matching the document categories
-            doc['category_match'] = mur["mur_type"] != "archived" and str(doc['doc_order_id']) in case_doc_category_ids
+            doc['category_match'] = mur['mur_type'] != 'archived' and str(doc['doc_order_id']) in case_doc_category_ids
             # Checks for document keyword text match
             doc['text_match'] = str(index) in mur['document_highlights']
 
@@ -818,12 +818,12 @@ def legal_doc_search_adr(request):
 
     # Define ADR document categories dictionary
     adr_document_categories = {
-        "1001": "Settlement Agreements",
-        "1002": "Complaint, Responses, Designation of Counsel and Extensions of Time",
-        "1003": "ADR Memoranda, Notifications and Responses",
-        "1004": "Certifications",
-        "1005": "Civil Penalties, Disgorgements, Other Payments and Letters of Compliance",
-        "1006": "Statements of Reasons"
+        '1001': 'Settlement Agreements',
+        '1002': 'Complaint, Responses, Designation of Counsel and Extensions of Time',
+        '1003': 'ADR Memoranda, Notifications and Responses',
+        '1004': 'Certifications',
+        '1005': 'Civil Penalties, Disgorgements, Other Payments and Letters of Compliance',
+        '1006': 'Statements of Reasons'
     }
 
     # Return the selected document category name
@@ -926,12 +926,12 @@ def legal_doc_search_regulations(request):
                                                page=page)
 
     regulations = [{
-                "highlights": [obj['full_text_excerpt']],
-                "name": obj['headings']['section'],
-                "no": obj['hierarchy']['section'],
-                "type": None,
-                "url":  (
-                    "https://www.ecfr.gov/current/title-11/"
+                'highlights': [obj['full_text_excerpt']],
+                'name': obj['headings']['section'],
+                'no': obj['hierarchy']['section'],
+                'type': None,
+                'url':  (
+                    'https://www.ecfr.gov/current/title-11/'
                     f"chapter-{obj['hierarchy']['chapter']}/"
                     f"section-{obj['hierarchy']['section']}"
                 )
@@ -982,12 +982,12 @@ def get_legal_category_order(results, result_type):
     """ Return categories in pre-defined order, moving categories with empty
         results to the end. Move chosen category(result_type) to top when not searching 'all'
     """
-    categories = ["admin_fines", "advisory_opinions", "adrs", "murs", "regulations", "statutes"]
-    category_order = [x for x in categories if results.get("total_" + x, 0) > 0] +\
-        [x for x in categories if results.get("total_" + x, 0) == 0]
+    categories = ['admin_fines', 'advisory_opinions', 'adrs', 'murs', 'regulations', 'statutes']
+    category_order = [x for x in categories if results.get('total_' + x, 0) > 0] +\
+        [x for x in categories if results.get('total_' + x, 0) == 0]
 
     # Default to 'admin_fines' first if result_type is 'all', because we dont want 'all' in category_order
-    result_type = "admin_fines" if result_type == 'all' else result_type
+    result_type = 'admin_fines' if result_type == 'all' else result_type
     # Move chosen search type to the top if not searching 'all'
     category_order.insert(0, category_order.pop(category_order.index(result_type)))
 
