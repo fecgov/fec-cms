@@ -44,15 +44,6 @@ urlpatterns = [
     re_path(r'^data/legal/search/enforcement/$', views.legal_doc_search_mur),  # TODO: retire this one
 
 
-    # Rulemakings
-    re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/$', views.rulemaking),  # single
-    # re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/add-comments/$', views.rulemaking_add_comments),
-    # ^^^^ comment on single
-
-    # re_path(r'^legal/rulemaking/save-comments/',
-    # views.save_rulemaking_comments, name='save_rulemaking_comments'),  # save comments
-
-
     # Statutes
     re_path(r'^legal/statutes/$', views.statutes_landing),  # landing
     re_path(r'^data/legal/statutes/$', views.statutes_landing),  # TODO: retire this one
@@ -88,6 +79,18 @@ if settings.FEATURES['afs']:
         re_path(r'^legal/search/admin-fines/$', views.legal_doc_search_af),  # landing page / datatable
         re_path(r'^data/legal/search/admin-fines/$', views.legal_doc_search_af),  # TODO: retire this one
     ]
+
+# Rulemakings
+if settings.FEATURES['rulemakings']:
+    urlpatterns += [
+        re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/$', views.rulemaking),  # single
+        # re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/add-comments/$', views.rulemaking_add_comments),
+        # ^^^^ comment on single
+
+        # re_path(r'^legal/rulemaking/save-comments/',
+        # views.save_rulemaking_comments, name='save_rulemaking_comments'),  # save comments
+    ]
+
 
 # Legal document redirect endpoint
 urlpatterns += [
