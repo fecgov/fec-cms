@@ -23,16 +23,12 @@ const params = new URLSearchParams(window.location.search);
 KeywordModal.prototype.handleSubmit = function(e) {
   e.preventDefault();
   const searchQuery = this.generateQueryString();
-  let query = URI(window.location.search)
-    .removeSearch('q')
-    .addSearch('q', searchQuery);
   this.dialog.hide();
   // Event record for GTM
   this.fireEvent('Keyword modal query: ' + searchQuery);
-  console.log('query', query); // eslint-disable-line no-console
 
- // Put value in field and trigger handleKeywordSearchChange()
- $('input[name="q"]').val(searchQuery).trigger('change');
+  // Put value in field and trigger handleKeywordSearchChange()
+  $('input[name="q"]').val(searchQuery).trigger('change');
 
 };
 
@@ -117,6 +113,15 @@ $('#search-input').on('change', function(e) {
 $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity"]', function() {
    $('input[name="max_gaps"]').attr('placeholder','0').val('');
 });
+
+ // Add a null submit button at the top of the form to prevent Enter submits
+  const rulemakingFiltersFormElement = document.querySelector('#rulemaking-filters');
+  const submitBlocker = document.createElement('input');
+  submitBlocker.setAttribute('type', 'submit');
+  submitBlocker.setAttribute('disabled', 'disabled');
+  submitBlocker.setAttribute('style', 'display:none');
+  submitBlocker.setAttribute('aria-hidden', 'true');
+  rulemakingFiltersFormElement.prepend(submitBlocker);
 
   const $table = $('#results');
   new DataTable_FEC($table, {

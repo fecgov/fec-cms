@@ -11,12 +11,12 @@
 {% block filters %}
   <div class="filters__inner">
   {# //TODO: Can maybe make form action="" #}
-<form id="category-filters" action="/legal-resources/rulemakings/">
+<form id="rulemaking-filters" action="">
     {{ legal.keyword_search_q(result_type, query) }}
     {{ proximity.field('keyword-proximity', title='Proximity') }}
     <div class="filter js-filter" data-filter="checkbox">
       <input id="is_open_for_comment" name="is_open_for_comment" type="checkbox" value="true">
-      <label class="dropdown__value" for="is_open_for_comment">Show only rulenakings open for comment</label>
+      <label class="dropdown__value" for="is_open_for_comment">Show only rulemakings open for comment</label>
     </div>
     {{ text.field('rm_no','Reg Number', helper_text='Example: 2016-01') }}
     {{ text.field('rm_name','Reg Name') }}

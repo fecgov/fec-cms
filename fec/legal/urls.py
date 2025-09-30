@@ -29,7 +29,7 @@ urlpatterns = [
 
 if settings.FEATURES['rulemakings']:
     urlpatterns += re_path(
-        r'^legal-resources/rulemakings/$',views_datatables.rulemaking
+        r'^legal/rulemakings/$',views_datatables.rulemaking
     ),
 
 if settings.FEATURES['adrs']:

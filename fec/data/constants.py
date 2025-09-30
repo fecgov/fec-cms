@@ -443,7 +443,7 @@ table_columns = OrderedDict([
     ('national-party-account-disbursements',
         ['Spender name', 'Recipient', 'Party account', 'Description', 'Date', 'Amount']),
     ('debts', ['Committee name', 'Creditor/Debtor name', 'Beginning balance', 'Ending balance', 'Coverage end date']),
-    ('rulemakings', ['REG Number', 'REG name and documents', 'Open for comments']),
+    ('rulemakings', ['REG number', 'REG name and documents', 'Open for comments']),
 ])
 
 line_numbers = {

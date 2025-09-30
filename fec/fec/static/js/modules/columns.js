@@ -1163,7 +1163,7 @@ export const rulemakings = [
           }
         }
       }
-      // TODO: Ask to check with OGC if no_tier documents should be inclufrf on doc type filter results
+      // TODO: Ask to check with OGC if no_tier documents should be included in doc type filter results
       if (row.no_tier_documents && row.no_tier_documents.length) {
         for (let id of get_doc_ids()) {
           for (let doc of row.no_tier_documents ) {
@@ -1205,9 +1205,8 @@ export const rulemakings = [
       return 'Not currently open for comment';
       }
       else {
-        const comment_deadline = moment(row.comment_close_date).format('MMMM, D YYYY');
+        const comment_deadline = moment(row.comment_close_date).format('MMMM D YYYY');
         return `<p><b>${row.description}</b><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="">Submit a comment</a></p>`;
-        //return `<p><b>${row.key_documents[0].doc_type_label}</b><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="//">Submit a comment</a></p>`
       }
     }
   }

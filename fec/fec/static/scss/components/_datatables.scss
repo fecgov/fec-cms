@@ -193,11 +193,12 @@
 // </li>
 
     &.column--rulemaking-docs {
-      padding: 0 !important;
+      padding: u(1rem 1rem 1rem 0) !important;
 
       p {
         padding-bottom: u(2rem);
         margin-left: u(1rem) !important;
+        font-size: inherit;
       }
       
       li.document-container {
@@ -207,7 +208,7 @@
       
       div.document-details {
         border-right: 1px solid $neutral;
-        font-size: u(1.6rem);
+        font-size: u(1.4rem);
         padding: u(1rem);
         width: 75%;
 
