@@ -154,7 +154,6 @@
     {% endfor %}
 
     {#- Next page button -#}
-    {%- if query %}search={{ query|urlencode|replace('+','%2B') }}&{% endif -%}
     {% if result_type != 'advisory_opinions' and offset + limit < total_all %}
       <a class="paginate_button next" href="/data/legal/search/{{ result_type }}/?
       {%- if offset %}offset={{ offset + limit }}&{% else %}offset={{ limit }}&{% endif -%}
