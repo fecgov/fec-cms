@@ -390,7 +390,7 @@ def rulemaking_add_comments(request, rm_no):
     # rulemaking['rm_no'] = '2024-06'
     # rulemaking['rm_number'] = 'REG 2024-10'
 
-    return render(request, 'rulemakings-comments.jinja', {
+    return render(request, 'rulemaking-comments.jinja', {
         'description': rulemaking['description'],
         'rm_id': rulemaking['rm_id'],
         'rm_name': rulemaking['rm_name'],

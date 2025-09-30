@@ -7,7 +7,7 @@
 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{{ path_for_css('legal-common.css') }}" />
-<link rel="stylesheet" type="text/css" href="{{ path_for_css('rulemakings-commenting.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ path_for_css('rulemaking-commenting.css') }}" />
 {% endblock %}
 
 {% block body %}
@@ -27,7 +27,7 @@
         <p>Finally, comments will not be considered submitted until all required information is completed and the commenter has received the confirmation message.</p>
       </div>
     </div>
-    <div class="row" id="rulemakings-comments">
+    <div class="row" id="rulemaking-comments">
       <div class="js-help hidden" id="help">
         <svg
           class="pointer"
@@ -44,7 +44,7 @@
           <div class="help_content">{helpContent}</div>
         </div>
       </div>
-      <form class="js-rulemakings-comments">
+      <form class="js-rulemaking-comments">
         <h3>Submit comments on rulemaking</h3>
         <h2>{{ rm_title }}</h2>
         <nav class="topnav">
@@ -82,7 +82,7 @@
             <label class="group-label">I am submitting these comments:</label>
 
             <fieldset class="field-label-combo">
-              <input type="radio" value="self" id="representedEntityType-self" name="representedEntityType" required checked>
+              <input type="radio" value="self" id="representedEntityType-self" name="representedEntityType" required>
               <label for="representedEntityType-self">On behalf of myself</label>
             </fieldset>
 
@@ -400,5 +400,5 @@
 {% endblock %}
 
 {% block scripts %}
-{{ tags_for_js_chunks('rulemakings-commenting.js', '')|safe }}
+{{ tags_for_js_chunks('rulemaking-commenting.js', '')|safe }}
 {% endblock %}

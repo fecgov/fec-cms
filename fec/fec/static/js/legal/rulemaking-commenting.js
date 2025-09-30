@@ -23,8 +23,8 @@
  *   ❌ TODO: ¿commenting period has closed before comments could be submitted? (not a field in the API)
  *   ❌ TODO: ¿commenting period is about to close? (not a field in the API)
  */
-export default function RulemakingsCommenting() {
-  this.appElId = 'rulemakings-comments'; // How to find the button to launch this
+export default function RulemakingCommenting() {
+  this.appElId = 'rulemaking-comments'; // How to find the button to launch this
   this.app = document.querySelector(`#${this.appElId}`);
   this.formEl = this.app.querySelector('form');
   this.framesHolder = document.querySelector('#frames-holder');
@@ -122,7 +122,7 @@ async function uploadFiles(data) {
 /**
  * Kick it off
  */
-RulemakingsCommenting.prototype.init = function() {
+RulemakingCommenting.prototype.init = function() {
   this.frames = document.querySelectorAll('fieldset.frame');
 
   // Which block should we use as a template for every commenter?
@@ -187,7 +187,7 @@ RulemakingsCommenting.prototype.init = function() {
  * builds the reCAPTCHA if it doesn't exist, otherwise resets it
  * @param {boolean} showRecap - whether the reCAPTCHA should be shown/offered
  */
-RulemakingsCommenting.prototype.showRecap = function(showRecap) {
+RulemakingCommenting.prototype.showRecap = function(showRecap) {
   const recapElId = 'commenting-recaptcha';
   const recapEl = document.querySelector(`#${recapElId}`);
 
@@ -204,10 +204,10 @@ RulemakingsCommenting.prototype.showRecap = function(showRecap) {
     }, true);
   }
 };
-RulemakingsCommenting.prototype.handleRecapCheck = function() {
+RulemakingCommenting.prototype.handleRecapCheck = function() {
   if (this.isOnFrame('summary')) this.updateBottomNav('submit');
 };
-RulemakingsCommenting.prototype.handleRecapExpiration = function() {
+RulemakingCommenting.prototype.handleRecapExpiration = function() {
   if (this.isOnFrame('summary')) this.updateBottomNav('submit-wait');
 };
 
@@ -216,14 +216,14 @@ RulemakingsCommenting.prototype.handleRecapExpiration = function() {
  * @param {('submitterType'|'submitterInfo'|'commenters'|'comments'|'summary'|'confirmation')} frameType
  * @returns {boolean}
  */
-RulemakingsCommenting.prototype.isOnFrame = function(frameType) {
+RulemakingCommenting.prototype.isOnFrame = function(frameType) {
   return framesOrder[this.currentFrameNum] === frameType;
 };
 
 /**
  * @param {number|string} frameNum
  */
-RulemakingsCommenting.prototype.goToFrame = function(frameNum) {
+RulemakingCommenting.prototype.goToFrame = function(frameNum) {
   // If we're already on the right frame, we're done
   if (this.currentFrameNum === frameNum) return;
 
@@ -276,7 +276,7 @@ RulemakingsCommenting.prototype.goToFrame = function(frameNum) {
 /**
  *
  */
-RulemakingsCommenting.prototype.updateHeightForCurrentFrame = function() {
+RulemakingCommenting.prototype.updateHeightForCurrentFrame = function() {
   const currFrame = this.formEl.querySelector('.frame.current');
   if (currFrame)
     this.framesHolder.style.height = `${currFrame.clientHeight}px`;
@@ -286,7 +286,7 @@ RulemakingsCommenting.prototype.updateHeightForCurrentFrame = function() {
  * Will build or update "next" frames as needed.
  * e.g. if moving from frame 0 to 1, will toggle fields for frame 1 based on values from frame 0
  */
-RulemakingsCommenting.prototype.buildTheFrame = function() {
+RulemakingCommenting.prototype.buildTheFrame = function() {
   if (this.isOnFrame('submitterType')) {
     if (this.representedEntityType == 'self') {
       //
@@ -518,7 +518,7 @@ RulemakingsCommenting.prototype.buildTheFrame = function() {
 /**
  *
  */
-RulemakingsCommenting.prototype.slideToTop = function() {
+RulemakingCommenting.prototype.slideToTop = function() {
   const prefersReducedMotion =
     window.matchMedia(`(prefers-reduced-motion: reduce)`) === true
     || window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
@@ -532,7 +532,7 @@ RulemakingsCommenting.prototype.slideToTop = function() {
  * Validates every field in this.formEl; fires goToFrame to any invalid fields
  * @returns {boolean}
  */
-RulemakingsCommenting.prototype.validateEntireForm = function() {
+RulemakingCommenting.prototype.validateEntireForm = function() {
   let toReturn = true;
   const formData = new FormData(this.formEl);
 
@@ -637,7 +637,7 @@ RulemakingsCommenting.prototype.validateEntireForm = function() {
  * @param {boolean} [requireValue=false]
  * @returns {boolean} whether the field is valid
  */
-RulemakingsCommenting.prototype.validateField = function(elOrSelector, requireValue = false) {
+RulemakingCommenting.prototype.validateField = function(elOrSelector, requireValue = false) {
   const theField = typeof elOrSelector === 'string'
     ? this.formEl.querySelector(elOrSelector)
     : elOrSelector;
@@ -674,7 +674,7 @@ RulemakingsCommenting.prototype.validateField = function(elOrSelector, requireVa
  * Starts with this.commenterTemplate, removes appropriate fields, numbers it, then returns the new commenter element.
  * @returns {HTMLElement} Returns the new commenter/div created
  */
-RulemakingsCommenting.prototype.addCommenter = function() {
+RulemakingCommenting.prototype.addCommenter = function() {
   const commentersHolder = this.formEl.querySelector('#commenters-holder');
   const newCommenter = document.createElement('div');
   newCommenter.setAttribute('class', 'commenter');
@@ -718,7 +718,7 @@ RulemakingsCommenting.prototype.addCommenter = function() {
  * Removes the commenter (el) and re-numbers those remaining.
  * @param {HTMLElement} el
  */
-RulemakingsCommenting.prototype.removeCommenter = function(el) {
+RulemakingCommenting.prototype.removeCommenter = function(el) {
   const commentersHolder = this.formEl.querySelector('#commenters-holder');
   // If we won't be removing the only commenter, do it
   el.remove();
@@ -748,7 +748,7 @@ RulemakingsCommenting.prototype.removeCommenter = function(el) {
  * Called when anything is typed into the phone field, saves non-digits and displays them in a US phone format
  * @param {InputEvent} e
  */
-RulemakingsCommenting.prototype.handlePhoneInput = function(e) {
+RulemakingCommenting.prototype.handlePhoneInput = function(e) {
   const field = e.target;
   const digitsStr = field.value.replaceAll(/\D/g, '').substring(0,10);
   const area = digitsStr.substring(0,3);
@@ -764,7 +764,7 @@ RulemakingsCommenting.prototype.handlePhoneInput = function(e) {
  * Handles all click events on a commenter, then calls addCommenter() or removeCommenter() as needed.
  * Both events are here to minimizes adding and removing listeners when adding & removing commenters.
  */
-RulemakingsCommenting.prototype.handleCommenterClick = function(e) {
+RulemakingCommenting.prototype.handleCommenterClick = function(e) {
   e.preventDefault();
   if (e.target.dataset.command == 'add-commenter') {
     this.addCommenter();
@@ -778,7 +778,7 @@ RulemakingsCommenting.prototype.handleCommenterClick = function(e) {
  * then dispatches a change event to be handled by handleFormChange.
  * @param {PointerEvent} e
  */
-RulemakingsCommenting.prototype.handleFileCancelClick = function(e) {
+RulemakingCommenting.prototype.handleFileCancelClick = function(e) {
   e.preventDefault();
 
   // Find the linked <input> element, clear its value and remove the has-file class
@@ -794,7 +794,7 @@ RulemakingsCommenting.prototype.handleFileCancelClick = function(e) {
  * Adds or removes elements based on their [data-show-if-var] and [data-show-if-val] values
  * then calls updateHeightForCurrentFrame
  */
-RulemakingsCommenting.prototype.toggleElementsByVars = function() {
+RulemakingCommenting.prototype.toggleElementsByVars = function() {
   const elementsToToggle = this.formEl.querySelectorAll('[data-show-if-var][data-show-if-val]');
   elementsToToggle.forEach(elToToggle => {
     const varName = elToToggle.dataset.showIfVar; // Which variable/input are we checking?
@@ -831,7 +831,7 @@ RulemakingsCommenting.prototype.toggleElementsByVars = function() {
 /**
  * Updates the meter and links in the topnav
  */
-RulemakingsCommenting.prototype.updateTopNav = function() {
+RulemakingCommenting.prototype.updateTopNav = function() {
   // if (this.isOnFrame('confirmation')) {
   //   this.topNav.classList.add('hidden');
   //   return;
@@ -895,7 +895,7 @@ RulemakingsCommenting.prototype.updateTopNav = function() {
  * Set the classes for the bottom nav buttons.
  * @param {('next'|'incomplete'|'submit')} frameState
  */
-RulemakingsCommenting.prototype.updateBottomNav = function(state = 'incomplete') {
+RulemakingCommenting.prototype.updateBottomNav = function(state = 'incomplete') {
   // The confirmation frame has three possible states and special rules
   if (this.isOnFrame('confirmation')) {
     if (this.submissionStatus === 'success') {
@@ -942,7 +942,7 @@ RulemakingsCommenting.prototype.updateBottomNav = function(state = 'incomplete')
  * On <form> changes, toggleElementsByVars(), clean up values, toggle required states, then validateCurrentFrame()
  * @param {Event} e
  */
-RulemakingsCommenting.prototype.handleFormChange = function(e) {
+RulemakingCommenting.prototype.handleFormChange = function(e) {
   // Maybe later: this.formEl.removeAttribute('data-has-been-active');
   this.toggleElementsByVars();
 
@@ -1053,7 +1053,7 @@ RulemakingsCommenting.prototype.handleFormChange = function(e) {
  * }
  * @param {number} [validationType=1] - Optional. For a 'force' value:
  */
-RulemakingsCommenting.prototype.validateCurrentFrame = function(validationType = 0) {
+RulemakingCommenting.prototype.validateCurrentFrame = function(validationType = 0) {
   let isValidated = true;
   const currentFrame = this.frames[this.currentFrameNum];
 
@@ -1080,14 +1080,14 @@ RulemakingsCommenting.prototype.validateCurrentFrame = function(validationType =
  * Calls this.toggleHelp();
  * @param {PointerEvent} e
  */
-RulemakingsCommenting.prototype.handleTooltipClick = function(e) {
+RulemakingCommenting.prototype.handleTooltipClick = function(e) {
   this.toggleHelp(e.target);
 };
 
 /**
  * @param {PointerEvent} e
  */
-RulemakingsCommenting.prototype.handleTopNavClick = function(e) {
+RulemakingCommenting.prototype.handleTopNavClick = function(e) {
   e.preventDefault();
   // We need a frame name. We don't want the links to do anything if we're on the 'success' confirmation page
   if (e.target.dataset.frame && this.submissionStatus !== 'success')
@@ -1098,7 +1098,7 @@ RulemakingsCommenting.prototype.handleTopNavClick = function(e) {
  * Handler for clicking the back, next, and submit buttons, then calls goToFrame() or startSubmitting()
  * @param {PointerEvent} e
  */
-RulemakingsCommenting.prototype.handleBottomNavClick = function(e) {
+RulemakingCommenting.prototype.handleBottomNavClick = function(e) {
   e.preventDefault();
 
   if (e.target.dataset.command == 'next') {
@@ -1116,7 +1116,7 @@ RulemakingsCommenting.prototype.handleBottomNavClick = function(e) {
  * Handles updates and display of the tooltip help section
  * @param {HTMLElement} [targetEl] - A null value acts like a force close.
  */
-RulemakingsCommenting.prototype.toggleHelp = function(targetEl) {
+RulemakingCommenting.prototype.toggleHelp = function(targetEl) {
   if (!targetEl) {
     this.help.classList.add('hidden');
     this.help.classList.remove('show');
@@ -1146,7 +1146,7 @@ RulemakingsCommenting.prototype.toggleHelp = function(targetEl) {
 /**
  *
  */
-RulemakingsCommenting.prototype.startSubmitting = async function() {
+RulemakingCommenting.prototype.startSubmitting = async function() {
   // TODO: deactivate bottom nav
 
   if (this.validateEntireForm()) {
@@ -1229,7 +1229,7 @@ RulemakingsCommenting.prototype.startSubmitting = async function() {
  * If the form has values, offer a change to stay on this page and not lose the data
  * @param {Event} e
  */
-RulemakingsCommenting.prototype.handleBeforeUnload = function() {
+RulemakingCommenting.prototype.handleBeforeUnload = function() {
   // TODO: turn this back on
   // if (this.formEl.dataset.hasBeenActive) {
   //   e.preventDefault();
@@ -1239,7 +1239,7 @@ RulemakingsCommenting.prototype.handleBeforeUnload = function() {
 /**
  * @param {Event} e
  */
-RulemakingsCommenting.prototype.handleInputChange = function() {
+RulemakingCommenting.prototype.handleInputChange = function() {
   // console.log('change(e): ', e);
   // Rules for frame 0/type
   // TODO: do we need this?
@@ -1248,12 +1248,12 @@ RulemakingsCommenting.prototype.handleInputChange = function() {
 /**
  * @param {InputEvent} e
  */
-RulemakingsCommenting.prototype.handleInputInput = function() {
+RulemakingCommenting.prototype.handleInputInput = function() {
   // console.log('input(e): ', e);
   // TODO: do we need this?
 };
 
 /**
- * Create an instance of RulemakingsCommenting()
+ * Create an instance of RulemakingCommenting()
  */
-new RulemakingsCommenting();
+new RulemakingCommenting();
