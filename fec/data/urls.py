@@ -52,6 +52,7 @@ urlpatterns = [
             views_datatables.reports),
     re_path(r'^legal-resources/enforcement/audit-search/$',
             views_datatables.audit),
+    
 
     re_path(r'^widgets/aggregate-totals/$', views.aggregate_totals),
 ]
