@@ -400,7 +400,7 @@ def rulemaking_add_comments(request, rm_no):
         'rm_title': rulemaking['title'],
         'parent': 'legal',
         'social_image_identifier': 'legal',
-        'could_testify': True,
+        'could_testify': False,  # TODO: This will change when the field exists in the API
     })
 
 
