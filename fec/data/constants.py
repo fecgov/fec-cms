@@ -444,7 +444,9 @@ table_columns = OrderedDict([
         ['Spender name', 'Recipient', 'Party account', 'Description', 'Date', 'Amount']),
     ('debts', ['Committee name', 'Creditor/Debtor name', 'Beginning balance', 'Ending balance', 'Coverage end date']),
     ('rulemakings', ['REG number', 'REG name and documents', 'Open for comments']),
+    ('murs', ['Case number', 'Case name', 'Case details and documents']),
 ])
+
 
 line_numbers = {
     'receipts': {
@@ -1023,6 +1025,15 @@ secondary_subject_ids = {
     "17": "Limits",
     "18": "Prohibitions",
   }
+}
+
+mur_document_categories = {
+    "1": "Conciliation and Settlement Agreements",
+    "2": "Complaint, Responses, Designation of Counsel and Extensions of Time",
+    "3": "General Counsel Reports, Briefs, Notifications and Responses",
+    "4": "Certifications",
+    "5": "Civil Penalties, Disgorgements and Other Payments",
+    "6": "Statements of Reasons"
 }
 
 

@@ -1,0 +1,152 @@
+{% extends 'partials/filters.jinja' %}
+{% import 'macros/filters/text.jinja' as text %}
+{% import 'macros/filters/date.jinja' as date %}
+{% import 'macros/filters/range.jinja' as range %}
+{% import 'macros/filters/keyword-proximity.jinja' as proximity %}
+{% import 'macros/legal.jinja' as legal %}
+{% import 'macros/filters/checkbox.jinja' as checkbox %}
+{% import 'macros/filters/dropdown-json.jinja' as dropdown %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+
+
+{% block filters %}
+  <div class="filters__aside">
+    <div class="button--notebook u-margin--top t-sans">Use the legal search guide to learn more about <a href="/legal-resources/how-to-use-fec-legal-search-systems/">how to use FEC legal search systems</a>.</div>
+  </div>
+  <form id="rulemaking-filters" action="">
+  <div class="filters__inner">
+    <div class="filter">
+      <label class="label" for="case_no">MUR number</label>
+      <input id="case_no" name="case_no" type="text">
+    </div>
+    <div class="filter">
+      <label class="label" for="case_respondents">MUR respondents</label>
+      <input id="case_respondents" name="case_respondents" type="text">
+    </div>
+  </div>
+
+  <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
+
+    <button type="button" class="js-accordion-trigger accordion__button">Documents</button>
+    <div class="accordion__content">
+    {{ legal.keyword_search_q(result_type, query) }}
+    {{ proximity.field('keyword-proximity', title='Proximity') }}
+   
+    {{ checkbox.checkbox_dropdown(
+      name='case_doc_category_id',
+      label='Document type',
+      options=constants.mur_document_categories,
+      ) 
+    }}
+    
+      <div class="filter">
+        <label class="label t-inline-block">Document date range</label>
+        <div class="tooltip__container" tabindex="0">
+          <button class="tooltip__trigger"><span class="u-visually-hidden">Learn more</span></button>
+          <div class="tooltip tooltip--left tooltip--above">
+            <p class="tooltip__content tooltip__content">Document date range does not search archived cases</p>
+          </div>
+        </div>
+        <div class="range range--date js-date-range">
+          <div class="range__input range__input--min" data-filter="range">
+            <label for="case_min_document_date">Beginning</label>
+            <input id="case_min_document_date" name="case_min_document_date" placeholder="mm/dd/yyyy">
+          </div>
+          <div class="range__hyphen">-</div>
+          <div class="range__input range__input--max" data-filter="range">
+            <label for="case_max_document_date">Ending</label>
+            <input id="case_max_document_date" name="case_max_document_date" placeholder="mm/dd/yyyy">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="js-accordion-trigger accordion__button">Case details</button>
+    <div class="accordion__content">
+
+      {{ checkbox.checkbox_dropdown_multiple(
+        'mur_disposition_category_id',
+        'Final disposition',
+        selected=constants.suggested_mur_disposition_category_ids ,
+        options=constants.mur_disposition_category_ids,
+        legend=True,
+        prefix='mur_disposition_category_id',
+        show_tooltip_text='Final disposition does not search archived cases'
+        ) }}
+      {{ dropdown.select_json(
+        'primary_subject_id',
+        'Case subject',
+        options=constants.primary_subject_ids,
+        default="",
+        show_tooltip_text='Case subject does not search archived cases'
+        ) }}
+      {{ dropdown.select_json_indentation(
+        'secondary_subject_id',
+        'Secondary case subject',
+        options=constants.secondary_subject_placeholder,
+        default=""
+        ) }}
+
+      <div class="filter">
+        <legend class="label">Penalty amount by respondent</legend>
+        <div class="range range--currency">
+          <div class="range__input range__input--min js-filter" data-filter="range">
+            <label for="case_min_penalty_amount">From</label>
+            <input id="case_min_penalty_amount" type="text" name="case_min_penalty_amount" data-range="min" data-prefix="$" data-suffix="or more">
+          </div>
+          <div class="range__hyphen">-</div>
+          <div class="range__input range__input--max js-filter" data-filter="range">
+            <label for="case_max_penalty_amount">To</label>
+            <input id="case_max_penalty_amount" type="text" name="case_max_penalty_amount" data-range="max" data-prefix="$" data-suffix="or less">
+          </div>
+        </div>
+      </div>
+
+      <div class="filter">
+        <legend class="label">Case open date range</legend>
+        <div class="range range--date js-date-range">
+          <div class="range__input range__input--min" data-filter="range">
+            <label for="case_min_open_date">Beginning</label>
+            <input id="case_min_open_date" name="case_min_open_date" placeholder="mm/dd/yyyy">
+          </div>
+          <div class="range__hyphen">-</div>
+          <div class="range__input range__input--max" data-filter="range">
+            <label for="case_max_open_date">Ending</label>
+            <input id="case_max_open_date" name="case_max_open_date" placeholder="mm/dd/yyyy">
+          </div>
+        </div>
+      </div>
+
+      <div class="filter">
+        <legend class="label">Case close date range</legend>
+        <div class="range range--date js-date-range">
+          <div class="range__input range__input--min" data-filter="range">
+            <label for="case_min_close_date">Beginning</label>
+            <input id="case_min_close_date" name="case_min_close_date" placeholder="mm/dd/yyyy">
+          </div>
+          <div class="range__hyphen">-</div>
+          <div class="range__input range__input--max" data-filter="range">
+            <label for="case_max_close_date">Ending</label>
+            <input id="case_max_close_date" name="case_max_close_date" placeholder="mm/dd/yyyy">
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <button type="button" class="js-accordion-trigger accordion__button">Disposition citations</button>
+
+    <div class="accordion__content">
+      <label>If more than one citation is entered:</label>
+      <input type="radio" id="case_citation_require_all_false" name="case_citation_require_all" value="false"{% if case_citation_require_all != 'true' %} checked{% endif %}>
+      <label for="case_citation_require_all_false">Show cases citing any of them</label>
+      <input type="radio" id="case_citation_require_all_true" name="case_citation_require_all" value="true"{% if case_citation_require_all == 'true' %} checked{% endif %}>
+      <label for="case_citation_require_all_true">Show cases citing all of them</label>
+      {{ typeahead.field('case_regulatory_citation', 'Regulatory citation', False, dataset='caseRegulatoryCitations',
+        allow_text=False, show_tooltip_text='Regulatory citation does not search archived cases') }}
+      {{ typeahead.field('case_statutory_citation', 'Statutory citation', False, dataset='caseStatutoryCitations',
+        allow_text=False, show_tooltip_text='Statutory citation does not search archived cases') }}
+    </div>
+  </div>
+</form>
+
+{% endblock %}

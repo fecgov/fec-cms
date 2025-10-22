@@ -1218,3 +1218,37 @@ let docs = params.getAll('doc_category_id') || [];
 return docs;
 };
 
+export const murs = [
+    {
+    data: 'no',
+    className: 'all align-top t-bold',
+    orderable: true,
+    render: function(data, type, row) {
+      return `MUR #${row.no}`;
+    }
+  },
+  {
+    data: 'name',
+    className: 'all align-top t-bold',
+    orderable: true,
+    render: function(data, type, row) {
+      return row.name;
+    }
+  },
+  {
+    data: null,
+    className: 'all column--rulemaking-docs align-top',
+    orderable: false,
+    render: function (data, type, row) {
+      let html = `<p>`;
+      for (let subject of row.subjects) {
+        html += `${subject.subject}, `
+      }
+      html += `</p>`;
+      return html;
+    }
+  }
+
+]
+
+

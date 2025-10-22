@@ -295,3 +295,17 @@ def rulemaking(request):
         'rm_year_opts': rm_year_opts,
         'social_image_identifier': 'data',
     })
+
+def mur(request):
+    rm_year_opts = {year: year for year in range(datetime.datetime.now().year, 1988, -1)}
+   
+    return render(request, 'datatable.jinja', {
+        'has_keyword_modal': True,
+        'parent': 'data',
+        'result_type': 'murs',
+        'slug': 'murs',
+        'title': 'MURs',
+        'columns': constants.table_columns['murs'],
+        'rm_year_opts': rm_year_opts,
+        'social_image_identifier': 'data',
+    })

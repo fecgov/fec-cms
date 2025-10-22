@@ -25,6 +25,7 @@ urlpatterns = [
     re_path(r'^data/legal/search/regulations/$',
             views.legal_doc_search_regulations),
     re_path(r'^data/legal/search/statutes/$', views.legal_doc_search_statutes),
+    re_path(r'^legal/murs/$',views_datatables.mur)
 ]
 
 if settings.FEATURES['rulemakings']:
