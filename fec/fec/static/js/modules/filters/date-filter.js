@@ -31,7 +31,7 @@ export default function DateFilter(elm) {
 
   this.$input.on('change', this.handleInputChange.bind(this));
 
-  this.fields = ['min_' + this.name, 'max_' + this.name];
+  this.fields = ['min_' + this.name, 'max_' + this.name, 'case_min_' + this.name, 'case_max_' + this.name];
 
   this.$minDate.on('focus', this.handleMinDateSelect.bind(this));
   this.$maxDate.on('focus', this.handleMaxDateSelect.bind(this));
@@ -130,6 +130,9 @@ DateFilter.prototype.validate = function() {
 DateFilter.prototype.fromQuery = function(query) {
   if (query['min_' + this.name] || query['max_' + this.name]) {
     this.setValue([query['min_' + this.name], query['max_' + this.name]]);
+  }
+  else if (query['case_min_' + this.name] || query['case_max_' + this.name]) {
+    this.setValue([query['case_min_' + this.name], query['case_max_' + this.name]]);
   }
   return this;
 };

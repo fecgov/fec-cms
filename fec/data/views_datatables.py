@@ -298,6 +298,12 @@ def rulemaking(request):
 
 def mur(request):
     rm_year_opts = {year: year for year in range(datetime.datetime.now().year, 1988, -1)}
+    secondary_subject_ids = constants.secondary_subject_ids
+
+    # For Javascript
+    context_vars = {
+        'secondary_subject_ids': secondary_subject_ids,
+    }
    
     return render(request, 'datatable.jinja', {
         'has_keyword_modal': True,
@@ -307,5 +313,7 @@ def mur(request):
         'title': 'MURs',
         'columns': constants.table_columns['murs'],
         'rm_year_opts': rm_year_opts,
+        'table_context': context_vars,
+        'dates': utils.date_ranges(),
         'social_image_identifier': 'data',
     })

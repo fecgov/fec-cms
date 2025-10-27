@@ -123,6 +123,73 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
   submitBlocker.setAttribute('aria-hidden', 'true');
   rulemakingFiltersFormElement.prepend(submitBlocker);
 
+  const get_subject_ids = function(type) {
+    const params = new URLSearchParams(window.location.search);
+    let ids = params.getAll(`${type}_subject_id`) || [];
+    return ids
+  };
+    // JS for subject MUR/ADR selects
+      // The window.context is declared in datatable.jinja
+     if (window.context) {
+        //TO DO: Find another way to NOT use "var" so this variable is available in scope below
+        var secondary_subject_ids = window.context.secondary_subject_ids || [];
+        }
+        const primary_subject_id = get_subject_ids('primary');
+        const secondary_subject_id = get_subject_ids('secondary');
+      
+        const subject_select = document.getElementById('primary_subject_id');
+        const secondary_select_div = document.querySelector("[data-modifies-filter='secondary_subject_id']");
+        const secondary_select = document.getElementById('secondary_subject_id');
+
+        // Populate secondary select on page load
+        load_secondary_select(primary_subject_id);
+        
+        // Add aria attribute to selected option in primary select
+        Array.from(subject_select.options).forEach(option => {
+          if (option.value == primary_subject_id) option.setAttribute('aria-selected', 'true');
+        });
+
+        // Load secondary select, upon change of primary select
+        subject_select.addEventListener('change', event => {
+          const selected_id = event.target.value;
+          load_secondary_select(selected_id);
+          $(secondary_select).val('').trigger('change')
+        });
+
+        function load_secondary_select(id) {
+          // First, reset the secondary select to default
+          secondary_select.replaceChildren(new Option('All', "", true, true));
+          // Show and populate secondary select options, if applicable
+          if (id in secondary_subject_ids) {
+            // Show secondary select
+            secondary_select_div.style.display = 'block';
+            // Append secondary select options
+            for (const [key, value] of Object.entries(secondary_subject_ids[id])) {
+              //If there is a current secondary_subject_id, append it as the selected option
+              if (key == secondary_subject_id) {
+                secondary_select.append(new Option(value, key, true, true));
+                // Add aria-selected to that option
+                secondary_select.options[secondary_select.selectedIndex].setAttribute('aria-selected', 'true');
+              // Append other options, unselected
+              } else {
+                secondary_select.append(new Option(value, key));
+              };
+            };
+
+          } else {
+            secondary_select_div.style.display = 'none';
+          };
+        };
+      
+    $(document).on('click','.accordion-trigger-on',  function(e){ 
+      let exp = $(this).attr('aria-expanded') == 'false' ? 'true' : 'false'
+      $(this).attr('aria-expanded', exp)
+      //let hid = $(this).next('div').attr('aria-hidden') == 'true' ? 'false' : 'false'
+      $(this).next('div').attr('aria-hidden', exp == 'true' ? 'false' : 'true')
+
+    })
+
+
   const $table = $('#results');
   new DataTable_FEC($table, {
     autoWidth: false,

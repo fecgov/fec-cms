@@ -18,11 +18,11 @@ data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{
 </div>
 {% endmacro %}
 
-{% macro select_json_indentation(name, label, keys, options={}, default=none) %}
+{% macro select_json_indentation(name, label, keys, options={}, default=none, data_prefix='') %}
 <div class="filter js-filter js-filter-control sub--filter--indent" data-filter="select" 
-data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{{ default }}">
+data-validate="false" data-name="{{ name }}" data-modifies-filter="{{ name }}" data-required-default="{{ default }}">
   <label for="{{ name }}" class="label">{{ label }}</label>
-  <select id="{{ name }}" name="{{ name }}">
+  <select id="{{ name }}" name="{{ name }}" data-filter-change="true" data-removeable-filter="true" data-prefix="{{ data_prefix }}">
     {% for key,value in options.items() %}
       <option value="{{ key }}">{{ value }}</option>
     {% endfor %}
@@ -62,18 +62,109 @@ data-validate="false" data-modifies-filter="{{ name }}" data-required-default="{
   @param {string} label - Used in <label>{label}</label> and <label>Limit 1 {label}</label>
   @param {list} options[] - The data used for <option value="{}">{}</option>
 #}
-{% macro select_single_flat_list(name, label, options={}, hide_help=false, first_opt_no_value_label=false) %}
+{% macro select_single_flat_list(name, label, options={}, hide_help=false, first_opt_no_value_label=false, data_prefix='') %}
 <div class="filter js-filter js-filter-control" id="{{ name }}-field" data-filter="select" data-name="{{ name }}" data-validate="false" data-modifies-filter="{{ name }}">
   <label for="{{ name }}" class="label">{{ label }}</label>
   {% if not hide_help -%}
   <label class="label--help u-margin--top">Limit 1 {{ label | lower }}</label>
   {%- endif %}
-  <select id="{{ name }}" name="{{ name }}" data-filter-change="true" data-removeable-filter="true" class="dropdown">
+  <select id="{{ name }}" name="{{ name }}" data-filter-change="true" data-removeable-filter="true" class="dropdown" data-prefix="{{ data_prefix }}">
     {% if first_opt_no_value_label %}<option value=''>{{ first_opt_no_value_label }}</option>{% endif %}
     {% for itemValue, itemLabel in options.items() %}
-      <option value={{itemValue}} data-line-type="">{{ itemLabel }}</option>
+      <option value={{itemValue}}>{{ itemLabel }}</option>
     {% endfor %}
     </optgroup>
   </select>
 </div>
 {% endmacro %}
+
+
+{# -----------NEW-------------------- #}
+{# {% macro field(name, label, id_suffix='', id_prefix='') %}
+  <div class="filter js-filter" id="{{ id_prefix }}{{ name }}{{ id_suffix }}" data-name="{{ name }}" data-filter="date">
+  <fieldset>
+    <legend class="label">{{ label }}</legend>
+    <div class="range range--date js-date-range">
+      <div class="range__input range__input--min" data-filter="range">
+        <label for="{{ id_prefix }}min_{{ name }}{{ id_suffix }}">Beginning</label>
+        <input type="text" id="{{ id_prefix }}min_{{ name }}{{ id_suffix }}" name="{{ id_prefix }}min_{{ name }}" data-range="min" data-removable="true" class="js-min-date" data-prefix="Beginning">
+      </div>
+      <div class="range__hyphen">-</div>
+      <div class="range__input range__input--max" data-filter="range">
+        <label for="{{ id_prefix }}max_{{ name }}{{ id_suffix }}">Ending</label>
+        <input type="text" id="{{ id_prefix }}max_{{ name }}{{ id_suffix }}" name="{{ id_prefix }}max_{{ name }}" data-range="max" data-removable="true" class="js-max-date" data-prefix="Ending">
+      </div>
+      <button class="button--go button--standard" type="button">
+        <span class="u-visually-hidden">Search</span>
+      </button>
+    </div>
+  </fieldset>
+</div>
+{% endmacro %} #}
+
+
+{% macro select_single_flat_list_range(name, label, options={}, hide_help=false, first_opt_no_value_label=false) %}
+<div class="filter js-filter js-filter-control" id="{{ name }}-field" data-filter="select"  data-validate="false">
+ <fieldset>
+    <div class="range range--date js-date-range" data-modifies-filter="primary_{{ name }}" data_prefix="Primary subject" data-name="primary_{{ name }}">
+    <label for="{{ name }}" class="label">{{ label }}</label>
+    {% if not hide_help -%}
+    <label class="label--help u-margin--top">Limit 1 {{ label | lower }}</label>
+    {%- endif %}
+    <select id="primary_{{ name }}" name="primary_{{ name }}" data-range="min" data-filter-change="true" data-removeable-filter="true" class="dropdown" data-prefix="Primary subject: "  data-removable="true" class="js-min-date">
+      {% if first_opt_no_value_label %}<option value=''>{{ first_opt_no_value_label }}</option>{% endif %}
+      {% for itemValue, itemLabel in options.items() %}
+        <option value={{itemValue}}>{{ itemLabel }}</option>
+      {% endfor %}
+    </select>
+    </div>
+
+    <div class="range range--date js-date-range" data-modifies-filter="secondary_{{ name }}" data_prefix="Secondary subject: " data-name="secondary_{{ name }}">
+    <label for="{{ name }}" class="label">{{ label }}</label>
+    {% if not hide_help -%}
+    <label class="label--help u-margin--top">Limit 1 {{ label | lower }}</label>
+    {%- endif %}
+    <select id="secondary_{{ name }}" name="secondary_{{ name }}" data-range="max" data-filter-change="true" data-removeable-filter="true" class="dropdown" data-prefix="Secondary subject: " data-removable="true" class="js-max-date">
+      {% if first_opt_no_value_label %}<option value=''>{{ first_opt_no_value_label }}</option>{% endif %}
+      {% for itemValue, itemLabel in options.items() %}
+        <option value={{itemValue}}>{{ itemLabel }}</option>
+      {% endfor %}
+    </select>
+    </div>
+  </fieldset>
+</div>
+{% endmacro %}
+
+{% macro select_single_flat_list_subject(name, label, options={}, hide_help=false, first_opt_no_value_label=false) %}
+<div class="filter js-filter js-filter-control" id="{{ name }}-field" data-filter="select"  data-validate="false">
+ <fieldset>
+    <div data-modifies-filter="primary_{{ name }}" data_prefix="Primary subject" data-name="primary_{{ name }}">
+    <label for="{{ name }}" class="label">{{ label }}</label>
+    {% if not hide_help -%}
+    <label class="label--help u-margin--top">Limit 1 {{ label | lower }}</label>
+    {%- endif %}
+    <select id="primary_{{ name }}" name="primary_{{ name }}" data-filter-change="true" data-removeable-filter="true" class="dropdown" data-prefix="Primary subject: "  data-removable="true">
+      {% if first_opt_no_value_label %}<option value=''>{{ first_opt_no_value_label }}</option>{% endif %}
+      {% for itemValue, itemLabel in options.items() %}
+        <option value={{itemValue}}>{{ itemLabel }}</option>
+      {% endfor %}
+    </select>
+    </div>
+
+    <div class="sub--filter--indent" data-modifies-filter="secondary_{{ name }}" data_prefix="Secondary subject: " data-name="secondary_{{ name }}">
+    <label for="{{ name }}" class="label">{{ label }}</label>
+    {% if not hide_help -%}
+    <label class="label--help u-margin--top">Limit 1 {{ label | lower }}</label>
+    {%- endif %}
+    <select id="secondary_{{ name }}" name="secondary_{{ name }}" data-filter-change="true" data-removeable-filter="true" class="dropdown" data-prefix="Secondary subject: " data-removable="true">
+      {% if first_opt_no_value_label %}<option value=''>{{ first_opt_no_value_label }}</option>{% endif %}
+      {% for itemValue, itemLabel in options.items() %}
+        <option value={{itemValue}}>{{ itemLabel }}</option>
+      {% endfor %}
+    </select>
+    </div>
+  </fieldset>
+</div>
+{% endmacro %}
+
+

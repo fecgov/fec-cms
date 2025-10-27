@@ -222,6 +222,42 @@
         width: 25%;
       }
     }
+
+    &.column--legal-docs {
+    padding: u(1rem);
+    vertical-align: top;
+    
+      .document-container {
+        display: flex;
+        margin-left: 0; 
+        padding: 0;
+
+        &:last-child {
+          margin-bottom: u(-1rem);
+        }
+
+        .document-category {
+          border-right: 1px solid $gray-lightest;
+          font-weight: bold;
+          margin-left: u(-1rem);
+          padding: u(1rem);
+          vertical-align: top;
+          width: 25%;
+        }
+
+        .document_details {
+          padding: u(1.5rem 1rem);
+          vertical-align: top;
+          width:75%;   
+        }
+      }
+
+      em, .t-highlight {
+        background-color: rgba(54,189,187,.15);
+        font-weight: 700;
+        padding: u(0 .3em);
+      }
+    }
   }
 
   .sorting_disabled {
