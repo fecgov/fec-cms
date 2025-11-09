@@ -80,33 +80,12 @@ data-validate="false" data-name="{{ name }}" data-modifies-filter="{{ name }}" d
 
 
 {# -----------NEW-------------------- #}
-{# {% macro field(name, label, id_suffix='', id_prefix='') %}
-  <div class="filter js-filter" id="{{ id_prefix }}{{ name }}{{ id_suffix }}" data-name="{{ name }}" data-filter="date">
-  <fieldset>
-    <legend class="label">{{ label }}</legend>
-    <div class="range range--date js-date-range">
-      <div class="range__input range__input--min" data-filter="range">
-        <label for="{{ id_prefix }}min_{{ name }}{{ id_suffix }}">Beginning</label>
-        <input type="text" id="{{ id_prefix }}min_{{ name }}{{ id_suffix }}" name="{{ id_prefix }}min_{{ name }}" data-range="min" data-removable="true" class="js-min-date" data-prefix="Beginning">
-      </div>
-      <div class="range__hyphen">-</div>
-      <div class="range__input range__input--max" data-filter="range">
-        <label for="{{ id_prefix }}max_{{ name }}{{ id_suffix }}">Ending</label>
-        <input type="text" id="{{ id_prefix }}max_{{ name }}{{ id_suffix }}" name="{{ id_prefix }}max_{{ name }}" data-range="max" data-removable="true" class="js-max-date" data-prefix="Ending">
-      </div>
-      <button class="button--go button--standard" type="button">
-        <span class="u-visually-hidden">Search</span>
-      </button>
-    </div>
-  </fieldset>
-</div>
-{% endmacro %} #}
 
-
+{#  WORKS (rename this from range to something else and try to make it more reusable) #}
 {% macro select_single_flat_list_range(name, label, options={}, hide_help=false, first_opt_no_value_label=false) %}
-<div class="filter js-filter js-filter-control" id="{{ name }}-field" data-filter="select"  data-validate="false">
- <fieldset>
-    <div class="range range--date js-date-range" data-modifies-filter="primary_{{ name }}" data_prefix="Primary subject" data-name="primary_{{ name }}">
+<div class="filter js-filter js-filter-control" id="{{ name }}-field" data-filter="select"  data-validate="false" data-name="{{ name }}">
+ <fieldset class="filter" id="{{name}}-field">
+    <div class="range range--date js-date-range js-filter" data-modifies-filter="primary_{{ name }}" data_prefix="Primary subject" data-name="primary_{{ name }}" data-filter="range">
     <label for="{{ name }}" class="label">{{ label }}</label>
     {% if not hide_help -%}
     <label class="label--help u-margin--top">Limit 1 {{ label | lower }}</label>
@@ -119,8 +98,8 @@ data-validate="false" data-name="{{ name }}" data-modifies-filter="{{ name }}" d
     </select>
     </div>
 
-    <div class="range range--date js-date-range" data-modifies-filter="secondary_{{ name }}" data_prefix="Secondary subject: " data-name="secondary_{{ name }}">
-    <label for="{{ name }}" class="label">{{ label }}</label>
+    <div class="range range--date js-date-range filter js-filter sub--filter--indent" data-modifies-filter="secondary_{{ name }}" data_prefix="Secondary subject: " data-name="secondary_{{ name }}" data-filter="range">
+    <label for="{{ name }}" class="label">Secondary {{ label }}</label>
     {% if not hide_help -%}
     <label class="label--help u-margin--top">Limit 1 {{ label | lower }}</label>
     {%- endif %}
@@ -132,8 +111,10 @@ data-validate="false" data-name="{{ name }}" data-modifies-filter="{{ name }}" d
     </select>
     </div>
   </fieldset>
-</div>
+</div> 
 {% endmacro %}
+{#  END BEST #}
+
 
 {% macro select_single_flat_list_subject(name, label, options={}, hide_help=false, first_opt_no_value_label=false) %}
 <div class="filter js-filter js-filter-control" id="{{ name }}-field" data-filter="select"  data-validate="false">
@@ -167,4 +148,4 @@ data-validate="false" data-name="{{ name }}" data-modifies-filter="{{ name }}" d
 </div>
 {% endmacro %}
 
-
+{# ----------/END-NEW-------------------- #}

@@ -122,11 +122,14 @@ export function getCycle(value, meta) {
  * @param {*} column
  * @returns
  */
+
 export function mapSort(order, column) {
   return _map(order, function(item) {
-    let name = column[item.column].data;
+    console.log('column[item.column]: ', column[item.column])
+    // Use sort column.sort_alias for legal, otherwise use the column.data 
+    let name = column[item.column].sort_alias ? column[item.column].sort_alias : column[item.column].data;
     if (item.dir === 'desc') {
-      name = '-' + name;
+    name =  '-' + name;
     }
     return name;
   });
@@ -609,6 +612,7 @@ export function DataTable_FEC(selector, opts) {
 }
 
 DataTable_FEC.prototype.initTable = function() {
+
   this.api = this.$body.DataTable(this.opts);
   DataTable_FEC.registry[this.$body.attr('id')] = this;
 

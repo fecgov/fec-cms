@@ -115,6 +115,14 @@
   }
 }
 
+[data-tag-category="primary_subject_id"] .tag__item::after {
+  content: "\2014" !important;
+}
+
+[data-tag-category="primary_subject_id"] .tag__item:last-child:after {
+  content: '' !important;
+}
+
 .tag__category--doc {
   padding: 0 0 0 3rem;
   background: none;

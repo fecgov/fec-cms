@@ -115,13 +115,13 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
 });
 
  // Add a null submit button at the top of the form to prevent Enter submits
-  const rulemakingFiltersFormElement = document.querySelector('#rulemaking-filters');
+  const mursFiltersFormElement = document.querySelector('#murs-filters');
   const submitBlocker = document.createElement('input');
   submitBlocker.setAttribute('type', 'submit');
   submitBlocker.setAttribute('disabled', 'disabled');
   submitBlocker.setAttribute('style', 'display:none');
   submitBlocker.setAttribute('aria-hidden', 'true');
-  rulemakingFiltersFormElement.prepend(submitBlocker);
+  mursFiltersFormElement.prepend(submitBlocker);
 
   const get_subject_ids = function(type) {
     const params = new URLSearchParams(window.location.search);
@@ -180,7 +180,8 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
             secondary_select_div.style.display = 'none';
           };
         };
-      
+
+    //Accordions in highlights need this implicit listener to work becuase of conflict eith accordions in filter panel
     $(document).on('click','.accordion-trigger-on',  function(e){ 
       let exp = $(this).attr('aria-expanded') == 'false' ? 'true' : 'false'
       $(this).attr('aria-expanded', exp)
@@ -189,13 +190,13 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
 
     })
 
-
+   
   const $table = $('#results');
   new DataTable_FEC($table, {
     autoWidth: false,
     title: 'MURs',
     path: ['legal', 'search'],
-    query: { type: "murs"},
+    query: { type: "murs", doc_type: "murs" },
     columns: cols_murs,
     order: [[0, 'desc']],
     useFilters: true,
@@ -207,7 +208,9 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
       if (queryParams.q) {
         $('input[name="q"]').val(queryParams.q).trigger('change');
       }
-    }
+    },
+//     "drawCallback": function() {
+//    }
   });
 
 });

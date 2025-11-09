@@ -1220,30 +1220,54 @@ return docs;
 
 export const murs = [
     {
-    data: 'case_serial',
+    data: 'no',
+    sort_alias: 'case_no',
     className: 'cell--25 hide-panel all align-top t-bold',
     orderable: true,
     render: function(data, type, row) {
-      return `MUR #${row.case_serial}`;
+      let archived  = row.mur_type == 'archived' ? `<div class="legal-mur__archive"><span class="legal-mur__archive-icon"><span class="u-visually-hidden">Icon representing an archived case</span></span>Archived case</div>` : '';
+      return `MUR #${row.no}${archived}`;
     }
   },
   {
     data: 'name',
-    className: 'cell--25 align-top t-bold',
-    orderable: true,
+    className: 'cell--25 align-top',
+    orderable: false,
     render: function(data, type, row) {
-      return row.name;
+      // name = row.name || row.mur_name
+      // return name.toUpperCase()
+      if (row.mur_type == 'current') {
+                return `<a title="${row.name}" href="/data/legal/matter-under-review/${row.no}/">
+                ${row.name.toUpperCase()}</a>`
+      } else if (row.no == '3620' && row.mur_type == 'archived') {
+                return `<a title="${row.mur_name }" href="/data/legal/matter-under-review/${row.no}/?mur_type=archived">
+                  ${row.mur_name.toUpperCase()}</a>`
+      } else {
+              return `<a title="${row.mur_name}" href="/data/legal/matter-under-review/${row.no}/">
+                  ${row.mur_name.toUpperCase()}</a>`
+      }
     }
   },
+
+
+
+
   {
     data: null,
     className: 'cell--50 column--legal-docs align-top',
     orderable: false,
     render: function (data, type, row) {
       let document_content = `<p>`;
-      for (let subject of row.subjects) {
-        document_content += `${subject.subject}, `
-      }
+        if (row.subjects) {
+          for (let subject of row.subjects) {
+            document_content += `${subject.subject}, `
+          }
+        } else if (row.subject) {
+            for (let subject of row.subject) {
+              document_content += `${subject.text}, `
+            }
+        }
+      
       document_content += `</p>`;
       //   const filters = this.filterSet.serialize();
 const filters = new URLSearchParams(window.location.search);
@@ -1252,7 +1276,7 @@ const filters_category_type = filters.has('case_doc_category_id')
 //   const filters_keyword = 'search' in filters;
 const filters_keyword = filters.has('q')
 //   const filters_proximity = 'q_proximity' in filters && filters.q_proximity.length == 2;
-const filters_proximity = filters.has('q_proximity') && filtersfilters.getAll('q_proximity').length == 2;
+const filters_proximity = filters.has('q_proximity') && filters.getAll('q_proximity').length == 2;
 //   const proximity_only = filters_proximity && !filters_keyword;
 const proximity_only = filters_proximity && !filters_keyword;
 
@@ -1260,8 +1284,6 @@ const current_doc_ids = filters.getAll('case_doc_category_id') || []
 console.log('current_doc_ids: ', current_doc_ids)
 
 //    // Opening div tags are lined up with their closing divs below
-     //let document_content = ''
-//   if (ao.document_highlights || ao.source || ao.ao_doc_category_id) {
      if (row.document_highlights || row.source || filters_category_type) {
        document_content += 
       `<div class="legal-search-result__hit u-margin--top">`;
@@ -1377,7 +1399,7 @@ show_category = document.category;
 
 ///////////// NEW FOR MUR DOCS ////////////////////////////////////////
 
-
+//NOT USING THIS NOW
   const showDocuments = function() {
     console.log('RAN')
   const filters = new URLSearchParams(window.location.search);
@@ -1388,130 +1410,3 @@ show_category = document.category;
   }
   return filters;
 };
-
-// //render: function (data, type, row) {
-//   //PLACHOLDER:
-//    const showDocumentsAA = function () {
-// //   const filters = this.filterSet.serialize();
-// const filters = new URLSearchParams(window.location.search);
-// //   const filters_category_type = 'ao_doc_category_id' in filters;
-// const filters_category_type = filters.has('case_doc_category_id')
-// //   const filters_keyword = 'search' in filters;
-// const filters_keyword = filters.has('q')
-// //   const filters_proximity = 'q_proximity' in filters && filters.q_proximity.length == 2;
-// const filters_proximity = filters.has('q_proximity') && filtersfilters.getAll('q_proximity').length == 2;
-// //   const proximity_only = filters_proximity && !filters_keyword;
-// const proximity_only = filters_proximity && !filters_keyword;
-
-// //    // Opening div tags are lined up with their closing divs below
-//      let document_content = ''
-// //   if (ao.document_highlights || ao.source || ao.ao_doc_category_id) {
-//      if (row.document_highlights || row.source || filters_category_type) {
-//        document_content += 
-//       `<div class="legal-search-result__hit u-margin--top">`;
-// //     if ((filters_category_type || filters_keyword) && !proximity_only) {
-//        if ((filters_category_type || filters_keyword) && !proximity_only) { 
-//            let category_shown = '';                                                                                                            
-// //         for (const [index, document] of ao.documents.entries()) { 
-//            for (const [index, document] of row.documents) { 
-
-// //           /*This will show documents in all 3 scenarios:
-// //             - When there is a keyword query and selected document categories
-// //             - When there are selected document categories and no keyword query
-// //             - When there is a keyword query and no selected document categories */
-
-// //           let category_match = !filters_category_type || filters.ao_doc_category_id.includes(document.ao_doc_category_id) ? true : false;
-// let category_match = !filters_category_type || filters.case_doc_category_id.includes(document.doc_order_id) ? true : false;
-
-// //           let text_match = index in ao.document_highlights || !filters_keyword ? true : false;
-// let text_match = index in row.document_highlights || !filters_keyword ? true : false;
-// //           let show_document = category_match && text_match;
-// let show_document = category_match && text_match; 
-//              if (show_document) {
-//                let top_border_class = '';
-//                let show_category = '';
-// //             let current_category = document.ao_doc_category_id;
-// let current_category = document.doc_order_id;
-//                if (category_shown != current_category) {
-//                      top_border_class = "u-border-top-nuetral";
-// //                   show_category = document.category;
-// show_category = document.category;
-//                      category_shown = current_category;
-//                  }
-//                  else {
-//                    show_category = '';
-//                  }
-//             document_content += `
-//                   <div class="document-container">
-//                     <div class="document-category ${top_border_class}">${show_category}</div>
-//                     <div class="document_details u-border-top-nuetral">
-//                       <div class="post--icon">
-//                         <span class="icon icon--inline--left i-document"></span>
-//                         <a href="${document.url}">
-//                           ${document.description}
-//                         </a>
-//                       </div>`;       
-//             if (row.document_highlights[index]) {
-//               if (row.document_highlights[index].length) {
-//                   document_content += `
-//                       <ul>
-//                         <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${row.document_highlights[index][0]}&#8230;
-//                         </li>
-//                       </ul>`;
-//               }
-//               if (row.document_highlights[index].length > 1) {
-//                   document_content += `
-//                       <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.no}-${index}">
-//                         <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.no}-${index}" aria-expanded="false">
-//                           ${row.document_highlights[index].length > 2 ? row.document_highlights[index].length -1 + " more keyword matches" : "1 more keyword match"}
-//                         </button>
-//                         <div class="accordion__content results__content" aria-hidden="true">
-//                           <ul>`;
-//                           for (let i = 1; i <= row.document_highlights[index].length -1; i++) {
-//                             document_content += `<li class="t-serif t-italic">&#8230;${row.document_highlights[index][i]}&#8230;</li>`;
-//                           }
-//                             document_content += `
-//                           </ul>
-//                         </div>
-//                       </div>`;       
-//               }
-//             }
-//             document_content += `
-//                     </div> 
-//                   </div>`;
-//           } 
-//         } 
-//       } else if (proximity_only) {
-//         let category_shown = '';
-//           for (const document of row.source) {
-//                 let top_border_class = '';
-//                 let show_category = '';
-//                 let current_category = document.doc;
-//                   if (category_shown != current_category) {
-//                       top_border_class = "u-border-top-nuetral";
-//                       show_category = document.category;
-//                       category_shown = current_category;
-//                   }
-//                   else {
-//                     show_category = '';
-//                   }
-//                     document_content += `
-//                       <div class="document-container">
-//                         <div class="document-category ${top_border_class}">${show_category}</div>
-//                         <div class="document_details u-border-top-nuetral">
-//                           <div class="post--icon">
-//                             <span class="icon icon--inline--left i-document"></span>
-//                             <a href="${document.url}">
-//                               ${document.description}
-//                             </a>
-//                           </div>
-//                         </div>
-//                       </div>`;
-//           }
-//       }
-//       document_content += `
-//       </div>`;
-//     }
-
-//     return document_content;
-//   }

@@ -260,6 +260,13 @@
     }
   }
 
+  .legal-mur__archive-icon {
+    display: inline-block;
+    margin-right: u(0.7rem);
+    vertical-align: top;
+    @include u-icon($file-box, $base, 1.5rem, 1.5rem, 100%);
+  }
+
   .sorting_disabled {
     cursor: default;
   }

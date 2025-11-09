@@ -13,20 +13,12 @@
   <div class="filters__aside">
     <div class="button--notebook u-margin--top t-sans">Use the legal search guide to learn more about <a href="/legal-resources/how-to-use-fec-legal-search-systems/">how to use FEC legal search systems</a>.</div>
   </div>
-  <form id="rulemaking-filters" action="">
+  <form id="murs-filters" action="">
   <div class="filters__inner">
-    <div class="filter">
-      <label class="label" for="case_no">MUR number</label>
-      <input id="case_no" name="case_no" type="text">
-    </div>
-    <div class="filter">
-      <label class="label" for="case_respondents">MUR respondents</label>
-      <input id="case_respondents" name="case_respondents" type="text">
-    </div>
+    {{ text.field('case_no', 'MUR number') }}
+    {{ text.field('case_respondents', 'MUR respondents') }}
   </div>
-
   <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
-
     <button type="button" class="js-accordion-trigger accordion__button">Documents</button>
     <div class="accordion__content">
         {{ legal.keyword_search_q(result_type, query) }}
@@ -50,7 +42,7 @@
             ) 
         }}
       {# ===============WORKS AS TWO SEPARATE FITERS =========================#}
-      {{ dropdown.select_single_flat_list(
+{#       {{ dropdown.select_single_flat_list(
         'primary_subject_id',
         'Case subject',
         options=constants.primary_subject_ids,
@@ -62,13 +54,10 @@
         options=constants.secondary_subject_placeholder,
         default="",
         data_prefix="Secondary subject: "
-        ) }}
-
-{# {{ dropdown.select_single_flat_list_subject(
-        'subject_id',
-        'Case subject',
-        options=constants.primary_subject_ids,
         ) }} #}
+    
+{# ===============TRY AS TWO RANGE FITERS =========================#}
+{{ dropdown.select_single_flat_list_range('subject_id', 'Case subject', options=constants.primary_subject_ids, hide_help=true, first_opt_no_value_label=false) }}
 
       <div class="filter">
         <legend class="label">Penalty amount by respondent</legend>
