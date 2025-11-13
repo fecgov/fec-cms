@@ -194,7 +194,7 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
   const $table = $('#results');
   new DataTable_FEC($table, {
     autoWidth: false,
-    title: 'MURs',
+    title: 'Closed Matters Under Review',
     path: ['legal', 'search'],
     query: { type: "murs", doc_type: "murs" },
     columns: cols_murs,
@@ -202,12 +202,15 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
     useFilters: true,
     useExport: false,
     // Initiate the field value and fire change for keyword if included in querystring in a link or copy/pasted url
-    // TODO: DO I NEED THIS AT ALL?, ALSO - If so Don't think I need to also add tags here(commented out)...ends up with two tags once I added trigger('change')
+    // TODO: DO I NEED THIS AT ALL?, ALSO - If so Don't think I need to also add tags here(commented out)...Updated comment...No, it ends up with two tags once I added trigger('change')
     initComplete: function () {
        const queryParams = URI.parseQuery(window.location.search);
       if (queryParams.q) {
         $('input[name="q"]').val(queryParams.q).trigger('change');
       }
+      // TODO: Below is a temporary hack to force initial hits_returned to be 30 insted of the default 20. 
+      // If we go with this table, have backend team switch default in api code to 30 if possible just for MURs.
+      $('#results-length').trigger('change');
     },
 //     "drawCallback": function() {
 //    }

@@ -9,6 +9,7 @@ import { supportOppose } from './decoders.js';
 import { amendmentVersion, amendmentVersionDescription, buildAppUrl, currency, datetime, globals } from './helpers.js';
 import { MODAL_TRIGGER_HTML, getCycle, yearRange } from './tables.js';
 import { default as reportType } from '../templates/reports/reportType.hbs';
+import { indexOf } from 'underscore';
 
 export const dateColumn = formattedColumn(datetime, {
   orderSequence: ['desc', 'asc']
@@ -1090,7 +1091,7 @@ export const rulemakings = [
     className: 'all column--rulemaking-docs align-top',
     orderable: false,
     render: function (data, type, row) {
-      let html = `<p><b>${row.rm_name}</b>`;
+      let html = `<p><strong>${row.rm_name}</strong>`;
 
       if (row.key_documents && row.key_documents.length ) {
         html += `<br><span class="icon icon--inline--left i-document"></span>`;
@@ -1206,7 +1207,7 @@ export const rulemakings = [
       }
       else {
         const comment_deadline = moment(row.comment_close_date).format('MMMM D YYYY');
-        return `<p><b>${row.description}</b><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="">Submit a comment</a></p>`;
+        return `<p><strong>${row.description}</strong><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="">Submit a comment</a></p>`;
       }
     }
   }
@@ -1222,7 +1223,7 @@ export const murs = [
     {
     data: 'no',
     sort_alias: 'case_no',
-    className: 'cell--25 hide-panel all align-top t-bold',
+    className: 'cell--15 hide-panel all align-top t-bold',
     orderable: true,
     render: function(data, type, row) {
       let archived  = row.mur_type == 'archived' ? `<div class="legal-mur__archive"><span class="legal-mur__archive-icon"><span class="u-visually-hidden">Icon representing an archived case</span></span>Archived case</div>` : '';
@@ -1231,7 +1232,7 @@ export const murs = [
   },
   {
     data: 'name',
-    className: 'cell--25 align-top',
+    className: 'cell--15 align-top',
     orderable: false,
     render: function(data, type, row) {
       // name = row.name || row.mur_name
@@ -1248,72 +1249,88 @@ export const murs = [
       }
     }
   },
-
-
-
-
   {
     data: null,
-    className: 'cell--50 column--legal-docs align-top',
+    className: 'column--legal-docs align-top',
     orderable: false,
     render: function (data, type, row) {
-      let document_content = `<p>`;
+        let document_content = `<ul class="case-summary">`;
+        if (row.mur_type == 'current') {
+          let cycles
+          if (row.election_cycles) {
+            const unique_cycles = [...new Set(row.election_cycles)];
+            cycles = unique_cycles.join(", ")
+            } 
+        document_content += `<li><strong>Election cycles(s): </strong>${cycles || ''}</li>`;
+        }
+      let subjects_list = [];
         if (row.subjects) {
           for (let subject of row.subjects) {
-            document_content += `${subject.subject}, `
-          }
+            subjects_list.push(`${subject.subject}`)
+          } 
         } else if (row.subject) {
             for (let subject of row.subject) {
-              document_content += `${subject.text}, `
+             subjects_list.push(`${subject.text}`)
             }
         }
-      
-      document_content += `</p>`;
+       document_content += `<li><strong>Subject(s): </strong>${subjects_list.join("; ")}</li>`;
+       
+      if (row.mur_type == 'current') {
+          let disposition_dict = {};
+          for (let disposition_record of row.dispositions) {
+              let disp = disposition_record['disposition']
+              if(disposition_dict[disp] ) {
+                disposition_dict[disp] += 1
+              }
+              else {
+                disposition_dict[disp] = 1
+              }
+          }
+          document_content += `<li><strong>Disposition(s): </strong>`;
+          let count = 0;
+          //let semicolon;
+          for (let disposition in disposition_dict) {
+              count += 1
+              const s = disposition_dict[disposition] > 1 ? 's': ''; 
+              const semicolon = count == Object.keys(disposition_dict).length ? '' : ';&nbsp;' 
+              document_content +=  `${disposition} (${ disposition_dict[disposition]} respondent${s})${semicolon}`;
+          }
+          document_content += `</li></ul>`
+       }
       //   const filters = this.filterSet.serialize();
-const filters = new URLSearchParams(window.location.search);
-//   const filters_category_type = 'ao_doc_category_id' in filters;
-const filters_category_type = filters.has('case_doc_category_id')
-//   const filters_keyword = 'search' in filters;
-const filters_keyword = filters.has('q')
-//   const filters_proximity = 'q_proximity' in filters && filters.q_proximity.length == 2;
-const filters_proximity = filters.has('q_proximity') && filters.getAll('q_proximity').length == 2;
-//   const proximity_only = filters_proximity && !filters_keyword;
-const proximity_only = filters_proximity && !filters_keyword;
+    const filters = new URLSearchParams(window.location.search);
+    const filters_category_type = filters.has('case_doc_category_id')
+    const filters_keyword = filters.has('q')
+    const filters_proximity = filters.has('q_proximity') && filters.getAll('q_proximity').length == 2;
+    const proximity_only = filters_proximity && !filters_keyword;
 
-const current_doc_ids = filters.getAll('case_doc_category_id') || []
-console.log('current_doc_ids: ', current_doc_ids)
+    const current_doc_ids = filters.getAll('case_doc_category_id') || []
+    console.log('current_doc_ids: ', current_doc_ids)
 
-//    // Opening div tags are lined up with their closing divs below
+    // Opening div tags are lined up with their closing divs below
      if (row.document_highlights || row.source || filters_category_type) {
        document_content += 
       `<div class="legal-search-result__hit u-margin--top">`;
-//     if ((filters_category_type || filters_keyword) && !proximity_only) {
        if ((filters_category_type || filters_keyword) && !proximity_only) {
            let category_shown = '';                                                                                                            
-//         for (const [index, document] of ao.documents.entries()) { 
            for (const [index, document] of row.documents.entries()) {
 //           /*This will show documents in all 3 scenarios:
 //             - When there is a keyword query and selected document categories
 //             - When there are selected document categories and no keyword query
 //             - When there is a keyword query and no selected document categories */
 
-//           let category_match = !filters_category_type || filters.ao_doc_category_id.includes(document.ao_doc_category_id) ? true : false;
 let category_match = !filters_category_type || current_doc_ids.includes(`${document.doc_order_id}`) ? true : false;
-             console.log('category_match: ', category_match )
-//           let text_match = index in ao.document_highlights || !filters_keyword ? true : false;
+console.log('category_match: ', category_match )
 let text_match = index in row.document_highlights || !filters_keyword ? true : false;
-//           let show_document = category_match && text_match;
 let show_document = category_match && text_match; 
              if (show_document) {
               console.log('GOT HERE')
                let top_border_class = '';
                let show_category = '';
-//             let current_category = document.ao_doc_category_id;
-let current_category = document.doc_order_id;
+               let current_category = document.doc_order_id;
                if (category_shown != current_category) {
                      top_border_class = "u-border-top-nuetral";
-//                   show_category = document.category;
-show_category = document.category;
+                     show_category = document.category;
                      category_shown = current_category;
                  }
                  else {

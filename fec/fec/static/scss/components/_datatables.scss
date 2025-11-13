@@ -226,6 +226,10 @@
     &.column--legal-docs {
     padding: u(1rem);
     vertical-align: top;
+
+      ul.case-summary li {
+        margin-bottom: u(1.6rem);
+      }
     
       .document-container {
         display: flex;

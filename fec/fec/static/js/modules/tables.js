@@ -1024,7 +1024,7 @@ DataTable_FEC.prototype.buildUrl = function(data, paginate, download) {
       api_key: window.DOWNLOAD_API_KEY
     });
   }
-  return buildUrl(
+    return buildUrl(
     this.opts.path,
     _extend({}, query, this.opts.query || {})
   );
