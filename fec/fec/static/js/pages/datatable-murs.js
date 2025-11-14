@@ -126,7 +126,7 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
   const get_subject_ids = function(type) {
     const params = new URLSearchParams(window.location.search);
     let ids = params.getAll(`${type}_subject_id`) || [];
-    return ids
+    return ids;
   };
     // JS for subject MUR/ADR selects
       // The window.context is declared in datatable.jinja
@@ -136,14 +136,14 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
         }
         const primary_subject_id = get_subject_ids('primary');
         const secondary_subject_id = get_subject_ids('secondary');
-      
+
         const subject_select = document.getElementById('primary_subject_id');
-        const secondary_select_div = document.querySelector("[data-modifies-filter='secondary_subject_id']");
+        const secondary_select_div = document.querySelector('[data-modifies-filter=\'secondary_subject_id\']');
         const secondary_select = document.getElementById('secondary_subject_id');
 
         // Populate secondary select on page load
         load_secondary_select(primary_subject_id);
-        
+
         // Add aria attribute to selected option in primary select
         Array.from(subject_select.options).forEach(option => {
           if (option.value == primary_subject_id) option.setAttribute('aria-selected', 'true');
@@ -153,12 +153,12 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
         subject_select.addEventListener('change', event => {
           const selected_id = event.target.value;
           load_secondary_select(selected_id);
-          $(secondary_select).val('').trigger('change')
+          $(secondary_select).val('').trigger('change');
         });
 
         function load_secondary_select(id) {
           // First, reset the secondary select to default
-          secondary_select.replaceChildren(new Option('All', "", true, true));
+          secondary_select.replaceChildren(new Option('All', '', true, true));
           // Show and populate secondary select options, if applicable
           if (id in secondary_subject_ids) {
             // Show secondary select
@@ -173,30 +173,29 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
               // Append other options, unselected
               } else {
                 secondary_select.append(new Option(value, key));
-              };
-            };
+              }
+            }
 
           } else {
             secondary_select_div.style.display = 'none';
-          };
-        };
+          }
+        }
 
     //Accordions in highlights need this implicit listener to work becuase of conflict eith accordions in filter panel
-    $(document).on('click','.accordion-trigger-on',  function(e){ 
-      let exp = $(this).attr('aria-expanded') == 'false' ? 'true' : 'false'
-      $(this).attr('aria-expanded', exp)
+    $(document).on('click','.accordion-trigger-on', function() {
+      let exp = $(this).attr('aria-expanded') == 'false' ? 'true' : 'false';
+      $(this).attr('aria-expanded', exp);
       //let hid = $(this).next('div').attr('aria-hidden') == 'true' ? 'false' : 'false'
-      $(this).next('div').attr('aria-hidden', exp == 'true' ? 'false' : 'true')
+      $(this).next('div').attr('aria-hidden', exp == 'true' ? 'false' : 'true');
 
-    })
+    });
 
-   
   const $table = $('#results');
   new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Closed Matters Under Review',
     path: ['legal', 'search'],
-    query: { type: "murs", doc_type: "murs" },
+    query: { type: 'murs', doc_type: 'murs' },
     columns: cols_murs,
     order: [[0, 'desc']],
     useFilters: true,
@@ -208,10 +207,10 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
       if (queryParams.q) {
         $('input[name="q"]').val(queryParams.q).trigger('change');
       }
-      // TODO: Below is a temporary hack to force initial hits_returned to be 30 insted of the default 20. 
+      // TODO: Below is a temporary hack to force initial hits_returned to be 30 insted of the default 20.
       // If we go with this table, have backend team switch default in api code to 30 if possible just for MURs.
       $('#results-length').trigger('change');
-    },
+    }
 //     "drawCallback": function() {
 //    }
   });

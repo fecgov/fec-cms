@@ -125,11 +125,10 @@ export function getCycle(value, meta) {
 
 export function mapSort(order, column) {
   return _map(order, function(item) {
-    console.log('column[item.column]: ', column[item.column])
-    // Use sort column.sort_alias for legal, otherwise use the column.data 
+    // Use sort column.sort_alias for legal, otherwise use the column.data
     let name = column[item.column].sort_alias ? column[item.column].sort_alias : column[item.column].data;
     if (item.dir === 'desc') {
-    name =  '-' + name;
+    name = '-' + name;
     }
     return name;
   });
@@ -1002,6 +1001,7 @@ DataTable_FEC.prototype.isPending = function() {
 DataTable_FEC.prototype.buildUrl = function(data, paginate, download) {
   let query;
   if (pagination_legal){
+
     query = _extend(
     { from_hit: `${data.start}`, hits_returned: `${data.length}` }, // eslint-disable-line camelcase
     this.filters || {}

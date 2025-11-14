@@ -9,7 +9,6 @@ import { supportOppose } from './decoders.js';
 import { amendmentVersion, amendmentVersionDescription, buildAppUrl, currency, datetime, globals } from './helpers.js';
 import { MODAL_TRIGGER_HTML, getCycle, yearRange } from './tables.js';
 import { default as reportType } from '../templates/reports/reportType.hbs';
-import { indexOf } from 'underscore';
 
 export const dateColumn = formattedColumn(datetime, {
   orderSequence: ['desc', 'asc']
@@ -1226,7 +1225,7 @@ export const murs = [
     className: 'cell--15 hide-panel all align-top t-bold',
     orderable: true,
     render: function(data, type, row) {
-      let archived  = row.mur_type == 'archived' ? `<div class="legal-mur__archive"><span class="legal-mur__archive-icon"><span class="u-visually-hidden">Icon representing an archived case</span></span>Archived case</div>` : '';
+      let archived = row.mur_type == 'archived' ? `<div class="legal-mur__archive"><span class="legal-mur__archive-icon"><span class="u-visually-hidden">Icon representing an archived case</span></span>Archived case</div>` : '';
       return `MUR #${row.no}${archived}`;
     }
   },
@@ -1239,13 +1238,13 @@ export const murs = [
       // return name.toUpperCase()
       if (row.mur_type == 'current') {
                 return `<a title="${row.name}" href="/data/legal/matter-under-review/${row.no}/">
-                ${row.name.toUpperCase()}</a>`
+                ${row.name.toUpperCase()}</a>`;
       } else if (row.no == '3620' && row.mur_type == 'archived') {
                 return `<a title="${row.mur_name }" href="/data/legal/matter-under-review/${row.no}/?mur_type=archived">
-                  ${row.mur_name.toUpperCase()}</a>`
+                  ${row.mur_name.toUpperCase()}</a>`;
       } else {
               return `<a title="${row.mur_name}" href="/data/legal/matter-under-review/${row.no}/">
-                  ${row.mur_name.toUpperCase()}</a>`
+                  ${row.mur_name.toUpperCase()}</a>`;
       }
     }
   },
@@ -1256,63 +1255,62 @@ export const murs = [
     render: function (data, type, row) {
         let document_content = `<ul class="case-summary">`;
         if (row.mur_type == 'current') {
-          let cycles
+          let cycles;
           if (row.election_cycles) {
             const unique_cycles = [...new Set(row.election_cycles)];
-            cycles = unique_cycles.join(", ")
-            } 
+            cycles = unique_cycles.join(', ');
+            }
         document_content += `<li><strong>Election cycles(s): </strong>${cycles || ''}</li>`;
         }
       let subjects_list = [];
         if (row.subjects) {
           for (let subject of row.subjects) {
-            subjects_list.push(`${subject.subject}`)
-          } 
+            subjects_list.push(`${subject.subject}`);
+          }
         } else if (row.subject) {
             for (let subject of row.subject) {
-             subjects_list.push(`${subject.text}`)
+             subjects_list.push(`${subject.text}`);
             }
         }
-       document_content += `<li><strong>Subject(s): </strong>${subjects_list.join("; ")}</li>`;
-       
+       document_content += `<li><strong>Subject(s): </strong>${subjects_list.join('; ')}</li>`;
+
       if (row.mur_type == 'current') {
           let disposition_dict = {};
           for (let disposition_record of row.dispositions) {
-              let disp = disposition_record['disposition']
+              let disp = disposition_record['disposition'];
               if(disposition_dict[disp] ) {
-                disposition_dict[disp] += 1
+                disposition_dict[disp] += 1;
               }
               else {
-                disposition_dict[disp] = 1
+                disposition_dict[disp] = 1;
               }
           }
           document_content += `<li><strong>Disposition(s): </strong>`;
           let count = 0;
           //let semicolon;
           for (let disposition in disposition_dict) {
-              count += 1
-              const s = disposition_dict[disposition] > 1 ? 's': ''; 
-              const semicolon = count == Object.keys(disposition_dict).length ? '' : ';&nbsp;' 
-              document_content +=  `${disposition} (${ disposition_dict[disposition]} respondent${s})${semicolon}`;
+              count += 1;
+              const s = disposition_dict[disposition] > 1 ? 's': '';
+              const semicolon = count == Object.keys(disposition_dict).length ? '' : ';&nbsp;';
+              document_content += `${disposition} (${ disposition_dict[disposition]} respondent${s})${semicolon}`;
           }
-          document_content += `</li></ul>`
+          document_content += `</li></ul>`;
        }
       //   const filters = this.filterSet.serialize();
     const filters = new URLSearchParams(window.location.search);
-    const filters_category_type = filters.has('case_doc_category_id')
-    const filters_keyword = filters.has('q')
+    const filters_category_type = filters.has('case_doc_category_id');
+    const filters_keyword = filters.has('q');
     const filters_proximity = filters.has('q_proximity') && filters.getAll('q_proximity').length == 2;
     const proximity_only = filters_proximity && !filters_keyword;
 
-    const current_doc_ids = filters.getAll('case_doc_category_id') || []
-    console.log('current_doc_ids: ', current_doc_ids)
+    const current_doc_ids = filters.getAll('case_doc_category_id') || [];
 
     // Opening div tags are lined up with their closing divs below
      if (row.document_highlights || row.source || filters_category_type) {
-       document_content += 
+       document_content +=
       `<div class="legal-search-result__hit u-margin--top">`;
        if ((filters_category_type || filters_keyword) && !proximity_only) {
-           let category_shown = '';                                                                                                            
+           let category_shown = '';
            for (const [index, document] of row.documents.entries()) {
 //           /*This will show documents in all 3 scenarios:
 //             - When there is a keyword query and selected document categories
@@ -1320,16 +1318,14 @@ export const murs = [
 //             - When there is a keyword query and no selected document categories */
 
 let category_match = !filters_category_type || current_doc_ids.includes(`${document.doc_order_id}`) ? true : false;
-console.log('category_match: ', category_match )
 let text_match = index in row.document_highlights || !filters_keyword ? true : false;
-let show_document = category_match && text_match; 
+let show_document = category_match && text_match;
              if (show_document) {
-              console.log('GOT HERE')
                let top_border_class = '';
                let show_category = '';
                let current_category = document.doc_order_id;
                if (category_shown != current_category) {
-                     top_border_class = "u-border-top-nuetral";
+                     top_border_class = 'u-border-top-nuetral';
                      show_category = document.category;
                      category_shown = current_category;
                  }
@@ -1345,7 +1341,7 @@ let show_document = category_match && text_match;
                         <a href="${document.url}">
                           ${document.description}
                         </a>
-                      </div>`;       
+                      </div>`;
             if (row.document_highlights[index]) {
               if (row.document_highlights[index].length) {
                   document_content += `
@@ -1358,7 +1354,7 @@ let show_document = category_match && text_match;
                   document_content += `
                       <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.no}-${index}">
                         <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.no}-${index}" aria-expanded="false">
-                          ${row.document_highlights[index].length > 2 ? row.document_highlights[index].length -1 + " more keyword matches" : "1 more keyword match"}
+                          ${row.document_highlights[index].length > 2 ? row.document_highlights[index].length -1 + ' more keyword matches' : '1 more keyword match'}
                         </button>
                         <div class="accordion__content results__content" aria-hidden="true">
                           <ul>`;
@@ -1368,14 +1364,14 @@ let show_document = category_match && text_match;
                             document_content += `
                           </ul>
                         </div>
-                      </div>`;       
+                      </div>`;
               }
             }
             document_content += `
                     </div> 
                   </div>`;
-          } 
-        } 
+          }
+        }
       } else if (proximity_only) {
           let category_shown = '';
           for (const document of row.source) {
@@ -1383,7 +1379,7 @@ let show_document = category_match && text_match;
                 let show_category = '';
                 let current_category = document.doc;
                   if (category_shown != current_category) {
-                      top_border_class = "u-border-top-nuetral";
+                      top_border_class = 'u-border-top-nuetral';
                       show_category = document.category;
                       category_shown = current_category;
                   }
@@ -1411,19 +1407,11 @@ let show_document = category_match && text_match;
     return document_content;
     } // end render
   }
-]
+];
 
-
-///////////// NEW FOR MUR DOCS ////////////////////////////////////////
-
-//NOT USING THIS NOW
-  const showDocuments = function() {
-    console.log('RAN')
-  const filters = new URLSearchParams(window.location.search);
-  console.log(filters.entries())
-  const docs = filters.getAll('case_doc_category_id') || [];
-  if (filters.has('case_doc_category_id')){
-    console.log('filters.case_doc_category_id: ',filters.getAll('case_doc_category_id') || [])
-  }
-  return filters;
-};
+// FOR MUR DOCS = NOT USING THIS NOW
+//   const showDocuments = function() {
+//   const filters = new URLSearchParams(window.location.search);
+//   const docs = filters.getAll('case_doc_category_id') || [];
+//   return filters;
+// };
