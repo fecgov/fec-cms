@@ -81,16 +81,16 @@ data-validate="false" data-name="{{ name }}" data-modifies-filter="{{ name }}" d
 
 {# -----------NEW-------------------- #}
 
-{#  WORKS (rename this from range to something else and try to make it more reusable) #}
-{% macro select_single_flat_list_range(name, label, options={}, hide_help=false, first_opt_no_value_label=false) %}
+{#  TODO: It works,  but try to make it more reusable) #}
+{% macro select_primary_secondary_subject(name, label, options={}, hide_help=false, first_opt_no_value_label=false) %}
 <div class="filter js-filter js-filter-control" id="{{ name }}-field" data-filter="select"  data-validate="false" data-name="{{ name }}">
  <fieldset class="filter" id="{{name}}-field">
-    <div class="range range--date js-date-range js-filter" data-modifies-filter="primary_{{ name }}" data_prefix="Primary subject" data-name="primary_{{ name }}" data-filter="range">
+    <div class="js-filter" data-modifies-filter="primary_{{ name }}" data_prefix="Primary subject" data-name="primary_{{ name }}" data-filter="select">
     <label for="{{ name }}" class="label">{{ label }}</label>
     {% if not hide_help -%}
     <label class="label--help u-margin--top">Limit 1 {{ label | lower }}</label>
     {%- endif %}
-    <select id="primary_{{ name }}" name="primary_{{ name }}" data-range="min" data-filter-change="true" data-removeable-filter="true" class="dropdown" data-prefix="Primary subject: "  data-removable="true" class="js-min-date">
+    <select id="primary_{{ name }}" name="primary_{{ name }}" data-filter-change="true" data-removeable-filter="true" class="dropdown" data-prefix="Primary subject: "  data-removable="true">
       {% if first_opt_no_value_label %}<option value=''>{{ first_opt_no_value_label }}</option>{% endif %}
       {% for itemValue, itemLabel in options.items() %}
         <option value={{itemValue}}>{{ itemLabel }}</option>
@@ -98,12 +98,12 @@ data-validate="false" data-name="{{ name }}" data-modifies-filter="{{ name }}" d
     </select>
     </div>
 
-    <div class="range range--date js-date-range filter js-filter sub--filter--indent" data-modifies-filter="secondary_{{ name }}" data_prefix="Secondary subject: " data-name="secondary_{{ name }}" data-filter="range">
+    <div class="filter js-filter sub--filter--indent" data-modifies-filter="secondary_{{ name }}" data_prefix="Secondary subject: " data-name="secondary_{{ name }}" data-filter="select">
     <label for="{{ name }}" class="label">Secondary {{ label }}</label>
     {% if not hide_help -%}
     <label class="label--help u-margin--top">Limit 1 {{ label | lower }}</label>
     {%- endif %}
-    <select id="secondary_{{ name }}" name="secondary_{{ name }}" data-range="max" data-filter-change="true" data-removeable-filter="true" class="dropdown" data-prefix="Secondary subject: " data-removable="true" class="js-max-date">
+    <select id="secondary_{{ name }}" name="secondary_{{ name }}" data-filter-change="true" data-removeable-filter="true" class="dropdown" data-prefix="Secondary subject: " data-removable="true">
       {% if first_opt_no_value_label %}<option value=''>{{ first_opt_no_value_label }}</option>{% endif %}
       {% for itemValue, itemLabel in options.items() %}
         <option value={{itemValue}}>{{ itemLabel }}</option>
@@ -113,7 +113,7 @@ data-validate="false" data-name="{{ name }}" data-modifies-filter="{{ name }}" d
   </fieldset>
 </div> 
 {% endmacro %}
-{#  END BEST #}
+{#  -----/END NEW----- #}
 
 
 {% macro select_single_flat_list_subject(name, label, options={}, hide_help=false, first_opt_no_value_label=false) %}

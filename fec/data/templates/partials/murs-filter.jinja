@@ -29,7 +29,7 @@
             options=constants.mur_document_categories,
             ) 
         }}
-        {{ date.field('document_date', 'Document date range', id_prefix='case_' ) }}
+        {{ date.field('document_date', 'Document date range', id_prefix='case_') }}
     </div>
 
     <button type="button" class="js-accordion-trigger accordion__button">Case details</button>
@@ -56,10 +56,9 @@
         data_prefix="Secondary subject: "
         ) }} #}
     
-{# ===============TRY AS TWO RANGE FITERS =========================#}
-{{ dropdown.select_single_flat_list_range('subject_id', 'Case subject', options=constants.primary_subject_ids, hide_help=true, first_opt_no_value_label=false) }}
+    {{ dropdown.select_primary_secondary_subject('subject_id', 'Case subject', options=constants.primary_subject_ids, hide_help=true, first_opt_no_value_label=false) }}
 
-      <div class="filter">
+    <div class="filter">
         <legend class="label">Penalty amount by respondent</legend>
         <div class="range range--currency">
           <div class="range__input range__input--min js-filter" data-filter="range">
@@ -73,40 +72,8 @@
           </div>
         </div>
       </div>
-{{ date.field('open_date', 'Case open date range', id_prefix='case_' ) }}
-{#       <div class="filter">
-        <legend class="label">Case open date range</legend>
-        <div class="range range--date js-date-range">
-          <div class="range__input range__input--min" data-filter="range">
-            <label for="case_min_open_date">Beginning</label>
-            <input id="case_min_open_date" name="case_min_open_date" placeholder="mm/dd/yyyy">
-          </div>
-          <div class="range__hyphen">-</div>
-          <div class="range__input range__input--max" data-filter="range">
-            <label for="case_max_open_date">Ending</label>
-            <input id="case_max_open_date" name="case_max_open_date" placeholder="mm/dd/yyyy">
-          </div>
-        </div>
-      </div> #}
-
-    {{ date.field('close_date', 'Case close date range', id_prefix='case_' ) }}
-
-      
-      {# <div class="filter">
-        <legend class="label">Case close date range</legend>
-        <div class="range range--date js-date-range">
-          <div class="range__input range__input--min" data-filter="range">
-            <label for="case_min_close_date">Beginning</label>
-            <input id="case_min_close_date" name="case_min_close_date" placeholder="mm/dd/yyyy">
-          </div>
-          <div class="range__hyphen">-</div>
-          <div class="range__input range__input--max" data-filter="range">
-            <label for="case_max_close_date">Ending</label>
-            <input id="case_max_close_date" name="case_max_close_date" placeholder="mm/dd/yyyy">
-          </div>
-        </div>
-      </div> #}
-
+      {{ date.field('open_date', 'Case open date range', id_prefix='case_') }}
+      {{ date.field('close_date', 'Case close date range', id_prefix='case_' ) }}
     </div>
     
     <button type="button" class="js-accordion-trigger accordion__button">Disposition citations</button>

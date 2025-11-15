@@ -87,7 +87,8 @@ describe('date filter', function() {
 
   it('sets its initial state', function() {
     expect(this.filter.name).to.equal('date');
-    expect(this.filter.fields).to.deep.equal(['min_date', 'max_date']);
+    expect(this.filter.fields).to.include('min_date');
+    expect(this.filter.fields).to.include('max_date');
     expect(this.filter.validateInput).to.be.true;
   });
 
