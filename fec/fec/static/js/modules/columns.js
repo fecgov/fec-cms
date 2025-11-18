@@ -1243,8 +1243,16 @@ export const murs = [
                 return `<a title="${row.mur_name }" href="/data/legal/matter-under-review/${row.no}/?mur_type=archived">
                   ${row.mur_name.toUpperCase()}</a>`;
       } else {
+              let mur_name;
+              if (row.mur_name != null) {
+                mur_name = row.mur_name.toUpperCase();
+              }
+              else {
+                mur_name = 'None';
+
+              }
               return `<a title="${row.mur_name}" href="/data/legal/matter-under-review/${row.no}/">
-                  ${row.mur_name.toUpperCase()}</a>`;
+                  ${mur_name}</a>`;
       }
     }
   },
@@ -1261,6 +1269,9 @@ export const murs = [
             cycles = unique_cycles.join(', ');
             }
         document_content += `<li><strong>Election cycles(s): </strong>${cycles || ''}</li>`;
+        }
+        else {
+          document_content += `<li><strong>Election cycles(s):</strong><i> Not available for archived MURs</i></li>`;
         }
       let subjects_list = [];
         if (row.subjects) {
@@ -1294,8 +1305,12 @@ export const murs = [
               const semicolon = count == Object.keys(disposition_dict).length ? '' : ';&nbsp;';
               document_content += `${disposition} (${ disposition_dict[disposition]} respondent${s})${semicolon}`;
           }
-          document_content += `</li></ul>`;
+
        }
+       else {
+         document_content += `<li><strong>Disposition(s):</strong><i> Not available for archived MURs</i>`;
+       }
+        document_content += `</li></ul>`;
       //   const filters = this.filterSet.serialize();
     const filters = new URLSearchParams(window.location.search);
     const filters_category_type = filters.has('case_doc_category_id');
@@ -1305,8 +1320,8 @@ export const murs = [
 
     const current_doc_ids = filters.getAll('case_doc_category_id') || [];
 
-    // Opening div tags are lined up with their closing divs below
-     if (row.document_highlights || row.source || filters_category_type) {
+    // Note: Opening div tags are lined up with their closing divs below
+     if (row.document_highlights || row.source.length || filters_category_type) {
        document_content +=
       `<div class="legal-search-result__hit u-margin--top">`;
        if ((filters_category_type || filters_keyword) && !proximity_only) {
@@ -1317,21 +1332,35 @@ export const murs = [
 //             - When there are selected document categories and no keyword query
 //             - When there is a keyword query and no selected document categories */
 
+/*  Old Jinja logic for temporary reference, remove before final push
+{% set category_match = (filters_category_type and document.category_match) or not filters_category_type %}
+{% set keyword_match = (filters_keyword and document.text_match) or not filters_keyword %}
+{% set show_document = category_match and keyword_match  %} */
+
 let category_match = !filters_category_type || current_doc_ids.includes(`${document.doc_order_id}`) ? true : false;
 let text_match = index in row.document_highlights || !filters_keyword ? true : false;
 let show_document = category_match && text_match;
              if (show_document) {
                let top_border_class = '';
                let show_category = '';
-               let current_category = document.doc_order_id;
+               let current_category = document.document_category || document.document_id;
                if (category_shown != current_category) {
                      top_border_class = 'u-border-top-nuetral';
-                     show_category = document.category;
+                     show_category = document.category || `Case document - ${document.document_id}` ;
                      category_shown = current_category;
-                 }
+                }
                  else {
                    show_category = '';
-                 }
+                }
+
+                let doc_description;
+                if (row.mur_type == 'current') {
+                  doc_description = document.description;
+                }
+                else if (row.mur_type == 'archived') {
+                  doc_description = row.documents.length == 1 ? 'Case document' : `Case documents, part ${document.document_id}`;
+                }
+
             document_content += `
                   <div class="document-container">
                     <div class="document-category ${top_border_class}">${show_category}</div>
@@ -1339,7 +1368,7 @@ let show_document = category_match && text_match;
                       <div class="post--icon">
                         <span class="icon icon--inline--left i-document"></span>
                         <a href="${document.url}">
-                          ${document.description}
+                          ${doc_description}
                         </a>
                       </div>`;
             if (row.document_highlights[index]) {

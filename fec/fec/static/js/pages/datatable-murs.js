@@ -130,9 +130,10 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
   };
     // JS for subject MUR/ADR selects
       // The window.context is declared in datatable.jinja
+     let secondary_subject_ids;
      if (window.context) {
         //TO DO: Find another way to NOT use "var" so this variable is available in scope below
-        var secondary_subject_ids = window.context.secondary_subject_ids || [];
+        secondary_subject_ids = window.context.secondary_subject_ids || [];
         }
         const primary_subject_id = get_subject_ids('primary');
         const secondary_subject_id = get_subject_ids('secondary');
