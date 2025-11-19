@@ -3,6 +3,7 @@ from django.views.generic.base import RedirectView
 from django.conf import settings
 
 from legal import views
+from data import views_datatables
 
 urlpatterns = [
     # AFs | Admin fines, Administrative fines
@@ -62,7 +63,11 @@ urlpatterns = [
     re_path(r'^data/legal/search/$', views.legal_search),  # TODO: retire this one
 ]
 
-# TODO: do we still need this feature flag?
+if settings.FEATURES['rulemakings']:
+    urlpatterns += re_path(
+        r'^legal/rulemakings/$', views_datatables.rulemaking
+    ),
+
 if settings.FEATURES['adrs']:
     urlpatterns += re_path(r'^legal/search/adrs/$', views.legal_doc_search_adr),
     urlpatterns += re_path(r'^data/legal/search/adrs/$', views.legal_doc_search_adr),  # TODO: retire this one
