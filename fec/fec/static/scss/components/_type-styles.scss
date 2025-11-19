@@ -104,6 +104,10 @@
   text-transform: uppercase;
 }
 
+.t-no-cap {
+  text-transform: none;
+}
+
 // Small header above a big data number
 .t-data-header {
   display: inline-block;

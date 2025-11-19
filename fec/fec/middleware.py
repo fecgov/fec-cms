@@ -1,11 +1,17 @@
 from django.utils.deprecation import MiddlewareMixin
 from django.conf import settings
+import os
 
 from psycopg_pool import PoolTimeout
 from django.db.utils import OperationalError
 from django.core.cache import cache
 from django.shortcuts import render
 from fec import slack
+
+
+FEC_RULEMAKING_BUCKET_NAME = os.getenv("FEC_RULEMAKING_BUCKET_NAME", "")
+FEC_RULEMAKING_S3_REGION_NAME = os.getenv("FEC_RULEMAKING_S3_REGION_NAME", "")
+AWS_S3_BUCKET_URL = f"https://{FEC_RULEMAKING_BUCKET_NAME}.s3.{FEC_RULEMAKING_S3_REGION_NAME}.amazonaws.com"
 
 
 class AddSecureHeaders(MiddlewareMixin):
@@ -25,9 +31,13 @@ class AddSecureHeaders(MiddlewareMixin):
                 "*.fec.gov",
                 "*.app.cloud.gov",
                 "https://www.google-analytics.com",
+                AWS_S3_BUCKET_URL,
             ],
             "font-src": ["'self'"],
-            "frame-ancestors": ["'self'", "https://stage.fec.gov"],
+            "form-action": [
+                "'self'",
+                AWS_S3_BUCKET_URL,
+            ],
             "frame-src": [
                 "'self'",
                 "https://www.google.com/recaptcha/",

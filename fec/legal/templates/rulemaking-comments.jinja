@@ -1,0 +1,410 @@
+{% extends 'layouts/legal-main.jinja' %}
+{% import 'macros/breadcrumbs.jinja' as breadcrumb %}
+{% import 'macros/legal.jinja' as legal %}
+{% set breadcrumb_links=[('/legal/rulemakings/', 'Rulemakings'), ('/legal/rulemakings/' + rm_no + '/', rm_number)] %}
+
+{% block title %}Submit rulemaking comments{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ path_for_css('legal-common.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ path_for_css('rulemaking-commenting.css') }}" />
+{% endblock %}
+
+{% block body %}
+<header class="page-header slab slab--primary">
+  {{ breadcrumb.breadcrumbs('Submit rulemaking comments', breadcrumb_links) }}
+</header>
+
+<div class="main container">
+  <header class="heading--main">
+    <h1>{{ title }}</h1>
+  </header>
+  <div class="main__content--full">
+    <div class="row">
+      <div class="main__content">
+        <h2>{{ description }}</h2>
+        {% if not is_open_for_comment %}
+        <p>Unfortunately, {{ rm_number }} is no longer open for comments.</p>
+        <a class="button--standard button--back" href="../">Go to {{ rm_number }}</a>
+        {% else %}
+        <p><strong>IMPORTANT</strong>: All comments will be made available to the public. Comments sent by online form or email will be posted to the FEC website. Comments sent via paper will be converted to PDF and then posted to the FEC website. The FEC does not remove personally identifiable information such as home address, phone number, email address or Social Security number from submissions before posting comments to the FEC website. The FEC encourages commenters to submit only information that they wish to make publicly available.</p>
+        <p>Finally, comments will not be considered submitted until all required information is completed and the commenter has received the confirmation message.</p>
+        {% endif %}
+      </div>
+    </div>
+    {% if is_open_for_comment %}
+    <div class="row" id="rulemaking-comments">
+      <div class="js-help hidden" id="help">
+        <svg
+          class="pointer"
+          height="40"
+          style="'top:' + helpPointerY + 'px'"
+          viewBox="-20 -40 20 40"
+          width="20">
+          <path d="M 0 -40 l -20 20 l 20 20" stroke="#112e51" fill="white"></path>
+        </svg>
+        <h3 class="help_title">{helpTitle}</h3>
+        <button class="filters__toggle" click="handleCloseClick" type="button"></button>
+        <div class="help_scroller">
+          <div class="ps-scrollbar-y-rail"><div class="ps-scrollbar-y"></div></div>
+          <div class="help_content">{helpContent}</div>
+        </div>
+      </div>
+      <form class="js-rulemaking-comments">
+        <h3>Submit comments on rulemaking</h3>
+        <h2>{{ rm_title }}</h2>
+        <nav class="topnav">
+          <!-- {'complete': th is.currentFrameNum == frames . length - 1}" -->
+          <meter value="this.currentFrameNum" max="frames.length - 1" class="hidden" min="0"></meter>
+          <i class="i i-check"></i>
+          <ul class="breadcrumbs">
+            <li class="breadcrumbs__item">
+              <a class="breadcrumbs__link" data-frame="submitterType">Submitting</a>
+            </li>
+            <li class="breadcrumbs__item">
+              <a class="breadcrumbs__link" data-frame="submitterInfo">Submitter information</a>
+            </li>
+            <li class="breadcrumbs__item">
+              <a class="breadcrumbs__link" data-frame="commenters">Commenter information</a>
+            </li>
+            <li class="breadcrumbs__item">
+              <a class="breadcrumbs__link" data-frame="comments">Comments</a>
+            </li>
+            <li class="breadcrumbs__item">
+              <a class="breadcrumbs__link" data-frame="summary">Final review</a>
+            </li>
+            <li class="breadcrumbs__item">
+              <a class="breadcrumbs__link">response</a>
+            </li>
+          </ul>
+        </nav>
+
+        <input type="hidden" name="rm_id" value="{{ rm_id }}">
+        <input type="hidden" name="rm_name" value="{{ rm_name }}">
+        <input type="hidden" name="rm_no" value="{{ rm_no }}">
+
+        <div id="frames-holder" class="frames">
+          <fieldset id="frame-representedEntityType" class="frame" data-validation="0">
+            <label class="group-label">I am submitting these comments:</label>
+
+            <fieldset class="field-label-combo">
+              <input type="radio" value="self" id="representedEntityType-self" name="representedEntityType" required>
+              <label for="representedEntityType-self">On behalf of myself</label>
+            </fieldset>
+
+            <fieldset class="field-label-combo">
+              <input type="radio" value="counsel" id="representedEntityType-counsel" name="representedEntityType" required>
+              <label for="representedEntityType-counsel">As counsel to another person, group or organization</label>
+              <button class="tooltip__trigger" data-tooltip-title="Are you counsel?" data-tooltip="Select counsel if you are an attorney providing comments and acting on behalf of a client." type="button"></button>
+            </fieldset>
+            
+            <fieldset class="field-label-combo">
+              <input type="radio" value="rep" id="representedEntityType-rep" name="representedEntityType" required>
+              <label for="representedEntityType-rep">As an officer, representative or member of a group of individuals or group of organizations</label>
+              <button class="tooltip__trigger" data-tooltip-title="Are you an officer, representative or member?" data-tooltip="Select officer, representative or member if you are otherwise acting on behalf of any person in a non-attorney capacity." type="button"></button>
+            </fieldset>
+
+            <fieldset class="field-label-combo">
+              <input type="radio" value="other" id="representedEntityType-other" name="representedEntityType" data-toggles="submitter_commenter_connection" required>
+              <label for="representedEntityType-other">Other (provide explanation)</label>
+            </fieldset>
+
+            <fieldset class="field-label-combo ux-indented" data-show-if-var="representedEntityType" data-show-if-val="other" aria-hidden="true">
+              <div class="grid grid--2-wide">
+                <div class="grid__item">
+                  <span class="ux-inline"><label for="representedEntityConnection">Explain your connection to the commenter</label></span>
+                  <input type="text" id="representedEntityConnection" name="representedEntityConnection" minlength="3" maxlength="40">
+                </div>
+              </div>
+            </fieldset>
+          </fieldset>{# close #frame-representedEntityType #}
+          <fieldset id="frame-submitterInfo" class="frame" data-validation="0">
+
+            <label class="group-label">
+              <span data-show-if-var="representedEntityType" data-show-if-val="self">Your</span>
+              <span data-show-if-var="representedEntityType" data-show-if-val="counsel">Counsel</span>
+              <span data-show-if-var="representedEntityType" data-show-if-val="rep">Officer/Representative/Member</span>
+              <span data-show-if-var="representedEntityType" data-show-if-val="other">Commenter</span>
+              information</label>
+
+            <div id="contact-info-template" class="commenter-block">
+
+              <label class="" data-index-0="false">Commenter #0</label>
+
+              <label for="commenters[0].commenterType" data-index-0="false">Commenter type</label>
+              <select id="commenters[0].commenterType" name="commenters[0].commenterType" class="grid__item--2-wide" data-index-0="false" size="1" required>
+                <option value="">--Select--</option>
+                <option value="individual">Individual</option>
+                <option value="organization">Organization</option>
+              </select>
+              <span class="error" data-index-0="false">What role is this commenter?</span>
+
+              <div class="grid grid--2-wide" data-toggle="individual">
+                <div class="grid__item">
+                  <label for="commenters[0].firstName">First name</label>
+                  <input type="text" id="commenters[0].firstName" name="commenters[0].firstName" minlength="1" required>
+                  <label class="error" for="commenters[0].firstName">A first name is required</label>
+                </div>
+                <div class="grid__item">
+                  <label for="commenters[0].lastName">Last name</label>
+                  <input id="commenters[0].lastName" name="commenters[0].lastName" title="Maximum length is 40" type="text" size="20" maxlength="40" minlength="2" required>
+                  <label class="error" for="commenters[0].lastName">Last name is a required field</label>
+                </div>
+              </div>
+              <div class="grid grid--2-wide" data-toggle="organization" data-index-0="false">
+                <div class="grid__item">
+                  <label for="commenters[0].orgName">Organization name</label>
+                  <input type="text" id="commenters[0].orgName" name="commenters[0].orgName" required>
+                  <label class="error" for="commenters[0].orgName">An organization name is required</label>
+                </div>
+                <div class="grid__item">&nbsp;</div>
+              </div>
+
+              <hr>
+
+              <label for="commenters[0].addressType">Address type</label>
+              <select id="commenters[0].addressType" name="commenters[0].addressType" size="1" required>
+                <option value="">--Select--</option>
+                <option value="Home">Home</option>
+                <option value="Office">Office</option>
+                <option value="Headquarters">Headquarters</option>
+                <option value="Branch">Branch</option>
+                <option value="Other">Other</option>
+              </select>
+              <label class="error" for="commenters[0].addressType">Required</label>
+
+              <div class="grid grid--2-wide">
+                <div class="grid__item">
+                  <label for="commenters[0].mailingCity">City</label>
+                  <input id="commenters[0].mailingCity" name="commenters[0].mailingCity" title="Maximum length is 100" type="text" size="20" maxlength="100" required>
+                  <label class="error" for="commenters[0].mailingCity">Please enter a city name</label>
+                </div>
+                <div class="grid__item">
+                  <label for="commenters[0].mailingState">State</label>
+                  <select id="commenters[0].mailingState" name="commenters[0].mailingState" size="1" required>
+                    <option value="">Select state</option>
+                    {%- for value, label in constants.states.items() -%}
+                      <option value="{{ value }}">{{ label }}</option>
+                    {%- endfor -%}
+                  </select>
+                  <label class="error" for="commenters[0].mailingState">Which state?</label>
+                </div>
+              </div>
+
+              <label for="commenters[0].mailingCountry">Country</label>
+              <select id="commenters[0].mailingCountry" name="commenters[0].mailingCountry" size="1" required>
+              {%- for value, label in constants.countries.items() -%}
+                <option value="{{ value }}"{% if value == 'US'%} selected{% endif %}>{{ label }}</option>
+              {%- endfor -%}
+              </select>
+              <label class="error" for="commenters[0].mailingCountry">Please select a country</label>
+
+              <hr>
+
+              <label for="commenters[0].emailAddress">Email<span class="label__optional"> (optional)</span></label>
+              <input type="email" id="commenters[0].emailAddress" name="commenters[0].emailAddress" title="Maximum length is 100" size="35" maxlength="100" required>
+              <label class="error" for="commenters[0].emailAddress">An email address is required</label>
+
+              {% if could_testify %}
+              <hr>
+
+              <fieldset class="">
+                <input type="checkbox" id="commenters[0].testify" name="commenters[0].testify" value="true">
+                <label for="commenters[0].testify" class="t-normal t-no-cap">I request to testify should the Commission hold a hearing on this matter.</label>
+              </fieldset>
+
+              <div class="grid grid--2-wide">
+                <div class="grid__item">
+                  <fieldset class="ux-indented" data-show-if-var="commenters[0].testify" data-show-if-val="true" aria-hidden="true">
+                    <label for="commenters[0].phone">Phone number</label>
+                    <label class="label--help">Phone number is not made public and is only used for the purpose of contacting participants to testify</label>
+                    <input type="text" id="commenters[0].phone" name="commenters[0].phone" placeholder="(xxx) xxx-xxxx" pattern="\(\d{3}\) \d{3}-\d{4}">
+                    <label class="error" for="commenters[0].phone">A phone number is required</label>
+                  </fieldset>
+                </div>
+              </div>
+              {% endif %}
+
+              <fieldset class="commenter-controls" data-index-0="false">
+                <button class="button--alt remove-commenter" data-command="remove-commenter" type="button">Remove this commenter</button>
+                <hr>
+                <button class="button--alt add-commenter" data-command="add-commenter" type="button">Add joint commenter</button>
+              </fieldset>
+            </div>{# close #contact-info-template #}
+
+            {# <input type="checkbox" id="createAccount" name="createAccount" value="true" aria-hidden="true" disabled>
+            <label for="createAccount">Save this information for later and create an account</label>
+
+            <fieldset class="" data-show-if-var="createAccount" data-show-if-val="true" aria-hidden="true">
+              <label for="user.password">Create a password</label>
+              <input type="password" id="user.password" name="user.password" autocomplete="false"><button class="button--cta button--go is-disabled" data-action="save-password">Save</button>
+            </fieldset>#}
+
+            <fieldset data-show-if-var="representedEntityType" data-show-if-val="counsel" aria-hidden="true">
+              <hr>
+              <input type="checkbox" id="lawfirm" name="lawfirm" value="true">
+              <label for="lawfirm">Include information about your associated law firm</label>
+            </fieldset>
+
+            <fieldset class="ux-indented" data-show-if-var="lawfirm" data-show-if-val="true" aria-hidden="true">
+
+              <label class="group-label">Law firm information</label>
+
+              <label for="commenters[0].representedEntity.orgName">Law firm name</label>
+              <input id="commenters[0].representedEntity.orgName" name="commenters[0].representedEntity.orgName" type="text" value="" size="40" maxlength="40" required>
+              <label class="error" for="commenters[0].representedEntity.orgName">The law firm name is required</label>
+
+              <hr>
+
+              <label for="commenters[0].representedEntity.addressType">Address type</label>
+              <select id="commenters[0].representedEntity.addressType" name="commenters[0].representedEntity.addressType" size="1" required>
+                <option value="">--Select--</option>
+                <option value="Home">Home</option>
+                <option value="Office">Office</option>
+                <option value="Headquarters">Headquarters</option>
+                <option value="Branch">Branch</option>
+                <option value="Other">Other</option>
+              </select>
+              <label class="error" for="commenters[0].representedEntity.addressType">Required</label>
+
+              <label for="commenters[0].representedEntity.mailingAddressStreet">Street address and apt/ste #</label>
+              <input type="text" id="commenters[0].representedEntity.mailingAddressStreet" name="commenters[0].representedEntity.mailingAddressStreet" value="">
+              <label class="error" for="commenters[0].representedEntity.mailingAddressStreet">A street address is required</label>
+
+              <label>City</label>
+              <input id="commenters[0].representedEntity.mailingCity" name="commenters[0].representedEntity.mailingCity" type="text" value="" size="20" maxlength="28">
+              <label class="error" for="commenters[0].representedEntity.mailingCity">Which city?</label>
+
+              <fieldset class="grid grid--2-wide">
+                <div class="grid__item">
+                  <label>State</label>
+                  <select id="commenters[0].representedEntity.mailingState" name="commenters[0].representedEntity.mailingState" size="1" required>
+                    <option value="">Select state</option>
+                    {% for value, label in constants.states.items() %}
+                      <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                  </select>
+                  <label class="error" for="commenters[0].representedEntity.mailingState">Required</label>
+                </div>
+                <div class="grid__item">
+                  <label for="commenters[0].representedEntity.mailingZip">ZIP</label>
+                  <input type="text" id="commenters[0].representedEntity.mailingZip" name="commenters[0].representedEntity.mailingZip" pattern="^[0-9]{5}(-[0-9]{4}){0,1}$" size="5" maxlength="10">
+                  <label class="error" for="commenters[0].representedEntity.mailingZip">Required</label>
+                </div>
+              </fieldset>
+
+              <label for="commenters[0].representedEntity.mailingCountry">Country</label>
+              <select id="commenters[0].representedEntity.mailingCountry" name="commenters[0].representedEntity.mailingCountry"></select>
+              <label class="error" for="commenters[0].representedEntity.mailingCountry">Which country?</label>
+
+              <hr>
+
+              <label for="commenters[0].representedEntity.emailAddress">Email<span class="label__optional"> (optional)</span></label>
+              <input id="commenters[0].representedEntity.emailAddress" name="commenters[0].representedEntity.emailAddress" type="text" value="" size="35" maxlength="40">
+            </fieldset>{# close law firm info #}
+            <fieldset class="commenter-controls" aria-hidden="true">
+              <button class="button--alt add-commenter" type="button" disabled>Add joint commenter</button>
+              <button class="button--alt remove-commenter" type="button" disabled>Remove this one</button>
+            </fieldset>
+          </fieldset>{# close #frame-submitterInfo #}
+          <fieldset id="frame-commentersInfo" class="frame" data-validation="0">
+            <label class="group-label">Add commenter information</label>
+
+            <div id="commenters-holder" class="commenters-block">
+              {# JavaScript populates these with the innerHTML from #contact-info-template #}
+            </div>
+            <fieldset class="commenters-controls" aria-hidden="true">
+              <button class="button--alt add-commenter" type="button" disabled>Add joint commenter</button>
+              <button class="button--alt remove-commenter" type="button" disabled>Remove this one</button>
+            </fieldset>
+          </fieldset>{# close #frame-commentersInfo #}
+          <fieldset id="frame-comments" class="frame" data-validation="0">
+            Add comments or upload files to submit
+            <p>Comments will be reviewed for inappropriate material before they are posted to FEC.gov. Commenters can attach files, provide text comments, or both.</p>
+
+            <label>Attach file</label>
+            <p class="u-no-margin">You may attach up to three (3) files up to five (5) MB each. Accepted file types are Microsoft Word (.doc or .docx extensions), Microsoft Excel (.xls or .xlsx extensions), text (.text or .rtf extensions) and PDF (.pdf extension) files.</p>
+
+            <div id="files-holder">
+              <fieldset class="field-label-combo">
+                <input type="file" id="files[0]" name="files[0]" accept=".doc, .docx, .pdf, .rtf, .txt" />
+                <label class="error" for="files[0]">Files must be smaller than five (5) MB each</label>
+                <button type="button" class="button--cancel" data-commandfor="files[0]"></button>
+              </fieldset>
+              <fieldset class="field-label-combo">
+                <input type="file" id="files[1]" name="files[1]" accept=".doc, .docx, .pdf, .rtf, .txt" />
+                <label class="error" for="files[1]">Files must be smaller than five (5) MB each</label>
+                <button type="button" class="button--cancel" data-commandfor="files[1]"></button>
+              </fieldset>
+              <fieldset class="field-label-combo">
+                <input type="file" id="files[2]" name="files[2]" accept=".doc, .docx, .pdf, .rtf, .txt" />
+                <label class="error" for="files[2]">Files must be smaller than five (5) MB each</label>
+                <button type="button" class="button--cancel" data-commandfor="files[2]"></button>
+              </fieldset>
+            </div>
+
+            <hr>
+            <label>Provide text comments</label>
+            <p>Do not duplicate content provided in attachments.</p>
+            <textarea id="comments" name="comments" rows="10" maxlength="4000" spellcheck="true" minlength="2" required></textarea>
+            <label for="comments">Available characters remaining: <span id="comments-length-remaining">4,000</span></label>
+
+          </fieldset>{# close #frame-comments #}
+          <fieldset id="frame-summary" class="frame">
+            <table class="summary-table">
+              <tbody>
+                {# this summary table populated by JavaScript #}
+              </tbody>
+            </table>
+          </fieldset>{# close #frame-summary #}
+          <fieldset id="frame-confirmation" class="frame">
+            <div class="message message--info" data-status="submitting">
+              <h2 class="message__title">Transmitting</h2>
+              We&apos;re transmitting your comments.
+            </div>
+            <div class="message message--alert" data-status="error">
+              <h2 class="message__title">Error: Could not submit</h2>
+              <p>We had trouble processing your request.
+              Go back to submit again, or try reloading the page (reloading will clear the information you've entered
+              here.) If the problem persists.</p>
+              <div class="message--alert__bottom">
+                  <p>Still not working?</p>
+                  <ul class="list--buttons">
+                    <li><button class="button--standard" href="https://github.com/fecgov/fec-cms/issues/">File an issue</button></li>
+                  </ul>
+              </div>
+            </div>
+            <div class="message message--success" data-status="success">
+              <h2 class="message__title">Success!</h2>
+              <p>commenters[0].lastName, commenters[0].firstName has submitted comments
+              on behalf of commenters[1].orgName and commenters[2].orgName for ${rm_name} on <time datetime="yyyy-mm-dd hh:mmT-4">D, Mm d, yyyy, at h:mm TimeZone</time>.</p>
+              <div class="message--alert__bottom">
+                  <ul class="list--buttons">
+                    <li><a class="button--standard" href="/legal/rulemakings/">Explore all rulemakings</a></li>
+                  </ul>
+              </div>
+            </div>
+            <p data-status="success">Comments will be reviewed for inappropriate material before they are posted to FEC.gov</p>
+          </fieldset>
+
+        </div>{# close #frames-holder #}
+        <nav class="frames-footer-nav">
+          <button class="button--alt button--back" data-command="back" type="button">Back</button>
+          <button class="button--cta button--go" data-command="next" type="button">Next</button>
+          <div id="commenting-recaptcha" name="commenting-recaptcha" data-sitekey="6Lc0uGwUAAAAALGRGXt3mTteJeb_lbse2frNdWjv"></div>
+          <button class="button--cta hidden is-disabled" data-command="submit" type="button">Submit</button>
+          <p class="t-note t-sans">Next step: Provide your comments</p>
+        </nav>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+      </form>
+    </div>
+    {% endif %}{# end if is_open_for_comment #}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% if is_open_for_comment %}
+{{ tags_for_js_chunks('rulemaking-commenting.js', '')|safe }}
+{% endif %}
+{% endblock %}
