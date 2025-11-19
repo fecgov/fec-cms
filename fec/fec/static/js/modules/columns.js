@@ -1343,7 +1343,7 @@ let show_document = category_match && text_match;
              if (show_document) {
                let top_border_class = '';
                let show_category = '';
-               let current_category = document.document_category || document.document_id;
+               let current_category = document.category || document.document_id;
                if (category_shown != current_category) {
                      top_border_class = 'u-border-top-nuetral';
                      show_category = document.category || `Case document - ${document.document_id}` ;
