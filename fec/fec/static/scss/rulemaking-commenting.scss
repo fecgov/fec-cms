@@ -69,6 +69,7 @@ html, body {
   }
   h2, h3 {
     font-family: $font-sans-serif;
+    margin-bottom: 0;
   }
   label {
     &:not(.t-normal) {
@@ -398,7 +399,7 @@ html, body {
 
     meter {
       background: transparent;
-      height: 1rem;
+      height: 1.5rem;
       margin-top: 1rem;
       width: 100%;
 
@@ -407,11 +408,13 @@ html, body {
         background: $color-gray-lightest;
         border-radius: 0.5rem;
         transition: all 1s;
+        border: solid thin $color-gray;
       }
       &::-moz-meter-bar {
         background: $color-gray-lightest;
         border-radius: 0.5rem;
         transition: all 1s;
+        border: solid thin $color-gray;
       }
       &::-webkit-meter-optimum-value {
         background: $color-green-light;
@@ -594,7 +597,7 @@ html, body {
       flex-direction: column;
       left: initial;
       min-height: calc(100vh - 114px);
-      padding: 1rem 0 0 calc(1rem + 20px);
+      padding: 2rem; // 1rem 0 0 calc(1rem + 20px);
       right: -1rem;
       transition: right 0.5s;
       width: calc(33% + 20px);
@@ -626,7 +629,8 @@ html, body {
     }
 
     h3 {
-      line-height: 1.4em;
+      line-height: 1.25em;
+      margin-bottom: 1rem;
       padding-left: 4rem;
       padding-right: 30px;
 
@@ -718,4 +722,9 @@ html, body {
       }
     }
   } /* end help */
+
+  /* One-off rules */
+  #frame-representedEntityType {
+    max-width: 75rem;
+  }
 }
