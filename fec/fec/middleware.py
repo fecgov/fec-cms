@@ -36,6 +36,7 @@ class AddSecureHeaders(MiddlewareMixin):
             "font-src": ["'self'"],
             "form-action": [
                 "'self'",
+                "*.fec.gov",
                 AWS_S3_BUCKET_URL,
             ],
             "frame-src": [
@@ -60,6 +61,7 @@ class AddSecureHeaders(MiddlewareMixin):
                 "'self'",
                 "'unsafe-inline'",
                 "'unsafe-eval'",
+                "*.fec.gov",
                 "https://code.jquery.com",
                 "https://dap.digitalgov.gov",
                 "https://www.google.com/recaptcha/",
