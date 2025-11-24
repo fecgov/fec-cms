@@ -62,11 +62,6 @@ urlpatterns = [
     re_path(r'^data/legal/search/$', views.legal_search),  # TODO: retire
 ]
 
-if settings.FEATURES['rulemakings']:
-    urlpatterns += re_path(
-        r'^legal/rulemakings/$', views_datatables.rulemaking
-    ),
-
 if settings.FEATURES['adrs']:
     urlpatterns += re_path(r'^legal/search/adrs/$', views.legal_doc_search_adr),
     urlpatterns += re_path(r'^data/legal/search/adrs/$', views.legal_doc_search_adr),  # TODO: retire
@@ -87,6 +82,7 @@ if settings.FEATURES['afs']:
 # Rulemakings
 if settings.FEATURES['rulemakings']:
     urlpatterns += [
+        re_path(r'^legal/rulemakings/$', views_datatables.rulemaking),  # datatable
         re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/$', views.rulemaking),  # single
         re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/add-comments/$', views.rulemaking_add_comments),  # commenting
         re_path(r'^legal/rulemaking/save-comments/',
