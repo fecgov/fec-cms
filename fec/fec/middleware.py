@@ -1,6 +1,5 @@
 from django.utils.deprecation import MiddlewareMixin
 from django.conf import settings
-import os
 
 from psycopg_pool import PoolTimeout
 from django.db.utils import OperationalError
@@ -9,8 +8,9 @@ from django.shortcuts import render
 from fec import slack
 
 
-FEC_RULEMAKING_BUCKET_NAME = os.environ.get("FEC_RULEMAKING_BUCKET_NAME", "")
-FEC_RULEMAKING_S3_REGION_NAME = os.environ.get("FEC_RULEMAKING_S3_REGION_NAME", "")
+# Get rulemaking bucket info from settings (which uses env.get_credential for cloud.gov)
+FEC_RULEMAKING_BUCKET_NAME = getattr(settings, 'FEC_RULEMAKING_BUCKET_NAME', '')
+FEC_RULEMAKING_S3_REGION_NAME = getattr(settings, 'FEC_RULEMAKING_S3_REGION_NAME', '')
 AWS_S3_BUCKET_URL = f"https://{FEC_RULEMAKING_BUCKET_NAME}.s3.{FEC_RULEMAKING_S3_REGION_NAME}.amazonaws.com"
 
 
