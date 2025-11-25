@@ -80,6 +80,7 @@ const mainEntries = {
   'calc-admin-fines': `${js}/modules/calc-admin-fines.js`,
   'fec-timeline': `${js}/modules/fec-timeline.js`,
   'rulemaking-commenting': `${js}/legal/rulemaking-commenting.js`,
+  'rulemaking-single': `${js}/legal/rulemaking-single.js`,
   'widgets/aggregate-totals-box': {
     import: `${js}/widgets/aggregate-totals-box.js`,
     filename: 'widgets/aggregate-totals-box.js',
