@@ -128,15 +128,13 @@
     </table>
   </div>
   <div class="embedded-pdf-panel">
-    <div class="embedded-pdf-url"><span>Document URL:&nbsp; </span><span></span></div>
+    <div class="embedded-pdf-url"><span>Document URL:&nbsp;</span><span></span></div>
     <div class="embedded-pdf-viewer js-embed-pdf-content-holder">
-      {# <div class="js-embed-pdf-content-holder"> #}
-        <object class="embed-viewer" data="" type="application/pdf" width="100%" height="100%">
-          {# <iframe class="embed-viewer" src="" type="application/pdf" width="100%" height="100%" style="border:none"> #}
-            <p>Your browser does not support PDFs.</p>
-          {# </iframe> #}
-        </object>
-      {# </div> #}
+      <object class="embed-viewer" data="" type="application/pdf" width="100%" height="100%">
+        {# <iframe class="embed-viewer" src="" type="application/pdf" width="100%" height="100%" style="border:none"> -#}
+        <p>Your browser does not support PDFs.</p>
+        {#- </iframe> #}
+      </object>
     </div>
   </div>
 </div>
