@@ -117,3 +117,11 @@ class TestDatatablesRender(TestCase):
         if settings.FEATURES.get('nat_party_acct_disbursements'):
             response = client.get('/data/national-party-account-disbursements/', follow=True)
             assert response.status_code == 200
+    
+    # Rulemakings
+
+    def test_rulemakings(self):
+        # TODO: remove the conditional with the flag
+        if settings.FEATURES.get('rulemakingsx'):
+            response = client.get('/legal/search/rulemakings/', follow=True)
+            assert response.status_code == 200
