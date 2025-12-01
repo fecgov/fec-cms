@@ -123,6 +123,15 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
   submitBlocker.setAttribute('aria-hidden', 'true');
   rulemakingFiltersFormElement.prepend(submitBlocker);
 
+  //Accordions in highlights need this implicit listener to work becuase of conflict eith accordions in filter panel
+  $(document).on('click','.accordion-trigger-on', function() {
+    let exp = $(this).attr('aria-expanded') == 'false' ? 'true' : 'false';
+    $(this).attr('aria-expanded', exp);
+    //let hid = $(this).next('div').attr('aria-hidden') == 'true' ? 'false' : 'false'
+    $(this).next('div').attr('aria-hidden', exp == 'true' ? 'false' : 'true');
+
+  });
+
   const $table = $('#results');
   new DataTable_FEC($table, {
     autoWidth: false,
@@ -130,6 +139,7 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
     path: ['rulemaking', 'search'],
     columns: cols_rulemakings,
     order: [[0, 'desc']],
+    //query: {sort:'-is_open_for_comment'},
     useFilters: true,
     useExport: false,
     // Initiate the field value and fire change for keyword if included in querystring in a link or copy/pasted url

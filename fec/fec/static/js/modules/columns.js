@@ -1079,7 +1079,7 @@ export const nationalPartyDisbursements = [
 export const rulemakings = [
   {
     data: 'rm_no',
-    className: 'all align-top t-bold',
+    className: 'cell--15 all align-top t-bold',
     orderable: true,
     render: function(data, type, row) {
       return buildEntityLink(
@@ -1091,10 +1091,11 @@ export const rulemakings = [
   },
   {
     data: null,
-    className: 'all column--rulemaking-docs align-top',
+    className: 'all column--legal-docs align-top',
     orderable: false,
     render: function (data, type, row) {
       let html = `<p><b>${row.rm_name}</b>`;
+      let html1 = 'THIS';
 
       if (row.key_documents && row.key_documents.length ) {
         html += `<br><span class="icon icon--inline--left i-document"></span>`;
@@ -1107,102 +1108,265 @@ export const rulemakings = [
             }
       }
         html += `</p>`;
-        html += `<ul>`;
-      if (row.documents && row.documents.length && get_doc_ids().length ) {
-        for (let id of get_doc_ids()) {
-          for (let doc of row.documents) {
-            if (doc.doc_category_id == id) {
+       
+      // if (row.documents && row.documents.length && get_doc_ids().length ) {
+      //   for (let id of get_doc_ids()) {
+      //     for (let doc of row.documents) {
+      //       if (doc.doc_category_id == id) {
 
-                html += `<li class="document-container">
-                          <div class="document-details">`;
+      //           html += `<li class="document-container">
+      //                     <div class="document-details">`;
 
-                html += `<div class="post--icon">
-                        <span class="icon icon--inline--left i-document"></span>`;
-                html +=
-                buildEntityLink(
-                    doc.doc_type_label, doc.url, doc.doc_type_label);
-                    html += `</div>`;
-                    let parsed;
-                    parsed = moment(doc.doc_date, 'YYYY-MM-DD');
-                    const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
-                    html += `<div class="tag tag--primary">${doc.doc_category_label}</div>
-                            </div>
-                            <div class="document-date">
-                            ${doc_date}
-                            </div>
-                            </li>`;
+      //           html += `<div class="post--icon">
+      //                   <span class="icon icon--inline--left i-document"></span>`;
+      //           html +=
+      //           buildEntityLink(
+      //               doc.doc_type_label, doc.url, doc.doc_type_label);
+      //               html += `</div>`;
+      //               let parsed;
+      //               parsed = moment(doc.doc_date, 'YYYY-MM-DD');
+      //               const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
+      //               html += `<div class="tag tag--primary">${doc.doc_category_label}</div>
+      //                       </div>
+      //                       <div class="document-date">
+      //                       ${doc_date}
+      //                       </div>
+      //                       </li>`;
+      //       }
+
+      //       if (doc.level_2_labels && doc.level_2_labels.length) {
+
+      //         for (let label of doc.level_2_labels) {
+
+      //           for (let i of label.level_2_docs) {
+
+      //             if (i.doc_category_id == id) {
+
+      //               html += `<li class="document-container">
+      //                       <div class="document-details">`;
+
+      //               html += `<div class="post--icon">
+      //                       <span class="icon icon--inline--left i-document"></span>`;
+      //               html +=
+      //               buildEntityLink(
+      //                   i.doc_type_label, i.url, i.doc_type_label);
+      //                   html += `</div>`;
+      //                   let parsed;
+      //                   parsed = moment(i.doc_date, 'YYYY-MM-DD');
+      //                   const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
+      //                   html += `<div class="tag tag--primary">${i.doc_category_label}</div>
+      //                           </div>
+      //                           <div class="document-date">
+      //                           ${doc_date}
+      //                           </div>
+      //                           </li>`;
+
+      //             }
+      //           }
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
+
+    const filters = new URLSearchParams(window.location.search);
+    const filters_category_type = filters.has('doc_category_id');
+    const filters_keyword = filters.has('q');
+    const filters_proximity = filters.has('q_proximity') && filters.getAll('q_proximity').length == 2;
+    const proximity_only = filters_proximity && !filters_keyword;
+
+    const current_doc_ids = filters.getAll('doc_category_id') || [];
+
+    // Note: Opening div tags are lined up with their closing divs below
+     if (row.document_highlights || row.source.length || filters_category_type) {
+       html += 
+      `<div class="legal-search-result__hit u-margin--top">`;
+       if ((filters_category_type || filters_keyword) && !proximity_only) {
+           for (let id of current_doc_ids) {
+           let category_shown = '';
+           for (const [index, document] of row.documents.entries()) {
+//           /*This will show documents in all 3 scenarios:
+//             - When there is a keyword query and selected document categories
+//             - When there are selected document categories and no keyword query
+//             - When there is a keyword query and no selected document categories */
+
+/*  Old Jinja logic for temporary reference, remove before final push
+{% set category_match = (filters_category_type and document.category_match) or not filters_category_type %}
+{% set keyword_match = (filters_keyword and document.text_match) or not filters_keyword %}
+{% set show_document = category_match and keyword_match  %} */
+
+let category_match = !filters_category_type || document.doc_category_id == id ? true : false;
+let text_match = index in row.document_highlights || !filters_keyword ? true : false;
+let show_document = category_match && text_match;
+
+             let top_border_class = '';
+             let show_category = '';
+             let current_category = document.doc_category_label;
+             if (show_document) {
+  
+               if (category_shown != current_category) {
+                     top_border_class = 'u-border-top-nuetral';
+                     show_category = document.doc_category_label;
+                     category_shown = current_category;
+                }
+                 else {
+                   show_category = '';
+                }
+
+                const doc_description = document.doc_type_label;
+
+            html += `
+                  <div class="document-container">
+                    <div class="document-category ${top_border_class}" aria-description="${current_category}">${show_category}</div>
+                    <div class="document_details u-border-top-nuetral">
+                      <div class="post--icon">
+                        <span class="icon icon--inline--left i-document"></span>
+                        <a href="${document.url}">
+                          ${doc_description}
+                        </a>
+                      </div>`;
+            if (row.document_highlights[index]) {
+              if (row.document_highlights[index].length) {
+                  html += `
+                      <ul>
+                        <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${row.document_highlights[index][0]}&#8230;
+                        </li>
+                      </ul>`;
+              }
+              if (row.document_highlights[index].length > 1) {
+                  html += `
+                      <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${index}">
+                        <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${index}" aria-expanded="false">
+                          ${row.document_highlights[index].length > 2 ? row.document_highlights[index].length -1 + ' more keyword matches' : '1 more keyword match'}
+                        </button>
+                        <div class="accordion__content results__content" aria-hidden="true">
+                          <ul>`;
+                          for (let i = 1; i <= row.document_highlights[index].length -1; i++) {
+                            html += `<li class="t-serif t-italic">&#8230;${row.document_highlights[index][i]}&#8230;</li>`;
+                          }
+                            html += `
+                          </ul>
+                        </div>
+                      </div>`;
+              }
             }
-
-            if (doc.level_2_labels && doc.level_2_labels.length) {
-
-              for (let label of doc.level_2_labels) {
+            html += `
+                    </div>
+                    </div>`;
+                 
+          }
+        
+    ////// NEED TO CHANGE THIS TO MATCH NEW DOC DIV STRYCTURE 
+          if (document.level_2_labels && document.level_2_labels.length) {
+               console.log('L2')
+              for (let label of document.level_2_labels) {
 
                 for (let i of label.level_2_docs) {
 
                   if (i.doc_category_id == id) {
 
-                    html += `<li class="document-container">
+                    html1 += `<div class="document-container">
                             <div class="document-details">`;
 
-                    html += `<div class="post--icon">
+                    html1 += `<div class="post--icon">
                             <span class="icon icon--inline--left i-document"></span>`;
-                    html +=
+                    html1 +=
                     buildEntityLink(
                         i.doc_type_label, i.url, i.doc_type_label);
-                        html += `</div>`;
+                        
+                        html1 += `</div>`;
+                        
                         let parsed;
                         parsed = moment(i.doc_date, 'YYYY-MM-DD');
                         const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
-                        html += `<div class="tag tag--primary">${i.doc_category_label}</div>
+                        html1 += `<div class="tag tag--primary">${i.doc_category_label}</div>
                                 </div>
-                                <div class="document-date">
-                                ${doc_date}
-                                </div>
-                                </li>`;
+                         
+                                - ${doc_date}
+                       
+                                </div>`;
 
                   }
                 }
               }
-            }
           }
+          ////// END - NEED TO CHANGE THIS TO MATCH NEW DOC DIV STRYCTURE 
         }
       }
+      } else if (proximity_only) {
+          let category_shown = '';
+          for (const document of row.source) {
+                let top_border_class = '';
+                let show_category = '';
+                let current_category = document.doc_category_label 
+                  if (category_shown != current_category) {
+                      top_border_class = 'u-border-top-nuetral';
+                      show_category = document.doc_category_label ;
+                      category_shown = current_category;
+                  }
+                  else {
+                    show_category = '';
+                  }
+                    html += `
+                      <div class="document-container">
+                        <div class="document-category ${top_border_class}">${show_category}</div>
+                        <div class="document_details u-border-top-nuetral">
+                          <div class="post--icon">
+                            <span class="icon icon--inline--left i-document"></span>
+                            <a href="${document.url}">
+                              ${document.doc_type_label}
+                            </a>
+                          </div>
+                        </div>
+                      </div>`;
+          }
+       }
+     
+      
+     }
+
+    
+
+    /////// END NEW WIP ///////
+
       // TODO: Ask to check with OGC if no_tier documents should be included in doc type filter results
-      if (row.no_tier_documents && row.no_tier_documents.length) {
-        for (let id of get_doc_ids()) {
-          for (let doc of row.no_tier_documents ) {
-            if (doc.doc_category_id == id) {
+      // if (row.no_tier_documents && row.no_tier_documents.length) {
+      //   for (let id of get_doc_ids()) {
+      //     for (let doc of row.no_tier_documents ) {
+      //       if (doc.doc_category_id == id) {
 
-                html += `<li class="document-container">
-                          <div class="document-details">`;
+      //           html += `<div class="document-container">
+      //                     <div class="document-details">`;
 
-                html += `<div class="post--icon">
-                        <span class="icon icon--inline--left i-document"></span>`;
-                html +=
-                buildEntityLink(
-                    doc.doc_type_label, doc.url, doc.doc_type_label);
-                    html += `</div>`;
-                    let parsed;
-                    parsed = moment(doc.doc_date, 'YYYY-MM-DD');
-                    const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
-                    html += `<div class="tag tag--primary">${doc.doc_category_label}</div>
-                            </div>
-                            <div class="document-date">
-                            ${doc_date}
-                            </div>
-                           </li>`;
-            }
-          }
-        }
-      }
+      //           html += `<div class="post--icon">
+      //                   <span class="icon icon--inline--left i-document"></span>`;
+      //           html +=
+      //           buildEntityLink(
+      //               doc.doc_type_label, doc.url, doc.doc_type_label);
+      //               html += `</div>`;
+      //               let parsed;
+      //               parsed = moment(doc.doc_date, 'YYYY-MM-DD');
+      //               const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
+      //               html += `<div class="tag tag--primary">${doc.doc_category_label}</div>
+      //                       </div>
+      //                       <div class="document-date">
+      //                       ${doc_date}
+      //                       </div>
+      //                      </div>`;
+      //       }
+      //     }
+      //   }
+      // }
       // /END TODO re... no_tier docs
-      html += `</ul>`;
-      return html;
+      //html += `</ul>`;
+       html1 += `
+      </div>`;
+      return html + html1;
     }
   },
   {
     data: 'is_open_for_comment',
-    className: 'all align-top',
+    className: 'cell--15 all align-top',
     orderable: true,
     render: function (data, type, row) {
       if (row.is_open_for_comment == false) {
