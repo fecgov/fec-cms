@@ -122,6 +122,6 @@ class TestDatatablesRender(TestCase):
 
     def test_rulemakings(self):
         # TODO: remove the conditional with the flag
-        if settings.FEATURES.get('rulemakingsx'):
+        if settings.FEATURES.get('rulemakings'):
             response = client.get('/legal/search/rulemakings/', follow=True)
             assert response.status_code == 200
