@@ -384,7 +384,3 @@ LOGGING = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
-# For the rulemakings' single page PDF viewer
-if FEATURES['rulemakings']:
-    X_FRAME_OPTIONS = "SAMEORIGIN"
