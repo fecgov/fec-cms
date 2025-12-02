@@ -1082,7 +1082,12 @@ export const rulemakings = [
     className: 'all align-top t-bold',
     orderable: true,
     render: function(data, type, row) {
-      return row.rm_number;
+      return buildEntityLink(
+          row.rm_number,
+          buildAppUrl(['legal','rulemakings', row.rm_no]
+        ),
+        row.rm_number
+      );
     }
   },
   {
@@ -1206,15 +1211,15 @@ export const rulemakings = [
       }
       else {
         const comment_deadline = moment(row.comment_close_date).format('MMMM D YYYY');
-        return `<p><b>${row.description}</b><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="">Submit a comment</a></p>`;
+        return `<p><b>${row.description}</b><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="/legal/rulemakings/${row.rm_no}/add-comments/">Submit a comment</a></p>`;
       }
     }
   }
 ];
-// TODO: SEE: const queryParams = URI.parseQuery(window.location.search);
+
 const get_doc_ids = function() {
-const params = new URLSearchParams(window.location.search);
-let docs = params.getAll('doc_category_id') || [];
-return docs;
+  const params = new URLSearchParams(window.location.search);
+  let docs = params.getAll('doc_category_id') || [];
+  return docs;
 };
 
