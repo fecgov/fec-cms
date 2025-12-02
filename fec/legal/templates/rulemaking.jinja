@@ -20,15 +20,18 @@
     </div>
   </div>
   <div class="embedded-pdf-list">
+    {% if FEATURES.rulemakings_commenting %}{# feature flag to hide the commenting block -#}
     <div class="submit-comments">
-    {% if not is_open_for_comment %}
+    {% if not is_open_for_comment -%}
       <div class="label">Not open for comment</div>
-    {% else %}
+    {% else -%}
       <div class="label">Open for comment: Notice of Availability</div>
       <div class="label sublabel t-sans">Comment deadline: {{ comment_close_date|date_full(time_tag=True) }}</div>
       <a class="button--cta" href="/legal/rulemakings/{{ rm_no }}/add-comments/">Submit a comment</a>
-    {% endif %}
+    {% endif -%}
     </div>
+    {% endif -%}{# end feature flag to hide commenting block -#}
+    {% if key_documents %}{# Include the Key Documents bits only if there are docs to include #}
     <h2>Key documents</h2>
     <table class="simple-table simple-table--display">
       <thead>
@@ -46,6 +49,7 @@
         {% endfor %}
       </tbody>
     </table>
+    {% endif %}
 
     <h2>All documents</h2>
     <table class="simple-table simple-table--display">
@@ -128,12 +132,10 @@
     </table>
   </div>
   <div class="embedded-pdf-panel">
-    <div class="embedded-pdf-url"><span>Document URL:&nbsp;</span><span></span></div>
+    <div class="embedded-pdf-url"><span>Document URL:&nbsp; </span><span></span></div>
     <div class="embedded-pdf-viewer js-embed-pdf-content-holder">
-      <object class="embed-viewer" data="" type="application/pdf" width="100%" height="100%">
-        {# <iframe class="embed-viewer" src="" type="application/pdf" width="100%" height="100%" style="border:none"> -#}
-        <p>Your browser does not support PDFs.</p>
-        {#- </iframe> #}
+      <object class="embed-viewer empty" data="" type="application/pdf" width="100%" height="100%">
+        <span>This file can be accessed at the URL above.<br>Your browser does not support embedded PDFs.</span>
       </object>
     </div>
   </div>

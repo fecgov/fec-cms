@@ -69,6 +69,7 @@ function openEmbeddedPdf(clickedEl) {
   if (pdfViewerObj) {
     pdfViewerObj.innerHTML = '';
     pdfViewerObj.data = url;
+    pdfViewerObj.classList.remove('empty');
   }
   if (pdfViewerFrame) pdfViewerFrame.src = url;
 
