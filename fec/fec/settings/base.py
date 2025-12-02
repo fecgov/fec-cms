@@ -127,7 +127,7 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['nat_party_acct_dis_single'] = True
     FEATURES['rulemakings'] = True
     FEATURES['rulemakings_single'] = True
-    # FEATURES['rulemakings_commenting'] = True
+    FEATURES['rulemakings_commenting'] = True
 
 # Application definition
 INSTALLED_APPS = (
