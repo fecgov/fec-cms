@@ -181,16 +181,25 @@
     .embedded-pdf-viewer {
       background-color: lightgrey;
       flex-grow: 2;
+
+      .empty {
+        align-items: center;
+        display: flex;
+        font-family: Karla, sans-serif;
+        justify-content: center;
+        padding: 1rem;
+        text-align: center;
+      }
     }
   }
   .embedded-pdf-list {
     padding: u(2rem);
     
-    @include media($med) {
-      border-right: 1px solid $primary;
-      width: 40%;
-    }
+    // @include media($med) {
+    //   width: 40%;
+    // }
     @include media($lg) {
+      border-right: 1px solid $primary;
       width: 33.3%;
     }
     

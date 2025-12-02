@@ -37,8 +37,8 @@ urlpatterns = [
     re_path(r'^legal/matters-under-review/(?P<mur_no>[\w-]+)/$', views.mur_page),  # single
     re_path(r'^data/legal/matter-under-review/(?P<mur_no>[\w-]+)/$', views.mur_page),  # TODO: retire this one
 
-    re_path(r'^legal/search/murs/$', views.legal_doc_search_mur),  # search, datatable
-    re_path(r'^legal/search/matters-under-review/$', views.legal_doc_search_mur),  # search, datatable
+    re_path(r'^legal/search/murs/$', views.legal_doc_search_mur),  # search, datatables
+    re_path(r'^legal/search/matters-under-review/$', views.legal_doc_search_mur),  # search, datatables TODO: redirect?
     re_path(r'^data/legal/search/murs/$', views.legal_doc_search_mur),  # TODO: retire this one
 
     re_path(r'^legal/search/enforcement/$', views.legal_doc_search_mur),
@@ -63,11 +63,6 @@ urlpatterns = [
     re_path(r'^data/legal/search/$', views.legal_search),  # TODO: retire this one
 ]
 
-if settings.FEATURES['rulemakings']:
-    urlpatterns += re_path(
-        r'^legal/rulemakings/$', views_datatables.rulemaking
-    ),
-
 if settings.FEATURES['adrs']:
     urlpatterns += re_path(r'^legal/search/adrs/$', views.legal_doc_search_adr),
     urlpatterns += re_path(r'^data/legal/search/adrs/$', views.legal_doc_search_adr),  # TODO: retire this one
@@ -81,19 +76,29 @@ if settings.FEATURES['afs']:
             RedirectView.as_view(url='/legal/search/admin-fines/', query_string=True)
         ),  # TODO: do we still need this redirect?
         # The actual `admin-fines` view
-        re_path(r'^legal/search/admin-fines/$', views.legal_doc_search_af),  # landing page / datatable
+        re_path(r'^legal/search/admin-fines/$', views.legal_doc_search_af),  # landing page / datatables
         re_path(r'^data/legal/search/admin-fines/$', views.legal_doc_search_af),  # TODO: retire this one
     ]
 
-# Rulemakings
+# Rulemakings - datatables
 if settings.FEATURES['rulemakings']:
     urlpatterns += [
-        re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/$', views.rulemaking),  # single
-        # re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/add-comments/$', views.rulemaking_add_comments),
-        # ^^^^ comment on single
+        re_path(r'^legal/search/rulemakings/$', views_datatables.rulemaking),  # datatables
+    ]
 
-        # re_path(r'^legal/rulemaking/save-comments/',
-        # views.save_rulemaking_comments, name='save_rulemaking_comments'),  # save comments
+# Rulemakings - single
+if settings.FEATURES['rulemakings_single']:
+    urlpatterns += [
+        re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/$', views.rulemaking),  # single
+    ]
+
+# Rulemakings - commenting (commenting requires single, too)
+if settings.FEATURES['rulemakings_commenting'] and settings.FEATURES['rulemakings_single']:
+    urlpatterns += [
+        # comment on single:
+        # re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/add-comments/$', views.rulemaking_add_comments),
+        # save comments:
+        # re_path(r'^legal/rulemaking/save-comments/', views.save_rulemaking_comments, name='save_rulemaking_comments'),
     ]
 
 
