@@ -10,7 +10,7 @@ from data import utils
 #   - home/templatetags/top_entities.py: def raising_spending, office
 #   - homes/templates/home/home_page.html: officeSelector.value; yearSelector.value
 
-START_YEAR = 1979
+START_YEAR = 1977
 END_YEAR = 2026  # Change at the beginning of the year
 DEFAULT_TIME_PERIOD = 2026  # Change after the April quarterly report (4/15/27)
 DEFAULT_ELECTION_YEAR = 2026  # Change after election day (11/3/26)
