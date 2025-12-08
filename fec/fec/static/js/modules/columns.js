@@ -1084,8 +1084,7 @@ export const rulemakings = [
     render: function(data, type, row) {
       return buildEntityLink(
           row.rm_number,
-          buildAppUrl(['legal','rulemakings', row.rm_no]
-        ),
+          `/legal/rulemakings/${row.rm_no}/`,
         row.rm_number
       );
     }
@@ -1222,4 +1221,3 @@ const get_doc_ids = function() {
   let docs = params.getAll('doc_category_id') || [];
   return docs;
 };
-
