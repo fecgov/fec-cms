@@ -443,6 +443,7 @@ table_columns = OrderedDict([
     ('national-party-account-disbursements',
         ['Spender name', 'Recipient', 'Party account', 'Description', 'Date', 'Amount']),
     ('debts', ['Committee name', 'Creditor/Debtor name', 'Beginning balance', 'Ending balance', 'Coverage end date']),
+    ('rulemakings', ['REG number', 'REG name and documents', 'Open for comments']),
 ])
 
 line_numbers = {
@@ -946,27 +947,24 @@ SENATE_CLASSES = {
 # Archived MUR that has the same number as the current MUR
 ARCHIVED_MUR_EXCEPTION = "3620"
 
-
 mur_disposition_category_ids = OrderedDict([
-    ('3', 'Dismiss and Remind'),
-    ('4', 'Dismissed'),
+    ('3', 'Dismiss with Caution'),
+    ('4', 'Dismissed-All'),
     ('5', 'Dismissed-Low Rated'),
     ('6', 'Dismissed-Other'),
     ('7', 'Dismissed-Stale'),
     ('8', 'Dismiss pursuant to prosecutorial discretion'),
-    ('9', 'Dismiss pursuant to prosecutorial discretion, and caution'),
-    ('10', 'Enforcement - Disposition - Dismissed "Dismiss" - Dismiss and Caution'),
-    ('11', 'No PCTB'),
-    ('12', 'No RTB'),
-    ('13', 'PCTB Finding'),
-    ('15', 'RTB Finding'),
-    ('16', 'RTB/NFA'),
-    ('17', 'Take no action'),
-    ('18', 'Take No Further Action'),
+    ('9', 'No Probable Cause to Believe'),
+    ('10', 'No Reason to Believe'),
+    ('11', 'Probable Cause to Believe Finding'),
+    ('12', 'Probable Cause to Believe Finding/No Further Action'),
+    ('14', 'Reason to Believe Finding/No Further Action'),
+    ('15', 'Take No Action'),
+    ('16', 'Take No Further Action'),
 ])
 
 suggested_mur_disposition_category_ids = OrderedDict([
-    ('14', 'Probable Cause/NFA'),
+    ('13', 'Reason to Believe Finding'),
     ('1', 'Conciliation: Pre Probable Cause'),
     ('2', 'Conciliation: Probable Cause'),
 ])
@@ -978,7 +976,7 @@ primary_subject_ids = {
     "3": "Contributions",
     "4": "Disclaimer",
     "5": "Disbursements",
-    "6": "Electioneering",
+    "6": "Electioneering Communications",
     "7": "Expenditures",
     "8": "Express Advocacy",
     "9": "Foreign Nationals",
@@ -1025,4 +1023,24 @@ secondary_subject_ids = {
     "17": "Limits",
     "18": "Prohibitions",
   }
+}
+
+
+rulemaking_doc_category_ids = {
+"1": "Open Meeting",
+"2": "Hearing",
+"3": "Agenda Document",
+"4": "Federal Register Document",
+"5": "Comments and Ex Parte Communications",
+"6": "Commencing Document",
+"7": "Votes",
+"8": "Press & Public Guidance",
+}
+
+rulemaking_entity_role_types = {
+"1": "Petitioner",
+"2": "Witness",
+"3": "Counsel",
+"4": "Officer/Representative",
+"5": "Commenter",
 }

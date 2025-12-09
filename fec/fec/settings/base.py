@@ -25,6 +25,7 @@ FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
 FEC_INTERNAL_API_KEY_PUBLIC = env.get_credential('FEC_INTERNAL_API_KEY_PUBLIC', '')
 FEC_INTERNAL_IP = env.get_credential('FEC_INTERNAL_IP', '')
 FEC_API_KEY_PUBLIC_CALENDAR = env.get_credential('FEC_WEB_API_KEY_PUBLIC_CALENDAR', FEC_API_KEY_PUBLIC)
+FEC_API_KEY_PUBLIC_SCHEDULE_A = env.get_credential('FEC_WEB_API_KEY_PUBLIC_SCHEDULE_A', FEC_API_KEY_PUBLIC)
 FEC_CAL_DOWNLOAD_API_KEY = env.get_credential('FEC_CAL_DOWNLOAD_API_KEY')
 FEC_DOWNLOAD_API_KEY = env.get_credential('FEC_DOWNLOAD_API_KEY', '')
 
@@ -85,6 +86,7 @@ FEATURES = {
     'pac_party': bool(env.get_credential('FEC_FEATURE_PAC_PARTY', '')),
     'pac_snapshot': bool(env.get_credential('FEC_FEATURE_PAC_SNAPSHOT', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
+    'rulemakings': bool(env.get_credential('FEC_FEATURE_RULEMAKINGS', '')),
 }
 
 # Set feature flags to True for Feature
@@ -115,6 +117,7 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['nat_party_acct_disbursements'] = True
     FEATURES['nat_party_acct_rec_single'] = True
     FEATURES['nat_party_acct_dis_single'] = True
+    FEATURES['rulemakings'] = True
 
 # Application definition
 INSTALLED_APPS = (
@@ -161,6 +164,7 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     # custom response headers
     'fec.middleware.AddSecureHeaders',
+    'fec.middleware.PoolTimeouts',
     'uaa_client.middleware.UaaRefreshMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
