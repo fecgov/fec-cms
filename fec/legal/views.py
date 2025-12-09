@@ -5,6 +5,7 @@ import datetime
 import re
 import boto3  # rulemaking comments
 import json  # rulemaking comments
+import os  # rulemaking comments
 import uuid  # rulemaking comments
 import requests  # reCAPTCHA for rulemaking comments
 from botocore.client import Config  # rulemaking comments
@@ -141,8 +142,8 @@ def save_rulemaking_comments(request):
         for field_name in ['files[0].name', 'files[1].name', 'files[2].name']:
             if data.get(field_name):
                 filename = data.get(field_name)
-                ext = filename[filename.rindex('.'):]
-                if ext in allowed_file_types:
+                ext = os.path.splitext(filename)[1]  # [0] is the root, [1] is the ext
+                if ext and ext in allowed_file_types:
                     to_submit['filenames'].append(str(i) + '-' + filename)
                     i += 1
                 else:
