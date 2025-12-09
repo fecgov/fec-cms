@@ -1133,10 +1133,12 @@ RulemakingCommenting.prototype.startSubmitting = async function() {
   const attachedFiles = [];
   // For each of the fields in the form,
   formData.entries().forEach(entry => {
+    // If the field name starts with `files[…`
     if (entry[0].indexOf('files[') === 0) {
-      // If this field is a file, we only want its name for now,
+      // If this field is a file, we only want its name and size for now,
       // and let's add '.name' to the end so files[0] becomes files[0].name
       dataPayload[`${entry[0]}.name`] = entry[1].name;
+      dataPayload[`${entry[0]}.size`] = entry[1].size;
       if (entry[1].name) attachedFiles.push(entry); // Only add it if it has a file name (not if the field's empty)
     // If it's not a file, just use the field name as the key and the value as the value
     } else dataPayload[entry[0]] = entry[1];

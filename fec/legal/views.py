@@ -35,6 +35,8 @@ def get_s3_client():
 # TODO: Get CSRF working in cloud environments
 @csrf_exempt
 def save_rulemaking_comments(request):
+    MAX_FILE_SIZE = 5000000
+
     # If not 'post', reject
     if request.method != 'POST':
         return JsonResponse({'status': 405, 'ok': False, 'message': 'POST required', }, status=405)
@@ -127,7 +129,14 @@ def save_rulemaking_comments(request):
 
         allowed_file_types = ['.doc', '.docx', '.pdf', '.rtf', '.txt', '.xls', '.xlsx']
 
-        # Because we can have 0-3 files and they could be in any of the fields, add the ones with values
+        # Because we can have 0-3 files and they could be in any of the fields,
+        # reject the submission if any are too large
+        for field_name in ['files[0].size', 'files[1].size', 'files[2].size']:
+            if data.get(field_name) > MAX_FILE_SIZE:  # 5 MB
+                return JsonResponse({'status': 413, 'ok': False, 'message': 'File size too large'}, status=413)
+            # Yes, we aren't adding the .size values to to_submit[]
+
+        # otherwise, add the ones with values.
         i = 0
         for field_name in ['files[0].name', 'files[1].name', 'files[2].name']:
             if data.get(field_name):
@@ -182,7 +191,7 @@ def save_rulemaking_comments(request):
                 Conditions=[
                     {'acl': 'private'},
                     ['starts-with', '$key', f'{prefix}/'],
-                    ['content-length-range', 0, 5000000],
+                    ['content-length-range', 0, MAX_FILE_SIZE],
                 ],
                 ExpiresIn=60,  # 1 minute
             )
