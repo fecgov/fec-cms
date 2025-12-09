@@ -1,27 +1,6 @@
 /**
- * ✅ TODO: add disclaimer for testify-phone: 'Phone number is not made public and is only used for the purpose of contacting participants to testify'
- * ✅ TODO: summary: include request to testify if needed, then phone number
- * ✅ TODO: review email address fields' 'required' states, particularly for counsel
- * ✅ TODO: email fields' (required) labels should toggle correctly
- * ✅ TODO: title should move above topnav
- * ✅ TODO: topnav links should work
- * ✅ TODO: phone number field should be limited width
- * ✅ TODO: error messages' widths should be auto, not necessarily the width of their <input>
- * ✅ TODO: When the country isn't the US, reset and disable the state <select>
  * TODO: history/flow
- *   ✅ TODO: arriving at the summary/review page and the confirmation page, scroll to the top
- *   ✅ TODO: Going back to change the radio buttons, the top nav options should update, too
- *   ✅ TODO: Going back from add comments takes us back to 0 instead of the previous frame we were shown
- *   TODO: confirmation page should adjust its size
- * ✅ TODO: error checking in JavaScript _and_ Python
- * ✅ TODO: handle errors:
- *   ✅ TODO: filesize too large
- *   ✅ TODO: if we can't save user information for some reason—some generic error
- *   ✅ TODO: saved information, couldn't save attachment(s)
- *   ✅ TODO: include unique ID for when commenters contact FEC
- *   ✅  TODO: ¿saved information, may have saved some attachment(s)?
- *   ❌ TODO: ¿commenting period has closed before comments could be submitted? (not a field in the API)
- *   ❌ TODO: ¿commenting period is about to close? (not a field in the API)
+ * TODO: confirmation page should adjust its size
  */
 export default function RulemakingCommenting() {
   this.appElId = 'rulemaking-comments'; // How to find the button to launch this
@@ -105,11 +84,8 @@ async function uploadData(dataPayload) {
  * @param {Object[]} uploadObjects - Objects to upload. The key is the url, the value is the File object (file)
  */
 async function uploadFiles(data) {
-    // let BREAK_FIRST_URL = -1; // TODO: REMOVE THE BREAK_FIRST_URL LINES
     const responses = await Promise.all(
       data.map(async file => {
-        // BREAK_FIRST_URL++; // TODO: REMOVE THE BREAK_FIRST_URL LINES
-        // return fetch(BREAK_FIRST_URL === 0 ? 'break' : file.url, { // TODO: THIS WILL BREAK THE FIRST FILE'S URL
         return fetch(file.url, { // TODO: this is the real line (remove this comment)
           method: 'POST',
           body: file.fileUploadBody
@@ -168,8 +144,7 @@ RulemakingCommenting.prototype.init = function() {
 
   const commentsTextarea = this.formEl.querySelector('textarea');
   commentsTextarea.addEventListener('resize', () => {
-    // TODO: HANDLE RESIZE
-    // console.log('resize(e): ', e);
+    // TODO: HANDLE RESIZE?
   });
   commentsTextarea.addEventListener('input', () => {
     const charsAvail = 4000 - commentsTextarea.value.length;
@@ -206,7 +181,6 @@ RulemakingCommenting.prototype.showRecap = function(showRecap) {
     this.recapWidgetId = grecaptcha.render(recapElId, {
       callback: this.handleRecapCheck.bind(this),
       'expired-callback': this.handleRecapExpiration.bind(this)
-      // 'error-callback': (e) => { console.log('errorcallback(e): ', e); }
     }, true);
   }
 };
@@ -246,7 +220,7 @@ RulemakingCommenting.prototype.goToFrame = function(frameNum) {
     if (this.representedEntityType === 'self' && this.isOnFrame('comments')) {
       this.currentFrameNum = framesOrder.indexOf('submitterInfo');
 
-      // Otherwise, if we're past frame [0], backup
+    // Otherwise, if we're past frame [0], back up
     } else if (this.currentFrameNum > 0) {
       this.currentFrameNum--;
 
@@ -452,7 +426,6 @@ RulemakingCommenting.prototype.buildTheFrame = function() {
 
         const commentersNames = [];
         for (let i = 1; formData.has(`commenters[${i}].commenterType`); i++) {
-          // console.log('  for ', i);
           commentersNames.push(
             formData.get(`commenters[${i}].commenterType`) === 'individual'
             ? formData.get(`commenters[${i}].firstName`) + ' ' + formData.get(`commenters[${i}].lastName`)
@@ -497,7 +470,7 @@ RulemakingCommenting.prototype.buildTheFrame = function() {
         this.frame5.querySelector('.message--alert p').innerHTML = submissionStatusMessages['error-data'];
 
       // else, there was a problem with 1+ attachments
-      else {// if (failures.includes('file'))
+      else { // if (failures.includes('file'))
         let confirmationMessage = submissionStatusMessages['error-files'];
         confirmationMessage = confirmationMessage.replace('[$team]', 'NEED A TEAM HERE?');
         confirmationMessage = confirmationMessage.replace('[$randomid]', this.submissionResponses[0].submission_id);
@@ -592,7 +565,7 @@ RulemakingCommenting.prototype.validateEntireForm = function() {
         requiredFieldNames.push(
           `commenters[${i}].firstName`,
           `commenters[${i}].lastName`,
-          `commenters[${i}].emailAddress` // Email addresses are required for individuals but not organizations
+          `commenters[${i}].emailAddress` // Email addresses are required for individuals (not organizations)
         );
       }
 
@@ -624,7 +597,7 @@ RulemakingCommenting.prototype.validateEntireForm = function() {
     }
   });
 
-  // If we have no files attached, and not valid comments, go back to that frame
+  // If we have no files attached, and no valid comments, go back to that frame
   if (!formData.get('files[0]').name && !formData.get('files[1]').name
     && !formData.get('files[2]').name && formData.get('comments').length < 2) {
       toReturn = false;
@@ -701,7 +674,6 @@ RulemakingCommenting.prototype.addCommenter = function() {
     'fieldset[data-show-if-var$=".testify"], fieldset:has(input[name$=".testify"])'
   );
   testifyEls.forEach(el => {
-    // el.parentElement.removeChild(el);
     el.remove();
   });
 
@@ -932,7 +904,6 @@ RulemakingCommenting.prototype.updateBottomNav = function(state = 'incomplete') 
     this.formEl.querySelector('[data-command="submit"]').classList.remove('is-disabled');
   } else {
     this.formEl.querySelector('[data-command="submit"]').classList.add('is-disabled');
-    // this.formEl.querySelector('.g-recaptcha').classList.add('hidden');
   }
 };
 
@@ -1238,7 +1209,6 @@ RulemakingCommenting.prototype.handleBeforeUnload = function() {
  * @param {Event} e
  */
 RulemakingCommenting.prototype.handleInputChange = function() {
-  // console.log('change(e): ', e);
   // Rules for frame 0/type
   // TODO: do we need this?
 };
@@ -1247,7 +1217,6 @@ RulemakingCommenting.prototype.handleInputChange = function() {
  * @param {InputEvent} e
  */
 RulemakingCommenting.prototype.handleInputInput = function() {
-  // console.log('input(e): ', e);
   // TODO: do we need this?
 };
 

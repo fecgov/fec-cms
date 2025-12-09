@@ -43,7 +43,6 @@ def save_rulemaking_comments(request):
     try:
         data = json.loads(request.body)
     except Exception:
-        # print('Exception: ', Exception)
         return JsonResponse({'status': 400, 'ok': False, 'message': 'Invalid JSON'}, status=400)
 
     # Checking reCAPTCHA
@@ -53,8 +52,7 @@ def save_rulemaking_comments(request):
         verifyRecaptcha = requests.post(
             'https://www.google.com/recaptcha/api/siteverify',
             data={
-                # TODO: don't use Google's generic, always-passes key
-                'secret': '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',  # settings.FEC_RECAPTCHA_SECRET_KEY,
+                'secret': settings.FEC_RECAPTCHA_SECRET_KEY,
                 'response': data['g-recaptcha-response'],
             },
         )
@@ -149,8 +147,6 @@ def save_rulemaking_comments(request):
 
         if not to_submit['filenames'] and len(to_submit['comments']) < 2:
             return JsonResponse({'error': 'Missing comments and files.'}, status=400)
-
-        # too large = 413
 
         # Submission ID is used later to keep folders and files together
         # Uses submission time prefixes in YYYYMMDDHHMMSS format for easier sorting
