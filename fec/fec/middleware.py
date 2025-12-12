@@ -31,6 +31,7 @@ class AddSecureHeaders(MiddlewareMixin):
                 "*.fec.gov",
                 "*.app.cloud.gov",
                 "https://www.google-analytics.com",
+                "https://www.google.com/recaptcha/",
             ],
             "font-src": ["'self'"],
             "form-action": [
