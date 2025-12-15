@@ -73,7 +73,7 @@ async function uploadData(dataPayload) {
 
     // If the response is not ok (e.g., 403 CSRF error), return error object
     if (!response.ok) {
-      console.error('Upload failed:', response.status, response.statusText);
+      console.error('Upload failed:', response.status, response.statusText); // eslint-disable-line no-console
       return {
         ok: false,
         status: response.status,
@@ -86,7 +86,7 @@ async function uploadData(dataPayload) {
     return result;
 
   } catch (err) {
-    console.error('Upload error:', err);
+    console.error('Upload error:', err); // eslint-disable-line no-console
     return {
       ok: false,
       status: 0,
@@ -1214,7 +1214,7 @@ RulemakingCommenting.prototype.startSubmitting = async function() {
     // Check for success status codes
     const isSuccess = response.ok === true || (response.status && response.status >= 200 && response.status < 300);
     if (!isSuccess) {
-      console.error('Submission failed:', response.status, response.statusText);
+      console.error('Submission failed:', response.status, response.statusText); // eslint-disable-line no-console
       passed = false;
     }
   });
