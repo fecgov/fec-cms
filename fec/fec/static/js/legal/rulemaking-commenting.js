@@ -71,11 +71,28 @@ async function uploadData(dataPayload) {
       body: JSON.stringify(dataPayload)
     });
 
+    // If the response is not ok (e.g., 403 CSRF error), return error object
+    if (!response.ok) {
+      console.error('Upload failed:', response.status, response.statusText);
+      return {
+        ok: false,
+        status: response.status,
+        statusText: response.statusText,
+        message: response.status === 403 ? 'CSRF validation failed' : 'Request failed'
+      };
+    }
+
     const result = await response.json();
     return result;
 
   } catch (err) {
-    return err;
+    console.error('Upload error:', err);
+    return {
+      ok: false,
+      status: 0,
+      statusText: 'Network Error',
+      message: err.message
+    };
   }
 }
 
@@ -1157,28 +1174,31 @@ RulemakingCommenting.prototype.startSubmitting = async function() {
 
   let dataSubmission = await uploadData(dataPayload)
     .then(response => {
-      const presignedURLs = response.presigned_urls;
+      // Only process presigned URLs if the response was successful
+      if (response.ok && response.presigned_urls) {
+        const presignedURLs = response.presigned_urls;
 
-      attachedFiles.forEach(
-        /**
-         * @param {Array} attachedFile - [key, value] pair of field name and File
-         * where [0] is the field name and [1] is the attached file
-        */
-        (attachedFile, i) => {
-          const indexedName = `${i}-${attachedFile[1].name}`;
-          const presignedDataObj = presignedURLs[indexedName];
+        attachedFiles.forEach(
+          /**
+           * @param {Array} attachedFile - [key, value] pair of field name and File
+           * where [0] is the field name and [1] is the attached file
+          */
+          (attachedFile, i) => {
+            const indexedName = `${i}-${attachedFile[1].name}`;
+            const presignedDataObj = presignedURLs[indexedName];
 
-          const fileUploadBody = new FormData();
-          Object.entries(presignedDataObj.fields).forEach(([key, value]) => {
-            fileUploadBody.append(key, value);
-          });
-          fileUploadBody.append('file', attachedFile[1]);
+            const fileUploadBody = new FormData();
+            Object.entries(presignedDataObj.fields).forEach(([key, value]) => {
+              fileUploadBody.append(key, value);
+            });
+            fileUploadBody.append('file', attachedFile[1]);
 
-          filesToUpload.push({
-            url: presignedDataObj.url,
-            fileUploadBody: fileUploadBody
-          });
-      });
+            filesToUpload.push({
+              url: presignedDataObj.url,
+              fileUploadBody: fileUploadBody
+            });
+        });
+      }
       return response;
     });
 
