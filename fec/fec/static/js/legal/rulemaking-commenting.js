@@ -1116,13 +1116,19 @@ RulemakingCommenting.prototype.toggleHelp = function(targetEl) {
  *
  */
 RulemakingCommenting.prototype.startSubmitting = async function() {
-  // TODO: deactivate bottom nav
+  // Disable submit button immediately after submitting
+  const submitButton = this.formEl.querySelector('[data-command="submit"]');
+  submitButton.classList.add('is-disabled');
+  submitButton.disabled = true;
 
   if (this.validateEntireForm()) {
     this.submissionResponses = [];
     this.submissionStatus = 'submitting';
   } else {
     // validEntireForm() will call goToFrame as needed
+    // Re-enable submit button if validation fails
+    submitButton.classList.remove('is-disabled');
+    submitButton.disabled = false;
     return;
   }
 
@@ -1185,8 +1191,12 @@ RulemakingCommenting.prototype.startSubmitting = async function() {
 
   let passed = true;
   this.submissionResponses.forEach(response => {
-    // We only need one submission to have failed
-    if (response.ok != true) passed = false;
+    // Check for success status codes
+    const isSuccess = response.ok === true || (response.status && response.status >= 200 && response.status < 300);
+    if (!isSuccess) {
+      console.error('Submission failed:', response.status, response.statusText);
+      passed = false;
+    }
   });
 
   this.submissionStatus = passed ? 'success' : 'error';
