@@ -44,20 +44,22 @@ const submissionStatusMessages = {
 const usZoneCodes = ['US', 'AS', 'GU', 'MP', 'PR', 'UM', 'VI'];
 
 /**
- * TEMP FUNCTION?
- * @param {string} name
- * @returns {string}
+ * Get CSRF token from the DOM (works with HttpOnly cookies)
+ * @returns {string|null}
  */
-function getCookie(name) {
-  return document.cookie
+function getCSRFToken() {
+  // Try to get from hidden input first (works with CSRF_COOKIE_HTTPONLY = True)
+  const tokenInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+  if (tokenInput) {
+    return tokenInput.value;
+  }
+
+  // Fallback to cookie (for local dev where HttpOnly might be false)
+  const value = document.cookie
     .split('; ')
-    .find(row => row.startsWith(name + '='))
-    ?.split('=')[1]
-    ? decodeURIComponent(document.cookie
-      .split('; ')
-      .find(row => row.startsWith(name + '='))
-      .split('=')[1])
-    : null;
+    .find(row => row.startsWith('csrftoken='));
+
+  return value ? value.split('=')[1] : null;
 }
 
 async function uploadData(dataPayload) {
@@ -66,7 +68,7 @@ async function uploadData(dataPayload) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': getCookie('csrftoken')
+        'X-CSRFToken': getCSRFToken()
       },
       body: JSON.stringify(dataPayload)
     });
