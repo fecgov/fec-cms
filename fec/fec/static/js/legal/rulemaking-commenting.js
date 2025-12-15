@@ -172,6 +172,18 @@ RulemakingCommenting.prototype.init = function() {
 
   window.addEventListener('beforeunload', this.handleBeforeUnload.bind(this));
 
+  // Close tooltip when clicking outside of it
+  document.addEventListener('click', (e) => {
+    // If tooltip is open and click is outside both the tooltip and any trigger button
+    if (!this.help.classList.contains('hidden')) {
+      const clickedInsideHelp = this.help.contains(e.target);
+      const clickedTrigger = e.target.classList.contains('tooltip__trigger');
+      if (!clickedInsideHelp && !clickedTrigger) {
+        this.toggleHelp();
+      }
+    }
+  });
+
   this.goToFrame(0);
 
   // Clearing representedEntityType for a history.back(). If there's a checked representedEntityType, clear it
@@ -223,6 +235,9 @@ RulemakingCommenting.prototype.isOnFrame = function(frameType) {
 RulemakingCommenting.prototype.goToFrame = function(frameNum) {
   // If we're already on the right frame, we're done
   if (this.currentFrameNum === frameNum) return;
+
+  // Close tooltip when navigating to a new frame
+  this.toggleHelp();
 
   if (this.currentFrameNum == undefined) this.currentFrameNum = 0;
 
