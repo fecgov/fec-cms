@@ -51,6 +51,7 @@
         </div>
       </div>
       <form class="js-rulemaking-comments">
+        {% csrf_token %}
         <h3>Submit comments on rulemaking</h3>
         <h2>{{ rm_title }}</h2>
         <nav class="topnav">

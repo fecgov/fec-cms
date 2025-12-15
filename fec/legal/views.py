@@ -16,7 +16,6 @@ from data import api_caller
 from data import ecfr_caller
 from data import constants
 from django.http import JsonResponse  # rulemaking comments
-from django.views.decorators.csrf import csrf_exempt  # rulemaking comments
 from fec import settings  # rulemaking comments
 
 
@@ -33,8 +32,6 @@ def get_s3_client():
     )
 
 
-# TODO: Get CSRF working in cloud environments
-@csrf_exempt
 def save_rulemaking_comments(request):
     MAX_FILE_SIZE = 5000000
 
