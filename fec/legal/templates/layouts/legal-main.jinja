@@ -21,36 +21,19 @@
   {% include 'partials/google-tag-manager-script.jinja' %}
 
   <script>
-    BASE_PATH = '/data';
+    {# BASE_PATH = '/data'; -#}
     API_LOCATION = '{{ FEC_API_URL }}';
     API_VERSION = 'v1';
     API_KEY_PUBLIC = '{{ API_KEY_PUBLIC }}';
-    API_KEY_PUBLIC_CALENDAR = '{{ FEC_API_KEY_PUBLIC_CALENDAR }}';
-    API_KEY_PUBLIC_SCHEDULE_A = '{{ API_KEY_PUBLIC_SCHEDULE_A }}';
-    CALENDAR_DOWNLOAD_PUBLIC_API_KEY = '{{ FEC_CAL_DOWNLOAD_API_KEY }}';
+    {# API_KEY_PUBLIC_CALENDAR = '{{ FEC_API_KEY_PUBLIC_CALENDAR }}'; -#}
+    {# CALENDAR_DOWNLOAD_PUBLIC_API_KEY = '{{ FEC_CAL_DOWNLOAD_API_KEY }}'; -#}
     DOWNLOAD_API_KEY = '{{ FEC_DOWNLOAD_API_KEY }}';
-    DEFAULT_TIME_PERIOD = {{ constants.DEFAULT_TIME_PERIOD }};
-    DEFAULT_PRESIDENTIAL_YEAR = {{ constants.DEFAULT_PRESIDENTIAL_YEAR }};
-    DEFAULT_ELECTION_YEAR = {{ constants.DEFAULT_ELECTION_YEAR }};
-    DISTRICT_MAP_CUTOFF = {{ constants.DISTRICT_MAP_CUTOFF }};
+    {# DEFAULT_TIME_PERIOD = {{ constants.DEFAULT_TIME_PERIOD }}; -#}
+    {# DEFAULT_PRESIDENTIAL_YEAR = {{ constants.DEFAULT_PRESIDENTIAL_YEAR }}; -#}
+    {# DEFAULT_ELECTION_YEAR = {{ constants.DEFAULT_ELECTION_YEAR }}; -#}
+    {# DISTRICT_MAP_CUTOFF = {{ constants.DISTRICT_MAP_CUTOFF }}; -#}
     WEBMANAGER_EMAIL = '{{ WEBMANAGER_EMAIL }}';
-    {% if election_year %}ELECTION_YEAR = '{{ election_year }}';{% endif %}
-
-    {#
-      Removing trackMetric since nobody has looking at it or performance.js
-      function trackMetric(name, imagesSelector) {
-      if (imagesSelector) {
-        var images = document.querySelectorAll(imagesSelector);
-        if (images && images.length) {
-          for (var i = 0, ilen = images.length; i < ilen; i++) {
-            images[i].addEventListener('load', function() {
-              window.performance.mark(name);
-            });
-          }
-        }
-      }
-      window.performance.mark(name);
-    } #}
+    {#- {% if election_year %}ELECTION_YEAR = '{{ election_year }}';{% endif %} #}
   </script>
 </head>
 <body>
@@ -141,8 +124,8 @@
 {% block modals %}{% endblock %}
 {#- Chunks required for every page -#}
 {{ tags_for_js_chunks('global.js', '')|safe }}
-{#- Chunks required for every data -#}
-{{ tags_for_js_chunks('data-init.js', '')|safe }}
+{#- Chunks required for every non-data legal page -#}
+{{ tags_for_js_chunks('legal-init.js', '')|safe }}
 {% block scripts %}
 {% endblock %}
 
