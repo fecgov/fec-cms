@@ -33,13 +33,13 @@ const submissionStatusMessages = {
     <time datetime="[$datetime]">[$datetimeStr]</time>`,
   'error-data':
     `Unfortunately, we couldnʼt process your request. Please click the ◂ Back button to try again,
-    or reload the page to start over.`,
+    or refresh the page to start over.`,
   'error-files':
-    `Weʼve received your data but couldnʼt process your attachments. Please contact [$team] to submit your
-    files and attach them to your entry. Give them this number:<br>[$randomid]`,
+    `Weʼve received your form data but couldnʼt process your attachments. Your submission ID is [$randomid].
+    Please <a href="mailto:[$teamEmail]">contact us</a> and reference your submission ID to report any issues.`,
   '500':
     `Unfortunately, we had trouble processing your request. Please click the ◂ Back button to try again,
-    or reload the page to start over.`
+    or refresh the page to start over.`
 };
 const usZoneCodes = ['US', 'AS', 'GU', 'MP', 'PR', 'UM', 'VI'];
 
@@ -506,7 +506,7 @@ RulemakingCommenting.prototype.buildTheFrame = function() {
       // else, there was a problem with 1+ attachments
       else { // if (failures.includes('file'))
         let confirmationMessage = submissionStatusMessages['error-files'];
-        confirmationMessage = confirmationMessage.replace('[$team]', 'NEED A TEAM HERE?');
+        confirmationMessage = confirmationMessage.replace('[$teamEmail]', window.WEBMANAGER_EMAIL);
         confirmationMessage = confirmationMessage.replace('[$randomid]', this.submissionResponses[0].submission_id);
         this.frame5.querySelector('.message--alert p').innerHTML = confirmationMessage;
       }
