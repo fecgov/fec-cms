@@ -179,6 +179,7 @@
       }
     }
 
+// TODO: NOT USING THIS ON LATEST INTERATION WITH HIGHLIGHTS (USING column--legal-docs ABOVE
 // Structure for document list-item (li) in rulemakings table name/documents column:
 
 // <li class="document-container">
@@ -233,6 +234,12 @@
     &.column--legal-docs {
       padding: u(1rem);
       vertical-align: top;
+
+      p {
+        // padding-bottom: u(2rem);
+        // margin-left: u(1rem) !important;
+        font-size: inherit;
+      }
 
       ul.case-summary li {
         margin-bottom: u(1.6rem);

@@ -139,7 +139,6 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
     path: ['rulemaking', 'search'],
     columns: cols_rulemakings,
     order: [[0, 'desc']],
-    //query: {sort:'-is_open_for_comment'},
     useFilters: true,
     useExport: false,
     // Initiate the field value and fire change for keyword if included in querystring in a link or copy/pasted url

@@ -1094,8 +1094,8 @@ export const rulemakings = [
     className: 'all column--legal-docs align-top',
     orderable: false,
     render: function (data, type, row) {
-      let html = `<p><b>${row.rm_name}</b>`;
-      let html1 = 'THIS';
+      let html = `<p><strong>${row.rm_name}</strong>`;
+      let html1 = '';
 
       if (row.key_documents && row.key_documents.length ) {
         html += `<br><span class="icon icon--inline--left i-document"></span>`;
@@ -1108,66 +1108,6 @@ export const rulemakings = [
             }
       }
         html += `</p>`;
-       
-      // if (row.documents && row.documents.length && get_doc_ids().length ) {
-      //   for (let id of get_doc_ids()) {
-      //     for (let doc of row.documents) {
-      //       if (doc.doc_category_id == id) {
-
-      //           html += `<li class="document-container">
-      //                     <div class="document-details">`;
-
-      //           html += `<div class="post--icon">
-      //                   <span class="icon icon--inline--left i-document"></span>`;
-      //           html +=
-      //           buildEntityLink(
-      //               doc.doc_type_label, doc.url, doc.doc_type_label);
-      //               html += `</div>`;
-      //               let parsed;
-      //               parsed = moment(doc.doc_date, 'YYYY-MM-DD');
-      //               const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
-      //               html += `<div class="tag tag--primary">${doc.doc_category_label}</div>
-      //                       </div>
-      //                       <div class="document-date">
-      //                       ${doc_date}
-      //                       </div>
-      //                       </li>`;
-      //       }
-
-      //       if (doc.level_2_labels && doc.level_2_labels.length) {
-
-      //         for (let label of doc.level_2_labels) {
-
-      //           for (let i of label.level_2_docs) {
-
-      //             if (i.doc_category_id == id) {
-
-      //               html += `<li class="document-container">
-      //                       <div class="document-details">`;
-
-      //               html += `<div class="post--icon">
-      //                       <span class="icon icon--inline--left i-document"></span>`;
-      //               html +=
-      //               buildEntityLink(
-      //                   i.doc_type_label, i.url, i.doc_type_label);
-      //                   html += `</div>`;
-      //                   let parsed;
-      //                   parsed = moment(i.doc_date, 'YYYY-MM-DD');
-      //                   const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
-      //                   html += `<div class="tag tag--primary">${i.doc_category_label}</div>
-      //                           </div>
-      //                           <div class="document-date">
-      //                           ${doc_date}
-      //                           </div>
-      //                           </li>`;
-
-      //             }
-      //           }
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
 
     const filters = new URLSearchParams(window.location.search);
     const filters_category_type = filters.has('doc_category_id');
@@ -1178,13 +1118,15 @@ export const rulemakings = [
     const current_doc_ids = filters.getAll('doc_category_id') || [];
 
     // Note: Opening div tags are lined up with their closing divs below
-     if (row.document_highlights || row.source.length || filters_category_type) {
-       html += 
+       html +=
       `<div class="legal-search-result__hit u-margin--top">`;
-       if ((filters_category_type || filters_keyword) && !proximity_only) {
-           for (let id of current_doc_ids) {
+       if ((filters_category_type || filters_keyword) && !proximity_only) { //////********* REDUNDANT**********/////
            let category_shown = '';
-           for (const [index, document] of row.documents.entries()) {
+            /// DOC ID
+            let doc_ids = [];
+            /// DOC ID
+           //for (const [index, document] of row.documents.entries()) {
+           for (const document of row.documents) {
 //           /*This will show documents in all 3 scenarios:
 //             - When there is a keyword query and selected document categories
 //             - When there are selected document categories and no keyword query
@@ -1195,15 +1137,16 @@ export const rulemakings = [
 {% set keyword_match = (filters_keyword and document.text_match) or not filters_keyword %}
 {% set show_document = category_match and keyword_match  %} */
 
-let category_match = !filters_category_type || document.doc_category_id == id ? true : false;
-let text_match = index in row.document_highlights || !filters_keyword ? true : false;
-let show_document = category_match && text_match;
-
-             let top_border_class = '';
-             let show_category = '';
-             let current_category = document.doc_category_label;
+let category_match = (filters_category_type && current_doc_ids.includes(`${document.doc_category_id}`) ? true : false) || !filters_category_type;
+let text_match = (filters_keyword && has_highlights(document)) || !filters_keyword;
+/// DOC ID
+let unique_id = !doc_ids.includes(`${document.doc_id}`);
+/// DOC ID
+let show_document = category_match && text_match && unique_id;
              if (show_document) {
-  
+               let top_border_class = '';
+               let show_category = '';
+               let current_category = document.doc_category_label;
                if (category_shown != current_category) {
                      top_border_class = 'u-border-top-nuetral';
                      show_category = document.doc_category_label;
@@ -1212,37 +1155,40 @@ let show_document = category_match && text_match;
                  else {
                    show_category = '';
                 }
-
-                const doc_description = document.doc_type_label;
+                /// DOC ID
+                doc_ids.push(`${document.doc_id}`);
+                 /// DOC ID
+                let parsed;
+                parsed = moment(document.doc_date, 'YYYY-MM-DD');
+                const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
 
             html += `
                   <div class="document-container">
-                    <div class="document-category ${top_border_class}" aria-description="${current_category}">${show_category}</div>
+                    <div class="document-category ${top_border_class}">${show_category}</div>
                     <div class="document_details u-border-top-nuetral">
                       <div class="post--icon">
                         <span class="icon icon--inline--left i-document"></span>
                         <a href="${document.url}">
-                          ${doc_description}
-                        </a>
+                        ${document.doc_type_label}</a> | ${doc_date}
                       </div>`;
-            if (row.document_highlights[index]) {
-              if (row.document_highlights[index].length) {
+            if (document.highlights) {
+              if (document.highlights.length) {
                   html += `
                       <ul>
-                        <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${row.document_highlights[index][0]}&#8230;
+                        <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${document.highlights[0]}&#8230;
                         </li>
                       </ul>`;
               }
-              if (row.document_highlights[index].length > 1) {
+              if (document.highlights.length > 1) {
                   html += `
-                      <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${index}">
-                        <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${index}" aria-expanded="false">
-                          ${row.document_highlights[index].length > 2 ? row.document_highlights[index].length -1 + ' more keyword matches' : '1 more keyword match'}
+                      <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${document.doc_id}">
+                        <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${document.doc_id}" aria-expanded="false">
+                          ${document.highlights.length > 2 ? document.highlights.length -1 + ' more keyword matches' : '1 more keyword match'}
                         </button>
                         <div class="accordion__content results__content" aria-hidden="true">
                           <ul>`;
-                          for (let i = 1; i <= row.document_highlights[index].length -1; i++) {
-                            html += `<li class="t-serif t-italic">&#8230;${row.document_highlights[index][i]}&#8230;</li>`;
+                          for (let i = 1; i <= document.highlights.length -1; i++) {
+                            html += `<li class="t-serif t-italic">&#8230;${document.highlights[i]}&#8230;</li>`;
                           }
                             html += `
                           </ul>
@@ -1251,54 +1197,88 @@ let show_document = category_match && text_match;
               }
             }
             html += `
-                    </div>
-                    </div>`;
-                 
+                    </div> 
+                  </div>`;
           }
-        
-    ////// NEED TO CHANGE THIS TO MATCH NEW DOC DIV STRYCTURE 
           if (document.level_2_labels && document.level_2_labels.length) {
-               console.log('L2')
-              for (let label of document.level_2_labels) {
 
-                for (let i of label.level_2_docs) {
+            for (let label of document.level_2_labels) {
 
-                  if (i.doc_category_id == id) {
+              for (let l2_document of label.level_2_docs) {
+                let category_match = (filters_category_type && current_doc_ids.includes(`${l2_document.doc_category_id}`) ? true : false) || !filters_category_type;
+                let text_match_l2 = (filters_keyword && has_highlights(l2_document)) || !filters_keyword;
+                /// DOC ID
+                let l2_unique_id = !doc_ids.includes(`${l2_document.doc_id}`);
+               /// DOC ID
+                let show_document = category_match && text_match_l2 && l2_unique_id;
+                if (show_document) {
+                  let top_border_class = '';
+                  let show_category = '';
+                  let current_category = l2_document.doc_category_label;
+               if (category_shown != current_category) {
+                     top_border_class = 'u-border-top-nuetral';
+                     show_category = l2_document.doc_category_label;
+                     category_shown = current_category;
+                }
+                 else {
+                   show_category = '';
+                }
+                 /// DOC ID
+                doc_ids.push(`${l2_document.doc_id}`);
+                 /// DOC ID
+                let parsed;
+                parsed = moment(l2_document.doc_date, 'YYYY-MM-DD');
+                const l2_doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
 
-                    html1 += `<div class="document-container">
-                            <div class="document-details">`;
+                  html1 += `
+                  <div class="document-container">
+                    <div class="document-category ${top_border_class}">${show_category}</div>
+                    <div class="document_details u-border-top-nuetral">
+                      <div class="post--icon">
+                        <span class="icon icon--inline--left i-document"></span>
+                        <a href="${l2_document.url}">
+                        ${l2_document.doc_type_label}</a> | ${l2_doc_date}
+                      </div>`;
+              if (l2_document.highlights && l2_document.highlights.length) {
+              if (l2_document.highlights.length) {
+                  html1 += `
+                      <ul>
+                        <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${l2_document.highlights[0]}&#8230;
+                        </li>
+                      </ul>`;
+              }
+              if (l2_document.highlights.length > 1) {
+                  html1 += `
+                      <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${l2_document.doc_id}">
+                        <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${l2_document.doc_id}" aria-expanded="false">
+                          ${l2_document.highlights.length > 2 ? l2_document.highlights.length -1 + ' more keyword matches' : '1 more keyword match'}
+                        </button>
+                        <div class="accordion__content results__content" aria-hidden="true">
+                          <ul>`;
+                          for (let i = 1; i <= l2_document.highlights.length -1; i++) {
+                            html1 += `<li class="t-serif t-italic">&#8230;${l2_document.highlights[i]}&#8230;</li>`;
+                          }
+                            html1 += `
+                          </ul>
+                        </div>
+                      </div>`;
+              }
+            }
+            html1 += `
+                    </div> 
+                  </div>`;
 
-                    html1 += `<div class="post--icon">
-                            <span class="icon icon--inline--left i-document"></span>`;
-                    html1 +=
-                    buildEntityLink(
-                        i.doc_type_label, i.url, i.doc_type_label);
-                        
-                        html1 += `</div>`;
-                        
-                        let parsed;
-                        parsed = moment(i.doc_date, 'YYYY-MM-DD');
-                        const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
-                        html1 += `<div class="tag tag--primary">${i.doc_category_label}</div>
-                                </div>
-                         
-                                - ${doc_date}
-                       
-                                </div>`;
-
-                  }
                 }
               }
+            }
           }
-          ////// END - NEED TO CHANGE THIS TO MATCH NEW DOC DIV STRYCTURE 
         }
-      }
-      } else if (proximity_only) {
+      } else if (proximity_only && row.source) {
           let category_shown = '';
           for (const document of row.source) {
                 let top_border_class = '';
                 let show_category = '';
-                let current_category = document.doc_category_label 
+                let current_category = document.doc_category_label;
                   if (category_shown != current_category) {
                       top_border_class = 'u-border-top-nuetral';
                       show_category = document.doc_category_label ;
@@ -1307,6 +1287,9 @@ let show_document = category_match && text_match;
                   else {
                     show_category = '';
                   }
+
+                  const doc_date = document.doc_date !== null ? moment(document.doc_date).format('MM/DD/YYYY') : 'Invalid date';
+
                     html += `
                       <div class="document-container">
                         <div class="document-category ${top_border_class}">${show_category}</div>
@@ -1315,19 +1298,12 @@ let show_document = category_match && text_match;
                             <span class="icon icon--inline--left i-document"></span>
                             <a href="${document.url}">
                               ${document.doc_type_label}
-                            </a>
+                            </a> | ${doc_date}
                           </div>
                         </div>
                       </div>`;
           }
        }
-     
-      
-     }
-
-    
-
-    /////// END NEW WIP ///////
 
       // TODO: Ask to check with OGC if no_tier documents should be included in doc type filter results
       // if (row.no_tier_documents && row.no_tier_documents.length) {
@@ -1374,14 +1350,15 @@ let show_document = category_match && text_match;
       }
       else {
         const comment_deadline = moment(row.comment_close_date).format('MMMM D YYYY');
-        return `<p><b>${row.description}</b><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="/legal/rulemakings/${row.rm_no}/add-comments/">Submit a comment</a></p>`;
+        return `<strong>${row.description}</strong><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="/legal/rulemakings/${row.rm_no}/add-comments/">Submit a comment</a>`;
       }
     }
   }
 ];
 
-const get_doc_ids = function() {
-  const params = new URLSearchParams(window.location.search);
-  let docs = params.getAll('doc_category_id') || [];
-  return docs;
-};
+const has_highlights = function(doc) {
+  if (doc.highlights && doc.highlights.length) {
+    //console.log( `true ${doc.doc_id}`)
+    return true;
+    }
+  };
