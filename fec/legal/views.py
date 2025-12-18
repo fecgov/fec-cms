@@ -3,13 +3,205 @@ from django.http import Http404, HttpResponseRedirect
 
 import datetime
 import re
+import boto3  # rulemaking comments
+import json  # rulemaking comments
+import os  # rulemaking comments
+import uuid  # rulemaking comments
+import requests  # reCAPTCHA for rulemaking comments
+from botocore.client import Config  # rulemaking comments
+from datetime import timezone  # rulemaking comments
 import logging
 
 from data import api_caller
 from data import ecfr_caller
 from data import constants
+from django.http import JsonResponse  # rulemaking comments
+from fec import settings  # rulemaking comments
+
 
 logger = logging.getLogger(__name__)
+
+
+def get_s3_client():
+    return boto3.client(
+        's3',
+        config=Config(signature_version='s3v4'),
+        aws_access_key_id=settings.FEC_RULEMAKING_S3_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.FEC_RULEMAKING_S3_SECRET_ACCESS_KEY,
+        region_name=settings.FEC_RULEMAKING_S3_REGION_NAME,
+    )
+
+
+def save_rulemaking_comments(request):
+    MAX_FILE_SIZE = 5000000
+
+    # If not 'post', reject
+    if request.method != 'POST':
+        return JsonResponse({'status': 405, 'ok': False, 'message': 'POST required', }, status=405)
+
+    # Test for valid data format, return if invalid json
+    try:
+        data = json.loads(request.body)
+    except Exception:
+        return JsonResponse({'status': 400, 'ok': False, 'message': 'Invalid JSON'}, status=400)
+
+    # Checking reCAPTCHA
+    if not data['g-recaptcha-response']:
+        return JsonResponse({'status': 400, 'ok': False, 'message': 'Invalid reCAPTCHA'}, status=400)
+    else:
+        verifyRecaptcha = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={
+                'secret': settings.FEC_RECAPTCHA_SECRET_KEY,
+                'response': data['g-recaptcha-response'],
+            },
+        )
+        recaptchaResponse = verifyRecaptcha.json()
+
+        if not recaptchaResponse['success']:
+            # if recaptcha failed, return failure
+            return JsonResponse(
+                {'status': 500, 'ok': False, 'message': 'reCAPTCHA failed', 'recaptcha_error': True},
+                status=500
+            )
+
+        # Start with the common, shared, required values
+        to_submit = {
+            'rm_name': data.get('rm_name', '').strip(),
+            'rm_no': data.get('rm_no', '').strip(),
+
+            'representedEntityConnection': (data.get('representedEntityConnection') or '').strip(),
+            'representedEntityType': (data.get('representedEntityType') or '').strip(),
+
+            'commenters[0].firstName': (data.get('commenters[0].firstName') or '').strip(),
+            'commenters[0].lastName': (data.get('commenters[0].lastName') or '').strip(),
+            'commenters[0].addressType': (data.get('commenters[0].addressType') or '').strip(),
+            'commenters[0].mailingCity': (data.get('commenters[0].mailingCity') or '').strip(),
+            'commenters[0].mailingState': (data.get('commenters[0].mailingState') or '').strip(),
+            'commenters[0].mailingCountry': (data.get('commenters[0].mailingCountry') or '').strip(),
+            'commenters[0].emailAddress': (data.get('commenters[0].emailAddress') or '').strip(),
+        }
+
+        # If they'd like to testify, save that and their phone number
+        if data.get('commenters[0].testify'):
+            to_submit['commenters[0].testify'] = data.get('commenters[0].testify')
+            to_submit['commenters[0].phone'] = data.get('commenters[0].phone')
+
+        # If we're including law firm information, add those
+        if data.get('lawfirm'):
+            to_submit['commenters[0].representedEntity.orgName'] = \
+                (data.get('commenters[0].representedEntity.orgName') or '').strip()
+            to_submit['commenters[0].representedEntity.addressType'] = \
+                (data.get('commenters[0].representedEntity.addressType') or '').strip()
+            to_submit['commenters[0].representedEntity.mailingAddressStreet'] = \
+                (data.get('commenters[0].representedEntity.mailingAddressStreet') or '').strip()
+            to_submit['commenters[0].representedEntity.mailingCity'] = \
+                (data.get('commenters[0].representedEntity.mailingCity') or '').strip()
+            to_submit['commenters[0].representedEntity.mailingState'] = \
+                (data.get('commenters[0].representedEntity.mailingState') or '').strip()
+            to_submit['commenters[0].representedEntity.mailingZip'] = \
+                (data.get('commenters[0].representedEntity.mailingZip') or '').strip()
+            to_submit['commenters[0].representedEntity.mailingCountry'] = \
+                (data.get('commenters[0].representedEntity.mailingCountry') or '').strip()
+            to_submit['commenters[0].representedEntity.emailAddress'] = \
+                (data.get('commenters[0].representedEntity.emailAddress') or '').strip()
+
+        # For an unlimited number of commenters,
+        i = 1
+        while data.get('commenters[' + str(i) + '].commenterType'):
+            prefix = 'commenters[' + str(i) + ']'
+            to_submit[prefix + '.commenterType'] = (data.get(prefix + '.commenterType') or '').strip()
+            to_submit[prefix + '.firstName'] = (data.get(prefix + '.firstName') or '').strip()
+            to_submit[prefix + '.lastName'] = (data.get(prefix + '.lastName') or '').strip()
+            to_submit[prefix + '.orgName'] = (data.get(prefix + '.orgName') or '').strip()
+            to_submit[prefix + '.addressType'] = (data.get(prefix + '.addressType') or '').strip()
+            to_submit[prefix + '.mailingCity'] = (data.get(prefix + '.mailingCity') or '').strip()
+            to_submit[prefix + '.mailingState'] = (data.get(prefix + '.mailingState') or '').strip()
+            to_submit[prefix + '.mailingCountry'] = (data.get(prefix + '.mailingCountry') or '').strip()
+            to_submit[prefix + '.emailAddress'] = (data.get(prefix + '.emailAddress') or '').strip()
+            i += 1
+
+        # Add the comments
+        to_submit['comments'] = data.get('comments', '').strip()
+        to_submit['filenames'] = []
+
+        allowed_file_types = ['.doc', '.docx', '.pdf', '.rtf', '.txt', '.xls', '.xlsx']
+
+        # Because we can have 0-3 files and they could be in any of the fields,
+        # reject the submission if any are too large
+        for field_name in ['files[0].size', 'files[1].size', 'files[2].size']:
+            if data.get(field_name) > MAX_FILE_SIZE:  # 5 MB
+                return JsonResponse({'status': 413, 'ok': False, 'message': 'File size too large'}, status=413)
+            # Yes, we aren't adding the .size values to to_submit[]
+
+        # otherwise, add the ones with values.
+        i = 0
+        for field_name in ['files[0].name', 'files[1].name', 'files[2].name']:
+            if data.get(field_name):
+                filename = data.get(field_name)
+                ext = os.path.splitext(filename)[1]  # [0] is the root, [1] is the ext
+                if ext and ext in allowed_file_types:
+                    to_submit['filenames'].append(str(i) + '-' + filename)
+                    i += 1
+                else:
+                    # If we know one is the wrong extension, reject it before saving the data
+                    return JsonResponse({'status': 400, 'ok': False, 'message': 'Invalid file type'}, status=400)
+
+        # TODO: report missing fields?
+
+        if to_submit['comments'] and len(to_submit['comments']) > 4000:
+            return JsonResponse({'error': 'Comment is too long.'}, status=400)
+
+        if not to_submit['filenames'] and len(to_submit['comments']) < 2:
+            return JsonResponse({'error': 'Missing comments and files.'}, status=400)
+
+        # Submission ID is used later to keep folders and files together
+        # Uses submission time prefixes in YYYYMMDDHHMMSS format for easier sorting
+        submission_id = str(uuid.uuid4())
+        submit_time = datetime.datetime.now(timezone.utc)
+        formatted_submission_time = submit_time.strftime('%Y%m%d%H%M%S')
+        submitted_at = submit_time.isoformat()
+        bucket = settings.FEC_RULEMAKING_BUCKET_NAME
+
+        # Generate JSON content for submission file
+        # submission_record = {
+        to_submit['submission_id'] = submission_id
+        to_submit['submitted_at'] = submitted_at
+
+        s3_client = get_s3_client()
+        prefix = f'rulemaking-submissions/{formatted_submission_time}-{submission_id}'
+        key = f'{prefix}/{submission_id}-comment_submission_data.json'
+
+        s3_client.put_object(
+            Bucket=bucket,
+            Key=key,
+            Body=json.dumps(to_submit, indent=2).encode('utf-8'),
+            ContentType='application/json'
+        )
+
+        # Generate presigned URLs for files
+        presigned_urls = {}
+        for filename in to_submit['filenames']:
+            presigned_url = s3_client.generate_presigned_post(
+                Bucket=bucket,
+                Key=f'{prefix}/{submission_id}-{filename}',
+                Fields={'acl': 'private'},
+                Conditions=[
+                    {'acl': 'private'},
+                    ['starts-with', '$key', f'{prefix}/'],
+                    ['content-length-range', 0, MAX_FILE_SIZE],
+                ],
+                ExpiresIn=60,  # 1 minute
+            )
+            presigned_urls[filename] = presigned_url
+
+        return JsonResponse({
+            'presigned_urls': presigned_urls,
+            'ok': True,
+            'status': 200,
+            'submission_id': submission_id,
+            'submitted_at': submitted_at,
+        })
 
 
 def parse_query(q):
@@ -188,6 +380,104 @@ def admin_fine_page(request, admin_fine_no):
     })
 
 
+def rulemaking(request, rm_no):
+
+    rulemaking = api_caller.load_legal_rulemaking(rm_no)
+    # rm_no always open for comment: 0033-99
+    # other rm_no: 2024-10, 2024-09, 2024-08, 2024-07
+    # rulemaking = api_caller.load_legal_rulemaking('2024-10')
+
+    if not rm_no:
+        raise Http404()
+
+    key_documents = []
+    for key_doc in rulemaking['key_documents']:
+        key_documents.append({
+            'doc_date': key_doc['doc_date'],
+            'doc_id': key_doc['doc_id'],
+            'label': key_doc['doc_type_label'],  # This is inconsistent
+            # 'label': key_doc['doc_description'],  # This is inconsistent
+            'url': key_doc['url'],
+        })
+
+    documents = []
+    # The base items in 'documents' are grouped by their rulemaking stage. e.g. Notice of Avail, Commencing Doc
+    for stage in rulemaking['documents']:
+        new_rm_stage = {}
+        new_rm_stage['doc_date'] = stage['doc_date']
+        new_rm_stage['doc_id'] = stage['doc_id']
+        new_rm_stage['label'] = stage['doc_type_label']
+        # new_rm_stage['doc_stage'] = stage['doc_type_label']  # e.g. Notice of Avail, Commencing Document
+        new_rm_stage['url'] = stage['url']
+
+        new_rm_stage['doc_entities'] = []
+        for entity in stage['doc_entities']:
+            new_rm_stage['doc_entities'].append({'name': entity['name'], 'role': entity['role']})
+
+        new_rm_stage['secondary_docs'] = []
+        for type in stage['level_2_labels']:
+            sub_doc = {}
+            sub_doc['label'] = type['level_2_label']
+            sub_doc['documents'] = []
+            for doc in type['level_2_docs']:
+                new_sub_doc = {}
+                new_sub_doc['doc_date'] = doc['doc_date']
+                new_sub_doc['doc_id'] = doc['doc_id']
+                new_sub_doc['label'] = doc['doc_type_label']
+                new_sub_doc['url'] = doc['url']
+
+                new_sub_doc['doc_entities'] = []
+                for entity in doc['doc_entities']:
+                    new_sub_doc['doc_entities'].append({'name': entity['name'], 'role': entity['role']})
+
+                sub_doc['documents'].append(new_sub_doc)
+
+            new_rm_stage['secondary_docs'].append(sub_doc)
+
+        documents.append(new_rm_stage)
+
+    return render(request, 'rulemaking.jinja', {
+        'is_open_for_comment': rulemaking['is_open_for_comment'],
+        'comment_close_date': rulemaking['comment_close_date'] or '',
+        'documents': documents,
+        'key_documents': key_documents,
+        'rm_entities': rulemaking['rm_entities'],
+        'rm_name': rulemaking['rm_name'],
+        'rm_no': rulemaking['rm_no'],
+        'rm_number': rulemaking['rm_number'],
+        'parent': 'legal',
+        'social_image_identifier': 'legal',
+        'could_testify': True,
+    })
+
+
+def rulemaking_add_comments(request, rm_no):
+    """
+    Data for the rulemaking commenting interface
+    """
+    if not rm_no:
+        raise Http404()
+
+    rulemaking = api_caller.load_legal_rulemaking(rm_no)
+
+    # If load_legal_rulemaking returned [], there was an error
+    if rulemaking == []:
+        raise Http404()
+
+    return render(request, 'rulemaking-comments.jinja', {
+        'description': rulemaking['description'],
+        'is_open_for_comment': rulemaking['is_open_for_comment'],
+        'rm_id': rulemaking['rm_id'],
+        'rm_name': rulemaking['rm_name'],
+        'rm_no': rulemaking['rm_no'],
+        'rm_number': rulemaking['rm_number'],
+        'rm_title': rulemaking['title'],
+        'parent': 'legal',
+        'social_image_identifier': 'legal',
+        'could_testify': False,  # TODO: This will change when the field exists in the API
+    })
+
+
 # Transform boolean queries for eCFR API
 # Query string:
 # ((coordinated | communications) | (in-kind AND contributions) |
@@ -225,25 +515,25 @@ def legal_search(request):
             ecfr_results = ecfr_caller.fetch_ecfr_data(updated_ecfr_query_string, limit=3, page=1)
             if 'results' in ecfr_results:
                 regulations = [{
-                    "doc_id": None,
-                    "document_highlights": {},
-                    "highlights": [obj['headings']['part'],
+                    'doc_id': None,
+                    'document_highlights': {},
+                    'highlights': [obj['headings']['part'],
                                    obj['full_text_excerpt']],
-                    "name": obj['headings']['section'],
-                    "no": obj['hierarchy']['section'],
-                    "type": None,
-                    "url": (
-                        "https://www.ecfr.gov/current/title-11/"
+                    'name': obj['headings']['section'],
+                    'no': obj['hierarchy']['section'],
+                    'type': None,
+                    'url': (
+                        'https://www.ecfr.gov/current/title-11/'
                         f"chapter-{obj['hierarchy']['chapter']}/"
                         f"section-{obj['hierarchy']['section']}"
                     )
                 } for obj in ecfr_results['results']]
 
                 results['regulations'] = regulations
-                results["total_regulations"] = ecfr_results.get('meta', {}).get(
+                results['total_regulations'] = ecfr_results.get('meta', {}).get(
                     'total_count', 0)
-                results["regulations_returned"] = ('3' if results["total_regulations"] > 3
-                                                   else results["total_regulations"])
+                results['regulations_returned'] = ('3' if results['total_regulations'] > 3
+                                                   else results['total_regulations'])
 
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
@@ -313,34 +603,34 @@ def legal_doc_search_ao(request):
 
     # Define AO document categories dictionary
     ao_document_categories = {
-        "F": "Final Opinion",
-        "V": "Votes",
-        "D": "Draft Documents",
-        "R": "AO Request, Supplemental Material, and Extensions of Time",
-        "W": "Withdrawal of Request",
-        "C": "Comments and Ex parte Communications",
-        "S": "Commissioner Statements"
+        'F': 'Final Opinion',
+        'V': 'Votes',
+        'D': 'Draft Documents',
+        'R': 'AO Request, Supplemental Material, and Extensions of Time',
+        'W': 'Withdrawal of Request',
+        'C': 'Comments and Ex parte Communications',
+        'S': 'Commissioner Statements'
     }
 
     # Define AO requestor types dictionary
     ao_requestor_types = {
-        # "0": "Any",
-        "1": "Federal candidate/candidate committee/officeholder",
-        "2": "Publicly funded candidates/committees",
-        "3": "Party committee, national",
-        "4": "Party committee, state or local",
-        "5": "Nonconnected political committee",
-        "6": "Separate segregated fund",
-        "7": "Labor Organization",
-        "8": "Trade Association",
-        "9": "Membership Organization, Cooperative, Corporation W/O Capital Stock",
-        "10": "Corporation (including LLCs electing corporate status)",
-        "11": "Partnership (including LLCs electing partnership status)",
-        "12": "Governmental entity",
-        "13": "Research/Public Interest/Educational Institution",
-        "14": "Law Firm",
-        "15": "Individual",
-        "16": "Other",
+        # '0': 'Any',
+        '1': 'Federal candidate/candidate committee/officeholder',
+        '2': 'Publicly funded candidates/committees',
+        '3': 'Party committee, national',
+        '4': 'Party committee, state or local',
+        '5': 'Nonconnected political committee',
+        '6': 'Separate segregated fund',
+        '7': 'Labor Organization',
+        '8': 'Trade Association',
+        '9': 'Membership Organization, Cooperative, Corporation W/O Capital Stock',
+        '10': 'Corporation (including LLCs electing corporate status)',
+        '11': 'Partnership (including LLCs electing partnership status)',
+        '12': 'Governmental entity',
+        '13': 'Research/Public Interest/Educational Institution',
+        '14': 'Law Firm',
+        '15': 'Individual',
+        '16': 'Other',
     }
 
     # Possible values for the ao_year filter
@@ -464,12 +754,12 @@ def legal_doc_search_mur(request):
 
     # Define MUR document categories dictionary
     mur_document_categories = {
-        "1": "Conciliation and Settlement Agreements",
-        "2": "Complaint, Responses, Designation of Counsel and Extensions of Time",
-        "3": "General Counsel Reports, Briefs, Notifications and Responses",
-        "4": "Certifications",
-        "5": "Civil Penalties, Disgorgements and Other Payments",
-        "6": "Statements of Reasons"
+        '1': 'Conciliation and Settlement Agreements',
+        '2': 'Complaint, Responses, Designation of Counsel and Extensions of Time',
+        '3': 'General Counsel Reports, Briefs, Notifications and Responses',
+        '4': 'Certifications',
+        '5': 'Civil Penalties, Disgorgements and Other Payments',
+        '6': 'Statements of Reasons'
     }
 
     # Return the selected document category name
@@ -513,7 +803,7 @@ def legal_doc_search_mur(request):
 
         for index, doc in enumerate(mur['documents']):
             # Checks if the selected document category filters matching the document categories
-            doc['category_match'] = mur["mur_type"] != "archived" and str(doc['doc_order_id']) in case_doc_category_ids
+            doc['category_match'] = mur['mur_type'] != 'archived' and str(doc['doc_order_id']) in case_doc_category_ids
             # Checks for document keyword text match
             doc['text_match'] = str(index) in mur['document_highlights']
 
@@ -603,12 +893,12 @@ def legal_doc_search_adr(request):
 
     # Define ADR document categories dictionary
     adr_document_categories = {
-        "1001": "Settlement Agreements",
-        "1002": "Complaint, Responses, Designation of Counsel and Extensions of Time",
-        "1003": "ADR Memoranda, Notifications and Responses",
-        "1004": "Certifications",
-        "1005": "Civil Penalties, Disgorgements, Other Payments and Letters of Compliance",
-        "1006": "Statements of Reasons"
+        '1001': 'Settlement Agreements',
+        '1002': 'Complaint, Responses, Designation of Counsel and Extensions of Time',
+        '1003': 'ADR Memoranda, Notifications and Responses',
+        '1004': 'Certifications',
+        '1005': 'Civil Penalties, Disgorgements, Other Payments and Letters of Compliance',
+        '1006': 'Statements of Reasons'
     }
 
     # Return the selected document category name
@@ -711,12 +1001,12 @@ def legal_doc_search_regulations(request):
                                                page=page)
 
     regulations = [{
-                "highlights": [obj['full_text_excerpt']],
-                "name": obj['headings']['section'],
-                "no": obj['hierarchy']['section'],
-                "type": None,
-                "url":  (
-                    "https://www.ecfr.gov/current/title-11/"
+                'highlights': [obj['full_text_excerpt']],
+                'name': obj['headings']['section'],
+                'no': obj['hierarchy']['section'],
+                'type': None,
+                'url':  (
+                    'https://www.ecfr.gov/current/title-11/'
                     f"chapter-{obj['hierarchy']['chapter']}/"
                     f"section-{obj['hierarchy']['section']}"
                 )
@@ -767,12 +1057,12 @@ def get_legal_category_order(results, result_type):
     """ Return categories in pre-defined order, moving categories with empty
         results to the end. Move chosen category(result_type) to top when not searching 'all'
     """
-    categories = ["admin_fines", "advisory_opinions", "adrs", "murs", "regulations", "statutes"]
-    category_order = [x for x in categories if results.get("total_" + x, 0) > 0] +\
-        [x for x in categories if results.get("total_" + x, 0) == 0]
+    categories = ['admin_fines', 'advisory_opinions', 'adrs', 'murs', 'regulations', 'statutes']
+    category_order = [x for x in categories if results.get('total_' + x, 0) > 0] +\
+        [x for x in categories if results.get('total_' + x, 0) == 0]
 
     # Default to 'admin_fines' first if result_type is 'all', because we dont want 'all' in category_order
-    result_type = "admin_fines" if result_type == 'all' else result_type
+    result_type = 'admin_fines' if result_type == 'all' else result_type
     # Move chosen search type to the top if not searching 'all'
     category_order.insert(0, category_order.pop(category_order.index(result_type)))
 

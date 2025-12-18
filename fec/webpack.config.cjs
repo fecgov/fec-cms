@@ -67,18 +67,20 @@ const mainEntries = {
     import: `${js}/data-init.js`,
     dependOn: 'global' // Any chunks for data-init will also expect global's chunks to exist
   },
+  'legal-init': {
+    import: `${js}/legal-init.js`,
+    dependOn: 'global' // Any chunks for data-init will also expect global's chunks to exist
+  },
   'legal-search-ao': {
     import: `${js}/legal-search-ao.js`,
     filename: 'legal-search-ao-[contenthash].js',
     dependOn: 'data-init'
   },
-  // 'legal-app': {
-  //   import: `${js}/legal/LegalApp.js`,
-  //   dependOn: 'global'
-  // },
   // 'calc-admin-fines-modal': `${js}/modules/calc-admin-fines-modal.js`, // Pulled into init.js
   'calc-admin-fines': `${js}/modules/calc-admin-fines.js`,
   'fec-timeline': `${js}/modules/fec-timeline.js`,
+  'rulemaking-commenting': `${js}/legal/rulemaking-commenting.js`,
+  'rulemaking-single': `${js}/legal/rulemaking-single.js`,
   'widgets/aggregate-totals-box': {
     import: `${js}/widgets/aggregate-totals-box.js`,
     filename: 'widgets/aggregate-totals-box.js',
