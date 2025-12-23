@@ -10,7 +10,7 @@ from data import utils
 #   - home/templatetags/top_entities.py: def raising_spending, office
 #   - homes/templates/home/home_page.html: officeSelector.value; yearSelector.value
 
-START_YEAR = 1979
+START_YEAR = 1977
 END_YEAR = 2026  # Change at the beginning of the year
 DEFAULT_TIME_PERIOD = 2026  # Change after the April quarterly report (4/15/27)
 DEFAULT_ELECTION_YEAR = 2026  # Change after election day (11/3/26)
@@ -970,77 +970,77 @@ suggested_mur_disposition_category_ids = OrderedDict([
 ])
 
 primary_subject_ids = {
-    "": "All",
-    "1": "Allocation",
-    "2": "Committees",
-    "3": "Contributions",
-    "4": "Disclaimer",
-    "5": "Disbursements",
-    "6": "Electioneering Communications",
-    "7": "Expenditures",
-    "8": "Express Advocacy",
-    "9": "Foreign Nationals",
-    "10": "Fraudulent Misrepresentation",
-    "11": "Issue Advocacy",
-    "12": "Knowing and Willful",
-    "13": "Loans",
-    "14": "Non-federal",
-    "15": "Other",
-    "16": "Personal Use",
-    "17": "Presidential",
-    "18": "Reporting",
-    "19": "Soft Money",
-    "20": "Solicitation",
+    '': 'All',
+    '1': 'Allocation',
+    '2': 'Committees',
+    '3': 'Contributions',
+    '4': 'Disclaimer',
+    '5': 'Disbursements',
+    '6': 'Electioneering Communications',
+    '7': 'Expenditures',
+    '8': 'Express Advocacy',
+    '9': 'Foreign Nationals',
+    '10': 'Fraudulent Misrepresentation',
+    '11': 'Issue Advocacy',
+    '12': 'Knowing and Willful',
+    '13': 'Loans',
+    '14': 'Non-federal',
+    '15': 'Other',
+    '16': 'Personal Use',
+    '17': 'Presidential',
+    '18': 'Reporting',
+    '19': 'Soft Money',
+    '20': 'Solicitation',
 }
 
 secondary_subject_placeholder = {
-   "": "All",
+   '': 'All',
 }
 
 secondary_subject_ids = {
-  "2": {
-    "1": "Candidate",
-    "2": "Multi-candidate",
-    "3": "Non-Party",
-    "4": "PAC",
-    "5": "Party",
-    "6": "Political",
-    "7": "Presidential",
+  '2': {
+    '1': 'Candidate',
+    '2': 'Multi-candidate',
+    '3': 'Non-Party',
+    '4': 'PAC',
+    '5': 'Party',
+    '6': 'Political',
+    '7': 'Presidential',
   },
-  "3": {
-    "8": "Corporations",
-    "9": "Excessive",
-    "10": "Exemptions",
-    "11": "In the Name of Another",
-    "12": "Labor Unions",
-    "13": "Limitations",
-    "14": "National Bank",
-    "15": "Prohibited",
+  '3': {
+    '8': 'Corporations',
+    '9': 'Excessive',
+    '10': 'Exemptions',
+    '11': 'In the Name of Another',
+    '12': 'Labor Unions',
+    '13': 'Limitations',
+    '14': 'National Bank',
+    '15': 'Prohibited',
   },
-  "7": {
-    "10": "Exemptions",
-    "16": "Coordinated",
-    "17": "Limits",
-    "18": "Prohibitions",
+  '7': {
+    '10': 'Exemptions',
+    '16': 'Coordinated',
+    '17': 'Limits',
+    '18': 'Prohibitions',
   }
 }
 
 
 rulemaking_doc_category_ids = {
-"1": "Open Meeting",
-"2": "Hearing",
-"3": "Agenda Document",
-"4": "Federal Register Document",
-"5": "Comments and Ex Parte Communications",
-"6": "Commencing Document",
-"7": "Votes",
-"8": "Press & Public Guidance",
+    '1': 'Open Meeting',
+    '2': 'Hearing',
+    '3': 'Agenda Document',
+    '4': 'Federal Register Document',
+    '5': 'Comments and Ex Parte Communications',
+    '6': 'Commencing Document',
+    '7': 'Votes',
+    '8': 'Press & Public Guidance',
 }
 
 rulemaking_entity_role_types = {
-"1": "Petitioner",
-"2": "Witness",
-"3": "Counsel",
-"4": "Officer/Representative",
-"5": "Commenter",
+    '1': 'Petitioner',
+    '2': 'Witness',
+    '3': 'Counsel',
+    '4': 'Officer/Representative',
+    '5': 'Commenter',
 }
