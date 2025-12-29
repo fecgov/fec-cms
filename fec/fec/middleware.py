@@ -8,6 +8,12 @@ from django.shortcuts import render
 from fec import slack
 
 
+# Get rulemaking bucket info from settings (which uses env.get_credential for cloud.gov)
+FEC_RULEMAKING_BUCKET_NAME = getattr(settings, 'FEC_RULEMAKING_BUCKET_NAME', '')
+FEC_RULEMAKING_S3_REGION_NAME = getattr(settings, 'FEC_RULEMAKING_S3_REGION_NAME', '')
+AWS_S3_BUCKET_URL = f"https://{FEC_RULEMAKING_BUCKET_NAME}.s3.{FEC_RULEMAKING_S3_REGION_NAME}.amazonaws.com"
+
+
 class AddSecureHeaders(MiddlewareMixin):
     """Add secure headers to each response"""
 
@@ -25,9 +31,13 @@ class AddSecureHeaders(MiddlewareMixin):
                 "*.fec.gov",
                 "*.app.cloud.gov",
                 "https://www.google-analytics.com",
+                "https://www.google.com/recaptcha/",
             ],
             "font-src": ["'self'"],
-            "frame-ancestors": ["'self'", "https://stage.fec.gov"],
+            "form-action": [
+                "'self'",
+                "*.fec.gov",
+            ],
             "frame-src": [
                 "'self'",
                 "https://www.google.com/recaptcha/",
@@ -50,6 +60,7 @@ class AddSecureHeaders(MiddlewareMixin):
                 "'self'",
                 "'unsafe-inline'",
                 "'unsafe-eval'",
+                "*.fec.gov",
                 "https://code.jquery.com",
                 "https://dap.digitalgov.gov",
                 "https://www.google.com/recaptcha/",
@@ -78,6 +89,11 @@ class AddSecureHeaders(MiddlewareMixin):
             content_security_policy["script-src"].append("https://tagmanager.google.com/")
             # Could use extend() if we want to add two elements instead of a string
             content_security_policy["style-src"].append("https://tagmanager.google.com/ https://fonts.googleapis.com/")
+
+        # For legal rulemaking commenting, we need to add permissions for files storage
+        if "/rulemakings/" in request.path_info and request.path_info.endswith("/add-comments/"):
+            content_security_policy["connect-src"].append(AWS_S3_BUCKET_URL)
+            content_security_policy["form-action"].append(AWS_S3_BUCKET_URL)
 
         # Add specific rules/permissions for users who are logged in (and not for the general site visitor)
         if request.user.is_authenticated:
