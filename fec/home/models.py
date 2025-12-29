@@ -1044,6 +1044,135 @@ class LegalResourcesLandingPage(ContentPage, UniqueModel):
         return 'legal'
 
 
+class CourtCaseIndexPage(ContentPage):
+    intro = RichTextField(blank=True)
+    sidebar = stream_factory(null=True, blank=True)
+    record_articles = RichTextField(blank=True)
+    show_contact_link = models.BooleanField(default=False)
+    continue_learning = StreamField([
+        ('thumbnail_list', blocks.ListBlock(ThumbnailBlock()))
+    ], null=True, blank=True)
+    related_topics = StreamField([
+        ('related_topics', blocks.ListBlock(
+            blocks.PageChooserBlock(label='Related topic')
+        ))
+    ], null=True, blank=True)
+    citations = StreamField([
+        ('citations', blocks.ListBlock(CitationsBlock()))
+    ], null=True, blank=True)
+    conditional_js = models.CharField(
+        max_length=255,
+        choices=[
+            ('', 'No conditional JavaScript'),
+            ('glossary', 'Glossary'),
+        ],
+        default='',
+        blank=True
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('intro'),
+        FieldPanel('body'),
+        FieldPanel('sidebar'),
+        FieldPanel('record_articles'),
+        FieldPanel('show_contact_link'),
+        FieldPanel('continue_learning'),
+        FieldPanel('related_topics'),
+        FieldPanel('citations'),
+        FieldPanel('conditional_js'),
+    ]
+
+    def get_context(self, request):
+        # Get the default context from the superclass
+        context = super().get_context(request)
+
+        # Get live, published court case children of this index page
+        cases = CourtCasePage.objects.live().descendant_of(self).order_by('title')
+
+        # Optional search filter
+        query = request.GET.get('q')
+        if query:
+            cases = cases.filter(title__icontains=query)
+
+        # Group cases by first letter
+        grouped_cases = {}
+        for case in cases:
+            letter = case.title[0].upper()
+            grouped_cases.setdefault(letter, []).append(case)
+
+        # Add variables to the context for the template
+        context['cases'] = cases
+        context['grouped_cases'] = dict(sorted(grouped_cases.items()))
+
+        return context
+
+    def get_conditional_js_display(self):
+        return self.conditional_js if self.conditional_js else ''
+
+    @property
+    def content_section(self):
+        return 'legal'
+
+
+class CourtCasePage(Page):
+    status = models.CharField(
+        max_length=100,
+        choices=[
+            ('active', 'Active'),
+            ('closed', 'Closed'),
+        ],
+        default='closed'
+    )
+    summary = RichTextField(blank=True)
+    opinions = RichTextField(blank=True)
+    see_also_cases = StreamField([
+        ('case', blocks.PageChooserBlock(page_type='home.CourtCasePage', label='Related court case'))
+    ], null=True, blank=True, help_text='Link to related court cases that should be referenced on the index page')
+    sidebar_title = models.CharField(max_length=255, null=True, blank=True)
+    related_pages = StreamField([
+        ('related_pages', blocks.ListBlock(blocks.PageChooserBlock())),
+        ('external_page', blocks.RichTextBlock()),
+    ], null=True, blank=True)
+    sections = StreamField([
+        ('sections', ResourceBlock())
+    ], null=True, blank=True)
+    citations = StreamField([
+        ('citations', blocks.ListBlock(CitationsBlock()))
+    ], null=True, blank=True)
+    related_topics = StreamField([
+        ('related_topics', blocks.ListBlock(
+            blocks.PageChooserBlock(label='Related topic')
+        ))
+    ], null=True, blank=True)
+    show_contact_card = models.BooleanField(
+        default=False,
+        choices=[
+            (True, 'Show contact card'),
+            (False, 'Do not show contact card')
+        ])
+    show_search = models.BooleanField(default=False)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('status'),
+        FieldPanel('summary'),
+        FieldPanel('opinions'),
+        FieldPanel('see_also_cases'),
+        FieldPanel('sidebar_title'),
+        FieldPanel('related_pages'),
+        FieldPanel('sections'),
+        FieldPanel('citations'),
+        FieldPanel('related_topics'),
+        FieldPanel('show_contact_card'),
+        FieldPanel('show_search'),
+    ]
+
+    parent_page_types = ['CourtCaseIndexPage']
+
+    @property
+    def content_section(self):
+        return 'legal'
+
+
 class ServicesLandingPage(ContentPage, UniqueModel):
     page_description = 'Unique landing page - Services / Help for Candidates and Committees main landing pages for \
         Candidates, SSF, Nonconnected and Party sections'

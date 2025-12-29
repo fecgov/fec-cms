@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load static %}
+{% load filters %}
+
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+{% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='secondary' %}
+
+<article class="main container">
+  <header class="heading--main">
+    <h1>{{ self.title }}</h1>
+  </header>
+
+  <div class="row">
+      {% if self.intro %}
+      <div class="rich-text">
+        {{ self.intro|richtext }}
+      </div>
+      {% endif %}
+
+    <div class="usa-width-one-whole search--container">
+      <div class="search-controls__either u-padding--top--small u-padding--left">
+        <div class="row">
+          {# 🔍 Search Form #}
+          <form class="court-case-search" method="get">
+            <label for="search" class="label t-bold">Filter by court case name</label>
+            <div class="combo combo--search combo--inline">
+              <input
+                type="text"
+                name="q"
+                id="search"
+                class="combo__input"
+                value="{{ request.GET.q }}"
+                placeholder="Case name keyword"
+              >
+              <button class="button--standard combo__button button--search" type="submit">
+                <span class="u-visually-hidden">Search</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="search-controls__or search-controls__or--vertical u-margin--top">or</div>
+      <div class="search-controls__either u-padding--top--small">
+        <fieldset>
+          <legend class="label">Alphabetical order</span>
+          </legend>
+          <div class="search-controls">
+            {# Alphabetical court case listing #}
+            <nav class="alphabet-nav">
+              {% for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
+                {% if letter in grouped_cases.keys %}
+                  <a class="u-padding--right--small u-padding--left--small alphabet-nav__link t-sans" href="#{{ letter|slugify }}">{{ letter }}</a>
+                {% else %}
+                  <span class="u-padding--right--small u-padding--left--small alphabet-nav__link alphabet-nav__link--inactive t-sans">{{ letter }}</span>
+                {% endif %}
+              {% endfor %}
+            </nav>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+      
+
+      {% for letter, cases in grouped_cases.items %}
+        <section class="u-padding--top" id="{{ letter|slugify }}">
+          <h2 class="t-ruled--bold">{{ letter }}</h2>
+          <table class="simple-table simple-table--display simple-table-cms">
+            <thead>
+              <tr>
+                <th width="30%">Case summary</th>
+                <th width="70%">Opinion(s)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for case in cases %}
+              <tr>
+                <td class="align-top">
+                  <a href="{{ case.url }}">{{ case.title }}</a>
+                  {% if case.status == 'active' %}
+                    <div class="t-data t-bold">
+                      <span class="is-active-status-litigation">Active Litigation</span>
+                    </div>
+                  {% endif %}
+                  {% if case.see_also_cases %}
+                    <div class="t-sans u-padding--top--small">
+                      {% for block in case.see_also_cases %}
+                        {% if block.block_type == 'case' %}
+                          See: <a href="{{ block.value.url }}">{{ block.value.title }}</a><br>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </td>
+                <td class="align-top">
+                  {% if case.opinions %}
+                    <div class="rich-text">{{ case.opinions|richtext }}</div>
+                  {% else %}
+                    <em>None</em>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <p class="u-padding--top"><a href="#top">Back to top</a></p>
+        </section>
+      {% endfor %}
+    </div>
+
+    <div class="sidebar-container">
+      {% if self.sidebar %}
+      <aside class="sidebar sidebar--secondary">
+        {% for block in self.sidebar %}
+          {% if block.block_type == 'heading' %}
+            <h4 class="sidebar__title">{{ block }}</h4>
+          {% else %}
+            <div class="sidebar__content">
+              {% if block.block_type == 'paragraph' %}
+                <div class="rich-text">{{ block }}</div>
+              {% else %}
+                {{ block }}
+              {% endif %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </aside>
+      {% endif %}
+
+      {% if self.record_articles %}
+      <div class="sidebar__related-links">
+        <h4 class="label sidebar__record-title">From the FEC Record</h4>
+        {{ self.record_articles }}
+      </div>
+      {% endif %}
+
+      {% if self.show_contact_link %}
+      <div class="sidebar__related-links">
+        <h4 class="label sidebar__question">Need help?</h4>
+        <a href="/contact/">Get help from the FEC by phone or email</a>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if self.continue_learning %}
+    <div class="content__section--ruled content__section">
+      <h3>Continue learning about this topic</h3>
+      <div class="grid grid--4-wide">
+        {% for blocks in self.continue_learning %}
+          {% with blocks.value as blocks %}
+            {% for block in blocks %}
+              <div class="grid__item">
+                {% image block.image width-200 %}
+                {% if block.media_type %}
+                  <span class="label">{{ block.media_type }}</span>
+                {% endif %}
+                <p><a href="{{ block.url }}">{{ block.text }}</a></p>
+              </div>
+            {% endfor %}
+          {% endwith %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if self.related_topics %}
+    <h2>Related topics</h2>
+    <div class="grid grid--4-wide">
+      {% for block in self.related_topics %}
+        {% with topics=block.value %}
+          {% for topic in topics %}
+            <div class="grid__item">
+              <a href="{{ topic.url }}">
+                <aside class="card card--horizontal card--primary">
+                  <div class="card__content">
+                    {{ topic }}
+                  </div>
+                </aside>
+              </a>
+            </div>
+          {% endfor %}
+        {% endwith %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if self.citations %}
+    <div id="legal-citations" class="sidebar--secondary t-sans">
+      <h4 class="sidebar__title">Legal citations</h4>
+      <div class="sidebar__content">
+        <div class="grid grid--2-wide">
+        {% for citation in self.citations %}
+          {% for block in citation.value %}
+            <div class="grid__item">
+              <p class="t-bold">{{ block.label }}</p>
+              <div class="rich-text">{{ block.content }}</div>
+            </div>
+          {% endfor %}
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</article>
+
+{% include 'partials/disclaimer.html' %}
+{% endblock %}
+
+{% block extra_js %}
+  {% if self.conditional_js %}
+    <script type="text/javascript" src="{% path_for_js self.get_conditional_js_display %}"></script>
+  {% endif %}
+{% endblock %}

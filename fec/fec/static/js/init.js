@@ -59,4 +59,83 @@ $(function() {
     }
     $p.nextAll().remove();
   });
+
+  // Court case alphabetical navigation
+  const navLinks = document.querySelectorAll('.alphabet-nav__link[href^="#"]');
+  const searchForm = document.querySelector('.court-case-search');
+  const searchInput = document.getElementById('search');
+
+  if (searchForm && searchInput) {
+    // Clear search when clicking alpha nav
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        if (searchInput.value) {
+          searchInput.value = '';
+          // Show all rows and sections
+          const allRows = document.querySelectorAll('section[id] table tbody tr');
+          const allSections = document.querySelectorAll('section[id]');
+          allRows.forEach(row => row.style.display = '');
+          allSections.forEach(section => section.style.display = '');
+
+          // Update URL to remove query param
+          const url = new URL(window.location);
+          url.searchParams.delete('q');
+          window.history.pushState({}, '', url);
+        }
+      });
+    });
+
+    // Handle search without page reload
+    searchForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const query = searchInput.value.toLowerCase().trim();
+
+      // Get all case rows
+      const allRows = document.querySelectorAll('section[id] table tbody tr');
+      const allSections = document.querySelectorAll('section[id]');
+
+      if (query === '') {
+        // Show all rows and sections
+        allRows.forEach(row => row.style.display = '');
+        allSections.forEach(section => section.style.display = '');
+      } else {
+        // Filter rows
+        allRows.forEach(row => {
+          const caseTitle = row.querySelector('td:first-child a').textContent.toLowerCase();
+          if (caseTitle.includes(query)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+
+        // Hide empty sections
+        allSections.forEach(section => {
+          const visibleRows = section.querySelectorAll('table tbody tr:not([style*="display: none"])');
+          if (visibleRows.length === 0) {
+            section.style.display = 'none';
+          } else {
+            section.style.display = '';
+          }
+        });
+      }
+
+      // Update URL without reloading
+      const url = new URL(window.location);
+      if (query) {
+        url.searchParams.set('q', query);
+      } else {
+        url.searchParams.delete('q');
+      }
+      window.history.pushState({}, '', url);
+    });
+
+    // Trigger search on input if there's a query in URL on page load
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlQuery = urlParams.get('q');
+    if (urlQuery) {
+      searchInput.value = urlQuery;
+      searchForm.dispatchEvent(new Event('submit'));
+    }
+  }
 });
