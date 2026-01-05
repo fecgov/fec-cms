@@ -21,7 +21,7 @@
       </div>
       {% endif %}
 
-    <div class="usa-width-one-whole search--container">
+    <div class="container u-padding--top u-padding--bottom search--container alpha-index-search">
       <div class="search-controls__either u-padding--top--small u-padding--left">
         <div class="row">
           {# 🔍 Search Form #}
@@ -44,10 +44,9 @@
         </div>
       </div>
       <div class="search-controls__or search-controls__or--vertical u-margin--top">or</div>
-      <div class="search-controls__either u-padding--top--small">
+      <div class="search-controls__either u-padding--left u-padding--top--small">
         <fieldset>
-          <legend class="label">Alphabetical order</span>
-          </legend>
+          <label class="label">Alphabetical order</label>
           <div class="search-controls">
             {# Alphabetical court case listing #}
             <nav class="alphabet-nav">
@@ -63,8 +62,8 @@
         </fieldset>
       </div>
     </div>
-      
 
+    <div class="container u-margin--top u-margin--bottom">
       {% for letter, cases in grouped_cases.items %}
         <section class="u-padding--top" id="{{ letter|slugify }}">
           <h2 class="t-ruled--bold">{{ letter }}</h2>

@@ -90,6 +90,11 @@
   background: $gray-lightest;
 }
 
+//For alphabetical index search controls
+.alpha-index-search.search--container {
+  padding: u(4rem 0);
+}
+
 //For data/election search boxes
 .election-search {
   .search--container {

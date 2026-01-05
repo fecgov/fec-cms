@@ -6,12 +6,13 @@
 
 .alphabet-nav {
   display: grid;
-  grid-template-columns: repeat(7, 1fr); // Mobile: 7 columns
+  grid-template-columns: repeat(7, 1fr); // Tablet/mobile: 7 columns
   gap: 0.5rem;
   max-width: 100%;
+  padding-right: 1rem;
 
-  @include media($med) {
-    grid-template-columns: repeat(13, 1fr); // Tablet/Desktop: 13 columns
+  @include media($lg) {
+    grid-template-columns: repeat(13, 1fr); // Desktop: 13 columns
   }
 }
 
