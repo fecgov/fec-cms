@@ -1070,6 +1070,8 @@ class CourtCaseIndexPage(ContentPage):
         blank=True
     )
 
+    subpage_types = ['CourtCasePage']
+
     content_panels = Page.content_panels + [
         FieldPanel('intro'),
         FieldPanel('body'),
@@ -1086,18 +1088,22 @@ class CourtCaseIndexPage(ContentPage):
         # Get the default context from the superclass
         context = super().get_context(request)
 
-        # Get live, published court case children of this index page
-        cases = CourtCasePage.objects.live().descendant_of(self).order_by('title')
+        # Get all live, published court cases site-wide
+        cases = CourtCasePage.objects.live().order_by('index_title', 'title')
 
         # Optional search filter
         query = request.GET.get('q')
         if query:
-            cases = cases.filter(title__icontains=query)
+            cases = cases.filter(
+                models.Q(title__icontains=query) |
+                models.Q(index_title__icontains=query)
+            )
 
-        # Group cases by first letter
+        # Group cases by first letter (use index_title if available, otherwise title)
         grouped_cases = {}
         for case in cases:
-            letter = case.title[0].upper()
+            display_title = case.index_title if case.index_title else case.title
+            letter = display_title[0].upper()
             grouped_cases.setdefault(letter, []).append(case)
 
         # Add variables to the context for the template
@@ -1115,6 +1121,14 @@ class CourtCaseIndexPage(ContentPage):
 
 
 class CourtCasePage(Page):
+    index_title = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text=(
+            'Title format for the alphabetical index page (e.g., "Adams: FEC v."). '
+            'Leave blank to use the regular page title.'
+        )
+    )
     status = models.CharField(
         max_length=100,
         choices=[
@@ -1153,6 +1167,7 @@ class CourtCasePage(Page):
     show_search = models.BooleanField(default=False)
 
     content_panels = Page.content_panels + [
+        FieldPanel('index_title'),
         FieldPanel('status'),
         FieldPanel('summary'),
         FieldPanel('opinions'),
@@ -1166,7 +1181,7 @@ class CourtCasePage(Page):
         FieldPanel('show_search'),
     ]
 
-    parent_page_types = ['CourtCaseIndexPage']
+    parent_page_types = ['CourtCaseIndexPage', 'ResourcePage']
 
     @property
     def content_section(self):

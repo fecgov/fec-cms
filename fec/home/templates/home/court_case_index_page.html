@@ -78,7 +78,7 @@
               {% for case in cases %}
               <tr>
                 <td class="align-top">
-                  <a href="{{ case.url }}">{{ case.title }}</a>
+                  <a href="{{ case.url }}">{% if case.index_title %}{{ case.index_title }}{% else %}{{ case.title }}{% endif %}</a>
                   {% if case.status == 'active' %}
                     <div class="t-data t-bold">
                       <span class="is-active-status-litigation">Active Litigation</span>
