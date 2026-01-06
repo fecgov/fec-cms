@@ -22,6 +22,24 @@
       {% endif %}
 
     <div class="container u-padding--top u-padding--bottom search--container alpha-index-search">
+      <div class="search-controls__either u-padding--left u-padding--top--small">
+        <fieldset>
+          <label class="label">Alphabetical order</label>
+          <div class="search-controls">
+            {# Alphabetical court case listing #}
+            <nav class="alphabet-nav">
+              {% for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
+                {% if letter in grouped_cases.keys %}
+                  <a class="u-padding--right--small u-padding--left--small alphabet-nav__link t-sans" href="#{{ letter|slugify }}">{{ letter }}</a>
+                {% else %}
+                  <span class="u-padding--right--small u-padding--left--small alphabet-nav__link alphabet-nav__link--inactive t-sans">{{ letter }}</span>
+                {% endif %}
+              {% endfor %}
+            </nav>
+          </div>
+        </fieldset>
+      </div>
+      <div class="search-controls__or search-controls__or--vertical u-margin--top">or</div>
       <div class="search-controls__either u-padding--top--small u-padding--left">
         <div class="row">
           {# 🔍 Search Form #}
@@ -43,41 +61,29 @@
           </form>
         </div>
       </div>
-      <div class="search-controls__or search-controls__or--vertical u-margin--top">or</div>
-      <div class="search-controls__either u-padding--left u-padding--top--small">
-        <fieldset>
-          <label class="label">Alphabetical order</label>
-          <div class="search-controls">
-            {# Alphabetical court case listing #}
-            <nav class="alphabet-nav">
-              {% for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
-                {% if letter in grouped_cases.keys %}
-                  <a class="u-padding--right--small u-padding--left--small alphabet-nav__link t-sans" href="#{{ letter|slugify }}">{{ letter }}</a>
-                {% else %}
-                  <span class="u-padding--right--small u-padding--left--small alphabet-nav__link alphabet-nav__link--inactive t-sans">{{ letter }}</span>
-                {% endif %}
-              {% endfor %}
-            </nav>
-          </div>
-        </fieldset>
-      </div>
     </div>
 
-    <div class="container u-margin--top u-margin--bottom">
+    <div class="container court-case-listing u-margin--top u-margin--bottom">
+      <div class="row court-case-listing-header u-padding--top">
+        <h2 class="u-float-left u-no-margin">All court cases in alphabetical order</h2>
+        <div class="case-count u-float-right">
+          <span class="t-sans">{{ total_cases_count }} total court case{{ total_cases_count|pluralize }}</span>
+        </div>
+      </div>
       {% for letter, cases in grouped_cases.items %}
         <section class="u-padding--top" id="{{ letter|slugify }}">
-          <h2 class="t-ruled--bold">{{ letter }}</h2>
-          <table class="simple-table simple-table--display simple-table-cms">
-            <thead>
+          <h3 class="t-ruled--bold">{{ letter }}</h3>
+          <table class="simple-table">
+            <thead class="simple-table__header">
               <tr>
-                <th width="30%">Case summary</th>
-                <th width="70%">Opinion(s)</th>
+                <th class="simple-table__header-cell cell--30">Case summary</th>
+                <th class="simple-table__header-cell cell--70">Opinion(s)</th>
               </tr>
             </thead>
             <tbody>
               {% for case in cases %}
-              <tr>
-                <td class="align-top">
+              <tr class="simple-table__row">
+                <td class="simple-table__cell align-top">
                   <a href="{{ case.url }}">{% if case.index_title %}{{ case.index_title }}{% else %}{{ case.title }}{% endif %}</a>
                   {% if case.status == 'active' %}
                     <div class="t-data t-bold">
@@ -94,7 +100,7 @@
                     </div>
                   {% endif %}
                 </td>
-                <td class="align-top">
+                <td class="simple-table__cell align-top">
                   {% if case.opinions %}
                     <div class="rich-text">{{ case.opinions|richtext }}</div>
                   {% else %}

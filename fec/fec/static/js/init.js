@@ -66,6 +66,26 @@ $(function() {
   const searchInput = document.getElementById('search');
 
   if (searchForm && searchInput) {
+    // Function to update header based on search state
+    function updateHeader(isSearching, visibleCount) {
+      const headerRow = document.querySelector('.court-case-listing .court-case-listing-header');
+      if (!headerRow) return;
+
+      const heading = headerRow.querySelector('.court-case-listing-header h2');
+      const countSpan = headerRow.querySelector('.case-count');
+
+      if (isSearching) {
+        // Show "Results" header
+        heading.textContent = 'Results';
+        countSpan.innerHTML = `${visibleCount} total result${visibleCount !== 1 ? 's' : ''} | <a href="#" class="js-clear-search">Show full alphabetical list</a>`;
+      } else {
+        // Show "All court cases" header
+        heading.textContent = 'All court cases in alphabetical order';
+        const totalCount = document.querySelectorAll('section[id] table tbody tr').length;
+        countSpan.textContent = `${totalCount} total court case${totalCount !== 1 ? 's' : ''}`;
+      }
+    }
+
     // Clear search when clicking alpha nav
     navLinks.forEach(link => {
       link.addEventListener('click', function() {
@@ -76,6 +96,9 @@ $(function() {
           const allSections = document.querySelectorAll('section[id]');
           allRows.forEach(row => row.style.display = '');
           allSections.forEach(section => section.style.display = '');
+
+          // Update header to show all cases
+          updateHeader(false);
 
           // Update URL to remove query param
           const url = new URL(window.location);
@@ -98,12 +121,15 @@ $(function() {
         // Show all rows and sections
         allRows.forEach(row => row.style.display = '');
         allSections.forEach(section => section.style.display = '');
+        updateHeader(false);
       } else {
         // Filter rows
+        let visibleCount = 0;
         allRows.forEach(row => {
           const caseTitle = row.querySelector('td:first-child a').textContent.toLowerCase();
           if (caseTitle.includes(query)) {
             row.style.display = '';
+            visibleCount++;
           } else {
             row.style.display = 'none';
           }
@@ -118,6 +144,9 @@ $(function() {
             section.style.display = '';
           }
         });
+
+        // Update header to show results
+        updateHeader(true, visibleCount);
       }
 
       // Update URL without reloading
@@ -128,6 +157,30 @@ $(function() {
         url.searchParams.delete('q');
       }
       window.history.pushState({}, '', url);
+    });
+
+    // Handle "Show full alphabetical list" link clicks (event delegation for dynamically created link)
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('js-clear-search')) {
+        e.preventDefault();
+
+        // Clear the search input
+        searchInput.value = '';
+
+        // Show all rows and sections
+        const allRows = document.querySelectorAll('section[id] table tbody tr');
+        const allSections = document.querySelectorAll('section[id]');
+        allRows.forEach(row => row.style.display = '');
+        allSections.forEach(section => section.style.display = '');
+
+        // Update header to show all cases
+        updateHeader(false);
+
+        // Update URL to remove query param
+        const url = new URL(window.location);
+        url.searchParams.delete('q');
+        window.history.pushState({}, '', url);
+      }
     });
 
     // Trigger search on input if there's a query in URL on page load

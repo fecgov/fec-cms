@@ -1089,10 +1089,12 @@ class CourtCaseIndexPage(ContentPage):
         context = super().get_context(request)
 
         # Get all live, published court cases site-wide
-        cases = CourtCasePage.objects.live().order_by('index_title', 'title')
+        all_cases = CourtCasePage.objects.live().order_by('index_title', 'title')
+        total_cases_count = all_cases.count()
 
         # Optional search filter
-        query = request.GET.get('q')
+        query = request.GET.get('q', '').strip()
+        cases = all_cases
         if query:
             cases = cases.filter(
                 models.Q(title__icontains=query) |
@@ -1109,6 +1111,9 @@ class CourtCaseIndexPage(ContentPage):
         # Add variables to the context for the template
         context['cases'] = cases
         context['grouped_cases'] = dict(sorted(grouped_cases.items()))
+        context['total_cases_count'] = total_cases_count
+        context['filtered_count'] = cases.count()
+        context['search_query'] = query if query else None
 
         return context
 
