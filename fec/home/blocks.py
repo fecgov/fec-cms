@@ -154,6 +154,14 @@ class AFSearchBlock(blocks.StaticBlock):
         template = 'blocks/af_search.html'
 
 
+class ActiveCourtCasesBlock(blocks.StaticBlock):
+    """A block that displays active court cases (ongoing litigation)"""
+    class Meta:
+        icon = 'list-ul'
+        admin_text = 'Show active court cases. No configuration needed.'
+        template = 'blocks/active_court_cases.html'
+
+
 class ReportingExampleCards(blocks.StructBlock):
     """Create links to reporting example pages that display as cards
     card_width is used in the template to set the grid class. On reporting example pages,
@@ -213,7 +221,7 @@ class ReportingTableBlock(blocks.StructBlock):
         'renderer': 'html',
         'renderAllRows': True,
     }
-    
+
     hide_state_dropdown = blocks.BooleanBlock(required=False, help_text='Hide state dropdown on this table?')
     table = TableBlock(table_options=reporting_table_options)
 
@@ -286,6 +294,7 @@ class ResourceBlock(blocks.StructBlock):
         ('adr_search', ADRSearchBlock()),
         ('audit_search', AuditSearchBlock()),
         ('af_search', AFSearchBlock()),
+        ('active_court_cases', ActiveCourtCasesBlock()),
         ('table', TableBlock(table_options=core_table_options)),
         ('custom_table', CustomTableBlock()),
         ('html', blocks.RawHTMLBlock()),
