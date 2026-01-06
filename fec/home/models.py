@@ -1142,6 +1142,9 @@ class CourtCasePage(Page):
     see_also_cases = StreamField([
         ('case', blocks.PageChooserBlock(page_type='home.CourtCasePage', label='Related court case'))
     ], null=True, blank=True, help_text='Link to related court cases that should be referenced on the index page')
+    case_numbers = StreamField([
+        ('case_number', blocks.CharBlock(label='Case number', help_text='e.g., 06-1247'))
+    ], null=True, blank=True, help_text='Add one or more case numbers associated with this court case')
     sidebar_title = models.CharField(max_length=255, null=True, blank=True)
     related_pages = StreamField([
         ('related_pages', blocks.ListBlock(blocks.PageChooserBlock())),
@@ -1176,6 +1179,7 @@ class CourtCasePage(Page):
         FieldPanel('summary'),
         FieldPanel('opinions'),
         FieldPanel('see_also_cases'),
+        FieldPanel('case_numbers'),
         FieldPanel('sidebar_title'),
         FieldPanel('related_pages'),
         FieldPanel('sections'),
