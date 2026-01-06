@@ -1165,6 +1165,10 @@ class CourtCasePage(Page):
             (False, 'Do not show contact card')
         ])
     show_search = models.BooleanField(default=False)
+    selected_court_case = models.BooleanField(
+        default=False,
+        help_text='Check this to include this case in the "Selected Court Cases" list'
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel('index_title'),
@@ -1179,6 +1183,7 @@ class CourtCasePage(Page):
         FieldPanel('related_topics'),
         FieldPanel('show_contact_card'),
         FieldPanel('show_search'),
+        FieldPanel('selected_court_case'),
     ]
 
     parent_page_types = ['CourtCaseIndexPage', 'ResourcePage']

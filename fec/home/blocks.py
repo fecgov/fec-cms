@@ -162,6 +162,14 @@ class ActiveCourtCasesBlock(blocks.StaticBlock):
         template = 'blocks/active_court_cases.html'
 
 
+class SelectedCourtCasesBlock(blocks.StaticBlock):
+    """A block that displays selected court cases"""
+    class Meta:
+        icon = 'list-ul'
+        admin_text = 'Show selected court cases. No configuration needed.'
+        template = 'blocks/selected_court_cases.html'
+
+
 class ReportingExampleCards(blocks.StructBlock):
     """Create links to reporting example pages that display as cards
     card_width is used in the template to set the grid class. On reporting example pages,
@@ -295,6 +303,7 @@ class ResourceBlock(blocks.StructBlock):
         ('audit_search', AuditSearchBlock()),
         ('af_search', AFSearchBlock()),
         ('active_court_cases', ActiveCourtCasesBlock()),
+        ('selected_court_cases', SelectedCourtCasesBlock()),
         ('table', TableBlock(table_options=core_table_options)),
         ('custom_table', CustomTableBlock()),
         ('html', blocks.RawHTMLBlock()),
