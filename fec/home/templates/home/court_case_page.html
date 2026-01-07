@@ -18,46 +18,14 @@
 
 
 
-    <div class="row">
+    <div class="row" id="page-sections">
       {# Left Navigation #}
-      <div class="sidebar-container sidebar-container--left">
-        <div class="js-sticky-side" data-sticky-container="page-sections">
-          <nav class="sidebar sidebar--neutral sidebar--left side-nav js-toc">
-            <ul class="sidebar__content">
-              {% if self.summary %}
-                <li class="side-nav__item">
-                  <a class="side-nav__link" href="#summary">Summary</a>
-                </li>
-              {% endif %}
-              {% if self.sections %}
-                <li class="side-nav__item">
-                  <a class="side-nav__link" href="#documents">Documents</a>
-                </li>
-              {% endif %}
-              {% if self.citations %}
-                <li class="side-nav__item">
-                  <a class="side-nav__link" href="#legal-citations">Legal citations</a>
-                </li>
-              {% endif %}
-            </ul>
-          </nav>
-        </div>
-      </div>
+      {% include 'partials/section-nav.html' with sections=self.sections citations=self.citations container='page-sections' %}
 
       {# Main Content #}
-      <div class="main__content main__content--right" id="page-sections">
-        {% if self.summary %}
-          <section id="summary">
-            <h2>Summary</h2>
-            <div class="rich-text">{{ self.summary|richtext }}</div>
-          </section>
-        {% endif %}
-
+      <div class="main__content main__content--right">
         {% if self.sections %}
-          <section id="documents">
-            <h2>Documents</h2>
-            {% include_block self.sections %}
-          </section>
+          {% include_block self.sections %}
         {% endif %}
 
         {% if self.citations %}

@@ -86,6 +86,41 @@ $(function() {
       }
     }
 
+    // Function to show/hide no results message
+    function updateNoResultsMessage(show, query) {
+      let noResultsDiv = document.querySelector('.message--info');
+
+      if (show) {
+        // Create the message if it doesn't exist
+        if (!noResultsDiv) {
+          noResultsDiv = document.createElement('div');
+          noResultsDiv.className = 'message message--info';
+          noResultsDiv.innerHTML = `
+            <h2>No results</h2>
+            <p>We didn't find any pages matching <strong>&ldquo;${query}&rdquo;</strong></p>
+            <p class="u-border-top-base u-padding--top">Think this was a mistake?<br>Please let us know.</p>
+            <p>
+              <a href="mailto:webmanager@fec.gov" class="button--standard">Email our team</a>&nbsp;&nbsp; <a href="https://github.com/fecgov/fec/issues/new" class="button--standard">File an issue</a>
+            </p>
+          `;
+          const headerRow = document.querySelector('.court-case-listing .court-case-listing-header');
+          headerRow.parentNode.insertBefore(noResultsDiv, headerRow.nextSibling);
+        } else {
+          // Update the query in the existing message
+          const querySpan = noResultsDiv.querySelector('strong');
+          if (querySpan) {
+            querySpan.innerHTML = `&ldquo;${query}&rdquo;`;
+          }
+          noResultsDiv.style.display = '';
+        }
+      } else {
+        // Hide the message if it exists
+        if (noResultsDiv) {
+          noResultsDiv.style.display = 'none';
+        }
+      }
+    }
+
     // Clear search when clicking alpha nav
     navLinks.forEach(link => {
       link.addEventListener('click', function() {
@@ -99,6 +134,9 @@ $(function() {
 
           // Update header to show all cases
           updateHeader(false);
+
+          // Hide no results message
+          updateNoResultsMessage(false);
 
           // Update URL to remove query param
           const url = new URL(window.location);
@@ -122,6 +160,7 @@ $(function() {
         allRows.forEach(row => row.style.display = '');
         allSections.forEach(section => section.style.display = '');
         updateHeader(false);
+        updateNoResultsMessage(false);
       } else {
         // Filter rows
         let visibleCount = 0;
@@ -147,6 +186,9 @@ $(function() {
 
         // Update header to show results
         updateHeader(true, visibleCount);
+
+        // Show/hide no results message
+        updateNoResultsMessage(visibleCount === 0, searchInput.value);
       }
 
       // Update URL without reloading
@@ -175,6 +217,9 @@ $(function() {
 
         // Update header to show all cases
         updateHeader(false);
+
+        // Hide no results message
+        updateNoResultsMessage(false);
 
         // Update URL to remove query param
         const url = new URL(window.location);

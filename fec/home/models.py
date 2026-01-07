@@ -1085,11 +1085,20 @@ class CourtCaseIndexPage(ContentPage):
     ]
 
     def get_context(self, request):
+        from django.db.models import Case, When, F, CharField
+
         # Get the default context from the superclass
         context = super().get_context(request)
 
         # Get all live, published court cases site-wide
-        all_cases = CourtCasePage.objects.live().order_by('index_title', 'title')
+        # Sort by index_title if present, otherwise by title
+        all_cases = CourtCasePage.objects.live().annotate(
+            sort_title=Case(
+                When(index_title='', then=F('title')),
+                default=F('index_title'),
+                output_field=CharField()
+            )
+        ).order_by('sort_title')
         total_cases_count = all_cases.count()
 
         # Optional search filter
@@ -1142,7 +1151,6 @@ class CourtCasePage(Page):
         ],
         default='closed'
     )
-    summary = RichTextField(blank=True)
     opinions = RichTextField(blank=True)
     see_also_cases = StreamField([
         ('case', blocks.PageChooserBlock(page_type='home.CourtCasePage', label='Related court case'))
@@ -1181,7 +1189,6 @@ class CourtCasePage(Page):
     content_panels = Page.content_panels + [
         FieldPanel('index_title'),
         FieldPanel('status'),
-        FieldPanel('summary'),
         FieldPanel('opinions'),
         FieldPanel('see_also_cases'),
         FieldPanel('case_numbers'),

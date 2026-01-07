@@ -70,6 +70,17 @@
           <span class="t-sans">{{ total_cases_count }} total court case{{ total_cases_count|pluralize }}</span>
         </div>
       </div>
+      {% if search_query and filtered_count == 0 %}
+        <div class="message message--info">
+          <h2>No results</h2>
+          <p>We didn't find any pages matching <strong>&ldquo;{{ search_query }}&rdquo;</strong>
+          </p>
+          <p class="u-border-top-base u-padding--top">Think this was a mistake?<br>Please let us know.</p>
+          <p>
+            <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}" class="button--standard">Email our team</a>&nbsp;&nbsp; <a href="https://github.com/fecgov/fec/issues/new" class="button--standard">File an issue</a>
+          </p>
+        </div>
+      {% endif %}
       {% for letter, cases in grouped_cases.items %}
         <section class="u-padding--top" id="{{ letter|slugify }}">
           <h3 class="t-ruled--bold">{{ letter }}</h3>
