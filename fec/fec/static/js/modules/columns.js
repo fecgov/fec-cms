@@ -1122,9 +1122,8 @@ export const rulemakings = [
       `<div class="legal-search-result__hit u-margin--top">`;
        if ((filters_category_type || filters_keyword) && !proximity_only) { //////********* REDUNDANT**********/////
            let category_shown = '';
-            /// DOC ID
+            // Array to keeo track of document already shown
             let doc_ids = [];
-            /// DOC ID
            //for (const [index, document] of row.documents.entries()) {
            for (const document of row.documents) {
 //           /*This will show documents in all 3 scenarios:
@@ -1139,9 +1138,8 @@ export const rulemakings = [
 
 let category_match = (filters_category_type && current_doc_ids.includes(`${document.doc_category_id}`) ? true : false) || !filters_category_type;
 let text_match = (filters_keyword && has_highlights(document)) || !filters_keyword;
-/// DOC ID
+// Dont show document if it has already been shown once
 let unique_id = !doc_ids.includes(`${document.doc_id}`);
-/// DOC ID
 let show_document = category_match && text_match && unique_id;
              if (show_document) {
                let top_border_class = '';
@@ -1155,9 +1153,10 @@ let show_document = category_match && text_match && unique_id;
                  else {
                    show_category = '';
                 }
-                /// DOC ID
+
+                // Push doc_id to array to keep track of already-shown documents
                 doc_ids.push(`${document.doc_id}`);
-                 /// DOC ID
+
                 let parsed;
                 parsed = moment(document.doc_date, 'YYYY-MM-DD');
                 const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
@@ -1207,9 +1206,8 @@ let show_document = category_match && text_match && unique_id;
               for (let l2_document of label.level_2_docs) {
                 let category_match = (filters_category_type && current_doc_ids.includes(`${l2_document.doc_category_id}`) ? true : false) || !filters_category_type;
                 let text_match_l2 = (filters_keyword && has_highlights(l2_document)) || !filters_keyword;
-                /// DOC ID
+                // Dont show document if it has already been shown once
                 let l2_unique_id = !doc_ids.includes(`${l2_document.doc_id}`);
-               /// DOC ID
                 let show_document = category_match && text_match_l2 && l2_unique_id;
                 if (show_document) {
                   let top_border_class = '';
@@ -1223,9 +1221,10 @@ let show_document = category_match && text_match && unique_id;
                  else {
                    show_category = '';
                 }
-                 /// DOC ID
+
+                // Push doc_id to array to keep track of already-shown documents
                 doc_ids.push(`${l2_document.doc_id}`);
-                 /// DOC ID
+
                 let parsed;
                 parsed = moment(l2_document.doc_date, 'YYYY-MM-DD');
                 const l2_doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
@@ -1281,7 +1280,7 @@ let show_document = category_match && text_match && unique_id;
                 let current_category = document.doc_category_label;
                   if (category_shown != current_category) {
                       top_border_class = 'u-border-top-nuetral';
-                      show_category = document.doc_category_label ;
+                      show_category = document.doc_category_label;
                       category_shown = current_category;
                   }
                   else {
@@ -1358,7 +1357,6 @@ let show_document = category_match && text_match && unique_id;
 
 const has_highlights = function(doc) {
   if (doc.highlights && doc.highlights.length) {
-    //console.log( `true ${doc.doc_id}`)
     return true;
     }
   };

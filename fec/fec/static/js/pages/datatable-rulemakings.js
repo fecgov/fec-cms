@@ -127,7 +127,6 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
   $(document).on('click','.accordion-trigger-on', function() {
     let exp = $(this).attr('aria-expanded') == 'false' ? 'true' : 'false';
     $(this).attr('aria-expanded', exp);
-    //let hid = $(this).next('div').attr('aria-hidden') == 'true' ? 'false' : 'false'
     $(this).next('div').attr('aria-hidden', exp == 'true' ? 'false' : 'true');
 
   });
@@ -145,6 +144,7 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
     // TODO: DO I NEED THIS AT ALL?, ALSO - If so Don't think I need to also add tags here(commented out)...ends up with two tags once I added trigger('change')
     initComplete: function () {
        const queryParams = URI.parseQuery(window.location.search);
+       //const queryParams = new URLSearchParams(window.location.search);
       if (queryParams.q) {
         $('input[name="q"]').val(queryParams.q).trigger('change');
       }
