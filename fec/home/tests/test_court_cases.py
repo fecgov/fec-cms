@@ -259,6 +259,50 @@ class CourtCaseIndexPageTests(WagtailPageTests):
         self.assertContains(response, '<h3 class="t-ruled--bold">A</h3>')
         self.assertContains(response, '<h3 class="t-ruled--bold">Z</h3>')
 
+    def test_index_page_handles_numeric_titles(self):
+        """Test that titles starting with numbers are grouped by spelled-out number"""
+        # Create case starting with number
+        case_21 = CourtCasePage(
+            title="21st Century Fund v. FEC",
+            slug="21st-century-fund-v-fec",
+            index_title="21st Century Fund v. FEC",
+        )
+        self.home_page.add_child(instance=case_21)
+        case_21.save()
+
+        case_501 = CourtCasePage(
+            title="501(c)(4) Organization v. FEC",
+            slug="501c4-organization-v-fec",
+            index_title="501(c)(4) Organization v. FEC",
+        )
+        self.home_page.add_child(instance=case_501)
+        case_501.save()
+
+        client = Client()
+        response = client.get(self.index_page.url)
+
+        # 21 = "twenty-one" should be under T
+        self.assertContains(response, '<h3 class="t-ruled--bold">T</h3>')
+        # 501 = "five hundred one" should be under F
+        self.assertContains(response, '<h3 class="t-ruled--bold">F</h3>')
+        self.assertContains(response, '21st Century Fund v. FEC')
+        self.assertContains(response, '501(c)(4) Organization v. FEC')
+
+    def test_get_sort_key_converts_numbers_to_words(self):
+        """Test that get_sort_key properly converts leading numbers"""
+        # Test the helper method directly
+        result = self.index_page.get_sort_key("21st Century Fund")
+        self.assertEqual(result, "twenty-onest Century Fund")
+
+        result = self.index_page.get_sort_key("501(c)(4)")
+        self.assertEqual(result, "five hundred one(c)(4)")
+
+        result = self.index_page.get_sort_key("Adams v. FEC")
+        self.assertEqual(result, "Adams v. FEC")
+
+        result = self.index_page.get_sort_key("100 Citizens Group")
+        self.assertEqual(result, "one hundred Citizens Group")
+
 
 class CourtCaseTemplateTagTests(TestCase):
     """Tests for court case template tags"""
