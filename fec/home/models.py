@@ -1084,6 +1084,50 @@ class CourtCaseIndexPage(ContentPage):
         FieldPanel('conditional_js'),
     ]
 
+    def get_sort_key(self, title):
+        """
+        Get the sort key for a title, converting leading numbers to words.
+        Examples:
+            "21st Century Fund" -> "twenty-one st Century Fund"
+            "501(c)(4)" -> "five hundred one"
+            "Adams v. FEC" -> "Adams v. FEC"
+        """
+        import re
+
+        # Number to word mappings for 0-99
+        ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+        teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen',
+                 'sixteen', 'seventeen', 'eighteen', 'nineteen']
+        tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
+
+        def num_to_words(n):
+            """Convert a number 0-999 to words"""
+            if n == 0:
+                return 'zero'
+            elif n < 10:
+                return ones[n]
+            elif n < 20:
+                return teens[n - 10]
+            elif n < 100:
+                return tens[n // 10] + ('' if n % 10 == 0 else '-' + ones[n % 10])
+            else:
+                hundreds = ones[n // 100] + ' hundred'
+                remainder = n % 100
+                if remainder == 0:
+                    return hundreds
+                return hundreds + ' ' + num_to_words(remainder)
+
+        # Check if title starts with digits
+        match = re.match(r'^(\d+)', title)
+        if match:
+            number = int(match.group(1))
+            # Convert number to words
+            number_words = num_to_words(number)
+            # Replace the number with words in the title
+            return re.sub(r'^\d+', number_words, title, count=1)
+
+        return title
+
     def get_context(self, request):
         from django.db.models import Case, When, F, CharField
 
@@ -1098,30 +1142,41 @@ class CourtCaseIndexPage(ContentPage):
                 default=F('index_title'),
                 output_field=CharField()
             )
-        ).order_by('sort_title')
-        total_cases_count = all_cases.count()
+        )
+
+        # Convert to list and sort using custom sort key
+        cases_list = list(all_cases)
+        cases_list.sort(key=lambda c: self.get_sort_key(
+            c.index_title if c.index_title else c.title
+        ).lower())
+
+        total_cases_count = len(cases_list)
 
         # Optional search filter
         query = request.GET.get('q', '').strip()
-        cases = all_cases
         if query:
-            cases = cases.filter(
-                models.Q(title__icontains=query) |
-                models.Q(index_title__icontains=query)
-            )
+            cases_list = [
+                case for case in cases_list
+                if query.lower() in (case.title.lower()) or
+                query.lower() in (case.index_title.lower() if case.index_title else '')
+            ]
 
         # Group cases by first letter (use index_title if available, otherwise title)
         grouped_cases = {}
-        for case in cases:
+        for case in cases_list:
             display_title = case.index_title if case.index_title else case.title
-            letter = display_title[0].upper()
+            # Get the sort key to determine the letter
+            sort_key = self.get_sort_key(display_title)
+            letter = sort_key[0].upper() if sort_key else 'A'
             grouped_cases.setdefault(letter, []).append(case)
+
+        cases = cases_list
 
         # Add variables to the context for the template
         context['cases'] = cases
         context['grouped_cases'] = dict(sorted(grouped_cases.items()))
         context['total_cases_count'] = total_cases_count
-        context['filtered_count'] = cases.count()
+        context['filtered_count'] = len(cases)
         context['search_query'] = query if query else None
 
         return context
