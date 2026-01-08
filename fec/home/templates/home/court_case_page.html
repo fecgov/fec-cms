@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 {% load static %}
+{% load filters %}
 
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
@@ -25,7 +26,33 @@
       {# Main Content #}
       <div class="main__content main__content--right">
         {% if self.sections %}
-          {% include_block self.sections %}
+          {% for section in self.sections %}
+            {% if forloop.first %}
+              <section id="{{ section.value.title | prepend_non_digit | slugify}}" class="option--no-intro">
+                {% if not section.value.hide_title %}<h2>{{ section.value.title }}</h2>{% endif %}
+                {% if section.value.aside %}
+                  <div class="option__content">
+                {% else %}
+                  <div class="row">
+                {% endif %}
+                    {% for content_block in section.value.content %}
+                    <div class="block-{{ content_block.block_type }}">
+                      {% if content_block.block_type == 'text' %}
+                      <div class="rich-text">{% include_block content_block %}</div>
+                      {% else %}
+                      {% include_block content_block %}
+                      {% endif %}
+                    </div>
+                    {% endfor %}
+                  </div>
+                {% if section.value.aside %}
+                    {% include_block section.value.aside %}
+                {% endif %}
+              </section>
+            {% else %}
+              {% include_block section %}
+            {% endif %}
+          {% endfor %}
         {% endif %}
 
         {% if self.citations %}
