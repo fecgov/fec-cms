@@ -1095,8 +1095,6 @@ export const rulemakings = [
     orderable: false,
     render: function (data, type, row) {
       let html = `<p><strong>${row.rm_name}</strong>`;
-      let html1 = '';
-
       if (row.key_documents && row.key_documents.length ) {
         html += `<br><span class="icon icon--inline--left i-document"></span>`;
         html +=
@@ -1120,27 +1118,24 @@ export const rulemakings = [
     // Note: Opening div tags are lined up with their closing divs below
        html +=
       `<div class="legal-search-result__hit u-margin--top">`;
-       if ((filters_category_type || filters_keyword) && !proximity_only) { //////********* REDUNDANT**********/////
+       if ((filters_category_type || filters_keyword) && !proximity_only) {
            let category_shown = '';
-            // Array to keeo track of document already shown
-            let doc_ids = [];
+           // Array to keep track of document already shown
+           let doc_ids = [];
            //for (const [index, document] of row.documents.entries()) {
            for (const document of row.documents) {
-//           /*This will show documents in all 3 scenarios:
-//             - When there is a keyword query and selected document categories
-//             - When there are selected document categories and no keyword query
-//             - When there is a keyword query and no selected document categories */
 
-/*  Old Jinja logic for temporary reference, remove before final push
-{% set category_match = (filters_category_type and document.category_match) or not filters_category_type %}
-{% set keyword_match = (filters_keyword and document.text_match) or not filters_keyword %}
-{% set show_document = category_match and keyword_match  %} */
-
-let category_match = (filters_category_type && current_doc_ids.includes(`${document.doc_category_id}`) ? true : false) || !filters_category_type;
-let text_match = (filters_keyword && has_highlights(document)) || !filters_keyword;
-// Dont show document if it has already been shown once
-let unique_id = !doc_ids.includes(`${document.doc_id}`);
-let show_document = category_match && text_match && unique_id;
+            /* Will show documents in all 3 scenarios:
+             - When there is a keyword query and selected document categories
+             - When there are selected document categories and no keyword query
+             - When there is a keyword query and no selected document categories
+             The preceding "if" statement above ensures that there is always one or the other of: "selected category" or "keyword query". Or both.
+            */
+          let category_match = (filters_category_type && current_doc_ids.includes(`${document.doc_category_id}`) ? true : false) || !filters_category_type;
+          let text_match = (filters_keyword && has_highlights(document)) || !filters_keyword;
+          // Dont show document if it has already been shown once
+          let unique_id = !doc_ids.includes(`${document.doc_id}`);
+          let show_document = category_match && text_match && unique_id;
              if (show_document) {
                let top_border_class = '';
                let show_category = '';
@@ -1229,7 +1224,7 @@ let show_document = category_match && text_match && unique_id;
                 parsed = moment(l2_document.doc_date, 'YYYY-MM-DD');
                 const l2_doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
 
-                  html1 += `
+                  html += `
                   <div class="document-container">
                     <div class="document-category ${top_border_class}">${show_category}</div>
                     <div class="document_details u-border-top-nuetral">
@@ -1240,14 +1235,14 @@ let show_document = category_match && text_match && unique_id;
                       </div>`;
               if (l2_document.highlights && l2_document.highlights.length) {
               if (l2_document.highlights.length) {
-                  html1 += `
+                  html += `
                       <ul>
                         <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${l2_document.highlights[0]}&#8230;
                         </li>
                       </ul>`;
               }
               if (l2_document.highlights.length > 1) {
-                  html1 += `
+                  html += `
                       <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${l2_document.doc_id}">
                         <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${l2_document.doc_id}" aria-expanded="false">
                           ${l2_document.highlights.length > 2 ? l2_document.highlights.length -1 + ' more keyword matches' : '1 more keyword match'}
@@ -1255,15 +1250,15 @@ let show_document = category_match && text_match && unique_id;
                         <div class="accordion__content results__content" aria-hidden="true">
                           <ul>`;
                           for (let i = 1; i <= l2_document.highlights.length -1; i++) {
-                            html1 += `<li class="t-serif t-italic">&#8230;${l2_document.highlights[i]}&#8230;</li>`;
+                            html += `<li class="t-serif t-italic">&#8230;${l2_document.highlights[i]}&#8230;</li>`;
                           }
-                            html1 += `
+                            html += `
                           </ul>
                         </div>
                       </div>`;
               }
             }
-            html1 += `
+            html += `
                     </div> 
                   </div>`;
 
@@ -1304,39 +1299,9 @@ let show_document = category_match && text_match && unique_id;
           }
        }
 
-      // TODO: Ask to check with OGC if no_tier documents should be included in doc type filter results
-      // if (row.no_tier_documents && row.no_tier_documents.length) {
-      //   for (let id of get_doc_ids()) {
-      //     for (let doc of row.no_tier_documents ) {
-      //       if (doc.doc_category_id == id) {
-
-      //           html += `<div class="document-container">
-      //                     <div class="document-details">`;
-
-      //           html += `<div class="post--icon">
-      //                   <span class="icon icon--inline--left i-document"></span>`;
-      //           html +=
-      //           buildEntityLink(
-      //               doc.doc_type_label, doc.url, doc.doc_type_label);
-      //               html += `</div>`;
-      //               let parsed;
-      //               parsed = moment(doc.doc_date, 'YYYY-MM-DD');
-      //               const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
-      //               html += `<div class="tag tag--primary">${doc.doc_category_label}</div>
-      //                       </div>
-      //                       <div class="document-date">
-      //                       ${doc_date}
-      //                       </div>
-      //                      </div>`;
-      //       }
-      //     }
-      //   }
-      // }
-      // /END TODO re... no_tier docs
-      //html += `</ul>`;
-       html1 += `
+       html += `
       </div>`;
-      return html + html1;
+      return html;
     }
   },
   {
@@ -1348,8 +1313,28 @@ let show_document = category_match && text_match && unique_id;
       return 'Not currently open for comment';
       }
       else {
-        const comment_deadline = moment(row.comment_close_date).format('MMMM D YYYY');
-        return `<strong>${row.description}</strong><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="/legal/rulemakings/${row.rm_no}/add-comments/">Submit a comment</a>`;
+        const comment_deadline = moment(row.comment_close_date).format('MMMM D, YYYY');
+        let eligible_documents = [];
+
+        for (const document of row.documents) {
+          if (document.is_comment_eligible == true) {
+              eligible_documents.push(document.doc_type_label);
+            }
+         if (document.level_2_labels && document.level_2_labels.length) {
+
+            for (let label of document.level_2_labels) {
+
+              for (const l2_document of label.level_2_docs) {
+
+                if (l2_document.is_comment_eligible == true) {
+                  eligible_documents.push(l2_document.doc_type_label);
+
+                }
+              }
+            }
+          }
+        }
+        return eligible_documents.map(doc => `<strong>${doc}</strong><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="/legal/rulemakings/${row.rm_no}/add-comments/">Submit a comment</a>`).join('');
       }
     }
   }
