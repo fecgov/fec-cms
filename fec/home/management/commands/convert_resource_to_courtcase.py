@@ -137,10 +137,27 @@ class Command(BaseCommand):
 
         # Update the content_type on the Page model using raw SQL
         court_case_content_type = ContentType.objects.get_for_model(CourtCasePage)
+
         with connection.cursor() as cursor:
             cursor.execute(
                 "UPDATE wagtailcore_page SET content_type_id = %s WHERE id = %s",
                 [court_case_content_type.id, page_id]
+            )
+
+        # NOTE: Switching a page's content_type_id causes duplicate page results
+        # in the Wagtail admin search results (but not in the admin explorer list).
+        # This happens because old search index entries remain with the previous content_type_id.
+        #
+        # Clean up old ResourcePage search index entries to prevent duplicate search results.
+        # ResourcePage content_type_id = 49 (hardcoded to avoid querying the model we're converting from).
+        # After running this, the wagtail page index also needs to be updated by running:
+        # python manage.py update_index
+        # For more info, see:
+        # https://github.com/fecgov/fec-cms/wiki/Switch-Wagtail-page%E2%80%90type-while-keeping-existing-ID-and-Slug#optional-maintenance-steps
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "DELETE FROM wagtailsearch_indexentry WHERE object_id = %s AND content_type_id = 49",
+                [str(page_id)]
             )
 
         # Delete the old ResourcePage instance using raw SQL (keeps the base Page)
