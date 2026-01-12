@@ -5,6 +5,9 @@ import { expect, use } from 'chai';
 use(sinonChai);
 // (end common)
 
+// Import the actual court case search implementation
+import { initCourtCaseSearch } from '../../static/js/modules/court-case-search.js';
+
 describe('court case search and navigation', function() {
   before(function() {
     this.$fixture = $('<div id="fixtures"></div>');
@@ -413,6 +416,79 @@ describe('court case search and navigation', function() {
       allSections.forEach(section => section.style.display = '');
 
       // All should be visible
+      allRows.forEach(row => {
+        expect(row.style.display).to.equal('');
+      });
+    });
+  });
+
+  describe('integration tests with actual implementation', function() {
+    beforeEach(function() {
+      // Initialize the actual court case search module
+      initCourtCaseSearch();
+    });
+
+    it('should filter cases when form is submitted', function() {
+      const searchInput = document.getElementById('search');
+      const searchForm = document.querySelector('.court-case-search');
+
+      // Enter search query
+      searchInput.value = 'adams';
+      searchForm.dispatchEvent(new Event('submit'));
+
+      // Check that only matching rows are visible
+      const allRows = document.querySelectorAll('section[id] table tbody tr');
+      const visibleRows = Array.from(allRows).filter(row => row.style.display !== 'none');
+
+      expect(visibleRows.length).to.equal(1);
+      expect(visibleRows[0].textContent).to.include('Adams');
+    });
+
+    it('should update header when searching', function() {
+      const searchInput = document.getElementById('search');
+      const searchForm = document.querySelector('.court-case-search');
+
+      // Perform search
+      searchInput.value = 'adams';
+      searchForm.dispatchEvent(new Event('submit'));
+
+      // Check header was updated
+      const heading = document.querySelector('.court-case-listing-header h2');
+      expect(heading.textContent).to.equal('Results');
+    });
+
+    it('should show no results message when no matches', function() {
+      const searchInput = document.getElementById('search');
+      const searchForm = document.querySelector('.court-case-search');
+
+      // Search for non-existent case
+      searchInput.value = 'nonexistent';
+      searchForm.dispatchEvent(new Event('submit'));
+
+      // Check no results message appears
+      const noResultsDiv = document.querySelector('.message--info');
+      expect(noResultsDiv).to.exist;
+      expect(noResultsDiv.textContent).to.include('No results');
+      expect(noResultsDiv.textContent).to.include('nonexistent');
+    });
+
+    it('should clear search when clear link is clicked', function() {
+      const searchInput = document.getElementById('search');
+      const searchForm = document.querySelector('.court-case-search');
+
+      // First perform a search
+      searchInput.value = 'adams';
+      searchForm.dispatchEvent(new Event('submit'));
+
+      // Click the clear link
+      const clearLink = document.querySelector('.js-clear-search');
+      clearLink.click();
+
+      // Check that search was cleared
+      expect(searchInput.value).to.equal('');
+
+      // Check all rows are visible
+      const allRows = document.querySelectorAll('section[id] table tbody tr');
       allRows.forEach(row => {
         expect(row.style.display).to.equal('');
       });
