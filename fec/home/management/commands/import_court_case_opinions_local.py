@@ -17,6 +17,9 @@ from html.parser import HTMLParser
 class CourtCaseTableParser(HTMLParser):
     """Simple HTML parser to extract court case data from tables"""
 
+    # Void elements that don't have closing tags
+    VOID_ELEMENTS = {'br'}
+
     def __init__(self):
         super().__init__()
         self.cases = []
@@ -72,7 +75,8 @@ class CourtCaseTableParser(HTMLParser):
                 self.current_case['opinions'] = opinions
         elif tag == 'a' and self.in_a:
             self.in_a = False
-        elif self.capturing_opinions:
+        elif self.capturing_opinions and tag not in self.VOID_ELEMENTS:
+            # Don't add closing tags for void elements like <br>, <hr>, etc.
             self.opinions_content.append(f'</{tag}>')
 
     def handle_data(self, data):

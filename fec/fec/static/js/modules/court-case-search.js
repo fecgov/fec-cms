@@ -43,7 +43,7 @@ export function initCourtCaseSearch() {
         noResultsDiv.className = 'message message--info';
         noResultsDiv.innerHTML = `
           <h2>No results</h2>
-          <p>We didn't find any pages matching <strong>&ldquo;${query}&rdquo;</strong></p>
+          <p>We didn't find any court cases matching <strong>&ldquo;${query}&rdquo;</strong></p>
           <p class="u-border-top-base u-padding--top">Think this was a mistake?<br>Please let us know.</p>
           <p>
             <a href="mailto:webmanager@fec.gov" class="button--standard">Email our team</a>&nbsp;&nbsp; <a href="https://github.com/fecgov/fec/issues/new" class="button--standard">File an issue</a>
