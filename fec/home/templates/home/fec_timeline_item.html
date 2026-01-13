@@ -1,0 +1,41 @@
+{# The template to preview individual timeline items #}
+{# The model redirects requests to the main timeline any request to view single entries #}
+{% load wagtailcore_tags %}
+{% load filters %}
+<body class="template-fec-historical-timeline-page">
+<main id="main"><article class="main"><div class="container"><div class="main__content">
+  <div id="fec-timeline" class="timeline-container">
+    <ol>
+      <li style="opacity:.5">
+        <time>1975</time>
+        <details>
+          <summary>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet velit ex</summary>
+          <div><p> Aliquam accumsan vel lacus vel rutrum. Quisque interdum mi fermentum quam viverra, sit amet efficitur purus rutrum. Aliquam congue tincidunt metus ut venenatis. Phasellus at pellentesque felis, nec consequat metus. Etiam imperdiet nisi ut est suscipit ornare. Nunc ultricies, tortor quis varius porttitor, massa erat commodo lectus, et lacinia sem nisi id ex. Fusce eu molestie erat. Vivamus ullamcorper mollis massa auctor vulputate. Sed vitae sodales dui. Maecenas tempor ligula arcu, et auctor augue pulvinar sed. Phasellus nec mauris condimentum, venenatis orci quis, gravida leo. Nam lacinia sapien egestas scelerisque luctus. Nam ornare tincidunt sem at gravida. Vivamus placerat, mi nec porta ultricies, tellus velit fringilla nibh, sed accumsan diam arcu sed metus.</p></div>
+        </details>
+      </li>
+      <li>
+        <time>{{ self.year }}</time>
+        <details id=""
+          data-categories="{% for catslist in self.categories %}{% for cat in catslist.value %}
+          {{cat}},{% endfor %}{% endfor %}"{% if self.start_open %} open{% endif %}>
+          <summary>{{ self.summary | richtext }}</summary>
+          <div>{{ self.content | richtext }}</div>
+        </details>
+        <details style="opacity:.5">
+          <summary>Praesent bibendum erat nisl, ultrices luctus sem fringilla non. Lorem ipsum dolor sit amet, consectetur adipiscing elit</summary>
+          <div><p>Donec sollicitudin ullamcorper interdum. Cras sit amet condimentum massa. Mauris elit tortor, vestibulum a ex vel, venenatis finibus eros. Fusce viverra pharetra faucibus. Cras suscipit tellus felis, at convallis augue scelerisque varius. Aenean at dui et metus tincidunt hendrerit. Pellentesque congue leo a eros fringilla, vitae ultricies arcu sagittis. Vestibulum nisi urna, consectetur ac pellentesque non, vestibulum eleifend tortor. Vestibulum vel pharetra odio. In ut molestie nibh, a imperdiet dolor. Pellentesque scelerisque viverra ipsum consectetur scelerisque.</p></div>
+        </details>
+      </li>
+      <li style="opacity:.5">
+        <time>2050</time>
+        <details>
+          <summary>Maecenas non leo pretium, tincidunt lacus sed, accumsan dolor</summary>
+          <div><p>Integer eu tempus mauris, sed mollis urna. Aliquam pellentesque malesuada sapien, sit amet aliquam risus porta vitae. Nam in pharetra ex, vitae porttitor eros. Ut venenatis purus sed imperdiet vestibulum. Mauris nisl turpis, tincidunt vitae fermentum eu, maximus vitae ante. Nulla dapibus consequat consequat. Donec ultricies est in laoreet condimentum. Phasellus non iaculis dui. In hendrerit blandit purus. Morbi et tortor ultricies, faucibus urna in, lobortis nisi.</p></div>
+        </details>
+      </li>
+    </ol>
+  </div>
+</div></div></article></main>
+<link rel="stylesheet" type="text/css" href="{% path_for_css 'base.css' %}">
+<link rel="stylesheet" type="text/css" href="{% path_for_css 'fec-timeline.css' %}">
+</body>
