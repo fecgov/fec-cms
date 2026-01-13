@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+{% load static %}
+{% load filters %}
+
+{% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
+
+{% block content %}
+{% include 'partials/breadcrumbs.html' with page=self links=self.get_ancestors style='' %}
+
+<article class="main">
+  <div class="container">
+    <header class="main">
+      <h1 class="entity__name">{{ self.title }}</h1>
+      <div class="heading--section">
+        <span class="t-data t-bold entity__type">Status: {{ self.status|capfirst }}</span>
+      </div>
+    </header>
+
+
+
+    <div class="row" id="page-sections">
+      {# Left Navigation #}
+      {% include 'partials/section-nav.html' with sections=self.sections citations=self.citations container='page-sections' %}
+
+      {# Main Content #}
+      <div class="main__content main__content--right">
+        {% if self.sections %}
+          {% for section in self.sections %}
+            {% if forloop.first %}
+              <section id="{{ section.value.title | prepend_non_digit | slugify}}" class="option--no-intro">
+                {% if not section.value.hide_title %}<h2>{{ section.value.title }}</h2>{% endif %}
+                {% if section.value.aside %}
+                  <div class="option__content">
+                {% else %}
+                  <div class="row">
+                {% endif %}
+                    {% for content_block in section.value.content %}
+                    <div class="block-{{ content_block.block_type }}">
+                      {% if content_block.block_type == 'text' %}
+                      <div class="rich-text">{% include_block content_block %}</div>
+                      {% else %}
+                      {% include_block content_block %}
+                      {% endif %}
+                    </div>
+                    {% endfor %}
+                  </div>
+                {% if section.value.aside %}
+                    {% include_block section.value.aside %}
+                {% endif %}
+              </section>
+            {% else %}
+              {% include_block section %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        {% if self.citations %}
+        <section id="legal-citations" class="sidebar--primary t-sans">
+          <h4 class="sidebar__title">Legal citations</h4>
+          <div class="sidebar__content">
+            <div class="grid grid--2-wide">
+            {% for citation in self.citations %}
+              {% for block in citation.value %}
+                <div class="grid__item">
+                  <p class="t-bold">{{ block.label }}</p>
+                  <div class="rich-text">{{ block.content }}</div>
+                </div>
+              {% endfor %}
+            {% endfor %}
+            </div>
+          </div>
+        </section>
+        {% endif %}
+      </div>
+
+      {% if self.sidebar_title %}
+      <div class="sidebar-container">
+        <aside class="sidebar sidebar--secondary">
+          <h4 class="sidebar__title">{{ self.sidebar_title }}</h4>
+          <ul class="sidebar__content">
+            {% for related_page in self.related_pages %}
+              {% if related_page.block_type == "related_pages" %}
+                {% for related in related_page.value %}
+                  <li class="u-padding--bottom"><a href="{{ related.url }}">{{ related.title }}</a></li>
+                {% endfor %}
+              {% else %}
+                  <li class="u-padding--bottom">{{ related_page.value }}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+          {% if self.show_search %}
+          <h4 class="sidebar__title">Already registered?</h4>
+          <form class="sidebar__content" action="/data/" method="GET">
+            <label class="label" for="committee-search">Find your committee</label>
+            <div class="combo--search--mini">
+              <input id="committee-search" name="search" class="combo__input" type="text">
+              <input type="hidden" name="search_type" value="committees" placeholder="Search committees">
+              <button class="combo__button button--search button--standard" type="submit"><span class="u-visually-hidden">Search</span></button>
+            </div>
+          </form>
+          {% endif %}
+        </aside>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</article>
+
+{% if self.related_topics or self.show_contact_card %}
+<div class="slab slab--neutral">
+  <div class="container">
+    <h2>Related topics</h2>
+    <div class="grid grid--4-wide">
+      {% if self.show_contact_card %}
+        <div class="grid__item">
+          <a href="/contact/">
+            <aside class="card card--horizontal card--secondary">
+              <div class="card__image__container">
+                  <span class="card__icon i-question-bubble"><span class="u-visually-hidden">Icon representing a question</span></span>
+              </div>
+              <div class="card__content">
+                Get help from the FEC by phone or email
+              </div>
+            </aside>
+          </a>
+        </div>
+      {% endif %}
+      {% for block in self.related_topics %}
+        {% with topics=block.value %}
+          {% for topic in topics %}
+          <div class="grid__item">
+            <a href="{{ topic.url }}">
+              <aside class="card card--horizontal card--primary">
+                <div class="card__content">
+                {{ topic }}
+                </div>
+              </aside>
+            </a>
+          </div>
+          {% endfor %}
+        {% endwith %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% include 'partials/disclaimer.html' %}
+{% endblock %}

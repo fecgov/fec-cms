@@ -1049,6 +1049,226 @@ class LegalResourcesLandingPage(ContentPage, UniqueModel):
         return 'legal'
 
 
+class CourtCaseIndexPage(ContentPage):
+    intro = RichTextField(blank=True)
+    sidebar = stream_factory(null=True, blank=True)
+    record_articles = RichTextField(blank=True)
+    show_contact_link = models.BooleanField(default=False)
+    continue_learning = StreamField([
+        ('thumbnail_list', blocks.ListBlock(ThumbnailBlock()))
+    ], null=True, blank=True)
+    related_topics = StreamField([
+        ('related_topics', blocks.ListBlock(
+            blocks.PageChooserBlock(label='Related topic')
+        ))
+    ], null=True, blank=True)
+    citations = StreamField([
+        ('citations', blocks.ListBlock(CitationsBlock()))
+    ], null=True, blank=True)
+    conditional_js = models.CharField(
+        max_length=255,
+        choices=[
+            ('', 'No conditional JavaScript'),
+            ('glossary', 'Glossary'),
+        ],
+        default='',
+        blank=True
+    )
+
+    subpage_types = ['CourtCasePage']
+
+    content_panels = Page.content_panels + [
+        FieldPanel('intro'),
+        FieldPanel('body'),
+        FieldPanel('sidebar'),
+        FieldPanel('record_articles'),
+        FieldPanel('show_contact_link'),
+        FieldPanel('continue_learning'),
+        FieldPanel('related_topics'),
+        FieldPanel('citations'),
+        FieldPanel('conditional_js'),
+    ]
+
+    def get_sort_key(self, title):
+        """
+        Get the sort key for a title, converting leading numbers to words.
+        Examples:
+            "21st Century Fund" -> "twenty-one st Century Fund"
+            "501(c)(4)" -> "five hundred one"
+            "Adams v. FEC" -> "Adams v. FEC"
+        """
+        import re
+
+        # Number to word mappings for 0-99
+        ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+        teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen',
+                 'sixteen', 'seventeen', 'eighteen', 'nineteen']
+        tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
+
+        def num_to_words(n):
+            """Convert a number 0-999 to words"""
+            if n == 0:
+                return 'zero'
+            elif n < 10:
+                return ones[n]
+            elif n < 20:
+                return teens[n - 10]
+            elif n < 100:
+                return tens[n // 10] + ('' if n % 10 == 0 else '-' + ones[n % 10])
+            else:
+                hundreds = ones[n // 100] + ' hundred'
+                remainder = n % 100
+                if remainder == 0:
+                    return hundreds
+                return hundreds + ' ' + num_to_words(remainder)
+
+        # Check if title starts with digits
+        match = re.match(r'^(\d+)', title)
+        if match:
+            number = int(match.group(1))
+            # Convert number to words
+            number_words = num_to_words(number)
+            # Replace the number with words in the title
+            return re.sub(r'^\d+', number_words, title, count=1)
+
+        return title
+
+    def get_context(self, request):
+        from django.db.models import Case, When, F, CharField
+
+        # Get the default context from the superclass
+        context = super().get_context(request)
+
+        # Get all live, published court cases site-wide
+        # Sort by index_title if present, otherwise by title
+        all_cases = CourtCasePage.objects.live().annotate(
+            sort_title=Case(
+                When(index_title='', then=F('title')),
+                default=F('index_title'),
+                output_field=CharField()
+            )
+        )
+
+        # Convert to list and sort using custom sort key
+        cases_list = list(all_cases)
+        cases_list.sort(key=lambda c: self.get_sort_key(
+            c.index_title if c.index_title else c.title
+        ).lower())
+
+        total_cases_count = len(cases_list)
+
+        # Optional search filter
+        query = request.GET.get('q', '').strip()
+        if query:
+            cases_list = [
+                case for case in cases_list
+                if query.lower() in (case.title.lower()) or
+                query.lower() in (case.index_title.lower() if case.index_title else '')
+            ]
+
+        # Group cases by first letter (use index_title if available, otherwise title)
+        grouped_cases = {}
+        for case in cases_list:
+            display_title = case.index_title if case.index_title else case.title
+            # Get the sort key to determine the letter
+            sort_key = self.get_sort_key(display_title)
+            letter = sort_key[0].upper() if sort_key else 'A'
+            grouped_cases.setdefault(letter, []).append(case)
+
+        cases = cases_list
+
+        # Add variables to the context for the template
+        context['cases'] = cases
+        context['grouped_cases'] = dict(sorted(grouped_cases.items()))
+        context['total_cases_count'] = total_cases_count
+        context['filtered_count'] = len(cases)
+        context['search_query'] = query if query else None
+
+        return context
+
+    def get_conditional_js_display(self):
+        return self.conditional_js if self.conditional_js else ''
+
+    @property
+    def content_section(self):
+        return 'legal'
+
+
+class CourtCasePage(Page):
+    index_title = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text=(
+            'Title format for the alphabetical index page (e.g., "Adams: FEC v."). '
+            'Leave blank to use the regular page title.'
+        )
+    )
+    status = models.CharField(
+        max_length=100,
+        choices=[
+            ('active', 'Active'),
+            ('closed', 'Closed'),
+        ],
+        default='closed'
+    )
+    opinions = RichTextField(blank=True)
+    see_also_cases = StreamField([
+        ('case', blocks.PageChooserBlock(page_type='home.CourtCasePage', label='Related court case'))
+    ], null=True, blank=True, help_text='Link to related court cases that should be referenced on the index page')
+    case_numbers = StreamField([
+        ('case_number', blocks.CharBlock(label='Case number', help_text='e.g., 06-1247'))
+    ], null=True, blank=True, help_text='Add one or more case numbers associated with this court case')
+    sidebar_title = models.CharField(max_length=255, null=True, blank=True)
+    related_pages = StreamField([
+        ('related_pages', blocks.ListBlock(blocks.PageChooserBlock())),
+        ('external_page', blocks.RichTextBlock()),
+    ], null=True, blank=True)
+    sections = StreamField([
+        ('sections', ResourceBlock())
+    ], null=True, blank=True)
+    citations = StreamField([
+        ('citations', blocks.ListBlock(CitationsBlock()))
+    ], null=True, blank=True)
+    related_topics = StreamField([
+        ('related_topics', blocks.ListBlock(
+            blocks.PageChooserBlock(label='Related topic')
+        ))
+    ], null=True, blank=True)
+    show_contact_card = models.BooleanField(
+        default=False,
+        choices=[
+            (True, 'Show contact card'),
+            (False, 'Do not show contact card')
+        ])
+    show_search = models.BooleanField(default=False)
+    selected_court_case = models.BooleanField(
+        default=False,
+        help_text='Check this to include this case in the "Selected Court Cases" list'
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('index_title'),
+        FieldPanel('status'),
+        FieldPanel('opinions'),
+        FieldPanel('see_also_cases'),
+        FieldPanel('case_numbers'),
+        FieldPanel('sidebar_title'),
+        FieldPanel('related_pages'),
+        FieldPanel('sections'),
+        FieldPanel('citations'),
+        FieldPanel('related_topics'),
+        FieldPanel('show_contact_card'),
+        FieldPanel('show_search'),
+        FieldPanel('selected_court_case'),
+    ]
+
+    parent_page_types = ['CourtCaseIndexPage', 'ResourcePage']
+
+    @property
+    def content_section(self):
+        return 'legal'
+
+
 class ServicesLandingPage(ContentPage, UniqueModel):
     page_description = 'Unique landing page - Services / Help for Candidates and Committees main landing pages for \
         Candidates, SSF, Nonconnected and Party sections'
