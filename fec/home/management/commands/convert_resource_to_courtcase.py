@@ -81,8 +81,11 @@ class Command(BaseCommand):
             self.stdout.write(f'\nConverting: {resource_page.title} (ID: {resource_page.id})')
 
             if dry_run:
+                index_title = self._generate_index_title(resource_page.title)
                 self.stdout.write('  - Would convert to CourtCasePage')
                 self.stdout.write(f'  - Parent: {resource_page.get_parent().title}')
+                if index_title:
+                    self.stdout.write(f'  - Would set index_title: "{index_title}"')
                 continue
 
             # Perform the conversion in a transaction
@@ -99,6 +102,19 @@ class Command(BaseCommand):
         else:
             self.stdout.write(self.style.SUCCESS('\n✓ Conversion complete'))
 
+    def _generate_index_title(self, title):
+        """
+        Generate index_title for alphabetical sorting.
+        If title starts with "FEC v. ", reformat as "{Party}: FEC v."
+        Example: "FEC v. Adams" -> "Adams: FEC v."
+        """
+        if title.startswith('FEC v. '):
+            # Extract party name after "FEC v. "
+            party_name = title[7:]  # Skip "FEC v. " prefix
+            if party_name:
+                return f'{party_name}: FEC v.'
+        return ''
+
     def _convert_page(self, resource_page):
         """Convert a ResourcePage to CourtCasePage"""
         from django.contrib.contenttypes.models import ContentType
@@ -106,6 +122,11 @@ class Command(BaseCommand):
 
         # Get the base Page object
         page_id = resource_page.page_ptr_id
+
+        # Generate index_title based on page title
+        index_title = self._generate_index_title(resource_page.title)
+        if index_title:
+            self.stdout.write(f'  ✓ Generated index_title: "{index_title}"')
 
         # Get the raw StreamField JSON data from the database
         # We need to query the database directly to get the JSON string
@@ -192,7 +213,7 @@ class Command(BaseCommand):
                 """,
                 [
                     page_id,
-                    '',  # index_title
+                    index_title,  # index_title (auto-generated from page title)
                     'closed',  # status
                     '',  # opinions
                     '[]',  # see_also_cases (empty StreamField)
