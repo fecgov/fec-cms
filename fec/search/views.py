@@ -18,7 +18,9 @@ def search_candidates(query):
     url = parse.urljoin(settings.FEC_API_URL, path)
 
     try:
-        r = requests.get(url, params={'q': query, 'sort': '-receipts', 'per_page': 3, 'api_key': settings.FEC_API_KEY_PRIVATE})
+        r = requests.get(url, params={
+            'q': query, 'sort': '-receipts', 'per_page': 3, 'api_key': settings.FEC_API_KEY_PRIVATE
+        })
         return r.json()
     except (Exception) as ex:
         logger.error('search_candidates:' + ex.__class__.__name__)
@@ -146,12 +148,12 @@ def search(request):
     results = {}
     results['count'] = 0
 
-
     search_error_message = """
         <h2>Something went wrong</h2>
-        <p class="u-negative--top--margin">This section failed to load. Check FEC.gov status page to check if we are experiencing a temporary outage.
-        If not, please try again and thanks for your patience.</p>
-        <p class="u-border-top-base u-padding--top">Need to contact our team? Use the feedback box at the bottom of any page to report this issue or visit our Contact page to find more ways to reach us.</p>
+        <p class="u-negative--top--margin">This section failed to load. Check FEC.gov status page to check if we are
+        experiencing a temporary outage. If not, please try again and thanks for your patience.</p>
+        <p class="u-border-top-base u-padding--top">Need to contact our team? Use the feedback box at the bottom of any
+        page to report this issue or visit our Contact page to find more ways to reach us.</p>
         <p class="u-padding--bottom">
             <a href="https://www.fec.gov" class="button--standard button--cta">Return home</a>&nbsp;&nbsp;
             <a href="https://fecgov.statuspage.io" class="button--standard">FEC.gov status page</a>&nbsp;&nbsp;
@@ -168,7 +170,7 @@ def search(request):
             results['count'] += len(results['candidates']['results'])
         else:
             cand_search_error = search_error_message
-          
+
     if 'committees' in search_type and search_query:
         results['committees'] = search_committees(search_query)
         if results['committees']:
@@ -237,17 +239,16 @@ def policy_guidance_search(request):
             num_pages = math.ceil(int(results['meta']['count']) / limit)
             total_count = results['meta']['count'] + results['best_bets']['count']
         else:
-            policy_search_error =  """
+            policy_search_error = """
             <h3>Something went wrong</h3>
-            <p>This section failed to load. Check FEC.gov status page to check if we are experiencing a temporary outage.
-            If not, please try again and thanks for your patience.</p>
+            <p>This section failed to load. Check FEC.gov status page to check if we are experiencing a temporary
+            outage. If not, please try again and thanks for your patience.</p>
             <p class="u-padding--bottom">
                 <a href="https://www.fec.gov" class="button--standard button--cta">Return home</a>&nbsp;&nbsp;
                 <a href="https://fecgov.statuspage.io" class="button--standard">FEC.gov status page</a>&nbsp;&nbsp;
                 <a href="https://www.fec.gov/contact" class="button--standard">Contact us</a>
             </p>
             """
-            
 
     resultset = {}
     resultset['search_query'] = search_query
