@@ -257,7 +257,7 @@ def policy_guidance_search(request):
     resultset['offset'] = offset
     resultset['num_pages'] = num_pages
     resultset['current_page'] = current_page
-    resultset['total_count'] = total_count,
+    resultset['total_count'] = total_count
     resultset['policy_search_error'] = policy_search_error
 
     return render(request, 'search/policy_guidance_search_page.html', resultset)
