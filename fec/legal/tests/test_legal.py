@@ -4,6 +4,7 @@ from unittest import mock
 
 from django.test import TestCase, RequestFactory
 from django.http import Http404
+from django.conf import settings
 
 from data import api_caller
 from legal import views
@@ -75,13 +76,11 @@ class TestLegalDocumentRedirect(TestCase):
         self.assertEqual(response.url, 'https://www.fec.gov/files/legal/aos/1997-01/1069112.pdf')
         mock_find_document.assert_called_once_with('1069112')
 
-    @mock.patch('requests.get')
-    def test_legal_document_redirect_with_pdf_extension(self, mock_get):
+    @mock.patch.object(api_caller, '_call_api')
+    def test_legal_document_redirect_with_pdf_extension(self, mock_call_api):
         """Test successful redirect when filename includes .pdf extension"""
         # Mock API response with document found
-        mock_response = mock.Mock()
-        mock_response.ok = True
-        mock_response.json.return_value = {
+        mock_call_api.return_value = {
             'murs': [{
                 'documents': [{
                     'filename': '00000182',
@@ -90,27 +89,24 @@ class TestLegalDocumentRedirect(TestCase):
                 }]
             }]
         }
-        mock_get.return_value = mock_response
 
         request = self.factory.get('/legal/search/documents/?filename=00000182.pdf')
         response = views.legal_document_redirect(request)
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, 'https://www.fec.gov/files/legal/murs/4735/00000182.pdf')
+        expected_url = f"{settings.CANONICAL_BASE}/files/legal/murs/4735/00000182.pdf"
+        self.assertEqual(response.url, expected_url)
 
-    @mock.patch('requests.get')
-    def test_legal_document_redirect_not_found(self, mock_get):
+    @mock.patch.object(api_caller, '_call_api')
+    def test_legal_document_redirect_not_found(self, mock_call_api):
         """Test 404 when document is not found"""
         # Mock API response with no documents found
-        mock_response = mock.Mock()
-        mock_response.ok = True
-        mock_response.json.return_value = {
+        mock_call_api.return_value = {
             'advisory_opinions': [],
             'murs': [],
             'adrs': [],
             'admin_fines': []
         }
-        mock_get.return_value = mock_response
 
         request = self.factory.get('/legal/search/documents/?filename=nonexistent')
 
