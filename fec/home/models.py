@@ -42,6 +42,100 @@ from home.blocks import (
 
 logger = logging.getLogger(__name__)
 
+
+def extract_case_numbers(title):
+    """
+    Extract case numbers from a court case title for sorting.
+    Case numbers appear in formats like (19-1021), (20-0588 / 21-5081), etc.
+    Returns a list of (year, number) tuples, sorted descending by year then number.
+    """
+    import re
+    pattern = r'(\d{2})-(\d+)'
+    matches = re.findall(pattern, title)
+    if not matches:
+        return []
+    numbers = [(int(year), int(num)) for year, num in matches]
+    numbers.sort(reverse=True)
+    return numbers
+
+
+def get_sort_key_for_title(title):
+    """
+    Get the sort key for a title, converting leading numbers to words.
+    This ensures proper alphabetical sorting where "21st Century" sorts under "T" not "2".
+
+    Examples:
+        "21st Century Fund" -> "twenty-one st Century Fund"
+        "501(c)(4)" -> "five hundred one(c)(4)"
+        "Adams v. FEC" -> "Adams v. FEC"
+    """
+    import re
+
+    # Number to word mappings for 0-99
+    ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+    teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen',
+             'sixteen', 'seventeen', 'eighteen', 'nineteen']
+    tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
+
+    def num_to_words(n):
+        """Convert a number 0-999 to words"""
+        if n == 0:
+            return 'zero'
+        elif n < 10:
+            return ones[n]
+        elif n < 20:
+            return teens[n - 10]
+        elif n < 100:
+            return tens[n // 10] + ('' if n % 10 == 0 else '-' + ones[n % 10])
+        else:
+            hundreds = ones[n // 100] + ' hundred'
+            remainder = n % 100
+            if remainder == 0:
+                return hundreds
+            return hundreds + ' ' + num_to_words(remainder)
+
+    # Check if title starts with digits
+    match = re.match(r'^(\d+)', title)
+    if match:
+        number = int(match.group(1))
+        # Convert number to words
+        number_words = num_to_words(number)
+        # Replace the number with words in the title
+        return re.sub(r'^\d+', number_words, title, count=1)
+
+    return title
+
+
+def court_case_sort_key(case, get_sort_key_func=None):
+    """
+    Generate a sort key for a court case.
+    Sorts alphabetically by index_title (or title if no index_title),
+    then by case numbers (higher first) for same titles.
+
+    Args:
+        case: A CourtCasePage instance
+        get_sort_key_func: Optional function to transform title for alphabetical sorting.
+                          Defaults to get_sort_key_for_title which converts leading numbers to words.
+    """
+    import re
+    title = case.index_title if case.index_title else case.title
+
+    # Use provided function or default to get_sort_key_for_title
+    sort_key_func = get_sort_key_func or get_sort_key_for_title
+
+    # Strip case numbers from title for alphabetical comparison
+    # This ensures "Case v. FEC (25-4559)" and "Case v. FEC (25-4072)" compare as equal alphabetically
+    alpha_title = re.sub(r'\s*\([^)]*\)\s*$', '', title).strip()
+    alpha_key = sort_key_func(alpha_title).lower()
+
+    # Get case numbers, negated for descending sort
+    case_nums = extract_case_numbers(title)
+    # Negate so higher numbers sort first; use (0, 0) if no case numbers
+    negated = tuple((-year, -num) for year, num in case_nums) if case_nums else ((0, 0),)
+
+    return (alpha_key, negated)
+
+
 """options for wagtail default table_block """
 core_table_options = {
     'renderer': 'html',
@@ -1092,46 +1186,9 @@ class CourtCaseIndexPage(ContentPage):
     def get_sort_key(self, title):
         """
         Get the sort key for a title, converting leading numbers to words.
-        Examples:
-            "21st Century Fund" -> "twenty-one st Century Fund"
-            "501(c)(4)" -> "five hundred one"
-            "Adams v. FEC" -> "Adams v. FEC"
+        Delegates to the module-level get_sort_key_for_title function.
         """
-        import re
-
-        # Number to word mappings for 0-99
-        ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
-        teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen',
-                 'sixteen', 'seventeen', 'eighteen', 'nineteen']
-        tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
-
-        def num_to_words(n):
-            """Convert a number 0-999 to words"""
-            if n == 0:
-                return 'zero'
-            elif n < 10:
-                return ones[n]
-            elif n < 20:
-                return teens[n - 10]
-            elif n < 100:
-                return tens[n // 10] + ('' if n % 10 == 0 else '-' + ones[n % 10])
-            else:
-                hundreds = ones[n // 100] + ' hundred'
-                remainder = n % 100
-                if remainder == 0:
-                    return hundreds
-                return hundreds + ' ' + num_to_words(remainder)
-
-        # Check if title starts with digits
-        match = re.match(r'^(\d+)', title)
-        if match:
-            number = int(match.group(1))
-            # Convert number to words
-            number_words = num_to_words(number)
-            # Replace the number with words in the title
-            return re.sub(r'^\d+', number_words, title, count=1)
-
-        return title
+        return get_sort_key_for_title(title)
 
     def get_context(self, request):
         from django.db.models import Case, When, F, CharField
@@ -1150,10 +1207,9 @@ class CourtCaseIndexPage(ContentPage):
         )
 
         # Convert to list and sort using custom sort key
+        # Sorts alphabetically (by index_title or title), then by case numbers (higher first) for same titles
         cases_list = list(all_cases)
-        cases_list.sort(key=lambda c: self.get_sort_key(
-            c.index_title if c.index_title else c.title
-        ).lower())
+        cases_list.sort(key=lambda c: court_case_sort_key(c))
 
         total_cases_count = len(cases_list)
 
