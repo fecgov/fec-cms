@@ -7,6 +7,9 @@ from django.core.exceptions import ValidationError
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete
 from django.contrib.auth.models import User
+from django.shortcuts import redirect
+from django.utils.text import slugify
+from itertools import groupby
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
@@ -18,13 +21,15 @@ from wagtail.admin.panels import (
     InlinePanel,
     MultiFieldPanel,
     PageChooserPanel,
-    FieldPanel)
+    FieldPanel,
+    FieldRowPanel)
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
 from django.db.models.signals import m2m_changed
 from wagtail.contrib.table_block.blocks import TableBlock
+
 from fec import constants
 
 from home.blocks import (
@@ -1044,6 +1049,226 @@ class LegalResourcesLandingPage(ContentPage, UniqueModel):
         return 'legal'
 
 
+class CourtCaseIndexPage(ContentPage):
+    intro = RichTextField(blank=True)
+    sidebar = stream_factory(null=True, blank=True)
+    record_articles = RichTextField(blank=True)
+    show_contact_link = models.BooleanField(default=False)
+    continue_learning = StreamField([
+        ('thumbnail_list', blocks.ListBlock(ThumbnailBlock()))
+    ], null=True, blank=True)
+    related_topics = StreamField([
+        ('related_topics', blocks.ListBlock(
+            blocks.PageChooserBlock(label='Related topic')
+        ))
+    ], null=True, blank=True)
+    citations = StreamField([
+        ('citations', blocks.ListBlock(CitationsBlock()))
+    ], null=True, blank=True)
+    conditional_js = models.CharField(
+        max_length=255,
+        choices=[
+            ('', 'No conditional JavaScript'),
+            ('glossary', 'Glossary'),
+        ],
+        default='',
+        blank=True
+    )
+
+    subpage_types = ['CourtCasePage']
+
+    content_panels = Page.content_panels + [
+        FieldPanel('intro'),
+        FieldPanel('body'),
+        FieldPanel('sidebar'),
+        FieldPanel('record_articles'),
+        FieldPanel('show_contact_link'),
+        FieldPanel('continue_learning'),
+        FieldPanel('related_topics'),
+        FieldPanel('citations'),
+        FieldPanel('conditional_js'),
+    ]
+
+    def get_sort_key(self, title):
+        """
+        Get the sort key for a title, converting leading numbers to words.
+        Examples:
+            "21st Century Fund" -> "twenty-one st Century Fund"
+            "501(c)(4)" -> "five hundred one"
+            "Adams v. FEC" -> "Adams v. FEC"
+        """
+        import re
+
+        # Number to word mappings for 0-99
+        ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+        teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen',
+                 'sixteen', 'seventeen', 'eighteen', 'nineteen']
+        tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
+
+        def num_to_words(n):
+            """Convert a number 0-999 to words"""
+            if n == 0:
+                return 'zero'
+            elif n < 10:
+                return ones[n]
+            elif n < 20:
+                return teens[n - 10]
+            elif n < 100:
+                return tens[n // 10] + ('' if n % 10 == 0 else '-' + ones[n % 10])
+            else:
+                hundreds = ones[n // 100] + ' hundred'
+                remainder = n % 100
+                if remainder == 0:
+                    return hundreds
+                return hundreds + ' ' + num_to_words(remainder)
+
+        # Check if title starts with digits
+        match = re.match(r'^(\d+)', title)
+        if match:
+            number = int(match.group(1))
+            # Convert number to words
+            number_words = num_to_words(number)
+            # Replace the number with words in the title
+            return re.sub(r'^\d+', number_words, title, count=1)
+
+        return title
+
+    def get_context(self, request):
+        from django.db.models import Case, When, F, CharField
+
+        # Get the default context from the superclass
+        context = super().get_context(request)
+
+        # Get all live, published court cases site-wide
+        # Sort by index_title if present, otherwise by title
+        all_cases = CourtCasePage.objects.live().annotate(
+            sort_title=Case(
+                When(index_title='', then=F('title')),
+                default=F('index_title'),
+                output_field=CharField()
+            )
+        )
+
+        # Convert to list and sort using custom sort key
+        cases_list = list(all_cases)
+        cases_list.sort(key=lambda c: self.get_sort_key(
+            c.index_title if c.index_title else c.title
+        ).lower())
+
+        total_cases_count = len(cases_list)
+
+        # Optional search filter
+        query = request.GET.get('q', '').strip()
+        if query:
+            cases_list = [
+                case for case in cases_list
+                if query.lower() in (case.title.lower()) or
+                query.lower() in (case.index_title.lower() if case.index_title else '')
+            ]
+
+        # Group cases by first letter (use index_title if available, otherwise title)
+        grouped_cases = {}
+        for case in cases_list:
+            display_title = case.index_title if case.index_title else case.title
+            # Get the sort key to determine the letter
+            sort_key = self.get_sort_key(display_title)
+            letter = sort_key[0].upper() if sort_key else 'A'
+            grouped_cases.setdefault(letter, []).append(case)
+
+        cases = cases_list
+
+        # Add variables to the context for the template
+        context['cases'] = cases
+        context['grouped_cases'] = dict(sorted(grouped_cases.items()))
+        context['total_cases_count'] = total_cases_count
+        context['filtered_count'] = len(cases)
+        context['search_query'] = query if query else None
+
+        return context
+
+    def get_conditional_js_display(self):
+        return self.conditional_js if self.conditional_js else ''
+
+    @property
+    def content_section(self):
+        return 'legal'
+
+
+class CourtCasePage(Page):
+    index_title = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text=(
+            'Title format for the alphabetical index page (e.g., "Adams: FEC v."). '
+            'Leave blank to use the regular page title.'
+        )
+    )
+    status = models.CharField(
+        max_length=100,
+        choices=[
+            ('active', 'Active'),
+            ('closed', 'Closed'),
+        ],
+        default='closed'
+    )
+    opinions = RichTextField(blank=True)
+    see_also_cases = StreamField([
+        ('case', blocks.PageChooserBlock(page_type='home.CourtCasePage', label='Related court case'))
+    ], null=True, blank=True, help_text='Link to related court cases that should be referenced on the index page')
+    case_numbers = StreamField([
+        ('case_number', blocks.CharBlock(label='Case number', help_text='e.g., 06-1247'))
+    ], null=True, blank=True, help_text='Add one or more case numbers associated with this court case')
+    sidebar_title = models.CharField(max_length=255, null=True, blank=True)
+    related_pages = StreamField([
+        ('related_pages', blocks.ListBlock(blocks.PageChooserBlock())),
+        ('external_page', blocks.RichTextBlock()),
+    ], null=True, blank=True)
+    sections = StreamField([
+        ('sections', ResourceBlock())
+    ], null=True, blank=True)
+    citations = StreamField([
+        ('citations', blocks.ListBlock(CitationsBlock()))
+    ], null=True, blank=True)
+    related_topics = StreamField([
+        ('related_topics', blocks.ListBlock(
+            blocks.PageChooserBlock(label='Related topic')
+        ))
+    ], null=True, blank=True)
+    show_contact_card = models.BooleanField(
+        default=False,
+        choices=[
+            (True, 'Show contact card'),
+            (False, 'Do not show contact card')
+        ])
+    show_search = models.BooleanField(default=False)
+    selected_court_case = models.BooleanField(
+        default=False,
+        help_text='Check this to include this case in the "Selected Court Cases" list'
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('index_title'),
+        FieldPanel('status'),
+        FieldPanel('opinions'),
+        FieldPanel('see_also_cases'),
+        FieldPanel('case_numbers'),
+        FieldPanel('sidebar_title'),
+        FieldPanel('related_pages'),
+        FieldPanel('sections'),
+        FieldPanel('citations'),
+        FieldPanel('related_topics'),
+        FieldPanel('show_contact_card'),
+        FieldPanel('show_search'),
+        FieldPanel('selected_court_case'),
+    ]
+
+    parent_page_types = ['CourtCaseIndexPage', 'ResourcePage']
+
+    @property
+    def content_section(self):
+        return 'legal'
+
+
 class ServicesLandingPage(ContentPage, UniqueModel):
     page_description = 'Unique landing page - Services / Help for Candidates and Committees main landing pages for \
         Candidates, SSF, Nonconnected and Party sections'
@@ -1479,11 +1704,9 @@ class ReportingDatesTable(Page):
     ]
 
 
-class FecTimelinePage(Page):
-    page_description = 'Unique page - Timeline of FECʼs History'
-    parent_page_types = ['AboutLandingPage']
-    body = stream_factory(null=True, blank=True)
-    category_options = [
+# The list of categories, builds the list of filtering options for the timeline page and timeline entries/items
+def fec_timeline_categories():
+    return [
         ('commission', 'Commission'),
         ('disclosure', 'Disclosure'),
         ('enforcement', 'Enforcement'),
@@ -1493,57 +1716,142 @@ class FecTimelinePage(Page):
         ('public_funding', 'Public funding'),
         ('regulations', 'Regulations'),
     ]
-    timeline_entries = StreamField(
-        [('year', blocks.StructBlock([
-            ('year_number', blocks.IntegerBlock(min_value=1960, max_value=2050, disable_comments=True)),
-            ('entries', blocks.StreamBlock([
-                ('entry', blocks.StructBlock([
-                    ('entry_date', blocks.DateBlock(format='%Y-%m-%d', disable_comments=True)),
-                    ('summary', blocks.RawHTMLBlock(label='Summary', form_classname='timeline-summary')),
-                    ('content', blocks.RawHTMLBlock(label='Content')),
-                    ('categories', blocks.MultipleChoiceBlock(
-                        required=False,
-                        choices=category_options
-                    )),
-                    ('start_open', blocks.BooleanBlock(
-                        required=False, disable_comments=True, form_classname="single-line-checkbox"
-                    )),
-                ]))
-            ],
-                collapsed=True)
-            )
-        ]))],
-        collapsed=True,
-        null=True, blank=True
+
+
+class FecTimelineItem(Page):
+    page_description = 'Entries for the FECʼs historical timeline'
+    parent_page_types = ['FecTimelinePage']
+    subpage_types = []  # Don't allow child pages
+    entry_date = models.DateField()
+    summary = models.TextField()
+    content = models.TextField()
+    order_tiebreaker = models.IntegerField(default=0, null=True, blank=True)
+    start_open = models.BooleanField(default=False)
+    categories = StreamField(
+        [('category_selections', blocks.MultipleChoiceBlock(
+            required=False,
+            choices=fec_timeline_categories(),
+            search_index=False,
+        ))],
+        block_counts={
+            'category_selections': {'max_num': 1},
+        },
+        null=True, blank=True,
     )
 
-    content_panels = Page.content_panels + [
-        FieldPanel('body'),
-        FieldPanel('timeline_entries', disable_comments=True, help_text='Scroll to the bottom for special notes'),
-        HelpPanel('<strong>Special notes for this page</strong>:\
-            <ul class="timeline-help"> \
-                <li><em>Year number</em>: the blue year tags</li>\
-                    <em>Summary</em>: the part of each entry thatʼs always visible;<br>\
-                    <em>Content</em>: the toggled content.</li>\
-                <li><em>Summary</em> and <em>Content</em> are html fields.</li>\
+    content_panels = [
+        FieldPanel('title', help_text='Strictly for Wagtail organization, never shown to site visitors'),
+        FieldPanel('summary', icon='code', help_text='The (html) content thatʼs always visible',
+                   heading='Entry title/summary', classname='timeline-summary', disable_comments=True),
+        FieldRowPanel([
+            FieldPanel('entry_date', help_text='Used while sorting', disable_comments=True),
+            FieldPanel('order_tiebreaker', help_text='If there are date duplicates', classname='timeline-tie-breaker',
+                       disable_comments=True),
+            FieldPanel('start_open', help_text='Start in an open state?', classname='timeline-start-open',
+                       disable_comments=True),
+        ]),
+        FieldPanel('content', icon='code', classname='timeline-content', disable_comments=True,
+                   help_text='The (html) part that collapses. Will be wrapped inside a <div></div>'),
+        FieldPanel('categories', help_text='Used for filtering (optional)', disable_comments=True),
+        HelpPanel('<h2>Special notes for timeline entries</h2>\
+            <h3>Wagtail</h3>\
+            <ul>\
+                <li><em>Summary</em> and <em>Content</em> are html fields</li>\
+                <li>If <em>Start open</em> is checked, this entry will be open on page load</li>\
+                <li><em>Order tiebreaker</em> comes into play when entries have the same entry date</li>\
+                <li>FEC historical timeline entries will be included on the FEC Historical Timeline page only when\
+                    published.</li>\
+                <li>Timeline entries canʼt be viewed individually, but the preview panel is interactive with some\
+                    visual context included.</li>\
+            </ul>\
+            <h3>HTML / formatting</h3>\
+            <ul>\
                 <li>Wrap dates in a <pre>&lt;time datetime="2025-12-31"&gt;&lt;/time&gt;</pre> where \
                     <pre>datetime</pre> is an ISO-8601 date. i.e. <pre>yyyy</pre> or <pre>yyyy-mm-dd</pre></li>\
                 <li>To prevent the linebreak before the first <pre>&lt;time&gt;</pre> in a summary,<br>\
                     add <pre> class="inline"</pre> to the first <pre>&lt;time&gt;</pre></li>\
                 <li>Photos inside the Content should be structured like<br>\
                     <pre>&lt;figure&gt;</pre><br>\
-                    <pre>&nbsp;&nbsp;&lt;img src="url" alt=""&gt;</pre><br>\
+                    <pre>&nbsp;&nbsp;&lt;img src="" alt=""&gt;</pre><br>\
                     <pre>&nbsp;&nbsp;&lt;figcaption&gt;Caption content&lt;/figcaption&gt;</pre><br>\
                     <pre>&lt;/figure&gt;</pre></li>\
                 <li>The default layout for content is for images to float to the right and text to flow around them \
                     on the left. To change that, add <pre> class="float-left"</pre> to the <pre>&lt;figure&gt;</pre>.\
                     (<pre>float-right</pre> is defined, too, but itʼs the default)</li>\
-                <li>If <em>Start open</em> is checked, this entry will be open on page load</li>\
-                <li>If launch YouTube links in the modal on this page, add <pre> data-media="url"</pre> to a link or \
-                    other element. The url should be in a format like <pre>youtube.com/embed/[videoid]</pre>,\
-                    <pre>youtu.be/[videoid]</pre>, or <pre>v=[videoid]</pre>.</li>\
-            </ul>'),
+                <li>To launch YouTube links in the modal on this page, add <pre> data-media="url"</pre> to a link or \
+                    other element. The <pre>href</pre> should be in a format like \
+                  <pre>youtube.com/embed/[videoid]</pre> or <pre>youtu.be/[videoid]</pre>, \
+                  or have <pre>v=[videoid]</pre></li>\
+            </ul>', attrs={'data-timeline-help': True}),
     ]
+
+    # No promote panels
+    promote_panels = []
+
+    @property
+    def year(self):
+        return self.entry_date.year
+
+    @property
+    def selected_cats_list(self):
+        to_return = []
+        for selected_cats in self.categories:
+            for cat in selected_cats.value:
+                to_return.append(cat)
+        return ', '.join(to_return)
+
+    # When saving, set the slug to `timeline-entry-` plus the title
+    def save(self, *args, **kwargs):
+        self.slug = slugify(f'timeline-entry-{self.year}-{self.title}')
+        super().save(*args, **kwargs)
+
+    # These should all redirect to their parent, the main timeline page
+    def serve(self, request, *args, **kwargs):
+        parent_page = self.get_parent()
+        return redirect(parent_page.url, permanent=True)
+
+    # Don't let these show up in sitemaps
+    def get_sitemap_urls(self, request=None):
+        return []
+
+    class Meta:
+        verbose_name = 'FEC historical timeline entry'
+        verbose_name_plural = 'FEC historical timeline entries'
+
+
+class FecTimelinePage(Page):
+    page_description = 'Unique page - Timeline of FECʼs History'
+    parent_page_types = ['AboutLandingPage']
+    subpage_types = ['FecTimelineItem']
+    body = stream_factory(null=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('body'),
+        HelpPanel('<h2>Special notes for this timeline page and its\
+            entries</h2>\
+        <p>Entries must be published/live to be included in this list. (Drafts wonʼt be shown.)</p>\
+        <p>To add a new entry, either create a child page here or</p>\
+        <ol>\
+            <li>go to “News and Updates” in the side panel</li>\
+            <li>choose “FEC Timeline Items”</li>\
+            <li>click “Add FEC historical timeline entry” at the top of the page</li>\
+        </ol>', attrs={'data-timeline-help': True}),
+    ]
+
+    def get_timeline_categories(self):
+        return fec_timeline_categories()
+
+    # Group the (live) child pages by year
+    # returns {
+    #     1974: [FecTimelineItem],
+    #     1975: [FecTimelineItem, FecTimelineItem],
+    #  }
+    def timeline_entries_by_year(self):
+        entries = FecTimelineItem.objects.child_of(self).live().order_by('entry_date', 'order_tiebreaker')
+        year_groups = {}
+        for k, g in groupby(entries, key=lambda x: x.year):
+            year_groups[k] = list(g)
+        return year_groups
 
     class Meta:
         verbose_name = 'FEC historical timeline page'

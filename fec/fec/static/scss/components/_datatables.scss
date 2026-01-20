@@ -344,6 +344,7 @@
 }
 
 .is-active-status,
+.is-active-status-litigation,
 .is-terminated-status {
   margin-left: u(1.5rem);
   position: relative;
@@ -361,8 +362,15 @@
   }
 }
 
+.is-active-status-litigation {
+  margin-left: 0;
+}
+
 .is-active-status::before {
   background-color: $green-light;
+}
+.is-active-status-litigation::before {
+  background-color: none;
 }
 .is-terminated-status::before {
   background-color: $gray;

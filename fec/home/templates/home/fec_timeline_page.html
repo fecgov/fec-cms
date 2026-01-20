@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load wagtailcore_tags %}
 {% load filters %}
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
@@ -26,14 +26,14 @@
         {% endif %}
       </div>
     {% endfor %}
-      <div class="">
+      <div>
         <div class="filter-controls">
           <div class="filter_year">
             <label for="year" class="label">Event type</label>
             <select id="timeline-category" name="timeline-category">
               <option value="" selected>Show all</option>
-              {% for option in self.category_options %}
-              <option value="{{ option.0 }}">{{ option.1 }}</option>
+              {% for val, label in self.get_timeline_categories %}
+              <option value="{{ val }}">{{ label }}</option>
               {% endfor %}
             </select>
           </div>
@@ -41,18 +41,19 @@
       </div>
       <div id="fec-timeline" class="timeline-container">
         <ol>
-          {% for year in self.timeline_entries %}
+          {% for year, entries in self.timeline_entries_by_year.items %}
           <li>
-            <time datetime="{{ year.value.year_number }}">{{ year.value.year_number }}</time>
-            {% for entry in year.value.entries %}
-            <details id="a{{ year.value.year_number }}-{{ forloop.counter }}"
-              data-categories="{% for cat in entry.value.categories %}{{cat}},{% endfor %}"
-              {% if entry.value.start_open %} open{% endif %}>
-              <summary>{{ entry.value.summary }}</summary>
-              <div>
-                {{ entry.value.content }}
-              </div>
+            <time datetime="{{ entry.entry_date|date:'Ymd' }}">{{ year }}</time>
+            {% for entry in entries %}
+            {% spaceless %}
+            <details id="a{{ entry.entry_date|date:'Ymd' }}-{{ forloop.counter }}"
+              data-categories="{{entry.selected_cats_list}}"
+              {% if entry.start_open %} open{% endif %}
+            >
+              <summary>{{ entry.summary|richtext }}</summary>
+              <div>{{ entry.content|richtext }}</div>
             </details>
+            {% endspaceless %}
             {% endfor %}
           </li>
           {% endfor %}

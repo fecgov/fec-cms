@@ -1,0 +1,45 @@
+// Alphabet Navigation
+//
+// Used on court case alphabetical index page
+// Displays A-Z navigation in a responsive grid layout with hover state indication
+//
+
+.alphabet-nav {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); // Tablet/mobile: 7 columns
+  gap: 0.5rem;
+  max-width: 100%;
+  padding-right: 1rem;
+
+  @include media($lg) {
+    grid-template-columns: repeat(13, 1fr); // Desktop: 13 columns
+  }
+}
+
+.alphabet-nav__link {
+  padding: 0.5rem 0.25rem;
+  padding-bottom: 4px;
+  text-decoration: none !important;
+  border-bottom: 4px solid transparent;
+  transition: border-color 0.2s;
+  text-align: center;
+  display: block;
+  min-height: 2.5rem; // Minimum touch target size
+
+  @include media($med) {
+    padding: 0.25rem;
+    min-height: auto;
+  }
+
+  &:hover:not(.alphabet-nav__link--inactive) {
+    border-bottom-color: #164F85;
+    text-decoration: none !important;
+  }
+
+  &--inactive {
+    color: #999;
+    cursor: default;
+    border-bottom: none !important;
+    text-decoration: none !important;
+  }
+}
