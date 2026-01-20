@@ -107,8 +107,8 @@
 
 .contact-item--map-pin {
   &.contact-item::before {
-    background-position: 50%;
-    background-size: 60%;
+    background-position: center;
+    background-size: 80% !important;
     @include u-icon-circle($map-pin, $primary, $inverse, 3.4rem);
   }
 }

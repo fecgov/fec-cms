@@ -82,34 +82,34 @@ class TestCycles(unittest.TestCase):
         # Mock out the current_cycle so it doesn't change in the future
         current_cycle.return_value = 2016
         # Check that it returns the correct default when no arg supplied
-        assert utils.get_cycles() == range(2016, 1979, -2)
+        assert utils.get_cycles() == range(2016, 1977, -2)
         # Check that it returns the correct range when an arg is supplied
-        assert utils.get_cycles(2020) == range(2020, 1979, -2)
+        assert utils.get_cycles(2020) == range(2020, 1977, -2)
 
     def test_get_senate_cycles(self):
         current_cycle = 2018
         assert utils.get_senate_cycles('1', current_cycle) == range(
-            2018, 1979, -6)
+            2018, 1977, -6)
         assert utils.get_senate_cycles('2', current_cycle) == range(
-            2020, 1979, -6)
+            2020, 1977, -6)
         assert utils.get_senate_cycles('3', current_cycle) == range(
-            2022, 1979, -6)
+            2022, 1977, -6)
 
         current_cycle = 2020
         assert utils.get_senate_cycles('1', current_cycle) == range(
-            2024, 1979, -6)
+            2024, 1977, -6)
         assert utils.get_senate_cycles('2', current_cycle) == range(
-            2020, 1979, -6)
+            2020, 1977, -6)
         assert utils.get_senate_cycles('3', current_cycle) == range(
-            2022, 1979, -6)
+            2022, 1977, -6)
 
         current_cycle = 2022
         assert utils.get_senate_cycles('1', current_cycle) == range(
-            2024, 1979, -6)
+            2024, 1977, -6)
         assert utils.get_senate_cycles('2', current_cycle) == range(
-            2026, 1979, -6)
+            2026, 1977, -6)
         assert utils.get_senate_cycles('3', current_cycle) == range(
-            2022, 1979, -6)
+            2022, 1977, -6)
 
     def test_state_senate_cycles(self):
 

@@ -69,7 +69,7 @@
             aria-controls="panel1"
             href="#section-1"
             aria-selected="true">Financial Summary</a>
-            {% if committee_type != 'I' %}
+            {% if committee_type != 'I' and not is_inaugural -%}
             <ul>
               {% if FEATURES.pac_snapshot %}<li><a href="#committee-snapshot">Committee snapshot</a></li>{% endif %}
               <li><a href="#total-raised">Total raised</a></li>
@@ -119,8 +119,11 @@
               href="#section-3">Raising</a>
               {% if committee_type not in ['C', 'E', 'I'] %}
               <ul>
+                {% if is_inaugural %}
+                <li><a href="#total-receipts">Total donations</a></li>
+                <li><a href="#donations">Donations</a></li>
+                {% else %}
                 <li><a href="#total-receipts">Total receipts</a></li>
-                {% if not is_inaugural %}
                 <li><a href="#individual-contribution-transactions">Individual contribution transactions</a></li>
                 {% endif %}
                 {% if FEATURES.nat_party_acct_rec_single and totals_national_party %}

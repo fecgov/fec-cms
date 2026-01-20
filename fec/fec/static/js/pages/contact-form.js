@@ -43,8 +43,8 @@ ContactForm.prototype.initTypeahead = function() {
     //focus away to prompt removal of error state, if present. Could only focus into...
     //...another field, Attempts to focusout, or focus onto body, did not work.
     $('#id_u_contact_title')
-      .focus() // TODO: jQuery deprecation
-      .blur(); // TODO: jQuery deprecation
+      .trigger('focus')
+      .trigger('blur');
   });
 };
 
@@ -136,7 +136,7 @@ AnalystLookup.prototype.fetchAnalyst = function(e, opts) {
 };
 
 /**
- * @param {JQueryCallback} response
+ * @param {jQuery.Callbacks} response
  */
 AnalystLookup.prototype.showAnalyst = function(response) {
   const hasResults = response.results.length > 0;

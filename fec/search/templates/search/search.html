@@ -58,7 +58,7 @@
               {% endif %}
             </ul>
           </nav>
-          <aside class="sidebar sidebar--primary">
+          <aside class="sidebar sidebar--primary sidebar--left side-nav">
             <h4 class="sidebar__title">Other search tools</h4>
               <div class="sidebar__content">
                 <ul class="sidebar__related-links">
@@ -170,9 +170,9 @@
                 {% endfor %}
               </ul>
               <div class="results-info">
-                <span class="t-sans">{{ results.site.meta.count }} results</span>
+                <span class="t-sans">Showing {{results.site.meta.results_range}} of {{ results.site.meta.count }} results</span>
                 <div class="u-float-right">
-                  {% if results.site.meta.prev_offset %}
+                  {% if results.site.meta.current_offset > 0 %}
                     <a class="button button--standard button--previous" href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;offset={{ results.site.meta.prev_offset }}"><span class="u-visually-hidden">Previous</span></a>
                   {% endif %}
                   {% if results.site.meta.next_offset %}
@@ -182,17 +182,70 @@
               </div>
             </section>
           {% endif %}
-        {% else %}
+          {% if cand_search_error %}
+            <h2 class="u-border-top-base u-padding--top">Candidates</h2>
+            <div class="message  message--alert">
+              <p>{{ cand_search_error | safe }} </p>
+            </div>
+          {% endif %}
+          {% if comm_search_error %}
+            <h2 class="u-border-top-base u-padding--top">Committees</h2>
+            <div class="message message--alert">
+             <p>{{ comm_search_error | safe }} </p>
+            </div>
+          {% endif %}
+          {% if site_search_error %}
+          <h2 class="u-border-top-base u-padding--top">Other pages</h2>
+            <div class="message message--alert">
+              {{ site_search_error | safe }}
+            </div>
+          {% endif %}
+        {% elif results.count == 0 %}
           <div class="message message--info">
             <h2>No results</h2>
-            <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong>.</p>
-            <div class="message--alert__bottom">
-              <p>Think this was a mistake?<br>Try one of the other search tools or submit feedback.</p>
-              <p>
-                <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}" class="button--standard">Email our team</a>&nbsp;&nbsp; <a href="https://github.com/fecgov/fec/issues/new" class="button--standard">File an issue</a></p>
-              </p>
-            </div>
+            <p>We didn’t find any pages matching <strong>&ldquo;{{search_query}}&rdquo;</strong>
+              {% if site_search_error or cand_search_error or comm_search_error %}
+                for
+                {% if 'candidates' in type and not cand_search_error %}
+                  Candidates
+                {% endif %}
+                {% if 'committees' in type and not comm_search_error %}
+                  {% if not cand_search_error %}
+                    or
+                  {% endif %}
+                  Committees
+                {% endif %}
+                {% if 'site' in type and not site_search_error %}
+                  {% if not comm_search_error or not cand_search_error  %}
+                    or
+                  {% endif %}
+                  Other pages
+                {% endif %}
+              {% endif %}
+            </p>
+            <p class="u-border-top-base u-padding--top">Think this was a mistake?<br>Please let us know.</p>
+            <p>
+              <a href="mailto:{{ settings.WEBMANAGER_EMAIL }}" class="button--standard">Email our team</a>&nbsp;&nbsp; <a href="https://github.com/fecgov/fec/issues/new" class="button--standard">File an issue</a></p>
+            </p>
           </div>
+          {% if cand_search_error %}
+            <h2 class="u-border-top-base u-padding--top">Candidates</h2>
+              <div class="message message--alert">
+                {{ cand_search_error | safe }}
+              </div>
+            {% endif %}
+            {% if comm_search_error %}
+            <h2 class="u-border-top-base u-padding--top">Committees</h2>
+              <div class="message  message--alert">
+                {{ comm_search_error | safe }}
+              </div>
+            {% endif %}
+            {% if site_search_error %}
+            <h2 class="u-border-top-base u-padding--top">Other pages</h2>
+            <div class="message  message--alert">
+              {{ site_search_error | safe }}
+            </div>
+          {% endif %}
         {% endif %}
       </div>
     </div>

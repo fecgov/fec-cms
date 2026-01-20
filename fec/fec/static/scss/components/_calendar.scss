@@ -468,9 +468,11 @@
 }
 
 .cal-list__time {
-  margin-right: 0 !important; // overriding omega()
   @include span-columns(4 of 8);
   @include omega;
+  & {
+    margin-right: 0; // overriding omega()
+  }
 }
 
 .cal-list__info {

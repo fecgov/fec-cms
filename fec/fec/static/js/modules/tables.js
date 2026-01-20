@@ -143,17 +143,24 @@ export function mapSort(order, column) {
   });
 }
 
+let pagination_legal;
+
 /**
  * Returns the number of results if <= 500K, otherwise rounds to the nearest 1K
  * @param {*} response
  * @returns {number} Number of real or estimated results
  */
-function getCount(response) {
+export function getCount(response) {
   let pagination_count = response.pagination.count; // eslint-disable-line camelcase
-
-  if (response.pagination.count > 500000) {
-    pagination_count = Math.round(response.pagination.count / 1000) * 1000; // eslint-disable-line camelcase
+  if (!response.pagination) {
+     pagination_legal = true;
+     const legal_type = Object.keys(response)[0];
+     const legal_type_count = `total_${legal_type}`;
+     pagination_count = response[legal_type_count];
   }
+
+  if (pagination_count > 500000)
+    pagination_count = Math.round(response.pagination.count / 1000) * 1000; // eslint-disable-line camelcase
 
   return pagination_count; // eslint-disable-line camelcase
 }
@@ -169,7 +176,7 @@ export function mapResponse(response) {
   return {
     recordsTotal: pagination_count, // eslint-disable-line camelcase
     recordsFiltered: pagination_count, // eslint-disable-line camelcase
-    data: response.results
+    data: response.results || response[legal_type]
   };
 }
 
@@ -454,10 +461,17 @@ export function OffsetPaginator() {/* */}
  * @returns Object with number values for `per_page` and `page`
  */
 OffsetPaginator.prototype.mapQuery = function(data) {
-  return {
-    per_page: data.length, // eslint-disable-line camelcase
-    page: Math.floor(data.start / data.length) + 1
-  };
+  if (pagination_legal) {
+    return {
+      hits_returned: data.length, // eslint-disable-line camelcase
+      from_hit: Math.floor(data.start)
+    };
+  } else {
+    return {
+      per_page: data.length, // eslint-disable-line camelcase
+      page: Math.floor(data.start / data.length) + 1
+    };
+  }
 };
 
 OffsetPaginator.prototype.handleResponse = function() {}; //eslint-disable-line no-empty-function
@@ -494,8 +508,14 @@ SeekPaginator.prototype.mapQuery = function(data, query) {
     this.clearIndexes();
   }
   const indexes = this.getIndexes(data.length, data.start);
+  let len;
+  if (pagination_legal) {
+    len = { hits_returned: data.length };
+  } else {
+    len = { per_page: data.length };
+  }
   return _extend(
-    { per_page: data.length }, // eslint-disable-line camelcase
+    len,
     _chain(Object.keys(indexes))
       .filter(function(key) {
         return indexes[key];
@@ -602,6 +622,9 @@ DataTable_FEC.prototype.getVars = function() {
 DataTable_FEC.prototype.parseParams = function(querystring){
     // Parse query string
     const params = new URLSearchParams(querystring);
+    // Remove text/boolean search filters whose boolean operator syntax would conflict as the 'i' in [value="${i}"] in 'querybox' constant below
+    params.delete('q');
+    params.delete('search');
     const obj = {};
     // Iterate over all keys
     for (const key of params.keys()) {
@@ -651,7 +674,7 @@ DataTable_FEC.prototype.checkFromQuery = function() {
       // …if they are not already checked
       for (let box of queryBoxes) {
         if (!($(box).is(':checked'))) {
-          $(box).prop('checked', true).change(); // TODO: jQuery deprecation
+          $(box).prop('checked', true).trigger('change');
         }
        }
       $('button.is-loading, label.is-loading').removeClass('is-loading');
@@ -660,11 +683,11 @@ DataTable_FEC.prototype.checkFromQuery = function() {
     // No Set-timeout needed on datatables without two filter panels…
     // …Also it causes a noticeable intermittent time-lag while populating table on these pages
     } else {
-    // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()...
-    // ...if they are not already checked
+    // Iterate the array of matching checkboxes(queryBoxes), check them and fire change()…
+    // …if they are not already checked
     for (let box of queryBoxes) {
       if (!($(box).is(':checked'))) {
-        $(box).prop('checked', true).change(); // TODO: jQuery deprecation
+        $(box).prop('checked', true).trigger('change');
       }
     }
   }
@@ -738,8 +761,8 @@ DataTable_FEC.prototype.ensureWidgets = function() {
   this.$processing = $('<div class="overlay is-loading"></div>').hide();
   this.$body.before(this.$processing);
 
-  if (this.opts.useExport) {
-    this.$exportWidget = $(exportWidgetTemplate({ title: this.opts.title }));
+  if (this.opts.title || this.opts.useExport ) {
+    this.$exportWidget = $(exportWidgetTemplate({ title: this.opts.title, export: this.opts.useExport }));
     this.$widgets.prepend(this.$exportWidget);
     this.$exportButton = $('.js-export');
     this.$exportMessage = $('.js-export-message');
@@ -952,23 +975,37 @@ DataTable_FEC.prototype.isPending = function() {
   return isPending(url);
 };
 
+/**
+ * @param {*} data
+ * @param {boolean} paginate
+ * @param {boolean} download
+ * @returns {string}
+ */
 DataTable_FEC.prototype.buildUrl = function(data, paginate, download) {
-  let query = _extend(
+  let query;
+  if (pagination_legal){
+    query = _extend(
+    { from_hit: `${data.start}`, hits_returned: `${data.length}` }, // eslint-disable-line camelcase
+    this.filters || {}
+  );
+  } else{
+  query = _extend(
     { sort_hide_null: false, sort_nulls_last: true }, // eslint-disable-line camelcase
     this.filters || {}
   );
+ }
+
   paginate = typeof paginate === 'undefined' ? true : paginate;
   query.sort = mapSort(data.order, this.opts.columns);
 
   if (paginate) {
-    query = _extend(query, this.paginator.mapQuery(data, query));
+  query = _extend(query, this.paginator.mapQuery(data, query));
   }
   if (download) {
     query = _extend(query, {
       api_key: window.DOWNLOAD_API_KEY
     });
   }
-
   return buildUrl(
     this.opts.path,
     _extend({}, query, this.opts.query || {})
@@ -1082,6 +1119,10 @@ DataTable_FEC.prototype.hideEmpty = function(response) {
 
 DataTable_FEC.registry = {};
 
+/**
+ * @param {JQuery} $table
+ * @param {Object} opts
+ */
 DataTable_FEC.defer = function($table, opts) {
   tabsOnShow($table, function() {
     new DataTable_FEC($table, opts);

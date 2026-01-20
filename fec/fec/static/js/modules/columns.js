@@ -1037,7 +1037,7 @@ export const nationalPartyDisbursements = [
   },
   {
     data: 'recipient_name',
-    className: 'all',
+    className: 'all align-top',
     orderable: false,
     render: function(data, type, row) {
       // We want to link the recipient name column to the committee if it is a committee
@@ -1075,3 +1075,149 @@ export const nationalPartyDisbursements = [
   }),
   modalTriggerColumn
 ];
+
+export const rulemakings = [
+  {
+    data: 'rm_no',
+    className: 'all align-top t-bold',
+    orderable: true,
+    render: function(data, type, row) {
+      return buildEntityLink(
+          row.rm_number,
+          `/legal/rulemakings/${row.rm_no}/`,
+        row.rm_number
+      );
+    }
+  },
+  {
+    data: null,
+    className: 'all column--rulemaking-docs align-top',
+    orderable: false,
+    render: function (data, type, row) {
+      let html = `<p><b>${row.rm_name}</b>`;
+
+      if (row.key_documents && row.key_documents.length ) {
+        html += `<br><span class="icon icon--inline--left i-document"></span>`;
+        html +=
+          buildEntityLink(
+            row.key_documents[0].doc_type_label, row.key_documents[0].url, row.key_documents[0].doc_type_label);
+            if (row.key_documents[0].doc_date !== null) {
+                const doc_date = moment(row.key_documents[0].doc_date).format('MM/DD/YYYY');
+                html += ` | ${doc_date}`;
+            }
+      }
+        html += `</p>`;
+        html += `<ul>`;
+      if (row.documents && row.documents.length && get_doc_ids().length ) {
+        for (let id of get_doc_ids()) {
+          for (let doc of row.documents) {
+            if (doc.doc_category_id == id) {
+
+                html += `<li class="document-container">
+                          <div class="document-details">`;
+
+                html += `<div class="post--icon">
+                        <span class="icon icon--inline--left i-document"></span>`;
+                html +=
+                buildEntityLink(
+                    doc.doc_type_label, doc.url, doc.doc_type_label);
+                    html += `</div>`;
+                    let parsed;
+                    parsed = moment(doc.doc_date, 'YYYY-MM-DD');
+                    const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
+                    html += `<div class="tag tag--primary">${doc.doc_category_label}</div>
+                            </div>
+                            <div class="document-date">
+                            ${doc_date}
+                            </div>
+                            </li>`;
+            }
+
+            if (doc.level_2_labels && doc.level_2_labels.length) {
+
+              for (let label of doc.level_2_labels) {
+
+                for (let i of label.level_2_docs) {
+
+                  if (i.doc_category_id == id) {
+
+                    html += `<li class="document-container">
+                            <div class="document-details">`;
+
+                    html += `<div class="post--icon">
+                            <span class="icon icon--inline--left i-document"></span>`;
+                    html +=
+                    buildEntityLink(
+                        i.doc_type_label, i.url, i.doc_type_label);
+                        html += `</div>`;
+                        let parsed;
+                        parsed = moment(i.doc_date, 'YYYY-MM-DD');
+                        const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
+                        html += `<div class="tag tag--primary">${i.doc_category_label}</div>
+                                </div>
+                                <div class="document-date">
+                                ${doc_date}
+                                </div>
+                                </li>`;
+
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      // TODO: Ask to check with OGC if no_tier documents should be included in doc type filter results
+      if (row.no_tier_documents && row.no_tier_documents.length) {
+        for (let id of get_doc_ids()) {
+          for (let doc of row.no_tier_documents ) {
+            if (doc.doc_category_id == id) {
+
+                html += `<li class="document-container">
+                          <div class="document-details">`;
+
+                html += `<div class="post--icon">
+                        <span class="icon icon--inline--left i-document"></span>`;
+                html +=
+                buildEntityLink(
+                    doc.doc_type_label, doc.url, doc.doc_type_label);
+                    html += `</div>`;
+                    let parsed;
+                    parsed = moment(doc.doc_date, 'YYYY-MM-DD');
+                    const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
+                    html += `<div class="tag tag--primary">${doc.doc_category_label}</div>
+                            </div>
+                            <div class="document-date">
+                            ${doc_date}
+                            </div>
+                           </li>`;
+            }
+          }
+        }
+      }
+      // /END TODO re... no_tier docs
+      html += `</ul>`;
+      return html;
+    }
+  },
+  {
+    data: 'is_open_for_comment',
+    className: 'all align-top',
+    orderable: true,
+    render: function (data, type, row) {
+      if (row.is_open_for_comment == false) {
+      return 'Not currently open for comment';
+      }
+      else {
+        const comment_deadline = moment(row.comment_close_date).format('MMMM D YYYY');
+        return `<p><b>${row.description}</b><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="/legal/rulemakings/${row.rm_no}/add-comments/">Submit a comment</a></p>`;
+      }
+    }
+  }
+];
+
+const get_doc_ids = function() {
+  const params = new URLSearchParams(window.location.search);
+  let docs = params.getAll('doc_category_id') || [];
+  return docs;
+};

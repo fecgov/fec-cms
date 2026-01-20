@@ -24,7 +24,8 @@
           <h3 class="heading__left">Total refunds</h3>
           {% endif %}
           <a class="heading__right button--alt button--browse"
-              href="/data/disbursements/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}">Filter all disbursements
+              href="/data/disbursements/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}"
+              >Filter all {% if is_inaugural %}refunds{% else %}disbursements{% endif %}
           </a>
         </div>
         <div class="content__section--narrow">

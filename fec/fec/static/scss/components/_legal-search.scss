@@ -127,3 +127,201 @@
   margin: u(2rem 0 0 0);
   padding: u(1rem);
 }
+
+.embedded-pdf {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+  /* class name borrowed from datatables pages structure */
+  .data-container__widgets {
+    width: 100%;
+
+    .data-container__head {
+      border-bottom: none;
+    }
+
+    .data-container__title {
+      display: block;
+      max-width: u(80rem);
+    }
+
+    .entity__type {
+      display: block;
+    }
+  }
+
+  .embedded-pdf-panel {
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+    position: sticky;
+    top: 0;
+
+    @include media($med) {
+      width: 60%;
+    }
+    @include media($lg) {
+      width: 66.6%;
+    }
+
+    .embedded-pdf-url {
+      // align-items: center;
+      display: flex;
+      flex-direction: row;
+      font-family: $sans-serif;
+      line-height: 1.25em;
+      padding: 2rem;
+
+      span:first-child {
+        flex-shrink: 0;
+        font-weight: bold;
+      }
+    }
+    .embedded-pdf-viewer {
+      background-color: lightgrey;
+      flex-grow: 2;
+
+      .empty {
+        align-items: center;
+        display: flex;
+        font-family: Karla, sans-serif;
+        justify-content: center;
+        padding: 1rem;
+        text-align: center;
+      }
+    }
+  }
+  .embedded-pdf-list {
+    padding: u(2rem);
+    
+    // @include media($med) {
+    //   width: 40%;
+    // }
+    @include media($lg) {
+      border-right: 1px solid $primary;
+      width: 33.3%;
+    }
+    
+    h2 {
+      font-family: $serif;
+      font-size: 2.4rem;
+      font-weight: bold;
+      margin-bottom: 0;
+      padding-bottom: 1rem;
+      text-align: left;
+    }
+
+    table {
+      border-bottom: 2px solid $primary;
+      border-top: 2px solid $primary;
+      margin-bottom: 3rem;
+      width: 100%;
+
+      th {
+        /* TODO: the .sort* rules are copied from _datatables.scss; would like to… @extend? @use? */
+        &.sorting, &.sorting_asc, &.sorting_desc {
+          background-position: calc(100% - 1rem) 50%;
+          background-repeat: no-repeat;
+          cursor: pointer;
+          padding-right: u(3rem);
+        }
+        &.sorting {
+          background-size: u(1rem);
+          @include u-icon-bg($dash, $gray);
+        }
+        &.sorting_asc {
+          background-size: u(1rem);
+          background-color: $gray-lightest;
+          @include u-icon-bg($arrow-up-border, $primary);
+        }
+        &.sorting_desc {
+          background-size: u(1rem);
+          background-color: $gray-lightest;
+          @include u-icon-bg($arrow-down-border, $primary);
+        }
+      }
+      th, td {
+        line-height: 1.2em;
+        padding: .75rem 1rem;
+        width: auto;
+
+        &:first-child {
+          border-right: solid thin lightgrey
+        }
+      }
+
+      &:has(.row-active) {
+        /* The .row-active border is pushing in the visual left edge of the table.
+           These two lines pull it back out, pushing that left border into the left padding */
+        margin-left: -0.5rem;
+        width: calc(100% + 0.5rem);
+        /* */
+
+        tr {
+          border-left: .5rem solid transparent;
+          transition: border-color .5s;
+        }
+      }
+
+      tr {
+        &.even {
+          background-color: $gray-lightest;
+        }
+        &.row-active {
+          border-color: $federal-blue;
+          transition: border-color .25s;
+        }
+
+        &.level-1 > :first-child {
+          padding-left: 1rem;
+        }
+        &.level-2 > :first-child {
+          padding-left: 2.25rem;
+        }
+        &.level-3 > :first-child {
+          padding-left: 3.5rem;
+        }
+        .level-1 + .level-2,
+        .level-3 + .level-2,
+        .level-3 + .level-1 {
+          border-top: solid thin $gray;
+        }
+      }
+
+      td {
+        vertical-align: top;
+      }
+
+      .date {
+        width: 10rem;
+      }
+    }
+    ul {
+      li {
+        &.indent {
+          padding-left: 1rem;
+        }
+        &:not(:only-child) {
+          /* A little more space when it's a list of more than one */
+          margin-bottom: .5rem;
+        }
+      }
+    }
+
+    .submit-comments {
+      display: block;
+      margin-bottom: 3rem;
+
+      .label {
+        line-height: 1em;
+        margin: 0 0 1rem;
+      }
+      .sublabel {
+        font-size: u(1.6rem);
+        font-weight: normal;
+        text-transform: none;
+      }
+    }
+  }
+}

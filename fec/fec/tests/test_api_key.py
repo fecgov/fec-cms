@@ -13,6 +13,7 @@ class TestApiKeyFunction(unittest.TestCase):
     def test_default_public_key(self, mock_settings):
         # Set up mock settings
         mock_settings.FEC_API_KEY_PUBLIC = 'default_public_key'
+        mock_settings.FEC_API_KEY_PUBLIC_SCHEDULE_A = 'schedule_a_key'
 
         # Call the function with an empty request
         result = fec.context.api_key(self.request)
@@ -27,6 +28,7 @@ class TestApiKeyFunction(unittest.TestCase):
         mock_settings.FEC_API_KEY_PUBLIC = 'default_public_key'
         mock_settings.FEC_INTERNAL_API_KEY_PUBLIC = 'internal_ip_key'
         mock_settings.FEC_INTERNAL_IP = 'internal_ip'
+        mock_settings.FEC_API_KEY_PUBLIC_SCHEDULE_A = 'schedule_a_key'
 
         # Set up X-Forwarded-For header with internal IP
         self.request.META['HTTP_X_FORWARDED_FOR'] = 'internal_ip'
@@ -44,6 +46,7 @@ class TestApiKeyFunction(unittest.TestCase):
         mock_settings.FEC_API_KEY_PUBLIC = 'default_public_key'
         mock_settings.FEC_INTERNAL_API_KEY_PUBLIC = 'internal_ip_key'
         mock_settings.FEC_INTERNAL_IP = 'internal_ip'
+        mock_settings.FEC_API_KEY_PUBLIC_SCHEDULE_A = 'schedule_a_key'
 
         # Set up X-Forwarded-For header with external IP
         self.request.META['HTTP_X_FORWARDED_FOR'] = 'external_ip'

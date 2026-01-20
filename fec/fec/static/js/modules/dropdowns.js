@@ -85,7 +85,7 @@ Dropdown.prototype.toggle = function(e) {
 Dropdown.prototype.show = function() {
   restoreTabindex(this.$panel);
   this.$panel.attr('aria-hidden', 'false');
-  this.$panel.find('input[type="checkbox"]:first').focus(); // TODO: jQuery deprecation (:first and .focus)
+  this.$panel.find('input[type="checkbox"]').first().trigger('focus');
   this.$button.addClass('is-active');
   this.isOpen = true;
 };
@@ -120,7 +120,7 @@ Dropdown.prototype.handleKeyup = function(e) {
   if (e.keyCode === KEYCODE_ESC) {
     if (this.isOpen) {
       this.hide();
-      this.$button.focus(); // TODO: jQuery deprecation
+      this.$button.trigger('focus');
     }
   }
 };
@@ -129,7 +129,7 @@ Dropdown.prototype.handleCheckKeyup = function(e) {
   if (e.keyCode === KEYCODE_ENTER) {
     $(e.target)
       .prop('checked', true)
-      .change(); // TODO: jQuery deprecation
+      .trigger('change');
   }
 };
 
@@ -145,7 +145,7 @@ Dropdown.prototype.handleDropdownItemClick = function(e) {
   const $input = this.$selected.find('#' + $button.data('label'));
 
   if (!$button.hasClass('is-checked')) {
-    $input.click(); // TODO: jQuery deprecation
+    $input.trigger('click');
   }
 };
 
@@ -202,7 +202,7 @@ Dropdown.prototype.selectItem = function($input) {
 
   $item.after(
     '<li class="dropdown__item">' +
-      '<button class="dropdown__item--selected is-checked"' +
+      '<button class="dropdown__item--selected is-checked" type="button"' +
       ' data-label="' +
       $label.attr('for') +
       '" >' +
@@ -221,14 +221,14 @@ Dropdown.prototype.selectItem = function($input) {
     if (next.length) {
       $(next[0])
         .find('input[type="checkbox"]')
-        .focus(); // TODO: jQuery deprecation
+        .trigger('focus');
     } else if (prev.length) {
       $(prev[0])
         .find('input[type="checkbox"]')
-        .focus(); // TODO: jQuery deprecation
+        .trigger('focus');
     }
   } else {
-    this.$selected.find('input[type="checkbox"]').focus(); // TODO: jQuery deprecation
+    this.$selected.find('input[type="checkbox"]').trigger('focus');
   }
 };
 

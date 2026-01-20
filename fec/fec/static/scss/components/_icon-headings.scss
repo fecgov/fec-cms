@@ -127,7 +127,7 @@
   &::before {
     $size: u(4rem);
 
-    background-size: 70%;
+    background-size: 90% !important;
     content: '';
     float: left;
     margin-right: u(1.5rem);
@@ -139,7 +139,7 @@
   &::before {
     $size: u(4rem);
 
-    background-size: 70%;
+    background-size: 90% !important;
     content: '';
     float: left;
     margin-right: u(1.5rem);

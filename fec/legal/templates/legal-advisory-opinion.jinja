@@ -111,7 +111,7 @@
                     {% if advisory_opinion.regulatory_citations %}
                     {% for citation in advisory_opinion.regulatory_citations %}
                     <div>
-                      <a href="{{ '/regulations/{0}-{1}/CURRENT#{0}-{1}'.format(citation.part, citation.section) }}">{{ citation.title }} CFR &sect;{{ citation.part }}.{{ citation.section }}</a>
+                      <a href="{{ 'https://www.ecfr.gov/current/title-{0}/section-{1}.{2}'.format(citation.title, citation.part, citation.section) }}">{{ citation.title }} CFR &sect;{{ citation.part }}.{{ citation.section }}</a>
                     </div><br>
                     {% endfor %}
                     {% else %}

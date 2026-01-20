@@ -80,3 +80,51 @@ li.sequence-member .sequence-member-inner .sequence-type-list .sequence-containe
 .richtext ol ol ol li {
   list-style-type: lower-roman;
 }
+
+/*
+ * Specials for editing the FEC timeline items
+ */
+.timeline-start-open .w-field--checkbox_input {
+  .w-field__input {
+    order: 0;
+  }
+  .w-field__help {
+    margin-top: calc(.625rem*var(--w-density-factor));
+    order: 1;
+  }
+}
+[data-timeline-help] {
+  
+  h2 {
+    font-weight: bold;
+  }
+  ol {
+    padding-left: 1rem;
+
+    li {
+      list-style-type: auto;
+    }
+  }
+  ul {
+    margin-left: 1rem;
+
+    li {
+      list-style-type: initial;
+    }
+    pre {
+      display: inline-block;
+      font-size: 90%;
+      margin: 0;
+      opacity: .66;
+    }
+  }
+  p:has(+ ol) {
+    margin-bottom: 0;
+  }
+  p + ol {
+    margin-top: 0;
+  }
+}
+/*
+ * End of specials for editing the FEC timeline items
+ */

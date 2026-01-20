@@ -15,6 +15,12 @@
     padding: 0;
   }
 }
+// Keep content off the side of the browser in these in-between widths as soon as we get into $lg
+@media screen and (min-width: 860px) and (max-width: 990px) {
+  .container {
+    max-width: calc(100vw - 4rem); // 2rem on each side
+  }
+}
 
 // clearfixes a group of divs / wraps grid columns
 .row {
@@ -164,6 +170,10 @@
   padding-right: u(2rem);
 }
 
+.u-padding--right--small {
+  padding-right: u(1rem);
+}
+
 .u-small-icon-padding--left {
   padding-left: u(2.5rem);
 }
@@ -195,6 +205,14 @@
 
 .u-negative--bottom--margin {
   margin-bottom: u(-1rem) !important;
+}
+
+.u-negative--left--margin {
+  margin-left: u(-1rem) !important;
+}
+
+.u-negative--right--margin {
+  margin-right: u(-1rem) !important;
 }
 
 // horizontal rule

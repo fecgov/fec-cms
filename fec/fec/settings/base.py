@@ -25,11 +25,18 @@ FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
 FEC_INTERNAL_API_KEY_PUBLIC = env.get_credential('FEC_INTERNAL_API_KEY_PUBLIC', '')
 FEC_INTERNAL_IP = env.get_credential('FEC_INTERNAL_IP', '')
 FEC_API_KEY_PUBLIC_CALENDAR = env.get_credential('FEC_WEB_API_KEY_PUBLIC_CALENDAR', FEC_API_KEY_PUBLIC)
+FEC_API_KEY_PUBLIC_SCHEDULE_A = env.get_credential('FEC_WEB_API_KEY_PUBLIC_SCHEDULE_A', FEC_API_KEY_PUBLIC)
 FEC_CAL_DOWNLOAD_API_KEY = env.get_credential('FEC_CAL_DOWNLOAD_API_KEY')
 FEC_DOWNLOAD_API_KEY = env.get_credential('FEC_DOWNLOAD_API_KEY', '')
 
 FEC_RECAPTCHA_SECRET_KEY = env.get_credential('FEC_RECAPTCHA_SECRET_KEY')
 FEC_GITHUB_TOKEN = env.get_credential('FEC_GITHUB_TOKEN')
+
+# Rulemaking commenting
+FEC_RULEMAKING_S3_ACCESS_KEY_ID = env.get_credential('FEC_RULEMAKING_S3_ACCESS_KEY_ID')
+FEC_RULEMAKING_S3_SECRET_ACCESS_KEY = env.get_credential('FEC_RULEMAKING_S3_SECRET_ACCESS_KEY')
+FEC_RULEMAKING_S3_REGION_NAME = env.get_credential('FEC_RULEMAKING_S3_REGION_NAME')
+FEC_RULEMAKING_BUCKET_NAME = env.get_credential('FEC_RULEMAKING_BUCKET_NAME')
 
 # Config for the ServiceNow API for contacting RAD
 FEC_SERVICE_NOW_API = env.get_credential('FEC_SERVICE_NOW_API')
@@ -71,6 +78,7 @@ FEATURES = {
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
     'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),
+    'hide_election_search_map': bool(env.get_credential('FEC_HIDE_ELECTION_SEARCH_MAP', '')),
     'h4_allocated_disbursements': bool(env.get_credential('FEC_FEATURE_H4_ALLOCATED_DISBURSEMENTS', True)),
     'house_senate_overview': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW', '')),
     'house_senate_overview_methodology': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_METHODOLOGY', '')),
@@ -84,6 +92,9 @@ FEATURES = {
     'pac_party': bool(env.get_credential('FEC_FEATURE_PAC_PARTY', '')),
     'pac_snapshot': bool(env.get_credential('FEC_FEATURE_PAC_SNAPSHOT', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
+    'rulemakings': bool(env.get_credential('FEC_FEATURE_RULEMAKINGS', '')),
+    'rulemakings_single': bool(env.get_credential('FEC_FEATURE_RULEMAKINGS_SINGLE', '')),
+    'rulemakings_commenting': bool(env.get_credential('FEC_FEATURE_RULEMAKINGS_COMMENTING', '')),
 }
 
 # Set feature flags to True for Feature
@@ -114,6 +125,9 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['nat_party_acct_disbursements'] = True
     FEATURES['nat_party_acct_rec_single'] = True
     FEATURES['nat_party_acct_dis_single'] = True
+    FEATURES['rulemakings'] = True
+    FEATURES['rulemakings_single'] = True
+    FEATURES['rulemakings_commenting'] = True
 
 # Application definition
 INSTALLED_APPS = (
@@ -160,6 +174,7 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     # custom response headers
     'fec.middleware.AddSecureHeaders',
+    'fec.middleware.PoolTimeouts',
     'uaa_client.middleware.UaaRefreshMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -227,14 +242,18 @@ WSGI_APPLICATION = 'fec.wsgi.application'
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_string(50))
 
 
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
 DATABASES = {
-    # Be sure to set the DATABASE_URL environment variable on your local
-    # development machine so that the local database can be connected to.
     'default': dj_database_url.config()
 }
+
+# Add or update OPTIONS after the config() call
+DATABASES['default'].setdefault('OPTIONS', {})
+DATABASES['default']['OPTIONS'].update({
+    'pool': {
+        'max_size': 50,  # total possible db conn = Workers x Instances x max_size (600, probably too high)
+        'max_idle': 400,  # default is 600 sec
+    }
+})
 
 
 # Internationalization
@@ -246,7 +265,6 @@ LANGUAGES = (
 )
 TIME_ZONE = 'America/New_York'
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 

@@ -1,0 +1,148 @@
+{% extends "layouts/legal-main.jinja" %}
+{% import 'macros/breadcrumbs.jinja' as breadcrumb %}
+{% import 'macros/legal.jinja' as legal %}
+ {% set breadcrumb_links=[('/legal-resources/', 'Legal resources'), ('/legal/search/rulemakings/', 'Rulemakings')] %}
+ {% block title %}Rulemaking #{{ rm_no }}{% endblock %}
+ {% block css %}
+<link rel="stylesheet" type="text/css" href="{{ path_for_css('legal-common.css') }}" />
+{% endblock %}
+{% block body %}
+<header class="page-header slab slab--primary">
+  {{ breadcrumb.breadcrumbs(rm_number, breadcrumb_links) }}
+</header>
+<div class="main__content--full embedded-pdf">
+  <div class="data-container__widgets">
+    <div class="data-container__wrapper">
+    <header class="data-container__head">
+      <h1 class="data-container__title">{{ rm_name }}</h1>
+      <span class="entity__type t-bold">{{ rm_number }}</span>
+    </header>
+    </div>
+  </div>
+  <div class="embedded-pdf-list">
+    {% if FEATURES.rulemakings_commenting %}{# feature flag to hide the commenting block -#}
+    <div class="submit-comments">
+    {% if not is_open_for_comment -%}
+      <div class="label">Not open for comment</div>
+    {% else -%}
+      <div class="label">Open for comment: Notice of Availability</div>
+      <div class="label sublabel t-sans">Comment deadline: {{ comment_close_date|date_full(time_tag=True) }}</div>
+      <a class="button--cta" href="/legal/rulemakings/{{ rm_no }}/add-comments/">Submit a comment</a>
+    {% endif -%}
+    </div>
+    {% endif -%}{# end feature flag to hide commenting block -#}
+    {% if key_documents %}{# Include the Key Documents bits only if there are docs to include #}
+    <h2>Key documents</h2>
+    <table class="simple-table simple-table--display">
+      <thead>
+        <tr class="simple-table__header">
+          <th class="">Name</th>
+          <th class="date">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for doc in key_documents %}
+        <tr>
+          <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a></td>
+          <td class="date">{{ doc.doc_date|date }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+
+    <h2>All documents</h2>
+    <table class="simple-table simple-table--display">
+      <thead>
+        <tr class="simple-table__header">
+          <th class="">Document</th>
+          <th class="date">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+{% for docL1 in documents %}
+  {% set rowshading = loop.cycle('odd', 'even') %}
+  <tr class="level-1 {{ rowshading }}">
+    <td>
+      <ul>
+        <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ docL1.url }}" data-doc_id="{{ docL1.doc_id }}" target="_blank">{{ docL1.label }}</a></li>
+          {%- if docL1.doc_entities -%}
+              
+                {%- for entity in docL1.doc_entities -%}
+                  <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </td>
+    <td>{{ docL1.doc_date|date }}</td>
+  </tr>
+  {# If there's no level 2 list, let's include the description #}
+  {# {% if not docL1.secondary_docs %}
+    <tr class="level-2 {{ rowshading }}"><td>{{ docL1.label }}</td><td></td></tr>
+  {% endif %} #}
+
+  {% for subcat in docL1.secondary_docs %}
+    <tr class="level-2 {{ rowshading }}"><td>{{ subcat.label }}</td><td></td></tr>
+    {% for doc in subcat.documents %}
+      <tr class="level-3 {{ rowshading }}">
+        <td>
+          <ul>
+            {% if doc.label == 'Comments' %}
+              {% for entity in doc.doc_entities %}
+                {% if doc.doc_entities|length == 1 %}
+                  <li>
+                  <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ entity.name }} | {{ entity.role }}</a>
+                  </li>
+                {% else %}
+                  {% if loop.first %}
+                    <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">Joint comment</a></li>
+                  {% endif %}
+                  <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a>
+            {% endif %}
+          </ul>
+        </td>
+        <td class="date">{{ doc.doc_date|date }}</td>
+      </tr>
+    {% endfor %}
+  {% endfor %}
+{% endfor %}
+      </tbody>
+    </table>
+
+    <h2>Entities</h2>
+    <table class="simple-table simple-table--display">
+      <thead>
+        <tr class="simple-table__header">
+          <th class="sorting sorting_asc">Name</th>
+          <th class="sorting">Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entity in rm_entities %}
+        <tr class="{{ loop.cycle('odd', 'even') }}" data-sort="{{ loop.index0 }}">
+          <td>{{ entity.name }}</td>
+          <td>{{ entity.role }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="embedded-pdf-panel">
+    <div class="embedded-pdf-url"><span>Document URL:&nbsp; </span><span></span></div>
+    <div class="embedded-pdf-viewer js-embed-pdf-content-holder">
+      <object class="embed-viewer empty" data="" type="application/pdf" width="100%" height="100%">
+        <span>This file can be accessed at the URL above.<br>Your browser does not support embedded PDFs.</span>
+      </object>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{#- legal-init and global chunks are loaded by legal-main.jinja -#}
+{{ tags_for_js_chunks('rulemaking-single.js', '')|safe }}
+{% endblock %}

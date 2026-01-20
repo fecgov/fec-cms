@@ -99,6 +99,51 @@ def load_legal_search_results(query, query_exclude="", query_type="all", offset=
     return results
 
 
+def find_legal_document_by_filename(filename):
+    """
+    Find a legal document by its filename and return the document URL.
+
+    Args:
+        filename (str): The document filename
+
+    Returns:
+        str: The full URL to the document, or None if not found
+
+    Raises:
+        Exception: If there's an API error
+    """
+    # Remove .pdf extension if provided
+    if filename.endswith('.pdf'):
+        filename = filename[:-4]
+
+    # Search for the document using the legal search API
+    results = _call_api("legal", "search", filename=filename)
+
+    if not results:
+        return None
+
+    # Search through all document types for a matching filename
+    document_types = ['advisory_opinions', 'murs', 'adrs', 'admin_fines']
+
+    for doc_type in document_types:
+        if doc_type in results and results[doc_type]:
+            for item in results[doc_type]:
+                if 'documents' in item:
+                    for doc in item['documents']:
+                        doc_filename = doc.get('filename', '')
+                        if doc_filename == filename or doc_filename == f"{filename}.pdf":
+                            document_url = doc.get('url')
+                            if document_url:
+                                if document_url.startswith('/'):
+                                    # Convert relative URL to absolute URL using CANONICAL_BASE
+                                    canonical_base = getattr(settings, 'CANONICAL_BASE', 'https://www.fec.gov')
+                                    return f"{canonical_base}{document_url}"
+                                else:
+                                    return document_url
+
+    return None
+
+
 def load_legal_advisory_opinion(ao_no):
     url = "/legal/docs/advisory_opinions/"
     results = _call_api(url, parse.quote(ao_no))
@@ -240,6 +285,12 @@ def load_legal_admin_fines(admin_fine_no):
     admin_fine["disposition_items"] = disposition_items
 
     return admin_fine
+
+
+def load_legal_rulemaking(rm_no):
+    url = "/rulemaking/search/"
+    response = _call_api(url, rm_no=rm_no)
+    return response["rulemakings"][0] if response["rulemakings"] else []
 
 
 def collate_dispositions(dispositions):
@@ -389,12 +440,12 @@ def _get_sorted_documents(ao):
     )
     sorted_documents = sorted(sorted_documents, key=itemgetter("date"), reverse=True)
 
-    # # Sort by document date unless it's a final opinion. Final opinion uses issue date.
-    # sorted_documents = sorted(
-    #     sorted_documents,
-    #     key=lambda doc: doc.get("date") if doc.get("ao_doc_category_id") != 'F' else ao.get("issue_date"),
-    #     reverse=True
-    # )
+    # Sort by document date unless it's a final opinion. Final opinion uses issue date.
+    sorted_documents = sorted(
+        sorted_documents,
+        key=lambda doc: doc.get("date") if doc.get("ao_doc_category_id") != 'F' else ao.get("issue_date"),
+        reverse=True
+    )
 
     return sorted_documents
 
