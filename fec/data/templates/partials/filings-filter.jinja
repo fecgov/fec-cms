@@ -29,8 +29,7 @@ Filter reports
 <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
   <button type="button" class="js-accordion-trigger accordion__button">Filer</button>
   <div class="accordion__content">
-   
-    {{ typeahead.field('q_filer', 'Committee name or ID', '', allow_text=True) }}
+    {{ typeahead.field('committee_id', 'Committee name or ID', '', allow_text=True) }}
     {{ typeahead.field('candidate_id', 'Candidate name or ID', '', dataset='candidates') }}
     {{ states.field('state', type='Candidate') }}
     {{ office.checkbox() }}
