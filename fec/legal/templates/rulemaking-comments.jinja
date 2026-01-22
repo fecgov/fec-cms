@@ -198,7 +198,7 @@
               <label for="commenters[0].mailingCountry">Country</label>
               <select id="commenters[0].mailingCountry" name="commenters[0].mailingCountry" size="1" required>
               {%- for value, label in constants.countries.items() -%}
-                <option value="{{ value }}"{% if value == 'US'%} selected{% endif %}>{{ label }}</option>
+                <option value="{{ value }}"{% if value == 'USA'%} selected{% endif %}>{{ label }}</option>
               {%- endfor -%}
               </select>
               <label class="error" for="commenters[0].mailingCountry">Please select a country</label>
