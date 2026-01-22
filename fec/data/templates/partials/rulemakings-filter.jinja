@@ -12,7 +12,7 @@
   <div class="filters__inner">
   {# //TODO: Can maybe make form action="" #}
 <form id="rulemaking-filters" action="">
-     <div class="filter js-filter u-visually-hidden" data-filter="text">
+     <div id="q_exclude_filter" class="filter js-filter u-visually-hidden" data-filter="text">
     <input type="hidden" name="q_exclude" id="q_exclude">
     </div>
     {{ legal.keyword_search_q(result_type, query) }}
