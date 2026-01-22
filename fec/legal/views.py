@@ -451,7 +451,7 @@ def rulemaking(request, rm_no):
     })
 
 
-def rulemaking_add_comments(request, rm_no):
+def rulemaking_add_comments(request, rm_no, doc_id):
     """
     Data for the rulemaking commenting interface
     """
