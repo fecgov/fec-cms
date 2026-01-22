@@ -5,16 +5,14 @@
 import { default as URI } from 'urijs';
 
 import { rulemakings as cols_rulemakings } from '../modules/columns.js';
+//import { default as FilterPanel } from '../modules/filters/filter-panel.js';
 import KeywordProximityFilter from '../modules/filters/keyword-proximity-filter.js';
 import KeywordModal from '../modules/keyword-modal.js';
 import { DataTable_FEC } from '../modules/tables.js';
 
-$(function() {
-const params = new URLSearchParams(window.location.search);
+/* eslint-disable no-console */
 
- if (params.q) {
-     $('input[name="q"]').val(params.q);
-  }
+$(function() {
 
 // Search_input change fires handleKeywordSearchChange() on change, with no page reload
 // Keyword_modal search_input submit fires keyworkModal.handleSubmit() which fires handleKeywordSearchChange(), with no reload
@@ -67,12 +65,11 @@ KeywordProximityFilter.prototype.handleNumberChange = function(e) {
 // Change type to button to disable native submit
  $('.modal__form [type="submit"]').attr('type', 'button');
 
-$('#search-input').on('change', function(e) {
-  handleKeywordSearchChange(e);
- });
-  let new_val;
-  const handleKeywordSearchChange = function(e) {
-  new_val = e.target.value;
+let new_val;// = $('input[name="q"]').val();
+const handleKeywordSearchChange = function() {
+  console.log('handleKeywordSearchChang-RAN');
+  //new_val = e.target.value;
+  new_val = $('input[name="q"]').val();
   const currentTag = document.querySelectorAll('.tags .tag__item[data-id="search-input"]');
   // If there's already a tag, we need to change its label
   if (currentTag.length >= 1) {
@@ -86,20 +83,23 @@ $('#search-input').on('change', function(e) {
     });
   }
   else {
+    //Zero second, setTimout to push this to end of script stack to ensure '.tags' is loaded before appending to it for refresh or links with  q in querystring
+    setTimeout(() => {
     $('.tags').attr('aria-hidden', 'false').append(`<li data-tag-category="q" class="tag__category"><div data-id="search-input" data-removable="true" class="tag__item">${new_val}
     <button class="button js-close tag__remove"><span class="u-visually-hidden">Remove</span></button>
     </div></li>`);
+}, 0);
+
   }
 
   const new_queryParams = new URLSearchParams(window.location.search);
-  const q_params = new_val;
 
       // We need to divide any 'search' value into q and q_exclude, split on ` -`
       // And put q value into q field and q_excluse value into hidden q_exclude field
       const qStrings = [];
       const qExcludeStrings = [];
-      if (q_params.indexOf(' -') >= 0) {
-        const allTerms = q_params.split(' ');
+      if (new_val.indexOf(' -') >= 0) {
+        const allTerms = new_val.split(' ');
         allTerms.forEach(term => {
           if (term.startsWith('-'))
             qExcludeStrings.push(term.substring(1));
@@ -107,16 +107,29 @@ $('#search-input').on('change', function(e) {
         });
         if (qStrings.length > 0)
           new_queryParams['q'] = qStrings.join(' ');
-          $('input[name="q"]').val(new_queryParams.q);
+          $('input[name="q"]').val(new_queryParams['q']);
         if (qExcludeStrings.length > 0)
           new_queryParams['q_exclude'] = qExcludeStrings.join(' ');
-          $('input[name="q_exclude"]').val(new_queryParams.q_exclude);
+          $('input[name="q_exclude"]').val(new_queryParams['q_exclude']);
 
-      } else {
-        new_queryParams['q'] = q_params;
+      }
+      else {
+        new_queryParams['q'] = new_val;
+        //$('input[name="q"]').val(new_val);
       }
 };
 
+$('input[name="q"]').on('change', function(e) {
+  console.log('handleKeywordSearchChange triggered');
+  handleKeywordSearchChange(e);
+ });
+
+const params = new URLSearchParams(window.location.search);
+const init_q_param = params.getAll('q');
+ if (init_q_param) {
+     $('input[name="q"]').val(init_q_param).trigger('change');
+     //handleKeywordSearchChange(e)
+  }
 // Remove max-gaps value from field and querystring upon tag removal
 $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity"]', function() {
    $('input[name="max_gaps"]').attr('placeholder','0').val('');
@@ -131,7 +144,7 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
   submitBlocker.setAttribute('aria-hidden', 'true');
   rulemakingFiltersFormElement.prepend(submitBlocker);
 
-  //Accordions in highlights need this implicit listener to work becuase of conflict eith accordions in filter panel
+  //Accordions in highlights need this implicit listener to work becuase of conflict with accordions in filter panel
   $(document).on('click','.accordion-trigger-on', function() {
     let exp = $(this).attr('aria-expanded') == 'false' ? 'true' : 'false';
     $(this).attr('aria-expanded', exp);
@@ -139,8 +152,37 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
 
   });
 
-  const $table = $('#results');
-  new DataTable_FEC($table, {
+  $(document).on('click','[data-id="search-input"] .tag__remove', function() {
+    const tag_params = new URLSearchParams(window.location.search);
+    tag_params.delete('q');
+    window.history.pushState(
+                  null,
+                  '',
+                  window.location.pathname + `?${tag_params.toString()}`
+                  );
+  });
+
+// TRIED TO PUT CHANGE EVENT ON FORM ELEMENTS, WORKS BUT THE PROBLEM IS THAT A PAGE RELOAD OR
+// PASTE ANS GO TO A LINK FIRES NUMEROUS CHANGE EVENTS ON THE FORM.
+// AND IT PUTS VALUE OF Q W/O Q_EXCLUDE I FIELD AND TAGS
+//$(document).on('change', '#rulemaking-filters', function (event) {
+// $(document).on('change', '#rulemaking-filters .js-filter input, #rulemaking-filters .js-filter select', function (event) {
+//      event.stopImmediatePropagation();
+
+//       const newQueryParams = new URLSearchParams(window.location.search);
+//       const new_q_param = newQueryParams.get('q')
+//       if (new_q_param) {
+
+//         $('input[name="q"]').val(new_q_param ).triggerHandler('change')
+//         //handleKeywordSearchChange(e)//; CAN'T GET e
+
+//     }
+// })
+
+const $table = $('#results');
+let tbl;
+
+ tbl = new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Rulemakings',
     path: ['rulemaking', 'search'],
@@ -148,44 +190,54 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
     order: [[2, 'desc']],
     useFilters: true,
     useExport: false,
-    // Initiate the field value and fire change for keyword if included in querystring in a link or copy/pasted url
-    // TODO: This ^^ is currently not working correctly--retrurns 'undefined' for q value
-    // initComplete: function () {
-    //    const queryParams = URI.parseQuery(window.location.search);
-    //   if (queryParams.q) {
-    //     console.log('XX:', queryParams)
-    //     $('input[name="q"]').val(queryParams.q).trigger('change');
-    //   }
-    // },
+    //filterPanel : new FilterPanel(),
+
+    //preDrawCallback: function(settings) {
+    preDrawCallback: function() {
+      //console.log('filterSet.serialize()):', settings.oInit.filterPanel.filterSet.serialize())
+      console.log('QVAL:', $('input[name="q_exclude"]').val());
+      console.log('QXCLUDE:', $('input[name="q"]').val());
+
+    },
+
+    initComplete: function () {
+      console.log('tbl.filterSet.serialize(): ' , tbl.filterSet.serialize());
+    },
 
     // After separating q and q_exclude, and getting reults from API call, put the original keyword search query
     // back into keyword (q)field to preserve any frontend keyword search operator syntax should a user want to edit
     // the value directly in the field instead of using the modal form to generate ta new query.
     drawCallback: function () {
-         $('input[name="q"]').val(new_val);
-         $('input[name="q_exclude"]').val('');
          //TODO: May just need 'if (new_val) {...'
-            const newer_queryParams = URI.parseQuery(window.location.search);
-            if (newer_queryParams.q) {
+            //const newer_queryParams = new URLSearchParams(window.location.search);
+            //if (newer_queryParams.has('q')) {
               let query;
-              if (new_val != '') {
+              if (new_val) {
+                $('input[name="q"]').val(new_val);
+                $('input[name="q_exclude"]').val('');
                 query = URI(window.location.search)
                 .removeSearch('q')
                 .removeSearch('q_exclude')//, `${newer_queryParams['q_exclude']}`)
-                .addSearch('q', `${new_val}`);
+                .addSearch('q', new_val);
+                console.log('QUERY1: ', query.toString());
 
               }
               else {
-                query = URI(window.location.search)
-                .removeSearch('q');
+                console.log('new_val2:', new_val);
+                query = URI(window.location.search);
+                // .removeSearch('q')
+                // .addSearch('q', new_val);//.removeSearch('q')
+                console.log('QUERY2: ', query.toString());
               }
+
               window.history.pushState(
                   null,
                   '',
                   window.location.pathname + query.toString()
                 );
-            }
+            //}
           }
-  });
+
+      });
 
 });

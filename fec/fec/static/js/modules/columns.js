@@ -1109,7 +1109,7 @@ export const rulemakings = [
 
     const filters = new URLSearchParams(window.location.search);
     const filters_category_type = filters.has('doc_category_id');
-    const filters_keyword = filters.has('q');
+    const filters_keyword = filters.getAll('q').length; //filters.has('q');
     const filters_proximity = filters.has('q_proximity') && filters.getAll('q_proximity').length == 2;
     const proximity_only = filters_proximity && !filters_keyword;
 
@@ -1136,7 +1136,7 @@ export const rulemakings = [
           // Dont show document if it has already been shown once
           let unique_id = !doc_ids.includes(`${document.doc_id}`);
           let show_document = category_match && text_match && unique_id;
-             if (show_document) {
+          if (show_document) {
                let top_border_class = '';
                let show_category = '';
                let current_category = document.doc_category_label;
@@ -1193,7 +1193,7 @@ export const rulemakings = [
             html += `
                     </div> 
                   </div>`;
-          }
+        }
           if (document.level_2_labels && document.level_2_labels.length) {
 
             for (let label of document.level_2_labels) {
@@ -1317,7 +1317,7 @@ export const rulemakings = [
         let eligible_documents = [];
 
         for (const document of row.documents) {
-          if (document.is_comment_eligible == true) {
+         if (document.is_comment_eligible == true) {
               eligible_documents.push(document.doc_type_label);
             }
          if (document.level_2_labels && document.level_2_labels.length) {
@@ -1334,7 +1334,12 @@ export const rulemakings = [
             }
           }
         }
+        if (eligible_documents.length) {
         return eligible_documents.map(doc => `<strong>${doc}</strong><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="/legal/rulemakings/${row.rm_no}/add-comments/">Submit a comment</a>`).join('');
+        }
+        else {
+          return 'No comment eligible document specified';
+        }
       }
     }
   }
