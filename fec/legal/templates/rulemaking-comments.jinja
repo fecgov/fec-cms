@@ -52,8 +52,8 @@
       </div>
       <form class="js-rulemaking-comments">
         {% csrf_token %}
-        <h3>Submit comments on rulemaking</h3>
-        <h2>{{ rm_title }}</h2>
+        <h3>Submit comments on {{ doc_type_label }}</h3>
+        <h2>{{ rm_no }} {{ rm_name }}</h2>
         <nav class="topnav">
           <!-- {'complete': th is.currentFrameNum == frames . length - 1}" -->
           <meter value="this.currentFrameNum" max="frames.length - 1" class="hidden" min="0"></meter>
