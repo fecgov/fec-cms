@@ -380,9 +380,33 @@ def admin_fine_page(request, admin_fine_no):
     })
 
 
+# Returns True if a rulemaking is_open_for_comment and a key document is_comment_eligible, else False
+def rulemaking_can_receive_comments(rm):
+    # If is_open_for_comment is false, we're done
+    if rm['is_open_for_comment'] is False:
+        return False
+
+    key_doc_id = ''
+    for i, key_doc in enumerate(rm['key_documents']):
+        if i == 0:
+            key_doc_id = key_doc['doc_id']
+
+    # rulemaking documents are organized by presentation/stage
+    # so we have to loop through stages, then label groups, then the documents themselves
+    for stage in rm['documents']:
+        for type in stage['level_2_labels']:
+            for doc in type['level_2_docs']:
+                if doc['doc_id'] == key_doc_id and doc['is_comment_eligible'] is True:
+                    return True
+
+    return False
+
+
+# The single rulemaking page
 def rulemaking(request, rm_no):
 
     rulemaking = api_caller.load_legal_rulemaking(rm_no)
+    can_receive_comments = rulemaking_can_receive_comments(rulemaking)
     # rm_no always open for comment: 0033-99
     # other rm_no: 2024-10, 2024-09, 2024-08, 2024-07
     # rulemaking = api_caller.load_legal_rulemaking('2024-10')
@@ -437,7 +461,7 @@ def rulemaking(request, rm_no):
         documents.append(new_rm_stage)
 
     return render(request, 'rulemaking.jinja', {
-        'is_open_for_comment': rulemaking['is_open_for_comment'],
+        'can_receive_comments': can_receive_comments,
         'comment_close_date': rulemaking['comment_close_date'] or '',
         'documents': documents,
         'key_documents': key_documents,
@@ -459,14 +483,22 @@ def rulemaking_add_comments(request, rm_no, doc_id):
         raise Http404()
 
     rulemaking = api_caller.load_legal_rulemaking(rm_no)
+    can_receive_comments = rulemaking_can_receive_comments(rulemaking)
 
     # If load_legal_rulemaking returned [], there was an error
-    if rulemaking == []:
+    if rulemaking == [] or can_receive_comments is False:
         raise Http404()
 
+    # If there's more than one key document, we want to remember which one is receiving these comments.
+    # This will be used for doc_id, doc_type_label, and doc_url
+    doc_receiving_comments = []
+    for key_doc in rulemaking['key_documents']:
+        if str(key_doc['doc_id']) == str(doc_id):
+            doc_receiving_comments = key_doc  # noqa: F841
+
     return render(request, 'rulemaking-comments.jinja', {
+        'can_receive_comments': can_receive_comments,
         'description': rulemaking['description'],
-        'is_open_for_comment': rulemaking['is_open_for_comment'],
         'rm_id': rulemaking['rm_id'],
         'rm_name': rulemaking['rm_name'],
         'rm_no': rulemaking['rm_no'],

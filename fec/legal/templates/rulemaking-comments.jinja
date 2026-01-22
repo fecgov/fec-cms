@@ -23,7 +23,7 @@
     <div class="row">
       <div class="main__content">
         <h2>{{ description }}</h2>
-        {% if not is_open_for_comment %}
+        {% if not can_receive_comments %}
         <p>Unfortunately, {{ rm_number }} is no longer open for comments.</p>
         <a class="button--standard button--back" href="../">Go to {{ rm_number }}</a>
         {% else %}
@@ -32,7 +32,7 @@
         {% endif %}
       </div>
     </div>
-    {% if is_open_for_comment %}
+    {% if can_receive_comments %}
     <div class="row" id="rulemaking-comments">
       <div class="js-help hidden" id="help">
         <svg
@@ -399,13 +399,13 @@
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
       </form>
     </div>
-    {% endif %}{# end if is_open_for_comment #}
+    {% endif %}{# end if can_receive_comments #}
   </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-{% if is_open_for_comment %}
+{% if can_receive_comments %}
 {{ tags_for_js_chunks('rulemaking-commenting.js', '')|safe }}
 {% endif %}
 {% endblock %}

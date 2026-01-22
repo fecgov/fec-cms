@@ -22,12 +22,12 @@
   <div class="embedded-pdf-list">
     {% if FEATURES.rulemakings_commenting %}{# feature flag to hide the commenting block -#}
     <div class="submit-comments">
-    {% if not is_open_for_comment -%}
+    {% if not can_receive_comments -%}
       <div class="label">Not open for comment</div>
     {% else -%}
       <div class="label">Open for comment: Notice of Availability</div>
       <div class="label sublabel t-sans">Comment deadline: {{ comment_close_date|date_full(time_tag=True) }}</div>
-      <a class="button--cta" href="/legal/rulemakings/{{ rm_no }}/add-comments/">Submit a comment</a>
+      <a class="button--cta" href="/legal/rulemakings/{{ rm_no }}/{{ doc_id }}/add-comments/">Submit a comment</a>
     {% endif -%}
     </div>
     {% endif -%}{# end feature flag to hide commenting block -#}
