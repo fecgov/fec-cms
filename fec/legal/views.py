@@ -415,14 +415,17 @@ def rulemaking(request, rm_no):
         raise Http404()
 
     key_documents = []
-    for key_doc in rulemaking['key_documents']:
+    doc_type_label = ''
+    key_doc_id = ''
+    for i, key_doc in enumerate(rulemaking['key_documents']):
         key_documents.append({
             'doc_date': key_doc['doc_date'],
             'doc_id': key_doc['doc_id'],
-            'label': key_doc['doc_type_label'],  # This is inconsistent
-            # 'label': key_doc['doc_description'],  # This is inconsistent
+            'label': key_doc['doc_type_label'],
             'url': key_doc['url'],
         })
+        if i == 0:
+            key_doc_id = key_doc['doc_id']
 
     documents = []
     # The base items in 'documents' are grouped by their rulemaking stage. e.g. Notice of Avail, Commencing Doc
@@ -431,8 +434,11 @@ def rulemaking(request, rm_no):
         new_rm_stage['doc_date'] = stage['doc_date']
         new_rm_stage['doc_id'] = stage['doc_id']
         new_rm_stage['label'] = stage['doc_type_label']
-        # new_rm_stage['doc_stage'] = stage['doc_type_label']  # e.g. Notice of Avail, Commencing Document
+
         new_rm_stage['url'] = stage['url']
+
+        if stage['doc_id'] == key_doc_id:
+            doc_type_label = stage['doc_type_label']
 
         new_rm_stage['doc_entities'] = []
         for entity in stage['doc_entities']:
@@ -469,6 +475,8 @@ def rulemaking(request, rm_no):
         'rm_name': rulemaking['rm_name'],
         'rm_no': rulemaking['rm_no'],
         'rm_number': rulemaking['rm_number'],
+        'doc_id': key_doc_id,
+        'doc_type_label': doc_type_label,
         'parent': 'legal',
         'social_image_identifier': 'legal',
         'could_testify': True,
@@ -504,6 +512,9 @@ def rulemaking_add_comments(request, rm_no, doc_id):
         'rm_no': rulemaking['rm_no'],
         'rm_number': rulemaking['rm_number'],
         'rm_title': rulemaking['title'],
+        'doc_id': doc_receiving_comments['doc_id'] or doc_id,
+        'doc_type_label': doc_receiving_comments['doc_type_label'] or '',
+        'doc_url': doc_receiving_comments['url'] or '',
         'parent': 'legal',
         'social_image_identifier': 'legal',
         'could_testify': False,  # TODO: This will change when the field exists in the API
