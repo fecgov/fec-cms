@@ -275,6 +275,10 @@
         font-weight: 700;
         padding: u(0 .3em);
       }
+
+      .u-border-top-neutral {
+        border-top: 1px solid $neutral;
+      }
     }
   }
 

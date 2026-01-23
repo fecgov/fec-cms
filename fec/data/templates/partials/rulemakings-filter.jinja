@@ -25,10 +25,11 @@
     {{ text.field('rm_name','Reg Name') }}
     {{ dropdown.select_single_flat_list('rm_year', 'Reg year', options=rm_year_opts, hide_help=true, first_opt_no_value_label='Any' )}}
     {{ checkbox.checkbox_dropdown(
+      id_suffix='',
       name='doc_category_id',
       label='Document type',
       options=constants.rulemaking_doc_category_ids,
-      ) 
+      )
     }}
   </div>
   <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
@@ -43,10 +44,11 @@
     <button type="button" class="js-accordion-trigger accordion__button">Entities</button>
       <div class="accordion__content">
         {{ checkbox.checkbox_dropdown(
+          id_suffix='',
           name='entity_role_type',
           label='Entity role',
           options=constants.rulemaking_entity_role_types,
-          ) 
+          )
         }}
         {{ text.field('entity_name','Entity name') }}
       </div>
