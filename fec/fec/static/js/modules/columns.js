@@ -10,6 +10,26 @@ import { amendmentVersion, amendmentVersionDescription, buildAppUrl, currency, d
 import { MODAL_TRIGGER_HTML, getCycle, yearRange } from './tables.js';
 import { default as reportType } from '../templates/reports/reportType.hbs';
 
+/**
+ * Sanitize highlight text while preserving <em> tags for search highlighting.
+ * @param {string} text - The highlight text from the API
+ * @returns {string} - Sanitized HTML-safe string with <em> tags preserved
+ */
+const sanitizeHighlight = function(text) {
+  if (!text) return '';
+  // First, escape all HTML entities
+  const escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+  // Then restore <em> and </em> tags which are used for search highlighting
+  return escaped
+    .replace(/&lt;em&gt;/g, '<em>')
+    .replace(/&lt;\/em&gt;/g, '</em>');
+};
+
 export const dateColumn = formattedColumn(datetime, {
   orderSequence: ['desc', 'asc']
 });
@@ -1141,12 +1161,9 @@ export const rulemakings = [
                let show_category = '';
                let current_category = document.doc_category_label;
                if (category_shown != current_category) {
-                     top_border_class = 'u-border-top-nuetral';
+                     top_border_class = 'u-border-top-neutral';
                      show_category = document.doc_category_label;
                      category_shown = current_category;
-                }
-                 else {
-                   show_category = '';
                 }
 
                 // Push doc_id to array to keep track of already-shown documents
@@ -1157,9 +1174,9 @@ export const rulemakings = [
                 const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
 
             html += `
-                  <div class="document-container">
-                    <div class="document-category ${top_border_class}">${show_category}</div>
-                    <div class="document_details u-border-top-nuetral">
+                  <div class="document-container ${top_border_class}">
+                    <div class="document-category">${show_category}</div>
+                    <div class="document_details">
                       <div class="post--icon">
                         <span class="icon icon--inline--left i-document"></span>
                         <a href="${document.url}">
@@ -1169,7 +1186,7 @@ export const rulemakings = [
               if (document.highlights.length) {
                   html += `
                       <ul>
-                        <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${document.highlights[0]}&#8230;
+                        <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${sanitizeHighlight(document.highlights[0])}&#8230;
                         </li>
                       </ul>`;
               }
@@ -1182,7 +1199,7 @@ export const rulemakings = [
                         <div class="accordion__content results__content" aria-hidden="true">
                           <ul>`;
                           for (let i = 1; i <= document.highlights.length -1; i++) {
-                            html += `<li class="t-serif t-italic">&#8230;${document.highlights[i]}&#8230;</li>`;
+                            html += `<li class="t-serif t-italic">&#8230;${sanitizeHighlight(document.highlights[i])}&#8230;</li>`;
                           }
                             html += `
                           </ul>
@@ -1209,12 +1226,9 @@ export const rulemakings = [
                   let show_category = '';
                   let current_category = l2_document.doc_category_label;
                if (category_shown != current_category) {
-                     top_border_class = 'u-border-top-nuetral';
+                     top_border_class = 'u-border-top-neutral';
                      show_category = l2_document.doc_category_label;
                      category_shown = current_category;
-                }
-                 else {
-                   show_category = '';
                 }
 
                 // Push doc_id to array to keep track of already-shown documents
@@ -1225,9 +1239,9 @@ export const rulemakings = [
                 const l2_doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
 
                   html += `
-                  <div class="document-container">
-                    <div class="document-category ${top_border_class}">${show_category}</div>
-                    <div class="document_details u-border-top-nuetral">
+                  <div class="document-container ${top_border_class}">
+                    <div class="document-category">${show_category}</div>
+                    <div class="document_details">
                       <div class="post--icon">
                         <span class="icon icon--inline--left i-document"></span>
                         <a href="${l2_document.url}">
@@ -1237,7 +1251,7 @@ export const rulemakings = [
               if (l2_document.highlights.length) {
                   html += `
                       <ul>
-                        <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${l2_document.highlights[0]}&#8230;
+                        <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${sanitizeHighlight(l2_document.highlights[0])}&#8230;
                         </li>
                       </ul>`;
               }
@@ -1250,7 +1264,7 @@ export const rulemakings = [
                         <div class="accordion__content results__content" aria-hidden="true">
                           <ul>`;
                           for (let i = 1; i <= l2_document.highlights.length -1; i++) {
-                            html += `<li class="t-serif t-italic">&#8230;${l2_document.highlights[i]}&#8230;</li>`;
+                            html += `<li class="t-serif t-italic">&#8230;${sanitizeHighlight(l2_document.highlights[i])}&#8230;</li>`;
                           }
                             html += `
                           </ul>
@@ -1274,20 +1288,17 @@ export const rulemakings = [
                 let show_category = '';
                 let current_category = document.doc_category_label;
                   if (category_shown != current_category) {
-                      top_border_class = 'u-border-top-nuetral';
+                      top_border_class = 'u-border-top-neutral';
                       show_category = document.doc_category_label;
                       category_shown = current_category;
-                  }
-                  else {
-                    show_category = '';
                   }
 
                   const doc_date = document.doc_date !== null ? moment(document.doc_date).format('MM/DD/YYYY') : 'Invalid date';
 
                     html += `
-                      <div class="document-container">
-                        <div class="document-category ${top_border_class}">${show_category}</div>
-                        <div class="document_details u-border-top-nuetral">
+                      <div class="document-container ${top_border_class}">
+                        <div class="document-category">${show_category}</div>
+                        <div class="document_details">
                           <div class="post--icon">
                             <span class="icon icon--inline--left i-document"></span>
                             <a href="${document.url}">
@@ -1310,36 +1321,42 @@ export const rulemakings = [
     orderable: true,
     render: function (data, type, row) {
       if (row.is_open_for_comment == false) {
-      return 'Not currently open for comment';
+        return 'Not currently open for comment';
       }
-      else {
-        const comment_deadline = moment(row.comment_close_date).format('MMMM D, YYYY');
-        let eligible_documents = [];
 
-        for (const document of row.documents) {
-         if (document.is_comment_eligible == true) {
-              eligible_documents.push(document.doc_type_label);
-            }
-         if (document.level_2_labels && document.level_2_labels.length) {
+      const comment_deadline = moment(row.comment_close_date).format('MMMM D, YYYY');
+      let eligible_documents = [];
 
-            for (let label of document.level_2_labels) {
-
-              for (const l2_document of label.level_2_docs) {
-
-                if (l2_document.is_comment_eligible == true) {
-                  eligible_documents.push(l2_document.doc_type_label);
-
-                }
+      // Check top-level documents
+      for (const document of row.documents) {
+        if (document.is_comment_eligible == true) {
+          eligible_documents.push({
+            doc_id: document.doc_id,
+            doc_type_label: document.doc_type_label
+          });
+        }
+        // Check nested level_2 documents
+        if (document.level_2_labels && document.level_2_labels.length) {
+          for (const label of document.level_2_labels) {
+            for (const l2_document of label.level_2_docs) {
+              if (l2_document.is_comment_eligible == true) {
+                eligible_documents.push({
+                  doc_id: l2_document.doc_id,
+                  doc_type_label: l2_document.doc_type_label
+                });
               }
             }
           }
         }
-        if (eligible_documents.length) {
-        return eligible_documents.map(doc => `<strong>${doc}</strong><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="/legal/rulemakings/${row.rm_no}/add-comments/">Submit a comment</a>`).join('');
-        }
-        else {
-          return 'No comment eligible document specified';
-        }
+      }
+
+      if (eligible_documents.length) {
+        return eligible_documents.map(doc =>
+          `<strong>${doc.doc_type_label}</strong><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="/legal/rulemakings/${row.rm_no}/${doc.doc_id}/add-comments/">Submit a comment</a>`
+        ).join('');
+      }
+      else {
+        return 'No comment eligible document specified';
       }
     }
   }
@@ -1347,6 +1364,7 @@ export const rulemakings = [
 
 const has_highlights = function(doc) {
   if (doc.highlights && doc.highlights.length) {
-    return true;
+      return true;
     }
+    return false;
   };

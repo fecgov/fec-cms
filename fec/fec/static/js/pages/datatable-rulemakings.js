@@ -65,11 +65,11 @@ KeywordProximityFilter.prototype.handleNumberChange = function(e) {
 // Change type to button to disable native submit
  $('.modal__form [type="submit"]').attr('type', 'button');
 
-let new_val;// = $('input[name="q"]').val();
+let new_val = $('input[name="q"]').val() || '';
 const handleKeywordSearchChange = function() {
   console.log('handleKeywordSearchChang-RAN');
   //new_val = e.target.value;
-  new_val = $('input[name="q"]').val();
+  new_val = $('input[name="q"]').val() || '';
   const currentTag = document.querySelectorAll('.tags .tag__item[data-id="search-input"]');
   // If there's already a tag, we need to change its label
   if (currentTag.length >= 1) {
@@ -82,7 +82,7 @@ const handleKeywordSearchChange = function() {
       else tag.querySelector('.js-close').click();
     });
   }
-  else {
+  else if (new_val.length > 0) {
     //Zero second, setTimout to push this to end of script stack to ensure '.tags' is loaded before appending to it for refresh or links with  q in querystring
     setTimeout(() => {
     $('.tags').attr('aria-hidden', 'false').append(`<li data-tag-category="q" class="tag__category"><div data-id="search-input" data-removable="true" class="tag__item">${new_val}
@@ -105,12 +105,14 @@ const handleKeywordSearchChange = function() {
             qExcludeStrings.push(term.substring(1));
           else qStrings.push(term);
         });
-        if (qStrings.length > 0)
+        if (qStrings.length > 0) {
           new_queryParams['q'] = qStrings.join(' ');
           $('input[name="q"]').val(new_queryParams['q']);
-        if (qExcludeStrings.length > 0)
+        }
+        if (qExcludeStrings.length > 0) {
           new_queryParams['q_exclude'] = qExcludeStrings.join(' ');
           $('input[name="q_exclude"]').val(new_queryParams['q_exclude']);
+        }
 
       }
       else {
@@ -126,7 +128,7 @@ $('input[name="q"]').on('change', function(e) {
 
 const params = new URLSearchParams(window.location.search);
 const init_q_param = params.getAll('q');
- if (init_q_param) {
+ if (init_q_param.length > 0 && init_q_param[0]) {
      $('input[name="q"]').val(init_q_param).trigger('change');
      //handleKeywordSearchChange(e)
   }
