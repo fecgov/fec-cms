@@ -90,6 +90,15 @@
   background: $gray-lightest;
 }
 
+//For alphabetical index search controls
+.alpha-index-search.search--container {
+  padding: u(2rem 0);
+
+  @include media($lg) {
+    padding: 4rem 0;
+  }
+}
+
 //For data/election search boxes
 .election-search {
   .search--container {
@@ -210,6 +219,14 @@
       bottom: u(-6.5rem);
     }
   }
+
+.alpha-index-search {
+  .search-controls__or--vertical {
+    @include media($med) {
+      margin: 7.5rem 0;
+    }
+  }
+}
 
   .election-search {
     .search-controls__either:first-child {

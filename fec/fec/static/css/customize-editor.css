@@ -82,52 +82,49 @@ li.sequence-member .sequence-member-inner .sequence-type-list .sequence-containe
 }
 
 /*
- * Specials for editing the FEC timeline
+ * Specials for editing the FEC timeline items
  */
-.timeline-summary textarea {
-  height: 6.5rem;
-}
-/* Switch off comment buttons when editing the timeline entries */
-input[name^="timeline_entries"] + .w-field__comment-button.w-field__comment-button--add {
-  display: none !important;
-}
-/* Some single-line label/input pairs */
-[data-contentpath="year_number"],
-[data-contentpath="entry_date"],
-[data-contentpath="start_open"] {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  float: none;
-  margin-bottom: 1rem;
-
-  & > label {
-    order: 2;
-  }
-  & > .w-field__wrapper {
-    margin-bottom: 0;
-    order: 1;
-    padding-bottom: 0;
-  }
+.timeline-start-open .w-field--checkbox_input {
   .w-field__input {
-    margin-right: .75rem;
-    margin-top: 0;
+    order: 0;
   }
-  input {
-    margin-right: 0rem;
+  .w-field__help {
+    margin-top: calc(.625rem*var(--w-density-factor));
+    order: 1;
   }
 }
-ul.timeline-help {
-  li {
-    list-style-type: initial;
+[data-timeline-help] {
+  
+  h2 {
+    font-weight: bold;
   }
-  pre {
-    display: inline-block;
-    font-size: 90%;
-    margin: 0;
-    opacity: .66;
+  ol {
+    padding-left: 1rem;
+
+    li {
+      list-style-type: auto;
+    }
+  }
+  ul {
+    margin-left: 1rem;
+
+    li {
+      list-style-type: initial;
+    }
+    pre {
+      display: inline-block;
+      font-size: 90%;
+      margin: 0;
+      opacity: .66;
+    }
+  }
+  p:has(+ ol) {
+    margin-bottom: 0;
+  }
+  p + ol {
+    margin-top: 0;
   }
 }
 /*
- * End of specials for editing the FEC timeline
+ * End of specials for editing the FEC timeline items
  */
