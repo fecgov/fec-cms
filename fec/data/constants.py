@@ -1137,7 +1137,7 @@ countries = OrderedDict([
     ('GUY', 'Guyana'),
     ('HTI', 'Haiti'),
     ('HMD', 'Heard Island and McDonald Islands'),
-    ('VEN', 'Holy See'),
+    ('VAT', 'Holy See'),
     ('HND', 'Honduras'),
     ('HKG', 'Hong Kong'),
     ('HUN', 'Hungary'),
