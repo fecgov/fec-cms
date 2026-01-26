@@ -476,7 +476,9 @@ OffsetPaginator.prototype.mapQuery = function(data) {
   if (pagination_legal){
     return {
     hits_returned: data.length, // eslint-disable-line camelcase
-    from_hit: Math.floor(data.start)
+    from_hit: Math.floor(data.start),
+    q_exclude: data.q_exclude,
+    q: data.q
      };
    }
   else {
