@@ -9,8 +9,9 @@ import KeywordProximityFilter from '../modules/filters/keyword-proximity-filter.
 import KeywordModal from '../modules/keyword-modal.js';
 import { DataTable_FEC } from '../modules/tables.js';
 
-$(function() {
+/* eslint-disable no-console */
 
+$(function() {
 // Search_input change fires handleKeywordSearchChange() on change, with no page reload
 // Keyword_modal search_input submit fires keyworkModal.handleSubmit() which fires handleKeywordSearchChange(), with no reload
 
@@ -24,12 +25,11 @@ KeywordModal.prototype.handleSubmit = function(e) {
 
   // Put value in field and trigger handleKeywordSearchChange()
   $('input[name="q"]').val(searchQuery).trigger('change');
-
 };
 
-if (document.querySelector('.js-keyword-modal')) {
-  new KeywordModal();
-}
+ if (document.querySelector('.js-keyword-modal')) {
+    new KeywordModal();
+  }
 
 const validationStates = {
   empty: 'EMPTY',
@@ -60,178 +60,147 @@ KeywordProximityFilter.prototype.handleNumberChange = function(e) {
 };
 
 // Change type to button to disable native submit
-$('.modal__form [type="submit"]').attr('type', 'button');
+ $('.modal__form [type="submit"]').attr('type', 'button');
 
-// Stores the original keyword query (including any exclude terms like " -word")
-// This is used to restore the full query to the text field after API calls
-let new_val = $('input[name="q"]').val() || '';
-
-// Handles keyword search field changes - updates tags and stores original value
-// Actual splitting of q/q_exclude happens in splitQExclude before API call
-const handleKeywordSearchChange = function() {
-  const currentQ = $('input[name="q"]').val() || '';
-  // Only update new_val if current value has exclude terms, or if new_val doesn't already have them
-  if (currentQ.indexOf(' -') >= 0 || new_val.indexOf(' -') < 0) {
-    new_val = currentQ;
-  }
-
-  const displayVal = new_val || currentQ;
+let new_val;// = $('input[name="q"]').val();
+let q_ex;
+let q_all;
+const handleKeywordSearchChange = function(e) {
+  console.log('handleKeywordSearchChang-RAN');
+  new_val = e.target.value; //$('input[name="q"]').val();
   const currentTag = document.querySelectorAll('.tags .tag__item[data-id="search-input"]');
-
+  // If there's already a tag, we need to change its label
   if (currentTag.length >= 1) {
-    // Update existing tag label
     currentTag.forEach((tag, i) => {
-      if (i === 0 && displayVal.length > 0) {
-        $(tag).contents()[0].nodeValue = displayVal;
-      } else {
-        tag.querySelector('.js-close').click();
-      }
+      // We only want to keep one filter tag for keywords, so change its label
+      // but only if it has a value to show
+      if (i === 0 && new_val.length > 0)
+        $(tag).contents()[0].nodeValue = new_val;
+      // Otherwise, if it's after the first one, click its X button
+      else tag.querySelector('.js-close').click();
     });
-  } else if (displayVal.length > 0) {
-    // Create new tag - setTimeout ensures .tags element is loaded
+  }
+  else {
+    //Zero second, setTimout to push this to end of script stack to ensure '.tags' is loaded before appending to it for refresh or links with  q in querystring
     setTimeout(() => {
-      $('.tags').attr('aria-hidden', 'false').append(
-        `<li data-tag-category="q" class="tag__category">` +
-        `<div data-id="search-input" data-removable="true" class="tag__item">${displayVal}` +
-        `<button class="button js-close tag__remove"><span class="u-visually-hidden">Remove</span></button>` +
-        `</div></li>`
-      );
+    $('.tags').attr('aria-hidden', 'false').append(`<li data-tag-category="q" class="tag__category"><div data-id="search-input" data-removable="true" class="tag__item">${new_val}
+    <button class="button js-close tag__remove"><span class="u-visually-hidden">Remove</span></button>
+    </div></li>`);
     }, 0);
   }
+
+  const new_queryParams = new URLSearchParams(window.location.search);
+
+  // We need to divide any 'search' value into q and q_exclude, split on ` -`
+  // And put q value into q field and q_excluse value into hidden q_exclude field
+  const qStrings = [];
+  const qExcludeStrings = [];
+  if (new_val.indexOf(' -') >= 0) {
+    const allTerms = new_val.split(' ');
+    allTerms.forEach(term => {
+      if (term.startsWith('-'))
+        qExcludeStrings.push(term.substring(1));
+      else qStrings.push(term);
+    });
+    if (qStrings.length > 0)
+      new_queryParams['q'] = qStrings.join(' ');
+      //$('input[name="q"]').val(new_queryParams['q']);
+      q_all = new_queryParams['q'];
+    if (qExcludeStrings.length > 0)
+      new_queryParams['q_exclude'] = qExcludeStrings.join(' ');
+      //$('input[name="q_exclude"]').val(new_queryParams['q_exclude']);
+      q_ex= new_queryParams['q_exclude'];
+
+  }
+  else {
+    new_queryParams['q'] = new_val;
+    q_all = new_queryParams['q'];
+    q_ex= '';
+    //$('input[name="q"]').val(new_val);
+  }
+  let query;
+  if (new_val !== '') {
+    query = URI(window.location.search)
+    .removeSearch('q')
+    .removeSearch('q_exclude')//, `${newer_queryParams['q_exclude']}`)
+    .addSearch('q', new_val);
+  }
+  else {
+    query = URI(window.location.search)
+    .removeSearch('q');
+  }
+  window.history.pushState(
+      null,
+      '',
+      window.location.pathname + query.toString()
+    );
 };
 
 $('input[name="q"]').on('change', function(e) {
+  console.log('handleKeywordSearchChange TRIGGERED');
   handleKeywordSearchChange(e);
-});
+ });
 
-// Initialize q field from URL parameters on page load
-const params = new URLSearchParams(window.location.search);
-const init_q_param = params.getAll('q');
-if (init_q_param.length > 0 && init_q_param[0]) {
-  $('input[name="q"]').val(init_q_param).trigger('change');
-}
 // Remove max-gaps value from field and querystring upon tag removal
 $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity"]', function() {
    $('input[name="max_gaps"]').attr('placeholder','0').val('');
 });
 
-// Add a null submit button at the top of the form to prevent Enter submits
-const rulemakingFiltersFormElement = document.querySelector('#rulemaking-filters');
-const submitBlocker = document.createElement('input');
-submitBlocker.setAttribute('type', 'submit');
-submitBlocker.setAttribute('disabled', 'disabled');
-submitBlocker.setAttribute('style', 'display:none');
-submitBlocker.setAttribute('aria-hidden', 'true');
-rulemakingFiltersFormElement.prepend(submitBlocker);
+ // Add a null submit button at the top of the form to prevent Enter submits
+  const rulemakingFiltersFormElement = document.querySelector('#rulemaking-filters');
+  const submitBlocker = document.createElement('input');
+  submitBlocker.setAttribute('type', 'submit');
+  submitBlocker.setAttribute('disabled', 'disabled');
+  submitBlocker.setAttribute('style', 'display:none');
+  submitBlocker.setAttribute('aria-hidden', 'true');
+  rulemakingFiltersFormElement.prepend(submitBlocker);
 
-// Accordions in highlights need this implicit listener due to conflict with filter panel accordions
-$(document).on('click', '.accordion-trigger-on', function() {
-  const exp = $(this).attr('aria-expanded') === 'false' ? 'true' : 'false';
-  $(this).attr('aria-expanded', exp);
-  $(this).next('div').attr('aria-hidden', exp === 'true' ? 'false' : 'true');
-});
+  //Accordions in highlights need this implicit listener to work becuase of conflict with accordions in filter panel
+  $(document).on('click','.accordion-trigger-on', function() {
+    let exp = $(this).attr('aria-expanded') == 'false' ? 'true' : 'false';
+    $(this).attr('aria-expanded', exp);
+    $(this).next('div').attr('aria-hidden', exp == 'true' ? 'false' : 'true');
 
-// Handle removal of keyword search tag
-$(document).on('click', '[data-id="search-input"] .tag__remove', function() {
-  const tag_params = new URLSearchParams(window.location.search);
-  tag_params.delete('q');
-  window.history.pushState(null, '', window.location.pathname + `?${tag_params.toString()}`);
-});
+  });
 
-/**
- * Splits the keyword query into positive terms (q) and exclude terms (q_exclude).
- * Called before DataTable serializes filters to ensure correct API parameters.
- *
- * Example: "contribution -limit" becomes q="contribution" and q_exclude="limit"
- *
- * @param {boolean} isQFieldChange - true if user directly changed the q field
- */
-const splitQExclude = function(isQFieldChange = false) {
-  const fieldVal = $('input[name="q"]').val() || '';
-  let currentQ = fieldVal;
+  $(document).on('click','[data-id="search-input"] .tag__remove', function() {
+    const tag_params = new URLSearchParams(window.location.search);
+    tag_params.delete('q');
+    window.history.pushState(
+      null,
+      '',
+      window.location.pathname + `?${tag_params.toString()}`
+      );
+  });
 
-  if (isQFieldChange) {
-    // User directly changed q field - use the new value
-    new_val = fieldVal;
-    currentQ = fieldVal;
-  } else if (new_val && new_val.indexOf(' -') >= 0) {
-    // User changed a different filter - check if we should use stored new_val
-    const positiveTerms = new_val.split(' ').filter(t => !t.startsWith('-')).join(' ');
-    if (fieldVal === positiveTerms || fieldVal === new_val) {
-      // Field matches expected value after splitting, use stored original
-      currentQ = new_val;
-    } else {
-      // Field has unexpected value (user changed it), use the new value
-      new_val = fieldVal;
-    }
-  }
-
-  if (currentQ.indexOf(' -') >= 0) {
-    // Split into positive and negative terms
-    new_val = currentQ;
-    const qStrings = [];
-    const qExcludeStrings = [];
-    currentQ.split(' ').forEach(term => {
-      if (term.startsWith('-')) {
-        qExcludeStrings.push(term.substring(1));
-      } else if (term) {
-        qStrings.push(term);
-      }
-    });
-
-    if (qStrings.length > 0) {
-      $('input[name="q"]').val(qStrings.join(' '));
-    }
-    if (qExcludeStrings.length > 0) {
-      $('input[name="q_exclude"]').val(qExcludeStrings.join(' '));
-    }
-  } else {
-    // No exclude terms, clear q_exclude
-    $('input[name="q_exclude"]').val('');
-  }
-};
-
-// Intercept ALL filter changes to split q/q_exclude BEFORE DataTable processes them
-// Use native capture phase to ensure this runs before jQuery/DataTable handlers
-document.querySelector('#rulemaking-filters').addEventListener('change', function(e) {
-  // Don't process if this is the q_exclude field itself
-  if (e.target.name === 'q_exclude') return;
-
-  // If the change is on the q field itself, user is changing the query - update new_val
-  const isQFieldChange = (e.target.name === 'q');
-
-  // Split q value before DataTable serializes filters
-  splitQExclude(isQFieldChange);
-}, true); // capture phase runs before bubble phase
+console.log('before PREXHR q_ex: ', q_ex);
+console.log('before PREXHR q_all: ', q_all);
 
 const $table = $('#results');
+$table.on('preXhr.dt', function (e, settings, data) {
+  console.log('inside PREXHR q_ex: ', q_ex);
+  console.log('inside PREXHR q_all: ', q_all);
+  data.q_exclude = q_ex;
+  data.q= q_all;
+  });
+ new DataTable_FEC($table, {
+    autoWidth: false,
+    title: 'Rulemakings',
+    path: ['rulemaking', 'search'],
+    columns: cols_rulemakings,
+    order: [[2, 'desc']],
+    useFilters: true,
+    useExport: false,
 
-new DataTable_FEC($table, {
-  autoWidth: false,
-  title: 'Rulemakings',
-  path: ['rulemaking', 'search'],
-  columns: cols_rulemakings,
-  order: [[2, 'desc']],
-  useFilters: true,
-  useExport: false,
+    initComplete: function () {
 
-  // After API call, restore the original keyword query (with exclude terms) to the text field
-  // This preserves the user's input syntax for editing
-  drawCallback: function() {
-    let query;
-    if (new_val) {
-      $('input[name="q"]').val(new_val);
-      $('input[name="q_exclude"]').val('');
-      query = URI(window.location.search)
-        .removeSearch('q')
-        .removeSearch('q_exclude')
-        .addSearch('q', new_val);
-    } else {
-      query = URI(window.location.search);
+      const params = new URLSearchParams(window.location.search);
+      const init_q_param = params.getAll('q');
+    if (init_q_param.length) {
+       $('input[name="q"]').val(init_q_param);
+       $('input[name="q"]').trigger('change');
+     }
     }
-
-    window.history.pushState(null, '', window.location.pathname + query.toString());
-  }
-});
+      });
 
 });
