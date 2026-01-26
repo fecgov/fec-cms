@@ -97,14 +97,14 @@ const handleKeywordSearchChange = function(e) {
         qExcludeStrings.push(term.substring(1));
       else qStrings.push(term);
     });
-    if (qStrings.length > 0)
+    if (qStrings.length > 0) {
       new_queryParams['q'] = qStrings.join(' ');
-      //$('input[name="q"]').val(new_queryParams['q']);
       q_all = new_queryParams['q'];
-    if (qExcludeStrings.length > 0)
+    }
+    if (qExcludeStrings.length > 0) {
       new_queryParams['q_exclude'] = qExcludeStrings.join(' ');
-      //$('input[name="q_exclude"]').val(new_queryParams['q_exclude']);
       q_ex = new_queryParams['q_exclude'];
+    }
   }
   else {
     new_queryParams['q'] = new_val;
