@@ -21,15 +21,19 @@
   </div>
   <div class="embedded-pdf-list">
     {% if FEATURES.rulemakings_commenting %}{# feature flag to hide the commenting block -#}
+    {% if not docs_that_can_receive_comments -%}
     <div class="submit-comments">
-    {% if not can_receive_comments -%}
       <div class="label">Not open for comment</div>
-    {% else -%}
-      <div class="label">Open for comment: Notice of Availability</div>
-      <div class="label sublabel t-sans">Comment deadline: {{ comment_close_date|date_full(time_tag=True) }}</div>
-      <a class="button--cta" href="/legal/rulemakings/{{ rm_no }}/{{ doc_id }}/add-comments/">Submit a comment</a>
-    {% endif -%}
     </div>
+    {% else %}
+      {% for doc_for_comments in docs_that_can_receive_comments %}
+    <div class="submit-comments">
+      <div class="label">Open for comment: {{ doc_for_comments.label }}</div>
+      <div class="label sublabel t-sans">Comment deadline: {{ comment_close_date|date_full(time_tag=True) }}</div>
+      <a class="button--cta" href="/legal/rulemakings/{{ rm_no }}/{{ doc_for_comments.doc_id }}/add-comments/" target="_blank">Submit a comment</a>
+    </div>
+      {% endfor -%}
+    {% endif -%}{# end if docs can receive comments #}
     {% endif -%}{# end feature flag to hide commenting block -#}
     {% if key_documents %}{# Include the Key Documents bits only if there are docs to include #}
     <h2>Key documents</h2>
@@ -43,7 +47,7 @@
       <tbody>
         {% for doc in key_documents %}
         <tr>
-          <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a></td>
+          <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" {% if doc.is_comment_eligible %}data-comment-href="/legal/rulemakings/{{ rm_no }}/{{ doc.doc_id }}/add-comments/" {% endif %}target="_blank">{{ doc.label }}</a></td>
           <td class="date">{{ doc.doc_date|date }}</td>
         </tr>
         {% endfor %}
