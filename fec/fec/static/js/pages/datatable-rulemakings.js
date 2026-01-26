@@ -9,10 +9,8 @@ import KeywordProximityFilter from '../modules/filters/keyword-proximity-filter.
 import KeywordModal from '../modules/keyword-modal.js';
 import { DataTable_FEC } from '../modules/tables.js';
 
-/* eslint-disable no-console */
-
 $(function() {
-// Search_input change fires handleKeywordSearchChange() on change, with no page reload
+// Search_input change fires handleKeywordSearchChange(), with no page reload
 // Keyword_modal search_input submit fires keyworkModal.handleSubmit() which fires handleKeywordSearchChange(), with no reload
 
 //Override KeywordModal.prototype.handleSubmit to use 'q' parameter instead of 'search' parameter and not reload page
@@ -62,12 +60,10 @@ KeywordProximityFilter.prototype.handleNumberChange = function(e) {
 // Change type to button to disable native submit
  $('.modal__form [type="submit"]').attr('type', 'button');
 
-let new_val;// = $('input[name="q"]').val();
 let q_ex;
 let q_all;
 const handleKeywordSearchChange = function(e) {
-  console.log('handleKeywordSearchChang-RAN');
-  new_val = e.target.value; //$('input[name="q"]').val();
+  const new_val = e.target.value; //$('input[name="q"]').val();
   const currentTag = document.querySelectorAll('.tags .tag__item[data-id="search-input"]');
   // If there's already a tag, we need to change its label
   if (currentTag.length >= 1) {
@@ -89,10 +85,9 @@ const handleKeywordSearchChange = function(e) {
     }, 0);
   }
 
-  const new_queryParams = new URLSearchParams(window.location.search);
+  const new_queryParams = {};
 
-  // We need to divide any 'search' value into q and q_exclude, split on ` -`
-  // And put q value into q field and q_excluse value into hidden q_exclude field
+  // We need to divide any 'search' value into q and q_exclude, split on ` -` for xhr call to API
   const qStrings = [];
   const qExcludeStrings = [];
   if (new_val.indexOf(' -') >= 0) {
@@ -109,20 +104,19 @@ const handleKeywordSearchChange = function(e) {
     if (qExcludeStrings.length > 0)
       new_queryParams['q_exclude'] = qExcludeStrings.join(' ');
       //$('input[name="q_exclude"]').val(new_queryParams['q_exclude']);
-      q_ex= new_queryParams['q_exclude'];
-
+      q_ex = new_queryParams['q_exclude'];
   }
   else {
     new_queryParams['q'] = new_val;
     q_all = new_queryParams['q'];
-    q_ex= '';
-    //$('input[name="q"]').val(new_val);
+    q_ex = new_queryParams['q_exclude'];
   }
+
   let query;
   if (new_val !== '') {
     query = URI(window.location.search)
     .removeSearch('q')
-    .removeSearch('q_exclude')//, `${newer_queryParams['q_exclude']}`)
+    .removeSearch('q_exclude')
     .addSearch('q', new_val);
   }
   else {
@@ -137,7 +131,6 @@ const handleKeywordSearchChange = function(e) {
 };
 
 $('input[name="q"]').on('change', function(e) {
-  console.log('handleKeywordSearchChange TRIGGERED');
   handleKeywordSearchChange(e);
  });
 
@@ -166,23 +159,21 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
   $(document).on('click','[data-id="search-input"] .tag__remove', function() {
     const tag_params = new URLSearchParams(window.location.search);
     tag_params.delete('q');
+    const new_location = tag_params.size ? `?${tag_params.toString()}` : '';
     window.history.pushState(
       null,
       '',
-      window.location.pathname + `?${tag_params.toString()}`
+      window.location.pathname + `${new_location}`
       );
   });
 
-console.log('before PREXHR q_ex: ', q_ex);
-console.log('before PREXHR q_all: ', q_all);
-
 const $table = $('#results');
+// Pass the seperate 'q' and 'q_exclude' values to be included in API call
 $table.on('preXhr.dt', function (e, settings, data) {
-  console.log('inside PREXHR q_ex: ', q_ex);
-  console.log('inside PREXHR q_all: ', q_all);
   data.q_exclude = q_ex;
-  data.q= q_all;
+  data.q = q_all;
   });
+
  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Rulemakings',
@@ -192,15 +183,15 @@ $table.on('preXhr.dt', function (e, settings, data) {
     useFilters: true,
     useExport: false,
 
+    // Handles when page is refreahed or navigated to with a predefined URL+querystring
     initComplete: function () {
-
       const params = new URLSearchParams(window.location.search);
       const init_q_param = params.getAll('q');
-    if (init_q_param.length) {
-       $('input[name="q"]').val(init_q_param);
-       $('input[name="q"]').trigger('change');
-     }
+      if (init_q_param.length) {
+        $('input[name="q"]').val(init_q_param);
+        $('input[name="q"]').trigger('change');
+      }
     }
-      });
+  });
 
 });

@@ -1129,7 +1129,7 @@ export const rulemakings = [
 
     const filters = new URLSearchParams(window.location.search);
     const filters_category_type = filters.has('doc_category_id');
-    const filters_keyword = filters.getAll('q').length; //filters.has('q');
+    const filters_keyword = filters.has('q'); //getAll('q').length;
     const filters_proximity = filters.has('q_proximity') && filters.getAll('q_proximity').length == 2;
     const proximity_only = filters_proximity && !filters_keyword;
 
