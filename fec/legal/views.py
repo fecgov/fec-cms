@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseGone, HttpResponseRedirect
 
 import datetime
 import re
@@ -44,6 +44,11 @@ def save_rulemaking_comments(request):
         data = json.loads(request.body)
     except Exception:
         return JsonResponse({'status': 400, 'ok': False, 'message': 'Invalid JSON'}, status=400)
+
+    # Is the rulemaking still open for comment?
+    rulemaking = api_caller.load_legal_rulemaking(data.get('rm_no', '').strip())
+    if rulemaking['is_open_for_comment'] is False:
+        return JsonResponse({'status': 410, 'ok': False, 'message': 'Commenting has closed'}, status=410)
 
     # Checking reCAPTCHA
     if not data['g-recaptcha-response']:
@@ -504,6 +509,9 @@ def rulemaking_add_comments(request, rm_no, doc_id):
     # If load_legal_rulemaking returned [], there was an error
     if rulemaking == []:
         raise Http404()
+
+    if requested_doc_can_receive_comments is False:
+        return HttpResponseGone()
 
     # If there's more than one key document, we want to remember which one is receiving these comments.
     # This will be used for doc_id, doc_type_label, and doc_url

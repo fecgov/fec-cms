@@ -37,6 +37,7 @@ const submissionStatusMessages = {
   'error-files':
     `Weʼve received your form data but couldnʼt process your attachments. Your submission ID is [$randomid].
     Please <a href="mailto:[$teamEmail]">contact us</a> and reference your submission ID to report any issues.`,
+  '410': `Unfortunately, comments are not being accepted at this time.`,
   '500':
     `Unfortunately, we had trouble processing your request. Please click the ◂ Back button to try again,
     or refresh the page to start over.`
@@ -498,6 +499,10 @@ RulemakingCommenting.prototype.buildTheFrame = function() {
       // If there were no responses for some reason
       if (!this.submissionResponses)
         this.frame5.querySelector('.message--alert p').innerHTML = submissionStatusMessages['500'];
+
+      // If the commenting period has closed
+      else if (this.submissionResponses[0].status == 410)
+        this.frame5.querySelector('.message--alert p').innerHTML = submissionStatusMessages['410'];
 
       // else if we contacted the server but the data didn't go through correctly
       else if (!this.submissionResponses[0].ok)
