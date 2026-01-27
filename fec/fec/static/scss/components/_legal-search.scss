@@ -197,12 +197,10 @@
   .embedded-pdf-list {
     padding: u(2rem);
     
-    // @include media($med) {
-    //   width: 40%;
-    // }
     @include media($lg) {
       border-right: 1px solid $primary;
       width: 33.3%;
+      min-height: 90vh;
     }
     
     h2 {
