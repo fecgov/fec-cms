@@ -444,7 +444,7 @@ def rulemaking(request, rm_no):
 
         new_rm_stage['url'] = stage['url']
 
-        if docs_that_can_receive_comments[0]['doc_id'] == stage['doc_id']:
+        if docs_that_can_receive_comments and docs_that_can_receive_comments[0]['doc_id'] == stage['doc_id']:
             doc_type_label = stage['doc_type_label']
 
         new_rm_stage['doc_entities'] = []
