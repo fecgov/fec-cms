@@ -447,7 +447,7 @@ def rulemaking(request, rm_no):
 
         new_rm_stage['url'] = stage['url']
 
-        if stage['doc_id'] == docs_that_can_receive_comments[0]:
+        if docs_that_can_receive_comments and docs_that_can_receive_comments[0] == stage['doc_id']:
             doc_type_label = stage['doc_type_label']
 
         new_rm_stage['doc_entities'] = []
@@ -500,16 +500,19 @@ def rulemaking_add_comments(request, rm_no, doc_id):
         raise Http404()
 
     rulemaking = api_caller.load_legal_rulemaking(rm_no)
+
+    # If load_legal_rulemaking returned [], there was an error
+    if rulemaking == []:
+        raise Http404()
+
+    # Which docs can receive comments, and is this doc one of them?
     docs_that_can_receive_comments = rulemaking_docs_that_can_receive_comments(rulemaking)
     requested_doc_can_receive_comments = False
     for item in docs_that_can_receive_comments:
         if int(item['doc_id']) == int(doc_id):
             requested_doc_can_receive_comments = True
 
-    # If load_legal_rulemaking returned [], there was an error
-    if rulemaking == []:
-        raise Http404()
-
+    # If this doc can't receive comments, throw a 410
     if requested_doc_can_receive_comments is False:
         return HttpResponseGone()
 

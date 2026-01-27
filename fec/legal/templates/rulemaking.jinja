@@ -47,7 +47,7 @@
       <tbody>
         {% for doc in key_documents %}
         <tr>
-          <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" {% if doc.is_comment_eligible %}data-comment-href="/legal/rulemakings/{{ rm_no }}/{{ doc.doc_id }}/add-comments/" {% endif %}target="_blank">{{ doc.label }}</a></td>
+          <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a></td>
           <td class="date">{{ doc.doc_date|date }}</td>
         </tr>
         {% endfor %}
