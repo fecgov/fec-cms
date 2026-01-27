@@ -421,9 +421,6 @@ def rulemaking(request, rm_no):
     rulemaking = api_caller.load_legal_rulemaking(rm_no)
     docs_that_can_receive_comments = rulemaking_docs_that_can_receive_comments(rulemaking)
 
-    print('docs_that_can_receive_comments:')
-    print(docs_that_can_receive_comments)
-
     if not rm_no:
         raise Http404()
 
@@ -447,7 +444,7 @@ def rulemaking(request, rm_no):
 
         new_rm_stage['url'] = stage['url']
 
-        if docs_that_can_receive_comments and docs_that_can_receive_comments[0] == stage['doc_id']:
+        if docs_that_can_receive_comments[0]['doc_id'] == stage['doc_id']:
             doc_type_label = stage['doc_type_label']
 
         new_rm_stage['doc_entities'] = []
