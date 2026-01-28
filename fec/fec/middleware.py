@@ -119,6 +119,14 @@ class AddSecureHeaders(MiddlewareMixin):
             response['cache-control'] = 'no-cache, no-store, must-revalidate'
             response['Pragma'] = 'no-cache'
             response['Expires'] = '0'
+        elif request.path.startswith('/legal/rulemakings/'):
+            # Do not cache individual rulemaking pages or comment submission pages
+            response['cache-control'] = 'no-cache, no-store, must-revalidate'
+            response['Pragma'] = 'no-cache'
+            response['Expires'] = '0'
+        elif request.path.startswith('/legal/search/rulemakings'):
+            # Reduced cache for rulemaking search/listing page
+            response['cache-control'] = 'max-age=60'
         else:
             # Cache everything else
             response["cache-control"] = "max-age=600"

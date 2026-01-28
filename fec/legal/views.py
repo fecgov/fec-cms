@@ -47,11 +47,13 @@ def save_rulemaking_comments(request):
 
     # Is the rulemaking still open for comment?
     rulemaking = api_caller.load_legal_rulemaking(data.get('rm_no', '').strip())
+    if rulemaking == []:
+        return JsonResponse({'status': 404, 'ok': False, 'message': 'Rulemaking not found'}, status=404)
     if rulemaking['is_open_for_comment'] is False:
         return JsonResponse({'status': 410, 'ok': False, 'message': 'Commenting has closed'}, status=410)
 
     # Checking reCAPTCHA
-    if not data['g-recaptcha-response']:
+    if not data.get('g-recaptcha-response'):
         return JsonResponse({'status': 400, 'ok': False, 'message': 'Invalid reCAPTCHA'}, status=400)
     else:
         verifyRecaptcha = requests.post(

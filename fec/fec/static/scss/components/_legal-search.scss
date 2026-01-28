@@ -199,8 +199,8 @@
     
     @include media($lg) {
       border-right: 1px solid $primary;
-      width: 33.3%;
       min-height: 90vh;
+      width: 33.3%;
     }
     
     h2 {
