@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseGone, HttpResponseRedirect
 
 import datetime
 import re
@@ -45,8 +45,15 @@ def save_rulemaking_comments(request):
     except Exception:
         return JsonResponse({'status': 400, 'ok': False, 'message': 'Invalid JSON'}, status=400)
 
+    # Is the rulemaking still open for comment?
+    rulemaking = api_caller.load_legal_rulemaking(data.get('rm_no', '').strip())
+    if rulemaking == []:
+        return JsonResponse({'status': 404, 'ok': False, 'message': 'Rulemaking not found'}, status=404)
+    if rulemaking['is_open_for_comment'] is False:
+        return JsonResponse({'status': 410, 'ok': False, 'message': 'Commenting has closed'}, status=410)
+
     # Checking reCAPTCHA
-    if not data['g-recaptcha-response']:
+    if not data.get('g-recaptcha-response'):
         return JsonResponse({'status': 400, 'ok': False, 'message': 'Invalid reCAPTCHA'}, status=400)
     else:
         verifyRecaptcha = requests.post(
@@ -380,23 +387,52 @@ def admin_fine_page(request, admin_fine_no):
     })
 
 
+# Returns a list of rulemaking docs that can receive comments, either [] or
+# [{'doc_id': int, 'label': string},]
+def rulemaking_docs_that_can_receive_comments(rm):
+    comment_eligible_docs = []
+
+    # If is_open_for_comment is false, we're done
+    if rm['is_open_for_comment'] is False:
+        return comment_eligible_docs
+
+    # Rulemaking documents are organized by presentation, starting with their document/rulemaking stage
+    # so we have to loop through stages, then label groups, then the documents themselves.
+    # {documents} can have different docs than {documents: [{level_2_labels: [{level_2_docs }]}]}
+    for docs_stage in rm['documents']:
+        if docs_stage['is_comment_eligible'] is True:
+            comment_eligible_docs.append({
+                'doc_id': int(docs_stage['doc_id']),
+                'label': docs_stage['level_1_label'],
+            })
+
+        for labels in docs_stage.get('level_2_labels', []):
+            for doc in labels.get('level_2_docs', []):
+                if doc['is_comment_eligible'] is True:
+                    comment_eligible_docs.append({
+                        'doc_id': int(doc['doc_id']),
+                        'label': doc['level_1_label'],
+                    })
+
+    return comment_eligible_docs
+
+
+# The single rulemaking page
 def rulemaking(request, rm_no):
 
     rulemaking = api_caller.load_legal_rulemaking(rm_no)
-    # rm_no always open for comment: 0033-99
-    # other rm_no: 2024-10, 2024-09, 2024-08, 2024-07
-    # rulemaking = api_caller.load_legal_rulemaking('2024-10')
+    docs_that_can_receive_comments = rulemaking_docs_that_can_receive_comments(rulemaking)
 
     if not rm_no:
         raise Http404()
 
     key_documents = []
-    for key_doc in rulemaking['key_documents']:
+    doc_type_label = ''
+    for i, key_doc in enumerate(rulemaking['key_documents']):
         key_documents.append({
             'doc_date': key_doc['doc_date'],
             'doc_id': key_doc['doc_id'],
-            'label': key_doc['doc_type_label'],  # This is inconsistent
-            # 'label': key_doc['doc_description'],  # This is inconsistent
+            'label': key_doc['doc_type_label'],
             'url': key_doc['url'],
         })
 
@@ -407,8 +443,12 @@ def rulemaking(request, rm_no):
         new_rm_stage['doc_date'] = stage['doc_date']
         new_rm_stage['doc_id'] = stage['doc_id']
         new_rm_stage['label'] = stage['doc_type_label']
-        # new_rm_stage['doc_stage'] = stage['doc_type_label']  # e.g. Notice of Avail, Commencing Document
+
         new_rm_stage['url'] = stage['url']
+
+        for doc in docs_that_can_receive_comments:
+            if doc['doc_id'] == stage['doc_id']:
+                doc_type_label = stage['doc_type_label']
 
         new_rm_stage['doc_entities'] = []
         for entity in stage['doc_entities']:
@@ -437,7 +477,7 @@ def rulemaking(request, rm_no):
         documents.append(new_rm_stage)
 
     return render(request, 'rulemaking.jinja', {
-        'is_open_for_comment': rulemaking['is_open_for_comment'],
+        'docs_that_can_receive_comments': docs_that_can_receive_comments,
         'comment_close_date': rulemaking['comment_close_date'] or '',
         'documents': documents,
         'key_documents': key_documents,
@@ -445,13 +485,14 @@ def rulemaking(request, rm_no):
         'rm_name': rulemaking['rm_name'],
         'rm_no': rulemaking['rm_no'],
         'rm_number': rulemaking['rm_number'],
+        'doc_type_label': doc_type_label,
         'parent': 'legal',
         'social_image_identifier': 'legal',
         'could_testify': True,
     })
 
 
-def rulemaking_add_comments(request, rm_no):
+def rulemaking_add_comments(request, rm_no, doc_id):
     """
     Data for the rulemaking commenting interface
     """
@@ -464,14 +505,35 @@ def rulemaking_add_comments(request, rm_no):
     if rulemaking == []:
         raise Http404()
 
+    # Which docs can receive comments, and is this doc one of them?
+    docs_that_can_receive_comments = rulemaking_docs_that_can_receive_comments(rulemaking)
+    requested_doc_can_receive_comments = False
+    for item in docs_that_can_receive_comments:
+        if int(item['doc_id']) == int(doc_id):
+            requested_doc_can_receive_comments = True
+
+    # If this doc can't receive comments, throw a 410
+    if requested_doc_can_receive_comments is False:
+        return HttpResponseGone()
+
+    # If there's more than one key document, we want to remember which one is receiving these comments.
+    # This will be used for doc_id, doc_type_label, and doc_url
+    doc_receiving_comments = {'doc_type_label': '', 'url': ''}
+    for key_doc in rulemaking['key_documents']:
+        if int(key_doc['doc_id']) == int(doc_id):
+            doc_receiving_comments = key_doc
+
     return render(request, 'rulemaking-comments.jinja', {
+        'can_receive_comments': requested_doc_can_receive_comments,
         'description': rulemaking['description'],
-        'is_open_for_comment': rulemaking['is_open_for_comment'],
         'rm_id': rulemaking['rm_id'],
         'rm_name': rulemaking['rm_name'],
         'rm_no': rulemaking['rm_no'],
         'rm_number': rulemaking['rm_number'],
         'rm_title': rulemaking['title'],
+        'doc_id': doc_id,
+        'doc_type_label': doc_receiving_comments['doc_type_label'],
+        'doc_url': doc_receiving_comments['url'],
         'parent': 'legal',
         'social_image_identifier': 'legal',
         'could_testify': False,  # TODO: This will change when the field exists in the API
