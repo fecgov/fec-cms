@@ -1,7 +1,7 @@
 {% extends 'layouts/legal-main.jinja' %}
 {% import 'macros/breadcrumbs.jinja' as breadcrumb %}
 {% import 'macros/legal.jinja' as legal %}
-{% set breadcrumb_links=[('/legal/rulemakings/', 'Rulemakings'), ('/legal/rulemakings/' + rm_no + '/', rm_number)] %}
+{% set breadcrumb_links=[('/legal/search/rulemakings/', 'Rulemakings'), ('/legal/rulemakings/' + rm_no + '/', rm_number)] %}
 
 {% block title %}Submit rulemaking comments{% endblock %}
 
