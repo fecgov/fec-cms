@@ -15,8 +15,7 @@ END_YEAR = 2026  # Change at the beginning of the year
 DEFAULT_TIME_PERIOD = 2026  # Change after the April quarterly report (4/15/27)
 DEFAULT_ELECTION_YEAR = 2026  # Change after election day (11/3/26)
 DEFAULT_PRESIDENTIAL_YEAR = 2028  # Change after April quarterly after mid-terms (4/15/29)
-DISTRICT_MAP_CUTOFF = 2012  # The year we show district maps for on election pages. Change at the beginning of the year
-
+DISTRICT_MAP_CUTOFF = 2012  # The earliest year we show district maps for on election pages
 states = OrderedDict([
     ('AL', 'Alabama'),
     ('AK', 'Alaska'),
