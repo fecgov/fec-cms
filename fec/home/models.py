@@ -103,6 +103,18 @@ def get_sort_key_for_title(title):
     return title
 
 
+class CrossReferenceEntry:
+    """Lightweight stand-in for a CourtCasePage used by cross-reference entries."""
+    is_cross_reference = True
+
+    def __init__(self, title, referenced_cases):
+        self.title = title
+        self.index_title = title
+        self.referenced_cases = referenced_cases  # list of CourtCasePage instances
+        self.status = 'closed'
+        self.opinions = ''
+
+
 def court_case_sort_key(case, get_sort_key_func=None):
     """
     Generate a sort key for a court case.
@@ -1165,11 +1177,25 @@ class CourtCaseIndexPage(ContentPage):
         default='',
         blank=True
     )
+    cross_references = StreamField([
+        ('cross_reference', blocks.StructBlock([
+            ('title', blocks.CharBlock(
+                label='Title',
+                help_text='Plain-text title for the index (e.g., "Americans for Change: FEC v.")'
+            )),
+            ('see_also_cases', blocks.ListBlock(
+                blocks.PageChooserBlock(page_type='home.CourtCasePage'),
+                label='See also cases',
+                help_text='Court case pages to link in the "See:" line'
+            )),
+        ]))
+    ], null=True, blank=True, help_text='Cross-reference entries that appear as plain text with "See:" links')
 
     subpage_types = ['CourtCasePage']
 
     content_panels = Page.content_panels + [
         FieldPanel('intro'),
+        FieldPanel('cross_references'),
         FieldPanel('body'),
         FieldPanel('sidebar'),
         FieldPanel('record_articles'),
@@ -1206,6 +1232,20 @@ class CourtCaseIndexPage(ContentPage):
         # Convert to list and sort using custom sort key
         # Sorts alphabetically (by index_title or title), then by case numbers (higher first) for same titles
         cases_list = list(all_cases)
+
+        # Merge cross-reference entries from the StreamField
+        if self.cross_references:
+            for block in self.cross_references:
+                if block.block_type == 'cross_reference':
+                    referenced_cases = [
+                        page.specific for page in block.value['see_also_cases']
+                    ]
+                    entry = CrossReferenceEntry(
+                        title=block.value['title'],
+                        referenced_cases=referenced_cases,
+                    )
+                    cases_list.append(entry)
+
         cases_list.sort(key=lambda c: court_case_sort_key(c))
 
         total_cases_count = len(cases_list)
@@ -1248,6 +1288,8 @@ class CourtCaseIndexPage(ContentPage):
 
 
 class CourtCasePage(Page):
+    is_cross_reference = False
+
     index_title = models.CharField(
         max_length=255,
         blank=True,

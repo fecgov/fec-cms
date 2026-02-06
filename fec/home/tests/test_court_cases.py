@@ -311,6 +311,50 @@ class CourtCaseIndexPageTests(WagtailPageTests):
         self.assertContains(response, '21st Century Fund v. FEC')
         self.assertContains(response, '501(c)(4) Organization v. FEC')
 
+    def test_cross_reference_cases_render_as_plain_text(self):
+        """Test that cross-reference entries from the StreamField render as
+        plain text with 'See:' links, while normal cases render as links."""
+        # Create a target case (the case being referenced)
+        target_case = CourtCasePage(
+            title="Wagner v. FEC",
+            slug="wagner-v-fec",
+            index_title="Wagner: FEC v.",
+            opinions="<p>Some opinion</p>",
+        )
+        self.index_page.add_child(instance=target_case)
+        target_case.save()
+
+        # Add a cross-reference entry on the index page's StreamField
+        self.index_page.cross_references = [
+            ('cross_reference', {
+                'title': 'Miller: FEC v.',
+                'see_also_cases': [target_case],
+            })
+        ]
+        self.index_page.save()
+
+        client = Client()
+        response = client.get(self.index_page.url)
+        content = response.content.decode()
+
+        self.assertEqual(response.status_code, 200)
+
+        # Cross-reference entry should be rendered as plain text (span), not a link
+        self.assertIn('<span>Miller: FEC v.</span>', content)
+
+        # "See:" line with the target case as a link
+        self.assertIn('See:', content)
+        self.assertIn(
+            '<a href="{}">Wagner v. FEC</a>'.format(target_case.url),
+            content,
+        )
+
+        # The target case itself should still render as a normal link
+        self.assertIn(
+            '<a href="{}">Wagner: FEC v.</a>'.format(target_case.url),
+            content,
+        )
+
     def test_get_sort_key_converts_numbers_to_words(self):
         """Test that get_sort_key properly converts leading numbers"""
         # Test the helper method directly
