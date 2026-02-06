@@ -16,7 +16,8 @@ from ..models import (
     CourtCasePage,
     CourtCaseIndexPage,
     ResourcePage,
-    HomePage
+    HomePage,
+    court_case_sort_key,
 )
 from ..templatetags.active_court_cases import active_court_cases
 from ..templatetags.selected_court_cases import selected_court_cases
@@ -302,6 +303,68 @@ class CourtCaseIndexPageTests(WagtailPageTests):
 
         result = self.index_page.get_sort_key("100 Citizens Group")
         self.assertEqual(result, "one hundred Citizens Group")
+
+
+class CourtCaseSortKeyTests(TestCase):
+    """Tests for court_case_sort_key function"""
+
+    def setUp(self):
+        self.home_page = HomePage.objects.first()
+        if not self.home_page:
+            root_page = Page.objects.get(depth=1)
+            self.home_page = HomePage(title="Home", slug="home")
+            root_page.add_child(instance=self.home_page)
+
+    def test_same_name_cases_sort_reverse_chronologically(self):
+        """Test that cases with the same name sort by first case number, newest first"""
+        case_oldest = CourtCasePage(
+            title="Campaign Legal Center v. FEC (21-1376)",
+            slug="clc-v-fec-21-1376",
+        )
+        self.home_page.add_child(instance=case_oldest)
+
+        case_mid = CourtCasePage(
+            title="Campaign Legal Center v. FEC (22-838)",
+            slug="clc-v-fec-22-838",
+        )
+        self.home_page.add_child(instance=case_mid)
+
+        case_newest = CourtCasePage(
+            title="Campaign Legal Center v. FEC (22-1976 / 22-5339)",
+            slug="clc-v-fec-22-1976",
+        )
+        self.home_page.add_child(instance=case_newest)
+
+        cases = [case_oldest, case_mid, case_newest]
+        sorted_cases = sorted(cases, key=lambda c: court_case_sort_key(c))
+
+        # Reverse chronological: newest (highest first case number) first
+        self.assertEqual(sorted_cases[0].slug, "clc-v-fec-22-1976")
+        self.assertEqual(sorted_cases[1].slug, "clc-v-fec-22-838")
+        self.assertEqual(sorted_cases[2].slug, "clc-v-fec-21-1376")
+
+    def test_sort_uses_first_case_number_not_highest(self):
+        """Test that sorting uses the first case number in the title, not the highest"""
+        # Case A has a lower first number (20-100) but a higher second number (23-9999)
+        case_a = CourtCasePage(
+            title="Test v. FEC (20-100 / 23-9999)",
+            slug="test-v-fec-a",
+        )
+        self.home_page.add_child(instance=case_a)
+
+        # Case B has a higher first number (22-500)
+        case_b = CourtCasePage(
+            title="Test v. FEC (22-500)",
+            slug="test-v-fec-b",
+        )
+        self.home_page.add_child(instance=case_b)
+
+        sorted_cases = sorted([case_a, case_b], key=lambda c: court_case_sort_key(c))
+
+        # Case B's first number (22-500) is higher than Case A's first number (20-100)
+        # so Case B should sort first (reverse chronological)
+        self.assertEqual(sorted_cases[0].slug, "test-v-fec-b")
+        self.assertEqual(sorted_cases[1].slug, "test-v-fec-a")
 
 
 class CourtCaseTemplateTagTests(TestCase):

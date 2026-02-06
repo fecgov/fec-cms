@@ -43,20 +43,17 @@ from home.blocks import (
 logger = logging.getLogger(__name__)
 
 
-def extract_case_numbers(title):
+def extract_first_case_number(title):
     """
-    Extract case numbers from a court case title for sorting.
+    Extract the first case number from a court case title for sorting.
     Case numbers appear in formats like (19-1021), (20-0588 / 21-5081), etc.
-    Returns a list of (year, number) tuples, sorted descending by year then number.
+    Returns the first (year, number) tuple found, or None if no case number exists.
     """
     import re
-    pattern = r'(\d{2})-(\d+)'
-    matches = re.findall(pattern, title)
-    if not matches:
-        return []
-    numbers = [(int(year), int(num)) for year, num in matches]
-    numbers.sort(reverse=True)
-    return numbers
+    match = re.search(r'(\d{2})-(\d+)', title)
+    if not match:
+        return None
+    return (int(match.group(1)), int(match.group(2)))
 
 
 def get_sort_key_for_title(title):
@@ -128,12 +125,12 @@ def court_case_sort_key(case, get_sort_key_func=None):
     alpha_title = re.sub(r'\s*\([^)]*\)\s*$', '', title).strip()
     alpha_key = sort_key_func(alpha_title).lower()
 
-    # Get case numbers, negated for descending sort
-    case_nums = extract_case_numbers(title)
-    # Negate so higher numbers sort first; use (0, 0) if no case numbers
-    negated = tuple((-year, -num) for year, num in case_nums) if case_nums else ((0, 0),)
+    # Sort by the first case number in the title, with higher numbers first (reverse chronological)
+    first_case_num = extract_first_case_number(title)
+    # Negate so higher numbers sort first; use (0, 0) if no case number
+    num_key = (-first_case_num[0], -first_case_num[1]) if first_case_num else (0, 0)
 
-    return (alpha_key, negated)
+    return (alpha_key, num_key)
 
 
 """options for wagtail default table_block """
