@@ -1315,6 +1315,12 @@ class CourtCasePage(Page):
         FieldPanel('selected_court_case'),
     ]
 
+    search_fields = Page.search_fields + [
+        index.SearchField('index_title'),
+        index.AutocompleteField('index_title'),
+        index.FilterField('status'),
+    ]
+
     parent_page_types = ['CourtCaseIndexPage', 'ResourcePage']
 
     @property

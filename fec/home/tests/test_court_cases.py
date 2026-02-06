@@ -103,6 +103,28 @@ class CourtCasePageTests(WagtailPageTests):
         # The template uses index_title if present
         self.assertEqual(court_case.index_title, "Short Name: FEC v.")
 
+    def test_search_fields_defined(self):
+        """Test that CourtCasePage has search_fields for the page chooser search.
+
+        The page chooser uses autocomplete(), so AutocompleteField entries
+        are required for the chooser's search bar to work.
+        """
+        from wagtail.search import index
+
+        field_names = [f.field_name for f in CourtCasePage.search_fields]
+        # title comes from Page.search_fields
+        self.assertIn('title', field_names)
+        # index_title is added by CourtCasePage
+        self.assertIn('index_title', field_names)
+
+        # Verify AutocompleteField entries exist (needed by page chooser)
+        autocomplete_fields = [
+            f.field_name for f in CourtCasePage.search_fields
+            if isinstance(f, index.AutocompleteField)
+        ]
+        self.assertIn('title', autocomplete_fields)
+        self.assertIn('index_title', autocomplete_fields)
+
 
 class CourtCaseIndexPageTests(WagtailPageTests):
     """Tests for CourtCaseIndexPage model"""
