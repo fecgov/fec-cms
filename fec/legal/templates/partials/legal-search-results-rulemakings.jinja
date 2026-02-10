@@ -1,0 +1,170 @@
+<div class="panel__main legal-search-results">
+  <div class="overlay is-loading" {% if is_loading %}style="display:block;"{% else %}style="display:none;"{% endif %}></div>
+  <table class="simple-table simple-table--display">
+    <thead>
+      <tr class="simple-table__header">
+        <th class="simple-table__header-cell cell--15">Reg number</th>
+        <th class="simple-table__header-cell cell--70">REG name and documents</th>
+        <th class="simple-table__header-cell cell--15">Open for comments</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rulemaking in results.rulemakings %}
+      <tr class="simple-table__row">
+        <td class="simple-table__cell align-top t-bold">
+          <div class="t-sans">
+            <i class="icon i-folder icon--inline--left"></i>
+            <a class="t-bold" title="{{ rulemaking.rm_name }}" href="/legal/rulemakings/{{ rulemaking.rm_no }}/">{{ rulemaking.rm_number }}</a>
+          </div>
+        </td>
+        <td class="simple-table__cell all column--legal-docs align-top">
+          <div class="t-sans">
+            <p><strong>{{rulemaking.rm_name}}</strong>
+          </div>
+          {% if rulemaking.document_highlights  %}
+            <div class="legal-search-result__hit u-padding--left--small u-margin--top u-negative--left--margin split__cell">
+              {# Check for set document categories #}
+              {# {% set filters_category_type = selected_doc_category_ids | length > 0 %} #}
+              {# Check for set keyword queries #}
+              {% set filters_keyword = query | length > 0 %}
+              {# Check for set proximity queries #}
+              {# {% set filters_proximity = q_proximities[0] != '' and q_proximities[1] != '' and max_gaps != '' %} #}
+              {# Check for proximity-only queries #}
+              {# {% set proximity_only = filters_proximity and not filters_keyword %} #}
+              {# Only show documents when categories or keywords are set #}
+              {% if filters_keyword %}
+                {% for document in rulemaking.documents %}
+                  {# When including this template in legal-search-results.jinja #}
+                  {% if nested_in_global_search %}
+                    {# Only show documents that have keyword matches #}
+                    {% set show_document =  document.highlights %}   
+                  {% endif %}
+                  {% if show_document %}
+                    <div class="post--icon u-padding--top">
+                      <span class="icon icon--inline--left i-document"></span>
+                      <a href="{{document.url}}">
+                        {{ document.doc_type_label}}
+                      </a>
+                    </div>
+                    {% set query_highlight = document.highlights %}
+                    {% if(query_highlight) %}
+                      {# show only first document highlight result #}
+                      <ul>
+                          <li class="post--icon t-serif t-italic u-padding--top--med">
+                            &#8230;{{ query_highlight[0] | safe }}&#8230;
+                          </li>
+                      </ul>
+                      {# show additional document highlight results, if any #}
+                      {% if(query_highlight|length > 1) %}
+                        <div class="js-accordion u-margin--top" data-content-prefix="additional-result-{{ rulemaking.rm_no }}-{{loop.index0}}">
+                        <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ rulemaking.rm_no }}-{{loop.index0}}" aria-expanded="false">
+                          {% if (query_highlight|length == 2) %}
+                            1 more match
+                          {% elif(query_highlight|length > 2)  %}
+                            {{ query_highlight|length -1 }} more matches
+                          {% endif %}
+                        </button>
+                        <div class="accordion__content results__content" aria-hidden="true">
+                            <ul>
+                              {% for highlight in query_highlight %}
+                                {% if(loop.index0 != 0) %}
+                                  <li class="t-serif t-italic">&#8230;{{ highlight | safe }}&#8230;</li>
+                                {% endif %}
+                              {% endfor %}
+                            </ul>
+                        </div>
+                      </div>
+                      {% endif %}
+                    {% endif %}
+                    <ul class="tags u-padding--bottom">
+                      <li class="tag__category tag__category--doc">
+                        <div class="tag tag--primary">{{ document.doc_category_label }}</div>
+                      </li>
+                    </ul>
+                    {% else %}
+                    {# documents we skip #}
+                  {% endif %}
+                  {% if document.level_2_labels and document.level_2_labels | length %}
+
+                    {% for  label in document.level_2_labels %} 
+
+                      {% for l2_document in label.level_2_docs %}
+                          {# When including this template in legal-search-results.jinja #}
+                          {% if nested_in_global_search %}
+                            {# Only show documents that have keyword matches #}
+                            {% set show_document =  l2_document.highlights %}   
+                          {% endif %}
+                          {% if show_document %}
+                            <div class="post--icon u-padding--top">
+                              <span class="icon icon--inline--left i-document"></span>
+                              <a href="{{document.url}}">
+                                {{ l2_document.doc_type_label}}
+                              </a>
+                            </div>
+                            {% set query_highlight = l2_document.highlights %}
+                            {% if(query_highlight) %}
+                              {# show only first document highlight result #}
+                              <ul>
+                                  <li class="post--icon t-serif t-italic u-padding--top--med">
+                                    &#8230;{{ query_highlight[0] | safe }}&#8230;
+                                  </li>
+                              </ul>
+                              {# show additional document highlight results, if any #}
+                              {% if(query_highlight|length > 1) %}
+                                  <div class="js-accordion u-margin--top" data-content-prefix="additional-result-{{ rulemaking.rm_no }}-{{loop.index0}}">
+                                    <button type="button" class="js-accordion-trigger accordion__button results__button" aria-controls="additional-result-{{ rulemaking.rm_no }}-{{loop.index0}}" aria-expanded="false">
+                                      {% if (query_highlight|length == 2) %}
+                                        1 more match
+                                      {% elif(query_highlight|length > 2)  %}
+                                        {{ query_highlight|length -1 }} more matches
+                                      {% endif %}
+                                    </button>
+                                    <div class="accordion__content results__content" aria-hidden="true">
+                                        <ul>
+                                          {% for highlight in query_highlight %}
+                                            {% if(loop.index0 != 0) %}
+                                              <li class="t-serif t-italic">&#8230;{{ highlight | safe }}&#8230;</li>
+                                            {% endif %}
+                                          {% endfor %}
+                                        </ul>
+                                    </div>
+                                  </div>
+                              {% endif %}
+                            {% endif %}
+                            <ul class="tags u-padding--bottom">
+                              <li class="tag__category tag__category--doc">
+                                <div class="tag tag--primary">{{ l2_document.doc_category_label }}</div>
+                              </li>
+                            </ul>
+                            {% else %}
+                            {# documents we skip #}
+                          {% endif %}
+                
+                      {% endfor %}
+                
+                    {% endfor %}
+
+                  {% endif %}
+                
+
+
+
+                  {% endfor %}
+              {% endif %}
+            </div>
+          {% endif %}
+        </td>
+        <td class="simple-table__cell align-top">
+          <div class="t-sans">
+          {% if rulemaking.is_open_for_comment == false %} 
+             Not currently open for comment.
+          {% else %}
+            Open for comment.
+          {% endif %} 
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

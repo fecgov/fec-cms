@@ -29,6 +29,9 @@
       <span class="filters__title">Edit filters</span>
     </button>
     <div class="filters__content">
+      <div class="filters__aside">
+    <div class="button--notebook u-margin--top t-sans">Use the legal search guide to learn more about <a href="/legal-resources/how-to-use-fec-legal-search-systems/">how to use FEC legal search systems</a>.</div>
+  </div>
       <form id="category-filters" action="/data/legal/search/{{ result_type | replace('_', '-') }}">
         <input id="search-type" type="hidden" name="search_type" value="{{ result_type }}">
         {% block filters %}
