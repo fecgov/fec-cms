@@ -196,34 +196,4 @@ Search legal resources
     </div>
   </div>
 </div>
-<script>
-  // Update results per page limit 
-  // Shows overlay when page is loading
-  document.addEventListener('DOMContentLoaded', function() {
-    var searchSelect = document.querySelector('[name="search_type"]');
-    var overlayContainer = document.querySelector('.overlay.is-loading');
-
-    function setLoadingState(isLoading) {
-      if (isLoading) {
-        overlayContainer.style.display = 'block';
-      } else {
-        overlayContainer.style.display = 'none';
-      }
-    }
-    
-      searchSelect.addEventListener('change', function() {
-        setLoadingState(true);
-      });
-    //resultsInfo.forEach(function(item) {
-      //item.addEventListener('change', function() {
-        //setLoadingState(true);
-     // });
-    //});
-
-    // Ends loading state after DOM content loaded
-    window.addEventListener('load', function() {
-      setLoadingState(false);
-    });
-  });
-  </script>
 {% endblock %}
