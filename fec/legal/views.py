@@ -117,10 +117,20 @@ def save_rulemaking_comments(request):
         i = 1
         while data.get('commenters[' + str(i) + '].commenterType'):
             prefix = 'commenters[' + str(i) + ']'
-            to_submit[prefix + '.commenterType'] = (data.get(prefix + '.commenterType') or '').strip()
-            to_submit[prefix + '.firstName'] = (data.get(prefix + '.firstName') or '').strip()
-            to_submit[prefix + '.lastName'] = (data.get(prefix + '.lastName') or '').strip()
-            to_submit[prefix + '.orgName'] = (data.get(prefix + '.orgName') or '').strip()
+            # Is the commenter an individual or organization?
+            commenterType = (data.get(prefix + '.commenterType') or '').strip()
+            to_submit[prefix + '.commenterType'] = commenterType
+
+            # For organizations, set firstName and lastName to '' (else save whatever comes in)
+            to_submit[prefix + '.firstName'] = \
+                '' if commenterType == 'organization' else (data.get(prefix + '.firstName') or '').strip()
+            to_submit[prefix + '.lastName'] = \
+                '' if commenterType == 'organization' else (data.get(prefix + '.lastName') or '').strip()
+
+            # For individuals, set orgName to '' (else save whatever comes in)
+            to_submit[prefix + '.orgName'] = \
+                '' if commenterType == 'individual' else (data.get(prefix + '.orgName') or '').strip()
+
             to_submit[prefix + '.addressType'] = (data.get(prefix + '.addressType') or '').strip()
             to_submit[prefix + '.mailingCity'] = (data.get(prefix + '.mailingCity') or '').strip()
             to_submit[prefix + '.mailingState'] = (data.get(prefix + '.mailingState') or '').strip()
