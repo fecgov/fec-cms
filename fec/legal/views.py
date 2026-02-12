@@ -114,19 +114,29 @@ def save_rulemaking_comments(request):
                 (data.get('commenters[0].representedEntity.emailAddress') or '').strip()
 
         # For an unlimited number of commenters,
-        i = 1
-        while data.get('commenters[' + str(i) + '].commenterType'):
-            prefix = 'commenters[' + str(i) + ']'
-            to_submit[prefix + '.commenterType'] = (data.get(prefix + '.commenterType') or '').strip()
-            to_submit[prefix + '.firstName'] = (data.get(prefix + '.firstName') or '').strip()
-            to_submit[prefix + '.lastName'] = (data.get(prefix + '.lastName') or '').strip()
-            to_submit[prefix + '.orgName'] = (data.get(prefix + '.orgName') or '').strip()
+        commenter_num = 1
+        while data.get('commenters[' + str(commenter_num) + '].commenterType'):
+            prefix = 'commenters[' + str(commenter_num) + ']'
+            # Is the commenter an individual or organization?
+            commenterType = (data.get(prefix + '.commenterType') or '').strip()
+            to_submit[prefix + '.commenterType'] = commenterType
+
+            # For organizations, set firstName and lastName to '' (else save whatever comes in)
+            to_submit[prefix + '.firstName'] = \
+                '' if commenterType == 'organization' else (data.get(prefix + '.firstName') or '').strip()
+            to_submit[prefix + '.lastName'] = \
+                '' if commenterType == 'organization' else (data.get(prefix + '.lastName') or '').strip()
+
+            # For individuals, set orgName to '' (else save whatever comes in)
+            to_submit[prefix + '.orgName'] = \
+                '' if commenterType == 'individual' else (data.get(prefix + '.orgName') or '').strip()
+
             to_submit[prefix + '.addressType'] = (data.get(prefix + '.addressType') or '').strip()
             to_submit[prefix + '.mailingCity'] = (data.get(prefix + '.mailingCity') or '').strip()
             to_submit[prefix + '.mailingState'] = (data.get(prefix + '.mailingState') or '').strip()
             to_submit[prefix + '.mailingCountry'] = (data.get(prefix + '.mailingCountry') or '').strip()
             to_submit[prefix + '.emailAddress'] = (data.get(prefix + '.emailAddress') or '').strip()
-            i += 1
+            commenter_num += 1
 
         # Add the comments
         to_submit['comments'] = data.get('comments', '').strip()
