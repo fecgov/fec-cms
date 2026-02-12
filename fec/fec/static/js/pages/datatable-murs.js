@@ -188,7 +188,6 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
       $(this).attr('aria-expanded', exp);
       //let hid = $(this).next('div').attr('aria-hidden') == 'true' ? 'false' : 'false'
       $(this).next('div').attr('aria-hidden', exp == 'true' ? 'false' : 'true');
-
     });
 
   const $table = $('#results');
@@ -201,6 +200,7 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
     order: [[0, 'desc']],
     useFilters: true,
     useExport: false,
+    pagingType: "full_numbers",
     // Initiate the field value and fire change for keyword if included in querystring in a link or copy/pasted url
     // TODO: DO I NEED THIS AT ALL?, ALSO - If so Don't think I need to also add tags here(commented out)...Updated comment...No, it ends up with two tags once I added trigger('change')
     initComplete: function () {
