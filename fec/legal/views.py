@@ -114,9 +114,9 @@ def save_rulemaking_comments(request):
                 (data.get('commenters[0].representedEntity.emailAddress') or '').strip()
 
         # For an unlimited number of commenters,
-        i = 1
-        while data.get('commenters[' + str(i) + '].commenterType'):
-            prefix = 'commenters[' + str(i) + ']'
+        commenter_num = 1
+        while data.get('commenters[' + str(commenter_num) + '].commenterType'):
+            prefix = 'commenters[' + str(commenter_num) + ']'
             # Is the commenter an individual or organization?
             commenterType = (data.get(prefix + '.commenterType') or '').strip()
             to_submit[prefix + '.commenterType'] = commenterType
@@ -136,7 +136,7 @@ def save_rulemaking_comments(request):
             to_submit[prefix + '.mailingState'] = (data.get(prefix + '.mailingState') or '').strip()
             to_submit[prefix + '.mailingCountry'] = (data.get(prefix + '.mailingCountry') or '').strip()
             to_submit[prefix + '.emailAddress'] = (data.get(prefix + '.emailAddress') or '').strip()
-            i += 1
+            commenter_num += 1
 
         # Add the comments
         to_submit['comments'] = data.get('comments', '').strip()
