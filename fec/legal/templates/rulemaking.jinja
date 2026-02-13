@@ -91,7 +91,7 @@
       <tr class="level-3 {{ rowshading }}">
         <td>
           <ul>
-            {% if doc.label == 'Comments' %}
+            {% if doc.label == 'Comments' and doc.doc_entities  %}
               {% for entity in doc.doc_entities %}
                 {% if doc.doc_entities|length == 1 %}
                   <li>
