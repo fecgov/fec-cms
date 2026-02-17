@@ -46,3 +46,4 @@ faker==26.0.0
 
 # CircleCI build
 setuptools==78.1.1
+pillow>=12.1.1 # not directly required, pinned by Snyk to avoid a vulnerability
