@@ -600,6 +600,7 @@ RulemakingCommenting.prototype.validateEntireForm = function() {
 
       if (formData.get(`commenters[${i}].commenterType`) === 'organization')
         requiredFieldNames.push(`commenters[${i}].orgName`);
+
       else {
         requiredFieldNames.push(
           `commenters[${i}].firstName`,
@@ -1043,6 +1044,13 @@ RulemakingCommenting.prototype.handleFormChange = function(e) {
 
     if (e.target.name === 'representedEntityType')
       this.representedEntityType = e.target.value;
+
+    else if (e.target.name === 'representedEntityConnection') {
+      // Then if the comments field is blank, push the relationship description to the comments field,
+      // which would allow submitters to change it before submission
+      if (e.target.value != '' && commentsField.value == '')
+        commentsField.value = `Relationship of submitter to commenter(s): ${e.target.value}\n\n`;
+    }
   }
 
   // If we've changed the country, we'll toggle whether state and ZIP are required (req for US/USA)
@@ -1252,7 +1260,7 @@ RulemakingCommenting.prototype.startSubmitting = async function() {
   const attachedFiles = [];
   // For each of the fields in the form,
   formData.entries().forEach(entry => {
-    // If the field name starts with `files[…`
+    // If the field name starts with `files[`
     if (entry[0].indexOf('files[') === 0) {
       // If this field is a file, we only want its name and size for now,
       // and let's add '.name' to the end so files[0] becomes files[0].name
