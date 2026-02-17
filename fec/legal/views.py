@@ -79,6 +79,7 @@ def save_rulemaking_comments(request):
 
             'representedEntityConnection': (data.get('representedEntityConnection') or '').strip(),
             'representedEntityType': (data.get('representedEntityType') or '').strip(),
+            'representedEntityTypeID': None,  # calculated below, after all commenters are processed
 
             'commenters[0].firstName': (data.get('commenters[0].firstName') or '').strip(),
             'commenters[0].lastName': (data.get('commenters[0].lastName') or '').strip(),
@@ -137,6 +138,55 @@ def save_rulemaking_comments(request):
             to_submit[prefix + '.mailingCountry'] = (data.get(prefix + '.mailingCountry') or '').strip()
             to_submit[prefix + '.emailAddress'] = (data.get(prefix + '.emailAddress') or '').strip()
             commenter_num += 1
+
+        # Derive representedEntityTypeID from the combination of:
+        # * representedEntityType (self, counsel, representative, or other)
+        # * the type of the additional commenters (individual or organization),
+        # * how many additional commenters there are
+        #
+        # commenter[0] is always the submitter (the attorney, officer, etc.).
+        # commenter[1], commenter[2], etc. are the people/orgs being represented.
+        # The frontend enforces that all additional commenters share the same type,
+        # so commenter[1].commenterType is used as the representative type for the whole group.
+        #
+        # Mapping:
+        #   0  REP_SELF                       representedEntityType = 'self'
+        #   1  REP_ANOTHER_PERSON_AS_COUNSEL  representedEntityType = 'counsel' + exactly 1 individual commenter
+        #   2  REP_GROUP_OF_IND_AS_MEMBER     representedEntityType = 'rep' + individual(s) (any count)
+        #   3  REP_GROUP_OF_IND_AS_COUNSEL    representedEntityType = 'counsel' + 2 or more individual commenters
+        #   4  REP_ORG_AS_OFFICER             representedEntityType = 'rep' + organization(s) (any count)
+        #   5  REP_ORG_OR_GROUP_AS_COUNSEL    representedEntityType = 'counsel' + organization(s) (any count)
+        #   6  REP_OTHER                      representedEntityType = 'other'
+        rep_type = to_submit.get('representedEntityType', '')
+        # commenter_num started at 1 and incremented per commenter, remove the submitter
+        commenter_count = commenter_num - 1
+        first_commenter_type = to_submit.get('commenters[1].commenterType', '')
+
+        if rep_type == 'self':
+            represented_entity_type_id = 0
+        elif rep_type == 'counsel' and first_commenter_type == 'individual' and commenter_count == 1:
+            # Counsel to a single individual (only commenter[1] present)
+            represented_entity_type_id = 1
+        elif rep_type == 'rep' and first_commenter_type == 'individual':
+            # Representative/member of a group of individuals (any count)
+            # There is no "rep of one individual" category, so this maps to the group ID 2 regardless
+            represented_entity_type_id = 2
+        elif rep_type == 'counsel' and first_commenter_type == 'individual' and commenter_count >= 2:
+            # Counsel to a group of individuals (commenter[2]+ present)
+            represented_entity_type_id = 3
+        elif rep_type == 'rep' and first_commenter_type == 'organization':
+            # Officer/representative, or member of an organization or group of organizations
+            represented_entity_type_id = 4
+        elif rep_type == 'counsel' and first_commenter_type == 'organization':
+            # Counsel to an organization or a group of organizations
+            represented_entity_type_id = 5
+        elif rep_type == 'other':
+            # Other, submitting on behalf of another
+            represented_entity_type_id = 6
+        else:
+            represented_entity_type_id = None
+
+        to_submit['representedEntityTypeID'] = represented_entity_type_id
 
         # Add the comments
         to_submit['comments'] = data.get('comments', '').strip()
