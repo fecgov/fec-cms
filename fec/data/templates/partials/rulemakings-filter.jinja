@@ -12,7 +12,7 @@
   <div class="filters__aside">
     <div class="button--notebook u-margin--top t-sans">Use the legal search guide to learn more about <a href="/legal-resources/how-to-use-fec-legal-search-systems/">how to use FEC legal search systems</a>.</div>
   </div>
-  <form id="rulemaking-filters" action=""></form>
+  <form id="rulemaking-filters" action="">
     <div class="filters__inner">
       {{ legal.keyword_search_q(result_type, query) }}
       {{ proximity.field('keyword-proximity', title='Proximity') }}

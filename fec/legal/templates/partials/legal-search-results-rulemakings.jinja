@@ -97,7 +97,7 @@
                           {% if show_document %}
                             <div class="post--icon u-padding--top">
                               <span class="icon icon--inline--left i-document"></span>
-                              <a href="{{document.url}}">
+                              <a href="{{l2_document.url}}">
                                 {{ l2_document.doc_type_label}}
                               </a>
                             </div>
@@ -156,7 +156,7 @@
         </td>
         <td class="simple-table__cell align-top">
           <div class="t-sans">
-          {% if rulemaking.is_open_for_comment == false %} 
+          {% if rulemaking.is_open_for_comment == False %} 
              Not currently open for comment.
           {% else %}
             Open for comment.
