@@ -9,48 +9,49 @@
 
 
 {% block filters %}
-  <div class="filters__inner">
-  {# //TODO: Can maybe make form action="" #}
-<form id="rulemaking-filters" action="">
-   
-    {{ legal.keyword_search_q(result_type, query) }}
-    {{ proximity.field('keyword-proximity', title='Proximity') }}
-    <div class="filter js-filter" data-filter="checkbox">
-      <input id="is_open_for_comment" name="is_open_for_comment" type="checkbox" value="true">
-      <label class="dropdown__value" for="is_open_for_comment">Show only rulemakings open for comment</label>
+  <div class="filters__aside">
+    <div class="button--notebook u-margin--top t-sans">Use the legal search guide to learn more about <a href="/legal-resources/how-to-use-fec-legal-search-systems/">how to use FEC legal search systems</a>.</div>
+  </div>
+  <form id="rulemaking-filters" action="">
+    <div class="filters__inner">
+      {{ legal.keyword_search_q(result_type, query) }}
+      {{ proximity.field('keyword-proximity', title='Proximity') }}
+      <div class="filter js-filter" data-filter="checkbox">
+        <input id="is_open_for_comment" name="is_open_for_comment" type="checkbox" value="true">
+        <label class="dropdown__value" for="is_open_for_comment">Show only rulemakings open for comment</label>
+      </div>
+      {{ text.field('rm_no','Reg Number', helper_text='Example: 2016-01') }}
+      {{ text.field('rm_name','Reg Name') }}
+      {{ dropdown.select_single_flat_list('rm_year', 'Reg year', options=rm_year_opts, hide_help=true, first_opt_no_value_label='Any' )}}
+      {{ checkbox.checkbox_dropdown(
+        id_suffix='',
+        name='doc_category_id',
+        label='Document type',
+        options=constants.rulemaking_doc_category_ids,
+        )
+      }}
     </div>
-    {{ text.field('rm_no','Reg Number', helper_text='Example: 2016-01') }}
-    {{ text.field('rm_name','Reg Name') }}
-    {{ dropdown.select_single_flat_list('rm_year', 'Reg year', options=rm_year_opts, hide_help=true, first_opt_no_value_label='Any' )}}
-    {{ checkbox.checkbox_dropdown(
-      id_suffix='',
-      name='doc_category_id',
-      label='Document type',
-      options=constants.rulemaking_doc_category_ids,
-      )
-    }}
-  </div>
-  <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
-    <button type="button" class="js-accordion-trigger accordion__button">Date</button>
-      <div class="accordion__content">
-        {{ date.field('federal_registry_publish_date', 'Federal Register publication date range') }}
-        {{ date.field('hearing_date', 'Hearing date range') }}
-        {{ date.field('vote_date', 'Vote date range') }}
-      </div>
-  </div>
-  <div class="js-accordion accordion--neutral" data-content-prefix="filter1" data-open-first="true">
-    <button type="button" class="js-accordion-trigger accordion__button">Entities</button>
-      <div class="accordion__content">
-        {{ checkbox.checkbox_dropdown(
-          id_suffix='',
-          name='entity_role_type',
-          label='Entity role',
-          options=constants.rulemaking_entity_role_types,
-          )
-        }}
-        {{ text.field('entity_name','Entity name') }}
-      </div>
-  </div>
-</form>
+    <div class="js-accordion accordion--neutral" data-content-prefix="filter" data-open-first="true">
+      <button type="button" class="js-accordion-trigger accordion__button">Date</button>
+        <div class="accordion__content">
+          {{ date.field('federal_registry_publish_date', 'Federal Register publication date range') }}
+          {{ date.field('hearing_date', 'Hearing date range') }}
+          {{ date.field('vote_date', 'Vote date range') }}
+        </div>
+    </div>
+    <div class="js-accordion accordion--neutral" data-content-prefix="filter1" data-open-first="true">
+      <button type="button" class="js-accordion-trigger accordion__button">Entities</button>
+        <div class="accordion__content">
+          {{ checkbox.checkbox_dropdown(
+            id_suffix='',
+            name='entity_role_type',
+            label='Entity role',
+            options=constants.rulemaking_entity_role_types,
+            )
+          }}
+          {{ text.field('entity_name','Entity name') }}
+        </div>
+    </div>
+  </form>
 
 {% endblock %}
