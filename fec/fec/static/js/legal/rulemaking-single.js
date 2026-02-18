@@ -67,9 +67,16 @@ function openEmbeddedPdf(clickedEl) {
   if (pdfViewerObj || pdfViewerFrame) urlHolder.innerHTML = urlText;
 
   if (pdfViewerObj) {
-    pdfViewerObj.innerHTML = '';
-    pdfViewerObj.data = url;
-    pdfViewerObj.classList.remove('empty');
+    // Reset any error state from a previous failed load 
+    // by removing the data attribute and reseting to empty. 
+    // Setting the timeout ensures that the browser doesn't 
+    // prematurely load the data url before emptying the previous.
+    pdfViewerObj.removeAttribute('data');
+    pdfViewerObj.classList.add('empty');
+    setTimeout(() => {
+      pdfViewerObj.data = url;
+      pdfViewerObj.classList.remove('empty');
+    }, 0);
   }
   if (pdfViewerFrame) pdfViewerFrame.src = url;
 

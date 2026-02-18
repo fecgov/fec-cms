@@ -493,7 +493,7 @@ def rulemaking(request, rm_no):
             'doc_date': key_doc['doc_date'],
             'doc_id': key_doc['doc_id'],
             'label': key_doc['doc_type_label'],
-            'url': key_doc['url'],
+            'url': key_doc['url'].replace('#', '%23'),
         })
 
     documents = []
@@ -504,7 +504,7 @@ def rulemaking(request, rm_no):
         new_rm_stage['doc_id'] = stage['doc_id']
         new_rm_stage['label'] = stage['doc_type_label']
 
-        new_rm_stage['url'] = stage['url']
+        new_rm_stage['url'] = stage['url'].replace('#', '%23')
 
         for doc in docs_that_can_receive_comments:
             if doc['doc_id'] == stage['doc_id']:
@@ -524,7 +524,7 @@ def rulemaking(request, rm_no):
                 new_sub_doc['doc_date'] = doc['doc_date']
                 new_sub_doc['doc_id'] = doc['doc_id']
                 new_sub_doc['label'] = doc['doc_type_label']
-                new_sub_doc['url'] = doc['url']
+                new_sub_doc['url'] = doc['url'].replace('#', '%23')
 
                 new_sub_doc['doc_entities'] = []
                 for entity in doc['doc_entities']:
@@ -656,7 +656,7 @@ def legal_search(request):
                     'total_count', 0)
                 results['regulations_returned'] = ('3' if results['total_regulations'] > 3
                                                    else results['total_regulations'])
-    
+
         if result_type == 'all' or result_type == 'rulemakings':
             filters = {}
             url = '/rulemaking/search/'
@@ -668,8 +668,7 @@ def legal_search(request):
             results['rulemakings'] = response['rulemakings']
             results['total_rulemakings'] = response['total_rulemakings']
             results['rulemakings_returned'] = ('3' if results['total_rulemakings'] > 3
-                                                   else results['total_rulemakings'])
-
+                                               else results['total_rulemakings'])
 
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
