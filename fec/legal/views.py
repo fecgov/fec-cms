@@ -79,6 +79,7 @@ def save_rulemaking_comments(request):
 
             'representedEntityConnection': (data.get('representedEntityConnection') or '').strip(),
             'representedEntityType': (data.get('representedEntityType') or '').strip(),
+            'representedEntityTypeID': None,  # calculated below, after all commenters are processed
 
             'commenters[0].firstName': (data.get('commenters[0].firstName') or '').strip(),
             'commenters[0].lastName': (data.get('commenters[0].lastName') or '').strip(),
@@ -114,19 +115,78 @@ def save_rulemaking_comments(request):
                 (data.get('commenters[0].representedEntity.emailAddress') or '').strip()
 
         # For an unlimited number of commenters,
-        i = 1
-        while data.get('commenters[' + str(i) + '].commenterType'):
-            prefix = 'commenters[' + str(i) + ']'
-            to_submit[prefix + '.commenterType'] = (data.get(prefix + '.commenterType') or '').strip()
-            to_submit[prefix + '.firstName'] = (data.get(prefix + '.firstName') or '').strip()
-            to_submit[prefix + '.lastName'] = (data.get(prefix + '.lastName') or '').strip()
-            to_submit[prefix + '.orgName'] = (data.get(prefix + '.orgName') or '').strip()
+        commenter_num = 1
+        while data.get('commenters[' + str(commenter_num) + '].commenterType'):
+            prefix = 'commenters[' + str(commenter_num) + ']'
+            # Is the commenter an individual or organization?
+            commenterType = (data.get(prefix + '.commenterType') or '').strip()
+            to_submit[prefix + '.commenterType'] = commenterType
+
+            # For organizations, set firstName and lastName to '' (else save whatever comes in)
+            to_submit[prefix + '.firstName'] = \
+                '' if commenterType == 'organization' else (data.get(prefix + '.firstName') or '').strip()
+            to_submit[prefix + '.lastName'] = \
+                '' if commenterType == 'organization' else (data.get(prefix + '.lastName') or '').strip()
+
+            # For individuals, set orgName to '' (else save whatever comes in)
+            to_submit[prefix + '.orgName'] = \
+                '' if commenterType == 'individual' else (data.get(prefix + '.orgName') or '').strip()
+
             to_submit[prefix + '.addressType'] = (data.get(prefix + '.addressType') or '').strip()
             to_submit[prefix + '.mailingCity'] = (data.get(prefix + '.mailingCity') or '').strip()
             to_submit[prefix + '.mailingState'] = (data.get(prefix + '.mailingState') or '').strip()
             to_submit[prefix + '.mailingCountry'] = (data.get(prefix + '.mailingCountry') or '').strip()
             to_submit[prefix + '.emailAddress'] = (data.get(prefix + '.emailAddress') or '').strip()
-            i += 1
+            commenter_num += 1
+
+        # Derive representedEntityTypeID from the combination of:
+        # * representedEntityType (self, counsel, representative, or other)
+        # * the type of the additional commenters (individual or organization),
+        # * how many additional commenters there are
+        #
+        # commenter[0] is always the submitter (the attorney, officer, etc.).
+        # commenter[1], commenter[2], etc. are the people/orgs being represented.
+        # The frontend enforces that all additional commenters share the same type,
+        # so commenter[1].commenterType is used as the representative type for the whole group.
+        #
+        # Mapping:
+        #   0  REP_SELF                       representedEntityType = 'self'
+        #   1  REP_ANOTHER_PERSON_AS_COUNSEL  representedEntityType = 'counsel' + exactly 1 individual commenter
+        #   2  REP_GROUP_OF_IND_AS_MEMBER     representedEntityType = 'rep' + individual(s) (any count)
+        #   3  REP_GROUP_OF_IND_AS_COUNSEL    representedEntityType = 'counsel' + 2 or more individual commenters
+        #   4  REP_ORG_AS_OFFICER             representedEntityType = 'rep' + organization(s) (any count)
+        #   5  REP_ORG_OR_GROUP_AS_COUNSEL    representedEntityType = 'counsel' + organization(s) (any count)
+        #   6  REP_OTHER                      representedEntityType = 'other'
+        rep_type = to_submit.get('representedEntityType', '')
+        # commenter_num started at 1 and incremented per commenter, remove the submitter
+        commenter_count = commenter_num - 1
+        first_commenter_type = to_submit.get('commenters[1].commenterType', '')
+
+        if rep_type == 'self':
+            represented_entity_type_id = 0
+        elif rep_type == 'counsel' and first_commenter_type == 'individual' and commenter_count == 1:
+            # Counsel to a single individual (only commenter[1] present)
+            represented_entity_type_id = 1
+        elif rep_type == 'rep' and first_commenter_type == 'individual':
+            # Representative/member of a group of individuals (any count)
+            # There is no "rep of one individual" category, so this maps to the group ID 2 regardless
+            represented_entity_type_id = 2
+        elif rep_type == 'counsel' and first_commenter_type == 'individual' and commenter_count >= 2:
+            # Counsel to a group of individuals (commenter[2]+ present)
+            represented_entity_type_id = 3
+        elif rep_type == 'rep' and first_commenter_type == 'organization':
+            # Officer/representative, or member of an organization or group of organizations
+            represented_entity_type_id = 4
+        elif rep_type == 'counsel' and first_commenter_type == 'organization':
+            # Counsel to an organization or a group of organizations
+            represented_entity_type_id = 5
+        elif rep_type == 'other':
+            # Other, submitting on behalf of another
+            represented_entity_type_id = 6
+        else:
+            represented_entity_type_id = None
+
+        to_submit['representedEntityTypeID'] = represented_entity_type_id
 
         # Add the comments
         to_submit['comments'] = data.get('comments', '').strip()
@@ -596,6 +656,20 @@ def legal_search(request):
                     'total_count', 0)
                 results['regulations_returned'] = ('3' if results['total_regulations'] > 3
                                                    else results['total_regulations'])
+    
+        if result_type == 'all' or result_type == 'rulemakings':
+            filters = {}
+            url = '/rulemaking/search/'
+            filters['q'] = query
+            filters['q_exclude'] = query_exclude
+            filters['hits_returned'] = 3
+            filters['from_hit'] = 0
+            response = api_caller._call_api(url, **filters)
+            results['rulemakings'] = response['rulemakings']
+            results['total_rulemakings'] = response['total_rulemakings']
+            results['rulemakings_returned'] = ('3' if results['total_rulemakings'] > 3
+                                                   else results['total_rulemakings'])
+
 
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
@@ -1119,7 +1193,9 @@ def get_legal_category_order(results, result_type):
     """ Return categories in pre-defined order, moving categories with empty
         results to the end. Move chosen category(result_type) to top when not searching 'all'
     """
-    categories = ['admin_fines', 'advisory_opinions', 'adrs', 'murs', 'regulations', 'statutes']
+    categories = ['admin_fines', 'advisory_opinions', 'adrs', 'murs', 'regulations', 'rulemakings', 'statutes']
+    if not settings.FEATURES['rulemakings']:
+        categories.remove('rulemakings')
     category_order = [x for x in categories if results.get('total_' + x, 0) > 0] +\
         [x for x in categories if results.get('total_' + x, 0) == 0]
 

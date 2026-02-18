@@ -10,7 +10,17 @@
             <li class="mega__item"><a href="/legal-resources/enforcement/">Enforcement</a></li>
             <li class="mega__item"><a href="/data/legal/statutes/">Statutes</a></li>
             <li class="mega__item"><a href="/legal-resources/legislation/">Legislation</a></li>
-            <li class="mega__item"><a href="/legal-resources/regulations/">Regulations</a></li>
+            <li class="mega__item"><a href="/legal-resources/regulations/">Regulations
+            {% if settings %} 
+              {% if settings.FEATURES.rulemakings %}
+              and rulemakings
+              {% endif %}
+            {% else %}
+               {% if FEATURES.rulemakings %}
+              and rulemakings
+              {% endif %}
+            {% endif %}
+            </a></li>
             <li class="mega__item"><a href="/legal-resources/court-cases/">Court cases</a></li>
             <li class="mega__item"><a href="/legal-resources/policy-other-guidance/">Policy and other guidance</a></li>
           </ul>
