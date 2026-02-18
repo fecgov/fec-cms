@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseGone, HttpResponseRedirect
 
 import datetime
 import re
@@ -45,8 +45,15 @@ def save_rulemaking_comments(request):
     except Exception:
         return JsonResponse({'status': 400, 'ok': False, 'message': 'Invalid JSON'}, status=400)
 
+    # Is the rulemaking still open for comment?
+    rulemaking = api_caller.load_legal_rulemaking(data.get('rm_no', '').strip())
+    if rulemaking == []:
+        return JsonResponse({'status': 404, 'ok': False, 'message': 'Rulemaking not found'}, status=404)
+    if rulemaking['is_open_for_comment'] is False:
+        return JsonResponse({'status': 410, 'ok': False, 'message': 'Commenting has closed'}, status=410)
+
     # Checking reCAPTCHA
-    if not data['g-recaptcha-response']:
+    if not data.get('g-recaptcha-response'):
         return JsonResponse({'status': 400, 'ok': False, 'message': 'Invalid reCAPTCHA'}, status=400)
     else:
         verifyRecaptcha = requests.post(
@@ -72,6 +79,7 @@ def save_rulemaking_comments(request):
 
             'representedEntityConnection': (data.get('representedEntityConnection') or '').strip(),
             'representedEntityType': (data.get('representedEntityType') or '').strip(),
+            'representedEntityTypeID': None,  # calculated below, after all commenters are processed
 
             'commenters[0].firstName': (data.get('commenters[0].firstName') or '').strip(),
             'commenters[0].lastName': (data.get('commenters[0].lastName') or '').strip(),
@@ -107,19 +115,78 @@ def save_rulemaking_comments(request):
                 (data.get('commenters[0].representedEntity.emailAddress') or '').strip()
 
         # For an unlimited number of commenters,
-        i = 1
-        while data.get('commenters[' + str(i) + '].commenterType'):
-            prefix = 'commenters[' + str(i) + ']'
-            to_submit[prefix + '.commenterType'] = (data.get(prefix + '.commenterType') or '').strip()
-            to_submit[prefix + '.firstName'] = (data.get(prefix + '.firstName') or '').strip()
-            to_submit[prefix + '.lastName'] = (data.get(prefix + '.lastName') or '').strip()
-            to_submit[prefix + '.orgName'] = (data.get(prefix + '.orgName') or '').strip()
+        commenter_num = 1
+        while data.get('commenters[' + str(commenter_num) + '].commenterType'):
+            prefix = 'commenters[' + str(commenter_num) + ']'
+            # Is the commenter an individual or organization?
+            commenterType = (data.get(prefix + '.commenterType') or '').strip()
+            to_submit[prefix + '.commenterType'] = commenterType
+
+            # For organizations, set firstName and lastName to '' (else save whatever comes in)
+            to_submit[prefix + '.firstName'] = \
+                '' if commenterType == 'organization' else (data.get(prefix + '.firstName') or '').strip()
+            to_submit[prefix + '.lastName'] = \
+                '' if commenterType == 'organization' else (data.get(prefix + '.lastName') or '').strip()
+
+            # For individuals, set orgName to '' (else save whatever comes in)
+            to_submit[prefix + '.orgName'] = \
+                '' if commenterType == 'individual' else (data.get(prefix + '.orgName') or '').strip()
+
             to_submit[prefix + '.addressType'] = (data.get(prefix + '.addressType') or '').strip()
             to_submit[prefix + '.mailingCity'] = (data.get(prefix + '.mailingCity') or '').strip()
             to_submit[prefix + '.mailingState'] = (data.get(prefix + '.mailingState') or '').strip()
             to_submit[prefix + '.mailingCountry'] = (data.get(prefix + '.mailingCountry') or '').strip()
             to_submit[prefix + '.emailAddress'] = (data.get(prefix + '.emailAddress') or '').strip()
-            i += 1
+            commenter_num += 1
+
+        # Derive representedEntityTypeID from the combination of:
+        # * representedEntityType (self, counsel, representative, or other)
+        # * the type of the additional commenters (individual or organization),
+        # * how many additional commenters there are
+        #
+        # commenter[0] is always the submitter (the attorney, officer, etc.).
+        # commenter[1], commenter[2], etc. are the people/orgs being represented.
+        # The frontend enforces that all additional commenters share the same type,
+        # so commenter[1].commenterType is used as the representative type for the whole group.
+        #
+        # Mapping:
+        #   0  REP_SELF                       representedEntityType = 'self'
+        #   1  REP_ANOTHER_PERSON_AS_COUNSEL  representedEntityType = 'counsel' + exactly 1 individual commenter
+        #   2  REP_GROUP_OF_IND_AS_MEMBER     representedEntityType = 'rep' + individual(s) (any count)
+        #   3  REP_GROUP_OF_IND_AS_COUNSEL    representedEntityType = 'counsel' + 2 or more individual commenters
+        #   4  REP_ORG_AS_OFFICER             representedEntityType = 'rep' + organization(s) (any count)
+        #   5  REP_ORG_OR_GROUP_AS_COUNSEL    representedEntityType = 'counsel' + organization(s) (any count)
+        #   6  REP_OTHER                      representedEntityType = 'other'
+        rep_type = to_submit.get('representedEntityType', '')
+        # commenter_num started at 1 and incremented per commenter, remove the submitter
+        commenter_count = commenter_num - 1
+        first_commenter_type = to_submit.get('commenters[1].commenterType', '')
+
+        if rep_type == 'self':
+            represented_entity_type_id = 0
+        elif rep_type == 'counsel' and first_commenter_type == 'individual' and commenter_count == 1:
+            # Counsel to a single individual (only commenter[1] present)
+            represented_entity_type_id = 1
+        elif rep_type == 'rep' and first_commenter_type == 'individual':
+            # Representative/member of a group of individuals (any count)
+            # There is no "rep of one individual" category, so this maps to the group ID 2 regardless
+            represented_entity_type_id = 2
+        elif rep_type == 'counsel' and first_commenter_type == 'individual' and commenter_count >= 2:
+            # Counsel to a group of individuals (commenter[2]+ present)
+            represented_entity_type_id = 3
+        elif rep_type == 'rep' and first_commenter_type == 'organization':
+            # Officer/representative, or member of an organization or group of organizations
+            represented_entity_type_id = 4
+        elif rep_type == 'counsel' and first_commenter_type == 'organization':
+            # Counsel to an organization or a group of organizations
+            represented_entity_type_id = 5
+        elif rep_type == 'other':
+            # Other, submitting on behalf of another
+            represented_entity_type_id = 6
+        else:
+            represented_entity_type_id = None
+
+        to_submit['representedEntityTypeID'] = represented_entity_type_id
 
         # Add the comments
         to_submit['comments'] = data.get('comments', '').strip()
@@ -380,23 +447,52 @@ def admin_fine_page(request, admin_fine_no):
     })
 
 
+# Returns a list of rulemaking docs that can receive comments, either [] or
+# [{'doc_id': int, 'label': string},]
+def rulemaking_docs_that_can_receive_comments(rm):
+    comment_eligible_docs = []
+
+    # If is_open_for_comment is false, we're done
+    if rm['is_open_for_comment'] is False:
+        return comment_eligible_docs
+
+    # Rulemaking documents are organized by presentation, starting with their document/rulemaking stage
+    # so we have to loop through stages, then label groups, then the documents themselves.
+    # {documents} can have different docs than {documents: [{level_2_labels: [{level_2_docs }]}]}
+    for docs_stage in rm['documents']:
+        if docs_stage['is_comment_eligible'] is True:
+            comment_eligible_docs.append({
+                'doc_id': int(docs_stage['doc_id']),
+                'label': docs_stage['level_1_label'],
+            })
+
+        for labels in docs_stage.get('level_2_labels', []):
+            for doc in labels.get('level_2_docs', []):
+                if doc['is_comment_eligible'] is True:
+                    comment_eligible_docs.append({
+                        'doc_id': int(doc['doc_id']),
+                        'label': doc['level_1_label'],
+                    })
+
+    return comment_eligible_docs
+
+
+# The single rulemaking page
 def rulemaking(request, rm_no):
 
     rulemaking = api_caller.load_legal_rulemaking(rm_no)
-    # rm_no always open for comment: 0033-99
-    # other rm_no: 2024-10, 2024-09, 2024-08, 2024-07
-    # rulemaking = api_caller.load_legal_rulemaking('2024-10')
+    docs_that_can_receive_comments = rulemaking_docs_that_can_receive_comments(rulemaking)
 
     if not rm_no:
         raise Http404()
 
     key_documents = []
-    for key_doc in rulemaking['key_documents']:
+    doc_type_label = ''
+    for i, key_doc in enumerate(rulemaking['key_documents']):
         key_documents.append({
             'doc_date': key_doc['doc_date'],
             'doc_id': key_doc['doc_id'],
-            'label': key_doc['doc_type_label'],  # This is inconsistent
-            # 'label': key_doc['doc_description'],  # This is inconsistent
+            'label': key_doc['doc_type_label'],
             'url': key_doc['url'],
         })
 
@@ -407,8 +503,12 @@ def rulemaking(request, rm_no):
         new_rm_stage['doc_date'] = stage['doc_date']
         new_rm_stage['doc_id'] = stage['doc_id']
         new_rm_stage['label'] = stage['doc_type_label']
-        # new_rm_stage['doc_stage'] = stage['doc_type_label']  # e.g. Notice of Avail, Commencing Document
+
         new_rm_stage['url'] = stage['url']
+
+        for doc in docs_that_can_receive_comments:
+            if doc['doc_id'] == stage['doc_id']:
+                doc_type_label = stage['doc_type_label']
 
         new_rm_stage['doc_entities'] = []
         for entity in stage['doc_entities']:
@@ -437,7 +537,7 @@ def rulemaking(request, rm_no):
         documents.append(new_rm_stage)
 
     return render(request, 'rulemaking.jinja', {
-        'is_open_for_comment': rulemaking['is_open_for_comment'],
+        'docs_that_can_receive_comments': docs_that_can_receive_comments,
         'comment_close_date': rulemaking['comment_close_date'] or '',
         'documents': documents,
         'key_documents': key_documents,
@@ -445,13 +545,14 @@ def rulemaking(request, rm_no):
         'rm_name': rulemaking['rm_name'],
         'rm_no': rulemaking['rm_no'],
         'rm_number': rulemaking['rm_number'],
+        'doc_type_label': doc_type_label,
         'parent': 'legal',
         'social_image_identifier': 'legal',
         'could_testify': True,
     })
 
 
-def rulemaking_add_comments(request, rm_no):
+def rulemaking_add_comments(request, rm_no, doc_id):
     """
     Data for the rulemaking commenting interface
     """
@@ -464,14 +565,35 @@ def rulemaking_add_comments(request, rm_no):
     if rulemaking == []:
         raise Http404()
 
+    # Which docs can receive comments, and is this doc one of them?
+    docs_that_can_receive_comments = rulemaking_docs_that_can_receive_comments(rulemaking)
+    requested_doc_can_receive_comments = False
+    for item in docs_that_can_receive_comments:
+        if int(item['doc_id']) == int(doc_id):
+            requested_doc_can_receive_comments = True
+
+    # If this doc can't receive comments, throw a 410
+    if requested_doc_can_receive_comments is False:
+        return HttpResponseGone()
+
+    # If there's more than one key document, we want to remember which one is receiving these comments.
+    # This will be used for doc_id, doc_type_label, and doc_url
+    doc_receiving_comments = {'doc_type_label': '', 'url': ''}
+    for key_doc in rulemaking['key_documents']:
+        if int(key_doc['doc_id']) == int(doc_id):
+            doc_receiving_comments = key_doc
+
     return render(request, 'rulemaking-comments.jinja', {
+        'can_receive_comments': requested_doc_can_receive_comments,
         'description': rulemaking['description'],
-        'is_open_for_comment': rulemaking['is_open_for_comment'],
         'rm_id': rulemaking['rm_id'],
         'rm_name': rulemaking['rm_name'],
         'rm_no': rulemaking['rm_no'],
         'rm_number': rulemaking['rm_number'],
         'rm_title': rulemaking['title'],
+        'doc_id': doc_id,
+        'doc_type_label': doc_receiving_comments['doc_type_label'],
+        'doc_url': doc_receiving_comments['url'],
         'parent': 'legal',
         'social_image_identifier': 'legal',
         'could_testify': False,  # TODO: This will change when the field exists in the API
@@ -534,6 +656,20 @@ def legal_search(request):
                     'total_count', 0)
                 results['regulations_returned'] = ('3' if results['total_regulations'] > 3
                                                    else results['total_regulations'])
+    
+        if result_type == 'all' or result_type == 'rulemakings':
+            filters = {}
+            url = '/rulemaking/search/'
+            filters['q'] = query
+            filters['q_exclude'] = query_exclude
+            filters['hits_returned'] = 3
+            filters['from_hit'] = 0
+            response = api_caller._call_api(url, **filters)
+            results['rulemakings'] = response['rulemakings']
+            results['total_rulemakings'] = response['total_rulemakings']
+            results['rulemakings_returned'] = ('3' if results['total_rulemakings'] > 3
+                                                   else results['total_rulemakings'])
+
 
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
@@ -1057,7 +1193,9 @@ def get_legal_category_order(results, result_type):
     """ Return categories in pre-defined order, moving categories with empty
         results to the end. Move chosen category(result_type) to top when not searching 'all'
     """
-    categories = ['admin_fines', 'advisory_opinions', 'adrs', 'murs', 'regulations', 'statutes']
+    categories = ['admin_fines', 'advisory_opinions', 'adrs', 'murs', 'regulations', 'rulemakings', 'statutes']
+    if not settings.FEATURES['rulemakings']:
+        categories.remove('rulemakings')
     category_order = [x for x in categories if results.get('total_' + x, 0) > 0] +\
         [x for x in categories if results.get('total_' + x, 0) == 0]
 

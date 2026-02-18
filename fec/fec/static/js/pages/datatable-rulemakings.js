@@ -10,13 +10,7 @@ import KeywordModal from '../modules/keyword-modal.js';
 import { DataTable_FEC } from '../modules/tables.js';
 
 $(function() {
-const params = new URLSearchParams(window.location.search);
-
- if (params.q) {
-     $('input[name="q"]').val(params.q);
-  }
-
-// Search_input change fires handleKeywordSearchChange() on change, with no page reload
+// Search_input change fires handleKeywordSearchChange(), with no page reload
 // Keyword_modal search_input submit fires keyworkModal.handleSubmit() which fires handleKeywordSearchChange(), with no reload
 
 //Override KeywordModal.prototype.handleSubmit to use 'q' parameter instead of 'search' parameter and not reload page
@@ -29,7 +23,6 @@ KeywordModal.prototype.handleSubmit = function(e) {
 
   // Put value in field and trigger handleKeywordSearchChange()
   $('input[name="q"]').val(searchQuery).trigger('change');
-
 };
 
  if (document.querySelector('.js-keyword-modal')) {
@@ -67,47 +60,79 @@ KeywordProximityFilter.prototype.handleNumberChange = function(e) {
 // Change type to button to disable native submit
  $('.modal__form [type="submit"]').attr('type', 'button');
 
-$('#search-input').on('change', function(e) {
-  handleKeywordSearchChange(e);
- });
-
-  const handleKeywordSearchChange = function(e) {
-  const newVal = e.target.value;
+let q_ex;
+let q_all;
+const handleKeywordSearchChange = function(e) {
+  const new_val = e.target.value; //$('input[name="q"]').val();
   const currentTag = document.querySelectorAll('.tags .tag__item[data-id="search-input"]');
   // If there's already a tag, we need to change its label
   if (currentTag.length >= 1) {
     currentTag.forEach((tag, i) => {
       // We only want to keep one filter tag for keywords, so change its label
       // but only if it has a value to show
-      if (i === 0 && newVal.length > 0)
-        $(tag).contents()[0].nodeValue = newVal;
+      if (i === 0 && new_val.length > 0)
+        $(tag).contents()[0].nodeValue = new_val;
       // Otherwise, if it's after the first one, click its X button
       else tag.querySelector('.js-close').click();
     });
   }
   else {
-    $('.tags').attr('aria-hidden', 'false').append(`<li data-tag-category="q" class="tag__category"><div data-id="search-input" data-removable="true" class="tag__item">${newVal}
+    //Zero second, setTimout to push this to end of script stack to ensure '.tags' is loaded before appending to it for refresh or links with  q in querystring
+    setTimeout(() => {
+    $('.tags').attr('aria-hidden', 'false').append(`<li data-tag-category="q" class="tag__category"><div data-id="search-input" data-removable="true" class="tag__item">${new_val}
     <button class="button js-close tag__remove"><span class="u-visually-hidden">Remove</span></button>
     </div></li>`);
+    }, 0);
   }
 
-   let query;
-   if (newVal != '') {
+  const new_queryParams = {};
+
+  // We need to divide any 'search' value into q and q_exclude, split on ` -` for xhr call to API
+  const qStrings = [];
+  const qExcludeStrings = [];
+  if (new_val.indexOf(' -') >= 0) {
+    const allTerms = new_val.split(' ');
+    allTerms.forEach(term => {
+      if (term.startsWith('-'))
+        qExcludeStrings.push(term.substring(1));
+      else qStrings.push(term);
+    });
+    if (qStrings.length > 0) {
+      new_queryParams['q'] = qStrings.join(' ');
+      q_all = new_queryParams['q'];
+    }
+    if (qExcludeStrings.length > 0) {
+      new_queryParams['q_exclude'] = qExcludeStrings.join(' ');
+      q_ex = new_queryParams['q_exclude'];
+    }
+  }
+  else {
+    new_queryParams['q'] = new_val;
+    q_all = new_queryParams['q'];
+    q_ex = new_queryParams['q_exclude'];
+  }
+
+  let query;
+  if (new_val !== '') {
     query = URI(window.location.search)
     .removeSearch('q')
-    .addSearch('q', newVal);
-   }
-   else {
+    .removeSearch('q_exclude')
+    .addSearch('q', new_val);
+  }
+  else {
     query = URI(window.location.search)
-     .removeSearch('q');
-   }
-
+    .removeSearch('q');
+  }
   window.history.pushState(
       null,
       '',
       window.location.pathname + query.toString()
-      );
+    );
 };
+
+$('input[name="q"]').on('change', function(e) {
+  handleKeywordSearchChange(e);
+ });
 
 // Remove max-gaps value from field and querystring upon tag removal
 $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity"]', function() {
@@ -123,21 +148,48 @@ $(document).on('click', '.js-close.tag__remove[data-filter-id="keyword-proximity
   submitBlocker.setAttribute('aria-hidden', 'true');
   rulemakingFiltersFormElement.prepend(submitBlocker);
 
-  const $table = $('#results');
-  new DataTable_FEC($table, {
+  //Accordions in highlights need this implicit listener to work becuase of conflict with accordions in filter panel
+  $(document).on('click','.accordion-trigger-on', function() {
+    let exp = $(this).attr('aria-expanded') == 'false' ? 'true' : 'false';
+    $(this).attr('aria-expanded', exp);
+    $(this).next('div').attr('aria-hidden', exp == 'true' ? 'false' : 'true');
+
+  });
+
+  $(document).on('click','[data-id="search-input"] .tag__remove', function() {
+    const tag_params = new URLSearchParams(window.location.search);
+    tag_params.delete('q');
+    const new_location = tag_params.size ? `?${tag_params.toString()}` : '';
+    window.history.pushState(
+      null,
+      '',
+      window.location.pathname + `${new_location}`
+      );
+  });
+
+const $table = $('#results');
+// Pass the seperate 'q' and 'q_exclude' values to be included in API call
+$table.on('preXhr.dt', function (e, settings, data) {
+  data.q_exclude = q_ex;
+  data.q = q_all;
+  });
+
+ new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Rulemakings',
     path: ['rulemaking', 'search'],
     columns: cols_rulemakings,
-    order: [[0, 'desc']],
+    order: [[2, 'desc']],
     useFilters: true,
     useExport: false,
-    // Initiate the field value and fire change for keyword if included in querystring in a link or copy/pasted url
-    // TODO: DO I NEED THIS AT ALL?, ALSO - If so Don't think I need to also add tags here(commented out)...ends up with two tags once I added trigger('change')
+
+    // Handles when page is refreahed or navigated to with a predefined URL+querystring
     initComplete: function () {
-       const queryParams = URI.parseQuery(window.location.search);
-      if (queryParams.q) {
-        $('input[name="q"]').val(queryParams.q).trigger('change');
+      const params = new URLSearchParams(window.location.search);
+      const init_q_param = params.getAll('q');
+      if (init_q_param.length) {
+        $('input[name="q"]').val(init_q_param);
+        $('input[name="q"]').trigger('change');
       }
     }
   });

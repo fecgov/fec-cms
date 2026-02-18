@@ -55,7 +55,13 @@ class CourtCaseTableParser(HTMLParser):
         elif self.capturing_opinions:
             # Reconstruct HTML tags for opinions
             attrs_str = ' '.join([f'{k}="{v}"' for k, v in attrs])
-            if attrs_str:
+            # Use self-closing syntax for void elements (e.g. br)
+            if tag in self.VOID_ELEMENTS:
+                if attrs_str:
+                    self.opinions_content.append(f'<{tag} {attrs_str}/>')
+                else:
+                    self.opinions_content.append(f'<{tag}/>')
+            elif attrs_str:
                 self.opinions_content.append(f'<{tag} {attrs_str}>')
             else:
                 self.opinions_content.append(f'<{tag}>')

@@ -37,6 +37,7 @@ const submissionStatusMessages = {
   'error-files':
     `Weʼve received your form data but couldnʼt process your attachments. Your submission ID is [$randomid].
     Please <a href="mailto:[$teamEmail]">contact us</a> and reference your submission ID to report any issues.`,
+  '410': `Unfortunately, comments are not being accepted at this time.`,
   '500':
     `Unfortunately, we had trouble processing your request. Please click the ◂ Back button to try again,
     or refresh the page to start over.`
@@ -499,6 +500,10 @@ RulemakingCommenting.prototype.buildTheFrame = function() {
       if (!this.submissionResponses)
         this.frame5.querySelector('.message--alert p').innerHTML = submissionStatusMessages['500'];
 
+      // If the commenting period has closed
+      else if (this.submissionResponses[0].status == 410)
+        this.frame5.querySelector('.message--alert p').innerHTML = submissionStatusMessages['410'];
+
       // else if we contacted the server but the data didn't go through correctly
       else if (!this.submissionResponses[0].ok)
         this.frame5.querySelector('.message--alert p').innerHTML = submissionStatusMessages['error-data'];
@@ -595,6 +600,7 @@ RulemakingCommenting.prototype.validateEntireForm = function() {
 
       if (formData.get(`commenters[${i}].commenterType`) === 'organization')
         requiredFieldNames.push(`commenters[${i}].orgName`);
+
       else {
         requiredFieldNames.push(
           `commenters[${i}].firstName`,
@@ -718,6 +724,37 @@ RulemakingCommenting.prototype.addCommenter = function() {
 
   commentersHolder.appendChild(newCommenter);
 
+  // Lock the commenterType of this new commenter to match commenter[1]'s type, if already selected.
+  // This enforces that all additional commenters must be the same type (all individual or all
+  // organization), which is required to accurately derive representedEntityTypeID on submission.
+  // We cannot mix commenter types.
+  // commenter[1] (the first child of #commenters-holder) is always the primary — its type is
+  // the one the user sets freely, and all subsequent commenters must follow it.
+  const firstAdditionalCommenter = commentersHolder.firstElementChild;
+  if (firstAdditionalCommenter && firstAdditionalCommenter !== newCommenter) {
+    const firstTypeSelect = firstAdditionalCommenter.querySelector('[name$=".commenterType"]');
+    if (firstTypeSelect && firstTypeSelect.value) {
+      const lockedType = firstTypeSelect.value;
+      const newTypeSelect = newCommenter.querySelector('[name$=".commenterType"]');
+      if (newTypeSelect) {
+        newTypeSelect.value = lockedType;
+        // Disable the select so the user cannot change the type on commenter[2]+.
+        // The type must stay consistent across all additional commenters.
+        newTypeSelect.setAttribute('disabled', '');
+        // Disabled form fields are excluded from FormData/submission, so we mirror the value
+        // in a hidden input with the same name so the backend still receives it.
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = newTypeSelect.name;
+        hiddenInput.value = lockedType;
+        newTypeSelect.insertAdjacentElement('afterend', hiddenInput);
+        // Fire change so the required-field toggling (first/last name vs org name, email) runs
+        // for the pre-selected type, keeping validation state consistent.
+        newTypeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }
+  }
+
   this.formEl.dispatchEvent(new Event('change')); // For the height resize
 
   return newCommenter;
@@ -748,6 +785,21 @@ RulemakingCommenting.prototype.removeCommenter = function(el) {
     const commenterNumberLabel = commenter.querySelector('label:first-of-type');
     commenterNumberLabel.innerHTML = `Commenter #${(i1)}`;
   });
+
+  // If removing a commenter leaves only one remaining, that commenter becomes the new commenter[1]
+  // (the primary). It should no longer be locked — the user must be free to change its type,
+  // which would then propagate to any future joint commenters they add.
+  // Remove the disabled attribute and delete the hidden input that was standing in for the
+  // disabled select during form submission.
+  if (commentersHolder.childElementCount === 1) {
+    const onlyCommenter = commentersHolder.firstElementChild;
+    const typeSelect = onlyCommenter.querySelector('[name$=".commenterType"]');
+    if (typeSelect) {
+      typeSelect.removeAttribute('disabled');
+      const hiddenInput = onlyCommenter.querySelector('input[type="hidden"][name$=".commenterType"]');
+      if (hiddenInput) hiddenInput.remove();
+    }
+  }
 
   this.formEl.dispatchEvent(new Event('change')); // For the height resize
 
@@ -992,6 +1044,13 @@ RulemakingCommenting.prototype.handleFormChange = function(e) {
 
     if (e.target.name === 'representedEntityType')
       this.representedEntityType = e.target.value;
+
+    else if (e.target.name === 'representedEntityConnection') {
+      // Then if the comments field is blank, push the relationship description to the comments field,
+      // which would allow submitters to change it before submission
+      if (e.target.value != '' && commentsField.value == '')
+        commentsField.value = `Relationship of submitter to commenter(s): ${e.target.value}\n\n`;
+    }
   }
 
   // If we've changed the country, we'll toggle whether state and ZIP are required (req for US/USA)
@@ -1041,6 +1100,34 @@ RulemakingCommenting.prototype.handleFormChange = function(e) {
     const emailField = parentEl.querySelector('[name*="emailAddress"]');
     if (commType === 'individual') emailField.setAttribute('required', '');
     else emailField.removeAttribute('required');
+
+    // When commenter[1]'s type changes, push the new type to all subsequent commenters (commenter[2]+)
+    // and lock their selects. This handles the case where commenter[2]+ were added before
+    // commenter[1] had a type — addCommenter() only locks on creation if a type is already set,
+    // so this change handler covers the retroactive lock.
+    const commentersHolder = this.formEl.querySelector('#commenters-holder');
+    if (commentersHolder && parentEl === commentersHolder.firstElementChild) {
+      const subsequentCommenters = [...commentersHolder.children].slice(1);
+      subsequentCommenters.forEach(commenter => {
+        const typeSelect = commenter.querySelector('[name$=".commenterType"]');
+        if (typeSelect) {
+          typeSelect.value = commType;
+          typeSelect.setAttribute('disabled', '');
+          // Create a hidden input if one doesn't already exist (e.g. commenter was added before
+          // commenter[1] had a type, so addCommenter() didn't create one at that time).
+          let hiddenInput = commenter.querySelector('input[type="hidden"][name$=".commenterType"]');
+          if (!hiddenInput) {
+            hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = typeSelect.name;
+            typeSelect.insertAdjacentElement('afterend', hiddenInput);
+          }
+          hiddenInput.value = commType;
+          // Fire change so required-field toggling stays in sync with the updated type.
+          typeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+    }
 
   }
 
@@ -1173,7 +1260,7 @@ RulemakingCommenting.prototype.startSubmitting = async function() {
   const attachedFiles = [];
   // For each of the fields in the form,
   formData.entries().forEach(entry => {
-    // If the field name starts with `files[…`
+    // If the field name starts with `files[`
     if (entry[0].indexOf('files[') === 0) {
       // If this field is a file, we only want its name and size for now,
       // and let's add '.name' to the end so files[0] becomes files[0].name

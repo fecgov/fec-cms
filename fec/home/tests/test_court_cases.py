@@ -338,7 +338,7 @@ class CourtCaseTemplateTagTests(TestCase):
         result = active_court_cases()
 
         self.assertIn('active_cases', result)
-        self.assertEqual(result['active_cases'].count(), 1)
+        self.assertEqual(len(result['active_cases']), 1)
         self.assertEqual(result['active_cases'][0].title, "Active Case v. FEC")
 
     def test_selected_court_cases_template_tag(self):
@@ -365,7 +365,7 @@ class CourtCaseTemplateTagTests(TestCase):
         result = selected_court_cases()
 
         self.assertIn('selected_cases', result)
-        self.assertEqual(result['selected_cases'].count(), 1)
+        self.assertEqual(len(result['selected_cases']), 1)
         self.assertEqual(result['selected_cases'][0].title, "Selected Case v. FEC")
 
     def test_active_court_cases_empty(self):
@@ -381,7 +381,7 @@ class CourtCaseTemplateTagTests(TestCase):
 
         result = active_court_cases()
 
-        self.assertEqual(result['active_cases'].count(), 0)
+        self.assertEqual(len(result['active_cases']), 0)
 
 
 class ConvertResourceToCourtCaseCommandTests(TestCase):

@@ -95,7 +95,8 @@ if settings.FEATURES['rulemakings_single']:
 if settings.FEATURES['rulemakings_commenting'] and settings.FEATURES['rulemakings_single']:
     urlpatterns += [
         # comment on single:
-        re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/add-comments/$', views.rulemaking_add_comments),
+        re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/(?P<doc_id>[0-9]+)/add-comments/$',
+                views.rulemaking_add_comments),
         # save comments:
         re_path(r'^legal/rulemaking/save-comments/', views.save_rulemaking_comments, name='save_rulemaking_comments'),
     ]

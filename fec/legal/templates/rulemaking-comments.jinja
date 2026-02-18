@@ -1,7 +1,7 @@
 {% extends 'layouts/legal-main.jinja' %}
 {% import 'macros/breadcrumbs.jinja' as breadcrumb %}
 {% import 'macros/legal.jinja' as legal %}
-{% set breadcrumb_links=[('/legal/rulemakings/', 'Rulemakings'), ('/legal/rulemakings/' + rm_no + '/', rm_number)] %}
+{% set breadcrumb_links=[('/legal/search/rulemakings/', 'Rulemakings'), ('/legal/rulemakings/' + rm_no + '/', rm_number)] %}
 
 {% block title %}Submit rulemaking comments{% endblock %}
 
@@ -23,7 +23,7 @@
     <div class="row">
       <div class="main__content">
         <h2>{{ description }}</h2>
-        {% if not is_open_for_comment %}
+        {% if not can_receive_comments %}
         <p>Unfortunately, {{ rm_number }} is no longer open for comments.</p>
         <a class="button--standard button--back" href="../">Go to {{ rm_number }}</a>
         {% else %}
@@ -32,7 +32,7 @@
         {% endif %}
       </div>
     </div>
-    {% if is_open_for_comment %}
+    {% if can_receive_comments %}
     <div class="row" id="rulemaking-comments">
       <div class="js-help hidden" id="help">
         <svg
@@ -52,8 +52,8 @@
       </div>
       <form class="js-rulemaking-comments">
         {% csrf_token %}
-        <h3>Submit comments on rulemaking</h3>
-        <h2>{{ rm_title }}</h2>
+        <h3>Submit comments on {{ doc_type_label }}</h3>
+        <h2>{{ rm_no }} {{ rm_name }}</h2>
         <nav class="topnav">
           <!-- {'complete': th is.currentFrameNum == frames . length - 1}" -->
           <meter value="this.currentFrameNum" max="frames.length - 1" class="hidden" min="0"></meter>
@@ -83,6 +83,9 @@
         <input type="hidden" name="rm_id" value="{{ rm_id }}">
         <input type="hidden" name="rm_name" value="{{ rm_name }}">
         <input type="hidden" name="rm_no" value="{{ rm_no }}">
+        <input type="hidden" name="doc_id" value="{{ doc_id }}">
+        <input type="hidden" name="doc_type_label" value="{{ doc_type_label }}">
+        <input type="hidden" name="doc_url" value="{{ doc_url }}">
 
         <div id="frames-holder" class="frames">
           <fieldset id="frame-representedEntityType" class="frame" data-validation="0">
@@ -195,7 +198,7 @@
               <label for="commenters[0].mailingCountry">Country</label>
               <select id="commenters[0].mailingCountry" name="commenters[0].mailingCountry" size="1" required>
               {%- for value, label in constants.countries.items() -%}
-                <option value="{{ value }}"{% if value == 'US'%} selected{% endif %}>{{ label }}</option>
+                <option value="{{ value }}"{% if value == 'USA'%} selected{% endif %}>{{ label }}</option>
               {%- endfor -%}
               </select>
               <label class="error" for="commenters[0].mailingCountry">Please select a country</label>
@@ -399,13 +402,13 @@
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
       </form>
     </div>
-    {% endif %}{# end if is_open_for_comment #}
+    {% endif %}{# end if can_receive_comments #}
   </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-{% if is_open_for_comment %}
+{% if can_receive_comments %}
 {{ tags_for_js_chunks('rulemaking-commenting.js', '')|safe }}
 {% endif %}
 {% endblock %}
