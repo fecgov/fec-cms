@@ -73,10 +73,10 @@ function openEmbeddedPdf(clickedEl) {
     // prematurely load the data url before emptying the previous.
     pdfViewerObj.removeAttribute('data');
     pdfViewerObj.classList.add('empty');
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       pdfViewerObj.data = url;
       pdfViewerObj.classList.remove('empty');
-    }, 0);
+    });
   }
   if (pdfViewerFrame) pdfViewerFrame.src = url;
 
