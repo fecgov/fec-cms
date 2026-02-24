@@ -583,7 +583,7 @@ def rulemaking_add_comments(request, rm_no, doc_id):
         if int(key_doc['doc_id']) == int(doc_id):
             doc_receiving_comments = key_doc
 
-    return render(request, 'rulemaking-comments.jinja', {
+    return render(request, 'rulemaking-commenting.jinja', {
         'can_receive_comments': requested_doc_can_receive_comments,
         'description': rulemaking['description'],
         'rm_id': rulemaking['rm_id'],
