@@ -29,6 +29,9 @@
                <option value="adrs">Alternative Dispute Resolutions</option>
                <option value="murs">Closed Matters Under Review</option>
                <option value="regulations">Regulations</option>
+               {% if settings.FEATURES.rulemakings %}
+               <option value="rulemakings">Rulemakings</option>
+               {% endif %}
                <option value="statutes">Statutes</option>
             </select>
             <input type="text" name="search" class="combo__input" aria-label="Search">
@@ -37,7 +40,7 @@
             </button>
           </div>
           <span class="t-note t-sans search__example">Examples: 102.2; electioneering</span>
-          <button type="button" class="button--keywords u-float-right u-margin--top" aria-controls="keyword-modal" data-a11y-dialog-show="keyword-modal">More keyword options</button>
+          <button type="button" class="button--keywords u-float-right u-margin--top" aria-controls="keyword-modal" data-a11y-dialog-show="keyword-modal">Boolean filters</button>
         </form>
       </div>
       <div class="example--primary">
@@ -49,6 +52,9 @@
           <!--<li><a href="/data/audit">Audits</a></li> -->
           <li><a href="/data/legal/search/enforcement/">Closed Matters Under Review</a></li>
           <li><a href="/data/legal/search/regulations/">Regulations</a></li>
+          {% if settings.FEATURES.rulemakings %}
+          <li><a href="/legal/search/rulemakings/">Rulemakings</a></li>
+          {% endif %}
           <li><a href="/data/legal/search/statutes">Statutes</a></li>
         </ul>
       </div>

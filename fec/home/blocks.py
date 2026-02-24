@@ -153,6 +153,13 @@ class AFSearchBlock(blocks.StaticBlock):
         admin_text = 'Show the AF search field. No configuration needed.'
         template = 'blocks/af_search.html'
 
+class RulemakingSearchBlock(blocks.StaticBlock):
+    """A block that displays the Rulemaking search box"""
+    class Meta:
+        icon = 'search'
+        admin_text = 'Show the Rulemakings search field. No configuration needed.'
+        template = 'blocks/rulemaking_search.html'
+
 
 class ActiveCourtCasesBlock(blocks.StaticBlock):
     """A block that displays active court cases (ongoing litigation)"""
@@ -302,6 +309,7 @@ class ResourceBlock(blocks.StructBlock):
         ('adr_search', ADRSearchBlock()),
         ('audit_search', AuditSearchBlock()),
         ('af_search', AFSearchBlock()),
+        ('rulemaking_search', RulemakingSearchBlock()),
         ('active_court_cases', ActiveCourtCasesBlock()),
         ('selected_court_cases', SelectedCourtCasesBlock()),
         ('table', TableBlock(table_options=core_table_options)),
