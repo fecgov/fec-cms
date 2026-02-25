@@ -493,7 +493,7 @@ def rulemaking(request, rm_no):
             'doc_date': key_doc['doc_date'],
             'doc_id': key_doc['doc_id'],
             'label': key_doc['doc_type_label'],
-            'url': key_doc['url'].replace('#', '%23'),
+            'url': key_doc['url'].replace('#', '%23') if key_doc.get('url') else '',
         })
 
     documents = []
@@ -504,7 +504,7 @@ def rulemaking(request, rm_no):
         new_rm_stage['doc_id'] = stage['doc_id']
         new_rm_stage['label'] = stage['doc_type_label']
 
-        new_rm_stage['url'] = stage['url'].replace('#', '%23')
+        new_rm_stage['url'] = stage['url'].replace('#', '%23') if stage.get('url') else ''
 
         for doc in docs_that_can_receive_comments:
             if doc['doc_id'] == stage['doc_id']:
@@ -524,7 +524,7 @@ def rulemaking(request, rm_no):
                 new_sub_doc['doc_date'] = doc['doc_date']
                 new_sub_doc['doc_id'] = doc['doc_id']
                 new_sub_doc['label'] = doc['doc_type_label']
-                new_sub_doc['url'] = doc['url'].replace('#', '%23')
+                new_sub_doc['url'] = doc['url'].replace('#', '%23') if doc.get('url') else ''
 
                 new_sub_doc['doc_entities'] = []
                 for entity in doc['doc_entities']:
@@ -536,11 +536,29 @@ def rulemaking(request, rm_no):
 
         documents.append(new_rm_stage)
 
+    # Process Press & Public Guidance documents (doc_category_id=8)
+    press_public_guidance_documents = []
+    if 'no_tier_documents' in rulemaking:
+        for doc in rulemaking['no_tier_documents']:
+            if str(doc.get('doc_category_id')) == '8':
+                # Skip documents without a URL
+                if not doc.get('url'):
+                    continue
+                # Use doc_description as label, fallback to filename
+                label = doc.get('doc_description') or doc.get('filename', 'Document')
+                press_public_guidance_documents.append({
+                    'doc_id': doc['doc_id'],
+                    'label': label,
+                    'url': doc['url'].replace('#', '%23'),
+                    'doc_date': doc.get('doc_date'),
+                })
+
     return render(request, 'rulemaking.jinja', {
         'docs_that_can_receive_comments': docs_that_can_receive_comments,
         'comment_close_date': rulemaking['comment_close_date'] or '',
         'documents': documents,
         'key_documents': key_documents,
+        'press_public_guidance_documents': press_public_guidance_documents,
         'rm_entities': rulemaking['rm_entities'],
         'rm_name': rulemaking['rm_name'],
         'rm_no': rulemaking['rm_no'],

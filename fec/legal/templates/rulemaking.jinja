@@ -116,6 +116,25 @@
 {% endfor %}
       </tbody>
     </table>
+    
+    {# Only show if there are docs to include #}
+    {% if press_public_guidance_documents %}
+    <h2>Press and public guidance</h2>
+    <table class="simple-table simple-table--display">
+      <thead>
+        <tr class="simple-table__header">
+          <th>Document</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for doc in press_public_guidance_documents %}
+        <tr class="{{ loop.cycle('odd', 'even') }}">
+          <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
 
     <h2>Entities</h2>
     <table class="simple-table simple-table--display">
