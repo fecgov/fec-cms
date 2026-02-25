@@ -251,7 +251,10 @@ html, body {
       } */
     /* remove this when commenters can be their own types */
     [name$=".commenterType"][value="individual"] ~ *[data-toggle="organization"],
-    [name$=".commenterType"][value="organization"] ~ *[data-toggle="individual"] {
+    [name$=".commenterType"][value="organization"] ~ *[data-toggle="individual"],
+    [name$=".commenterType"][value="individual"] ~ .commenter-controls button span[data-show-if-val="organization"],
+    [name$=".commenterType"][value="organization"] ~ .commenter-controls button span[data-show-if-val="individual"]
+    {
       display: none;
     }
     &:not(:last-child) .add-commenter {

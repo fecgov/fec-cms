@@ -129,7 +129,7 @@ RulemakingCommenting.prototype.init = function() {
   unwantedNodes.forEach(node => { node.remove(); });
 
   // Remove commenters[0].commenterType from the submitter (i.e. the first, which will remain commenters[0])
-  const unnecessaryCommenter0Type = commenter0block.querySelector('input[name="commenters[0].commenterType');
+  const unnecessaryCommenter0Type = commenter0block.querySelector('input[name="commenters[0].commenterType"]');
   commenter0block.removeChild(unnecessaryCommenter0Type);
 
   // Dupe the #commenters[0].mailingCountry country <select> to the lawfirm country <select>

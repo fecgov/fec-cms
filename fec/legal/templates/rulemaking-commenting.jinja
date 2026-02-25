@@ -226,7 +226,10 @@
               <fieldset class="commenter-controls" data-index-0="false">
                 <button class="button--alt remove-commenter" data-command="remove-commenter" type="button">Remove this commenter</button>
                 <hr>
-                <button class="button--alt add-commenter" data-command="add-commenter" type="button">Add joint commenter</button>
+                <button class="button--alt add-commenter" data-command="add-commenter" type="button">
+                  <span data-show-if-val="individual">Add individual joint commenter</span>
+                  <span data-show-if-val="organization">Add organization joint commenter</span>
+                </button>
               </fieldset>
             </div>{# close #contact-info-template #}
 
