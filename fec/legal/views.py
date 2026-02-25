@@ -541,6 +541,9 @@ def rulemaking(request, rm_no):
     if 'no_tier_documents' in rulemaking:
         for doc in rulemaking['no_tier_documents']:
             if str(doc.get('doc_category_id')) == '8':
+                # Skip documents without a URL
+                if not doc.get('url'):
+                    continue
                 # Use doc_description as label, fallback to filename
                 label = doc.get('doc_description') or doc.get('filename', 'Document')
                 press_public_guidance_documents.append({
