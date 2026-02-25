@@ -1117,9 +1117,10 @@ export const rulemakings = [
       let html = `<p><strong>${row.rm_name}</strong>`;
       if (row.key_documents && row.key_documents.length ) {
         html += `<br><span class="icon icon--inline--left i-document"></span>`;
+        const keyDocUrl = row.key_documents[0].url ? row.key_documents[0].url.replace(/#/g, '%23') : '';
         html +=
           buildEntityLink(
-            row.key_documents[0].doc_type_label, row.key_documents[0].url, row.key_documents[0].doc_type_label);
+            row.key_documents[0].doc_type_label, keyDocUrl, row.key_documents[0].doc_type_label);
             if (row.key_documents[0].doc_date !== null) {
                 const doc_date = moment(row.key_documents[0].doc_date).format('MM/DD/YYYY');
                 html += ` | ${doc_date}`;
@@ -1173,13 +1174,14 @@ export const rulemakings = [
                 parsed = moment(document.doc_date, 'YYYY-MM-DD');
                 const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
 
+            const docUrl = document.url ? document.url.replace(/#/g, '%23') : '';
             html += `
                   <div class="document-container ${top_border_class}">
                     <div class="document-category">${show_category}</div>
                     <div class="document_details">
                       <div class="post--icon">
                         <span class="icon icon--inline--left i-document"></span>
-                        <a href="${document.url}">
+                        <a href="${docUrl}">
                         ${document.doc_type_label}</a> | ${doc_date}
                       </div>`;
             if (document.highlights) {
@@ -1237,6 +1239,7 @@ export const rulemakings = [
                 let parsed;
                 parsed = moment(l2_document.doc_date, 'YYYY-MM-DD');
                 const l2_doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
+                const l2DocUrl = l2_document.url ? l2_document.url.replace(/#/g, '%23') : '';
 
                   html += `
                   <div class="document-container ${top_border_class}">
@@ -1244,7 +1247,7 @@ export const rulemakings = [
                     <div class="document_details">
                       <div class="post--icon">
                         <span class="icon icon--inline--left i-document"></span>
-                        <a href="${l2_document.url}">
+                        <a href="${l2DocUrl}">
                         ${l2_document.doc_type_label}</a> | ${l2_doc_date}
                       </div>`;
               if (l2_document.highlights && l2_document.highlights.length) {

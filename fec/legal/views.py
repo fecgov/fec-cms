@@ -685,7 +685,22 @@ def legal_search(request):
             response = api_caller._call_api(url, **filters)
             # Only set results if the response has the expected keys
             if 'rulemakings' in response and 'total_rulemakings' in response:
-                results['rulemakings'] = response['rulemakings']
+                # Encode # characters in document URLs to prevent URL bucket issues
+                rulemakings = response['rulemakings']
+                for rulemaking in rulemakings:
+                    if 'documents' in rulemaking:
+                        for document in rulemaking['documents']:
+                            if 'url' in document and document['url']:
+                                document['url'] = document['url'].replace('#', '%23')
+                            # Process level 2 documents
+                            if 'level_2_labels' in document:
+                                for label in document['level_2_labels']:
+                                    if 'level_2_docs' in label:
+                                        for l2_doc in label['level_2_docs']:
+                                            if 'url' in l2_doc and l2_doc['url']:
+                                                l2_doc['url'] = l2_doc['url'].replace('#', '%23')
+
+                results['rulemakings'] = rulemakings
                 results['total_rulemakings'] = response['total_rulemakings']
                 results['rulemakings_returned'] = ('3' if results['total_rulemakings'] > 3
                                                    else results['total_rulemakings'])
