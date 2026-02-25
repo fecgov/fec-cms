@@ -68,6 +68,7 @@ select {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: u(1.2em);
 
   @include appearance(none);
   @include u-icon-bg($arrow-down, $primary);
