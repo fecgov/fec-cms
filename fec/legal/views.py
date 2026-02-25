@@ -536,11 +536,26 @@ def rulemaking(request, rm_no):
 
         documents.append(new_rm_stage)
 
+    # Process Press & Public Guidance documents (doc_category_id=8)
+    press_public_guidance_documents = []
+    if 'no_tier_documents' in rulemaking:
+        for doc in rulemaking['no_tier_documents']:
+            if str(doc.get('doc_category_id')) == '8':
+                # Use doc_description as label, fallback to filename
+                label = doc.get('doc_description') or doc.get('filename', 'Document')
+                press_public_guidance_documents.append({
+                    'doc_id': doc['doc_id'],
+                    'label': label,
+                    'url': doc['url'].replace('#', '%23'),
+                    'doc_date': doc.get('doc_date'),
+                })
+
     return render(request, 'rulemaking.jinja', {
         'docs_that_can_receive_comments': docs_that_can_receive_comments,
         'comment_close_date': rulemaking['comment_close_date'] or '',
         'documents': documents,
         'key_documents': key_documents,
+        'press_public_guidance_documents': press_public_guidance_documents,
         'rm_entities': rulemaking['rm_entities'],
         'rm_name': rulemaking['rm_name'],
         'rm_no': rulemaking['rm_no'],
