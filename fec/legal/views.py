@@ -657,7 +657,7 @@ def legal_search(request):
                 results['regulations_returned'] = ('3' if results['total_regulations'] > 3
                                                    else results['total_regulations'])
 
-        if result_type == 'all' or result_type == 'rulemakings':
+        if settings.FEATURES['rulemakings'] and (result_type == 'all' or result_type == 'rulemakings'):
             filters = {}
             url = '/rulemaking/search/'
             filters['q'] = query
@@ -665,10 +665,12 @@ def legal_search(request):
             filters['hits_returned'] = 3
             filters['from_hit'] = 0
             response = api_caller._call_api(url, **filters)
-            results['rulemakings'] = response['rulemakings']
-            results['total_rulemakings'] = response['total_rulemakings']
-            results['rulemakings_returned'] = ('3' if results['total_rulemakings'] > 3
-                                               else results['total_rulemakings'])
+            # Only set results if the response has the expected keys
+            if 'rulemakings' in response and 'total_rulemakings' in response:
+                results['rulemakings'] = response['rulemakings']
+                results['total_rulemakings'] = response['total_rulemakings']
+                results['rulemakings_returned'] = ('3' if results['total_rulemakings'] > 3
+                                                   else results['total_rulemakings'])
 
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
