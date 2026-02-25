@@ -128,6 +128,10 @@ RulemakingCommenting.prototype.init = function() {
   const unwantedNodes = commenter0block.querySelectorAll('[data-index-0="false"]');
   unwantedNodes.forEach(node => { node.remove(); });
 
+  // Remove commenters[0].commenterType from the submitter (i.e. the first, which will remain commenters[0])
+  const unnecessaryCommenter0Type = commenter0block.querySelector('input[name="commenters[0].commenterType');
+  commenter0block.removeChild(unnecessaryCommenter0Type);
+
   // Dupe the #commenters[0].mailingCountry country <select> to the lawfirm country <select>
   this.formEl.querySelector('select[name="commenters[0].representedEntity.mailingCountry"]').innerHTML =
     this.formEl.querySelector('select[name="commenters[0].mailingCountry"]').innerHTML;
@@ -307,8 +311,9 @@ RulemakingCommenting.prototype.buildTheFrame = function() {
       //
     }
   } else if (this.isOnFrame('commenters')) {
-    const commentersHolder = this.formEl.querySelector('#commenters-holder');
-    if (!commentersHolder.childElementCount) this.addCommenter();
+    // We no longer want to add a commenter automatically, opting instead to do so after commentersType is set.
+    // const commentersHolder = this.formEl.querySelector('#commenters-holder');
+    // if (!commentersHolder.childElementCount) this.addCommenter();
 
   } else if (this.isOnFrame('summary')) {
 
@@ -688,9 +693,10 @@ RulemakingCommenting.prototype.validateField = function(elOrSelector, requireVal
 
 /**
  * Starts with this.commenterTemplate, removes appropriate fields, numbers it, then returns the new commenter element.
+ * @param {boolean} [broadcastEvent=true] - Whether the resize event should fire
  * @returns {HTMLElement} Returns the new commenter/div created
  */
-RulemakingCommenting.prototype.addCommenter = function() {
+RulemakingCommenting.prototype.addCommenter = function(broadcastEvent=true) {
   const commentersHolder = this.formEl.querySelector('#commenters-holder');
   const newCommenter = document.createElement('div');
   newCommenter.setAttribute('class', 'commenter');
@@ -701,14 +707,15 @@ RulemakingCommenting.prototype.addCommenter = function() {
   newInnerHtml = newInnerHtml.replaceAll('0', newChildIndex);
   newCommenter.innerHTML = newInnerHtml;
 
-  // Remove any of the representedEntity fields that should only exist for [0]
-  const repEntEls = newCommenter.querySelectorAll(
-    '[name*="representedEntity"]', '[for*="representedEntity"]'
-  );
-  repEntEls.forEach(el => {
-    el.remove();
-  });
+  // Remove any of the representedEntity fields since should only exist for [0]
+  const repEntEls = newCommenter.querySelectorAll('[name*="representedEntity"]', '[for*="representedEntity"]');
+  repEntEls.forEach(el => { el.remove(); });
 
+  // Set the commenterType to commentersType
+  newCommenter.querySelector('input[name$=".commenterType"]').value =
+    this.formEl.querySelector('[name="commentersType"]').value;
+
+  // TODO: move this to when the template is created rather than doing it for every addition?
   // Remove any of the possible "I'd like to testify" fields that should only be included for the submitter
   const testifyEls = newCommenter.querySelectorAll(
     'fieldset[data-show-if-var$=".testify"], fieldset:has(input[name$=".testify"])'
@@ -724,38 +731,7 @@ RulemakingCommenting.prototype.addCommenter = function() {
 
   commentersHolder.appendChild(newCommenter);
 
-  // Lock the commenterType of this new commenter to match commenter[1]'s type, if already selected.
-  // This enforces that all additional commenters must be the same type (all individual or all
-  // organization), which is required to accurately derive representedEntityTypeID on submission.
-  // We cannot mix commenter types.
-  // commenter[1] (the first child of #commenters-holder) is always the primary — its type is
-  // the one the user sets freely, and all subsequent commenters must follow it.
-  const firstAdditionalCommenter = commentersHolder.firstElementChild;
-  if (firstAdditionalCommenter && firstAdditionalCommenter !== newCommenter) {
-    const firstTypeSelect = firstAdditionalCommenter.querySelector('[name$=".commenterType"]');
-    if (firstTypeSelect && firstTypeSelect.value) {
-      const lockedType = firstTypeSelect.value;
-      const newTypeSelect = newCommenter.querySelector('[name$=".commenterType"]');
-      if (newTypeSelect) {
-        newTypeSelect.value = lockedType;
-        // Disable the select so the user cannot change the type on commenter[2]+.
-        // The type must stay consistent across all additional commenters.
-        newTypeSelect.setAttribute('disabled', '');
-        // Disabled form fields are excluded from FormData/submission, so we mirror the value
-        // in a hidden input with the same name so the backend still receives it.
-        const hiddenInput = document.createElement('input');
-        hiddenInput.type = 'hidden';
-        hiddenInput.name = newTypeSelect.name;
-        hiddenInput.value = lockedType;
-        newTypeSelect.insertAdjacentElement('afterend', hiddenInput);
-        // Fire change so the required-field toggling (first/last name vs org name, email) runs
-        // for the pre-selected type, keeping validation state consistent.
-        newTypeSelect.dispatchEvent(new Event('change', { bubbles: true }));
-      }
-    }
-  }
-
-  this.formEl.dispatchEvent(new Event('change')); // For the height resize
+  if (broadcastEvent) this.formEl.dispatchEvent(new Event('change')); // For the height resize
 
   return newCommenter;
 };
@@ -785,21 +761,6 @@ RulemakingCommenting.prototype.removeCommenter = function(el) {
     const commenterNumberLabel = commenter.querySelector('label:first-of-type');
     commenterNumberLabel.innerHTML = `Commenter #${(i1)}`;
   });
-
-  // If removing a commenter leaves only one remaining, that commenter becomes the new commenter[1]
-  // (the primary). It should no longer be locked — the user must be free to change its type,
-  // which would then propagate to any future joint commenters they add.
-  // Remove the disabled attribute and delete the hidden input that was standing in for the
-  // disabled select during form submission.
-  if (commentersHolder.childElementCount === 1) {
-    const onlyCommenter = commentersHolder.firstElementChild;
-    const typeSelect = onlyCommenter.querySelector('[name$=".commenterType"]');
-    if (typeSelect) {
-      typeSelect.removeAttribute('disabled');
-      const hiddenInput = onlyCommenter.querySelector('input[type="hidden"][name$=".commenterType"]');
-      if (hiddenInput) hiddenInput.remove();
-    }
-  }
 
   this.formEl.dispatchEvent(new Event('change')); // For the height resize
 
@@ -1001,12 +962,12 @@ RulemakingCommenting.prototype.handleFormChange = function(e) {
   // Maybe later: this.formEl.removeAttribute('data-has-been-active');
   this.toggleElementsByVars();
 
-  // Trim text inputs
+  // TEXT - trim
   // If it's a text-type element, first trim off any leading or trailing spaces
   if (['text', 'email', 'textarea'].includes(e.target.type))
     e.target.value = e.target.value.trim();
 
-  // Handle the file inputs
+  // FILES
   if (e.target.type == 'file') {
     // Add/remove the has-file class to toggle the X button, which will let css show additional pickers
     // It 'has-file' when a file's selected and it's <= 5 MB
@@ -1037,6 +998,7 @@ RulemakingCommenting.prototype.handleFormChange = function(e) {
   if (commentsAreRequired) commentsField.setAttribute('required', '');
   else commentsField.removeAttribute('required');
 
+  // REPRESENTED ENTITY TYPE
   // The first frame has an 'other' field to toggle
   if (e.target.name === 'representedEntityType' || e.target.name === 'representedEntityConnection') {
     // For the first frame, there's been activity so let's restrict leaving the page and losing data
@@ -1053,6 +1015,7 @@ RulemakingCommenting.prototype.handleFormChange = function(e) {
     }
   }
 
+  // COUNTRY
   // If we've changed the country, we'll toggle whether state and ZIP are required (req for US/USA)
   if (e.target.name.indexOf('.mailingCountry') > 0) {
     const elementNameRoot = e.target.name.substring(0, e.target.name.lastIndexOf('.'));
@@ -1084,51 +1047,33 @@ RulemakingCommenting.prototype.handleFormChange = function(e) {
     });
   }
 
+  // COMMENTER/COMMENTERS TYPE
   // If we've changed the commenter type, let's toggle the required name <input>s (i.e. [first, last] or [org] name)
-  if (e.target.name.indexOf('.commenterType') > 0) {
+  if (e.target.name === 'commentersType') {
     // The type of commenter
     const commType = e.target.value;
-    const parentEl = e.target.closest('.commenter');
-    // required fields are inputs inside the matching data-toggle
-    // non-required are inputs inside elements with data-toggle but the data-toggle that doesn't match
-    const requiredEls = parentEl.querySelectorAll(`[data-toggle="${commType}"] input`);
-    const nonReqEls = parentEl.querySelectorAll(`[data-toggle]:not([data-toggle="${commType}"]) input`);
+    const commentersHolder = document.querySelector('#commenters-holder');
+
+    // If we have 0 commenters, add one
+    if (commentersHolder.childElementCount < 1) this.addCommenter();
+
+    // Loop through the hidden commenterType inputs, setting the value to commentersType
+    const commenterTypeInputs = commentersHolder.querySelectorAll(`input[name$=".commenterType"]`);
+    commenterTypeInputs.forEach(el => { el.value = commType; });
+
+    // Required fields are inputs inside the matching data-toggle
+    // Non-required are inputs inside elements with data-toggle but the data-toggle that doesn't match
+    const requiredEls = commentersHolder.querySelectorAll(`[data-toggle="${commType}"] input`);
+    const nonReqEls = commentersHolder.querySelectorAll(`[data-toggle]:not([data-toggle="${commType}"]) input`);
     requiredEls.forEach(el => { el.setAttribute('required', ''); });
     nonReqEls.forEach(el => { el.removeAttribute('required'); });
 
-    // email address is available for both types, but only required for individuals
-    const emailField = parentEl.querySelector('[name*="emailAddress"]');
-    if (commType === 'individual') emailField.setAttribute('required', '');
-    else emailField.removeAttribute('required');
-
-    // When commenter[1]'s type changes, push the new type to all subsequent commenters (commenter[2]+)
-    // and lock their selects. This handles the case where commenter[2]+ were added before
-    // commenter[1] had a type — addCommenter() only locks on creation if a type is already set,
-    // so this change handler covers the retroactive lock.
-    const commentersHolder = this.formEl.querySelector('#commenters-holder');
-    if (commentersHolder && parentEl === commentersHolder.firstElementChild) {
-      const subsequentCommenters = [...commentersHolder.children].slice(1);
-      subsequentCommenters.forEach(commenter => {
-        const typeSelect = commenter.querySelector('[name$=".commenterType"]');
-        if (typeSelect) {
-          typeSelect.value = commType;
-          typeSelect.setAttribute('disabled', '');
-          // Create a hidden input if one doesn't already exist (e.g. commenter was added before
-          // commenter[1] had a type, so addCommenter() didn't create one at that time).
-          let hiddenInput = commenter.querySelector('input[type="hidden"][name$=".commenterType"]');
-          if (!hiddenInput) {
-            hiddenInput = document.createElement('input');
-            hiddenInput.type = 'hidden';
-            hiddenInput.name = typeSelect.name;
-            typeSelect.insertAdjacentElement('afterend', hiddenInput);
-          }
-          hiddenInput.value = commType;
-          // Fire change so required-field toggling stays in sync with the updated type.
-          typeSelect.dispatchEvent(new Event('change', { bubbles: true }));
-        }
-      });
-    }
-
+    // Email address is available for both types, but only required for individuals
+    const emailInputs = commentersHolder.querySelectorAll('[name*="emailAddress"]');
+    emailInputs.forEach(el => {
+      if (commType === 'individual') el.setAttribute('required', '');
+      else el.removeAttribute('required');
+    });
   }
 
   this.validateCurrentFrame();

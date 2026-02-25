@@ -237,7 +237,8 @@ html, body {
   .commenter {
     min-height: 20rem;
 
-    select[name$=".commenterType"] {
+    /* Restore this when commenters can be their own types
+    [name$=".commenterType"] {
       // If no commenter type has been selected, hide all following siblings
       &:not(&:has(option:checked)) ~ *,
       &:has(option[value=""]:checked) ~ *,
@@ -247,7 +248,11 @@ html, body {
       // For "organization", hide all "organization" siblings
       &:has(option[value="organization"]:checked) ~ *[data-toggle="individual"] {
         display: none;
-      }
+      } */
+    /* remove this when commenters can be their own types */
+    [name$=".commenterType"][value="individual"] ~ *[data-toggle="organization"],
+    [name$=".commenterType"][value="organization"] ~ *[data-toggle="individual"] {
+      display: none;
     }
     &:not(:last-child) .add-commenter {
       display: none;

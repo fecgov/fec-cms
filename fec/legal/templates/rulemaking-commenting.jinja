@@ -135,13 +135,7 @@
 
               <label class="" data-index-0="false">Commenter #0</label>
 
-              <label for="commenters[0].commenterType" data-index-0="false">Commenter type</label>
-              <select id="commenters[0].commenterType" name="commenters[0].commenterType" class="grid__item--2-wide" data-index-0="false" size="1" required>
-                <option value="">--Select--</option>
-                <option value="individual">Individual</option>
-                <option value="organization">Organization</option>
-              </select>
-              <span class="error" data-index-0="false">What role is this commenter?</span>
+              <input type="hidden" id="commenters[0].commenterType" name="commenters[0].commenterType" value="">
 
               <div class="grid grid--2-wide" data-toggle="individual">
                 <div class="grid__item">
@@ -314,8 +308,16 @@
           <fieldset id="frame-commentersInfo" class="frame" data-validation="0">
             <label class="group-label">Add commenter information</label>
 
+            <label for="commentersType" data-index-0="false">I&apos;m commenting on behalf of</label>
+            <select id="commentersType" name="commentersType" class="grid__item--2-wide" data-index-0="false" size="1" required>
+              <option value="">--Select--</option>
+              <option value="individual">Individuals</option>
+              <option value="organization">Organizations</option>
+            </select>
+            <label class="error" data-index-0="false">Required</label>
+
             <div id="commenters-holder" class="commenters-block">
-              {# JavaScript populates these with the innerHTML from #contact-info-template #}
+              {#- JavaScript populates these with the innerHTML from #contact-info-template -#}
             </div>
             <fieldset class="commenters-controls" aria-hidden="true">
               <button class="button--alt add-commenter" type="button" disabled>Add joint commenter</button>
