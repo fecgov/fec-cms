@@ -1114,8 +1114,13 @@ export const rulemakings = [
     className: 'all column--legal-docs align-top',
     orderable: false,
     render: function (data, type, row) {
+      // Array to keep track of documents already shown
+      let doc_ids = [];
+
       let html = `<p><strong>${row.rm_name}</strong>`;
       if (row.key_documents && row.key_documents.length ) {
+        // Push doc_id to array to keep track of already-shown documents
+        doc_ids.push(`${row.key_documents[0].doc_id}`)
         html += `<br><span class="icon icon--inline--left i-document"></span>`;
         html +=
           buildEntityLink(
@@ -1123,6 +1128,9 @@ export const rulemakings = [
             if (row.key_documents[0].doc_date !== null) {
                 const doc_date = moment(row.key_documents[0].doc_date).format('MM/DD/YYYY');
                 html += ` | ${doc_date}`;
+            }
+            else {
+              html += ' | Undated'
             }
       }
         html += `</p>`;
@@ -1138,12 +1146,10 @@ export const rulemakings = [
     // Note: Opening div tags are lined up with their closing divs below
        html +=
       `<div class="legal-search-result__hit u-margin--top">`;
-       if ((filters_category_type || filters_keyword) && !proximity_only) {
+      if ((filters_category_type || filters_keyword) && !proximity_only) {
            let category_shown = '';
-           // Array to keep track of document already shown
-           let doc_ids = [];
            //for (const [index, document] of row.documents.entries()) {
-           for (const document of row.documents) {
+          for (const document of row.documents) {
 
             /* Will show documents in all 3 scenarios:
              - When there is a keyword query and selected document categories
@@ -1216,6 +1222,7 @@ export const rulemakings = [
             for (let label of document.level_2_labels) {
 
               for (let l2_document of label.level_2_docs) {
+                // See above comment: "Will show documents in all 3 scenarios:" to understand 'show_document'
                 let category_match = (filters_category_type && current_doc_ids.includes(`${l2_document.doc_category_id}`) ? true : false) || !filters_category_type;
                 let text_match_l2 = (filters_keyword && has_highlights(l2_document)) || !filters_keyword;
                 // Dont show document if it has already been shown once
@@ -1281,6 +1288,52 @@ export const rulemakings = [
             }
           }
         }
+      //} else if ((filters_category_type || !filters_keyword) && !proximity_only) {
+
+        if (row.no_tier_documents && row.no_tier_documents.length) {
+          for (let no_tier_document of row.no_tier_documents ) {
+            let category_match = (filters_category_type && current_doc_ids.includes(`${no_tier_document.doc_category_id}`) ? true : false) || !filters_category_type;
+            let text_match = (filters_keyword && has_highlights(no_tier_document)) || !filters_keyword;
+            // Dont show document if it has already been shown once
+            let no_tier_unique_id = !doc_ids.includes(`${no_tier_document.doc_id}`);
+            let show_document = category_match && text_match && no_tier_unique_id;
+            if (show_document) {
+               let top_border_class = '';
+               let show_category = '';
+               let current_category = no_tier_document.doc_category_label;
+               if (category_shown != current_category) {
+                     top_border_class = 'u-border-top-neutral';
+                     show_category = no_tier_document.doc_category_label;
+                     category_shown = current_category;
+                }
+
+                // Push doc_id to array to keep track of already-shown documents
+                doc_ids.push(`${no_tier_document.doc_id}`);
+                
+                let no_tier_doc_date;
+                let parsed;
+                parsed = moment(no_tier_document.doc_date, 'YYYY-MM-DD');
+                if (no_tier_document.doc_date !== null) {
+                  no_tier_doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
+                } else {
+                  no_tier_doc_date = 'Undated'
+                }
+
+            html += `
+                  <div class="document-container ${top_border_class}">
+                    <div class="document-category">${show_category}</div>
+                    <div class="document_details">
+                      <div class="post--icon">
+                        <span class="icon icon--inline--left i-document"></span>
+                        <a href="${no_tier_document.url}">
+                        ${no_tier_document.doc_type_label}</a> | ${no_tier_doc_date}
+                      </div>
+                    </div>
+                  </div>`;
+            }
+          }
+        }
+
       } else if (proximity_only && row.source) {
           let category_shown = '';
           for (const document of row.source) {
