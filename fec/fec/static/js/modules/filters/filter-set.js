@@ -169,10 +169,13 @@ FilterSet.prototype.clear = function() {
 FilterSet.prototype.handleTagRemoved = function(e, opts) {
   const $input = $(document.getElementById(opts.key));
 
-  // The keyword proximity filter is different because of its three fields and two values
+  // Proximity filter has three fields (kw0, kw1, max_gaps) — clear all on tag removal
   if ($input.attr('data-filter') == 'keyword-proximity') {
     const $proximityFields = $input.find('input[name="q_proximity"]');
+    const $maxGapsField = $input.find('input[name="max_gaps"]');
     $proximityFields.val('');
+    $maxGapsField.val('');
+    // Trigger change to update validation state and refresh the table
     $proximityFields.get(0).dispatchEvent(new Event('change', { bubbles: true }));
 
   } else if ($input.length > 0) {

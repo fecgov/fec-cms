@@ -667,16 +667,14 @@ DataTable_FEC.prototype.checkFromQuery = function() {
     if (Array.isArray(val)) {
       // iterate the val array
       val.forEach(i => {
-        // Find matching checkboxes
-        queryBox = $(`input:checkbox[name="${key}"][value="${i}"]`);
-        // Push matching checkboxes to the  array
+        // CSS.escape prevents selector syntax errors from quotes or special chars in values
+        queryBox = $(`input:checkbox[name="${CSS.escape(key)}"][value="${CSS.escape(i)}"]`);
         queryBoxes.push(queryBox);
       });
     }
     // Handle singular val
     else {
-      // find matching checkbox
-      queryBox = $(`input:checkbox[name="${key}"][value="${val}"]`);
+      queryBox = $(`input:checkbox[name="${CSS.escape(key)}"][value="${CSS.escape(val)}"]`);
       // Push matching checkbox to the array
       queryBoxes.push(queryBox);
     }
