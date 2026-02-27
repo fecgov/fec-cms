@@ -221,9 +221,11 @@ TagList.prototype.removeTagElement = function($tag, emit) {
  * @param {boolean} forceRemove
  */
 TagList.prototype.removeTag = function(key, emit, forceRemove) {
-  let $tag = this.$list.find('[data-id="' + key + '"]');
-  // If we didn't find the tag by its data-id, use the data-tag-category instead (for keyword-proximity)
-  if ($tag.length === 0) $tag = this.$list.find(`[data-tag-category="${key}"]`);
+  // Escape key for use in attribute selectors (prevents crash from quotes or special chars)
+  const escapedKey = CSS.escape(key);
+  let $tag = this.$list.find('[data-id="' + escapedKey + '"]');
+  // Keyword-proximity tags use data-tag-category instead of data-id
+  if ($tag.length === 0) $tag = this.$list.find(`[data-tag-category="${escapedKey}"]`);
 
   if ($tag.length > 0) {
     // If the tag exists, remove the element if it's removable

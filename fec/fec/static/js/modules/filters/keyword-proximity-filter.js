@@ -1,4 +1,5 @@
 import { default as Filter } from './filter-base.js';
+import { default as URI } from 'urijs';
 
 /**
  * @TODO
@@ -26,6 +27,16 @@ const validationStates = {
   incomplete: 'INCOMPLETE',
   valid: 'VALID'
 };
+
+/**
+ * Strips leading/trailing quotes from a string value
+ * @param {string} value
+ * @returns {string}
+ */
+function stripQuotes(value) {
+  if (!value || typeof value !== 'string') return value;
+  return value.replace(/^["']|["']$/g, '');
+}
 
 /**
  * Used inside typeahead-filter.js as this.typeaheadFilter
@@ -157,6 +168,12 @@ KeywordProximityFilter.prototype.handleInputChange = function(e) {
   // Reset the 'waiting' css animation
   document.querySelector('[data-filter="max_gaps"]').classList.remove('waiting');
 
+  // Strip any quotes the user may have typed into the keyword fields
+  const cleanKw0 = stripQuotes(this.$keyword0.val());
+  const cleanKw1 = stripQuotes(this.$keyword1.val());
+  if (this.$keyword0.val() !== cleanKw0) this.$keyword0.val(cleanKw0);
+  if (this.$keyword1.val() !== cleanKw1) this.$keyword1.val(cleanKw1);
+
   const wasValid = this.validationState == validationStates.valid;
   this.validateValues();
   const isValid = this.validationState == validationStates.valid;
@@ -164,12 +181,12 @@ KeywordProximityFilter.prototype.handleInputChange = function(e) {
 
   let eventName;
 
-  if (!wasValid && !isValid) {
-    // If it wasn't valid and still isn't valid, don't do anything,
-    // i.e. keep the error message and block the <input> change event
+  // Block API calls when incomplete - user needs both keywords + distance
+  if (this.validationState == validationStates.incomplete) {
     e.stopPropagation();
   }
 
+  // Only create/update/remove tags when valid or empty (not incomplete)
   if (!isValid) eventName = 'filter:removed';
   else if (isValid && tagCurrentlyExists) eventName = 'filter:renamed';
   else if (isValid) eventName = 'filter:added';
@@ -203,7 +220,9 @@ KeywordProximityFilter.prototype.handleInputChange = function(e) {
     ]);
   }
 
-  if (wasValid && !isValid && this.validationState == validationStates.incomplete) {
+  // When clearing from valid state to empty, refresh the table to clear results
+  if (wasValid && this.validationState == validationStates.empty) {
+    this.$maxGaps.val('');
     this.bubbleTheChangeEvent();
   }
 
@@ -312,8 +331,24 @@ KeywordProximityFilter.prototype.toggleErrorMessage = function() {
  * @param {string|string[]} queryVars.q_proximity - String or array of strings of keywords to use in the prox. search
  */
 KeywordProximityFilter.prototype.fromQuery = function(queryVars) {
-  if (queryVars.q_proximity || queryVars.max_gaps) {
+  // Ignore orphaned max_gaps without q_proximity — prevents TypeError on undefined access
+  if (queryVars.q_proximity) {
+    // Check if q_proximity is incomplete (only one keyword)
+    const isIncomplete = typeof queryVars.q_proximity === 'string' ||
+                         (Array.isArray(queryVars.q_proximity) && queryVars.q_proximity.length === 1);
+
     this.setValue(queryVars);
+
+    if (isIncomplete) {
+      // Clear invalid proximity parameters from URL to prevent search execution
+      this.clearProximityFromUrl();
+    } else {
+      // sanitizeQueryParams() already strips quotes from queryVars before we see them,
+      // but the browser address bar still shows the original quoted URL. Fix it here.
+      if (this.rawUrlHasQuotedProximity()) {
+        this.cleanUrlAfterLoad();
+      }
+    }
   }
   return this;
 };
@@ -328,12 +363,14 @@ KeywordProximityFilter.prototype.setValue = function(queryVals) {
   let kw0 = '';
   let kw1 = '';
 
-  // If q_proximity is a string, then there's only one q_proximity value so we'll leave kw1 blank.
-  // If it's an Array then we have two values so we're all set
-  if (typeof queryVals.q_proximity == 'string') kw0 = queryVals.q_proximity;
-  else {
-    kw0 = queryVals.q_proximity[0];
-    kw1 = queryVals.q_proximity[1];
+  // Guard against undefined q_proximity (e.g. orphaned max_gaps in URL)
+  if (queryVals.q_proximity) {
+    // String means one value; Array means two keywords for proximity search
+    if (typeof queryVals.q_proximity == 'string') kw0 = stripQuotes(queryVals.q_proximity);
+    else {
+      kw0 = stripQuotes(queryVals.q_proximity[0]);
+      kw1 = stripQuotes(queryVals.q_proximity[1]);
+    }
   }
 
   this.$keyword0.val(kw0).trigger('change');
@@ -361,6 +398,52 @@ KeywordProximityFilter.prototype.handleModifyEvent = function(e, opts) {
  */
 KeywordProximityFilter.prototype.handleRemoveAll = function(e, opts) {
   // TODO ?
+};
+
+/**
+ * Checks the raw browser URL for quotes in q_proximity values.
+ * Must check window.location.search directly because sanitizeQueryParams()
+ * strips quotes before they reach fromQuery().
+ * @returns {boolean}
+ */
+KeywordProximityFilter.prototype.rawUrlHasQuotedProximity = function() {
+  // %22 = URL-encoded double quote, %27 = single quote
+  return /q_proximity=[^&]*(%22|%27|["'])/i.test(window.location.search);
+};
+
+/**
+ * Replaces q_proximity in the browser URL with the clean input field values.
+ * Deferred with setTimeout so it runs after DataTable's own updateQuery() call.
+ */
+KeywordProximityFilter.prototype.cleanUrlAfterLoad = function() {
+  const self = this;
+  setTimeout(function() {
+    const val0 = self.$keyword0.val();
+    const val1 = self.$keyword1.val();
+
+    const currentUrl = URI(window.location.search);
+    currentUrl.removeSearch('q_proximity');
+    if (val0) currentUrl.addSearch('q_proximity', val0);
+    if (val1) currentUrl.addSearch('q_proximity', val1);
+
+    const newUrl = currentUrl.toString();
+    window.history.replaceState(null, '', newUrl || window.location.pathname);
+  }, 0);
+};
+
+/**
+ * Clears incomplete proximity search parameters from the URL.
+ * This prevents the table from executing a search with invalid/incomplete parameters.
+ * Deferred with setTimeout so it runs after DataTable's own updateQuery() call.
+ */
+KeywordProximityFilter.prototype.clearProximityFromUrl = function() {
+  setTimeout(function() {
+    const currentUrl = URI(window.location.search);
+    currentUrl.removeSearch('q_proximity');
+    currentUrl.removeSearch('max_gaps');
+    const newUrl = currentUrl.toString();
+    window.history.replaceState(null, '', newUrl || window.location.pathname);
+  }, 0);
 };
 
 /**
