@@ -43,20 +43,17 @@ from home.blocks import (
 logger = logging.getLogger(__name__)
 
 
-def extract_case_numbers(title):
+def extract_first_case_number(title):
     """
-    Extract case numbers from a court case title for sorting.
+    Extract the first case number from a court case title for sorting.
     Case numbers appear in formats like (19-1021), (20-0588 / 21-5081), etc.
-    Returns a list of (year, number) tuples, sorted descending by year then number.
+    Returns the first (year, number) tuple found, or None if no case number exists.
     """
     import re
-    pattern = r'(\d{2})-(\d+)'
-    matches = re.findall(pattern, title)
-    if not matches:
-        return []
-    numbers = [(int(year), int(num)) for year, num in matches]
-    numbers.sort(reverse=True)
-    return numbers
+    match = re.search(r'(\d{2})-(\d+)', title)
+    if not match:
+        return None
+    return (int(match.group(1)), int(match.group(2)))
 
 
 def get_sort_key_for_title(title):
@@ -106,6 +103,18 @@ def get_sort_key_for_title(title):
     return title
 
 
+class CrossReferenceEntry:
+    """Lightweight stand-in for a CourtCasePage used by cross-reference entries."""
+    is_cross_reference = True
+
+    def __init__(self, title, referenced_cases):
+        self.title = title
+        self.index_title = title
+        self.referenced_cases = referenced_cases  # list of CourtCasePage instances
+        self.status = 'closed'
+        self.opinions = ''
+
+
 def court_case_sort_key(case, get_sort_key_func=None):
     """
     Generate a sort key for a court case.
@@ -128,12 +137,12 @@ def court_case_sort_key(case, get_sort_key_func=None):
     alpha_title = re.sub(r'\s*\([^)]*\)\s*$', '', title).strip()
     alpha_key = sort_key_func(alpha_title).lower()
 
-    # Get case numbers, negated for descending sort
-    case_nums = extract_case_numbers(title)
-    # Negate so higher numbers sort first; use (0, 0) if no case numbers
-    negated = tuple((-year, -num) for year, num in case_nums) if case_nums else ((0, 0),)
+    # Sort by the first case number in the title, with higher numbers first (reverse chronological)
+    first_case_num = extract_first_case_number(title)
+    # Negate so higher numbers sort first; use (0, 0) if no case number
+    num_key = (-first_case_num[0], -first_case_num[1]) if first_case_num else (0, 0)
 
-    return (alpha_key, negated)
+    return (alpha_key, num_key)
 
 
 """options for wagtail default table_block """
@@ -1168,11 +1177,25 @@ class CourtCaseIndexPage(ContentPage):
         default='',
         blank=True
     )
+    cross_references = StreamField([
+        ('cross_reference', blocks.StructBlock([
+            ('title', blocks.CharBlock(
+                label='Title',
+                help_text='Plain-text title for the index (e.g., "Americans for Change: FEC v.")'
+            )),
+            ('see_also_cases', blocks.ListBlock(
+                blocks.PageChooserBlock(page_type='home.CourtCasePage'),
+                label='See also cases',
+                help_text='Court case pages to link in the "See:" line'
+            )),
+        ]))
+    ], null=True, blank=True, help_text='Cross-reference entries that appear as plain text with "See:" links')
 
     subpage_types = ['CourtCasePage']
 
     content_panels = Page.content_panels + [
         FieldPanel('intro'),
+        FieldPanel('cross_references'),
         FieldPanel('body'),
         FieldPanel('sidebar'),
         FieldPanel('record_articles'),
@@ -1209,6 +1232,20 @@ class CourtCaseIndexPage(ContentPage):
         # Convert to list and sort using custom sort key
         # Sorts alphabetically (by index_title or title), then by case numbers (higher first) for same titles
         cases_list = list(all_cases)
+
+        # Merge cross-reference entries from the StreamField
+        if self.cross_references:
+            for block in self.cross_references:
+                if block.block_type == 'cross_reference':
+                    referenced_cases = [
+                        page.specific for page in block.value['see_also_cases']
+                    ]
+                    entry = CrossReferenceEntry(
+                        title=block.value['title'],
+                        referenced_cases=referenced_cases,
+                    )
+                    cases_list.append(entry)
+
         cases_list.sort(key=lambda c: court_case_sort_key(c))
 
         total_cases_count = len(cases_list)
@@ -1251,6 +1288,8 @@ class CourtCaseIndexPage(ContentPage):
 
 
 class CourtCasePage(Page):
+    is_cross_reference = False
+
     index_title = models.CharField(
         max_length=255,
         blank=True,
@@ -1316,6 +1355,12 @@ class CourtCasePage(Page):
         FieldPanel('show_contact_card'),
         FieldPanel('show_search'),
         FieldPanel('selected_court_case'),
+    ]
+
+    search_fields = Page.search_fields + [
+        index.SearchField('index_title'),
+        index.AutocompleteField('index_title'),
+        index.FilterField('status'),
     ]
 
     parent_page_types = ['CourtCaseIndexPage', 'ResourcePage']

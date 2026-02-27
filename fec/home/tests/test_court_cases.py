@@ -16,7 +16,8 @@ from ..models import (
     CourtCasePage,
     CourtCaseIndexPage,
     ResourcePage,
-    HomePage
+    HomePage,
+    court_case_sort_key,
 )
 from ..templatetags.active_court_cases import active_court_cases
 from ..templatetags.selected_court_cases import selected_court_cases
@@ -101,6 +102,28 @@ class CourtCasePageTests(WagtailPageTests):
 
         # The template uses index_title if present
         self.assertEqual(court_case.index_title, "Short Name: FEC v.")
+
+    def test_search_fields_defined(self):
+        """Test that CourtCasePage has search_fields for the page chooser search.
+
+        The page chooser uses autocomplete(), so AutocompleteField entries
+        are required for the chooser's search bar to work.
+        """
+        from wagtail.search import index
+
+        field_names = [f.field_name for f in CourtCasePage.search_fields]
+        # title comes from Page.search_fields
+        self.assertIn('title', field_names)
+        # index_title is added by CourtCasePage
+        self.assertIn('index_title', field_names)
+
+        # Verify AutocompleteField entries exist (needed by page chooser)
+        autocomplete_fields = [
+            f.field_name for f in CourtCasePage.search_fields
+            if isinstance(f, index.AutocompleteField)
+        ]
+        self.assertIn('title', autocomplete_fields)
+        self.assertIn('index_title', autocomplete_fields)
 
 
 class CourtCaseIndexPageTests(WagtailPageTests):
@@ -288,6 +311,50 @@ class CourtCaseIndexPageTests(WagtailPageTests):
         self.assertContains(response, '21st Century Fund v. FEC')
         self.assertContains(response, '501(c)(4) Organization v. FEC')
 
+    def test_cross_reference_cases_render_as_plain_text(self):
+        """Test that cross-reference entries from the StreamField render as
+        plain text with 'See:' links, while normal cases render as links."""
+        # Create a target case (the case being referenced)
+        target_case = CourtCasePage(
+            title="Wagner v. FEC",
+            slug="wagner-v-fec",
+            index_title="Wagner: FEC v.",
+            opinions="<p>Some opinion</p>",
+        )
+        self.index_page.add_child(instance=target_case)
+        target_case.save()
+
+        # Add a cross-reference entry on the index page's StreamField
+        self.index_page.cross_references = [
+            ('cross_reference', {
+                'title': 'Miller: FEC v.',
+                'see_also_cases': [target_case],
+            })
+        ]
+        self.index_page.save()
+
+        client = Client()
+        response = client.get(self.index_page.url)
+        content = response.content.decode()
+
+        self.assertEqual(response.status_code, 200)
+
+        # Cross-reference entry should be rendered as plain text (span), not a link
+        self.assertIn('<span>Miller: FEC v.</span>', content)
+
+        # "See:" line with the target case as a link
+        self.assertIn('See:', content)
+        self.assertIn(
+            '<a href="{}">Wagner v. FEC</a>'.format(target_case.url),
+            content,
+        )
+
+        # The target case itself should still render as a normal link
+        self.assertIn(
+            '<a href="{}">Wagner: FEC v.</a>'.format(target_case.url),
+            content,
+        )
+
     def test_get_sort_key_converts_numbers_to_words(self):
         """Test that get_sort_key properly converts leading numbers"""
         # Test the helper method directly
@@ -302,6 +369,68 @@ class CourtCaseIndexPageTests(WagtailPageTests):
 
         result = self.index_page.get_sort_key("100 Citizens Group")
         self.assertEqual(result, "one hundred Citizens Group")
+
+
+class CourtCaseSortKeyTests(TestCase):
+    """Tests for court_case_sort_key function"""
+
+    def setUp(self):
+        self.home_page = HomePage.objects.first()
+        if not self.home_page:
+            root_page = Page.objects.get(depth=1)
+            self.home_page = HomePage(title="Home", slug="home")
+            root_page.add_child(instance=self.home_page)
+
+    def test_same_name_cases_sort_reverse_chronologically(self):
+        """Test that cases with the same name sort by first case number, newest first"""
+        case_oldest = CourtCasePage(
+            title="Campaign Legal Center v. FEC (21-1376)",
+            slug="clc-v-fec-21-1376",
+        )
+        self.home_page.add_child(instance=case_oldest)
+
+        case_mid = CourtCasePage(
+            title="Campaign Legal Center v. FEC (22-838)",
+            slug="clc-v-fec-22-838",
+        )
+        self.home_page.add_child(instance=case_mid)
+
+        case_newest = CourtCasePage(
+            title="Campaign Legal Center v. FEC (22-1976 / 22-5339)",
+            slug="clc-v-fec-22-1976",
+        )
+        self.home_page.add_child(instance=case_newest)
+
+        cases = [case_oldest, case_mid, case_newest]
+        sorted_cases = sorted(cases, key=lambda c: court_case_sort_key(c))
+
+        # Reverse chronological: newest (highest first case number) first
+        self.assertEqual(sorted_cases[0].slug, "clc-v-fec-22-1976")
+        self.assertEqual(sorted_cases[1].slug, "clc-v-fec-22-838")
+        self.assertEqual(sorted_cases[2].slug, "clc-v-fec-21-1376")
+
+    def test_sort_uses_first_case_number_not_highest(self):
+        """Test that sorting uses the first case number in the title, not the highest"""
+        # Case A has a lower first number (20-100) but a higher second number (23-9999)
+        case_a = CourtCasePage(
+            title="Test v. FEC (20-100 / 23-9999)",
+            slug="test-v-fec-a",
+        )
+        self.home_page.add_child(instance=case_a)
+
+        # Case B has a higher first number (22-500)
+        case_b = CourtCasePage(
+            title="Test v. FEC (22-500)",
+            slug="test-v-fec-b",
+        )
+        self.home_page.add_child(instance=case_b)
+
+        sorted_cases = sorted([case_a, case_b], key=lambda c: court_case_sort_key(c))
+
+        # Case B's first number (22-500) is higher than Case A's first number (20-100)
+        # so Case B should sort first (reverse chronological)
+        self.assertEqual(sorted_cases[0].slug, "test-v-fec-b")
+        self.assertEqual(sorted_cases[1].slug, "test-v-fec-a")
 
 
 class CourtCaseTemplateTagTests(TestCase):
