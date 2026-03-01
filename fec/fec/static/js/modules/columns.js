@@ -1120,7 +1120,7 @@ export const rulemakings = [
       let html = `<p><strong>${row.rm_name}</strong>`;
       if (row.key_documents && row.key_documents.length ) {
         // Push doc_id to array to keep track of already-shown documents
-        doc_ids.push(`${row.key_documents[0].doc_id}`)
+        doc_ids.push(`${row.key_documents[0].doc_id}`);
         html += `<br><span class="icon icon--inline--left i-document"></span>`;
         html +=
           buildEntityLink(
@@ -1130,7 +1130,7 @@ export const rulemakings = [
                 html += ` | ${doc_date}`;
             }
             else {
-              html += ' | Undated'
+              html += ' | Undated';
             }
       }
         html += `</p>`;
@@ -1288,7 +1288,6 @@ export const rulemakings = [
             }
           }
         }
-      //} else if ((filters_category_type || !filters_keyword) && !proximity_only) {
 
         if (row.no_tier_documents && row.no_tier_documents.length) {
           for (let no_tier_document of row.no_tier_documents ) {
@@ -1309,14 +1308,14 @@ export const rulemakings = [
 
                 // Push doc_id to array to keep track of already-shown documents
                 doc_ids.push(`${no_tier_document.doc_id}`);
-                
+
                 let no_tier_doc_date;
                 let parsed;
                 parsed = moment(no_tier_document.doc_date, 'YYYY-MM-DD');
                 if (no_tier_document.doc_date !== null) {
                   no_tier_doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
                 } else {
-                  no_tier_doc_date = 'Undated'
+                  no_tier_doc_date = 'Undated';
                 }
 
             html += `
@@ -1327,8 +1326,34 @@ export const rulemakings = [
                         <span class="icon icon--inline--left i-document"></span>
                         <a href="${no_tier_document.url}">
                         ${no_tier_document.doc_type_label}</a> | ${no_tier_doc_date}
-                      </div>
-                    </div>
+                      </div>`;
+                if (no_tier_document.highlights && no_tier_document.highlights.length) {
+                  if (no_tier_document.highlights.length) {
+                      html += `
+                          <ul>
+                            <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${sanitizeHighlight(no_tier_document.highlights[0])}&#8230;
+                            </li>
+                          </ul>`;
+                  }
+                  if (no_tier_document.highlights.length > 1) {
+                      html += `
+                          <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${no_tier_document.doc_id}">
+                            <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${no_tier_document.doc_id}" aria-expanded="false">
+                              ${no_tier_document.highlights.length > 2 ? no_tier_document.highlights.length -1 + ' more keyword matches' : '1 more keyword match'}
+                            </button>
+                            <div class="accordion__content results__content" aria-hidden="true">
+                              <ul>`;
+                              for (let i = 1; i <= no_tier_document.highlights.length -1; i++) {
+                                html += `<li class="t-serif t-italic">&#8230;${sanitizeHighlight(no_tier_document.highlights[i])}&#8230;</li>`;
+                              }
+                                html += `
+                              </ul>
+                            </div>
+                          </div>`;
+                  }
+                }
+            html += `
+                    </div> 
                   </div>`;
             }
           }
