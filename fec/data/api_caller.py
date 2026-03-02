@@ -290,7 +290,7 @@ def load_legal_admin_fines(admin_fine_no):
 def load_legal_rulemaking(rm_no):
     url = "/rulemaking/search/"
     response = _call_api(url, rm_no=rm_no)
-    return response["rulemakings"][0] if response["rulemakings"] else []
+    return response["rulemakings"][0] if response["rulemakings"] else {}
 
 
 def collate_dispositions(dispositions):
