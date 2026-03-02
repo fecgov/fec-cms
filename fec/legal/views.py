@@ -481,10 +481,11 @@ def rulemaking_docs_that_can_receive_comments(rm):
 def rulemaking(request, rm_no):
 
     rulemaking = api_caller.load_legal_rulemaking(rm_no)
-    docs_that_can_receive_comments = rulemaking_docs_that_can_receive_comments(rulemaking)
 
-    if not rm_no:
+    if not rm_no or not rulemaking:
         raise Http404()
+
+    docs_that_can_receive_comments = rulemaking_docs_that_can_receive_comments(rulemaking)
 
     key_documents = []
     doc_type_label = ''
