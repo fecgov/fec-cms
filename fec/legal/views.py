@@ -490,10 +490,17 @@ def rulemaking(request, rm_no):
     key_documents = []
     doc_type_label = ''
     for i, key_doc in enumerate(rulemaking['key_documents']):
+        # Use doc_type_label unless it contains "NO TIER ENTRY" or is null
+        key_doc_type_label = key_doc.get('doc_type_label', '')
+        if not key_doc_type_label or 'NO TIER ENTRY' in key_doc_type_label:
+            label = key_doc.get('doc_description') or key_doc.get('filename', 'Document')
+        else:
+            label = key_doc_type_label
+
         key_documents.append({
             'doc_date': key_doc['doc_date'],
             'doc_id': key_doc['doc_id'],
-            'label': key_doc['doc_type_label'],
+            'label': label,
             'url': key_doc['url'].replace('#', '%23') if key_doc.get('url') else '',
         })
 
@@ -503,7 +510,13 @@ def rulemaking(request, rm_no):
         new_rm_stage = {}
         new_rm_stage['doc_date'] = stage['doc_date']
         new_rm_stage['doc_id'] = stage['doc_id']
-        new_rm_stage['label'] = stage['doc_type_label']
+
+        # Use doc_type_label unless it contains "NO TIER ENTRY" or is null
+        stage_doc_type_label = stage.get('doc_type_label', '')
+        if not stage_doc_type_label or 'NO TIER ENTRY' in stage_doc_type_label:
+            new_rm_stage['label'] = stage.get('doc_description') or stage.get('filename', 'Document')
+        else:
+            new_rm_stage['label'] = stage_doc_type_label
 
         new_rm_stage['url'] = stage['url'].replace('#', '%23') if stage.get('url') else ''
 
@@ -524,7 +537,14 @@ def rulemaking(request, rm_no):
                 new_sub_doc = {}
                 new_sub_doc['doc_date'] = doc['doc_date']
                 new_sub_doc['doc_id'] = doc['doc_id']
-                new_sub_doc['label'] = doc['doc_type_label']
+
+                # Use doc_type_label unless it contains "NO TIER ENTRY" or is null
+                doc_type_label_value = doc.get('doc_type_label', '')
+                if not doc_type_label_value or 'NO TIER ENTRY' in doc_type_label_value:
+                    new_sub_doc['label'] = doc.get('doc_description') or doc.get('filename', 'Document')
+                else:
+                    new_sub_doc['label'] = doc_type_label_value
+
                 new_sub_doc['url'] = doc['url'].replace('#', '%23') if doc.get('url') else ''
 
                 new_sub_doc['doc_entities'] = []
@@ -539,12 +559,15 @@ def rulemaking(request, rm_no):
 
     # Process Press & Public Guidance documents (doc_category_id=8)
     press_public_guidance_documents = []
+    # Process other no-tier documents (not doc_category_id=8) for "Other" category
+    other_no_tier_documents = []
     if 'no_tier_documents' in rulemaking:
         for doc in rulemaking['no_tier_documents']:
+            # Skip documents without a URL
+            if not doc.get('url'):
+                continue
+
             if str(doc.get('doc_category_id')) == '8':
-                # Skip documents without a URL
-                if not doc.get('url'):
-                    continue
                 # Use doc_description as label, fallback to filename
                 label = doc.get('doc_description') or doc.get('filename', 'Document')
                 press_public_guidance_documents.append({
@@ -553,6 +576,36 @@ def rulemaking(request, rm_no):
                     'url': doc['url'].replace('#', '%23'),
                     'doc_date': doc.get('doc_date'),
                 })
+            else:
+                # Other no-tier documents (not category 8)
+                # Use doc_type_label unless it contains "NO TIER ENTRY" or is null
+                doc_type_label = doc.get('doc_type_label', '')
+                if not doc_type_label or 'NO TIER ENTRY' in doc_type_label:
+                    label = doc.get('doc_description') or doc.get('filename', 'Document')
+                else:
+                    label = doc_type_label
+                other_no_tier_documents.append({
+                    'doc_id': doc['doc_id'],
+                    'label': label,
+                    'url': doc['url'].replace('#', '%23'),
+                    'doc_date': doc.get('doc_date'),
+                    'doc_entities': doc.get('doc_entities', []),
+                })
+
+    # Add "Other" category to documents list if there are other no-tier documents
+    if other_no_tier_documents:
+        other_category = {
+            'doc_date': None,
+            'doc_id': None,
+            'label': 'Other',
+            'url': '',
+            'doc_entities': [],
+            'secondary_docs': [{
+                'label': '',
+                'documents': other_no_tier_documents
+            }]
+        }
+        documents.append(other_category)
 
     return render(request, 'rulemaking.jinja', {
         'docs_that_can_receive_comments': docs_that_can_receive_comments,

@@ -69,9 +69,15 @@
   <tr class="level-1 {{ rowshading }}">
     <td>
       <ul>
-        <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ docL1.url }}" data-doc_id="{{ docL1.doc_id }}" target="_blank">{{ docL1.label }}</a></li>
+        <li>
+          {%- if docL1.url -%}
+          <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ docL1.url }}" data-doc_id="{{ docL1.doc_id }}" target="_blank">{{ docL1.label }}</a>
+          {%- else -%}
+          {{ docL1.label }}
+          {%- endif -%}
+        </li>
           {%- if docL1.doc_entities -%}
-              
+
                 {%- for entity in docL1.doc_entities -%}
                   <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
                 {%- endfor -%}
@@ -86,7 +92,10 @@
   {% endif %} #}
 
   {% for subcat in docL1.secondary_docs %}
+    {# Only render level-2 if there's a subcategory label. Skip for "Other" category which has empty label. #}
+    {% if subcat.label %}
     <tr class="level-2 {{ rowshading }}"><td>{{ subcat.label }}</td><td></td></tr>
+    {% endif %}
     {% for doc in subcat.documents %}
       <tr class="level-3 {{ rowshading }}">
         <td>
