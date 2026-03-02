@@ -1119,8 +1119,6 @@ export const rulemakings = [
 
       let html = `<p><strong>${row.rm_name}</strong>`;
       if (row.key_documents && row.key_documents.length ) {
-        // Push doc_id to array to keep track of already-shown documents
-        doc_ids.push(`${row.key_documents[0].doc_id}`);
         html += `<br><span class="icon icon--inline--left i-document"></span>`;
         html +=
           buildEntityLink(
@@ -1147,8 +1145,7 @@ export const rulemakings = [
        html +=
       `<div class="legal-search-result__hit u-margin--top">`;
       if ((filters_category_type || filters_keyword) && !proximity_only) {
-           let category_shown = '';
-           //for (const [index, document] of row.documents.entries()) {
+          let category_shown = '';
           for (const document of row.documents) {
 
             /* Will show documents in all 3 scenarios:
@@ -1317,6 +1314,9 @@ export const rulemakings = [
                 } else {
                   no_tier_doc_date = 'Undated';
                 }
+               const no_tier_docUrl = no_tier_document.url ? no_tier_document.url.replace(/#/g, '%23') : '';
+               const regex = /NO TIER ENTRY/i;
+               const no_tier_label = regex.test(no_tier_document.doc_type_label) ? no_tier_document.doc_description || no_tier_document.filename : no_tier_document.doc_type_label;
 
             html += `
                   <div class="document-container ${top_border_class}">
@@ -1324,8 +1324,8 @@ export const rulemakings = [
                     <div class="document_details">
                       <div class="post--icon">
                         <span class="icon icon--inline--left i-document"></span>
-                        <a href="${no_tier_document.url}">
-                        ${no_tier_document.doc_type_label}</a> | ${no_tier_doc_date}
+                        <a href="${no_tier_docUrl}">
+                        ${no_tier_label}</a> | ${no_tier_doc_date}
                       </div>`;
                 if (no_tier_document.highlights && no_tier_document.highlights.length) {
                   if (no_tier_document.highlights.length) {
