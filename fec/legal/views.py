@@ -52,6 +52,20 @@ def save_rulemaking_comments(request):
     if rulemaking['is_open_for_comment'] is False:
         return JsonResponse({'status': 410, 'ok': False, 'message': 'Commenting has closed'}, status=410)
 
+    # Are specific document(s) still eligible for comment?
+    doc_id = data.get('doc_id')
+    if doc_id:
+        docs_that_can_receive_comments = rulemaking_docs_that_can_receive_comments(rulemaking)
+        doc_can_receive_comments = any(
+            int(doc['doc_id']) == int(doc_id) for doc in docs_that_can_receive_comments
+        )
+
+        if not doc_can_receive_comments:
+            return JsonResponse({'status': 410, 'ok': False, 'message': 'This document is not accepting comments'},
+                                status=410)
+    else:
+        return JsonResponse({'status': 400, 'ok': False, 'message': 'Document ID is required'}, status=400)
+
     # Checking reCAPTCHA
     if not data.get('g-recaptcha-response'):
         return JsonResponse({'status': 400, 'ok': False, 'message': 'Invalid reCAPTCHA'}, status=400)
@@ -448,13 +462,16 @@ def admin_fine_page(request, admin_fine_no):
 
 
 # Returns a list of rulemaking docs that can receive comments, either [] or
-# [{'doc_id': int, 'label': string},]
+# [{'doc_id': int, 'label': string, 'doc_comment_close_date': string},]
 def rulemaking_docs_that_can_receive_comments(rm):
     comment_eligible_docs = []
 
     # If is_open_for_comment is false, we're done
     if rm['is_open_for_comment'] is False:
         return comment_eligible_docs
+
+    # Fallback to rulemaking-level comment_close_date if doc-level doesn't exist or is null
+    rulemaking_comment_close_date = rm.get('comment_close_date') or ''
 
     # Rulemaking documents are organized by presentation, starting with their document/rulemaking stage
     # so we have to loop through stages, then label groups, then the documents themselves.
@@ -464,6 +481,7 @@ def rulemaking_docs_that_can_receive_comments(rm):
             comment_eligible_docs.append({
                 'doc_id': int(docs_stage['doc_id']),
                 'label': docs_stage['level_1_label'],
+                'doc_comment_close_date': docs_stage.get('doc_comment_close_date') or rulemaking_comment_close_date,
             })
 
         for labels in docs_stage.get('level_2_labels', []):
@@ -472,6 +490,7 @@ def rulemaking_docs_that_can_receive_comments(rm):
                     comment_eligible_docs.append({
                         'doc_id': int(doc['doc_id']),
                         'label': doc['level_1_label'],
+                        'doc_comment_close_date': doc.get('doc_comment_close_date') or rulemaking_comment_close_date,
                     })
 
     return comment_eligible_docs
@@ -609,7 +628,6 @@ def rulemaking(request, rm_no):
 
     return render(request, 'rulemaking.jinja', {
         'docs_that_can_receive_comments': docs_that_can_receive_comments,
-        'comment_close_date': rulemaking['comment_close_date'] or '',
         'documents': documents,
         'key_documents': key_documents,
         'press_public_guidance_documents': press_public_guidance_documents,
