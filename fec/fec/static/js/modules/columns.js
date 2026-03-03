@@ -1324,15 +1324,19 @@ export const rulemakings = [
         return 'Not currently open for comment';
       }
 
-      const comment_deadline = moment(row.comment_close_date).format('MMMM D, YYYY');
+      // Fallback to rulemaking-level comment_close_date
+      const rulemaking_comment_close_date = row.comment_close_date;
       let eligible_documents = [];
 
       // Check top-level documents
       for (const document of row.documents) {
         if (document.is_comment_eligible == true) {
+          // Use doc-level comment_close_date if available, otherwise use rulemaking-level
+          const doc_deadline = document.doc_comment_close_date || rulemaking_comment_close_date;
           eligible_documents.push({
             doc_id: document.doc_id,
-            doc_type_label: document.doc_type_label
+            doc_type_label: document.doc_type_label,
+            doc_comment_close_date: doc_deadline
           });
         }
         // Check nested level_2 documents
@@ -1340,9 +1344,12 @@ export const rulemakings = [
           for (const label of document.level_2_labels) {
             for (const l2_document of label.level_2_docs) {
               if (l2_document.is_comment_eligible == true) {
+                // Use doc-level comment_close_date if available, otherwise use rulemaking-level comment close date
+                const l2_doc_deadline = l2_document.doc_comment_close_date || rulemaking_comment_close_date;
                 eligible_documents.push({
                   doc_id: l2_document.doc_id,
-                  doc_type_label: l2_document.doc_type_label
+                  doc_type_label: l2_document.doc_type_label,
+                  doc_comment_close_date: l2_doc_deadline
                 });
               }
             }
@@ -1351,9 +1358,10 @@ export const rulemakings = [
       }
 
       if (eligible_documents.length) {
-        return eligible_documents.map(doc =>
-          `<strong>${doc.doc_type_label}</strong><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="/legal/rulemakings/${row.rm_no}/${doc.doc_id}/add-comments/">Submit a comment</a>`
-        ).join('');
+        return eligible_documents.map(doc => {
+          const comment_deadline = moment(doc.doc_comment_close_date).format('MMMM D, YYYY');
+          return `<div class="u-padding--bottom"><strong>${doc.doc_type_label}</strong><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="/legal/rulemakings/${row.rm_no}/${doc.doc_id}/add-comments/">Submit a comment</a></div>`;
+        }).join('');
       }
       else {
         return 'No comment eligible document specified';
