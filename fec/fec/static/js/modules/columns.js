@@ -1114,6 +1114,9 @@ export const rulemakings = [
     className: 'all column--legal-docs align-top',
     orderable: false,
     render: function (data, type, row) {
+      // Array to keep track of documents already shown
+      let doc_ids = [];
+
       let html = `<p><strong>${row.rm_name}</strong>`;
       if (row.key_documents && row.key_documents.length ) {
         html += `<br><span class="icon icon--inline--left i-document"></span>`;
@@ -1123,6 +1126,9 @@ export const rulemakings = [
             if (row.key_documents[0].doc_date !== null) {
                 const doc_date = moment(row.key_documents[0].doc_date).format('MM/DD/YYYY');
                 html += ` | ${doc_date}`;
+            }
+            else {
+              html += ' | Undated';
             }
       }
         html += `</p>`;
@@ -1138,12 +1144,9 @@ export const rulemakings = [
     // Note: Opening div tags are lined up with their closing divs below
        html +=
       `<div class="legal-search-result__hit u-margin--top">`;
-       if ((filters_category_type || filters_keyword) && !proximity_only) {
-           let category_shown = '';
-           // Array to keep track of document already shown
-           let doc_ids = [];
-           //for (const [index, document] of row.documents.entries()) {
-           for (const document of row.documents) {
+      if ((filters_category_type || filters_keyword) && !proximity_only) {
+          let category_shown = '';
+          for (const document of row.documents) {
 
             /* Will show documents in all 3 scenarios:
              - When there is a keyword query and selected document categories
@@ -1183,13 +1186,12 @@ export const rulemakings = [
                         ${document.doc_type_label}</a> | ${doc_date}
                       </div>`;
             if (document.highlights) {
-              if (document.highlights.length) {
-                  html += `
-                      <ul>
-                        <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${sanitizeHighlight(document.highlights[0])}&#8230;
-                        </li>
-                      </ul>`;
-              }
+              html += `
+                    <ul>
+                      <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${sanitizeHighlight(document.highlights[0])}&#8230;
+                      </li>
+                    </ul>`;
+
               if (document.highlights.length > 1) {
                   html += `
                       <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${document.doc_id}">
@@ -1216,6 +1218,7 @@ export const rulemakings = [
             for (let label of document.level_2_labels) {
 
               for (let l2_document of label.level_2_docs) {
+                // See above comment: "Will show documents in all 3 scenarios:" to understand 'show_document'
                 let category_match = (filters_category_type && current_doc_ids.includes(`${l2_document.doc_category_id}`) ? true : false) || !filters_category_type;
                 let text_match_l2 = (filters_keyword && has_highlights(l2_document)) || !filters_keyword;
                 // Dont show document if it has already been shown once
@@ -1247,31 +1250,30 @@ export const rulemakings = [
                         <a href="${l2_document.url}">
                         ${l2_document.doc_type_label}</a> | ${l2_doc_date}
                       </div>`;
-              if (l2_document.highlights && l2_document.highlights.length) {
-              if (l2_document.highlights.length) {
-                  html += `
+              if (l2_document.highlights) {
+                html += `
                       <ul>
                         <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${sanitizeHighlight(l2_document.highlights[0])}&#8230;
                         </li>
                       </ul>`;
+
+                if (l2_document.highlights.length > 1) {
+                      html += `
+                          <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${l2_document.doc_id}">
+                            <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${l2_document.doc_id}" aria-expanded="false">
+                              ${l2_document.highlights.length > 2 ? l2_document.highlights.length -1 + ' more keyword matches' : '1 more keyword match'}
+                            </button>
+                            <div class="accordion__content results__content" aria-hidden="true">
+                              <ul>`;
+                              for (let i = 1; i <= l2_document.highlights.length -1; i++) {
+                                html += `<li class="t-serif t-italic">&#8230;${sanitizeHighlight(l2_document.highlights[i])}&#8230;</li>`;
+                              }
+                                html += `
+                              </ul>
+                            </div>
+                          </div>`;
+                }
               }
-              if (l2_document.highlights.length > 1) {
-                  html += `
-                      <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${l2_document.doc_id}">
-                        <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${l2_document.doc_id}" aria-expanded="false">
-                          ${l2_document.highlights.length > 2 ? l2_document.highlights.length -1 + ' more keyword matches' : '1 more keyword match'}
-                        </button>
-                        <div class="accordion__content results__content" aria-hidden="true">
-                          <ul>`;
-                          for (let i = 1; i <= l2_document.highlights.length -1; i++) {
-                            html += `<li class="t-serif t-italic">&#8230;${sanitizeHighlight(l2_document.highlights[i])}&#8230;</li>`;
-                          }
-                            html += `
-                          </ul>
-                        </div>
-                      </div>`;
-              }
-            }
             html += `
                     </div> 
                   </div>`;
@@ -1281,6 +1283,79 @@ export const rulemakings = [
             }
           }
         }
+
+        if (row.no_tier_documents && row.no_tier_documents.length) {
+          for (let no_tier_document of row.no_tier_documents ) {
+            let category_match = (filters_category_type && current_doc_ids.includes(`${no_tier_document.doc_category_id}`) ? true : false) || !filters_category_type;
+            let text_match = (filters_keyword && has_highlights(no_tier_document)) || !filters_keyword;
+            // Dont show document if it has already been shown once
+            let no_tier_unique_id = !doc_ids.includes(`${no_tier_document.doc_id}`);
+            let show_document = category_match && text_match && no_tier_unique_id;
+            if (show_document) {
+               let top_border_class = '';
+               let show_category = '';
+               let current_category = no_tier_document.doc_category_label;
+               if (category_shown != current_category) {
+                     top_border_class = 'u-border-top-neutral';
+                     show_category = no_tier_document.doc_category_label;
+                     category_shown = current_category;
+                }
+
+                // Push doc_id to array to keep track of already-shown documents
+                doc_ids.push(`${no_tier_document.doc_id}`);
+
+                let no_tier_doc_date;
+                let parsed;
+                parsed = moment(no_tier_document.doc_date, 'YYYY-MM-DD');
+                if (no_tier_document.doc_date !== null) {
+                  no_tier_doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
+                } else {
+                  no_tier_doc_date = 'Undated';
+                }
+               const no_tier_docUrl = no_tier_document.url ? no_tier_document.url.replace(/#/g, '%23') : '';
+               const regex = /NO TIER ENTRY/i;
+               const no_tier_label = regex.test(no_tier_document.doc_type_label) ? no_tier_document.doc_description || no_tier_document.filename : no_tier_document.doc_type_label;
+
+            html += `
+                  <div class="document-container ${top_border_class}">
+                    <div class="document-category">${show_category}</div>
+                    <div class="document_details">
+                      <div class="post--icon">
+                        <span class="icon icon--inline--left i-document"></span>
+                        <a href="${no_tier_docUrl}">
+                        ${no_tier_label}</a> | ${no_tier_doc_date}
+                      </div>`;
+                  if (no_tier_document.highlights) {
+                    html += `
+                          <ul>
+                            <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${sanitizeHighlight(no_tier_document.highlights[0])}&#8230;
+                            </li>
+                          </ul>`;
+
+                    if (no_tier_document.highlights.length > 1) {
+                        html += `
+                            <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${no_tier_document.doc_id}">
+                              <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${no_tier_document.doc_id}" aria-expanded="false">
+                                ${no_tier_document.highlights.length > 2 ? no_tier_document.highlights.length -1 + ' more keyword matches' : '1 more keyword match'}
+                              </button>
+                              <div class="accordion__content results__content" aria-hidden="true">
+                                <ul>`;
+                                for (let i = 1; i <= no_tier_document.highlights.length -1; i++) {
+                                  html += `<li class="t-serif t-italic">&#8230;${sanitizeHighlight(no_tier_document.highlights[i])}&#8230;</li>`;
+                                }
+                                  html += `
+                                </ul>
+                              </div>
+                            </div>`;
+                    }
+                  }
+            html += `
+                    </div> 
+                  </div>`;
+            }
+          }
+        }
+
       } else if (proximity_only && row.source) {
           let category_shown = '';
           for (const document of row.source) {
