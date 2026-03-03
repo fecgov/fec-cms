@@ -1186,13 +1186,12 @@ export const rulemakings = [
                         ${document.doc_type_label}</a> | ${doc_date}
                       </div>`;
             if (document.highlights) {
-              if (document.highlights.length) {
-                  html += `
-                      <ul>
-                        <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${sanitizeHighlight(document.highlights[0])}&#8230;
-                        </li>
-                      </ul>`;
-              }
+              html += `
+                    <ul>
+                      <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${sanitizeHighlight(document.highlights[0])}&#8230;
+                      </li>
+                    </ul>`;
+
               if (document.highlights.length > 1) {
                   html += `
                       <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${document.doc_id}">
@@ -1251,31 +1250,30 @@ export const rulemakings = [
                         <a href="${l2_document.url}">
                         ${l2_document.doc_type_label}</a> | ${l2_doc_date}
                       </div>`;
-              if (l2_document.highlights && l2_document.highlights.length) {
-              if (l2_document.highlights.length) {
-                  html += `
+              if (l2_document.highlights) {
+                html += `
                       <ul>
                         <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${sanitizeHighlight(l2_document.highlights[0])}&#8230;
                         </li>
                       </ul>`;
+
+                if (l2_document.highlights.length > 1) {
+                      html += `
+                          <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${l2_document.doc_id}">
+                            <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${l2_document.doc_id}" aria-expanded="false">
+                              ${l2_document.highlights.length > 2 ? l2_document.highlights.length -1 + ' more keyword matches' : '1 more keyword match'}
+                            </button>
+                            <div class="accordion__content results__content" aria-hidden="true">
+                              <ul>`;
+                              for (let i = 1; i <= l2_document.highlights.length -1; i++) {
+                                html += `<li class="t-serif t-italic">&#8230;${sanitizeHighlight(l2_document.highlights[i])}&#8230;</li>`;
+                              }
+                                html += `
+                              </ul>
+                            </div>
+                          </div>`;
+                }
               }
-              if (l2_document.highlights.length > 1) {
-                  html += `
-                      <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${l2_document.doc_id}">
-                        <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${l2_document.doc_id}" aria-expanded="false">
-                          ${l2_document.highlights.length > 2 ? l2_document.highlights.length -1 + ' more keyword matches' : '1 more keyword match'}
-                        </button>
-                        <div class="accordion__content results__content" aria-hidden="true">
-                          <ul>`;
-                          for (let i = 1; i <= l2_document.highlights.length -1; i++) {
-                            html += `<li class="t-serif t-italic">&#8230;${sanitizeHighlight(l2_document.highlights[i])}&#8230;</li>`;
-                          }
-                            html += `
-                          </ul>
-                        </div>
-                      </div>`;
-              }
-            }
             html += `
                     </div> 
                   </div>`;
@@ -1327,31 +1325,30 @@ export const rulemakings = [
                         <a href="${no_tier_docUrl}">
                         ${no_tier_label}</a> | ${no_tier_doc_date}
                       </div>`;
-                if (no_tier_document.highlights && no_tier_document.highlights.length) {
-                  if (no_tier_document.highlights.length) {
-                      html += `
+                  if (no_tier_document.highlights) {
+                    html += `
                           <ul>
                             <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${sanitizeHighlight(no_tier_document.highlights[0])}&#8230;
                             </li>
                           </ul>`;
+
+                    if (no_tier_document.highlights.length > 1) {
+                        html += `
+                            <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${no_tier_document.doc_id}">
+                              <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${no_tier_document.doc_id}" aria-expanded="false">
+                                ${no_tier_document.highlights.length > 2 ? no_tier_document.highlights.length -1 + ' more keyword matches' : '1 more keyword match'}
+                              </button>
+                              <div class="accordion__content results__content" aria-hidden="true">
+                                <ul>`;
+                                for (let i = 1; i <= no_tier_document.highlights.length -1; i++) {
+                                  html += `<li class="t-serif t-italic">&#8230;${sanitizeHighlight(no_tier_document.highlights[i])}&#8230;</li>`;
+                                }
+                                  html += `
+                                </ul>
+                              </div>
+                            </div>`;
+                    }
                   }
-                  if (no_tier_document.highlights.length > 1) {
-                      html += `
-                          <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${no_tier_document.doc_id}">
-                            <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${no_tier_document.doc_id}" aria-expanded="false">
-                              ${no_tier_document.highlights.length > 2 ? no_tier_document.highlights.length -1 + ' more keyword matches' : '1 more keyword match'}
-                            </button>
-                            <div class="accordion__content results__content" aria-hidden="true">
-                              <ul>`;
-                              for (let i = 1; i <= no_tier_document.highlights.length -1; i++) {
-                                html += `<li class="t-serif t-italic">&#8230;${sanitizeHighlight(no_tier_document.highlights[i])}&#8230;</li>`;
-                              }
-                                html += `
-                              </ul>
-                            </div>
-                          </div>`;
-                  }
-                }
             html += `
                     </div> 
                   </div>`;
