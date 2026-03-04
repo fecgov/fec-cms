@@ -300,10 +300,11 @@ html, body {
       cursor: default;
     }
 
-    & + .button--cancel {
+    & ~ .button--cancel {
       display: none;
+      margin-right: 25% !important;
     }
-    &.has-file + .button--cancel {
+    &.has-file ~ .button--cancel {
       display: inline-block;
     }
   }
