@@ -978,7 +978,8 @@ RulemakingCommenting.prototype.handleFormChange = function(e) {
       'text/plain', 'text/rtf', 'application/vnd.ms-excel', 'application/msword', 'application/pdf',
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-    const isAcceptableFileType = acceptableFileTypes.includes(e.target.files[0].type);
+
+    const isAcceptableFileType = hasFile ? acceptableFileTypes.includes(e.target.files[0].type) : false;
 
     e.target.classList.toggle('has-file', hasFile);
 
