@@ -975,7 +975,8 @@ RulemakingCommenting.prototype.handleFormChange = function(e) {
     const fileTooLarge = e.target.files.length > 0 && e.target.files[0].size > 5000000;
 
     const acceptableFileTypes = [
-      'application/msword', 'application/pdf', 'application/rtf', 'text/plain', 'text/rtf',
+      'text/plain', 'text/rtf', 'application/vnd.ms-excel', 'application/msword', 'application/pdf',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
     const isAcceptableFileType = acceptableFileTypes.includes(e.target.files[0].type);
 
