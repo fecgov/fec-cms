@@ -638,7 +638,7 @@ def rulemaking(request, rm_no):
         'doc_type_label': doc_type_label,
         'parent': 'legal',
         'social_image_identifier': 'legal',
-        'could_testify': True,
+        'open_to_testify_in_person': rulemaking.get('testify_flg', False),
     })
 
 
@@ -686,7 +686,7 @@ def rulemaking_add_comments(request, rm_no, doc_id):
         'doc_url': doc_receiving_comments['url'],
         'parent': 'legal',
         'social_image_identifier': 'legal',
-        'could_testify': False,  # TODO: This will change when the field exists in the API
+        'open_to_testify_in_person': rulemaking.get('testify_flg', False),
     })
 
 
