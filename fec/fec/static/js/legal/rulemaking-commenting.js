@@ -310,6 +310,17 @@ RulemakingCommenting.prototype.buildTheFrame = function() {
     if (this.representedEntityType == 'self') {
       //
     }
+  } else if (this.isOnFrame('submitterInfo')) {
+    // Should we hide the "include lawfirm info" box?
+    const offerToAddLawFirm = this.representedEntityType === 'counsel';
+    if (!offerToAddLawFirm) {
+      // Uncheck the lawfirm box and its related fields will go away
+      const lawfirmCheckbox = this.formEl.querySelector('input[name="lawfirm"]');
+      lawfirmCheckbox.removeAttribute('checked'); // the standard
+      lawfirmCheckbox.checked = false; // Chrome seems to require this
+      this.toggleElementsByVars(); // Hide the related fields
+    }
+
   } else if (this.isOnFrame('commenters')) {
     // We no longer want to add a commenter automatically, opting instead to do so after commentersType is set.
     // const commentersHolder = this.formEl.querySelector('#commenters-holder');
@@ -822,7 +833,7 @@ RulemakingCommenting.prototype.toggleElementsByVars = function() {
     const varName = elToToggle.dataset.showIfVar; // Which variable/input are we checking?
     const varValue = elToToggle.dataset.showIfVal; // What value is the display value?
 
-    // We want :checked elements tied to the same elements
+    // We only want the :checked <input>s tied to the <div>s (etc) to be toggled
     const selectorString = `[name="${varName}"]:checked`;
 
     const controllerInput = this.formEl.querySelector(selectorString);
