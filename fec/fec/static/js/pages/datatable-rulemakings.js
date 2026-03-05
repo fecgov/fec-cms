@@ -174,7 +174,11 @@ $table.on('preXhr.dt', function (e, settings, data) {
   data.q = q_all;
   });
 
- new DataTable_FEC($table, {
+ // Add a cache-busting timestamp that updates every 60 seconds
+  const cacheBustInterval = 60 * 1000; // 60 seconds
+  const cacheBustTimestamp = Math.floor(Date.now() / cacheBustInterval);
+
+  new DataTable_FEC($table, {
     autoWidth: false,
     title: 'Rulemakings',
     path: ['rulemaking', 'search'],
@@ -182,6 +186,9 @@ $table.on('preXhr.dt', function (e, settings, data) {
     order: [[2, 'desc']],
     useFilters: true,
     useExport: false,
+    query: {
+      _t: cacheBustTimestamp // Timestamp that changes every 60 seconds
+    },
 
     // Handles when page is refreahed or navigated to with a predefined URL+querystring
     initComplete: function () {
