@@ -260,6 +260,9 @@ html, body {
     &:not(:last-child) .add-commenter {
       display: none;
     }
+    button > span { /* For the button with swappable labels, don't let the labels be event targets */
+      pointer-events: none;
+    }
   }
   .commenter-controls {
     margin-top: 1rem;
