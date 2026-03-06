@@ -480,16 +480,19 @@ def rulemaking_docs_that_can_receive_comments(rm):
         if docs_stage['is_comment_eligible'] is True:
             comment_eligible_docs.append({
                 'doc_id': int(docs_stage['doc_id']),
-                'label': docs_stage['level_1_label'],
+                'label': docs_stage.get('level_1_label'),
                 'doc_comment_close_date': docs_stage.get('doc_comment_close_date') or rulemaking_comment_close_date,
             })
+
+        # Get the parent label to use as fallback for sub-documents
+        parent_label = docs_stage.get('level_1_label')
 
         for labels in docs_stage.get('level_2_labels', []):
             for doc in labels.get('level_2_docs', []):
                 if doc['is_comment_eligible'] is True:
                     comment_eligible_docs.append({
                         'doc_id': int(doc['doc_id']),
-                        'label': doc['level_1_label'],
+                        'label': doc.get('level_1_label') or parent_label,
                         'doc_comment_close_date': doc.get('doc_comment_close_date') or rulemaking_comment_close_date,
                     })
 
@@ -530,10 +533,14 @@ def rulemaking(request, rm_no):
         new_rm_stage['doc_date'] = stage['doc_date']
         new_rm_stage['doc_id'] = stage['doc_id']
 
-        # Use doc_type_label unless it contains "NO TIER ENTRY" or is null
+        # Label priority: doc_type_label (if valid) > doc_description > filename > level_1_label > "Document"
+        # Skip doc_type_label if it contains "NO TIER ENTRY" or is null
         stage_doc_type_label = stage.get('doc_type_label', '')
         if not stage_doc_type_label or 'NO TIER ENTRY' in stage_doc_type_label:
-            new_rm_stage['label'] = stage.get('doc_description') or stage.get('filename', 'Document')
+            new_rm_stage['label'] = (
+                stage.get('doc_description') or stage.get('filename')
+                or stage.get('level_1_label') or 'Document'
+            )
         else:
             new_rm_stage['label'] = stage_doc_type_label
 
@@ -547,6 +554,9 @@ def rulemaking(request, rm_no):
         for entity in stage['doc_entities']:
             new_rm_stage['doc_entities'].append({'name': entity['name'], 'role': entity['role']})
 
+        # Get the parent label to use as fallback for sub-documents
+        parent_stage_label = stage.get('level_1_label')
+
         new_rm_stage['secondary_docs'] = []
         for type in stage['level_2_labels']:
             sub_doc = {}
@@ -557,10 +567,15 @@ def rulemaking(request, rm_no):
                 new_sub_doc['doc_date'] = doc['doc_date']
                 new_sub_doc['doc_id'] = doc['doc_id']
 
-                # Use doc_type_label unless it contains "NO TIER ENTRY" or is null
+                # Label priority: doc_type_label (if valid):
+                # doc_description > filename > level_1_label > parent_stage_label > "Document"
+                # Skip doc_type_label if it contains "NO TIER ENTRY" or is null
                 doc_type_label_value = doc.get('doc_type_label', '')
                 if not doc_type_label_value or 'NO TIER ENTRY' in doc_type_label_value:
-                    new_sub_doc['label'] = doc.get('doc_description') or doc.get('filename', 'Document')
+                    new_sub_doc['label'] = (
+                        doc.get('doc_description') or doc.get('filename')
+                        or doc.get('level_1_label') or parent_stage_label or 'Document'
+                    )
                 else:
                     new_sub_doc['label'] = doc_type_label_value
 
