@@ -2,6 +2,7 @@ import logging
 import os
 import requests
 import inspect
+import time
 
 from collections import OrderedDict
 from operator import itemgetter
@@ -288,8 +289,12 @@ def load_legal_admin_fines(admin_fine_no):
 
 
 def load_legal_rulemaking(rm_no):
+    # Add a cache-busting timestamp that updates every 60 seconds
+    cache_bust_interval = 60  # 60 seconds
+    cache_bust_timestamp = int(time.time() // cache_bust_interval)
+
     url = "/rulemaking/search/"
-    response = _call_api(url, rm_no=rm_no)
+    response = _call_api(url, rm_no=rm_no, _t=cache_bust_timestamp)
     return response["rulemakings"][0] if response["rulemakings"] else {}
 
 
