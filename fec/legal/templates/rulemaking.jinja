@@ -48,7 +48,7 @@
         {% for doc in key_documents %}
         <tr>
           <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a></td>
-          <td class="date">{{ doc.doc_date|date }}</td>
+          <td class="date">{{ doc.doc_date|date if doc.doc_date else '' }}</td>
         </tr>
         {% endfor %}
       </tbody>
@@ -84,7 +84,7 @@
               </ul>
             {%- endif -%}
           </td>
-    <td>{{ docL1.doc_date|date }}</td>
+    <td>{{ docL1.doc_date|date if docL1.doc_date else '' }}</td>
   </tr>
   {# If there's no level 2 list, let's include the description #}
   {# {% if not docL1.secondary_docs %}
@@ -118,7 +118,7 @@
             {% endif %}
           </ul>
         </td>
-        <td class="date">{{ doc.doc_date|date }}</td>
+        <td class="date">{{ doc.doc_date|date if doc.doc_date else '' }}</td>
       </tr>
     {% endfor %}
   {% endfor %}
