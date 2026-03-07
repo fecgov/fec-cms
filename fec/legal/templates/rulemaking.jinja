@@ -75,7 +75,7 @@
           {%- else -%}
           {{ docL1.label }}
           {%- endif -%}
-          {%- if docL1.doc_description and (docL1.label == 'Commencing Document' or docL1.label == 'Ex Parte Communication') -%}
+          {%- if docL1.doc_description and 'pdf' not in docL1.doc_description.lower() -%}
             <br>{{ docL1.doc_description }}
           {%- endif -%}
         </li>
@@ -114,12 +114,12 @@
                   {% if doc.doc_entities|length == 1 %}
                     <li>
                     <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ entity.name }} | {{ entity.role }}</a>
-                    {# {% if doc.doc_description %}<br>{{ doc.doc_description }}{% endif %} #}
+                    {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}<br>{{ doc.doc_description }}{% endif %}
                     </li>
                   {% else %}
                     {% if loop.first %}
                       <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">Joint comment</a>
-                      {% if doc.doc_description %}<br>{{ doc.doc_description }}{% endif %}</li>
+                      {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}<br>{{ doc.doc_description }}{% endif %}</li>
                     {% endif %}
                     <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
                   {% endif %}
@@ -127,9 +127,9 @@
               {% endif %}
             {% else %}
               <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a>
-              {%- if doc.doc_description and (doc.label == 'Comments' or doc.label == 'Commencing Document' or doc.label == 'Ex Parte Communication') -%}
+              {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}
                 <br>{{ doc.doc_description }}
-              {%- endif -%}
+              {% endif %}
             {% endif %}
           </ul>
         </td>
