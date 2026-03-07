@@ -75,6 +75,9 @@
           {%- else -%}
           {{ docL1.label }}
           {%- endif -%}
+          {%- if docL1.doc_description and (docL1.label == 'Commencing Document' or docL1.label == 'Ex Parte Communication') -%}
+            <br>{{ docL1.doc_description }}
+          {%- endif -%}
         </li>
           {%- if docL1.doc_entities -%}
 
@@ -100,21 +103,33 @@
       <tr class="level-3 {{ rowshading }}">
         <td>
           <ul>
-            {% if doc.label == 'Comments' and doc.doc_entities %}
-              {% for entity in doc.doc_entities %}
-                {% if doc.doc_entities|length == 1 %}
-                  <li>
-                  <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ entity.name }} | {{ entity.role }}</a>
-                  </li>
-                {% else %}
-                  {% if loop.first %}
-                    <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">Joint comment</a></li>
-                  {% endif %}
+            {% if (doc.label == 'Comments' or doc.label == 'Hearing Schedule') and doc.doc_entities %}
+              {% if doc.label == 'Hearing Schedule' %}
+                <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a></li>
+                {% for entity in doc.doc_entities %}
                   <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
-                {% endif %}
-              {% endfor %}
+                {% endfor %}
+              {% else %}
+                {% for entity in doc.doc_entities %}
+                  {% if doc.doc_entities|length == 1 %}
+                    <li>
+                    <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ entity.name }} | {{ entity.role }}</a>
+                    {# {% if doc.doc_description %}<br>{{ doc.doc_description }}{% endif %} #}
+                    </li>
+                  {% else %}
+                    {% if loop.first %}
+                      <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">Joint comment</a>
+                      {% if doc.doc_description %}<br>{{ doc.doc_description }}{% endif %}</li>
+                    {% endif %}
+                    <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
             {% else %}
               <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a>
+              {%- if doc.doc_description and (doc.label == 'Comments' or doc.label == 'Commencing Document' or doc.label == 'Ex Parte Communication') -%}
+                <br>{{ doc.doc_description }}
+              {%- endif -%}
             {% endif %}
           </ul>
         </td>
