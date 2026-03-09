@@ -638,14 +638,6 @@ def rulemaking(request, rm_no):
     # Negate tier precedence so it sorts ascending when overall sort is reversed
     documents.sort(key=lambda x: (x['sort_date'], -TIER_PRECEDENCE.get(x.get('level_1'), 999)), reverse=True)
 
-    # Debug logging to verify final sort order
-    logger.info("=== Final document sort order ===")
-    for i, doc in enumerate(documents):
-        source = "main" if doc.get('doc_date') else ("sub-doc" if doc.get('secondary_docs') else "current")
-        tier_precedence = TIER_PRECEDENCE.get(doc.get('level_1'), 999)
-        logger.info(f"{i+1}. {doc.get('label'):30} sort_date: {doc.get('sort_date')}, "
-                    f"source: {source:10}, tier: {doc.get('level_1')}, precedence: {tier_precedence}")
-
     # Process Press & Public Guidance documents (doc_category_id=8)
     press_public_guidance_documents = []
     # Process other no-tier documents (not doc_category_id=8) for "Other" category
