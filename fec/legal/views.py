@@ -551,11 +551,6 @@ def rulemaking(request, rm_no):
         new_rm_stage['doc_id'] = stage['doc_id']
         new_rm_stage['level_1'] = stage.get('level_1')
 
-        # Debug logging to check tier values
-        logger.info(f"Doc: {stage.get('doc_type_label') or stage.get('level_1_label')}, "
-                    f"Date: {stage['doc_date']}, Level_1: {stage.get('level_1')}, "
-                    f"Precedence: {TIER_PRECEDENCE.get(stage.get('level_1'), 999)}")
-
         # Label priority: doc_type_label (if valid) > doc_description > filename > level_1_label > "Document"
         # Skip doc_type_label if it contains "NO TIER ENTRY" or is null
         stage_doc_type_label = stage.get('doc_type_label', '')
