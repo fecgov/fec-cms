@@ -21,6 +21,23 @@ from fec import settings  # rulemaking comments
 
 logger = logging.getLogger(__name__)
 
+# Tier precedence order for sorting
+# Notice of Disposition (tier 15) has highest priority
+TIER_PRECEDENCE = {
+    15: 0,  # Notice of Disposition (highest pråiority)
+    5: 1,   # Advance NPRM
+    13: 2,  # Interim Final Rules (swapped with tier 14)
+    14: 3,  # Notice of Availability
+    2: 4,   # NPRM
+    17: 5,  # Supplemental NPRM
+    3: 6,   # Notice of Hearing
+    6: 7,   # Notice of Change of Hearing Date
+    8: 8,   # Correction to Final Rules
+    9: 9,   # Correction to Final Rules and E&J
+    1: 10,  # Final Rules
+    10: 11,  # Explanation and Justification
+}
+
 
 def get_s3_client():
     return boto3.client(
@@ -480,16 +497,19 @@ def rulemaking_docs_that_can_receive_comments(rm):
         if docs_stage['is_comment_eligible'] is True:
             comment_eligible_docs.append({
                 'doc_id': int(docs_stage['doc_id']),
-                'label': docs_stage['level_1_label'],
+                'label': docs_stage.get('level_1_label'),
                 'doc_comment_close_date': docs_stage.get('doc_comment_close_date') or rulemaking_comment_close_date,
             })
+
+        # Get the parent label to use as fallback for sub-documents
+        parent_label = docs_stage.get('level_1_label')
 
         for labels in docs_stage.get('level_2_labels', []):
             for doc in labels.get('level_2_docs', []):
                 if doc['is_comment_eligible'] is True:
                     comment_eligible_docs.append({
                         'doc_id': int(doc['doc_id']),
-                        'label': doc['level_1_label'],
+                        'label': doc.get('level_1_label') or parent_label,
                         'doc_comment_close_date': doc.get('doc_comment_close_date') or rulemaking_comment_close_date,
                     })
 
@@ -529,15 +549,21 @@ def rulemaking(request, rm_no):
         new_rm_stage = {}
         new_rm_stage['doc_date'] = stage['doc_date']
         new_rm_stage['doc_id'] = stage['doc_id']
+        new_rm_stage['level_1'] = stage.get('level_1')
 
-        # Use doc_type_label unless it contains "NO TIER ENTRY" or is null
+        # Label priority: doc_type_label (if valid) > doc_description > filename > level_1_label > "Document"
+        # Skip doc_type_label if it contains "NO TIER ENTRY" or is null
         stage_doc_type_label = stage.get('doc_type_label', '')
         if not stage_doc_type_label or 'NO TIER ENTRY' in stage_doc_type_label:
-            new_rm_stage['label'] = stage.get('doc_description') or stage.get('filename', 'Document')
+            new_rm_stage['label'] = (
+                stage.get('doc_description') or stage.get('filename')
+                or stage.get('level_1_label') or 'Document'
+            )
         else:
             new_rm_stage['label'] = stage_doc_type_label
 
         new_rm_stage['url'] = stage['url'].replace('#', '%23') if stage.get('url') else ''
+        new_rm_stage['doc_description'] = stage.get('doc_description')
 
         for doc in docs_that_can_receive_comments:
             if doc['doc_id'] == stage['doc_id']:
@@ -546,6 +572,9 @@ def rulemaking(request, rm_no):
         new_rm_stage['doc_entities'] = []
         for entity in stage['doc_entities']:
             new_rm_stage['doc_entities'].append({'name': entity['name'], 'role': entity['role']})
+
+        # Get the parent label to use as fallback for sub-documents
+        parent_stage_label = stage.get('level_1_label')
 
         new_rm_stage['secondary_docs'] = []
         for type in stage['level_2_labels']:
@@ -557,14 +586,20 @@ def rulemaking(request, rm_no):
                 new_sub_doc['doc_date'] = doc['doc_date']
                 new_sub_doc['doc_id'] = doc['doc_id']
 
-                # Use doc_type_label unless it contains "NO TIER ENTRY" or is null
+                # Label priority: doc_type_label (if valid):
+                # doc_description > filename > level_1_label > parent_stage_label > "Document"
+                # Skip doc_type_label if it contains "NO TIER ENTRY" or is null
                 doc_type_label_value = doc.get('doc_type_label', '')
                 if not doc_type_label_value or 'NO TIER ENTRY' in doc_type_label_value:
-                    new_sub_doc['label'] = doc.get('doc_description') or doc.get('filename', 'Document')
+                    new_sub_doc['label'] = (
+                        doc.get('doc_description') or doc.get('filename')
+                        or doc.get('level_1_label') or parent_stage_label or 'Document'
+                    )
                 else:
                     new_sub_doc['label'] = doc_type_label_value
 
                 new_sub_doc['url'] = doc['url'].replace('#', '%23') if doc.get('url') else ''
+                new_sub_doc['doc_description'] = doc.get('doc_description')
 
                 new_sub_doc['doc_entities'] = []
                 for entity in doc['doc_entities']:
@@ -572,9 +607,36 @@ def rulemaking(request, rm_no):
 
                 sub_doc['documents'].append(new_sub_doc)
 
+            # Sort documents by date in ascending order (oldest first)
+            sub_doc['documents'].sort(key=lambda x: x['doc_date'] if x['doc_date'] else '')
+
             new_rm_stage['secondary_docs'].append(sub_doc)
 
         documents.append(new_rm_stage)
+
+    # If doc_date is null, use the date from the LAST sub-document
+    # If still null (no sub-docs), use current date
+    # Then sort by date descending with tier precedence as tiebreaker
+    from datetime import date as date_class
+    current_date_str = date_class.today().isoformat()
+
+    for doc in documents:
+        if not doc['doc_date'] and doc.get('secondary_docs'):
+            # Get the last sub-document's date from any secondary_docs group
+            for sec_doc_group in doc['secondary_docs']:
+                if sec_doc_group.get('documents'):
+                    last_sub_doc = sec_doc_group['documents'][-1]
+                    doc['sort_date'] = last_sub_doc.get('doc_date') or current_date_str
+                    break
+            else:
+                # No sub-docs with documents, use current date
+                doc['sort_date'] = current_date_str
+        else:
+            doc['sort_date'] = doc['doc_date'] or current_date_str
+
+    # Sort by date descending, then by tier precedence ascending (for equal dates)
+    # Negate tier precedence so it sorts ascending when overall sort is reversed
+    documents.sort(key=lambda x: (x['sort_date'], -TIER_PRECEDENCE.get(x.get('level_1'), 999)), reverse=True)
 
     # Process Press & Public Guidance documents (doc_category_id=8)
     press_public_guidance_documents = []
@@ -613,6 +675,9 @@ def rulemaking(request, rm_no):
 
     # Add "Other" category to documents list if there are other no-tier documents
     if other_no_tier_documents:
+        # Sort other no-tier documents by date in descending order
+        other_no_tier_documents.sort(key=lambda x: x['doc_date'] if x['doc_date'] else '', reverse=True)
+
         other_category = {
             'doc_date': None,
             'doc_id': None,
@@ -638,7 +703,7 @@ def rulemaking(request, rm_no):
         'doc_type_label': doc_type_label,
         'parent': 'legal',
         'social_image_identifier': 'legal',
-        'could_testify': True,
+        'open_to_testify_in_person': rulemaking.get('testify_flg', False),
     })
 
 
@@ -686,7 +751,7 @@ def rulemaking_add_comments(request, rm_no, doc_id):
         'doc_url': doc_receiving_comments['url'],
         'parent': 'legal',
         'social_image_identifier': 'legal',
-        'could_testify': False,  # TODO: This will change when the field exists in the API
+        'open_to_testify_in_person': rulemaking.get('testify_flg', False),
     })
 
 

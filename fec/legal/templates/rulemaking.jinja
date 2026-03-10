@@ -48,7 +48,7 @@
         {% for doc in key_documents %}
         <tr>
           <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a></td>
-          <td class="date">{{ doc.doc_date|date }}</td>
+          <td class="date">{{ doc.doc_date|date if doc.doc_date else '' }}</td>
         </tr>
         {% endfor %}
       </tbody>
@@ -75,6 +75,9 @@
           {%- else -%}
           {{ docL1.label }}
           {%- endif -%}
+          {%- if docL1.doc_description and 'pdf' not in docL1.doc_description.lower() -%}
+            <br>{{ docL1.doc_description }}
+          {%- endif -%}
         </li>
           {%- if docL1.doc_entities -%}
 
@@ -84,7 +87,7 @@
               </ul>
             {%- endif -%}
           </td>
-    <td>{{ docL1.doc_date|date }}</td>
+    <td>{{ docL1.doc_date|date if docL1.doc_date else '' }}</td>
   </tr>
   {# If there's no level 2 list, let's include the description #}
   {# {% if not docL1.secondary_docs %}
@@ -100,25 +103,37 @@
       <tr class="level-3 {{ rowshading }}">
         <td>
           <ul>
-            {% if doc.label == 'Comments' and doc.doc_entities %}
-              {% for entity in doc.doc_entities %}
-                {% if doc.doc_entities|length == 1 %}
-                  <li>
-                  <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ entity.name }} | {{ entity.role }}</a>
-                  </li>
-                {% else %}
-                  {% if loop.first %}
-                    <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">Joint comment</a></li>
-                  {% endif %}
+            {% if (doc.label == 'Comments' or doc.label == 'Hearing Schedule') and doc.doc_entities %}
+              {% if doc.label == 'Hearing Schedule' %}
+                <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a></li>
+                {% for entity in doc.doc_entities %}
                   <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
-                {% endif %}
-              {% endfor %}
+                {% endfor %}
+              {% else %}
+                {% for entity in doc.doc_entities %}
+                  {% if doc.doc_entities|length == 1 %}
+                    <li>
+                    <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ entity.name }} | {{ entity.role }}</a>
+                    {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}<br>{{ doc.doc_description }}{% endif %}
+                    </li>
+                  {% else %}
+                    {% if loop.first %}
+                      <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">Joint comment</a>
+                      {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}<br>{{ doc.doc_description }}{% endif %}</li>
+                    {% endif %}
+                    <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
             {% else %}
               <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a>
+              {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}
+                <br>{{ doc.doc_description }}
+              {% endif %}
             {% endif %}
           </ul>
         </td>
-        <td class="date">{{ doc.doc_date|date }}</td>
+        <td class="date">{{ doc.doc_date|date if doc.doc_date else '' }}</td>
       </tr>
     {% endfor %}
   {% endfor %}
