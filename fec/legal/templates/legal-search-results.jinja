@@ -57,7 +57,7 @@ Search legal resources
       </div>
 
       <section class="main__content--right">
-        <div class="overlay is-loading"></div>
+        <div class="overlay is-loading position-top"></div>
         {% if query %}
         <h1 class="main__title data-container__head js-results">Results for &ldquo;{{ query }}&rdquo; in {{document_types[result_type]}}</h1>
         {% endif %}
@@ -198,7 +198,7 @@ Search legal resources
 </div>
 <script>
 
-const overlayContainer = document.querySelector('.overlay.is-loading');
+const overlayContainer = document.querySelector('.position-top');
 const searchInput = document.querySelector('input[name="search"]');
 const searchSelect = document.querySelector('select[name="search_type"]');
 let params = new URLSearchParams(window.location.search);
