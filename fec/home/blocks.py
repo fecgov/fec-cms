@@ -153,6 +153,29 @@ class AFSearchBlock(blocks.StaticBlock):
         admin_text = 'Show the AF search field. No configuration needed.'
         template = 'blocks/af_search.html'
 
+class RulemakingSearchBlock(blocks.StaticBlock):
+    """A block that displays the Rulemaking search box"""
+    class Meta:
+        icon = 'search'
+        admin_text = 'Show the Rulemakings search field. No configuration needed.'
+        template = 'blocks/rulemaking_search.html'
+
+
+class ActiveCourtCasesBlock(blocks.StaticBlock):
+    """A block that displays active court cases (ongoing litigation)"""
+    class Meta:
+        icon = 'list-ul'
+        admin_text = 'Show active court cases. No configuration needed.'
+        template = 'blocks/active_court_cases.html'
+
+
+class SelectedCourtCasesBlock(blocks.StaticBlock):
+    """A block that displays selected court cases"""
+    class Meta:
+        icon = 'list-ul'
+        admin_text = 'Show selected court cases. No configuration needed.'
+        template = 'blocks/selected_court_cases.html'
+
 
 class ReportingExampleCards(blocks.StructBlock):
     """Create links to reporting example pages that display as cards
@@ -213,7 +236,7 @@ class ReportingTableBlock(blocks.StructBlock):
         'renderer': 'html',
         'renderAllRows': True,
     }
-    
+
     hide_state_dropdown = blocks.BooleanBlock(required=False, help_text='Hide state dropdown on this table?')
     table = TableBlock(table_options=reporting_table_options)
 
@@ -286,6 +309,9 @@ class ResourceBlock(blocks.StructBlock):
         ('adr_search', ADRSearchBlock()),
         ('audit_search', AuditSearchBlock()),
         ('af_search', AFSearchBlock()),
+        ('rulemaking_search', RulemakingSearchBlock()),
+        ('active_court_cases', ActiveCourtCasesBlock()),
+        ('selected_court_cases', SelectedCourtCasesBlock()),
         ('table', TableBlock(table_options=core_table_options)),
         ('custom_table', CustomTableBlock()),
         ('html', blocks.RawHTMLBlock()),

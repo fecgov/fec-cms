@@ -1,0 +1,17 @@
+{% load wagtailcore_tags %}
+{% comment %}
+  This partial is used by the inclusion tag in active_court_cases.py
+  Displays all active court cases (ongoing litigation)
+{% endcomment %}
+
+{% if active_cases %}
+<ul class="list--bulleted">
+  {% for case in active_cases %}
+  <li>
+    <em><a href="{{ case.url }}">{% if case.index_title %}{{ case.index_title }}{% else %}{{ case.title }}{% endif %}</a></em>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>There are currently no active court cases.</p>
+{% endif %}

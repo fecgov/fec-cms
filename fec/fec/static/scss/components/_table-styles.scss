@@ -786,3 +786,18 @@ table[data-summary] {
     margin-left: u(2.5rem);
   }
 }
+
+// Court case listing table
+.court-case-listing {
+  table {
+    th:first-child,
+    tr td:first-child {
+      border-right: 1px solid $gray-lightest;
+    }
+  }
+
+  .simple-table__header-cell,
+  th {
+    padding: u(0.5rem);
+  }
+}

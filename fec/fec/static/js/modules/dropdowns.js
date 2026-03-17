@@ -202,7 +202,7 @@ Dropdown.prototype.selectItem = function($input) {
 
   $item.after(
     '<li class="dropdown__item">' +
-      '<button class="dropdown__item--selected is-checked"' +
+      '<button class="dropdown__item--selected is-checked" type="button"' +
       ' data-label="' +
       $label.attr('for') +
       '" >' +

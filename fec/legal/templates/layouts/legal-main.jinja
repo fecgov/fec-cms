@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+  <title>{% block title %}{% endblock %} | FEC</title>
+  {%- set title = self.title() -%}
+
+  {%- include 'partials/meta-tags.jinja' -%}
+  {% if (FEC_CMS_ENVIRONMENT == 'PRODUCTION') -%}
+  {% include 'partials/meta-tags-preconnects.jinja' %}
+  {%- endif %}
+
+  {% block css %}
+  <link rel="stylesheet" type="text/css" href="{{ path_for_css('base.css') }}" />
+  {% endblock css %}
+
+  {% block head_js -%}
+  
+  {% endblock %}
+
+  {% include 'partials/google-tag-manager-script.jinja' %}
+
+  <script>
+    {# BASE_PATH = '/data'; -#}
+    API_LOCATION = '{{ FEC_API_URL }}';
+    API_VERSION = 'v1';
+    API_KEY_PUBLIC = '{{ API_KEY_PUBLIC }}';
+    {# API_KEY_PUBLIC_CALENDAR = '{{ FEC_API_KEY_PUBLIC_CALENDAR }}'; -#}
+    {# CALENDAR_DOWNLOAD_PUBLIC_API_KEY = '{{ FEC_CAL_DOWNLOAD_API_KEY }}'; -#}
+    DOWNLOAD_API_KEY = '{{ FEC_DOWNLOAD_API_KEY }}';
+    {# DEFAULT_TIME_PERIOD = {{ constants.DEFAULT_TIME_PERIOD }}; -#}
+    {# DEFAULT_PRESIDENTIAL_YEAR = {{ constants.DEFAULT_PRESIDENTIAL_YEAR }}; -#}
+    {# DEFAULT_ELECTION_YEAR = {{ constants.DEFAULT_ELECTION_YEAR }}; -#}
+    {# DISTRICT_MAP_CUTOFF = {{ constants.DISTRICT_MAP_CUTOFF }}; -#}
+    WEBMANAGER_EMAIL = '{{ WEBMANAGER_EMAIL }}';
+    {#- {% if election_year %}ELECTION_YEAR = '{{ election_year }}';{% endif %} #}
+  </script>
+</head>
+<body>
+
+  {% include 'partials/google-tag-manager-noscript.jinja' %}
+
+{% import 'macros/search.jinja' as search %}
+{% include 'partials/warnings.jinja' %}
+
+  <a href="#main" class="skip-nav" tabindex="0">skip navigation</a>
+  {# env-specific banner #} 
+  {% include 'partials/env-banner.html' %}
+  {# .gov banner #}
+  {% include 'partials/usa-banner.html' %}
+  <header class="site-header">
+    <div class="masthead">
+      <div class="site-title--print"></div>
+      <a title="Home" href="/" rel="home" class="site-title"><span class="u-visually-hidden">Federal Election Commission | United States of America</span></a>
+      <ul class="utility-nav list--flat">
+        <li class="utility-nav__item"><a href="/calendar/">Calendar</a></li>
+        <li class="utility-nav__item"><a class="js-glossary-toggle glossary__toggle">Glossary</a></li>
+        <li class="utility-nav__search">
+          <form accept-charset="UTF-8" action="/search" class="combo" method="get" role="search">
+            <input type="hidden" name="type" value="candidates">
+            <input type="hidden" name="type" value="committees">
+            <input type="hidden" name="type" value="site">
+            <label class="u-visually-hidden" for="query">Search</label>
+             <div class="combo combo--search">
+            <input
+              class="js-site-search combo__input"
+              autocomplete="off"
+              id="query"
+              name="query"
+              type="text"
+              aria-label="Search FEC.gov">
+            <button type="submit" class="button--standard combo__button button--search">
+              <span class="u-visually-hidden">Search</span>
+            </button>
+           </div>
+          </form>
+        </li>
+      </ul>
+    </div>
+
+    {% include 'partials/navigation/navigation.html' %}
+
+  </header>
+
+  {% block header %}{% endblock %}
+  <main id="main" {% if section %} data-section="{{section}}"{% endif %}>
+    {% block body %}{% endblock %}
+  </main>
+  {% include 'partials/footer-navigation.html' %}
+  <footer class="footer">
+    <div class="container">
+      <div class="seal">
+        <img class="seal__img" width="140" height="140" src="{{ static('img/seal--inverse.svg') }}" alt="Seal of the Federal Election Commission | United States of America">
+        <p class="address__title">Federal Election Commission</p>
+      </div>
+
+      <div class="address">
+        <ul class="social-media">
+          <li>
+            <div class="i icon--x-twitter">
+              <a href="https://x.com/fec"><span class="u-visually-hidden">The FEC's Twitter page</span></a>
+            </div>
+          </li>
+          <li>
+            <div class="i icon--youtube">
+              <a href="https://www.youtube.com/user/FECTube"><span class="u-visually-hidden">The FEC's YouTube page</span></a>
+            </div>
+          </li>
+        </ul>
+        <a href="https://public.govdelivery.com/accounts/USFEC/subscriber/topics?qsp=CODE_RED" target="_blank" rel="noopener">
+          <button class="button--standard button--envelope" type="button">Sign up for FECMail</button>
+        </a>
+      </div>
+      <div class="taxpayer-statement">
+        <p>This information is produced and disseminated at U.S. taxpayer expense.</p>
+      </div>
+    </div>
+  </footer>
+
+{% include './partials/glossary.html' %}
+
+{% csrf_token %}
+
+{% block modals %}{% endblock %}
+{#- Chunks required for every page -#}
+{{ tags_for_js_chunks('global.js', '')|safe }}
+{#- Chunks required for every non-data legal page -#}
+{{ tags_for_js_chunks('legal-init.js', '')|safe }}
+{% block scripts %}
+{% endblock %}
+
+{# GSA DAP for Production #}
+{% if (FEC_CMS_ENVIRONMENT == 'PRODUCTION') %}
+  <script id="_fed_an_ua_tag" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=FEC"></script>
+{% endif %}
+
+</body>
+</html>
