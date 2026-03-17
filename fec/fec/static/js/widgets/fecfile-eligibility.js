@@ -544,7 +544,7 @@ FecFileEligibility.prototype.initMainComponent = function() {
         this.plansToAllocate = undefined;
         this.showHelp = false;
         // Set all the frames to not viewed (for breadcrumbs and Next button)
-        this.frames.forEach(frame => {frame.viewed.false;});
+        this.frames.forEach(frame => {frame.viewed = false;});
         // for (let i = 0; i < this.frames.length; i++) {
           // this.frames[i].viewed = false;
         // }
