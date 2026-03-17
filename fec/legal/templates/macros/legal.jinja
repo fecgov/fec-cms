@@ -8,7 +8,7 @@
    </div>
   </div>
   <div class="combo combo--search--mini no-mar-b">
-    <input id="search-input" type="text" name="search" class="combo__input" value="">
+    <input id="search-input" type="text" name="search" class="combo__input" value="{{ query }}">
     <button class="combo__button button--search button--standard" type="submit">
       <span class="u-visually-hidden">Search</span>
     </button>
@@ -175,7 +175,6 @@
 {% endif %}
 {% endmacro %}
 
-{# TODO: Re-use keyword_search macro above to use {{ query }} as the input name attr and update AO, MUR, ADR, AF, Rulemakings filters accordingly #}
 {% macro keyword_search_q(result_type, query ) %}
 <div class="filter" data-filter="text">
   <label class="label t-inline-block" for="search-input">Document keyword</label>

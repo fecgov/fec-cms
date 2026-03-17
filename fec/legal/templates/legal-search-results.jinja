@@ -57,6 +57,7 @@ Search legal resources
       </div>
 
       <section class="main__content--right">
+        <div class="overlay is-loading position-top"></div>
         {% if query %}
         <h1 class="main__title data-container__head js-results">Results for &ldquo;{{ query }}&rdquo; in {{document_types[result_type]}}</h1>
         {% endif %}
@@ -195,4 +196,47 @@ Search legal resources
     </div>
   </div>
 </div>
+<script>
+
+const overlayContainer = document.querySelector('.position-top');
+const searchInput = document.querySelector('input[name="search"]');
+const searchSelect = document.querySelector('select[name="search_type"]');
+let params = new URLSearchParams(window.location.search);
+const queries = {
+  search: params.get('search'),
+  search_type: params.get('search_type')
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  const searchForm = document.getElementById('header-search');
+
+  function setLoadingState(isLoading) {
+    if (isLoading) {
+      overlayContainer.style.display = 'block';
+    } else {
+      overlayContainer.style.display = 'none';
+    }
+  }
+
+  // Ends loading state after DOM content loaded
+  window.addEventListener('pageshow', function() {
+    setLoadingState(false);
+    // Make sure state of form always matches querystring parameters
+    let selectedOption = searchSelect.querySelector('option[selected]');
+    if (selectedOption) {
+      searchSelect.value = selectedOption.value;
+    }
+    searchInput.value = queries.search
+  });
+
+  searchSelect.addEventListener('change', function() {
+    setLoadingState(true);
+    searchForm.submit();
+  });
+
+  searchForm.addEventListener('submit', function() {
+    setLoadingState(true);
+  });
+});
+</script>
 {% endblock %}
