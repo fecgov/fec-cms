@@ -91,6 +91,10 @@ const mainEntries = {
     filename: 'widgets/contributions-by-state-box.js',
     dependOn: 'bythenumbers'
   },
+  'widgets/fecfile-eligibility': {
+    import: `${js}/widgets/fecfile-eligibility.js`,
+    filename: 'widgets/fecfile-eligibility.js'
+  },
   'widgets/pres-finance-map-box': {
     import: `${js}/widgets/pres-finance-map-box.js`,
     filename: 'widgets/pres-finance-map-box.js',
@@ -205,7 +209,10 @@ module.exports = [
     },
     plugins: [
       new webpack.DefinePlugin({
-        context: {}
+        context: {},
+        __VUE_OPTIONS_API__: true,
+        __VUE_PROD_DEVTOOLS__: mode == 'production' ? false : true,
+        __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: mode == 'production' ? false : true
       }),
       new webpack.ProvidePlugin({
         $: 'jquery',
