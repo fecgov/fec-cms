@@ -105,6 +105,11 @@ def save_rulemaking_comments(request):
 
         # Start with the common, shared, required values
         to_submit = {
+            'doc_id': data.get('doc_id', '').strip(),
+            'doc_type_label': data.get('doc_type_label', '').strip(),
+            'doc_url': data.get('doc_url', '').strip(),
+
+            'rm_id': data.get('rm_id', '').strip(),
             'rm_name': data.get('rm_name', '').strip(),
             'rm_no': data.get('rm_no', '').strip(),
 
