@@ -34,6 +34,7 @@ Filter receipts
   <legend class="label u-margin--top">Source details</legend>
   {{ typeahead.field(name = 'contributor_name', title = 'Name or ID', dataset='committees', allow_text=True, minor_label_text = True, helper_text = 'Limit 10 source names or IDs') }}
   {{ text.field(name = 'contributor_city', title = 'City', minor_label_text = True, helper_text = 'Limit 10 cities') }}
+  {{ states.field('contributor_state', minor_label_text = True, helper_text = 'When searching by state or territory, and across multiple time periods, choose one or more fields: recipient name or ID, source name or ID, city, ZIP code, occupation, employer, or image number.', restricted_field = True) }}
   {{ text.field(name = 'contributor_zip', title = 'ZIP code', attrs = {'maxlength':5}, minor_label_text = True, helper_text = 'Limit 10 ZIP codes') }}
   {{ text.field(name = 'contributor_occupation', title = 'Occupation', minor_label_text = True, helper_text = 'Use the employer field to search by occupation in reports filed before 2003. Limit 10 occupations') }}
   {{ text.field(name = 'contributor_employer', title = 'Employer', minor_label_text = True, helper_text = 'Limit 10 employers') }}
@@ -42,22 +43,21 @@ Filter receipts
 <div class="js-accordion accordion--neutral restricted-fields" data-content-prefix="filter" data-open-first="true">
   <button type="button" class="js-accordion-trigger accordion__button">Time period</button>
   <div class="accordion__content">
-    {{ years.cycles('two_year_transaction_period', 'Report time period', multi_time_period_label="When searching multiple time periods, choose one or more fields: recipient name or ID, source name or ID, city, ZIP code, occupation or employer, or image number.")  }}
+    <label class="label--help u-margin--top">When searching accross multiple time periods, choose one or more fields: <br /> recipient name or ID, source name or ID, city, ZIP code, occupation, employer, or image number.</label>
+    {{ years.cycles('two_year_transaction_period', 'Report time period')  }}
     {{ date.field('date', 'Receipt date range' ) }}
-  </div>
-  <button type="button" class="js-accordion-trigger accordion__button">More source details</button>
-  <div class="accordion__content">
-    {{ states.field('contributor_state') }}
-    {% include 'partials/filters/unique-receipts.jinja' %}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Recipient committee type</button>
   <div class="accordion__content">
+    <label class="label--help u-margin--top">When searching by recipient committee type and across multiple time periods, choose one or more fields: <br /> recipient name or ID, source name or ID, city, ZIP code, occupation, employer, or image number.</label>
     {% import 'macros/filters/committee-types.jinja' as committee_type %}
     {{ committee_type.field(committee_type='recipient_committee_type', organization_type='recipient_committee_org_type', designation='recipient_committee_designation') }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Receipt details</button>
   <div class="accordion__content">
+    <label class="label--help u-margin--top">When searching by receipt details and across multiple time periods, choose one or more fields: <br /> recipient name or ID, source name or ID, city, ZIP code, occupation, employer, or image number.</label>
     {{ range.amount('amount', 'Receipt amount') }}
+    {% include 'partials/filters/unique-receipts.jinja' %}
     {{ dropdown.select_single('line_number', 'Receipt type', options=constants.line_numbers.receipts, default='', title_prefix='Received by', forms =['Form 3','Form 3P','Form 3X'] )}}
     <div class="js-line-number-message message message--info message--small">
       <span class="t-block">Filters for receipt types are available only for filings from 2007 or later.</span>
