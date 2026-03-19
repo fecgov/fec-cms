@@ -736,12 +736,25 @@ def rulemaking_add_comments(request, rm_no, doc_id):
     if requested_doc_can_receive_comments is False:
         return HttpResponseGone()
 
-    # If there's more than one key document, we want to remember which one is receiving these comments.
+    # Find the document that is receiving these comments from the documents array.
     # This will be used for doc_id, doc_type_label, and doc_url
     doc_receiving_comments = {'doc_type_label': '', 'url': ''}
-    for key_doc in rulemaking['key_documents']:
-        if int(key_doc['doc_id']) == int(doc_id):
-            doc_receiving_comments = key_doc
+
+    # Search in documents array for documents that can receive comments
+    for docs_stage in rulemaking.get('documents', []):
+        if int(docs_stage.get('doc_id', 0)) == int(doc_id):
+            doc_receiving_comments = docs_stage
+            break
+        # Also check level_2_docs
+        for labels in docs_stage.get('level_2_labels', []):
+            for doc in labels.get('level_2_docs', []):
+                if int(doc.get('doc_id', 0)) == int(doc_id):
+                    doc_receiving_comments = doc
+                    break
+            if doc_receiving_comments.get('doc_type_label') or doc_receiving_comments.get('url'):
+                break
+        if doc_receiving_comments.get('doc_type_label') or doc_receiving_comments.get('url'):
+            break
 
     return render(request, 'rulemaking-commenting.jinja', {
         'can_receive_comments': requested_doc_can_receive_comments,
