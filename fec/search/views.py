@@ -127,10 +127,10 @@ def search_site(query, limit=0, offset=0):
         'offset': offset
     }
     try:
-        r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14y', params=params, timeout=5)
+        r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14y', params=params, timeout=10)
         return process_site_results(r.json(), limit=limit, offset=offset)
     except requests.exceptions.Timeout:
-        logger.error('search_site: Search.gov request timed out after 5 seconds for query: %s', query)
+        logger.error('search_site: Search.gov request timed out after 10 seconds for query: %s', query)
         return None
     except (Exception) as ex:
         logger.error('search_site: %s - %s', ex.__class__.__name__, str(ex))
@@ -213,10 +213,10 @@ def policy_guidance_search_site(query, limit=0, offset=0):
     }
 
     try:
-        r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14y', params=params, timeout=5)
+        r = requests.get('https://api.gsa.gov/technology/searchgov/v2/results/i14y', params=params, timeout=10)
         return process_site_results(r.json(), limit=limit, offset=offset)
     except requests.exceptions.Timeout:
-        logger.error('policy_guidance_search_site: Search.gov request timed out after 5 seconds for query: %s', query)
+        logger.error('policy_guidance_search_site: Search.gov request timed out after 10 seconds for query: %s', query)
         return None
     except (Exception) as ex:
         logger.error('policy_guidance_search_site: %s - %s', ex.__class__.__name__, str(ex))
