@@ -310,6 +310,17 @@ RulemakingCommenting.prototype.buildTheFrame = function() {
     if (this.representedEntityType == 'self') {
       //
     }
+  } else if (this.isOnFrame('submitterInfo')) {
+    // Should we hide the "include lawfirm info" box?
+    const offerToAddLawFirm = this.representedEntityType === 'counsel';
+    if (!offerToAddLawFirm) {
+      // Uncheck the lawfirm box and its related fields will go away
+      const lawfirmCheckbox = this.formEl.querySelector('input[name="lawfirm"]');
+      lawfirmCheckbox.removeAttribute('checked'); // the standard
+      lawfirmCheckbox.checked = false; // Chrome seems to require this
+      this.toggleElementsByVars(); // Hide the related fields
+    }
+
   } else if (this.isOnFrame('commenters')) {
     // We no longer want to add a commenter automatically, opting instead to do so after commentersType is set.
     // const commentersHolder = this.formEl.querySelector('#commenters-holder');
@@ -822,7 +833,7 @@ RulemakingCommenting.prototype.toggleElementsByVars = function() {
     const varName = elToToggle.dataset.showIfVar; // Which variable/input are we checking?
     const varValue = elToToggle.dataset.showIfVal; // What value is the display value?
 
-    // We want :checked elements tied to the same elements
+    // We only want the :checked <input>s tied to the <div>s (etc) to be toggled
     const selectorString = `[name="${varName}"]:checked`;
 
     const controllerInput = this.formEl.querySelector(selectorString);
@@ -972,16 +983,40 @@ RulemakingCommenting.prototype.handleFormChange = function(e) {
     // Add/remove the has-file class to toggle the X button, which will let css show additional pickers
     // It 'has-file' when a file's selected and it's <= 5 MB
     const hasFile = e.target.files.length > 0;
-    const hasLegitFile = e.target.files.length > 0 && e.target.files[0].size <= 5000000;
+    const fileTooLarge = e.target.files.length > 0 && e.target.files[0].size > 5000000;
+
+    const acceptableFileTypes = [
+      'text/plain', 'text/rtf', 'application/vnd.ms-excel', 'application/msword', 'application/pdf',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+    const isAcceptableFileType = hasFile ? acceptableFileTypes.includes(e.target.files[0].type) : false;
 
     e.target.classList.toggle('has-file', hasFile);
 
-    if (hasFile && !hasLegitFile) {
-      e.target.classList.add('invalid');
-      e.target.setCustomValidity('Files must be smaller than 5 MB each');
-    } else if (!hasFile || hasLegitFile) {
+    // Passing test
+    if (hasFile && !fileTooLarge && isAcceptableFileType) {
       e.target.classList.remove('invalid');
       e.target.setCustomValidity('');
+      e.target.labels[0].innerText = '';
+
+    // Has file but is too large
+    } else if (hasFile && fileTooLarge) {
+      e.target.classList.add('invalid');
+      e.target.setCustomValidity('Files must be smaller than 5 MB each');
+      e.target.labels[0].innerText = 'Files must be smaller than five (5) MB each';
+
+    // Has file but unacceptable file type
+    } else if (hasFile && !isAcceptableFileType) {
+      e.target.classList.add('invalid');
+      e.target.setCustomValidity('Unacceptable file type');
+      e.target.labels[0].innerText = 'Unacceptable file type';
+
+    // Doesn't have file, so reset the field
+    } else if (!hasFile) {
+      e.target.classList.remove('invalid');
+      e.target.setCustomValidity('');
+      e.target.labels[0].innerText = '';
     }
 
     // Because attaching and removing files can change the height

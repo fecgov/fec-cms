@@ -260,6 +260,9 @@ html, body {
     &:not(:last-child) .add-commenter {
       display: none;
     }
+    button > span { /* For the button with swappable labels, don't let the labels be event targets */
+      pointer-events: none;
+    }
   }
   .commenter-controls {
     margin-top: 1rem;
@@ -300,10 +303,11 @@ html, body {
       cursor: default;
     }
 
-    & + .button--cancel {
+    & ~ .button--cancel {
       display: none;
+      margin-right: 25% !important;
     }
-    &.has-file + .button--cancel {
+    &.has-file ~ .button--cancel {
       display: inline-block;
     }
   }
@@ -437,6 +441,11 @@ html, body {
       &.complete {
         transition: width 0.5s ease-in-out;
         width: calc(100% - 25px);
+
+        & ~ ul li {
+          /* disable pointer events for li elements following a complete <meter> */
+          pointer-events: none;
+        }
       }
     }
     .i-check {
