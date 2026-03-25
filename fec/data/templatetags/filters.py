@@ -179,15 +179,15 @@ def compare(string, string_1):
     threshold = .5
 
     if similarity_ratio >= threshold:
-        # Next two lines are for testing, remove before merge and uncomment: return False
+        # Next two lines are for testing, the prod version will just return False
         return_val = '<b style="color:red">{}</b>'.format(string)
         return format_html(return_val)
         #return False
         
     else:
-        # Next two lines are for testing, remove before merge and uncomment: return True
+        # Next two lines are for testing, the prod version will just return True
         return_val = '<b style="color:green">{}</b>'.format(string)
-        return_val = '<br>{}'.format(string)
+        return format_html(return_val)
         #return True
 
 
