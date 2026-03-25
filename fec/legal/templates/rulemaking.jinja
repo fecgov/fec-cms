@@ -76,7 +76,7 @@
           {{ docL1.label }}
           {%- endif -%}
           {%- if docL1.doc_description and 'pdf' not in docL1.doc_description.lower() -%}
-            <br>{{ docL1.doc_description }}
+            <br>{{ docL1.doc_description | compare(docL1.label) }}
           {%- endif -%}
         </li>
           {%- if docL1.doc_entities -%}
@@ -115,7 +115,9 @@
                   {# Single commenter: show commenter name #}
                   <li>
                   <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.commenters[0].name }} | {{ doc.commenters[0].role }}</a>
-                  {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}<br>{{ doc.doc_description }}{% endif %}
+                  {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}
+                   <br>{{ doc.doc_description | compare(doc.label) }}
+                  {% endif %}
                   </li>
                   {% for entity in doc.doc_entities %}
                     <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
@@ -123,7 +125,10 @@
                 {% else %}
                   {# Multiple commenters: show "Joint comment" #}
                   <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">Joint comment</a>
-                  {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}<br>{{ doc.doc_description }}{% endif %}</li>
+                  {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}
+                   <br>{{ doc.doc_description | compare(doc.label) }}
+                  {% endif %}
+                  </li>
                   {% for entity in doc.doc_entities %}
                     <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
                   {% endfor %}
@@ -132,7 +137,7 @@
             {% else %}
               <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a>
               {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}
-                <br>{{ doc.doc_description }}
+                <br>{{ doc.doc_description | compare(doc.label) }}
               {% endif %}
             {% endif %}
           </ul>
