@@ -189,6 +189,55 @@ def compare(string, string_1):
         return_val = '<b style="color:green">{}</b>'.format(string)
         return format_html(return_val)
         #return True
+  
+
+@library.filter
+def compare_commenter(string, string_1):
+    """Convert `string_1` from "LastName, FirstName" format to "FirstName LastName" 
+    Returns False if `converted_string_1` is in `string`. Else returns True.
+    """
+
+    # Convert name from "LastName, FirstName" format to "FirstName LastName"
+    converted_string_1 = ' '.join(reversed(string_1.split(', ')))
+
+    if converted_string_1 in string:
+        # Next two lines are for testing, the prod version will just return False
+        return_val = '<b style="color:red">{}</b>'.format(string)
+        return format_html(return_val)
+        #return False
+    else:
+        # Next two lines are for testing, the prod version will just return True
+        return_val = '<b style="color:green">{}</b>'.format(string)
+        return format_html(return_val)
+        #return True
+
+
+# @library.filter
+# def compare_sorted(string, string_1):
+#     """Compares two strings to determine if they are nearly identical or semantically similar.
+#     Sort the stringd first to account for juxtuposition of words or slighly different words.
+#     Examples:( Smith, Joe should be similar to Joe Smith ) or ( notice of action should be similar action notification )
+#     Returns False if `string` is >= than 50% similar to `string_1`. Else returns True.
+#     Uses difflib.SequenceMatcher: https://docs.python.org/3/library/difflib.html
+#     """
+
+#     # Calculate the similarity ratio
+#     similarity_ratio = SequenceMatcher(None, sorted(string), sorted(string_1)).ratio()
+
+#     # Define a threshold for redundancy (e.g., 50% similar)
+#     threshold = .5
+
+#     if similarity_ratio >= threshold:
+#         # Next two lines are for testing, the prod version will just return False
+#         return_val = '<b style="color:red">{}</b>'.format(string)
+#         return format_html(return_val)
+#         #return False
+        
+#     else:
+#         # Next two lines are for testing, the prod version will just return True
+#         return_val = '<b style="color:green">{}</b>'.format(string)
+#         return format_html(return_val)
+#         #return True
 
 
 @library.global_function

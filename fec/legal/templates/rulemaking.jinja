@@ -116,7 +116,7 @@
                   <li>
                   <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.commenters[0].name }} | {{ doc.commenters[0].role }}</a>
                   {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}
-                   <br>{{ doc.doc_description | compare(doc.label) }}
+                   <br>XX {{ doc.doc_description | compare_commenter(doc.commenters[0].name) }}
                   {% endif %}
                   </li>
                   {% for entity in doc.doc_entities %}
@@ -126,7 +126,8 @@
                   {# Multiple commenters: show "Joint comment" #}
                   <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">Joint comment</a>
                   {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}
-                   <br>{{ doc.doc_description | compare(doc.label) }}
+                   {# <br>{{ doc.doc_description | compare('Joint comment')  }} #}
+                   <br>{{ doc.doc_description }}
                   {% endif %}
                   </li>
                   {% for entity in doc.doc_entities %}
