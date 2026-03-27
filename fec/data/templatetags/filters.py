@@ -188,13 +188,15 @@ def compare(string, string_1):
 @library.filter
 def compare_commenter(string, string_1):
     """Convert `string_1` from "LastName, FirstName" format to "FirstName LastName" 
-    Returns False if `converted_string_1` is in `string`. Else returns True.
+    Returns False if `converted_string_1` is in `string`.
+    Returns False if `string` == 'Comment'.
+    Else returns True.
     """
 
     # Convert name from "LastName, FirstName" format to "FirstName LastName"
     converted_string_1 = ' '.join(reversed(string_1.split(', ')))
 
-    if converted_string_1 in string:
+    if converted_string_1 in string or string == 'Comment':
         return False
     else:
         return True
