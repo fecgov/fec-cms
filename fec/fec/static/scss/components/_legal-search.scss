@@ -251,7 +251,7 @@
         }
       }
 
-      &:has(.row-active) {
+      &:has(.dt-hasChild) {
         /* The .row-active border is pushing in the visual left edge of the table.
            These two lines pull it back out, pushing that left border into the left padding */
         margin-left: -0.5rem;
@@ -268,7 +268,7 @@
         &.even {
           background-color: $gray-lightest;
         }
-        &.row-active {
+        &.dt-hasChild {
           border-color: $federal-blue;
           transition: border-color .25s;
         }

@@ -229,42 +229,46 @@ export function modalRenderFactory(template, fetch) {
       if (e.which === 13 || e.type === 'click') {
         // Note: Use `currentTarget` to get parent row, since the target column
         // may have been moved since the triggering event
-        const $row = $(e.currentTarget);
+        const $row = api.row(e.currentTarget);
         const $target = $(e.target);
-        if ($target.is('a')) {
-          return true;
-        }
 
-        if (!$target.closest('td').hasClass('dataTables_empty')) {
-          const row = api.row($row);
-          const index = row.index();
+        // If the click target is a link, stop here. Don't toggle any rows
+        if ($target.is('a')) return true;
 
-          if (row.child.isShown()) {
-            row.child.hide();
-            $row.removeClass('row-active');
-            $row.removeAttr('aria-details');
-            return;
-          }
+        // Hide any other open rows
+        // For each row
+        let toggledSelfClosed = false;
+        api.rows('.dt-hasChild').every((i) => {
 
-          $.when(fetch(response.results[index])).done(function(fetched) {
-            const newChildRowContent = template(fetched);
-            const newChildRowHtml = childRow(newChildRowContent);
-            const newChildRow = row.child(newChildRowHtml);
+          // If the clicked element is this row in the loop and it has a child row, remember that we only toggled it
+          if (this == api.row(i).node() && api.row(i).child.isShown()) toggledSelfClosed = true;
 
-            newChildRow.show();
-            $row.addClass('row-active');
-            const parentRowsEvenOddClass = e.currentTarget.classList.contains('even') ? 'even' : 'odd';
-            row.child().addClass(`${parentRowsEvenOddClass} dt-isChild row-active`);
-            // Aria link the normal row and its child/details row
-            row.child().attr('id', `details-for-tr-${index}`);
-            $row.attr('aria-details', `details-for-tr-${index}`);
-            const newChildRowPdfButton = $row.next().find('.js-pdf_url');
-            if (fetched.pdf_url)
-              newChildRowPdfButton.attr('href', fetched.pdf_url);
-            else
-              newChildRowPdfButton.remove();
-          });
-        }
+          // Close every row
+          api.row(i).child.hide(); // close its child
+
+        });
+
+        // If we only toggled a row closed, no reason to continue with loading data, etc
+        if (toggledSelfClosed) return; // Stop here
+
+        // If it's an empty datatable, return and be done.
+        if ($target.closest('td').hasClass('dataTables_empty')) return;
+
+        // Otherwise, get the data to build a child row
+        const row = api.row($row);
+        const index = row.index();
+
+        $.when(fetch(response.results[index])).done(function(fetched) {
+          const parentRowsEvenOddClass = e.currentTarget.classList.contains('even') ? 'even' : 'odd';
+
+          const newChildRowContent = template(fetched);
+          const newChildRowHtml = childRow(newChildRowContent, fetched.pdf_url || '');
+          const newChildRow = row.child(newChildRowHtml, `${parentRowsEvenOddClass} dt-isChild`).show();
+
+          // Aria link the normal row and its child/details row
+          $(newChildRow).attr('id', `details-for-tr-${index}`);
+          $(row.node()).attr('aria-details', `details-for-tr-${index}`);
+        });
       }
     };
     $table.on(
@@ -1401,10 +1405,10 @@ function drawContributionsByStateTable(selected, pageContext) {
  * @param {string} contents
  * @returns {string} a string to be used as the innerHTML of the child/details row
  */
-function childRow(contents) {
+function childRow(contents, pdf_url) {
   return `<div class="dt-details">
     <div class="dt-details__nav">
-      <a class="dt-details__link button--small button--standard js-pdf_url" target="_blank">Open image</a>
+      <a href="${pdf_url}" class="dt-details__link button--small button--standard js-pdf_url" target="_blank">Open image</a>
     </div>
     <div class="dt-details__content">
       ${contents}
