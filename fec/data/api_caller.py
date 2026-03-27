@@ -1,5 +1,6 @@
 import logging
 import os
+import random
 import requests
 import inspect
 
@@ -288,9 +289,12 @@ def load_legal_admin_fines(admin_fine_no):
 
 
 def load_legal_rulemaking(rm_no):
+    # Add a cache-busting random number to ensure every request is fresh
+    cache_bust = random.randint(1, 999999999)
+
     url = "/rulemaking/search/"
-    response = _call_api(url, rm_no=rm_no)
-    return response["rulemakings"][0] if response["rulemakings"] else []
+    response = _call_api(url, rm_no=rm_no, _t=cache_bust)
+    return response["rulemakings"][0] if response["rulemakings"] else {}
 
 
 def collate_dispositions(dispositions):

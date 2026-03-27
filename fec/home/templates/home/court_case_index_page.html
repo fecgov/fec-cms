@@ -95,6 +95,14 @@
               {% for case in cases %}
               <tr class="simple-table__row">
                 <td class="simple-table__cell align-top">
+                  {% if case.is_cross_reference %}
+                  <span>{{ case.title }}</span>
+                  <div class="t-sans u-padding--top--small">
+                    See: {% for ref_case in case.referenced_cases %}
+                      <a href="{{ ref_case.url }}">{{ ref_case.title }}</a>{% if not forloop.last %}; {% endif %}
+                    {% endfor %}
+                  </div>
+                  {% else %}
                   <a href="{{ case.url }}">{% if case.index_title %}{{ case.index_title }}{% else %}{{ case.title }}{% endif %}</a>
                   {% if case.status == 'active' %}
                     <div class="t-data t-bold">
@@ -109,6 +117,7 @@
                         {% endif %}
                       {% endfor %}
                     </div>
+                  {% endif %}
                   {% endif %}
                 </td>
                 <td class="simple-table__cell align-top">

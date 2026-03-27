@@ -21,6 +21,23 @@ from fec import settings  # rulemaking comments
 
 logger = logging.getLogger(__name__)
 
+# Tier precedence order for sorting
+# Notice of Disposition (tier 15) has highest priority
+TIER_PRECEDENCE = {
+    15: 0,  # Notice of Disposition (highest pråiority)
+    5: 1,   # Advance NPRM
+    13: 2,  # Interim Final Rules (swapped with tier 14)
+    14: 3,  # Notice of Availability
+    2: 4,   # NPRM
+    17: 5,  # Supplemental NPRM
+    3: 6,   # Notice of Hearing
+    6: 7,   # Notice of Change of Hearing Date
+    8: 8,   # Correction to Final Rules
+    9: 9,   # Correction to Final Rules and E&J
+    1: 10,  # Final Rules
+    10: 11,  # Explanation and Justification
+}
+
 
 def get_s3_client():
     return boto3.client(
@@ -52,6 +69,20 @@ def save_rulemaking_comments(request):
     if rulemaking['is_open_for_comment'] is False:
         return JsonResponse({'status': 410, 'ok': False, 'message': 'Commenting has closed'}, status=410)
 
+    # Are specific document(s) still eligible for comment?
+    doc_id = data.get('doc_id')
+    if doc_id:
+        docs_that_can_receive_comments = rulemaking_docs_that_can_receive_comments(rulemaking)
+        doc_can_receive_comments = any(
+            int(doc['doc_id']) == int(doc_id) for doc in docs_that_can_receive_comments
+        )
+
+        if not doc_can_receive_comments:
+            return JsonResponse({'status': 410, 'ok': False, 'message': 'This document is not accepting comments'},
+                                status=410)
+    else:
+        return JsonResponse({'status': 400, 'ok': False, 'message': 'Document ID is required'}, status=400)
+
     # Checking reCAPTCHA
     if not data.get('g-recaptcha-response'):
         return JsonResponse({'status': 400, 'ok': False, 'message': 'Invalid reCAPTCHA'}, status=400)
@@ -74,6 +105,11 @@ def save_rulemaking_comments(request):
 
         # Start with the common, shared, required values
         to_submit = {
+            'doc_id': data.get('doc_id', '').strip(),
+            'doc_type_label': data.get('doc_type_label', '').strip(),
+            'doc_url': data.get('doc_url', '').strip(),
+
+            'rm_id': data.get('rm_id', '').strip(),
             'rm_name': data.get('rm_name', '').strip(),
             'rm_no': data.get('rm_no', '').strip(),
 
@@ -448,13 +484,16 @@ def admin_fine_page(request, admin_fine_no):
 
 
 # Returns a list of rulemaking docs that can receive comments, either [] or
-# [{'doc_id': int, 'label': string},]
+# [{'doc_id': int, 'label': string, 'doc_comment_close_date': string},]
 def rulemaking_docs_that_can_receive_comments(rm):
     comment_eligible_docs = []
 
     # If is_open_for_comment is false, we're done
     if rm['is_open_for_comment'] is False:
         return comment_eligible_docs
+
+    # Fallback to rulemaking-level comment_close_date if doc-level doesn't exist or is null
+    rulemaking_comment_close_date = rm.get('comment_close_date') or ''
 
     # Rulemaking documents are organized by presentation, starting with their document/rulemaking stage
     # so we have to loop through stages, then label groups, then the documents themselves.
@@ -463,15 +502,20 @@ def rulemaking_docs_that_can_receive_comments(rm):
         if docs_stage['is_comment_eligible'] is True:
             comment_eligible_docs.append({
                 'doc_id': int(docs_stage['doc_id']),
-                'label': docs_stage['level_1_label'],
+                'label': docs_stage.get('level_1_label'),
+                'doc_comment_close_date': docs_stage.get('doc_comment_close_date') or rulemaking_comment_close_date,
             })
+
+        # Get the parent label to use as fallback for sub-documents
+        parent_label = docs_stage.get('level_1_label')
 
         for labels in docs_stage.get('level_2_labels', []):
             for doc in labels.get('level_2_docs', []):
                 if doc['is_comment_eligible'] is True:
                     comment_eligible_docs.append({
                         'doc_id': int(doc['doc_id']),
-                        'label': doc['level_1_label'],
+                        'label': doc.get('level_1_label') or parent_label,
+                        'doc_comment_close_date': doc.get('doc_comment_close_date') or rulemaking_comment_close_date,
                     })
 
     return comment_eligible_docs
@@ -481,19 +525,27 @@ def rulemaking_docs_that_can_receive_comments(rm):
 def rulemaking(request, rm_no):
 
     rulemaking = api_caller.load_legal_rulemaking(rm_no)
-    docs_that_can_receive_comments = rulemaking_docs_that_can_receive_comments(rulemaking)
 
-    if not rm_no:
+    if not rm_no or not rulemaking:
         raise Http404()
+
+    docs_that_can_receive_comments = rulemaking_docs_that_can_receive_comments(rulemaking)
 
     key_documents = []
     doc_type_label = ''
     for i, key_doc in enumerate(rulemaking['key_documents']):
+        # Use doc_type_label unless it contains "NO TIER ENTRY" or is null
+        key_doc_type_label = key_doc.get('doc_type_label', '')
+        if not key_doc_type_label or 'NO TIER ENTRY' in key_doc_type_label:
+            label = key_doc.get('doc_description') or key_doc.get('filename', 'Document')
+        else:
+            label = key_doc_type_label
+
         key_documents.append({
             'doc_date': key_doc['doc_date'],
             'doc_id': key_doc['doc_id'],
-            'label': key_doc['doc_type_label'],
-            'url': key_doc['url'],
+            'label': label,
+            'url': key_doc['url'].replace('#', '%23') if key_doc.get('url') else '',
         })
 
     documents = []
@@ -502,17 +554,37 @@ def rulemaking(request, rm_no):
         new_rm_stage = {}
         new_rm_stage['doc_date'] = stage['doc_date']
         new_rm_stage['doc_id'] = stage['doc_id']
-        new_rm_stage['label'] = stage['doc_type_label']
+        new_rm_stage['level_1'] = stage.get('level_1')
 
-        new_rm_stage['url'] = stage['url']
+        # Label priority: doc_type_label (if valid) > doc_description > filename > level_1_label > "Document"
+        # Skip doc_type_label if it contains "NO TIER ENTRY" or is null
+        stage_doc_type_label = stage.get('doc_type_label', '')
+        if not stage_doc_type_label or 'NO TIER ENTRY' in stage_doc_type_label:
+            new_rm_stage['label'] = (
+                stage.get('doc_description') or stage.get('filename')
+                or stage.get('level_1_label') or 'Document'
+            )
+        else:
+            new_rm_stage['label'] = stage_doc_type_label
+
+        new_rm_stage['url'] = stage['url'].replace('#', '%23') if stage.get('url') else ''
+        new_rm_stage['doc_description'] = stage.get('doc_description')
 
         for doc in docs_that_can_receive_comments:
             if doc['doc_id'] == stage['doc_id']:
                 doc_type_label = stage['doc_type_label']
 
+        # Build entity lists for display in template
+        # Filter commenters separately to determine single vs. joint comment display
         new_rm_stage['doc_entities'] = []
+        new_rm_stage['commenters'] = []
         for entity in stage['doc_entities']:
             new_rm_stage['doc_entities'].append({'name': entity['name'], 'role': entity['role']})
+            if entity['role'] == 'Commenter':
+                new_rm_stage['commenters'].append({'name': entity['name'], 'role': entity['role']})
+
+        # Get the parent label to use as fallback for sub-documents
+        parent_stage_label = stage.get('level_1_label')
 
         new_rm_stage['secondary_docs'] = []
         for type in stage['level_2_labels']:
@@ -523,24 +595,122 @@ def rulemaking(request, rm_no):
                 new_sub_doc = {}
                 new_sub_doc['doc_date'] = doc['doc_date']
                 new_sub_doc['doc_id'] = doc['doc_id']
-                new_sub_doc['label'] = doc['doc_type_label']
-                new_sub_doc['url'] = doc['url']
 
+                # Label priority: doc_type_label (if valid):
+                # doc_description > filename > level_1_label > parent_stage_label > "Document"
+                # Skip doc_type_label if it contains "NO TIER ENTRY" or is null
+                doc_type_label_value = doc.get('doc_type_label', '')
+                if not doc_type_label_value or 'NO TIER ENTRY' in doc_type_label_value:
+                    new_sub_doc['label'] = (
+                        doc.get('doc_description') or doc.get('filename')
+                        or doc.get('level_1_label') or parent_stage_label or 'Document'
+                    )
+                else:
+                    new_sub_doc['label'] = doc_type_label_value
+
+                new_sub_doc['url'] = doc['url'].replace('#', '%23') if doc.get('url') else ''
+                new_sub_doc['doc_description'] = doc.get('doc_description')
+
+                # Build entity lists for display in template
+                # Filter commenters separately to determine single vs. joint comment display
                 new_sub_doc['doc_entities'] = []
+                new_sub_doc['commenters'] = []
                 for entity in doc['doc_entities']:
                     new_sub_doc['doc_entities'].append({'name': entity['name'], 'role': entity['role']})
+                    if entity['role'] == 'Commenter':
+                        new_sub_doc['commenters'].append({'name': entity['name'], 'role': entity['role']})
 
                 sub_doc['documents'].append(new_sub_doc)
+
+            # Sort documents by date in ascending order (oldest first)
+            sub_doc['documents'].sort(key=lambda x: x['doc_date'] if x['doc_date'] else '')
 
             new_rm_stage['secondary_docs'].append(sub_doc)
 
         documents.append(new_rm_stage)
 
+    # If doc_date is null, use the date from the LAST sub-document
+    # If still null (no sub-docs), use current date
+    # Then sort by date descending with tier precedence as tiebreaker
+    from datetime import date as date_class
+    current_date_str = date_class.today().isoformat()
+
+    for doc in documents:
+        if not doc['doc_date'] and doc.get('secondary_docs'):
+            # Get the last sub-document's date from any secondary_docs group
+            for sec_doc_group in doc['secondary_docs']:
+                if sec_doc_group.get('documents'):
+                    last_sub_doc = sec_doc_group['documents'][-1]
+                    doc['sort_date'] = last_sub_doc.get('doc_date') or current_date_str
+                    break
+            else:
+                # No sub-docs with documents, use current date
+                doc['sort_date'] = current_date_str
+        else:
+            doc['sort_date'] = doc['doc_date'] or current_date_str
+
+    # Sort by date descending, then by tier precedence ascending (for equal dates)
+    # Negate tier precedence so it sorts ascending when overall sort is reversed
+    documents.sort(key=lambda x: (x['sort_date'], -TIER_PRECEDENCE.get(x.get('level_1'), 999)), reverse=True)
+
+    # Process Press & Public Guidance documents (doc_category_id=8)
+    press_public_guidance_documents = []
+    # Process other no-tier documents (not doc_category_id=8) for "Other" category
+    other_no_tier_documents = []
+    if 'no_tier_documents' in rulemaking:
+        for doc in rulemaking['no_tier_documents']:
+            # Skip documents without a URL
+            if not doc.get('url'):
+                continue
+
+            if str(doc.get('doc_category_id')) == '8':
+                # Use doc_description as label, fallback to filename
+                label = doc.get('doc_description') or doc.get('filename', 'Document')
+                press_public_guidance_documents.append({
+                    'doc_id': doc['doc_id'],
+                    'label': label,
+                    'url': doc['url'].replace('#', '%23'),
+                    'doc_date': doc.get('doc_date'),
+                })
+            else:
+                # Other no-tier documents (not category 8)
+                # Use doc_type_label unless it contains "NO TIER ENTRY" or is null
+                doc_type_label = doc.get('doc_type_label', '')
+                if not doc_type_label or 'NO TIER ENTRY' in doc_type_label:
+                    label = doc.get('doc_description') or doc.get('filename', 'Document')
+                else:
+                    label = doc_type_label
+                other_no_tier_documents.append({
+                    'doc_id': doc['doc_id'],
+                    'label': label,
+                    'url': doc['url'].replace('#', '%23'),
+                    'doc_date': doc.get('doc_date'),
+                    'doc_entities': doc.get('doc_entities', []),
+                })
+
+    # Add "Other" category to documents list if there are other no-tier documents
+    if other_no_tier_documents:
+        # Sort other no-tier documents by date in descending order
+        other_no_tier_documents.sort(key=lambda x: x['doc_date'] if x['doc_date'] else '', reverse=True)
+
+        other_category = {
+            'doc_date': None,
+            'doc_id': None,
+            'label': 'Other',
+            'url': '',
+            'doc_entities': [],
+            'secondary_docs': [{
+                'label': '',
+                'documents': other_no_tier_documents
+            }]
+        }
+        documents.append(other_category)
+
     return render(request, 'rulemaking.jinja', {
         'docs_that_can_receive_comments': docs_that_can_receive_comments,
-        'comment_close_date': rulemaking['comment_close_date'] or '',
         'documents': documents,
         'key_documents': key_documents,
+        'press_public_guidance_documents': press_public_guidance_documents,
         'rm_entities': rulemaking['rm_entities'],
         'rm_name': rulemaking['rm_name'],
         'rm_no': rulemaking['rm_no'],
@@ -548,7 +718,7 @@ def rulemaking(request, rm_no):
         'doc_type_label': doc_type_label,
         'parent': 'legal',
         'social_image_identifier': 'legal',
-        'could_testify': True,
+        'open_to_testify_in_person': rulemaking.get('testify_flg', False),
     })
 
 
@@ -576,14 +746,27 @@ def rulemaking_add_comments(request, rm_no, doc_id):
     if requested_doc_can_receive_comments is False:
         return HttpResponseGone()
 
-    # If there's more than one key document, we want to remember which one is receiving these comments.
+    # Find the document that is receiving these comments from the documents array.
     # This will be used for doc_id, doc_type_label, and doc_url
     doc_receiving_comments = {'doc_type_label': '', 'url': ''}
-    for key_doc in rulemaking['key_documents']:
-        if int(key_doc['doc_id']) == int(doc_id):
-            doc_receiving_comments = key_doc
 
-    return render(request, 'rulemaking-comments.jinja', {
+    # Search in documents array for documents that can receive comments
+    for docs_stage in rulemaking.get('documents', []):
+        if int(docs_stage.get('doc_id', 0)) == int(doc_id):
+            doc_receiving_comments = docs_stage
+            break
+        # Also check level_2_docs
+        for labels in docs_stage.get('level_2_labels', []):
+            for doc in labels.get('level_2_docs', []):
+                if int(doc.get('doc_id', 0)) == int(doc_id):
+                    doc_receiving_comments = doc
+                    break
+            if doc_receiving_comments.get('doc_type_label') or doc_receiving_comments.get('url'):
+                break
+        if doc_receiving_comments.get('doc_type_label') or doc_receiving_comments.get('url'):
+            break
+
+    return render(request, 'rulemaking-commenting.jinja', {
         'can_receive_comments': requested_doc_can_receive_comments,
         'description': rulemaking['description'],
         'rm_id': rulemaking['rm_id'],
@@ -596,7 +779,7 @@ def rulemaking_add_comments(request, rm_no, doc_id):
         'doc_url': doc_receiving_comments['url'],
         'parent': 'legal',
         'social_image_identifier': 'legal',
-        'could_testify': False,  # TODO: This will change when the field exists in the API
+        'open_to_testify_in_person': rulemaking.get('testify_flg', False),
     })
 
 
@@ -656,8 +839,8 @@ def legal_search(request):
                     'total_count', 0)
                 results['regulations_returned'] = ('3' if results['total_regulations'] > 3
                                                    else results['total_regulations'])
-    
-        if result_type == 'all' or result_type == 'rulemakings':
+
+        if settings.FEATURES['rulemakings'] and (result_type == 'all' or result_type == 'rulemakings'):
             filters = {}
             url = '/rulemaking/search/'
             filters['q'] = query
@@ -665,11 +848,27 @@ def legal_search(request):
             filters['hits_returned'] = 3
             filters['from_hit'] = 0
             response = api_caller._call_api(url, **filters)
-            results['rulemakings'] = response['rulemakings']
-            results['total_rulemakings'] = response['total_rulemakings']
-            results['rulemakings_returned'] = ('3' if results['total_rulemakings'] > 3
-                                                   else results['total_rulemakings'])
+            # Only set results if the response has the expected keys
+            if 'rulemakings' in response and 'total_rulemakings' in response:
+                # Encode # characters in document URLs to prevent URL bucket issues
+                rulemakings = response['rulemakings']
+                for rulemaking in rulemakings:
+                    if 'documents' in rulemaking:
+                        for document in rulemaking['documents']:
+                            if 'url' in document and document['url']:
+                                document['url'] = document['url'].replace('#', '%23')
+                            # Process level 2 documents
+                            if 'level_2_labels' in document:
+                                for label in document['level_2_labels']:
+                                    if 'level_2_docs' in label:
+                                        for l2_doc in label['level_2_docs']:
+                                            if 'url' in l2_doc and l2_doc['url']:
+                                                l2_doc['url'] = l2_doc['url'].replace('#', '%23')
 
+                results['rulemakings'] = rulemakings
+                results['total_rulemakings'] = response['total_rulemakings']
+                results['rulemakings_returned'] = ('3' if results['total_rulemakings'] > 3
+                                                   else results['total_rulemakings'])
 
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
@@ -1191,18 +1390,16 @@ def legal_doc_search_statutes(request):
 
 def get_legal_category_order(results, result_type):
     """ Return categories in pre-defined order, moving categories with empty
-        results to the end. Move chosen category(result_type) to top when not searching 'all'
+        results to the end.
     """
     categories = ['admin_fines', 'advisory_opinions', 'adrs', 'murs', 'regulations', 'rulemakings', 'statutes']
     if not settings.FEATURES['rulemakings']:
         categories.remove('rulemakings')
-    category_order = [x for x in categories if results.get('total_' + x, 0) > 0] +\
+    category_order = [x for x in categories if results.get('total_' + x, 0) > 0] + \
         [x for x in categories if results.get('total_' + x, 0) == 0]
 
     # Default to 'admin_fines' first if result_type is 'all', because we dont want 'all' in category_order
     result_type = 'admin_fines' if result_type == 'all' else result_type
-    # Move chosen search type to the top if not searching 'all'
-    category_order.insert(0, category_order.pop(category_order.index(result_type)))
 
     return category_order
 
