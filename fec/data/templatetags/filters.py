@@ -200,7 +200,8 @@ def compare_commenter(string, string_1):
     # Convert name from "LastName, FirstName" format to "FirstName LastName"
     converted_string_1 = ' '.join(reversed(string_1.split(', ')))
 
-    if converted_string_1 in string:
+    if converted_string_1 in string or string == 'Comment':
+    #if string in string_1:
         # Next two lines are for testing, the prod version will just return False
         return_val = '<b style="color:red">{}</b>'.format(string)
         return format_html(return_val)
