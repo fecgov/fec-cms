@@ -574,9 +574,14 @@ def rulemaking(request, rm_no):
             if doc['doc_id'] == stage['doc_id']:
                 doc_type_label = stage['doc_type_label']
 
+        # Build entity lists for display in template
+        # Filter commenters separately to determine single vs. joint comment display
         new_rm_stage['doc_entities'] = []
+        new_rm_stage['commenters'] = []
         for entity in stage['doc_entities']:
             new_rm_stage['doc_entities'].append({'name': entity['name'], 'role': entity['role']})
+            if entity['role'] == 'Commenter':
+                new_rm_stage['commenters'].append({'name': entity['name'], 'role': entity['role']})
 
         # Get the parent label to use as fallback for sub-documents
         parent_stage_label = stage.get('level_1_label')
@@ -606,9 +611,14 @@ def rulemaking(request, rm_no):
                 new_sub_doc['url'] = doc['url'].replace('#', '%23') if doc.get('url') else ''
                 new_sub_doc['doc_description'] = doc.get('doc_description')
 
+                # Build entity lists for display in template
+                # Filter commenters separately to determine single vs. joint comment display
                 new_sub_doc['doc_entities'] = []
+                new_sub_doc['commenters'] = []
                 for entity in doc['doc_entities']:
                     new_sub_doc['doc_entities'].append({'name': entity['name'], 'role': entity['role']})
+                    if entity['role'] == 'Commenter':
+                        new_sub_doc['commenters'].append({'name': entity['name'], 'role': entity['role']})
 
                 sub_doc['documents'].append(new_sub_doc)
 

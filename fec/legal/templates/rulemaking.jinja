@@ -110,20 +110,24 @@
                   <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
                 {% endfor %}
               {% else %}
-                {% for entity in doc.doc_entities %}
-                  {% if doc.doc_entities|length == 1 %}
-                    <li>
-                    <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ entity.name }} | {{ entity.role }}</a>
-                    {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}<br>{{ doc.doc_description }}{% endif %}
-                    </li>
-                  {% else %}
-                    {% if loop.first %}
-                      <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">Joint comment</a>
-                      {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}<br>{{ doc.doc_description }}{% endif %}</li>
-                    {% endif %}
+                {# Check commenters count to determine display #}
+                {% if doc.commenters|length == 1 %}
+                  {# Single commenter: show commenter name #}
+                  <li>
+                  <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.commenters[0].name }} | {{ doc.commenters[0].role }}</a>
+                  {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}<br>{{ doc.doc_description }}{% endif %}
+                  </li>
+                  {% for entity in doc.doc_entities %}
                     <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
-                  {% endif %}
-                {% endfor %}
+                  {% endfor %}
+                {% else %}
+                  {# Multiple commenters: show "Joint comment" #}
+                  <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">Joint comment</a>
+                  {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}<br>{{ doc.doc_description }}{% endif %}</li>
+                  {% for entity in doc.doc_entities %}
+                    <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
+                  {% endfor %}
+                {% endif %}
               {% endif %}
             {% else %}
               <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a>
