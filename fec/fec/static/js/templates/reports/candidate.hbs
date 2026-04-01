@@ -1,4 +1,4 @@
-<div class="dt-details__sect">
+<div class="dt-details__sect col-span-all">
   <div class="dt-details__heading">
     <h4 class="dt-details__title">{{document_description}}
     {{#if is_amended}}
@@ -11,6 +11,8 @@
     {{/if}}
     {{{amendment_version}}}
   </div>
+</div>
+<div class="dt-details__sect">
   <table>
     {{#dtDetailsTableRow "Filer"~}}
       <a href="{{basePath}}/committee/{{committee_id}}">{{committee_name}}</a>

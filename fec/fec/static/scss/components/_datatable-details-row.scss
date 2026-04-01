@@ -3,14 +3,8 @@
   position: relative;
 
   .dt-details__nav {
-    text-align: right;
+    margin-bottom: 2rem;
     width: 100%;
-
-    @include media($xl) {
-      position: absolute;
-      right: 0;
-      width: 50%;
-    }
   }
 
   .dt-details__sect {
@@ -39,6 +33,10 @@
     .dt-details__title {
       margin-bottom: 0;
     }
+  }
+
+  .col-span-all {
+    column-span: all;
   }
 
   table {
@@ -80,14 +78,13 @@
   }
   @include media($med) {
     .dt-details__content {
-      display: flex;
-      flex-wrap: wrap;
-      
-      & > .dt-details__sect {
-        width: 50%;
-      }
-      & > .dt-details__title {
-        width: 100%;
+      // If there are more than 2 children, 
+      &:has(.dt-details__sect:nth-of-type(2)) {
+        columns: 2;
+
+        & > .dt-details__sect {
+          break-inside: avoid-column;
+        }
       }
       // For full-width row
       & > .dt-details__sect-full {

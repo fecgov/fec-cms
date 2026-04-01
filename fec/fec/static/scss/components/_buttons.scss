@@ -447,7 +447,7 @@
 tr.dt-hasChild .button--dt-details {
   background-position-y: 5%;
   background-size: 90%;
-  @include u-icon($minus-circle, $primary, 2rem, 2rem, contain);
+  @include u-icon($minus-circle, $inverse, 2rem, 2rem, contain);
 }
 
 .button--nav-panel {
