@@ -38,6 +38,24 @@
 
 <div class="dt-details__sect">
   <table>
+    <caption>Recipient information</caption>
+    {{#dtDetailsTableRow "Committee"~}}
+      <a href="{{basePath}}/committee/{{committee.committee_id}}/">{{committee.name}}</a>
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Political party"~}}
+      {{committee.party_full}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Type"~}}
+      {{committee.committee_type_full}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "State"~}}
+      {{committee.state_full}}
+    {{/dtDetailsTableRow}}
+  </table>
+</div>
+
+<div class="dt-details__sect">
+  <table>
     <caption>Receipt information</caption>
     {{#dtDetailsTableRow "Amount"~}}
       {{{currency contribution_receipt_amount}}}
@@ -58,24 +76,6 @@
     {{/if}}
     {{#dtDetailsTableRow "Election type"~}}
       {{fec_election_type_desc}}
-    {{/dtDetailsTableRow}}
-  </table>
-</div>
-
-<div class="dt-details__sect">
-  <table>
-    <caption>Recipient information</caption>
-    {{#dtDetailsTableRow "Committee"~}}
-      <a href="{{basePath}}/committee/{{committee.committee_id}}/">{{committee.name}}</a>
-    {{/dtDetailsTableRow}}
-    {{#dtDetailsTableRow "Political party"~}}
-      {{committee.party_full}}
-    {{/dtDetailsTableRow}}
-    {{#dtDetailsTableRow "Type"~}}
-      {{committee.committee_type_full}}
-    {{/dtDetailsTableRow}}
-    {{#dtDetailsTableRow "State"~}}
-      {{committee.state_full}}
     {{/dtDetailsTableRow}}
   </table>
 </div>

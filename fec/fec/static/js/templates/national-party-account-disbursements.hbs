@@ -19,6 +19,24 @@ Template for national party accounts disbursements datatable details row
 
 <div class="dt-details__sect">
   <table>
+    <caption>Spender information</caption>
+    {{#dtDetailsTableRow "Name"~}}
+      <a href="{{entityUrl this type="committee"}}">{{committee_name}}</a>
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Designation"~}}
+      {{spender_committee_designation}} {{!-- TODO: this will change to spender_committee_designation_full --}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Treasurer"~}}
+      {{treasurer_name}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "State"~}}
+      {{state_full}}
+    {{/dtDetailsTableRow}}
+  </table>
+</div>
+
+<div class="dt-details__sect">
+  <table>
     <caption>Disbursement information</caption>
     {{#dtDetailsTableRow "Amount"~}}
       {{currency disbursement_amount}}
@@ -46,24 +64,6 @@ Template for national party accounts disbursements datatable details row
     {{/dtDetailsTableRow}}
     {{#dtDetailsTableRow "Reported on"~}}
       {{filing_form}} on Line {{line_number}}
-    {{/dtDetailsTableRow}}
-  </table>
-</div>
-
-<div class="dt-details__sect">
-  <table>
-    <caption>Spender information</caption>
-    {{#dtDetailsTableRow "Name"~}}
-      <a href="{{entityUrl this type="committee"}}">{{committee_name}}</a>
-    {{/dtDetailsTableRow}}
-    {{#dtDetailsTableRow "Designation"~}}
-      {{spender_committee_designation}} {{!-- TODO: this will change to spender_committee_designation_full --}}
-    {{/dtDetailsTableRow}}
-    {{#dtDetailsTableRow "Treasurer"~}}
-      {{treasurer_name}}
-    {{/dtDetailsTableRow}}
-    {{#dtDetailsTableRow "State"~}}
-      {{state_full}}
     {{/dtDetailsTableRow}}
   </table>
 </div>

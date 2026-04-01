@@ -14,6 +14,24 @@
 
 <div class="dt-details__sect">
   <table>
+    <caption>Committee information</caption>
+    {{#dtDetailsTableRow "Name"}}
+      <a href="{{basePath}}/committee/{{committee.committee_id}}">{{committee.name}}</a>
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Designation"~}}
+      {{committee.designation_full}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Most recent treasurer"~}}
+      {{committee.treasurer_name}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Committee city, state and ZIP code"~}}
+      {{committee.city}}, {{committee.state}}  {{zipCode committee.zip}}
+    {{/dtDetailsTableRow}}
+  </table>
+</div>
+
+<div class="dt-details__sect">
+  <table>
     <caption>Transaction information</caption>
     {{#dtDetailsTableRow "Activity or event identifier"~}}
       {{{activity_or_event}}}
@@ -38,24 +56,6 @@
     {{/dtDetailsTableRow}}
     {{#dtDetailsTableRow "Allocated activity or event year-to-date"~}}
       {{{currency event_amount_year_to_date}}}
-    {{/dtDetailsTableRow}}
-  </table>
-</div>
-
-<div class="dt-details__sect">
-  <table>
-    <caption>Committee information</caption>
-    {{#dtDetailsTableRow "Name"}}
-      <a href="{{basePath}}/committee/{{committee.committee_id}}">{{committee.name}}</a>
-    {{/dtDetailsTableRow}}
-    {{#dtDetailsTableRow "Designation"~}}
-      {{committee.designation_full}}
-    {{/dtDetailsTableRow}}
-    {{#dtDetailsTableRow "Most recent treasurer"~}}
-      {{committee.treasurer_name}}
-    {{/dtDetailsTableRow}}
-    {{#dtDetailsTableRow "Committee city, state and ZIP code"~}}
-      {{committee.city}}, {{committee.state}}  {{zipCode committee.zip}}
     {{/dtDetailsTableRow}}
   </table>
 </div>

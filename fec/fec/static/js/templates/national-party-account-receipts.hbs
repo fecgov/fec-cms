@@ -32,6 +32,24 @@ Template for national party accounts disbursements datatable details row
 
 <div class="dt-details__sect">
   <table>
+    <caption>Recipient information</caption>
+    {{#dtDetailsTableRow "Committee"~}}
+      <a href="{{entityUrl this type="committee"}}">{{committee_name}}</a>
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Political party"~}}
+      {{party_full}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Type"~}}
+      {{recipient_committee_type_full}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "State"~}}
+        {{state_full}}
+    {{/dtDetailsTableRow}}
+  </table>
+</div>
+
+<div class="dt-details__sect">
+  <table>
     <caption>Receipt information</caption>
     {{#dtDetailsTableRow "Amount"~}}
       {{{currency contribution_receipt_amount}}}
@@ -53,24 +71,6 @@ Template for national party accounts disbursements datatable details row
     {{/dtDetailsTableRow}}
     {{#dtDetailsTableRow "Election type"~}}
       {{fec_election_type_desc}}
-    {{/dtDetailsTableRow}}
-  </table>
-</div>
-
-<div class="dt-details__sect">
-  <table>
-    <caption>Recipient information</caption>
-    {{#dtDetailsTableRow "Committee"~}}
-      <a href="{{entityUrl this type="committee"}}">{{committee_name}}</a>
-    {{/dtDetailsTableRow}}
-    {{#dtDetailsTableRow "Political party"~}}
-      {{party_full}}
-    {{/dtDetailsTableRow}}
-    {{#dtDetailsTableRow "Type"~}}
-      {{recipient_committee_type_full}}
-    {{/dtDetailsTableRow}}
-    {{#dtDetailsTableRow "State"~}}
-        {{state_full}}
     {{/dtDetailsTableRow}}
   </table>
 </div>
