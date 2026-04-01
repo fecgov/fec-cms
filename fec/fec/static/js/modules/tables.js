@@ -1,3 +1,14 @@
+/**
+ * tables.js contains three classes:
+ *
+ * DataTable_FEC - A custom class that extends datatables.net-responsive-dt
+ *   across the site, every time "datatables" is referenced, it's DataTable_FEC, not datatables.net*
+ *
+ * OffsetPaginator -
+ *
+ * SeekPaginator -
+ */
+
 import { default as _chain } from 'underscore/modules/chain.js';
 import { default as _clone } from 'underscore/modules/clone.js';
 import { default as _debounce } from 'underscore/modules/debounce.js';
@@ -13,7 +24,7 @@ import { default as _pairs } from 'underscore/modules/pairs.js';
 import { default as _pluck } from 'underscore/modules/pluck.js';
 import 'datatables.net-responsive-dt';
 
-import { removeTabindex, restoreTabindex } from './accessibility.js';
+// import { removeTabindex, restoreTabindex } from './accessibility.js';
 import { sizeColumns, stateColumns } from './column-helpers.js';
 import { download, isPending, pendingCount } from './download.js';
 import Dropdown from './dropdowns.js';
@@ -120,7 +131,7 @@ export function getCycle(value, meta) {
  *
  * @param {*} order
  * @param {*} column
- * @returns
+ * @returns {string}
  */
 export function mapSort(order, column) {
   return _map(order, function(item) {
@@ -131,23 +142,25 @@ export function mapSort(order, column) {
     return name;
   });
 }
+
 let pagination_legal;
-let legal_type;
+
+/**
+ * Returns the number of results if <= 500K, otherwise rounds to the nearest 1K
+ * @param {*} response
+ * @returns {number} Number of real or estimated results
+ */
 export function getCount(response) {
-  let pagination_count;
+  let pagination_count = response.pagination.count; // eslint-disable-line camelcase
   if (!response.pagination) {
      pagination_legal = true;
-     legal_type = Object.keys(response)[0];
+     const legal_type = Object.keys(response)[0];
      const legal_type_count = `total_${legal_type}`;
      pagination_count = response[legal_type_count];
   }
-  else {
-    pagination_count = response.pagination.count;
-  }
 
-  if (pagination_count > 500000) {
+  if (pagination_count > 500000)
     pagination_count = Math.round(response.pagination.count / 1000) * 1000; // eslint-disable-line camelcase
-  }
 
   return pagination_count; // eslint-disable-line camelcase
 }
@@ -177,19 +190,19 @@ function identity(value) {
   return value;
 }
 
-/** Selector class name for the modal trigger */
-export const MODAL_TRIGGER_CLASS = 'js-panel-trigger';
+/** Selector class name for the details trigger */
+export const DETAILS_TRIGGER_CLASS = 'js-dt-details-trigger';
 
 /** String of html that becomes the 'Toggle details' button */
 export const MODAL_TRIGGER_HTML =
-  `<button class="js-panel-button button--panel"><span class="u-visually-hidden">Toggle details</span></button>`;
+  `<button class="button--dt-details"><span class="u-visually-hidden">Toggle details</span></button>`;
 
 /**
  * Adds MODAL_TRIGGER_CLASS and `row--has-panel` classes to the given element
  * @param {HTMLTableRowElement} row
  */
 export function modalRenderRow(row) {
-  row.classList.add(MODAL_TRIGGER_CLASS, 'row--has-panel');
+  row.classList.add(DETAILS_TRIGGER_CLASS, 'row--has-details');
 }
 
 /**
@@ -203,89 +216,69 @@ export function modalRenderFactory(template, fetch) {
 
   return function(api, data, response) {
     const $table = $(api.table().node());
-    const $modal = $('#datatable-modal');
-    const $main = $table.closest('.panel__main');
-    // Move the modal to the results div.
-    $modal.appendTo($main);
-    $modal.css('display', 'block');
 
     // Add a class to the .dataTables_wrapper
     $table.closest('.dataTables_wrapper').addClass('dataTables_wrapper--panel');
 
     $table.off(
       'click keypress',
-      '.js-panel-toggle tr.' + MODAL_TRIGGER_CLASS,
+      `.js-panel-toggle tr.${DETAILS_TRIGGER_CLASS}`,
       callback
     );
     callback = function(e) {
       if (e.which === 13 || e.type === 'click') {
         // Note: Use `currentTarget` to get parent row, since the target column
         // may have been moved since the triggering event
-        const $row = $(e.currentTarget);
+        const $row = api.row(e.currentTarget);
         const $target = $(e.target);
-        if ($target.is('a')) {
-          return true;
-        }
-        if (!$target.closest('td').hasClass('dataTables_empty')) {
-          const index = api.row($row).index();
-          $.when(fetch(response.results[index])).done(function(fetched) {
-            $modal.find('.js-panel-content').html(template(fetched));
-            $modal.attr('aria-hidden', 'false');
-            $row.siblings().toggleClass('row-active', false);
-            $row.toggleClass('row-active', true);
-            $('body').toggleClass('panel-active', true);
-            restoreTabindex($modal);
-            const hideColumns = api.columns('.hide-panel');
-            hideColumns.visible(false);
 
-            // Populate the pdf button if there is one
-            if (fetched.pdf_url) {
-              $modal.find('.js-pdf_url').attr('href', fetched.pdf_url);
-            } else {
-              $modal.find('.js-pdf_url').remove();
-            }
-            // Set focus on the close button
-            $('.js-hide').trigger('focus');
+        // If the click target is a link, stop here. Don't toggle any rows
+        if ($target.is('a')) return true;
 
-            // When under $large-screen
-            // TODO figure way to share these values with CSS.
-            if ($(document).width() < 980) {
-              api.columns('.hide-panel-tablet').visible(false);
-            }
-          });
-        }
+        // Hide any other open rows
+        // For each row
+        let toggledSelfClosed = false;
+        api.rows('.dt-hasChild').every((i) => {
+
+          // If the clicked element is this row in the loop and it has a child row, remember that we only toggled it
+          if (this == api.row(i).node() && api.row(i).child.isShown()) toggledSelfClosed = true;
+
+          // Close every row
+          api.row(i).child.hide(); // close its child
+
+        });
+
+        // If we only toggled a row closed, no reason to continue with loading data, etc
+        if (toggledSelfClosed) return; // Stop here
+
+        // If it's an empty datatable, return and be done.
+        if ($target.closest('td').hasClass('dataTables_empty')) return;
+
+        // Otherwise, get the data to build a child row
+        const row = api.row($row);
+        const index = row.index();
+
+        $.when(fetch(response.results[index])).done(function(fetched) {
+          const parentRowsEvenOddClass = e.currentTarget.classList.contains('even') ? 'even' : 'odd';
+
+          const newChildRowContent = template(fetched);
+          const newChildRowHtml = childRow(newChildRowContent, fetched.pdf_url || '');
+          const newChildRow = row.child(newChildRowHtml, `${parentRowsEvenOddClass} dt-isChild`).show();
+
+          // Aria link the normal row and its child/details row
+          $(newChildRow).attr('id', `details-for-tr-${index}`);
+          $(row.node()).attr('aria-details', `details-for-tr-${index}`);
+        });
       }
     };
     $table.on(
       'click keypress',
-      '.js-panel-toggle tr.' + MODAL_TRIGGER_CLASS,
+      `.js-panel-toggle tr.${DETAILS_TRIGGER_CLASS}`,
       callback
     );
-
-    $modal.on('click', '.js-panel-close', function(e) {
-      e.preventDefault();
-      hidePanel(api, $modal);
-    });
   };
 }
 
-function hidePanel(api, $modal) {
-  $('.row-active .js-panel-button').trigger('focus');
-  $('.js-panel-toggle tr').toggleClass('row-active', false);
-  $('body').toggleClass('panel-active', false);
-  $modal.attr('aria-hidden', 'true');
-
-  if ($(document).width() > 640) {
-    api.columns('.hide-panel-tablet').visible(true);
-    api.columns('.hide-panel.min-tablet').visible(true);
-  }
-
-  if ($(document).width() > 980) {
-    api.columns('.hide-panel').visible(true);
-  }
-
-  removeTabindex($modal);
-}
 /**
  *
  * @param {?string} template
@@ -333,7 +326,6 @@ export function barsAfterRender(template, api) {
 function updateOnChange($form, api) {
   function onChange(e) {
     e.preventDefault();
-    hidePanel(api, $('#datatable-modal'));
     api.ajax.reload();
 
     updateChangedEl = e.target;
@@ -473,19 +465,18 @@ export function OffsetPaginator() {/* */}
  * @returns Object with number values for `per_page` and `page`
  */
 OffsetPaginator.prototype.mapQuery = function(data) {
-  if (pagination_legal){
+  if (pagination_legal) {
     return {
-    hits_returned: data.length, // eslint-disable-line camelcase
-    from_hit: Math.floor(data.start),
-    q_exclude: data.q_exclude,
-    q: data.q
-     };
-   }
-  else {
+      hits_returned: data.length, // eslint-disable-line camelcase
+      from_hit: Math.floor(data.start),
+      q_exclude: data.q_exclude,
+      q: data.q
+    };
+  } else {
     return {
-    per_page: data.length, // eslint-disable-line camelcase
-    page: Math.floor(data.start / data.length) + 1
-  };
+      per_page: data.length, // eslint-disable-line camelcase
+      page: Math.floor(data.start / data.length) + 1
+    };
   }
 };
 
@@ -524,10 +515,9 @@ SeekPaginator.prototype.mapQuery = function(data, query) {
   }
   const indexes = this.getIndexes(data.length, data.start);
   let len;
-  if (pagination_legal){
+  if (pagination_legal) {
     len = { hits_returned: data.length };
-  }
-  else {
+  } else {
     len = { per_page: data.length };
   }
   return _extend(
@@ -881,7 +871,7 @@ DataTable_FEC.prototype.fetch = function(data, callback) {
         .addClass('is-active-filter')
         .removeClass('is-disabled-filter');
 
-      // Datatables that should have limits and reached the maxiumum
+      // Datatables that should have limits and reached the maximum
       // filter limit should display the field's error message
       // and disable that field's filter
       if (
@@ -1163,7 +1153,7 @@ DataTable_FEC.prototype.handleSwitch = function(e, opts) {
 
 /**
  * Used for…
- * @param {string} className - Selector text, including the leading period (ex: `.data-table` instead of `data-table`)
+ * @param {string} tableElementSelector - Selector text, including the leading period (ex: `.data-table` instead of `data-table`)
  * @param {Object} pageContext - The window.context data object
  * @param {string} pageContext.candidateID
  * @param {number} pageContext.cycle
@@ -1173,8 +1163,8 @@ DataTable_FEC.prototype.handleSwitch = function(e, opts) {
  * @param {string} pageContext.timePeriod - In the format of `2023-2024`
  * @param {Object} options - spendingTableOpts from {@link /fec/fec/static/js/pages/elections.js}
  */
-export function initSpendingTables(className, pageContext, options) {
-  $(className).each(function(index, table) {
+export function initSpendingTables(tableElementSelector, pageContext, options) {
+  $(tableElementSelector).each(function(index, table) {
     const $table = $(table);
     const dataType = $table.attr('data-type');
     const opts = options[dataType];
@@ -1406,4 +1396,20 @@ function drawContributionsByStateTable(selected, pageContext) {
       )
     );
   });
+}
+
+/**
+ * Build the HTML for the child row / details row
+ * @param {string} contents
+ * @returns {string} a string to be used as the innerHTML of the child/details row
+ */
+function childRow(contents, pdf_url) {
+  return `<div class="dt-details">
+    <div class="dt-details__nav">
+      <a href="${pdf_url}" class="dt-details__link button--small button--standard js-pdf_url" target="_blank">Open image</a>
+    </div>
+    <div class="dt-details__content">
+      ${contents}
+    </div>
+  </div>`;
 }
