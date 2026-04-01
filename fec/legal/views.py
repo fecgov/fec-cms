@@ -840,7 +840,7 @@ def legal_search(request):
                 results['regulations_returned'] = ('3' if results['total_regulations'] > 3
                                                    else results['total_regulations'])
 
-        if settings.FEATURES['rulemakings'] and (result_type == 'all' or result_type == 'rulemakings'):
+        if (result_type == 'all' or result_type == 'rulemakings'):
             filters = {}
             url = '/rulemaking/search/'
             filters['q'] = query
@@ -1393,8 +1393,6 @@ def get_legal_category_order(results, result_type):
         results to the end.
     """
     categories = ['admin_fines', 'advisory_opinions', 'adrs', 'murs', 'regulations', 'rulemakings', 'statutes']
-    if not settings.FEATURES['rulemakings']:
-        categories.remove('rulemakings')
     category_order = [x for x in categories if results.get('total_' + x, 0) > 0] + \
         [x for x in categories if results.get('total_' + x, 0) == 0]
 
