@@ -118,7 +118,7 @@
                      <br>{{ doc.doc_description }} 
                     {% endif %}
                   </li>
-                  {% for entity in doc.doc_entities if entity.role != 'Commenter' %}
+                  {% for entity in doc.doc_entities %}
                     <li class="indent">{{ entity.name }} | {{ entity.role }}</li>
                   {% endfor %}
                 {% else %}
