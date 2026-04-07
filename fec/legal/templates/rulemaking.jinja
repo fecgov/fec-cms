@@ -114,7 +114,7 @@
                 {%- if doc.commenters|length == 1 -%}
                   {# Single commenter: show commenter name #}
                   <li>
-                  <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.commenters[0].name }} | {{ doc.commenters[0].role }}</a>
+                  <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.commenters[0].name }} <span aria-label=";">|</span> {{ doc.commenters[0].role }}</a>
                   {%- if doc.doc_description and 'pdf' not in doc.doc_description.lower() -%}<br>{{ doc.doc_description }}{%- endif -%}
                   </li>
                   {%- for entity in doc.doc_entities -%}
