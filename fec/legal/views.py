@@ -21,23 +21,6 @@ from fec import settings  # rulemaking comments
 
 logger = logging.getLogger(__name__)
 
-# Tier precedence order for sorting
-# Notice of Disposition (tier 15) has highest priority
-TIER_PRECEDENCE = {
-    15: 0,  # Notice of Disposition (highest pråiority)
-    5: 1,   # Advance NPRM
-    13: 2,  # Interim Final Rules (swapped with tier 14)
-    14: 3,  # Notice of Availability
-    2: 4,   # NPRM
-    17: 5,  # Supplemental NPRM
-    3: 6,   # Notice of Hearing
-    6: 7,   # Notice of Change of Hearing Date
-    8: 8,   # Correction to Final Rules
-    9: 9,   # Correction to Final Rules and E&J
-    1: 10,  # Final Rules
-    10: 11,  # Explanation and Justification
-}
-
 
 def get_s3_client():
     return boto3.client(
@@ -554,7 +537,6 @@ def rulemaking(request, rm_no):
         new_rm_stage = {}
         new_rm_stage['doc_date'] = stage['doc_date']
         new_rm_stage['doc_id'] = stage['doc_id']
-        new_rm_stage['level_1'] = stage.get('level_1')
 
         # Label priority: doc_type_label (if valid) > doc_description > filename > level_1_label > "Document"
         # Skip doc_type_label if it contains "NO TIER ENTRY" or is null
@@ -622,36 +604,9 @@ def rulemaking(request, rm_no):
 
                 sub_doc['documents'].append(new_sub_doc)
 
-            # Sort documents by date in ascending order (oldest first)
-            sub_doc['documents'].sort(key=lambda x: x['doc_date'] if x['doc_date'] else '')
-
             new_rm_stage['secondary_docs'].append(sub_doc)
 
         documents.append(new_rm_stage)
-
-    # If doc_date is null, use the date from the LAST sub-document
-    # If still null (no sub-docs), use current date
-    # Then sort by date descending with tier precedence as tiebreaker
-    from datetime import date as date_class
-    current_date_str = date_class.today().isoformat()
-
-    for doc in documents:
-        if not doc['doc_date'] and doc.get('secondary_docs'):
-            # Get the last sub-document's date from any secondary_docs group
-            for sec_doc_group in doc['secondary_docs']:
-                if sec_doc_group.get('documents'):
-                    last_sub_doc = sec_doc_group['documents'][-1]
-                    doc['sort_date'] = last_sub_doc.get('doc_date') or current_date_str
-                    break
-            else:
-                # No sub-docs with documents, use current date
-                doc['sort_date'] = current_date_str
-        else:
-            doc['sort_date'] = doc['doc_date'] or current_date_str
-
-    # Sort by date descending, then by tier precedence ascending (for equal dates)
-    # Negate tier precedence so it sorts ascending when overall sort is reversed
-    documents.sort(key=lambda x: (x['sort_date'], -TIER_PRECEDENCE.get(x.get('level_1'), 999)), reverse=True)
 
     # Process Press & Public Guidance documents (doc_category_id=8)
     press_public_guidance_documents = []
@@ -690,9 +645,6 @@ def rulemaking(request, rm_no):
 
     # Add "Other" category to documents list if there are other no-tier documents
     if other_no_tier_documents:
-        # Sort other no-tier documents by date in descending order
-        other_no_tier_documents.sort(key=lambda x: x['doc_date'] if x['doc_date'] else '', reverse=True)
-
         other_category = {
             'doc_date': None,
             'doc_id': None,
