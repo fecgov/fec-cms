@@ -1,12 +1,12 @@
-{% extends "layouts/legal-main.jinja" %}
-{% import 'macros/breadcrumbs.jinja' as breadcrumb %}
-{% import 'macros/legal.jinja' as legal %}
- {% set breadcrumb_links=[('/legal-resources/', 'Legal resources'), ('/legal/search/rulemakings/', 'Rulemakings')] %}
- {% block title %}Rulemaking #{{ rm_no }}{% endblock %}
- {% block css %}
+{%- extends "layouts/legal-main.jinja" -%}
+{%- import 'macros/breadcrumbs.jinja' as breadcrumb -%}
+{%- import 'macros/legal.jinja' as legal -%}
+ {%- set breadcrumb_links=[('/legal-resources/', 'Legal resources'), ('/legal/search/rulemakings/', 'Rulemakings')] -%}
+ {%- block title -%}Rulemaking #{{ rm_no }}{%- endblock -%}
+ {%- block css -%}
 <link rel="stylesheet" type="text/css" href="{{ path_for_css('legal-common.css') }}" />
-{% endblock %}
-{% block body %}
+{%- endblock -%}
+{%- block body -%}
 <header class="page-header slab slab--primary">
   {{ breadcrumb.breadcrumbs(rm_number, breadcrumb_links) }}
 </header>
@@ -20,22 +20,22 @@
     </div>
   </div>
   <div class="embedded-pdf-list">
-    {% if FEATURES.rulemakings_commenting %}{# feature flag to hide the commenting block -#}
-    {% if not docs_that_can_receive_comments -%}
+    {%- if FEATURES.rulemakings_commenting -%}{# feature flag to hide the commenting block -#}
+    {%- if not docs_that_can_receive_comments -%}
     <div class="submit-comments">
       <div class="label">Not open for comment</div>
     </div>
-    {% else %}
-      {% for doc_for_comments in docs_that_can_receive_comments %}
+    {%- else -%}
+      {%- for doc_for_comments in docs_that_can_receive_comments -%}
     <div class="submit-comments">
       <div class="label">Open for comment: {{ doc_for_comments.label }}</div>
       <div class="label sublabel t-sans">Comment deadline: {{ doc_for_comments.doc_comment_close_date|date_full(time_tag=True) }}</div>
       <a class="button--cta" href="/legal/rulemakings/{{ rm_no }}/{{ doc_for_comments.doc_id }}/add-comments/" target="_blank">Submit a comment</a>
     </div>
-      {% endfor -%}
-    {% endif -%}{# end if docs can receive comments #}
-    {% endif -%}{# end feature flag to hide commenting block -#}
-    {% if key_documents %}{# Include the Key Documents bits only if there are docs to include #}
+      {%- endfor -%}
+    {%- endif -%}{# end if docs can receive comments #}
+    {%- endif -%}{# end feature flag to hide commenting block -#}
+    {%- if key_documents -%}{# Include the Key Documents bits only if there are docs to include #}
     <h2>Key documents</h2>
     <table class="simple-table simple-table--display">
       <thead>
@@ -45,15 +45,15 @@
         </tr>
       </thead>
       <tbody>
-        {% for doc in key_documents %}
+        {%- for doc in key_documents -%}
         <tr>
           <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a></td>
           <td class="date">{{ doc.doc_date|date if doc.doc_date else '' }}</td>
         </tr>
-        {% endfor %}
+        {%- endfor -%}
       </tbody>
     </table>
-    {% endif %}
+    {%- endif -%}
 
     <h2>All documents</h2>
     <table class="simple-table simple-table--display">
@@ -64,8 +64,8 @@
         </tr>
       </thead>
       <tbody>
-{% for docL1 in documents %}
-  {% set rowshading = loop.cycle('odd', 'even') %}
+{%- for docL1 in documents -%}
+  {%- set rowshading = loop.cycle('odd', 'even') -%}
   <tr class="level-1 {{ rowshading }}">
     <td>
       <ul>
@@ -90,63 +90,63 @@
     <td>{{ docL1.doc_date|date if docL1.doc_date else '' }}</td>
   </tr>
   {# If there's no level 2 list, let's include the description #}
-  {# {% if not docL1.secondary_docs %}
+  {# {%- if not docL1.secondary_docs -%}
     <tr class="level-2 {{ rowshading }}"><td>{{ docL1.label }}</td><td></td></tr>
-  {% endif %} #}
+  {%- endif -%} #}
 
-  {% for subcat in docL1.secondary_docs %}
+  {%- for subcat in docL1.secondary_docs -%}
     {# Only render level-2 if there's a subcategory label. Skip for "Other" category which has empty label. #}
-    {% if subcat.label %}
+    {%- if subcat.label -%}
     <tr class="level-2 {{ rowshading }}"><td>{{ subcat.label }}</td><td></td></tr>
-    {% endif %}
-    {% for doc in subcat.documents %}
+    {%- endif -%}
+    {%- for doc in subcat.documents -%}
       <tr class="level-3 {{ rowshading }}">
         <td>
           <ul>
-            {% if (doc.label == 'Comments' or doc.label == 'Hearing Schedule') and doc.doc_entities %}
-              {% if doc.label == 'Hearing Schedule' %}
+            {%- if (doc.label == 'Comments' or doc.label == 'Hearing Schedule') and doc.doc_entities -%}
+              {%- if doc.label == 'Hearing Schedule' -%}
                 <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a></li>
-                {% for entity in doc.doc_entities %}
+                {%- for entity in doc.doc_entities -%}
                   <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
-                {% endfor %}
-              {% else %}
+                {%- endfor -%}
+              {%- else -%}
                 {# Check commenters count to determine display #}
-                {% if doc.commenters|length == 1 %}
+                {%- if doc.commenters|length == 1 -%}
                   {# Single commenter: show commenter name #}
                   <li>
                   <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.commenters[0].name }} | {{ doc.commenters[0].role }}</a>
-                  {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}<br>{{ doc.doc_description }}{% endif %}
+                  {%- if doc.doc_description and 'pdf' not in doc.doc_description.lower() -%}<br>{{ doc.doc_description }}{%- endif -%}
                   </li>
-                  {% for entity in doc.doc_entities %}
+                  {%- for entity in doc.doc_entities -%}
                     <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
-                  {% endfor %}
-                {% else %}
+                  {%- endfor -%}
+                {%- else -%}
                   {# Multiple commenters: show "Joint comment" #}
                   <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">Joint comment</a>
-                  {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}<br>{{ doc.doc_description }}{% endif %}</li>
-                  {% for entity in doc.doc_entities %}
+                  {%- if doc.doc_description and 'pdf' not in doc.doc_description.lower() -%}<br>{{ doc.doc_description }}{%- endif -%}</li>
+                  {%- for entity in doc.doc_entities -%}
                     <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
-                  {% endfor %}
-                {% endif %}
-              {% endif %}
-            {% else %}
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- else -%}
               <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a>
-              {% if doc.doc_description and 'pdf' not in doc.doc_description.lower() %}
+              {%- if doc.doc_description and 'pdf' not in doc.doc_description.lower() -%}
                 <br>{{ doc.doc_description }}
-              {% endif %}
-            {% endif %}
+              {%- endif -%}
+            {%- endif -%}
           </ul>
         </td>
         <td class="date">{{ doc.doc_date|date if doc.doc_date else '' }}</td>
       </tr>
-    {% endfor %}
-  {% endfor %}
-{% endfor %}
+    {%- endfor -%}
+  {%- endfor -%}
+{%- endfor -%}
       </tbody>
     </table>
     
     {# Only show if there are docs to include #}
-    {% if press_public_guidance_documents %}
+    {%- if press_public_guidance_documents -%}
     <h2>Press and public guidance</h2>
     <table class="simple-table simple-table--display">
       <thead>
@@ -155,14 +155,14 @@
         </tr>
       </thead>
       <tbody>
-        {% for doc in press_public_guidance_documents %}
+        {%- for doc in press_public_guidance_documents -%}
         <tr class="{{ loop.cycle('odd', 'even') }}">
           <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a></td>
         </tr>
-        {% endfor %}
+        {%- endfor -%}
       </tbody>
     </table>
-    {% endif %}
+    {%- endif -%}
 
     <h2>Entities</h2>
     <table class="simple-table simple-table--display">
@@ -173,12 +173,12 @@
         </tr>
       </thead>
       <tbody>
-        {% for entity in rm_entities %}
+        {%- for entity in rm_entities -%}
         <tr class="{{ loop.cycle('odd', 'even') }}" data-sort="{{ loop.index0 }}">
           <td>{{ entity.name }}</td>
           <td>{{ entity.role }}</td>
         </tr>
-        {% endfor %}
+        {%- endfor -%}
       </tbody>
     </table>
   </div>
@@ -191,9 +191,9 @@
     </div>
   </div>
 </div>
-{% endblock %}
+{%- endblock -%}
 
-{% block scripts %}
+{%- block scripts -%}
 {#- legal-init and global chunks are loaded by legal-main.jinja -#}
 {{ tags_for_js_chunks('rulemaking-single.js', '')|safe }}
-{% endblock %}
+{%- endblock -%}
