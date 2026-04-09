@@ -104,4 +104,6 @@ if settings.FEATURES['rulemakings_commenting'] and settings.FEATURES['rulemaking
 # Legal document redirect endpoint
 urlpatterns += [
     re_path(r'^legal/search/documents/$', views.legal_document_redirect, name='legal_document_redirect'),
+    re_path(r'^legal/search/rulemakings/documents/$', views.rulemaking_document_redirect,
+            name='rulemaking_document_redirect'),
 ]
