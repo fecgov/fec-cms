@@ -988,7 +988,7 @@ $(function() {
                 cycle: cycle,
                 committee_id: committeeId,
                 form_type: ['F5', 'F24', 'F6', 'F9', 'F10', 'F11', 'RFAI'],
-                report_type: ['-Q1', '-Q2', '-Q3', '-YE', '24', '48'],
+                report_type: ['-Q1', '-Q2', '-Q3', '-YE', '-TER', '-30G'],
                 /* Performing an include would only show RFAI form types.
                 For this reason, excludes need to be used for request_type
 
