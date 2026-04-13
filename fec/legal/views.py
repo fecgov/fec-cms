@@ -1430,3 +1430,34 @@ def legal_document_redirect(request):
     except Exception as e:
         logger.error(f"Error searching for filename {filename}: {e}")
         raise Http404("Unable to retrieve document information")
+
+
+def rulemaking_document_redirect(request):
+    """
+    Redirects to the appropriate rulemaking document on the main website based on doc_id.
+    This endpoint is designed to work with proxy redirects from legacy domains.
+
+    Query parameter:
+    - doc_id: The rulemaking document ID
+
+    Example:
+    - /legal/search/rulemakings/documents/?doc_id=420899
+    """
+    doc_id = request.GET.get('doc_id', '').strip()
+    if not doc_id:
+        raise Http404("doc_id parameter is required")
+
+    try:
+        doc_id = int(doc_id)
+    except ValueError:
+        raise Http404("doc_id parameter must be an integer")
+
+    try:
+        document_url = api_caller.find_rulemaking_document_by_doc_id(doc_id)
+        if document_url:
+            return HttpResponseRedirect(document_url)
+        else:
+            raise Http404(f"Rulemaking document with doc_id '{doc_id}' not found")
+    except Exception as e:
+        logger.error(f"Error searching for rulemaking doc_id {doc_id}: {e}")
+        raise Http404("Unable to retrieve rulemaking document information")
