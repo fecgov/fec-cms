@@ -29,9 +29,7 @@
                <option value="adrs">Alternative Dispute Resolutions</option>
                <option value="murs">Closed Matters Under Review</option>
                <option value="regulations">Regulations</option>
-               {% if settings.FEATURES.rulemakings %}
                <option value="rulemakings">Rulemakings</option>
-               {% endif %}
                <option value="statutes">Statutes</option>
             </select>
             <input type="text" name="search" class="combo__input" aria-label="Search">
@@ -52,9 +50,7 @@
           <!--<li><a href="/data/audit">Audits</a></li> -->
           <li><a href="/data/legal/search/enforcement/">Closed Matters Under Review</a></li>
           <li><a href="/data/legal/search/regulations/">Regulations</a></li>
-          {% if settings.FEATURES.rulemakings %}
           <li><a href="/legal/search/rulemakings/">Rulemakings</a></li>
-          {% endif %}
           <li><a href="/data/legal/search/statutes">Statutes</a></li>
         </ul>
       </div>

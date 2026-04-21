@@ -80,28 +80,27 @@ if settings.FEATURES['afs']:
     ]
 
 # Rulemakings - datatables
-if settings.FEATURES['rulemakings']:
-    urlpatterns += [
-        re_path(r'^legal/search/rulemakings/$', views_datatables.rulemaking),  # datatables
-    ]
+urlpatterns += [
+    re_path(r'^legal/search/rulemakings/$', views_datatables.rulemaking),  # datatables
+]
 
 # Rulemakings - single
-if settings.FEATURES['rulemakings_single']:
-    urlpatterns += [
-        re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/$', views.rulemaking),  # single
-    ]
+urlpatterns += [
+    re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/$', views.rulemaking),  # single
+]
 
 # Rulemakings - commenting (commenting requires single, too)
-if settings.FEATURES['rulemakings_commenting'] and settings.FEATURES['rulemakings_single']:
-    urlpatterns += [
-        # comment on single:
-        re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/(?P<doc_id>[0-9]+)/add-comments/$',
-                views.rulemaking_add_comments),
-        # save comments:
-        re_path(r'^legal/rulemaking/save-comments/', views.save_rulemaking_comments, name='save_rulemaking_comments'),
-    ]
+urlpatterns += [
+    # comment on single:
+    re_path(r'^legal/rulemakings/(?P<rm_no>[\w-]+)/(?P<doc_id>[0-9]+)/add-comments/$',
+            views.rulemaking_add_comments),
+    # save comments:
+    re_path(r'^legal/rulemaking/save-comments/', views.save_rulemaking_comments, name='save_rulemaking_comments'),
+]
 
 # Legal document redirect endpoint
 urlpatterns += [
     re_path(r'^legal/search/documents/$', views.legal_document_redirect, name='legal_document_redirect'),
+    re_path(r'^legal/search/rulemakings/documents/$', views.rulemaking_document_redirect,
+            name='rulemaking_document_redirect'),
 ]
