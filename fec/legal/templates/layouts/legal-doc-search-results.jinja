@@ -30,8 +30,8 @@
     </button>
     <div class="filters__content">
       <div class="filters__aside">
-    <div class="button--notebook u-margin--top t-sans">Use the legal search guide to learn more about <a href="/legal-resources/how-to-use-fec-legal-search-systems/">how to use FEC legal search systems</a>.</div>
-  </div>
+        <div class="button--notebook u-margin--top t-sans">Use the legal search guide to learn more about <a href="/legal-resources/how-to-use-fec-legal-search-systems/">how to use FEC legal search systems</a>.</div>
+      </div>
       <form id="category-filters" action="/data/legal/search/{{ result_type | replace('_', '-') }}">
         <input id="search-type" type="hidden" name="search_type" value="{{ result_type }}">
         {% block filters %}
@@ -57,7 +57,24 @@
         {% block message %}{% endblock %}
       </div>
     </div>
-    {% if results.total_all %}
+    
+    {% if result_type in results.search_errors %}
+    <div class="u-padding--left u-padding--right">
+      <div class="message message--alert">
+        <h2>Something went wrong</h2>
+        <p class="u-negative--top--margin">{{ document_type_display_name  }} failed to load. Check FEC.gov status page to check if we are
+        experiencing a temporary outage. If not, please try again and thanks for your patience.</p>
+        <p class="u-border-top-base u-padding--top">Need to contact our team? Use the feedback box at the bottom of any
+        page to report this issue or visit our Contact page to find more ways to reach us.</p>
+        <p class="u-padding--bottom">
+            <a href="https://www.fec.gov" class="button--standard button--cta">Return home</a>&nbsp;&nbsp;
+            <a href="https://fecgov.statuspage.io" class="button--standard">FEC.gov status page</a>&nbsp;&nbsp;
+            <a href="https://www.fec.gov/contact" class="button--standard">Contact us</a>
+        </p>
+      </div>
+    </div>
+    {% endif %}
+    {% if results.total_all  %}
       {% block results %}{% endblock %}
     {% else %}
     <div class="u-padding--left u-padding--right js-legal-search-no-results">

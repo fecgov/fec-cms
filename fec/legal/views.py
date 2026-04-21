@@ -803,21 +803,31 @@ def transform_ecfr_query_string(query_string):
         query_string = re.sub(pattern, replacement, query_string)
     return query_string
 
-
 def legal_search(request):
     original_query = request.GET.get('search', '')
     updated_ecfr_query_string = transform_ecfr_query_string(original_query)
     result_type = request.GET.get('search_type', 'all')
     results = {}
     query, query_exclude = parse_query(original_query)
-
+    
+    other_search_errors = []
+    results['search_erros'] = []
     # Only hit the API if there's an actual query
     if original_query:
-        results = api_caller.load_legal_search_results(query, query_exclude, result_type, limit=3)
-
+        results = api_caller.load_legal_search_results(query, query_exclude, result_type, limit=3)     
+        
         # Only search regulations if result_type is all or regulations
         if result_type == 'all' or result_type == 'regulations':
             ecfr_results = ecfr_caller.fetch_ecfr_data(updated_ecfr_query_string, limit=3, page=1)
+            try:
+               ecfr_results['meta']['total_count']
+               print('META.COUNT: '+ str(ecfr_results['meta']['total_count']))
+            except Exception:
+                #other_search_errors.append('regulations')
+                results['search_errors'].append('regulations')
+                print('ECFR ERROR')
+                
+            #ecfr_results = ecfr_caller.fetch_ecfr_data(updated_ecfr_query_string, limit=3, page=1)
             if 'results' in ecfr_results:
                 regulations = [{
                     'doc_id': None,
@@ -839,6 +849,9 @@ def legal_search(request):
                     'total_count', 0)
                 results['regulations_returned'] = ('3' if results['total_regulations'] > 3
                                                    else results['total_regulations'])
+            # else:
+            #     type_errors.append('regulations')
+            #     print('ECFR ERROR')
 
         if settings.FEATURES['rulemakings'] and (result_type == 'all' or result_type == 'rulemakings'):
             filters = {}
@@ -868,7 +881,13 @@ def legal_search(request):
                 results['rulemakings'] = rulemakings
                 results['total_rulemakings'] = response['total_rulemakings']
                 results['rulemakings_returned'] = ('3' if results['total_rulemakings'] > 3
-                                                   else results['total_rulemakings'])
+                                                else results['total_rulemakings'])
+            else:
+                #other_search_errors.append('rulemakings')
+                results['search_errors'].append('rulemakings')
+
+        all_search_errors = [*results['search_errors'], *other_search_errors]
+
 
     return render(request, 'legal-search-results.jinja', {
         'parent': 'legal',
@@ -877,6 +896,8 @@ def legal_search(request):
         'results': results,
         'result_type': result_type,
         'category_order': get_legal_category_order(results, result_type),
+        #'search_errors' : results['search_errors'] if results else [],
+        'all_search_errors': all_search_errors,
         'social_image_identifier': 'legal',
     })
 

@@ -69,18 +69,52 @@ def load_search_results(query, query_type=None):
 def load_legal_search_results(query, query_exclude="", query_type="all", offset=0, limit=20, **kwargs):
     filters = dict((key, value) for key, value in kwargs.items() if value)
 
-    # Apply type filter if only looking for one type
-    if query_type != "all":
-        filters["type"] = query_type
+    ALL_DOCUMENT_TYPES = [
+    "statutes",
+    "advisory_opinions",
+    "murs",
+    "adrs",
+    "admin_fines",
+    ]
+
+    search_errors = []
 
     filters["hits_returned"] = limit
     filters["from_hit"] = offset
-    filters["q"] = query
     filters["q_exclude"] = query_exclude
+    
+    # Make a test api call with no q value to get all results for the combined legal endpoint 
+    resp = _call_api("legal", "search", **filters)
+    # Iterate the results for eeach type
+    for doc_type in ALL_DOCUMENT_TYPES:
+        try:
+            if len(resp[doc_type]) > 0:
+                #pass
+                print(doc_type + 'GOOD')
+                print(len(resp[doc_type]))
 
+            else:
+                # If there are no results, append that type to the errors list 
+                print(doc_type + 'BAD')
+                search_errors.append(doc_type)
+
+        # Catch server errors indicating the entire endpoint is not functioning, meaning none were serachable
+        except Exception as e:
+            #pass
+            print(doc_type + 'BAD-Exception')
+            print(type(e).__qualname__)
+            search_errors.append(doc_type)
+    
+    # Apply type filter if only looking for one type, otherwise the default is 'all'
+    if query_type != "all":
+        filters["type"] = query_type
+    filters["q"] = query
+    # Make the api call for results, including keyword(q) and type filters
     results = _call_api("legal", "search", **filters)
     results["limit"] = limit
     results["offset"] = offset
+    # Append the errors list to results for use in the template
+    results["search_errors"] = search_errors
 
     if "statutes" in results:
         results["statutes_returned"] = len(results["statutes"])

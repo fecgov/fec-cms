@@ -23,6 +23,16 @@ Search legal resources
 </header>
 
 <div class="main">
+ERRORS: {{ type_errors }}
+<br>
+SINGLE ERRORS: {{ results['search_errors'] }}
+<br>
+ALL ERRORS: {{ all_search_errors }}
+<br>
+{% for err in type_errors %}
+ {{ err }}<br>
+{% endfor %}
+
   <div class="container">
     <div class="row">
       <div class="sidebar-container sidebar-container--left">
@@ -31,6 +41,11 @@ Search legal resources
             {% set document_types = {'all': 'All','statutes': 'Statutes','regulations':
             'Regulations','advisory_opinions': 'Advisory opinions','murs': 'Closed Matters Under Review', 'adrs':
             'Alternative dispute resolutions', 'admin_fines': 'Administrative fines', 'rulemakings': 'Rulemakings'} %}
+            
+            {% set template_names = {'statutes': 'statute','regulations':
+            'regulation','advisory_opinions': 'advisory-opinion','murs': 'mur', 'adrs':
+            'adrs', 'admin_fines': 'afs', 'rulemakings': 'rulemakings'} %}
+
             {% if not FEATURES['rulemakings'] %}
               {% do document_types.pop('rulemakings', None) %}
             {% endif %}
@@ -39,7 +54,11 @@ Search legal resources
             {% if result_type == category or result_type == 'all' %}
             <li class="side-nav__item">
               <a class="side-nav__link" href="#results-{{ category|replace('_', '-') }}">
-                {{ category_title }} ({{ results["total_" + category]|default(0) }})
+                {{ category_title }} {% if category in all_search_errors %}
+                <span class="message--alert message--mini"></span>
+                {% else %}
+                ({{ results["total_" + category]|default(0) }})
+                {% endif %}
               </a>
             </li>
             {% endif %}
@@ -84,114 +103,35 @@ Search legal resources
               </div>
             {% endif %}
           </div>
-          
-          {% if category == "statutes" %}
-          {% if results["total_" + category] %}
-          {% with statutes = results[category] %}
-          {% include 'partials/legal-search-results-statute.jinja' %}
-          {% endwith %}
-          <div class="results-info">
-            <a class="button button--browse button--alt"
-              href="/data/legal/search/{{ category }}/?search={{ query }}&search_type={{ category}}">All results</a>
-          </div>
-          {% elif not results["total_" + category] and (result_type == category or result_type == 'all') %}
-          {{ legal.no_results("statutes", category, query, result_type, fec_resources=['fec.gov']) }}
+            {% if results["total_" + category] %}
+              {% with nested_in_global_search=true  %}
+                {% include "partials/legal-search-results-" ~ template_names[category] ~ ".jinja" %}
+              {% endwith %}
+              <div class="results-info">
+                <a class="button button--browse button--alt"
+                  href="/data/legal/search/{{ category }}/?search={{ query }}&search_type={{ category}}">All results</a>
+              </div>
+            {% elif category in all_search_errors %}    
+              <div class="message message--alert">
+                <h2>Something went wrong</h2>
+                <p class="u-negative--top--margin">{{ category_title}} failed to load. Check FEC.gov status page to check if we are
+                experiencing a temporary outage. If not, please try again and thanks for your patience.</p>
+                <p class="u-border-top-base u-padding--top">Need to contact our team? Use the feedback box at the bottom of any
+                page to report this issue or visit our Contact page to find more ways to reach us.</p>
+                <p class="u-padding--bottom">
+                    <a href="https://www.fec.gov" class="button--standard button--cta">Return home</a>&nbsp;&nbsp;
+                    <a href="https://fecgov.statuspage.io" class="button--standard">FEC.gov status page</a>&nbsp;&nbsp;
+                    <a href="https://www.fec.gov/contact" class="button--standard">Contact us</a>
+                </p>
+              </div>
+            {% elif not results["total_" + category] and (result_type == category or result_type == 'all') %}
+              {{ legal.no_results(category, category, query, result_type, fec_resources=['fec.gov']) }}
+            {% endif %}
+
           {% endif %}
-
-          {% elif category == "regulations" %}
-          {% if results["total_" + category] %}
-          {% with regulations = results[category] %}
-          {% include 'partials/legal-search-results-regulation.jinja' %}
-          {% endwith %}
-          <div class="results-info">
-            <a class="button button--browse button--alt"
-              href="/data/legal/search/{{ category }}/?search={{ query }}">All results</a>
-          </div>
-          {% elif not results["total_" + category] and (result_type == category or result_type == 'all') %}
-          {{ legal.no_results("regulations", category, query, result_type, fec_resources=['Rulemaster', 'fec.gov']) }}
-          {% endif %}
-
-          {% elif category == "advisory_opinions" %}
-          {% if results["total_" + category] %}
-          {% with advisory_opinions = results[category], nested_in_global_search=true %}
-          {% include 'partials/legal-search-results-advisory-opinion.jinja' %}
-          {% endwith %}
-          <div class="results-info">
-            <a class="button button--browse button--alt"
-              href="/data/legal/search/{{ category | replace('_', '-') }}/?search={{ query }}&search_type={{ category}}">All
-              results</a>
-          </div>
-          {% elif not results["total_" + category] and (result_type == category or result_type == 'all') %}
-          {{ legal.no_results("advisory opinions", category, query, result_type, fec_resources=['Advisory_Opinion',
-          'fec.gov']) }}
-          {% endif %}
-
-          {% elif category == "murs" %}
-          {% if results["total_" + category] %}
-          {% with murs = results[category], nested_in_global_search=true %}
-          {% include 'partials/legal-search-results-mur.jinja' %}
-          {% endwith %}
-          <div class="results-info">
-            <a class="button button--browse button--alt"
-              href="/data/legal/search/enforcement/?search={{ query }}&search_type={{ category}}">All results</a>
-          </div>
-          {% elif not results["total_" + category] and (result_type == category or result_type == 'all') %}
-          {{ legal.no_results("Closed Matters Under Review", category, query, result_type,
-          fec_resources=['Administrative_Fine', 'Alternative_Dispute_Resolution', 'Audit_Reports',
-          'Matters_Under_Review', 'Matters_Under_Review_Archived', 'fec.gov']) }}
-          {% endif %}
-
-          {% elif category == "adrs" %}
-          {% if results["total_" + category] %}
-          {% with adrs = results[category], nested_in_global_search=true %}
-          {% include 'partials/legal-search-results-adrs.jinja' %}
-          {% endwith %}
-          <div class="results-info">
-            <a class="button button--browse button--alt"
-              href="/data/legal/search/{{ category }}/?search={{ query }}">All results</a>
-          </div>
-          {% elif not results["total_" + category] and (result_type == category or result_type == 'all') %}
-          {{ legal.no_results("alternative dispute resolutions", category, query, result_type,
-          fec_resources=['Administrative_Fine', 'Alternative_Dispute_Resolution', 'Audit_Reports',
-          'Matters_Under_Review', 'Matters_Under_Review_Archived', 'fec.gov']) }}
-          {% endif %}
-
-
-          {% elif category == "rulemakings" %}
-          {% if results["total_" + category] %}
-          {% with rulemakings = results[category], nested_in_global_search=true %}
-          {% include 'partials/legal-search-results-rulemakings.jinja' %}
-          {% endwith %}
-          <div class="results-info">
-            <a class="button button--browse button--alt"
-              href="/legal/search/{{ category }}/?q={{ query }}">All results</a>
-          </div>
-          {% elif not results["total_" + category] and (result_type == category or result_type == 'all') %}
-          {{ legal.no_results("rulemakings", category, query, result_type,
-          fec_resources=['Administrative_Fine', 'Alternative_Dispute_Resolution', 'Audit_Reports',
-          'Matters_Under_Review', 'Matters_Under_Review_Archived', 'fec.gov']) }}
-          {% endif %}
-
-
-
-          {% else %}
-          {% if results["total_" + category] %}
-          {% with admin_fines = results[category], nested_in_global_search=true %}
-          {% include 'partials/legal-search-results-afs.jinja' %}
-          {% endwith %}
-          <div class="results-info">
-            <a class="button button--browse button--alt"
-              href="/data/legal/search/{{ category }}/?search={{ query }}">All results</a>
-          </div>
-          {% elif not results["total_" + category] and (result_type == category or result_type == 'all') %}
-          {{ legal.no_results("administrative fines", category, query, result_type,
-          fec_resources=['Administrative_Fine', 'Alternative_Dispute_Resolution', 'Audit_Reports',
-          'Matters_Under_Review', 'Matters_Under_Review_Archived', 'fec.gov']) }}
-          {% endif %}
-          {% endif %}
-        </div>
-        {% endif %}
+        
         {% endfor %}
+        
       </section>
     </div>
   </div>

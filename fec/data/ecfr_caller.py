@@ -27,4 +27,5 @@ def fetch_ecfr_data(query, date="current", limit=20, page=1):
     if response.status_code == 200:
         return response.json()
     else:
-        return None
+        return {'results': []}
+        #return None
