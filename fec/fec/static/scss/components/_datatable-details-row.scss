@@ -76,8 +76,9 @@
     }
 
   }
-  @include media($med) {
-    .dt-details__content {
+  .dt-details__content {
+    /* Using container queries because browser width != content width */
+    @container cq-table-width (width > 640px) {
       // If there are more than 2 children, 
       &:has(.dt-details__sect:nth-of-type(2)) {
         columns: 2;

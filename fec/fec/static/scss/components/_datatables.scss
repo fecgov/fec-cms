@@ -49,6 +49,9 @@
 .dataTables_wrapper {
   overflow-x: scroll;
   position: relative;
+
+  container-type: inline-size; /* Make the outermost part of datatables into a css container */
+  container-name: cq-table-width;
 }
 
 // Sortable headers
