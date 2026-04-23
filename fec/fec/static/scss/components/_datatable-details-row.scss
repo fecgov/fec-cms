@@ -30,6 +30,10 @@
     margin-bottom: 1rem;
     padding-bottom: 1rem;
 
+    &:last-child {
+      border-bottom: none; // __sect has a bottom border so don't add one for __heading if it's an only child
+    }
+
     .dt-details__title {
       margin-bottom: 0;
     }

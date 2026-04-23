@@ -129,6 +129,9 @@
       td {
         background-color: $navy;
         color: $inverse;
+        a {
+          color: $inverse;
+        }
       }
     }
     &.dt-isChild {
