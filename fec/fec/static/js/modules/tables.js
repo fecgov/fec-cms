@@ -150,11 +150,12 @@ let pagination_legal;
  * @param {*} response
  * @returns {number} Number of real or estimated results
  */
+let legal_type;
 export function getCount(response) {
   let pagination_count = response.pagination.count; // eslint-disable-line camelcase
   if (!response.pagination) {
      pagination_legal = true;
-     const legal_type = Object.keys(response)[0];
+     legal_type = Object.keys(response)[0];
      const legal_type_count = `total_${legal_type}`;
      pagination_count = response[legal_type_count];
   }
