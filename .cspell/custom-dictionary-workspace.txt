@@ -4,6 +4,7 @@ blockquote
 bythenumbers
 camelcase
 commenters
+datatables
 disgorgements
 draftail
 ecfr
