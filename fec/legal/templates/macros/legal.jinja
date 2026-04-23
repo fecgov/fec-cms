@@ -94,9 +94,6 @@
   <div class="combo combo--search {{ size }}">
     {% set document_types = [('all', 'All'),('admin_fines', 'Administrative fines'), ('advisory_opinions', 'Advisory opinions'), ('adrs', 'Alternative dispute resolutions'), ('murs', 'Closed Matters Under Review'), ('regulations', 'Regulations'),  ('rulemakings', 'Rulemakings'), ('statutes', 'Statutes')] %}
     <select class="search__select {{select_class}}" name="search_type" aria-label="Select a document type">
-    {% if not FEATURES['rulemakings'] %}
-      {% set document_types = document_types  | rejectattr('0', 'equalto', 'rulemakings') | list %}
-    {% endif %}
       {% for value, name in document_types %}
       <option value="{{ value }}" {% if result_type == value %}selected{% endif %}>{{ name }}</option>
       {% endfor %}

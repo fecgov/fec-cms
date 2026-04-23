@@ -31,9 +31,6 @@ Search legal resources
             {% set document_types = {'all': 'All','statutes': 'Statutes','regulations':
             'Regulations','advisory_opinions': 'Advisory opinions','murs': 'Closed Matters Under Review', 'adrs':
             'Alternative dispute resolutions', 'admin_fines': 'Administrative fines', 'rulemakings': 'Rulemakings'} %}
-            {% if not FEATURES['rulemakings'] %}
-              {% do document_types.pop('rulemakings', None) %}
-            {% endif %}
             {% for category in category_order %}
             {% set category_title = document_types[category] %}
             {% if result_type == category or result_type == 'all' %}

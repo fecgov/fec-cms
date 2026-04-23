@@ -157,3 +157,118 @@ class TestLegalDocumentRedirect(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, 'https://env.fec.gov/files/legal/aos/1997-01/1069112.pdf')
         mock_find_document.assert_called_once_with('1069112')
+
+
+class TestRulemakingDocumentRedirect(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    @mock.patch('data.api_caller.find_rulemaking_document_by_doc_id')
+    def test_rulemaking_document_redirect_success(self, mock_find_document):
+        mock_find_document.return_value = 'https://www.fec.gov/files/legal/rulemakings/2011-02/420899/test.pdf'
+
+        request = self.factory.get('/legal/search/rulemakings/documents/?doc_id=420899')
+        response = views.rulemaking_document_redirect(request)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, 'https://www.fec.gov/files/legal/rulemakings/2011-02/420899/test.pdf')
+        mock_find_document.assert_called_once_with(420899)
+
+    @mock.patch.object(api_caller, '_call_api')
+    def test_find_rulemaking_document_redirect_nested_doc_success(self, mock_call_api):
+        mock_call_api.return_value = {
+            'rulemakings': [{
+                'documents': [{
+                    'doc_id': 421096,
+                    'url': '/files/legal/rulemakings/2011-02/421096/Final-Rule.pdf',
+                    'level_2_labels': [{
+                        'level_2_docs': [{
+                            'doc_id': 420899,
+                            'url': '/files/legal/rulemakings/2011-02/420899/test.pdf'
+                        }]
+                    }]
+                }],
+                'no_tier_documents': []
+            }]
+        }
+
+        request = self.factory.get('/legal/search/rulemakings/documents/?doc_id=420899')
+        response = views.rulemaking_document_redirect(request)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, f"{settings.CANONICAL_BASE}/files/legal/rulemakings/2011-02/420899/test.pdf")
+
+    @mock.patch.object(api_caller, '_call_api')
+    def test_find_rulemaking_document_redirect_no_tier_success(self, mock_call_api):
+        mock_call_api.return_value = {
+            'rulemakings': [{
+                'documents': [],
+                'no_tier_documents': [{
+                    'doc_id': 22006,
+                    'url': '/files/legal/rulemakings/2009-03/22006/Debt-Consolidation-Act.pdf'
+                }]
+            }]
+        }
+
+        request = self.factory.get('/legal/search/rulemakings/documents/?doc_id=22006')
+        response = views.rulemaking_document_redirect(request)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            response.url,
+            f"{settings.CANONICAL_BASE}/files/legal/rulemakings/2009-03/22006/Debt-Consolidation-Act.pdf"
+        )
+
+    @mock.patch('data.api_caller.find_rulemaking_document_by_doc_id')
+    def test_rulemaking_document_redirect_api_error(self, mock_find_document):
+        mock_find_document.side_effect = Exception('API Error')
+
+        request = self.factory.get('/legal/search/rulemakings/documents/?doc_id=420899')
+
+        with self.assertRaises(Http404):
+            views.rulemaking_document_redirect(request)
+        mock_find_document.assert_called_once_with(420899)
+
+    @mock.patch.object(api_caller, '_call_api')
+    def test_rulemaking_document_redirect_not_found(self, mock_call_api):
+        mock_call_api.return_value = {
+            'rulemakings': []
+        }
+
+        request = self.factory.get('/legal/search/rulemakings/documents/?doc_id=999999')
+
+        with self.assertRaises(Http404):
+            views.rulemaking_document_redirect(request)
+
+    def test_rulemaking_document_redirect_no_doc_id(self):
+        request = self.factory.get('/legal/search/rulemakings/documents/')
+
+        with self.assertRaises(Http404):
+            views.rulemaking_document_redirect(request)
+
+    def test_rulemaking_document_redirect_invalid_doc_id(self):
+        request = self.factory.get('/legal/search/rulemakings/documents/?doc_id=abc')
+
+        with self.assertRaises(Http404):
+            views.rulemaking_document_redirect(request)
+
+    @mock.patch('data.api_caller.find_rulemaking_document_by_doc_id')
+    def test_rulemaking_document_redirect_url_routing(self, mock_find_document):
+        mock_find_document.return_value = 'https://www.fec.gov/files/legal/rulemakings/2011-02/420899/test.pdf'
+
+        response = self.client.get('/legal/search/rulemakings/documents/?doc_id=420899')
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, 'https://www.fec.gov/files/legal/rulemakings/2011-02/420899/test.pdf')
+        mock_find_document.assert_called_once_with(420899)
+
+    @mock.patch('data.api_caller.find_rulemaking_document_by_doc_id')
+    def test_rulemaking_document_redirect_uses_canonical_base(self, mock_find_document):
+        mock_find_document.return_value = 'https://env.fec.gov/files/legal/rulemakings/2011-02/420899/test.pdf'
+
+        request = self.factory.get('/legal/search/rulemakings/documents/?doc_id=420899')
+        response = views.rulemaking_document_redirect(request)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, 'https://env.fec.gov/files/legal/rulemakings/2011-02/420899/test.pdf')
+        mock_find_document.assert_called_once_with(420899)
