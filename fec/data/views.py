@@ -717,12 +717,12 @@ def load_committee_history(committee_id, cycle=None):
     path = "/committee/" + committee_id + "/history/" + str(cycle)
     committee = api_caller.load_first_row_data(path, **filters)
     if committee is None:
-        # If commitee has no dara for cycle data but commitee_id exists, call /history/ endpoint without cycle
+        # If commitee has no data for cycle data but commitee_id exists, call /history/ endpoint without /cycle/
         path = "/committee/" + committee_id + "/history/"
         committee = api_caller.load_first_row_data(path, **filters)
-        # Raise 404 instead of server error for urls with non-existent comm-id and cycle query (data/committee/C0000000/?cycle=2026)
-        if committee is None:
-            raise Http404()
+        # Raise 404 instead of server error for urls with non-existent comm-id and cycle query (data/committee/C00123456/?cycle=2026)
+        # if committee is None:
+        #     raise Http404()
 
     # (3)call endpoint: committee/{committee_id}/candidates/history/{cycle}
     # --under tag: candidate, get all candidates associated with that commitee
