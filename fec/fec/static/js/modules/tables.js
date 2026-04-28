@@ -213,6 +213,7 @@ export function modalRenderRow(row) {
  */
 export function modalRenderFactory(template, fetch) {
   let callback;
+  let latestDetailsRequestId = 0;
   fetch = fetch || identity;
 
   return function(api, data, response) {
@@ -230,6 +231,7 @@ export function modalRenderFactory(template, fetch) {
       if (e.which === 13 || e.type === 'click') {
         // Note: Use `currentTarget` to get parent row, since the target column
         // may have been moved since the triggering event
+        const clickedNode = e.currentTarget;
         const $row = api.row(e.currentTarget);
         const $target = $(e.target);
 
@@ -242,11 +244,11 @@ export function modalRenderFactory(template, fetch) {
         api.rows('.dt-hasChild').every((i) => {
 
           // If the clicked element is this row in the loop and it has a child row, remember that we only toggled it
-          if (this == api.row(i).node() && api.row(i).child.isShown()) toggledSelfClosed = true;
+          if (clickedNode == api.row(i).node() && api.row(i).child.isShown()) toggledSelfClosed = true;
 
           // Close every row
           api.row(i).child.hide(); // close its child
-
+          api.row(i).node().removeAttribute('aria-details'); // strip its aria-details for appearance
         });
 
         // If we only toggled a row closed, no reason to continue with loading data, etc
@@ -258,13 +260,15 @@ export function modalRenderFactory(template, fetch) {
         // Otherwise, get the data to build a child row
         const row = api.row($row);
         const index = row.index();
+        const currentRequestId = ++latestDetailsRequestId;
 
         $.when(fetch(response.results[index])).done(function(fetched) {
-          const parentRowsEvenOddClass = e.currentTarget.classList.contains('even') ? 'even' : 'odd';
+          // Ignore stale async responses from previously clicked rows.
+          if (currentRequestId !== latestDetailsRequestId) return;
 
           const newChildRowContent = template(fetched);
           const newChildRowHtml = childRow(newChildRowContent, fetched.pdf_url || '');
-          const newChildRow = row.child(newChildRowHtml, `${parentRowsEvenOddClass} dt-isChild`).show();
+          const newChildRow = row.child(newChildRowHtml, 'dt-isChild').show();
 
           // Aria link the normal row and its child/details row
           $(newChildRow).attr('id', `details-for-tr-${index}`);
