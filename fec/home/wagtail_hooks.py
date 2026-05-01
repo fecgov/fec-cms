@@ -4,7 +4,7 @@ from wagtail.admin.viewsets.base import ViewSetGroup
 from wagtail.admin.viewsets.model import ModelViewSet
 from wagtail.admin.viewsets.pages import PageListingViewSet
 from wagtail import hooks
-from home.models import (Author, DigestPage, FecTimelineItem, PressReleasePage,
+from home.models import (Author, DigestPage, FecTimelineItem, HomePageBannerAnnouncement, PressReleasePage,
                          RecordPage, TipsForTreasurersPage)
 
 
@@ -76,6 +76,18 @@ class FecTimelineViewSet(PageListingViewSet):
     ]
     name = 'fec_timeline_items'
 
+class HomePageBannerViewSet(PageListingViewSet):
+    menu_label = 'Home page banner announcements'
+    model = HomePageBannerAnnouncement
+    ordering = ['-date_active']
+    columns = [
+        PageTitleColumn('page_description', label='Title', sort_key='title'),
+        Column('date_active', label='Date active', sort_key='date_active'),
+        Column('date_inactive', label='Date inactive' , sort_key='date_inactive'),
+        PageStatusColumn('live', label='Status', sort_key='live'),
+    ]
+    name = 'Home page banner announcements'
+    
 
 class UpdatesViewSetGroup(ViewSetGroup):
     menu_label = 'News and Updates'
@@ -83,7 +95,7 @@ class UpdatesViewSetGroup(ViewSetGroup):
     add_to_admin_menu = True
     menu_order = 100
     items = (PressReleaseListingView, DigestListingView, TipsForTreasurersListingView,
-             RecordListingView, FecTimelineViewSet)
+             RecordListingView, FecTimelineViewSet, HomePageBannerViewSet)
     name = 'News and Updates'
 
 
