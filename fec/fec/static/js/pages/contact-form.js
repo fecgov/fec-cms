@@ -88,7 +88,7 @@ ContactForm.prototype.clearForm = function(e) {
 
 /**
  * Analyst lookup tool
- * @param {JQuery.$element} $elm
+ * @param {jQuery} $elm
  */
 export function AnalystLookup($elm) {
   this.$elm = $elm;
