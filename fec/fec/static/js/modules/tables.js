@@ -152,19 +152,30 @@ let pagination_legal;
  */
 let legal_type;
 export function getCount(response) {
-  let pagination_count;
-  if (!response.pagination) {
-     pagination_legal = true;
-     legal_type = Object.keys(response)[0];
-     const legal_type_count = `total_${legal_type}`;
-     pagination_count = response[legal_type_count];
+
+  let pagination_count; // eslint-disable-line camelcase
+  if (response.pagination) {
+    pagination_count = response.pagination.count; // eslint-disable-line camelcase
+    pagination_legal = false;
+    legal_type = undefined;
+  } else {
+    // Legal search responses return arrays like `rulemakings` plus a
+    // matching `total_rulemakings` count instead of a Datatables-style
+    // `pagination` object.
+    pagination_legal = true;
+    legal_type = Object.keys(response).find(function(key) {
+      return key.indexOf('total_') !== 0 && Array.isArray(response[key]);
+    });
+    const legal_type_count = `total_${legal_type}`;
+    pagination_count = response[legal_type_count] || 0;
   }
   else {
     pagination_count = response.pagination.count; // eslint-disable-line camelcase
   }
 
-  if (pagination_count > 500000)
-    pagination_count = Math.round(response.pagination.count / 1000) * 1000; // eslint-disable-line camelcase
+  if (pagination_count > 500000) {
+    pagination_count = Math.round(pagination_count / 1000) * 1000; // eslint-disable-line camelcase
+  }
 
   return pagination_count; // eslint-disable-line camelcase
 }
@@ -1122,7 +1133,8 @@ DataTable_FEC.prototype.fetchError = function(jqXHR, textStatus) {
  * filtering.
  */
 DataTable_FEC.prototype.hideEmpty = function(response) {
-  if (!response.pagination.count) {
+  // Use the shared counter for both data responses and legal API responses.
+  if (!getCount(response)) {
     this.destroy();
     this.$body.before(missingTemplate(this.opts.hideEmptyOpts));
     this.$body.remove();
