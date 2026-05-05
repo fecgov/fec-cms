@@ -152,12 +152,15 @@ let pagination_legal;
  */
 let legal_type;
 export function getCount(response) {
-  let pagination_count = response.pagination.count; // eslint-disable-line camelcase
+  let pagination_count;
   if (!response.pagination) {
      pagination_legal = true;
      legal_type = Object.keys(response)[0];
      const legal_type_count = `total_${legal_type}`;
      pagination_count = response[legal_type_count];
+  }
+  else {
+    pagination_count = response.pagination.count; // eslint-disable-line camelcase
   }
 
   if (pagination_count > 500000)
