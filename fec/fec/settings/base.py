@@ -72,8 +72,8 @@ FEATURES = {
     'website_status': bool(env.get_credential('FEC_FEATURE_WEBSITE_STATUS', '')),
 
     # Feature flags (hiding or displaying components)
-    'adrs': bool(env.get_credential('FEC_FEATURE_ADRS', '')),
-    'afs': bool(env.get_credential('FEC_FEATURE_AFS', '')),  # Admin fines search
+    # 'adrs': bool(env.get_credential('FEC_FEATURE_ADRS', '')),
+    # 'afs': bool(env.get_credential('FEC_FEATURE_AFS', '')),  # Admin fines search
     'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
@@ -103,8 +103,8 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['feature']:
 
 # Set feature flags to True for local
 if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
-    FEATURES['adrs'] = True
-    FEATURES['afs'] = True
+    # FEATURES['adrs'] = True
+    # FEATURES['afs'] = True
     FEATURES['aggregatetotals'] = True
     FEATURES['barcharts'] = True
     FEATURES['contributionsbystate'] = True

@@ -62,22 +62,22 @@ urlpatterns = [
     re_path(r'^data/legal/search/$', views.legal_search),  # TODO: retire
 ]
 
-if settings.FEATURES['adrs']:
-    urlpatterns += re_path(r'^legal/search/adrs/$', views.legal_doc_search_adr),
-    urlpatterns += re_path(r'^data/legal/search/adrs/$', views.legal_doc_search_adr),  # TODO: retire
+# ADR - datatables
+urlpatterns += re_path(r'^legal/search/adrs/$', views.legal_doc_search_adr),
+urlpatterns += re_path(r'^data/legal/search/adrs/$', views.legal_doc_search_adr),  # TODO: retire
 
-# TODO: do we still need this feature flag?
-if settings.FEATURES['afs']:
-    urlpatterns += [
-        # Redirect from `admin_fines` to `admin-fines`
-        re_path(
-            r'^data/legal/search/admin_fines/$',
-            RedirectView.as_view(url='/legal/search/admin-fines/', query_string=True)
-        ),  # TODO: do we still need this redirect?
-        # The actual `admin-fines` view
-        re_path(r'^legal/search/admin-fines/$', views.legal_doc_search_af),  # landing page / datatables
-        re_path(r'^data/legal/search/admin-fines/$', views.legal_doc_search_af),  # TODO: retire this one
-    ]
+# Admin fines - datatables
+
+urlpatterns += [
+    # Redirect from `admin_fines` to `admin-fines`
+    re_path(
+        r'^data/legal/search/admin_fines/$',
+        RedirectView.as_view(url='/legal/search/admin-fines/', query_string=True)
+    ),  # TODO: do we still need this redirect?
+    # The actual `admin-fines` view
+    re_path(r'^legal/search/admin-fines/$', views.legal_doc_search_af),  # landing page / datatables
+    re_path(r'^data/legal/search/admin-fines/$', views.legal_doc_search_af),  # TODO: retire this one
+]
 
 # Rulemakings - datatables
 urlpatterns += [
