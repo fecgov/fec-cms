@@ -52,20 +52,14 @@ urlpatterns = [
             views_datatables.reports),
     re_path(r'^legal-resources/enforcement/audit-search/$',
             views_datatables.audit),
-    
-
     re_path(r'^widgets/aggregate-totals/$', views.aggregate_totals),
+    re_path(r'^data/committees/pac-party/$', views_datatables.pac_party),
+    re_path(r'^data/debts/$', views_datatables.debts),
+    re_path(r'^data/national-party-account-receipts/$',
+            views_datatables.national_party_account_receipts),
+    re_path(r'^data/national-party-account-disbursements/$',
+                views_datatables.national_party_account_disbursements)
 ]
-
-if settings.FEATURES.get('pac_party'):
-    urlpatterns.append(
-        re_path(r'^data/committees/pac-party/$', views_datatables.pac_party)
-    )
-
-if settings.FEATURES.get('debts'):
-    urlpatterns.append(
-        re_path(r'^data/debts/$', views_datatables.debts)
-    )
 
 if settings.FEATURES.get('presidential_map'):
     # Presidential candidate map
@@ -96,18 +90,4 @@ if settings.FEATURES.get('h4_allocated_disbursements'):
     urlpatterns.append(
         re_path(r'^data/allocated-federal-nonfederal-disbursements/$',
                 views_datatables.allocated_federal_nonfederal_disbursements)
-    )
-
-if settings.FEATURES.get('nat_party_acct_receipts'):
-    # Feature flag for the national party account receipts tables and data
-    urlpatterns.append(
-        re_path(r'^data/national-party-account-receipts/$',
-                views_datatables.national_party_account_receipts)
-    )
-
-if settings.FEATURES.get('nat_party_acct_disbursements'):
-    # Feature flag for the national party account disbursements tables and data
-    urlpatterns.append(
-        re_path(r'^data/national-party-account-disbursements/$',
-                views_datatables.national_party_account_disbursements)
     )
