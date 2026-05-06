@@ -2,9 +2,11 @@ from wagtail.admin.ui.tables import Column, DateColumn
 from wagtail.admin.ui.tables.pages import BulkActionsColumn, PageStatusColumn, PageTitleColumn
 from wagtail.admin.viewsets.base import ViewSetGroup
 from wagtail.admin.viewsets.model import ModelViewSet
+from wagtail.admin.views.pages.listing import IndexView
 from wagtail.admin.viewsets.pages import PageListingViewSet
+from django.urls import reverse
 from wagtail import hooks
-from home.models import (Author, DigestPage, FecTimelineItem, PressReleasePage,
+from home.models import (Author, DigestPage, FecTimelineItem, HomePageBannerAnnouncement, PressReleasePage,
                          RecordPage, TipsForTreasurersPage)
 
 
@@ -77,13 +79,34 @@ class FecTimelineViewSet(PageListingViewSet):
     name = 'fec_timeline_items'
 
 
+class BannerPageIndexView(IndexView):
+    def get_queryset(self):
+        # Force the queryset to order by '-date_active'
+        return super().get_queryset().order_by('-date_active')
+
+
+class HomePageBannerViewSet(PageListingViewSet):
+    menu_label = 'Home page banner announcements'
+    model = HomePageBannerAnnouncement
+    #ordering = ['-date_active'] # might work in Wagtail 7
+    columns = [
+        PageTitleColumn('description', label='Title', sort_key='page_description'),
+        Column('date_active', label='Date active', sort_key='date_active'),
+        Column('date_inactive', label='Date inactive' , sort_key='date_inactive'),
+        PageStatusColumn('status', label='Status', sort_key='status'),
+    ]
+    name = 'home_page_banner_announcements'
+    # Use the IndexView to apply the order_by on the queryset
+    index_view_class = BannerPageIndexView
+
+
 class UpdatesViewSetGroup(ViewSetGroup):
     menu_label = 'News and Updates'
     menu_icon = 'globe'
     add_to_admin_menu = True
     menu_order = 100
     items = (PressReleaseListingView, DigestListingView, TipsForTreasurersListingView,
-             RecordListingView, FecTimelineViewSet)
+             RecordListingView, FecTimelineViewSet, HomePageBannerViewSet)
     name = 'News and Updates'
 
 

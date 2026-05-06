@@ -2,6 +2,8 @@ import datetime
 import zoneinfo
 
 from django import template
+from django.db.models import Q
+from django.db.models import Q
 from itertools import chain, islice
 from datetime import date
 from home.models import (HomePageBannerAnnouncement, AlertForEmergencyUseOnly, DigestPage, RecordPage,
@@ -9,11 +11,15 @@ from home.models import (HomePageBannerAnnouncement, AlertForEmergencyUseOnly, D
 
 register = template.Library()
 
+eastern = zoneinfo.ZoneInfo('America/New_York')
+datetime_now = datetime.datetime.today().replace(tzinfo=eastern)
+eastern = zoneinfo.ZoneInfo('America/New_York')
+datetime_now = datetime.datetime.today().replace(tzinfo=eastern)
 
 @register.inclusion_tag('partials/home-page-banner-announcement.html')
 def home_page_banner_announcement():
-    eastern = zoneinfo.ZoneInfo('America/New_York')
-    datetime_now = datetime.datetime.today().replace(tzinfo=eastern)
+
+
     banners = HomePageBannerAnnouncement.objects.live().filter(
         active=True, date_active__lte=datetime_now,
         date_inactive__gt=datetime_now).order_by('-date_active')[:2]
@@ -27,15 +33,38 @@ def home_page_banner_announcement():
     }
 
 
-# This is for the Wagtail preview for Home Page Banner Announcement
+""" 
+This is for the Wagtail preview for Home Page Banner Announcement. 
+Shows the banner currenty being edited (draft_banner or draft_alert_banner) and any live_banner(s) or alert_draft_alert_banner(s).
+All are ordered by -date_active.
+"""
 @register.inclusion_tag('partials/draft-home-page-banner-announcement.html')
-def draft_home_page_banner_announcement():
-    draft_banners = HomePageBannerAnnouncement.objects.all().order_by('-date_active')
-    draft_alert_banners = AlertForEmergencyUseOnly.objects.all().order_by('-alert_date_active')
+def draft_home_page_banner_announcement(id):
+    live_banners = HomePageBannerAnnouncement.objects.live().filter(
+        active=True, date_active__lte=datetime_now,
+        date_inactive__gt=datetime_now).order_by('-date_active')[:2] 
+    live_alert_banners = AlertForEmergencyUseOnly.objects.live().filter(
+        alert_active=True, alert_date_active__lte=datetime_now,
+        alert_date_inactive__gt=datetime_now).order_by('-alert_date_active')[:2]
+    
+    # This is the banner currently being edited in Wagtail
+    draft_banner = HomePageBannerAnnouncement.objects.filter(id=id)
+    # Combine the draft banner with any currently live banners
+    preview_banners = draft_banner | live_banners 
+    # Limit to three to allow up to two live banners (the homepage limit) plus the one being edited
+    display_banners = preview_banners.order_by('-date_active')[:3]
+    
+    # This is the alert_banner currently being edited in Wagtail
+    draft_alert_banner = AlertForEmergencyUseOnly.objects.filter(id=id)
+    # Combine the draft alert banner with any currently live alert banners
+    preview_alert_banners = draft_alert_banner | live_alert_banners
+    # Limit to two to represent what the homepage would show
+    display_alert_banners = preview_alert_banners.order_by('-alert_date_active')[:2]
 
     return {
-        'draft_banners': draft_banners,
-        'draft_alert_banners': draft_alert_banners
+        'draft_id': id,
+        'display_banners': display_banners,
+        'display_alert_banners': display_alert_banners,
     }
 
 
