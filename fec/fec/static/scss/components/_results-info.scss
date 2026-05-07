@@ -70,6 +70,33 @@
   }
 }
 
+// Styles for datatables datatables.net-dt: ^2.3.7 and datatables.net-responsive-dt: ^3.0.8
+.results-info {
+  font-family: $sans-serif;
+
+  div.dt-paging  {
+    float: right;
+    padding: u(0.5rem 0);
+  }
+
+  .dt-length {
+    float: left;
+    line-height: u(2rem);
+    margin-bottom: u(2rem);
+
+    label, select {
+      display: inline;
+    }
+  }
+
+  .dt-info {
+    padding-top: u(1rem);
+    clear: both;
+    float: right;
+  }
+}
+
+
 @include media($med) {
   .results-info {
     padding: u(1rem 1rem);
@@ -107,6 +134,31 @@
       padding: u(0 1rem 0 0);
     }
   }
+  
+  // media($med) styles for datatables datatables.net-dt: ^2.3.7 and datatables.net-responsive-dt: ^3.0.8
+  .results-info {
+      .dt-length {
+        float: left;
+        margin-bottom: 0;
+        margin-left: 0;
+      }
+
+
+      div.dt-paging {
+        padding: u(0.5rem 0 0.5rem 0.5rem);
+      }
+
+      .dt-info {
+        margin-left: 1.5em;
+        padding-top: u(0.75rem);
+        clear: none;
+      }
+    }
+
+    .dt-length {
+      padding: u(0 1rem 0 0);
+    }
+
 }
 
 @include media($lg) {
@@ -114,3 +166,4 @@
     padding: u(1rem);
   }
 }
+
