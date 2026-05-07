@@ -29,7 +29,7 @@
               {% for column in columns %}
                 <th scope="col" role="columnheader">{{ column }}</th>
               {% endfor %}
-              {% if slug != 'rulemakings' %}
+              {% if slug not in ['rulemakings', 'audit'] %}
               <th scope="col"></th>
               {% endif %}
             </tr>
