@@ -1,15 +1,13 @@
 {%- extends "layouts/legal-main.jinja" -%}
 {%- import 'macros/breadcrumbs.jinja' as breadcrumb -%}
 {%- import 'macros/legal.jinja' as legal -%}
- {%- set breadcrumb_links=[('/legal-resources/', 'Legal resources'), ('/legal/search/rulemakings/', 'Rulemakings')] -%}
- {%- block title -%}Rulemaking #{{ rm_no }}{%- endblock -%}
- {%- block css -%}
+{%- set breadcrumb_links=[('/legal-resources/', 'Legal resources'), ('/legal/search/rulemakings/', 'Rulemakings')] -%}
+{%- block title -%}Rulemaking #{{ rm_no }}{%- endblock -%}
+{%- block css -%}
 <link rel="stylesheet" type="text/css" href="{{ path_for_css('legal-common.css') }}" />
 {%- endblock -%}
 {%- block body -%}
-<header class="page-header slab slab--primary">
-  {{ breadcrumb.breadcrumbs(rm_number, breadcrumb_links) }}
-</header>
+<header class="page-header slab slab--primary">{{ breadcrumb.breadcrumbs(rm_number, breadcrumb_links) }}</header>
 <div class="main__content--full embedded-pdf">
   <div class="data-container__widgets">
     <div class="data-container__wrapper">
@@ -20,24 +18,22 @@
     </div>
   </div>
   <div class="embedded-pdf-list">
-    {%- if FEATURES.rulemakings_commenting -%}{# feature flag to hide the commenting block -#}
-    {%- if not docs_that_can_receive_comments -%}
+  {%- if not docs_that_can_receive_comments -%}
     <div class="submit-comments">
       <div class="label">Not open for comment</div>
     </div>
-    {%- else -%}
-      {%- for doc_for_comments in docs_that_can_receive_comments -%}
+  {%- else -%}
+    {%- for doc_for_comments in docs_that_can_receive_comments -%}
     <div class="submit-comments">
       <div class="label">Open for comment: {{ doc_for_comments.label }}</div>
       <div class="label sublabel t-sans">Comment deadline: {{ doc_for_comments.doc_comment_close_date|date_full(time_tag=True) }}</div>
       <a class="button--cta" href="/legal/rulemakings/{{ rm_no }}/{{ doc_for_comments.doc_id }}/add-comments/" target="_blank">Submit a comment</a>
     </div>
-      {%- endfor -%}
-    {%- endif -%}{# end if docs can receive comments #}
-    {%- endif -%}{# end feature flag to hide commenting block -#}
-    {%- if key_documents -%}{# Include the Key Documents bits only if there are docs to include #}
+    {%- endfor -%}
+  {%- endif -%}{# end if docs can receive comments #}
+  {%- if key_documents -%}{# Include the Key Documents bits only if there are docs to include #}
     <h2>Key documents</h2>
-    <table class="simple-table simple-table--display">
+    <table class="simple-table simple-table--display" tabindex="0" aria-label="Key documents">
       <thead>
         <tr class="simple-table__header">
           <th class="">Name</th>
@@ -45,110 +41,133 @@
         </tr>
       </thead>
       <tbody>
-        {%- for doc in key_documents -%}
+    {%- for doc in key_documents -%}
         <tr>
           <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a></td>
           <td class="date">{{ doc.doc_date|date_full(fmt='%m/%d/%Y', time_tag=True) if doc.doc_date else '' }}</td>
         </tr>
-        {%- endfor -%}
+    {%- endfor -%}
       </tbody>
     </table>
-    {%- endif -%}
+  {%- endif %}{# end if key_documents -#}
 
     <h2>All documents</h2>
-    <table class="simple-table simple-table--display">
-      <thead>
-        <tr class="simple-table__header">
-          <th class="">Document</th>
-          <th class="date">Date</th>
-        </tr>
-      </thead>
+    <table class="simple-table simple-table--display" tabindex="0" aria-label="All documents">
+      <thead><tr class="simple-table__header"><th class="">Document</th><th class="date">Date</th></tr></thead>
       <tbody>
-{%- for docL1 in documents -%}
-  {%- set rowshading = loop.cycle('odd', 'even') -%}
-  <tr class="level-1 {{ rowshading }}">
-    <td>
-      <ul>
-        <li>
-          {%- if docL1.url -%}
-          <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ docL1.url }}" data-doc_id="{{ docL1.doc_id }}" target="_blank">{{ docL1.label }}</a>
-          {%- else -%}
-          {{ docL1.label }}
-          {%- endif -%}
-          {%- if docL1.doc_description and 'pdf' not in docL1.doc_description.lower() -%}
-            <br>{{ docL1.doc_description }}
-          {%- endif -%}
-        </li>
-          {%- if docL1.doc_entities -%}
+  {%- for docL1 in documents %}{# For every doc at level 1, -#}
+    {%- set rowshading = loop.cycle('odd', 'even') -%}
+        <tr class="level-1 {{ rowshading }}">
+          <td role="label" tabindex="0">
+    {#- Add the label/link for the level 1 document -#}
+    {%- if docL1.url %}{# If the doc at level 1 has a url, make its label a link -#}
+            <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ docL1.url }}"
+            data-doc_id="{{ docL1.doc_id }}" target="_blank">{{ docL1.label }}</a>
+    {%- else %}{# Otherwise, just display its label -#}
+      {{ docL1.label }}
+    {%- endif %}{# end if docL1.url -#}
 
-                {%- for entity in docL1.doc_entities -%}
-                  <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
-                {%- endfor -%}
-              </ul>
-            {%- endif -%}
-          </td>
-    <td>{{ docL1.doc_date|date_full(fmt='%m/%d/%Y', time_tag=True) if docL1.doc_date else '' }}</td>
-  </tr>
+    {#- If its doc_description includes 'pdf', add doc_description under the label/link -#}
+    {%- if docL1.doc_description and 'pdf' not in docL1.doc_description.lower() -%}
+            <br><span id="a-desc-{{ docL1.doc_id }}" aria-label="{{ docL1.doc_description|replace('FEC', 'F.E.C.') }}" tabindex="0">{{ docL1.doc_description }}</span>
+    {%- endif -%}
+
+      {#- If this level 1 doc has doc_entities, list 'em -#}
+    {%- if docL1.doc_entities -%}
+      {%- for entity in docL1.doc_entities -%}
+            <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
+      {%- endfor -%}
+    {%- endif -%}
+          </td>{# Close the left column, create the date column #}
+          <td>{{ docL1.doc_date|date_full(fmt='%m/%d/%Y', time_tag=True) if docL1.doc_date else '' }}</td>
+        </tr>
   {# If there's no level 2 list, let's include the description #}
   {# {%- if not docL1.secondary_docs -%}
-    <tr class="level-2 {{ rowshading }}"><td>{{ docL1.label }}</td><td></td></tr>
+        <tr class="level-2 {{ rowshading }}"><td>{{ docL1.label }}</td><td></td></tr>
   {%- endif -%} #}
 
-  {%- for subcat in docL1.secondary_docs -%}
-    {# Only render level-2 if there's a subcategory label. Skip for "Other" category which has empty label. #}
-    {%- if subcat.label -%}
-    <tr class="level-2 {{ rowshading }}"><td>{{ subcat.label }}</td><td></td></tr>
-    {%- endif -%}
-    {%- for doc in subcat.documents -%}
-      <tr class="level-3 {{ rowshading }}">
-        <td>
-          <ul>
-            {%- if (doc.label == 'Comments' or doc.label == 'Hearing Schedule') and doc.doc_entities -%}
-              {%- if doc.label == 'Hearing Schedule' -%}
-                <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a></li>
-                {%- for entity in doc.doc_entities -%}
-                  <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
-                {%- endfor -%}
-              {%- else -%}
-                {# Check commenters count to determine display #}
-                {%- if doc.commenters|length == 1 -%}
-                  {# Single commenter: show commenter name #}
-                  <li>
-                  <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.commenters[0].name }} <span aria-label=";">|</span> {{ doc.commenters[0].role }}</a>
-                  {%- if doc.doc_description and 'pdf' not in doc.doc_description.lower() -%}<br>{{ doc.doc_description }}{%- endif -%}
-                  </li>
-                  {%- for entity in doc.doc_entities -%}
-                    <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
-                  {%- endfor -%}
-                {%- else -%}
-                  {# Multiple commenters: show "Joint comment" #}
-                  <li><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">Joint comment</a>
-                  {%- if doc.doc_description and 'pdf' not in doc.doc_description.lower() -%}<br>{{ doc.doc_description }}{%- endif -%}</li>
-                  {%- for entity in doc.doc_entities -%}
-                    <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
-                  {%- endfor -%}
-                {%- endif -%}
-              {%- endif -%}
-            {%- else -%}
-              <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a>
+    {# For every secondary_doc in this level 1 document #}
+    {%- for subcat in docL1.secondary_docs -%}
+      {# Only render level-2 if there's a subcategory label. Skip for "Other" category which has empty label. #}
+    
+      {#- if this subcat has a label, it'll be an otherwise-empty table row -#}
+      {%- if subcat.label -%}
+        <tr class="level-2 {{ rowshading }}"><td role="label" tabindex="0">{{ subcat.label }}</td><td></td></tr>
+      {%- endif -%}
+
+      {%- for doc in subcat.documents -%}
+        <tr class="level-3 {{ rowshading }}">
+        {#- Comments or Hearing Schedule WITH doc_entities -#}
+        {%- if (doc.label == 'Comments' or doc.label == 'Hearing Schedule') and doc.doc_entities -%}
+          {#- Hearing Schedule -#}
+          {%- if doc.label == 'Hearing Schedule' -%}
+          <td>
+            <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a>
+            <ul>
+            {%- for entity in doc.doc_entities -%}
+              <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
+            {%- endfor -%}
+            </ul>
+          </td>
+          <td class="date">{{ doc.doc_date|date_full(fmt='%m/%d/%Y', time_tag=True) if doc.doc_date else '' }}</td>
+          {#- else Comments -#}
+          {%- elif doc.label == 'Comments' -%}
+          <td>
+            {#- Check commenters count to determine display -#}
+            {%- if doc.commenters|length == 1 -%}
+              {#- Single commenter: show commenter name -#}
+            <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" 
+              data-doc_id="{{ doc.doc_id }}" target="_blank"
+              >{{ doc.commenters[0].name }} <span aria-label=";">|</span> {{ doc.commenters[0].role }}</a>
               {%- if doc.doc_description and 'pdf' not in doc.doc_description.lower() -%}
-                <br>{{ doc.doc_description }}
-              {%- endif -%}
+              {# <br>{{ doc.doc_description }} #}
+            <ul tabindex="0" aria-label="Entities">
+                {%- for entity in doc.doc_entities -%}
+              <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
+                {%- endfor -%}
+            </ul>
+              {% elif doc.doc_description %}
+              doc_description
+              {% else %}
+            <ul tabindex="0" aria-label="Commenting entities">
+                {%- for entity in doc.doc_entities -%}
+              <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
+                {%- endfor -%}
+            </ul>
+              {%- endif %}{# end doc.commenters|length or doc.doc_description -#}
+            {%- elif doc.commenters|length > 1 -%}{# Multiple commenters: show "Joint comment" -#}
+            <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">Joint comment</a>
+              {#- TODO: need to verify this one -#}
+              {%- if doc.doc_description and 'pdf' not in doc.doc_description.lower() -%}<br>{{ doc.doc_description }}{%- endif -%}
+            <ul tabindex="0" aria-label="Commenting entities">
+                {%- for entity in doc.doc_entities -%}
+              <li class="indent">{{ entity.name }}, {{ entity.role }}</li>
+                {%- endfor -%}
+            </ul>
+              {% endif %}{# end if doc.doc_description and 'pdf' not in… -#}
+          </td>
+          <td class="date">{{ doc.doc_date|date_full(fmt='%m/%d/%Y', time_tag=True) if doc.doc_date else '' }}</td>
+            {%- endif %}{# end elif doc.label == 'Hearing Schedule/'Comments' -#}
+          {%- else -%}
+          <td>
+            <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a>
+            {%- if doc.doc_description and 'pdf' not in doc.doc_description.lower() -%}
+            <br><span id="a-desc-{{ doc.doc_id }}">{{ doc.doc_description }}</span>
             {%- endif -%}
-          </ul>
-        </td>
-        <td class="date">{{ doc.doc_date|date_full(fmt='%m/%d/%Y', time_tag=True) if doc.doc_date else '' }}</td>
-      </tr>
-    {%- endfor -%}
-  {%- endfor -%}
-{%- endfor -%}
+          </td>
+          <td class="date">{{ doc.doc_date|date_full(fmt='%m/%d/%Y', time_tag=True) if doc.doc_date else '' }}</td>
+          {%- endif %}{# end doc.label == 'Hearing Schedule' or 'Comments' -#}
+        {% endfor %}{# end for doc in subcat.documents -#}
+        </tr>
+    {%- endfor %}{# end for subcat in docL1.secondary_docs -#}
+  {%- endfor %}{# end for docL1 in documents -#}
       </tbody>
     </table>
-    
+
     {# Only show if there are docs to include #}
     {%- if press_public_guidance_documents -%}
-    <h2>Press and public guidance</h2>
-    <table class="simple-table simple-table--display">
+    <h2 tabindex="0">Press and public guidance</h2>
+    <table class="simple-table simple-table--display" tabindex="0" aria-label="Press and public guidance documents">
       <thead>
         <tr class="simple-table__header">
           <th>Document</th>
@@ -157,7 +176,7 @@
       <tbody>
         {%- for doc in press_public_guidance_documents -%}
         <tr class="{{ loop.cycle('odd', 'even') }}">
-          <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a></td>
+          <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank" aria-label="{{ doc.label|replace('FEC', 'F.E.C.') }}">{{ doc.label }}</a></td>
         </tr>
         {%- endfor -%}
       </tbody>
@@ -165,7 +184,7 @@
     {%- endif -%}
 
     <h2>Entities</h2>
-    <table class="simple-table simple-table--display">
+    <table class="simple-table simple-table--display" tabindex="0" aria-label="Entities">
       <thead>
         <tr class="simple-table__header">
           <th class="sorting sorting_asc">Name</th>
@@ -175,7 +194,7 @@
       <tbody>
         {%- for entity in rm_entities -%}
         <tr class="{{ loop.cycle('odd', 'even') }}" data-sort="{{ loop.index0 }}">
-          <td>{{ entity.name }}</td>
+          <td tabindex="0" aria-label="{{ entity.name }}, {{ entity.role }}">{{ entity.name }}</td>
           <td>{{ entity.role }}</td>
         </tr>
         {%- endfor -%}
