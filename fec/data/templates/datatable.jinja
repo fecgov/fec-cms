@@ -44,7 +44,7 @@
           <noscript>
           {% if query %}
             <div class="results-info">
-              <div class="dataTables_paginate paging_simple">
+              <div class="dt-paging paging_simple">
                 {% if query['page']|int > 1 %}
                   <a href="?page={{query['page']|int - 1}}" class="button button--previous button--standard"></a>
                 {% endif %}
