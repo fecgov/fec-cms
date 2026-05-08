@@ -6,7 +6,8 @@
 {% block body_class %}template-{{ self.get_verbose_name | slugify }}{% endblock %}
 
 {% comment %}
-This template is for previewing the home page banner announcement only in Wagtail.
+This template is for preview-only of alert home page banner announcements in Wagtail.
+This template calls "draft_home_page_banner_announcement(id)" from home_page.py
 {% endcomment %}
 
 {% block content %}

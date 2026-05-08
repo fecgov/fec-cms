@@ -16,16 +16,8 @@
 </section>
  {% endif %}
 
-
-{% if display_banners %}
-{% for banner in display_banners %}
-{% if forloop.counter == 3 and banner.id == draft_id %} oops!{% endif %}
-{% endfor %}
-
 <section class="slab slab--secondary">
   <div class="container">
-  
-
   {% comment %}
     We allow a max of three banners in this preview for rare situation where there are already two live banners,
     but we still want to show the one being edited. We will fade opacity of the third banner to signify that 
