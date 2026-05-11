@@ -130,7 +130,7 @@
         background-color: $navy;
         color: $inverse;
 
-        a {
+        a:not(.dropdown__value) {
           border-bottom-color: $inverse;
           color: $inverse;
         }
