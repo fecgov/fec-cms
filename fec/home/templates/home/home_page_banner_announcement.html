@@ -13,9 +13,9 @@ This template calls "draft_home_page_banner_announcement(id)" from home_page.py
 
 {% block content %}
 <div style="color:green">
-   <h2 class="t-sans">This preview shows the banner you are currently editing (draft or live) plus any other banners currently live on the homepage.</h2>
+   <h2 class="t-sans">This preview shows the banner you are currently editing (draft or live) plus the latest draft of any other banners currently live on the homepage.</h2>
    <h2 class="t-sans"> To change the order of your banner among others: Adjust the "date_active" and save draft to verify order before publishing.</h2>
-   <h2 class="t-sans">Note: Banners are ordered by most recent "date_active" first ("alert_for_emergency_use_only" are always first, regardless)</h2>
+   <h2 class="t-sans">Note: Banners are ordered by most recent "date_active" first ("alert_for_emergency_use_only" banners are always first, regardless)</h2>
 </div>
   <section class="hero hero--home" aria-labelledby="hero-heading">
     <div class="container">
@@ -26,7 +26,13 @@ This template calls "draft_home_page_banner_announcement(id)" from home_page.py
     </div>
   </section>
 
- {% draft_home_page_banner_announcement self.id %}
+{% comment %}
+Wagtail automatically looks for a template which is the 'snake_case' version of the 'CamelCase' model name.
+So instances of 'HomePageBannerAnnouncement' will preview using 'home_page_banner_announcement.html'
+This template is for preview only, it is not used to actually render the banner to the homepage.
+{% endcomment %}
+ 
+{% draft_home_page_banner_announcement self.id %}
 
   <section class="slab">
     <div class="container">

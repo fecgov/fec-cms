@@ -4,7 +4,6 @@ from wagtail.admin.viewsets.base import ViewSetGroup
 from wagtail.admin.viewsets.model import ModelViewSet
 from wagtail.admin.views.pages.listing import IndexView
 from wagtail.admin.viewsets.pages import PageListingViewSet
-from django.urls import reverse
 from wagtail import hooks
 from home.models import (Author, DigestPage, FecTimelineItem, HomePageBannerAnnouncement, PressReleasePage,
                          RecordPage, TipsForTreasurersPage)

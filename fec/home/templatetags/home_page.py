@@ -34,37 +34,56 @@ def home_page_banner_announcement():
 
 
 """ 
-This is for the Wagtail preview for Home Page Banner Announcement. 
-Shows the banner currenty being edited (draft_banner or draft_alert_banner) and any live_banner(s) or alert_draft_alert_banner(s).
-All are ordered by -date_active.
+This is for the Wagtail preview of HomePageBannerAnnouncement and AlertForEmergencyUseOnly banners
+Shows the latest draft of banner currenty being edited and any other banner(s) currently live and showing on the home page.
+All are ordered by -date_active. Alert banners are always first, followed by regular banners. 
+See: /partials/draft-home-page-banner-announcement.html
 """
 @register.inclusion_tag('partials/draft-home-page-banner-announcement.html')
 def draft_home_page_banner_announcement(id):
+    # Banners live on the homepage. Excluding the one being edited in the case it is currently live
     live_banners = HomePageBannerAnnouncement.objects.live().filter(
         active=True, date_active__lte=datetime_now,
-        date_inactive__gt=datetime_now).order_by('-date_active')[:2] 
-    live_alert_banners = AlertForEmergencyUseOnly.objects.live().filter(
-        alert_active=True, alert_date_active__lte=datetime_now,
-        alert_date_inactive__gt=datetime_now).order_by('-alert_date_active')[:2]
+        date_inactive__gt=datetime_now).exclude(id=id).order_by('-date_active')[:2]
     
-    # This is the banner currently being edited in Wagtail
-    draft_banner = HomePageBannerAnnouncement.objects.filter(id=id)
-    # Combine the draft banner with any currently live banners
-    preview_banners = draft_banner | live_banners 
-    # Limit to three to allow up to two live banners (the homepage limit) plus the one being edited
-    display_banners = preview_banners.order_by('-date_active')[:3]
-    
-    # This is the alert_banner currently being edited in Wagtail
-    draft_alert_banner = AlertForEmergencyUseOnly.objects.filter(id=id)
-    # Combine the draft alert banner with any currently live alert banners
-    preview_alert_banners = draft_alert_banner | live_alert_banners
-    # Limit to two to represent what the homepage would show
-    display_alert_banners = preview_alert_banners.order_by('-alert_date_active')[:2]
+    # Latest drafts of any live banners
+    live_banners_drafts = [page.get_latest_revision_as_object() for page in live_banners ]
 
+    # The banner currently being edited in Wagtail
+    edit_banner = HomePageBannerAnnouncement.objects.filter(id=id)
+
+    # The latest draft of the banner being edited
+    edit_banner_draft = [page.get_latest_revision_as_object() for page in edit_banner ]
+    
+    # Combine edit_banner_draft and live_banner_drafts for all that will be previwed
+    combined_banners = edit_banner_draft + live_banners_drafts
+
+    # Sort combined_banners by date_active, descending
+    preview_banners = sorted(combined_banners, key=lambda x: x.date_active, reverse=True)
+
+    alert_live_banners = AlertForEmergencyUseOnly.objects.live().filter(
+        alert_active=True, alert_date_active__lte=datetime_now,
+        alert_date_inactive__gt=datetime_now).exclude(id=id).order_by('-alert_date_active')[:2]
+    
+    # Latest draft of any live alert banners
+    alert_live_banners_drafts = [page.get_latest_revision_as_object() for page in alert_live_banners]
+    
+     # The alert banner currently being edited in Wagtail
+    alert_edit_banner = AlertForEmergencyUseOnly.objects.filter(id=id)
+
+    # The latest draft of the alert banner being edited
+    alert_edit_banner_draft = [page.get_latest_revision_as_object() for page in alert_edit_banner]
+    
+    # Combine alert_edit_banner_draft and alert_live_banner_drafts for all that will be previwed
+    combined_alert_banners = alert_edit_banner_draft + alert_live_banners_drafts
+
+    # Sort combined_alert_banners by date_active, descending
+    alert_preview_banners = sorted(combined_alert_banners, key=lambda x: x.alert_date_active, reverse=True)
+    
     return {
         'draft_id': id,
-        'display_banners': display_banners,
-        'display_alert_banners': display_alert_banners,
+        'alert_preview_banners': alert_preview_banners,
+        'preview_banners': preview_banners,   
     }
 
 

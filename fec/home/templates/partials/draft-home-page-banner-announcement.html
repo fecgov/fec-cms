@@ -1,10 +1,15 @@
 {% load wagtailcore_tags %}
-{% if display_alert_banners %}
+{% if alert_preview_banners %}
 
 <section class="slab slab--secondary message--vivid">
   <div class="container">
-  {% for alert_banner in display_alert_banners %}
-    <div>
+   {% comment %}
+    We allow a max of three alert banners in this preview for rare occasions where there are already two live alert banners,
+    but we still want to show the one being edited. We will fade opacity of the third alert banner to signify that 
+    it will not show on homepage since the home page max is two.
+  {% endcomment %}
+  {% for alert_banner in alert_preview_banners %}
+   <div class="u-margin--top"{% if forloop.counter == 3 %} style="opacity:.4"{% endif %}>
       <div class="message message--vivid message--large message--alert message--inline u-no-margin-top u-no-margin-bottom">
         <span class="t-bold">{{ alert_banner.title }}: </span> {{ alert_banner.alert_description }}
         <br>
@@ -16,16 +21,16 @@
 </section>
  {% endif %}
 
- {% if display_banners %}
+ {% if preview_banners %}
  
 <section class="slab slab--secondary">
   <div class="container">
   {% comment %}
-    We allow a max of three banners in this preview for rare situation where there are already two live banners,
+    We allow a max of three banners in this preview for rare occasions where there are already two live banners,
     but we still want to show the one being edited. We will fade opacity of the third banner to signify that 
     it will not show on homepage since the home page max is two.
   {% endcomment %}
-  {% for banner in display_banners %}
+  {% for banner in preview_banners%}
     <div class="u-margin--top"{% if forloop.counter == 3 %} style="opacity:.4"{% endif %}>
       <div class="message message--vivid message--mini message--info message--inline u-no-margin-top u-no-margin-bottom">
         <span class="t-bold">{{ banner.title }}: </span> {{ banner.description }}

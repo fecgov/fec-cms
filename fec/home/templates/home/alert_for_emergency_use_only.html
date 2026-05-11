@@ -25,6 +25,12 @@ This template calls "draft_home_page_banner_announcement(id)" from home_page.py
     </div>
   </section>
 
+{% comment %}
+Wagtail automatically looks for a template which is the 'snake_case' version of the 'CamelCase' model name
+So instances of 'AlertForEmergencyUseOnly' will preview using 'alert_for_emergency_use_only.html'
+This template is for preview only. It is not used to actually render the banner to the homepage.
+{% endcomment %}
+
  {% draft_home_page_banner_announcement self.id %}
 
   <section class="slab">
