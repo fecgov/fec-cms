@@ -54,11 +54,12 @@ def draft_home_page_banner_announcement(id):
 
     # The latest draft of the banner being edited
     edit_banner_draft = [page.get_latest_revision_as_object() for page in edit_banner ]
+    #edit_banner_draft = edit_banner[0].get_latest_revision_as_object()
     
     # Combine edit_banner_draft and live_banner_drafts for all that will be previwed
     combined_banners = edit_banner_draft + live_banners_drafts
 
-    # Sort combined_banners by date_active, descending
+    # All that will be previwed, sorted by date_active, descending
     preview_banners = sorted(combined_banners, key=lambda x: x.date_active, reverse=True)
 
     alert_live_banners = AlertForEmergencyUseOnly.objects.live().filter(
@@ -77,13 +78,14 @@ def draft_home_page_banner_announcement(id):
     # Combine alert_edit_banner_draft and alert_live_banner_drafts for all that will be previwed
     combined_alert_banners = alert_edit_banner_draft + alert_live_banners_drafts
 
-    # Sort combined_alert_banners by date_active, descending
+    # All that will be previwed, sorted  by date_active, descending
     alert_preview_banners = sorted(combined_alert_banners, key=lambda x: x.alert_date_active, reverse=True)
     
     return {
         'draft_id': id,
         'alert_preview_banners': alert_preview_banners,
-        'preview_banners': preview_banners,   
+        'preview_banners': preview_banners,
+        #'edit_banner_draft': edit_banner_draft, 
     }
 
 
