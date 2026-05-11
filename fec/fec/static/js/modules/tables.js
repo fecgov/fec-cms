@@ -1420,12 +1420,14 @@ function drawContributionsByStateTable(selected, pageContext) {
  * @returns {string} a string to be used as the innerHTML of the child/details row
  */
 function childRow(contents, pdf_url) {
-  return `<div class="dt-details">
-    <div class="dt-details__nav">
-      <a href="${pdf_url}" class="dt-details__link button--small button--standard js-pdf_url" target="_blank">Open image</a>
-    </div>
-    <div class="dt-details__content">
-      ${contents}
-    </div>
-  </div>`;
+  let toReturn ='<div class="dt-details">';
+  if (pdf_url) {
+    toReturn += '<div class="dt-details__nav">';
+    toReturn += `<a href="${pdf_url}" class="dt-details__link button--small button--standard js-pdf_url" target="_blank">Open image</a>`;
+    toReturn += '</div>';
+  }
+  toReturn += `<div class="dt-details__content">${contents}</div>`;
+  toReturn += '</div>';
+
+  return toReturn;
 }
