@@ -19,7 +19,19 @@ This template is for previewing the home page banner announcement on Wagtail
     </div>
   </section>
 
-  {% draft_home_page_banner_announcement %}
+  <section class="slab slab--secondary">
+    <div class="container">
+      <div class="u-margin--top">
+        <div class="message message--vivid message--mini message--info message--inline u-no-margin-top u-no-margin-bottom">
+          <span class="t-bold">{{ self.title }}: </span> {{ self.description }}
+        </div>
+        <a href="{{ self.link_url }}" class="t-sans">{{ self.link_title }}</a> »
+        {% if self.link_url_2 %}
+        &nbsp; | &nbsp; <a href="{{ self.link_url_2 }}" class="t-sans">{{ self.link_title_2 }}</a> »
+        {% endif %}
+      </div>
+    </div>
+  </section>
 
   <section class="slab">
     <div class="container">
