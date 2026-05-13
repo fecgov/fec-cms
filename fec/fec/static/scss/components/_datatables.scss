@@ -49,6 +49,9 @@
 .dataTables_wrapper {
   overflow-x: scroll;
   position: relative;
+
+  container-type: inline-size; /* Make the outermost part of datatables into a css container */
+  container-name: cq-table-width;
 }
 
 // Sortable headers
@@ -112,7 +115,7 @@
     border-bottom: 1px solid $neutral;
 
     &.row-color-contrast,
-    &:nth-child(even) {
+    &.even {
       background-color: rgba($gray-lightest, 0.5);
     }
 
@@ -120,7 +123,20 @@
       background-color: $inverse;
     }
 
-    &.row-active {
+    &.dt-hasChild {
+      border-left: 0.5rem solid $primary;
+      
+      td {
+        background-color: $navy;
+        color: $inverse;
+
+        a:not(.dropdown__value) {
+          border-bottom-color: $inverse;
+          color: $inverse;
+        }
+      }
+    }
+    &.dt-isChild {
       border-left: 0.5rem solid $primary;
     }
   }
@@ -337,21 +353,22 @@
 }
 
 // Special styles for rows that trigger panels
-.row--has-panel {
+.row--has-details {
   cursor: pointer;
+
   @include transition(border-left-width, 0.2s);
 }
 
-.row-active {
+.dt-hasChild, .dt-isChild {
   td {
     background-color: rgba($gray-lightest, 0.3);
     border-top: 1px solid $gray-lightest;
     border-bottom: 1px solid $gray-lightest;
-  }
 
-  td:first-child {
-    padding-left: u(1rem);
-    border-left: 1px solid $gray-lightest;
+    &:first-child {
+      padding-left: u(1rem);
+      border-left: 1px solid $gray-lightest;
+    }
   }
 }
 

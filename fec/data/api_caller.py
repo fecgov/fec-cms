@@ -145,6 +145,46 @@ def find_legal_document_by_filename(filename):
     return None
 
 
+def find_rulemaking_document_by_doc_id(doc_id):
+    """
+    Find a rulemaking document by doc_id and return the document URL.
+
+    Args:
+        doc_id (int): The rulemaking document ID
+
+    Returns:
+        str: The full URL to the document, or None if not found
+    """
+    results = _call_api("/rulemaking/search/", doc_id=doc_id)
+
+    if not results:
+        return None
+
+    canonical_base = getattr(settings, 'CANONICAL_BASE', 'https://www.fec.gov')
+
+    for rulemaking in results.get("rulemakings", []):
+        for doc in rulemaking.get("documents", []):
+            if doc.get("doc_id") == doc_id:
+                document_url = doc.get("url")
+                if document_url:
+                    return f"{canonical_base}{document_url}" if document_url.startswith('/') else document_url
+
+            for level_2 in doc.get("level_2_labels", []):
+                for nested_doc in level_2.get("level_2_docs", []):
+                    if nested_doc.get("doc_id") == doc_id:
+                        document_url = nested_doc.get("url")
+                        if document_url:
+                            return f"{canonical_base}{document_url}" if document_url.startswith('/') else document_url
+
+        for no_tier_doc in rulemaking.get("no_tier_documents", []):
+            if no_tier_doc.get("doc_id") == doc_id:
+                document_url = no_tier_doc.get("url")
+                if document_url:
+                    return f"{canonical_base}{document_url}" if document_url.startswith('/') else document_url
+
+    return None
+
+
 def load_legal_advisory_opinion(ao_no):
     url = "/legal/docs/advisory_opinions/"
     results = _call_api(url, parse.quote(ao_no))

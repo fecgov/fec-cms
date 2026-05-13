@@ -4,6 +4,7 @@ import locale
 import re
 
 from dateutil.parser import parse as parse_date
+from difflib import SequenceMatcher
 
 from django.conf import settings
 from django_jinja import library
@@ -162,6 +163,43 @@ def filesize(value):
         unit += 1
 
     return '%d %s' % (value, units[unit])
+
+
+@library.filter
+def compare(string, string_1):
+    """Compares two strings to determine if they are nearly identical or semantically similar. 
+    Returns False if `string` is >= than 50% similar to `string_1`. Else returns True.
+    Uses difflib.SequenceMatcher: https://docs.python.org/3/library/difflib.html
+    """
+
+    # Calculate the similarity ratio
+    similarity_ratio = SequenceMatcher(None, string, string_1).ratio()
+
+    # Define a threshold for redundancy (e.g., 50% similar)
+    threshold = .5
+
+    if similarity_ratio >= threshold:
+        return False
+        
+    else:
+        return True
+
+
+@library.filter
+def compare_commenter(string, string_1):
+    """Convert `string_1` from "LastName, FirstName" format to "FirstName LastName" 
+    Returns False if `converted_string_1` is in `string`.
+    Returns False if `string` == 'Comment'.
+    Else returns True.
+    """
+
+    # Convert name from "LastName, FirstName" format to "FirstName LastName"
+    converted_string_1 = ' '.join(reversed(string_1.split(', ')))
+
+    if converted_string_1 in string or string == 'Comment':
+        return False
+    else:
+        return True
 
 
 @library.global_function
