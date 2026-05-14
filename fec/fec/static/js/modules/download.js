@@ -93,6 +93,7 @@ export function DownloadItem(url, container, opts) {
   this.downloadUrl = payload.downloadUrl;
   this.isPending = !_isEmpty(payload);
   this.filename = this.resource + '-' + this.timestamp + '.csv';
+  this.task_id = '';
 }
 
 DownloadItem.prototype.init = function() {
@@ -119,7 +120,8 @@ DownloadItem.prototype.serialize = function() {
     url: this.url,
     apiUrl: this.apiUrl,
     downloadUrl: this.downloadUrl,
-    filename: this.filename
+    filename: this.filename,
+    task_id: this.task_id
   };
 };
 
@@ -141,7 +143,7 @@ DownloadItem.prototype.refresh = function() {
   this.promise = $.ajax({
     method: 'POST',
     url: this.apiUrl,
-    data: JSON.stringify({ filename: this.filename }),
+    data: JSON.stringify({ filename: this.filename, task_id: this.task_id }),
     contentType: 'application/json',
     dataType: 'json'
   });
@@ -156,6 +158,8 @@ DownloadItem.prototype.cancel = function() {
 };
 
 DownloadItem.prototype.handleSuccess = function(response) {
+  this.task_id = response.task_id || '';
+
   if (response && response.status === 'complete') {
     this.finish(response.url);
   } else {
