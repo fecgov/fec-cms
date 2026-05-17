@@ -15,6 +15,7 @@
 
 {% block css %}
   <link rel="stylesheet" type="text/css" href="{{ path_for_css('elections.css') }}" />
+  <link rel="stylesheet" type="text/css" href="/static/css/widgets/party-money-bars.css" />
 {% endblock %}
 {% block body %}
   {{ header.header(title, crumb) }}
@@ -56,6 +57,7 @@
       election_full: true,
       duration: '{{ election_duration }}',
       office: '{{ office }}',
+      office_code: '{{ office_code }}',
       state: '{{ state or '' }}',
       stateFull: '{{ state_full or '' }}',
       district: '{{ district or '' }}'
@@ -63,6 +65,7 @@
   };
 
 </script>
+{{ tags_for_js_chunks('election-summary.js', '')|safe }}
 {#- data-init and global chunks are loaded by main.jinja -#}
 {{ tags_for_js_chunks('elections.js', '')|safe }}
 {% endblock %}
