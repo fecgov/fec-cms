@@ -1,0 +1,50 @@
+{# used inside fec/data/templates/house-senate-overview.jinja #}
+{% import 'macros/null.jinja' as null %}
+{% import 'macros/disclaimer.jinja' as disclaimer %}
+{% import 'macros/cycle-select.jinja' as select %}
+       <div id="raising-spending-summary" class="entity__figure row">
+       <h3 class="heading__left">Raising and spending summary</h3>
+        <section id="summary" class="option">
+        <div id="election-summary" class="heading--section heading--with-action u-no-margin">
+          <div id="election-summary">
+            <div class="grid--flex grid--3-wide">
+              <div class="grid__item">
+                <figure class="js-party-money-bars" id="summary-total-raised" data-event-field-id="total_receipts">
+                  <div class="total-wrapper">
+                    <h1 class="value js-value-large">$1,234,567,890</h1>
+                    <h2 class="description js-value-large-desc">raised by candidates</h2>
+                  </div>
+                  <div class="visual-divider" role="presentation"></div>
+                  <div class="parties-wrapper"></div>
+                </figure>
+              </div>
+              <div class="grid__item">
+                <figure class="js-party-money-bars" id="summary-total-spent" data-event-field-id="total_disbursements">
+                  <div class="total-wrapper">
+                    <h1 class="value js-value-large">$1,234,567,890</h1>
+                    <h2 class="description js-value-large-desc">spent by candidates</h2>
+                  </div>
+                  <div class="visual-divider" role="presentation"></div>
+                  <div class="parties-wrapper"></div>
+                </figure>
+              </div>
+              <div class="grid__item">
+                <figure class="js-party-money-bars" id="summary-remaining-coh" data-event-field-id="total_cash_on_hand_end_period">
+                  <div class="total-wrapper">
+                    <h1 class="value js-value-large">$1,234,567,890</h1>
+                    <h2 class="description js-value-large-desc">cash on hand for candidates</h2>
+                  </div>
+                  <div class="visual-divider" role="presentation"></div>
+                  <div class="parties-wrapper"></div>
+                </figure>
+              </div>
+            </div>
+            <div class="content__section--ruled-responsive methodology-block t-serif">
+              <div class="heading--with-action t-small t-serif">
+                <i class="data-disclaimer">Newly filed summary data may not appear for up to 48 hours. Money raised includes both itemized and unitemized totals. Independent expenditure totals are combined for all candidates, exclude 24- and 48-hour reports, and may take 30 days or more to appear.</i>
+                <div class="heading__right">
+                </div>
+              </div>
+            </div>
+        </section>
+       </div>
