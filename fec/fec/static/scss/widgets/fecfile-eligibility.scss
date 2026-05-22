@@ -57,12 +57,17 @@ body:has(#modal-gov-fec-fecfile-eligibility[open]) {
     height: 100%;
     left: unset;
     margin: 0;
+    min-height: 65 * $font-rem;
     overflow: hidden;
     padding: 2 * $font-rem;
     position: relative;
     right: unset;
     top: unset;
     width: 100%;
+
+    @media screen and (min-width:$width-med) {
+      min-height: 57 * $font-rem;
+    }
   }
   .modal__close {
     position: absolute;
