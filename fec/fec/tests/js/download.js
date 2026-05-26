@@ -87,6 +87,7 @@ describe('DownloadItem', function() {
       expect(this.item.isPending).to.be.false;
       expect(this.item.timestamp.slice(0, 10)).to.equal('1985-10-01');
       expect(this.item.downloadUrl).not.to.be.ok;
+      expect(this.item.task_id).to.equal('');
     });
 
     it('parses localStorage', function() {
@@ -131,7 +132,7 @@ describe('DownloadItem', function() {
       expect($.ajax).to.have.been.calledWith({
         method: 'POST',
         url: this.item.apiUrl,
-        data: JSON.stringify({ filename: this.item.filename }),
+        data: JSON.stringify({ filename: this.item.filename, task_id: '' }),
         contentType: 'application/json',
         dataType: 'json'
       });
