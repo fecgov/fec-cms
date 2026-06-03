@@ -286,18 +286,6 @@
   }
 }
 
-.icon-download--inline--left {
-  display: inline-block;
-  vertical-align: middle;
-
-  &::before {
-    content: '';
-    float: left;
-    padding: u(1.5rem);
-    @include u-icon-bg($download, $primary);
-  }
-}
-
 .icon-star {
   width: u(1.5rem);
   height: u(1.5rem);

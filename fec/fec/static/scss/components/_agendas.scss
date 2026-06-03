@@ -54,20 +54,10 @@
     }
   }
 
-  .list--flat-bordered li {
-    &::after {
-      content: '';
-      padding-left: 0;
-
-      @include media($med) {
-        content: '|';
-        padding-left: u(1rem);
-      }
-    }
-
-    &:last-child::after {
-      content: '';
-      padding-left: 0;
+  .list--flat-bordered li:not(:last-child) {
+    @include media($med) {
+      content: '|';
+      padding-left: u(1rem);
     }
   }
 }
