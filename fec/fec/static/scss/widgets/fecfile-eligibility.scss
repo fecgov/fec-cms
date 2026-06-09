@@ -21,7 +21,7 @@ html, body {
 }
 
 body:has(#modal-gov-fec-fecfile-eligibility[open]) {
-  overflow: hidden; /* prevent scrolling while the <dialog> is open */
+  overflow: hidden !important; /* prevent scrolling while the <dialog> is open */
 }
 
 /* Rules specifically for this <dialog> */
@@ -32,12 +32,13 @@ body:has(#modal-gov-fec-fecfile-eligibility[open]) {
   font-family: $font-base-family;
   font-feature-settings: 'kern', 'liga', 'pnum';
   font-size: 1.4 * $font-rem;
-  line-height: 1.8 * $font-rem;
-  padding: 0;
   height: calc(100% - (4 * $font-rem));
-  width: calc(100% - (4 * $font-rem));
+  line-height: 1.8 * $font-rem;
   max-height: 65 * $font-rem;
   max-width: 80 * $font-rem;
+  overflow: scroll;
+  padding: 0;
+  width: calc(100% - (4 * $font-rem));
 
   &::backdrop {
     background: rgb(from $color-base r g b / 50%);
