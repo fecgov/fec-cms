@@ -245,7 +245,7 @@ DATABASES = {
 DATABASES['default'].setdefault('OPTIONS', {})
 DATABASES['default']['OPTIONS'].update({
     'pool': {
-        'max_size': 50,  # total possible db conn = Workers x Instances x max_size (600, probably too high)
+        'max_size': int(env.get_credential('DB_POOL_MAX_SIZE', 50)),
         'max_idle': 400,  # default is 600 sec
     }
 })
