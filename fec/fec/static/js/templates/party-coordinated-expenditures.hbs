@@ -1,68 +1,67 @@
 {{!--
-Template for Party Coordinated Expenditures datatable details panel
+Template for Party Coordinated Expenditures datatable details row
 ---------------------
 This shows all the fields available on the Schedule F form.
 --}}
-
-<div class="panel__row">
-  <h4 class="panel__title">Committee information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Name"}}
+    <caption>Committee information</caption>
+    {{#dtDetailsTableRow "Name"~}}
       <a href="{{basePath}}/committee/{{committee_id}}">{{committee.name}}</a>
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     {{#if subordinate_committee}}
-      {{#panelRow "Full Name of Subordinate Committee"}}
+      {{#dtDetailsTableRow "Full Name of Subordinate Committee"~}}
         {{subordinate_committee.name}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
-    {{#panelRow "Mailing Address"}}
+    {{#dtDetailsTableRow "Mailing Address"~}}
       {{committee.street_1}}<br>
       {{committee.city}}, {{committee.state}} {{zipCode committee.zip}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">Candidate information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Candidate"}}
+    <caption>Candidate information</caption>
+    {{#dtDetailsTableRow "Candidate"~}}
       <a href="{{basePath}}/candidate/{{candidate_id}}">{{candidate_last_name}}, {{candidate_first_name}} {{candidate_middle_name}}</a>
-    {{/panelRow}}
-    {{#panelRow "Office"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Office"~}}
       {{candidate_office_full}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
     {{#if candidate_office_state}}
-      {{#panelRow "State"}}
+      {{#dtDetailsTableRow "State"~}}
         {{candidate_office_state_full}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
     {{#if candidate_office_district}}
-      {{#panelRow "District"}}
+      {{#dtDetailsTableRow "District"~}}
         {{candidate_office_district}}
-      {{/panelRow}}
+      {{/dtDetailsTableRow}}
     {{/if}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">Expenditure information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Payee"}}
-      {{#if payee_name}}
+    <caption>Expenditure information</caption>
+    {{#dtDetailsTableRow "Payee"~}}
+      {{#if payee_name~}}
         {{payee_name}}
       {{/if}}
-    {{/panelRow}}
-    {{#panelRow "Purpose of Expenditure"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Purpose of Expenditure"~}}
       {{{expenditure_purpose_full}}}
-    {{/panelRow}}
-    {{#panelRow "Category/Type"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Category/Type"~}}
       {{{expenditure_type}}}
-    {{/panelRow}}
-    {{#panelRow "Date"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Date"~}}
       {{datetime expenditure_date}}
-    {{/panelRow}}
-    {{#panelRow "Amount"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Amount"~}}
       {{currency expenditure_amount}}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>

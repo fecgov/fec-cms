@@ -25,11 +25,19 @@ FEC_API_KEY_PUBLIC = env.get_credential('FEC_WEB_API_KEY_PUBLIC', '')
 FEC_INTERNAL_API_KEY_PUBLIC = env.get_credential('FEC_INTERNAL_API_KEY_PUBLIC', '')
 FEC_INTERNAL_IP = env.get_credential('FEC_INTERNAL_IP', '')
 FEC_API_KEY_PUBLIC_CALENDAR = env.get_credential('FEC_WEB_API_KEY_PUBLIC_CALENDAR', FEC_API_KEY_PUBLIC)
+FEC_API_KEY_PUBLIC_SCHEDULE_A = env.get_credential('FEC_WEB_API_KEY_PUBLIC_SCHEDULE_A', FEC_API_KEY_PUBLIC)
 FEC_CAL_DOWNLOAD_API_KEY = env.get_credential('FEC_CAL_DOWNLOAD_API_KEY')
+API_CALLER_POOL_MAXSIZE = int(env.get_credential('API_CALLER_POOL_MAXSIZE', 10))
 FEC_DOWNLOAD_API_KEY = env.get_credential('FEC_DOWNLOAD_API_KEY', '')
 
 FEC_RECAPTCHA_SECRET_KEY = env.get_credential('FEC_RECAPTCHA_SECRET_KEY')
 FEC_GITHUB_TOKEN = env.get_credential('FEC_GITHUB_TOKEN')
+
+# Rulemaking commenting
+FEC_RULEMAKING_S3_ACCESS_KEY_ID = env.get_credential('FEC_RULEMAKING_S3_ACCESS_KEY_ID')
+FEC_RULEMAKING_S3_SECRET_ACCESS_KEY = env.get_credential('FEC_RULEMAKING_S3_SECRET_ACCESS_KEY')
+FEC_RULEMAKING_S3_REGION_NAME = env.get_credential('FEC_RULEMAKING_S3_REGION_NAME')
+FEC_RULEMAKING_BUCKET_NAME = env.get_credential('FEC_RULEMAKING_BUCKET_NAME')
 
 # Config for the ServiceNow API for contacting RAD
 FEC_SERVICE_NOW_API = env.get_credential('FEC_SERVICE_NOW_API')
@@ -161,6 +169,7 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     # custom response headers
     'fec.middleware.AddSecureHeaders',
+    'fec.middleware.PoolTimeouts',
     'uaa_client.middleware.UaaRefreshMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -228,14 +237,18 @@ WSGI_APPLICATION = 'fec.wsgi.application'
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_string(50))
 
 
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
 DATABASES = {
-    # Be sure to set the DATABASE_URL environment variable on your local
-    # development machine so that the local database can be connected to.
     'default': dj_database_url.config()
 }
+
+# Add or update OPTIONS after the config() call
+DATABASES['default'].setdefault('OPTIONS', {})
+DATABASES['default']['OPTIONS'].update({
+    'pool': {
+        'max_size': int(env.get_credential('DB_POOL_MAX_SIZE', 50)),
+        'max_idle': 400,  # default is 600 sec
+    }
+})
 
 
 # Internationalization
@@ -247,7 +260,6 @@ LANGUAGES = (
 )
 TIME_ZONE = 'America/New_York'
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 

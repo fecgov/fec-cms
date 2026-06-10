@@ -14,6 +14,10 @@
   padding: u(5rem 2rem 2rem 2rem);
   @include clearfix;
 
+  .message--white {
+    background-color: #fff
+  }
+
   p:last-child {
     margin-bottom: 0;
   }
@@ -100,7 +104,7 @@ p {
 //
 
 .message--small {
-  background-position: u(1rem 1rem);
+  background-position: u(1rem 1.5rem);
   padding: u(4rem 1rem 1rem 1rem);
 
   &.message {
@@ -185,7 +189,7 @@ p {
 
   .message--small {
     background-size: u(2rem);
-    background-position: u(1rem 1rem);
+    background-position: u(1rem 1.5rem);
     padding: u(1rem 1rem 1rem 4rem);
   }
 

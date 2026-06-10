@@ -336,10 +336,13 @@ Calendar.prototype.handleEventClick = function(calEvent, jsEvent) {
   }
 };
 
-// Simulate clicks when hitting enter on certain full-calendar elements
+/**
+ * Simulate clicks when hitting enter on certain full-calendar elements
+ * @param {jQuery.Event} e
+ */
 Calendar.prototype.simulateClick = function(e) {
   if (e.which === 13) {
-    $(e.target).click(); // TODO: jQuery deprecation
+    $(e.target).trigger('click');
   }
 };
 
@@ -350,8 +353,8 @@ Calendar.prototype.managePopoverControl = function(e) {
   $popover
     .find('.fc-close')
     .attr('tabindex', '0')
-    .focus() // TODO: jQuery deprecation
+    .trigger('focus')
     .on('click', function() {
-      $target.focus(); // TODO: jQuery deprecation
+      $target.trigger('focus');
     });
 };

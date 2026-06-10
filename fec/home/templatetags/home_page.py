@@ -27,18 +27,6 @@ def home_page_banner_announcement():
     }
 
 
-# This is for the Wagtail preview for Home Page Banner Announcement
-@register.inclusion_tag('partials/draft-home-page-banner-announcement.html')
-def draft_home_page_banner_announcement():
-    draft_banners = HomePageBannerAnnouncement.objects.all().order_by('-date_active')
-    draft_alert_banners = AlertForEmergencyUseOnly.objects.all().order_by('-alert_date_active')
-
-    return {
-        'draft_banners': draft_banners,
-        'draft_alert_banners': draft_alert_banners
-    }
-
-
 @register.inclusion_tag('partials/home-page-news.html')
 def home_page_news():
     # get one of each update type (not featured)

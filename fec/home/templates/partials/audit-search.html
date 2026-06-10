@@ -28,10 +28,8 @@
           <label for="primary_category_id" class="label">Findings and issue categories</label>
           <div class="combo search--medium combo--search--inline">
             <select id="primary_category_id" name="primary_category_id" aria-label="Select a district" class="select--full ">
-              {% for finding in findings %}
-                <option value="{{ finding.primary_category_id }}">
-                 {{ finding.primary_category_name }}
-                </option>
+              {% for key,value in findings %}
+                  <option value="{{ key }}">{{ value }}</option>
               {% endfor %}
             </select>
             <span class="u-visually-hidden">Search</span>

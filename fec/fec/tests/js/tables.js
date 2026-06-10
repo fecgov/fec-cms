@@ -9,9 +9,6 @@ use(sinonChai);
 import { default as URI } from 'urijs';
 import { default as _extend } from 'underscore/modules/extend.js';
 
-// require('datatables.net')();
-// require('datatables.net-responsive')();
-
 import { candidateColumn, committeeColumn, supportOpposeColumn } from '../../static/js/modules/columns.js';
 import { buildTotalLink } from '../../static/js/modules/column-helpers.js';
 import { buildUrl } from '../../static/js/modules/helpers.js';
@@ -106,7 +103,7 @@ describe('data table', function() {
     });
 
     it('does nothing on click', function() {
-      this.table.$exportButton.click(); // TODO: jQuery deprecation
+      this.table.$exportButton.trigger('click');
       expect(DataTable_FEC.prototype.export).not.to.have.been.called;
     });
   });

@@ -465,13 +465,18 @@ def guides(request):
 # Custom handle 500 error for website status
 def error_500(request, template_name="500.html"):
     cms_env = request.GET.get("FEC_CMS_ENVIRONMENT", "")
+    context = {'FEC_CMS_ENVIRONMENT': cms_env}
     if settings.FEATURES.get('website_status'):
         return render(
             request,
             '500-status.html',
-            {'FEC_CMS_ENVIRONMENT': cms_env})
+            context,
+            status=500
+        )
 
     return render(
         request,
         template_name,
-        {'FEC_CMS_ENVIRONMENT': cms_env})
+        context,
+        status=500
+    )

@@ -1,54 +1,54 @@
-<div class="panel__row">
-  <h4 class="panel__title">Disbursement information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Committee name"}}
+    <caption class="details__title">Disbursement information</caption>
+    {{#dtDetailsTableRow "Committee name"~}}
       <a href="{{basePath}}/committee/{{committee_id}}">{{committee_name}}</a>
-    {{/panelRow}}
-    {{#panelRow "Amount"}}
-      {{ currency transaction_amount }}
-    {{/panelRow}}
-    {{#panelRow "Report year"}}
-      {{ report_year }}
-    {{/panelRow}}
-    {{#panelRow "Transaction date"}}
-      {{ datetime transaction_date format=pretty }}
-    {{/panelRow}}
-    {{#panelRow "Transaction type"}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Amount"~}}
+      {{currency transaction_amount}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Report year"~}}
+      {{report_year}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Transaction date"~}}
+      {{datetime transaction_date format=pretty}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Transaction type"~}}
       {{transaction_type}}
-    {{/panelRow}}
-    {{#panelRow "Communication class"}}
-      {{ communication_class }}
-    {{/panelRow}}
-    {{#panelRow "Communication type"}}
-      {{ communication_type }}
-    {{/panelRow}}
-    {{#panelRow "Purpose"}}
-      {{ purpose }}
-    {{/panelRow}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Communication class"~}}
+      {{communication_class}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Communication type"~}}
+      {{communication_type}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Purpose"~}}
+      {{purpose}}
+    {{/dtDetailsTableRow}}
   </table>
 </div>
 
-<div class="panel__row">
-  <h4 class="panel__title">Candidate information</h4>
+<div class="dt-details__sect">
   <table>
-    {{#panelRow "Candidate"}}
+    <caption class="details__title">Candidate information</caption>
+    {{#dtDetailsTableRow "Candidate"~}}
       <a href="{{basePath}}/candidate/{{candidate_id}}/">{{candidate_name}}</a> ({{decodeSupportOppose support_oppose_indicator}})
-    {{/panelRow}}
-    {{#panelRow "Party"}}
-      {{ decodeParty candidate_party_affiliation }}
-    {{/panelRow}}
-    {{#panelRow "Office"}}
-      {{ decodeOffice candidate_office }}
-    {{/panelRow}}
-    {{#if candidate_office_state }}
-      {{#panelRow "State"}}
-        {{ decodeState candidate_office_state }}
-      {{/panelRow}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Party"~}}
+      {{decodeParty candidate_party_affiliation}}
+    {{/dtDetailsTableRow}}
+    {{#dtDetailsTableRow "Office"~}}
+      {{decodeOffice candidate_office}}
+    {{/dtDetailsTableRow}}
+    {{#if candidate_office_state}}
+      {{#dtDetailsTableRow "State"~}}
+        {{decodeState candidate_office_state}}
+      {{/dtDetailsTableRow}}
     {{/if}}
     {{#if candidate_office_district}}
-      {{#panelRow "District"}}
-        {{ candidate_office_district }}
-      {{/panelRow}}
+      {{#dtDetailsTableRow "District"~}}
+        {{candidate_office_district}}
+      {{/dtDetailsTableRow}}
     {{/if}}
   </table>
 </div>

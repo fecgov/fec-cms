@@ -22,7 +22,16 @@
 //  </div>
 //
 
-.paginate_button {
+// .paging_simple for datatables.net-dt: ^2.3.7 and datatables.net-responsive-dt: ^3.0.8:
+
+//<div class="dt-paging paging_simple">
+//  <nav aria-label="pagination">
+//   <button class="dt-paging-button disabled previous" role="link" type="button" aria-controls="results" aria-disabled="true" aria-label="Previous" data-dt-idx="previous" tabindex="-1"></button>
+//   <button class="dt-paging-button next" role="link" type="button" aria-controls="results" aria-label="Next" data-dt-idx="next"></button>
+//  </nav>
+//</div>
+
+.paginate_button, button.dt-paging-button {
   @extend .button--standard;
   @extend .button--sm;
 
@@ -59,7 +68,7 @@
   }
 }
 
-.paginate_button + span.ellipsis {
+.paginate_button + span.ellipsis, button.dt-paging-button + span.ellipsis {
   display: inline-block;
   height: 24px;
   line-height: 36px;

@@ -1,5 +1,6 @@
 import logging
 import os
+import random
 import requests
 import inspect
 
@@ -18,7 +19,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 session = requests.Session()
-http_adapter = requests.adapters.HTTPAdapter(max_retries=2)
+http_adapter = requests.adapters.HTTPAdapter(max_retries=2, pool_maxsize=settings.API_CALLER_POOL_MAXSIZE)
 session.mount("https://", http_adapter)
 
 
@@ -97,6 +98,91 @@ def load_legal_search_results(query, query_exclude="", query_type="all", offset=
         results["admin_fines_returned"] = len(results["admin_fines"])
 
     return results
+
+
+def find_legal_document_by_filename(filename):
+    """
+    Find a legal document by its filename and return the document URL.
+
+    Args:
+        filename (str): The document filename
+
+    Returns:
+        str: The full URL to the document, or None if not found
+
+    Raises:
+        Exception: If there's an API error
+    """
+    # Remove .pdf extension if provided
+    if filename.endswith('.pdf'):
+        filename = filename[:-4]
+
+    # Search for the document using the legal search API
+    results = _call_api("legal", "search", filename=filename)
+
+    if not results:
+        return None
+
+    # Search through all document types for a matching filename
+    document_types = ['advisory_opinions', 'murs', 'adrs', 'admin_fines']
+
+    for doc_type in document_types:
+        if doc_type in results and results[doc_type]:
+            for item in results[doc_type]:
+                if 'documents' in item:
+                    for doc in item['documents']:
+                        doc_filename = doc.get('filename', '')
+                        if doc_filename == filename or doc_filename == f"{filename}.pdf":
+                            document_url = doc.get('url')
+                            if document_url:
+                                if document_url.startswith('/'):
+                                    # Convert relative URL to absolute URL using CANONICAL_BASE
+                                    canonical_base = getattr(settings, 'CANONICAL_BASE', 'https://www.fec.gov')
+                                    return f"{canonical_base}{document_url}"
+                                else:
+                                    return document_url
+
+    return None
+
+
+def find_rulemaking_document_by_doc_id(doc_id):
+    """
+    Find a rulemaking document by doc_id and return the document URL.
+
+    Args:
+        doc_id (int): The rulemaking document ID
+
+    Returns:
+        str: The full URL to the document, or None if not found
+    """
+    results = _call_api("/rulemaking/search/", doc_id=doc_id)
+
+    if not results:
+        return None
+
+    canonical_base = getattr(settings, 'CANONICAL_BASE', 'https://www.fec.gov')
+
+    for rulemaking in results.get("rulemakings", []):
+        for doc in rulemaking.get("documents", []):
+            if doc.get("doc_id") == doc_id:
+                document_url = doc.get("url")
+                if document_url:
+                    return f"{canonical_base}{document_url}" if document_url.startswith('/') else document_url
+
+            for level_2 in doc.get("level_2_labels", []):
+                for nested_doc in level_2.get("level_2_docs", []):
+                    if nested_doc.get("doc_id") == doc_id:
+                        document_url = nested_doc.get("url")
+                        if document_url:
+                            return f"{canonical_base}{document_url}" if document_url.startswith('/') else document_url
+
+        for no_tier_doc in rulemaking.get("no_tier_documents", []):
+            if no_tier_doc.get("doc_id") == doc_id:
+                document_url = no_tier_doc.get("url")
+                if document_url:
+                    return f"{canonical_base}{document_url}" if document_url.startswith('/') else document_url
+
+    return None
 
 
 def load_legal_advisory_opinion(ao_no):
@@ -240,6 +326,15 @@ def load_legal_admin_fines(admin_fine_no):
     admin_fine["disposition_items"] = disposition_items
 
     return admin_fine
+
+
+def load_legal_rulemaking(rm_no):
+    # Add a cache-busting random number to ensure every request is fresh
+    cache_bust = random.randint(1, 999999999)
+
+    url = "/rulemaking/search/"
+    response = _call_api(url, rm_no=rm_no, _t=cache_bust)
+    return response["rulemakings"][0] if response["rulemakings"] else {}
 
 
 def collate_dispositions(dispositions):
@@ -389,12 +484,12 @@ def _get_sorted_documents(ao):
     )
     sorted_documents = sorted(sorted_documents, key=itemgetter("date"), reverse=True)
 
-    # # Sort by document date unless it's a final opinion. Final opinion uses issue date.
-    # sorted_documents = sorted(
-    #     sorted_documents,
-    #     key=lambda doc: doc.get("date") if doc.get("ao_doc_category_id") != 'F' else ao.get("issue_date"),
-    #     reverse=True
-    # )
+    # Sort by document date unless it's a final opinion. Final opinion uses issue date.
+    sorted_documents = sorted(
+        sorted_documents,
+        key=lambda doc: doc.get("date") if doc.get("ao_doc_category_id") != 'F' else ao.get("issue_date"),
+        reverse=True
+    )
 
     return sorted_documents
 

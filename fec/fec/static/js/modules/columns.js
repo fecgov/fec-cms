@@ -10,6 +10,26 @@ import { amendmentVersion, amendmentVersionDescription, buildAppUrl, currency, d
 import { MODAL_TRIGGER_HTML, getCycle, yearRange } from './tables.js';
 import { default as reportType } from '../templates/reports/reportType.hbs';
 
+/**
+ * Sanitize highlight text while preserving <em> tags for search highlighting.
+ * @param {string} text - The highlight text from the API
+ * @returns {string} - Sanitized HTML-safe string with <em> tags preserved
+ */
+const sanitizeHighlight = function(text) {
+  if (!text) return '';
+  // First, escape all HTML entities
+  const escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+  // Then restore <em> and </em> tags which are used for search highlighting
+  return escaped
+    .replace(/&lt;em&gt;/g, '<em>')
+    .replace(/&lt;\/em&gt;/g, '</em>');
+};
+
 export const dateColumn = formattedColumn(datetime, {
   orderSequence: ['desc', 'asc']
 });
@@ -1037,7 +1057,7 @@ export const nationalPartyDisbursements = [
   },
   {
     data: 'recipient_name',
-    className: 'all',
+    className: 'all align-top',
     orderable: false,
     render: function(data, type, row) {
       // We want to link the recipient name column to the committee if it is a committee
@@ -1075,3 +1095,362 @@ export const nationalPartyDisbursements = [
   }),
   modalTriggerColumn
 ];
+
+export const rulemakings = [
+  {
+    data: 'rm_no',
+    className: 'cell--15 all align-top t-bold',
+    orderable: true,
+    render: function(data, type, row) {
+      return buildEntityLink(
+          row.rm_number,
+          `/legal/rulemakings/${row.rm_no}/`,
+        row.rm_number
+      );
+    }
+  },
+  {
+    data: null,
+    className: 'all column--legal-docs align-top',
+    orderable: false,
+    render: function (data, type, row) {
+      // Array to keep track of documents already shown
+      let doc_ids = [];
+
+      let html = `<p><strong>${row.rm_name}</strong>`;
+      if (row.key_documents && row.key_documents.length ) {
+        html += `<br><span class="icon icon--inline--left i-document"></span>`;
+        const keyDocUrl = row.key_documents[0].url ? row.key_documents[0].url.replace(/#/g, '%23') : '';
+        html +=
+          buildEntityLink(
+            row.key_documents[0].doc_type_label, keyDocUrl, row.key_documents[0].doc_type_label);
+            if (row.key_documents[0].doc_date !== null) {
+                const doc_date = moment(row.key_documents[0].doc_date).format('MM/DD/YYYY');
+                html += ` | ${doc_date}`;
+            }
+            else {
+              html += ' | Undated';
+            }
+      }
+        html += `</p>`;
+
+    const filters = new URLSearchParams(window.location.search);
+    const filters_category_type = filters.has('doc_category_id');
+    const filters_keyword = filters.has('q'); //getAll('q').length;
+    const filters_proximity = filters.has('q_proximity') && filters.getAll('q_proximity').length == 2;
+    const proximity_only = filters_proximity && !filters_keyword;
+
+    const current_doc_ids = filters.getAll('doc_category_id') || [];
+
+    // Note: Opening div tags are lined up with their closing divs below
+       html +=
+      `<div class="legal-search-result__hit u-margin--top">`;
+      if ((filters_category_type || filters_keyword) && !proximity_only) {
+          let category_shown = '';
+          for (const document of row.documents) {
+
+            /* Will show documents in all 3 scenarios:
+             - When there is a keyword query and selected document categories
+             - When there are selected document categories and no keyword query
+             - When there is a keyword query and no selected document categories
+             The preceding "if" statement above ensures that there is always one or the other of: "selected category" or "keyword query". Or both.
+            */
+          let category_match = (filters_category_type && current_doc_ids.includes(`${document.doc_category_id}`) ? true : false) || !filters_category_type;
+          let text_match = (filters_keyword && has_highlights(document)) || !filters_keyword;
+          // Dont show document if it has already been shown once
+          let unique_id = !doc_ids.includes(`${document.doc_id}`);
+          let show_document = category_match && text_match && unique_id;
+          if (show_document) {
+               let top_border_class = '';
+               let show_category = '';
+               let current_category = document.doc_category_label;
+               if (category_shown != current_category) {
+                     top_border_class = 'u-border-top-neutral';
+                     show_category = document.doc_category_label;
+                     category_shown = current_category;
+                }
+
+                // Push doc_id to array to keep track of already-shown documents
+                doc_ids.push(`${document.doc_id}`);
+
+                let parsed;
+                parsed = moment(document.doc_date, 'YYYY-MM-DD');
+                const doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
+
+            const docUrl = document.url ? document.url.replace(/#/g, '%23') : '';
+            html += `
+                  <div class="document-container ${top_border_class}">
+                    <div class="document-category">${show_category}</div>
+                    <div class="document_details">
+                      <div class="post--icon">
+                        <span class="icon icon--inline--left i-document"></span>
+                        <a href="${docUrl}">
+                        ${document.doc_type_label}</a> | ${doc_date}
+                      </div>`;
+            if (document.highlights) {
+              html += `
+                    <ul>
+                      <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${sanitizeHighlight(document.highlights[0])}&#8230;
+                      </li>
+                    </ul>`;
+
+              if (document.highlights.length > 1) {
+                  html += `
+                      <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${document.doc_id}">
+                        <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${document.doc_id}" aria-expanded="false">
+                          ${document.highlights.length > 2 ? document.highlights.length -1 + ' more keyword matches' : '1 more keyword match'}
+                        </button>
+                        <div class="accordion__content results__content" aria-hidden="true">
+                          <ul>`;
+                          for (let i = 1; i <= document.highlights.length -1; i++) {
+                            html += `<li class="t-serif t-italic">&#8230;${sanitizeHighlight(document.highlights[i])}&#8230;</li>`;
+                          }
+                            html += `
+                          </ul>
+                        </div>
+                      </div>`;
+              }
+            }
+            html += `
+                    </div> 
+                  </div>`;
+        }
+          if (document.level_2_labels && document.level_2_labels.length) {
+
+            for (let label of document.level_2_labels) {
+
+              for (let l2_document of label.level_2_docs) {
+                // See above comment: "Will show documents in all 3 scenarios:" to understand 'show_document'
+                let category_match = (filters_category_type && current_doc_ids.includes(`${l2_document.doc_category_id}`) ? true : false) || !filters_category_type;
+                let text_match_l2 = (filters_keyword && has_highlights(l2_document)) || !filters_keyword;
+                // Dont show document if it has already been shown once
+                let l2_unique_id = !doc_ids.includes(`${l2_document.doc_id}`);
+                let show_document = category_match && text_match_l2 && l2_unique_id;
+                if (show_document) {
+                  let top_border_class = '';
+                  let show_category = '';
+                  let current_category = l2_document.doc_category_label;
+               if (category_shown != current_category) {
+                     top_border_class = 'u-border-top-neutral';
+                     show_category = l2_document.doc_category_label;
+                     category_shown = current_category;
+                }
+
+                // Push doc_id to array to keep track of already-shown documents
+                doc_ids.push(`${l2_document.doc_id}`);
+
+                let parsed;
+                parsed = moment(l2_document.doc_date, 'YYYY-MM-DD');
+                const l2_doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
+                const l2DocUrl = l2_document.url ? l2_document.url.replace(/#/g, '%23') : '';
+
+                  html += `
+                  <div class="document-container ${top_border_class}">
+                    <div class="document-category">${show_category}</div>
+                    <div class="document_details">
+                      <div class="post--icon">
+                        <span class="icon icon--inline--left i-document"></span>
+                        <a href="${l2DocUrl}">
+                        ${l2_document.doc_type_label}</a> | ${l2_doc_date}
+                      </div>`;
+              if (l2_document.highlights) {
+                html += `
+                      <ul>
+                        <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${sanitizeHighlight(l2_document.highlights[0])}&#8230;
+                        </li>
+                      </ul>`;
+
+                if (l2_document.highlights.length > 1) {
+                      html += `
+                          <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${l2_document.doc_id}">
+                            <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${l2_document.doc_id}" aria-expanded="false">
+                              ${l2_document.highlights.length > 2 ? l2_document.highlights.length -1 + ' more keyword matches' : '1 more keyword match'}
+                            </button>
+                            <div class="accordion__content results__content" aria-hidden="true">
+                              <ul>`;
+                              for (let i = 1; i <= l2_document.highlights.length -1; i++) {
+                                html += `<li class="t-serif t-italic">&#8230;${sanitizeHighlight(l2_document.highlights[i])}&#8230;</li>`;
+                              }
+                                html += `
+                              </ul>
+                            </div>
+                          </div>`;
+                }
+              }
+            html += `
+                    </div> 
+                  </div>`;
+
+                }
+              }
+            }
+          }
+        }
+
+        if (row.no_tier_documents && row.no_tier_documents.length) {
+          for (let no_tier_document of row.no_tier_documents ) {
+            let category_match = (filters_category_type && current_doc_ids.includes(`${no_tier_document.doc_category_id}`) ? true : false) || !filters_category_type;
+            let text_match = (filters_keyword && has_highlights(no_tier_document)) || !filters_keyword;
+            // Dont show document if it has already been shown once
+            let no_tier_unique_id = !doc_ids.includes(`${no_tier_document.doc_id}`);
+            let show_document = category_match && text_match && no_tier_unique_id;
+            if (show_document) {
+               let top_border_class = '';
+               let show_category = '';
+               let current_category = no_tier_document.doc_category_label;
+               if (category_shown != current_category) {
+                     top_border_class = 'u-border-top-neutral';
+                     show_category = no_tier_document.doc_category_label;
+                     category_shown = current_category;
+                }
+
+                // Push doc_id to array to keep track of already-shown documents
+                doc_ids.push(`${no_tier_document.doc_id}`);
+
+                let no_tier_doc_date;
+                let parsed;
+                parsed = moment(no_tier_document.doc_date, 'YYYY-MM-DD');
+                if (no_tier_document.doc_date !== null) {
+                  no_tier_doc_date = parsed.isValid() ? parsed.format('MM/DD/YYYY') : 'Invalid date';
+                } else {
+                  no_tier_doc_date = 'Undated';
+                }
+               const no_tier_docUrl = no_tier_document.url ? no_tier_document.url.replace(/#/g, '%23') : '';
+               const regex = /NO TIER ENTRY/i;
+               const no_tier_label = regex.test(no_tier_document.doc_type_label) ? no_tier_document.doc_description || no_tier_document.filename : no_tier_document.doc_type_label;
+
+            html += `
+                  <div class="document-container ${top_border_class}">
+                    <div class="document-category">${show_category}</div>
+                    <div class="document_details">
+                      <div class="post--icon">
+                        <span class="icon icon--inline--left i-document"></span>
+                        <a href="${no_tier_docUrl}">
+                        ${no_tier_label}</a> | ${no_tier_doc_date}
+                      </div>`;
+                  if (no_tier_document.highlights) {
+                    html += `
+                          <ul>
+                            <li class="post--icon t-serif t-italic u-padding--top--med">&#8230;${sanitizeHighlight(no_tier_document.highlights[0])}&#8230;
+                            </li>
+                          </ul>`;
+
+                    if (no_tier_document.highlights.length > 1) {
+                        html += `
+                            <div class="js-accordion u-margin--top" data-content-prefix="additional-result-${row.rm_no}-${no_tier_document.doc_id}">
+                              <button type="button" class="js-accordion-trigger accordion-trigger-on accordion__button results__button" aria-controls="additional-result-${row.rm_no}-${no_tier_document.doc_id}" aria-expanded="false">
+                                ${no_tier_document.highlights.length > 2 ? no_tier_document.highlights.length -1 + ' more keyword matches' : '1 more keyword match'}
+                              </button>
+                              <div class="accordion__content results__content" aria-hidden="true">
+                                <ul>`;
+                                for (let i = 1; i <= no_tier_document.highlights.length -1; i++) {
+                                  html += `<li class="t-serif t-italic">&#8230;${sanitizeHighlight(no_tier_document.highlights[i])}&#8230;</li>`;
+                                }
+                                  html += `
+                                </ul>
+                              </div>
+                            </div>`;
+                    }
+                  }
+            html += `
+                    </div> 
+                  </div>`;
+            }
+          }
+        }
+
+      } else if (proximity_only && row.source) {
+          let category_shown = '';
+          for (const document of row.source) {
+                let top_border_class = '';
+                let show_category = '';
+                let current_category = document.doc_category_label;
+                  if (category_shown != current_category) {
+                      top_border_class = 'u-border-top-neutral';
+                      show_category = document.doc_category_label;
+                      category_shown = current_category;
+                  }
+
+                  const doc_date = document.doc_date !== null ? moment(document.doc_date).format('MM/DD/YYYY') : 'Invalid date';
+
+                    html += `
+                      <div class="document-container ${top_border_class}">
+                        <div class="document-category">${show_category}</div>
+                        <div class="document_details">
+                          <div class="post--icon">
+                            <span class="icon icon--inline--left i-document"></span>
+                            <a href="${document.url}">
+                              ${document.doc_type_label}
+                            </a> | ${doc_date}
+                          </div>
+                        </div>
+                      </div>`;
+          }
+       }
+
+       html += `
+      </div>`;
+      return html;
+    }
+  },
+  {
+    data: 'is_open_for_comment',
+    className: 'cell--15 all align-top',
+    orderable: true,
+    render: function (data, type, row) {
+      if (row.is_open_for_comment == false) {
+        return 'Not currently open for comment';
+      }
+
+      // Fallback to rulemaking-level comment_close_date
+      const rulemaking_comment_close_date = row.comment_close_date;
+      let eligible_documents = [];
+
+      // Check top-level documents
+      for (const document of row.documents) {
+        if (document.is_comment_eligible == true) {
+          // Use doc-level comment_close_date if available, otherwise use rulemaking-level
+          const doc_deadline = document.doc_comment_close_date || rulemaking_comment_close_date;
+          eligible_documents.push({
+            doc_id: document.doc_id,
+            doc_type_label: document.doc_type_label,
+            doc_comment_close_date: doc_deadline
+          });
+        }
+        // Check nested level_2 documents
+        if (document.level_2_labels && document.level_2_labels.length) {
+          for (const label of document.level_2_labels) {
+            for (const l2_document of label.level_2_docs) {
+              if (l2_document.is_comment_eligible == true) {
+                // Use doc-level comment_close_date if available, otherwise use rulemaking-level comment close date
+                const l2_doc_deadline = l2_document.doc_comment_close_date || rulemaking_comment_close_date;
+                eligible_documents.push({
+                  doc_id: l2_document.doc_id,
+                  doc_type_label: l2_document.doc_type_label,
+                  doc_comment_close_date: l2_doc_deadline
+                });
+              }
+            }
+          }
+        }
+      }
+
+      if (eligible_documents.length) {
+        return eligible_documents.map(doc => {
+          const comment_deadline = moment(doc.doc_comment_close_date).format('MMMM D, YYYY');
+          return `<div class="u-padding--bottom"><strong>${doc.doc_type_label}</strong><br>Comment deadline: ${comment_deadline}<br><a class="button--cta" href="/legal/rulemakings/${row.rm_no}/${doc.doc_id}/add-comments/">Submit a comment</a></div>`;
+        }).join('');
+      }
+      else {
+        return 'No comment eligible document specified';
+      }
+    }
+  }
+];
+
+const has_highlights = function(doc) {
+  if (doc.highlights && doc.highlights.length) {
+      return true;
+    }
+    return false;
+  };

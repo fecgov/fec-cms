@@ -121,10 +121,10 @@ describe('FilterTypeahead', function() {
     var enableButton = spy(this.FilterTypeahead, 'enableButton');
     var disableButton = spy(this.FilterTypeahead, 'disableButton');
 
-    // this.FilterTypeahead.$field.typeahead('val', 'FAKE CANDIDATE').change(); // TODO: jQuery deprecation
+    // this.FilterTypeahead.$field.typeahead('val', 'FAKE CANDIDATE').trigger('change');
     // expect(enableButton).to.have.been.called;
 
-    // this.FilterTypeahead.$field.typeahead('val', '').change(); // TODO: jQuery deprecation
+    // this.FilterTypeahead.$field.typeahead('val', '').trigger('change');
     // expect(disableButton).to.have.been.called;
 
     // this.FilterTypeahead.enableButton.restore();

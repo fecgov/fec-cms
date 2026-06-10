@@ -161,7 +161,7 @@ FilterTypeahead.prototype.handleSelected = function(e, datum) {
 
   this.$elm.find('label[for="' + id + '"]').addClass('is-loading');
 
-  this.$button.focus().addClass('is-loading');
+  this.$button.trigger('focus').addClass('is-loading');
 };
 
 FilterTypeahead.prototype.handleAutocomplete = function(e, datum) {
@@ -276,7 +276,7 @@ FilterTypeahead.prototype.appendCheckbox = function(opts) {
   } else {
     const checkbox = $(template_checkbox(data));
     checkbox.appendTo(this.$selected);
-    checkbox.find('input').change(); // TODO: jQuery deprecation
+    checkbox.find('input').trigger('change');
     this.clearInput();
   }
 };

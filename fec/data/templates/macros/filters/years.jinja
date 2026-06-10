@@ -55,12 +55,12 @@
 {% endmacro %}
 
 
-{% macro singleElectionYear(name, label) %}
+{% macro singleElectionYear(name, label, start_year=constants.START_YEAR, end_year=constants.END_YEAR) %}
 <div class="filter">
   <fieldset data-name="{{name}}" class="js-filter" data-filter="select" data-required-default="{{constants.DEFAULT_ELECTION_YEAR}}">
     <label class="label" for="{{ name }}">{{ label }}</label>
     <select id="{{ name }}-select" name="{{ name }}" class="select--full" data-filter-change="true">
-    {% for year in range(constants.END_YEAR, constants.START_YEAR, -2) %}
+    {% for year in range(end_year, start_year, -2) %}
       <option value="{{ year }}">{{ year | fmt_year_range }}</option>
     {% endfor %}
     </select>

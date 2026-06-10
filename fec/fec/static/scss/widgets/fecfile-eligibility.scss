@@ -1,0 +1,698 @@
+@use '../variables';
+
+$color-base: variables.$base;
+$color-error: variables.$error;
+$color-federal-blue: variables.$federal-blue;
+$color-gray: variables.$gray;
+$color-gray-dark: variables.$gray-dark;
+$color-gray-lightest: variables.$gray-lightest;
+$color-green-light: variables.$green-light;
+$color-gray-medium: variables.$gray-medium;
+$color-inverse: variables.$inverse;
+$font-sans-serif: variables.$sans-serif;
+$font-serif: variables.$serif;
+$font-base-family: variables.$base-font-family;
+$font-rem: 10px; /* To replace ' * $font-rem' sizes, in case the parent page is different */
+$width-med: 40em;
+$width-lg: 860em;
+
+html, body {
+  min-width: 400px !important;
+}
+
+body:has(#modal-gov-fec-fecfile-eligibility[open]) {
+  overflow: hidden; /* prevent scrolling while the <dialog> is open */
+}
+
+/* Rules specifically for this <dialog> */
+#modal-gov-fec-fecfile-eligibility {
+  /* Pulled from base.scss etc */
+  border: transparent;
+  color: $color-base;
+  font-family: $font-base-family;
+  font-feature-settings: 'kern', 'liga', 'pnum';
+  font-size: 1.4 * $font-rem;
+  line-height: 1.8 * $font-rem;
+  padding: 0;
+  height: calc(100% - (4 * $font-rem));
+  width: calc(100% - (4 * $font-rem));
+  max-height: 65 * $font-rem;
+  max-width: 80 * $font-rem;
+
+  &::backdrop {
+    background: rgb(from $color-base r g b / 50%);
+    cursor: pointer;
+  }
+  
+  h2 {
+    font-family: $font-serif;
+    font-size: 2 * $font-rem; /* then 2.4 * $font-rem */
+    font-weight: bold;
+    line-height: 1.2;
+    width: calc(100% - $font-rem);
+  }
+
+  .modal__content {
+    bottom: unset;
+    height: 100%;
+    left: unset;
+    margin: 0;
+    overflow: hidden;
+    padding: 2 * $font-rem;
+    position: relative;
+    right: unset;
+    top: unset;
+    width: 100%;
+  }
+  .modal__close {
+    position: absolute;
+    right: $font-rem;
+    top: $font-rem;
+  }
+  [data-v-app] {
+    container-name: app;
+    container-type: inline-size;
+  }
+}
+
+/* Vue strips the attributes from its DOM element so we'll use the name */
+#gov-fec-fecfile-eligibility {
+  border-top: 2px solid $color-base;
+  overflow: hidden;
+  position: relative;
+
+  @media screen and (min-width:$width-med) {
+    min-height: calc(100% - (5 * $font-rem));
+  }
+
+  h4 {
+    float: left;
+    font-family: $font-sans-serif;
+    font-size: 1.8 * $font-rem;
+    font-weight: bold;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+    margin: (0.5 * $font-rem) 0 $font-rem 0;
+    padding-right: 0.5 * $font-rem;
+
+    &:has(+ p) {
+      margin-bottom: 0;
+    }
+
+    &.indented {
+      font-size: 1.4 * $font-rem;
+      max-width: 70%;
+      padding-left: 3.5 * $font-rem;
+      padding-top: 0.5 * $font-rem;
+    }
+    &.subhead {
+      text-transform: uppercase;
+    }
+
+    &.search_example {
+      margin-bottom: 0;
+    }
+
+    button.tooltip__trigger {
+      margin-top: 0.2em;
+    }
+
+  }
+  p {
+    color: inherit;
+    font-size: 1.6 * $font-rem;
+    margin: 0 0 (2.4 * $font-rem) 0;
+    max-width: 80 * $font-rem;
+    width: 100%;
+
+    & + h1 { margin-top: 3 * $font-rem; }
+    & + h2 { margin-top: 3 * $font-rem; }
+    & + h3 { margin-top: 2 * $font-rem; }
+    & + h4 { margin-top: 2 * $font-rem; }
+  }
+  
+  .topnav {
+    margin-bottom: $font-rem;
+    min-height: 10 * $font-rem;
+    width: 100%;
+
+    @media screen and (min-width:$width-med) {
+      margin-bottom: 0; /* TODO - is this needed? */
+      min-height: 7.5 * $font-rem;
+      padding-right: calc(33% + (3 * $font-rem));
+    }
+    @media screen and (min-width:$width-lg) {
+      min-height: 7.5 * $font-rem;
+    }
+
+    meter {
+      background: transparent;
+      height: $font-rem;
+      margin-top: $font-rem;
+      width: 100%;
+
+      /* Still need to prefix for these */
+      &::-webkit-meter-bar {
+        background: $color-gray-lightest;
+        border-radius: 0.5 * $font-rem;
+        transition: all 1s;
+      }
+      &::-moz-meter-bar {
+        background: $color-gray-lightest;
+        border-radius: 0.5 * $font-rem;
+        transition: all 1s;
+      }
+      &::-webkit-meter-optimum-value {
+        background: $color-green-light;
+        border-radius: 0.5 * $font-rem;
+        transition: all 1s;
+      }
+      &:-moz-meter-optimum::-moz-meter-bar {
+        background: $color-green-light;
+        border-radius: 0.5 * $font-rem;
+        transition: all 1s;
+      }
+      &.complete {
+        transition: width 0.5s ease-in-out;
+        width: calc(100% - 25px);
+      }
+    }
+    .i-check {
+      background: url('data:image/svg+xml;charset=utf8, %3Csvg%20%20fill%3D%27%234aa564%27%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M16.47%206.678l.177.177a1.233%201.233%200%201%200-1.743-1.744l-6.84%206.84h.354L4.854%208.387a1.233%201.233%200%200%200-1.743%201.744l4.259%204.258a1.23%201.23%200%200%200%201.743%200l7.534-7.534-.176-.177z%22%2F%3E%3C%2Fsvg%3E');
+      background-position: center;
+      clip: rect(0 15px 0 0);
+      clip-path: inset(0 15px 0 0);
+      display: block;
+      float: right;
+      height: 15px;
+      margin-top: 0.75 * $font-rem;
+      overflow: hidden;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 15px;
+
+      @media screen and (min-width:$width-med) {
+        right: calc(33% + (3 * $font-rem));
+      }
+    }
+    meter.complete + .i-check {
+      background-size: 100%;
+      clip: unset;
+      clip-path: inset(0);
+      transition: clip-path 0.5s;
+      transition-delay: 0.5s;
+    }
+
+    .breadcrumbs {
+      display: block;
+    }
+
+    li {
+      display: inline-block;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.1s;
+
+      &.viewed {
+        color: purple; /* forcing browser colors */
+        cursor: pointer;
+        display: inline-block;
+        opacity: 1;
+        pointer-events: visible;
+        transition:
+          opacity 1s,
+          color 0.5s;
+      }
+      &.current {
+        color: blue; /* forcing browser colors */
+        cursor: default;
+        display: inline-block;
+        opacity: 1;
+        transition:
+          opacity 1s,
+          color 0.5s;
+      }
+      &::after {
+        color: purple; /* forcing browser colors */
+        content: ' › ';
+        display: inline;
+        padding: (0.5 * $font-rem) (0.8 * $font-rem);
+      }
+      &.breadcrumbs__item {
+        display: inline;
+        font-size: 1.4 * $font-rem;
+        line-height: 1.4em;
+        max-width: none;
+        padding: 0;
+      }
+      a.breadcrumbs__link {
+        border: none;
+        border-bottom: 1px dotted $color-inverse;
+        color: $color-gray-dark;
+        font-size: 1.4 * $font-rem;
+        line-height: 1.6 * $font-rem;
+
+        &:hover {
+          border-bottom: 1px dotted $color-federal-blue;
+        }
+      }
+      &.hidden {
+        display: none !important;
+      }
+      &.hide-after::after {
+        content: '';
+        padding: 0;
+      }
+    }
+  } /* end .topnav */
+
+  .bottomnav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .5 * $font-rem;
+    margin: 0 auto;
+    max-width: 100%;
+
+    /* for the last (success!) frame, we'll need to account for the larger login button */
+    @container app (width < 600px) {
+      &:has(.login:not(.hidden)) {
+        justify-content: space-between;
+      }
+
+      button.login {
+        order: -1;
+        width: 100%;
+      }
+    }
+
+    button {
+      margin: 0;
+    }
+
+    .break {
+      display: block;
+      height: 1px;
+      margin: -0 auto;
+      width: 100%;
+    }
+  }
+
+  .frames {
+    container-name: frames;
+    container-type: inline-size;
+    display: block;
+    font-family: $font-sans-serif;
+    height: 370px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    
+    @container app (width < 375px) {
+      /* For the last frame at the smallest widths, the bottomnav is pushing off the bottom of the screen */
+      &:has(.outro.current) {
+        height: 320px;
+      }
+    }
+  }
+  .frame {
+    display: block;
+    float: left;
+    height: 370px;
+    left: 100%;
+    overflow-y: scroll;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    transition: left 0.25s;
+    width: 100% !important;
+
+    @media screen and (min-width:$width-med) {
+      padding: 1em calc(33% + (3 * $font-rem)) 2em 0; /* 33% to give room for the help content */
+    }
+
+    &.previous {
+      left: -100%;
+      transition: left 0.25s;
+      * {
+        pointer-events: none;
+        user-select: none;
+      }
+    }
+    &.next {
+      * {
+        pointer-events: none;
+        user-select: none;
+      }
+    }
+    &.current {
+      display: block; /* (only need to define this because .next.off-screen will jump to transition complete before animation can start) */
+      left: 0;
+      pointer-events: all;
+      transition: left 0.5s;
+    }
+    &.intro {
+      text-align: center;
+
+      @media screen and (min-width:$width-med) {
+        padding-right: 2em;
+      }
+
+      div {
+        margin: 0 auto;
+        max-width: 80%;
+
+        @media screen and (min-width:$width-med) {
+          max-width: 66%;
+        }
+      }
+      .button--cta {
+        margin-top: 1.2 * $font-rem; /* Little extra space above the button */
+      }
+    }
+    &.off-screen * {
+      display: none;
+    }
+  } /* end .frame */
+  label {
+    clear: both;
+  }
+  .buttons-lockup {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5 * $font-rem;
+
+    & > * {
+      margin: 0;
+    }
+  }
+  button {
+    &.is-disabled {
+      cursor: default;
+      pointer-events: none;
+    }
+    &.button--back.button--alt {
+      background-image: url('data:image/svg+xml;charset=utf8, %3Csvg%20%20fill%3D%27%23212121%27%20width%3D%2212%22%20height%3D%2210%22%20viewBox%3D%220%200%2012%2010%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M.418%203.809L6.652.124a.851.851%200%200%201%201.294.727v7.382a.852.852%200%200%201-1.284.733L.418%205.276a.852.852%200%200%201%200-1.467z%22%2F%3E%3C%2Fsvg%3E');
+    }
+    &.tooltip__trigger {
+      margin: 0.5em 0 (0.5 * $font-rem);
+      position: relative;
+    }
+    &.tooltip__trigger + p {
+      display: inline-block;
+      float: left;
+      width: auto;
+    }
+    &.hidden {
+      display: none !important;
+    }
+  }
+  div.indented {
+    padding-left: 3.5 * $font-rem;
+  }
+
+  /* buttons inside #help */
+  #help + div > button {
+    margin-top: 0.5 * $font-rem; /* don't crop off the top of the focus highlight */
+
+    @media screen and (min-width:$width-med) {
+      margin-bottom: 2 * $font-rem;
+    }
+  }
+
+  .question-type-block {
+    clear: both;
+    display: inline-block;
+    float: left;
+    position: relative;
+  }
+
+  .t-note {
+    font-family: inherit;
+    font-style: italic;
+  }
+
+  [type='radio'] + label {
+    background-color: transparent;
+    border-color: $color-inverse;
+    float: left;
+    margin-right: 0;
+    transition: border-color 0.5s;
+    width: calc(100% - (3 * $font-rem)); /* Save room for the tooltip on the right */
+
+    /* Let the tooltips be staggered when .frames is 400-560 or >= 658.
+       Staggered is preferred but the smaller widths + linebreaks looks messy */
+    @container frames (400px <= width < 560px) or (width >= 658px) {
+      width: unset;
+    }
+  }
+  [type='radio'] + label:hover {
+    background-color: transparent;
+    border-color: #aeb0b5;
+    transition: border-color 0.5s;
+  }
+  [type='radio']:checked + label {
+    background-color: transparent;
+    border: 1px solid #aeb0b5;
+    transition: border-color 0.5s;
+  }
+
+  [type='radio'].is_roadblock {
+    & + label.is_roadblock + div.is_roadblock {
+      clear: both;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-out, opacity 0.4s ease-out;
+      width: 100%;
+    }
+
+    &:checked + label.is_roadblock + div.is_roadblock {
+      max-height: 500px;
+      opacity: 1;
+      overflow: hidden;
+      transition: max-height 1s ease-out, opacity 0.5s ease-in;
+    }
+  }
+
+  span.clear {
+    clear: both;
+    display: block;
+    height: 0;
+    margin-bottom: $font-rem;
+    width: 100%;
+  }
+
+  input.label-headline {
+    clear: both;
+    float: left;
+  }
+  label {
+    &.indented {
+      float: left;
+
+      // &.search__example {
+      //   clear: none;
+      //   padding-top: $font-rem;
+      // }
+    }
+    // &.label-headline {
+    //   float: left;
+    //   font-size: 1.4 * $font-rem;
+    //   font-weight: bold;
+    //   letter-spacing: -0.3px;
+    //   margin-top: 0.2 * $font-rem;
+    //   text-transform: uppercase;
+    // }
+  }
+  p {
+    font-size: 1.4 * $font-rem;
+    line-height: 1.25em;
+    margin-bottom: 1.2 * $font-rem;
+    width: 100%;
+
+    &.indented {
+      clear: both;
+      float: left;
+      max-width: 70%;
+      padding-left: 3.5 * $font-rem;
+
+      @media screen and (min-width:$width-med) {
+        max-width: none;
+      }
+    }
+  }
+  // .contact-item {
+  //   margin-bottom: 0;
+  //   padding-left: 3.5 * $font-rem;
+
+  //   &::before {
+  //     margin-right: $font-rem;
+  //   }
+  // }
+  // .nonbreaking {
+  //   display: inline-block;
+  // }
+  // .search__example {
+  //   clear: both;
+  //   float: left;
+  //   margin-top: 0;
+  // }
+  // span.t-note.indented {
+  //   margin-left: 3.5 * $font-rem;
+  // }
+
+  #help {
+    background: url('data:image/svg+xml;charset=utf8, %3Csvg%20%20fill%3D%27%23112e51%27%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20d%3D%22M10%200a10%2010%200%201%200%2010%2010A10%2010%200%200%200%2010%200zm1.2%2016.1a15.69%2015.69%200%200%201-2.4.3q-.9%200-.9-.6a9.32%209.32%200%200%201%20.2-1.4l.8-4.7a3.08%203.08%200%200%200%20.1-.9c0-.3-.4-.4-1.2-.4l.1-.5a14.22%2014.22%200%200%201%202.5-.3.61.61%200%200%201%20.7.6%2011.48%2011.48%200%200%201-.2%201.4l-.8%204.8a2.25%202.25%200%200%200-.1.7c0%20.4.2.5%201.2.5v.5zm-.5-10a1.15%201.15%200%200%201-1.2-1.2%201.35%201.35%200%200%201%201.3-1.4A1.22%201.22%200%200%201%2012%204.7a1.42%201.42%200%200%201-1.3%201.4z%22%2F%3E%3C%2Fsvg%3E');
+    background-color: $color-inverse;
+    background-position: $font-rem $font-rem;
+    background-repeat: no-repeat;
+    background-size: 3 * $font-rem;
+    border-bottom: thin solid $color-federal-blue;
+    border-bottom-left-radius: $font-rem;
+    border-left: thin solid $color-federal-blue;
+    color: $color-federal-blue;
+    height: 100%;
+    left: $font-rem;
+    padding: $font-rem;
+    position: absolute;
+    top: 0;
+    transition: left 0.5s;
+    width: calc(100% - $font-rem);
+    z-index: 100;
+
+    @media screen and (min-width:$width-med) {
+      background: $color-inverse;
+      border: none;
+      border-bottom-left-radius: initial;
+      display: flex;
+      flex-direction: column;
+      left: initial;
+      min-height: calc(100vh - 114px);
+      padding: $font-rem 0 0 calc($font-rem + 20px);
+      right: 0;
+      transition: right 0.5s;
+      width: calc(33% + 20px);
+
+      &::before {
+        border-left: 1px solid $color-federal-blue;
+        content: '';
+        display: block;
+        height: 100%;
+        left: 19px;
+        position: absolute;
+        top: 0;
+        width: 1px;
+        z-index: 0;
+      }
+    }
+
+    p + ul {
+      margin-bottom: 1.2 * $font-rem;
+      margin-top: 0;
+    }
+
+    & > svg {
+      display: none;
+
+      @media screen and (min-width:$width-med) {
+        display: block;
+      }
+    }
+
+    h3 {
+      line-height: 1.4em;
+      padding-left: 4 * $font-rem;
+      padding-right: 30px;
+
+      @media screen and (min-width:$width-med) {
+        flex-grow: 0;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .help_scroller {
+      flex-grow: 3;
+      overflow-y: scroll;
+    }
+
+    .filters__toggle {
+      padding: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+
+      &::before {
+        display: none;
+      }
+
+      @media screen and (min-width:$width-med) {
+        display: none;
+      }
+    }
+
+    .help_content {
+      font-family: $font-sans-serif;
+      font-size: 1.4 * $font-rem;
+      line-height: 1.4em;
+      padding-right: $font-rem;
+
+      @media screen and (min-width:$width-med) {
+        max-height: 100%;
+        overflow-y: scroll;
+      }
+
+      p {
+        line-height: 1.4em;
+      }
+      ul {
+        list-style-type: disc;
+        padding-left: 1.5 * $font-rem;
+      }
+    }
+
+    .pointer {
+      left: 0;
+      position: absolute;
+      top: 100px;
+      transition: top 0.33s;
+    }
+
+    @media screen and (min-width:$width-med) {
+      .ps-scrollbar-y-rail {
+        background: $color-gray-medium;
+        border-left: 1px solid $color-gray-dark;
+        left: 0;
+        position: absolute;
+        right: auto;
+        width: 4px;
+      }
+
+      .ps-scrollbar-y {
+        background: $color-gray-dark;
+        left: 0;
+        position: absolute;
+        right: auto;
+        width: 4px;
+      }
+    }
+
+    &.hidden {
+      left: 120%;
+      transition: left 0.5s;
+
+      @media screen and (min-width:$width-med) {
+        left: initial;
+        right: -40%;
+        transition: right 0.5s;
+      }
+
+      .filters__toggle {
+        display: none; /* hide it explicitly to  * $font-remove it from the tab order */
+      }
+    }
+  } /* end help */
+}

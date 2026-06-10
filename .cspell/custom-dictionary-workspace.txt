@@ -1,9 +1,20 @@
 # Custom Dictionary Words
+adrs
 blockquote
 bythenumbers
 camelcase
+commenters
+datatables
+disgorgements
 draftail
-Draftail
+ecfr
 labelledby
+murs
+nonconnected
+nonqualified
+proximities
+rulemaking
+rulemakings
+unitemized
 wagtailcore
 wagtailimages

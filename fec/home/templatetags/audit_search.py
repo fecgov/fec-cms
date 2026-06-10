@@ -6,5 +6,5 @@ register = template.Library()
 
 @register.inclusion_tag('partials/audit-search.html')
 def search_audits():
-    findings = [item for item in constants.audit_primary_categories_options]
-    return {'findings': findings}
+    findings = [item for item in constants.audit_primary_categories_options.items()]
+    return {'findings': findings }

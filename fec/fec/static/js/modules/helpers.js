@@ -1,4 +1,4 @@
-/* global API_LOCATION, API_VERSION, API_KEY_PUBLIC */
+/* global API_LOCATION, API_VERSION, API_KEY_PUBLIC, API_KEY_PUBLIC_SCHEDULE_A */
 
 import DOMPurify from 'dompurify';
 import * as Handlebars from 'handlebars/runtime';
@@ -19,13 +19,19 @@ import {
   states as decoders_states
 } from './decoders.js';
 
-// set parameters from the API
+/**
+ * Set parameters from the API
+ * @enum {string}
+ */
 export const API = {
   amendment_indicator_new: 'N',
   amendment_indicator_terminated: 'T',
   means_filed_e_file: 'e-file'
 };
 
+/**
+ * Pixel widths when we consider a screen small (default), medium, or large
+ * @enum {number} */
 export const BREAKPOINTS = {
   MEDIUM: 640,
   LARGE: 860
@@ -34,6 +40,10 @@ export const BREAKPOINTS = {
 export const LOADING_DELAY = 1500;
 export const SUCCESS_DELAY = 5000;
 
+/**
+ * Selection of date formats
+ * @enum {string} Selected date format e.g. 'MM/DD/YYYY' or 'MMMM D, h:mma'
+ */
 export const formatMap = {
   default: 'MM/DD/YYYY',
   pretty: 'MMMM D, YYYY',
@@ -43,8 +53,11 @@ export const formatMap = {
   fullDayOfWeek: 'dddd'
 };
 
+/**
+ * Attach anchor <a> links to any tag with a given attribute.
+ * @param {string} attr - Content of a `[]` selector
+ */
 export function anchorify(attr) {
-  // Attach anchor <a> links to any tag with a given attribute
   $('[' + attr + ']').each(function(idx, item) {
     const elt = $(item);
     const link = $('<a></a>');
@@ -56,6 +69,10 @@ export function anchorify(attr) {
   });
 }
 
+/**
+ * Scrolls the page to the anchor specified by the in the URL, over ms number of milliseconds
+ * @param {number} ms - The duration of the animation in milliseconds
+ */
 export function scrollAnchor(ms) {
   ms = ms || 1000;
   if (window.location.hash) {
@@ -237,13 +254,8 @@ Handlebars.registerHelper('formatSentence', function(value) {
 
 Handlebars.registerHelper('basePath', global.BASE_PATH);
 
-Handlebars.registerHelper('panelRow', function(label, options) {
-  return new Handlebars.SafeString(
-    `<tr>` +
-      `<td class="panel__term">${label}</td>` +
-      `<td class="panel__data">${options.fn(this)}</td>` +
-    '</tr>'
-  );
+Handlebars.registerHelper('dtDetailsTableRow', function(label, options) {
+  return new Handlebars.SafeString(`<tr><th scope="row">${label}</th><td>${options.fn(this)}</td></tr>`);
 });
 
 /**
@@ -377,9 +389,27 @@ export function buildAppUrl(path, query) {
  * @returns {string} The final URL
  */
 export function buildUrl(path, query) {
+  // Use dedicated schedule_a API key for schedule_a endpoints
+  let isScheduleA = false;
+
+  // Handle undefined/null path
+  if (path) {
+    if (Array.isArray(path)) {
+      // Check if path array contains both 'schedules' and 'schedule_a'
+      isScheduleA = path.includes('schedules') && path.includes('schedule_a');
+    } else if (typeof path === 'string') {
+      // Check if path string contains 'schedules/schedule_a'
+      isScheduleA = path.includes('schedules/schedule_a');
+    }
+  }
+
+  // Fallback to regular API key if schedule_a key is not defined (e.g., in tests)
+  const scheduleAKey = typeof API_KEY_PUBLIC_SCHEDULE_A !== 'undefined' ? API_KEY_PUBLIC_SCHEDULE_A : API_KEY_PUBLIC;
+  const apiKey = isScheduleA ? scheduleAKey : API_KEY_PUBLIC;
+
   const uri = URI(API_LOCATION)
     .path(Array.prototype.concat(API_VERSION, path, '').join('/'))
-    .addQuery({ api_key: API_KEY_PUBLIC });
+    .addQuery({ api_key: apiKey });
 
   if (query.api_key) {
     // if query provides api_key, use that.
