@@ -11,4 +11,4 @@ cd fec
 ./manage.py migrate --noinput
 
 # Run application
-gunicorn -k gevent -w 2 fec.wsgi:application
+gunicorn -c gunicorn.conf.py fec.wsgi:application

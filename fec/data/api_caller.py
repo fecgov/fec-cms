@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 session = requests.Session()
-http_adapter = requests.adapters.HTTPAdapter(max_retries=2)
+http_adapter = requests.adapters.HTTPAdapter(max_retries=2, pool_maxsize=settings.API_CALLER_POOL_MAXSIZE)
 session.mount("https://", http_adapter)
 
 

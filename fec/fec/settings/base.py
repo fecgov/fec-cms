@@ -27,6 +27,7 @@ FEC_INTERNAL_IP = env.get_credential('FEC_INTERNAL_IP', '')
 FEC_API_KEY_PUBLIC_CALENDAR = env.get_credential('FEC_WEB_API_KEY_PUBLIC_CALENDAR', FEC_API_KEY_PUBLIC)
 FEC_API_KEY_PUBLIC_SCHEDULE_A = env.get_credential('FEC_WEB_API_KEY_PUBLIC_SCHEDULE_A', FEC_API_KEY_PUBLIC)
 FEC_CAL_DOWNLOAD_API_KEY = env.get_credential('FEC_CAL_DOWNLOAD_API_KEY')
+API_CALLER_POOL_MAXSIZE = int(env.get_credential('API_CALLER_POOL_MAXSIZE', 10))
 FEC_DOWNLOAD_API_KEY = env.get_credential('FEC_DOWNLOAD_API_KEY', '')
 
 FEC_RECAPTCHA_SECRET_KEY = env.get_credential('FEC_RECAPTCHA_SECRET_KEY')
@@ -244,7 +245,7 @@ DATABASES = {
 DATABASES['default'].setdefault('OPTIONS', {})
 DATABASES['default']['OPTIONS'].update({
     'pool': {
-        'max_size': 50,  # total possible db conn = Workers x Instances x max_size (600, probably too high)
+        'max_size': int(env.get_credential('DB_POOL_MAX_SIZE', 50)),
         'max_idle': 400,  # default is 600 sec
     }
 })
