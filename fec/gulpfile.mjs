@@ -35,8 +35,16 @@ function _buildWebpFiles() {
 /**
  * Empties ./dist/fec/static/css
  */
-function _clearDirectory() {
+function _clearCssDirectory() {
   return src('./dist/fec/static/css', { read: false, allowEmpty: true })
+    .pipe(clean());
+}
+
+/**
+ * Empties ./dist/fec/static/css
+ */
+function _clearIconsDirectory() {
+  return src('./fec/static/icons/output', { read: false, allowEmpty: true })
     .pipe(clean());
 }
 
@@ -180,9 +188,8 @@ function _purgecss() {
 /**
  * Register the events so package.json can call them with npm run
  */
-task('build-sass', series(_clearDirectory, _compile));
+task('build-icons', series(_clearIconsDirectory, _minifyIcons, _consolidateIcons));
+task('build-sass', series(_clearCssDirectory, _compile));
 task('build-webp-files', _buildWebpFiles);
 task('build-widgets-sass', series(_clearWidgetsDirectory, _compileWidgets));
-task('consolidate-icons', _consolidateIcons);
-task('minify-icons', _minifyIcons);
 task('purgecss', _purgecss);
