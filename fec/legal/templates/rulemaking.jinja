@@ -161,7 +161,7 @@
           {%- else -%}
           <td>
             <a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a>
-            {%- if doc.doc_description and 'pdf' not in doc.doc_description.lower() -%}
+            {%- if doc.doc_description and 'pdf' not in doc.doc_description.lower() and doc.doc_description|compare(doc.label) -%}
             <br><span id="a-desc-{{ doc.doc_id }}">{{ doc.doc_description }}</span>
             {%- endif -%}
           </td>
