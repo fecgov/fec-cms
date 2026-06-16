@@ -6,14 +6,14 @@
     "url": "git+https://github.com/fecgov/fec-cms.git"
   },
   "scripts": {
-    "build": "cd fec && webpack --mode development && gulp build-sass && gulp build-widgets-sass && gulp purgecss && gulp build-webp-files",
+    "build": "cd fec && webpack --mode development && gulp build-sass && gulp build-widgets-sass && gulp purgecss",
     "build-icons": "cd fec && gulp build-icons && gulp build-sass",
     "build-webp": "cd fec && gulp build-webp-files",
     "build-sass": "cd fec && gulp build-sass && gulp build-widgets-sass && gulp purgecss",
     "build-widgets-sass": "cd fec && gulp build-widgets-sass",
     "build-homepage-css": "cd fec && gulp purgecss",
     "build-js": "cd fec && webpack --mode development",
-    "build-production": "cd fec && webpack --mode production && gulp build-sass && gulp build-widgets-sass && gulp purgecss && gulp build-webp-files",
+    "build-production": "cd fec && webpack --mode production && gulp build-sass && gulp build-widgets-sass && gulp purgecss",
     "format": "eslint --fix ./fec/fec/static/js/**/*.js",
     "format-sass": "prettier './fec/fec/static/scss/**/*.scss' --check",
     "format-sass-fix": "prettier './fec/fec/static/scss/**/*.scss' --write",
