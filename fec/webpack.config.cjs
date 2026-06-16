@@ -3,6 +3,7 @@ const path = require('path');
 
 const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const TerserPlugin = require('terser-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 // mode comes from the package.json's definition for `npm run build…` but defaults to 'development'
@@ -24,6 +25,12 @@ const sourceMapType_prod = undefined; // For when mode == 'production'
 // Pauses the Webpack bundling near the end and opens a browser window with an interactive graph of the bundles.
 // (Will need to control-c the terminal to do anything else after running this)
 const analyzerBundlesDuringDevelopment = false;
+
+const productionMinimizer = [
+  new TerserPlugin({
+    parallel: false
+  })
+];
 
 // Abbreviation for use throughout this file
 const js = './fec/static/js';
@@ -171,6 +178,7 @@ module.exports = [
     optimization: {
       emitOnErrors: true,
       innerGraph: true,
+      minimizer: mode === 'production' ? productionMinimizer : undefined,
       moduleIds: 'named',
       // chunkIds: 'named', // shared chunks default to numbered names. 'named' makes it easier to debug
       // removeAvailableModules: true,
@@ -240,6 +248,9 @@ module.exports = [
       path: path.resolve(__dirname, './dist/fec/static/js')
     },
     devtool: mode === 'production' ? sourceMapType_prod : sourceMapType,
+    optimization: {
+      minimizer: mode === 'production' ? productionMinimizer : undefined
+    },
     plugins: [
       new webpack.ProvidePlugin({
         $: 'jquery',
