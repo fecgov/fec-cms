@@ -3,6 +3,7 @@
 version: 2.1
 jobs:
   build:
+    resource_class: large
     docker:
       # CircleCI maintains a library of pre-built images documented at
       # https://circleci.com/developer/images
