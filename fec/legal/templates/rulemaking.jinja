@@ -68,7 +68,7 @@
     {%- endif %}{# end: if docL1.url -#}
 
     {#- If its doc_description includes 'pdf', add doc_description under the label/link -#}
-    {%- if docL1.doc_description and 'pdf' not in docL1.doc_description.lower() and doc.doc_description|compare(doc.label) -%}
+    {%- if docL1.doc_description and 'pdf' not in docL1.doc_description.lower() and docL1.doc_description|compare(doc.label) -%}
             <br><span id="a-desc-{{ docL1.doc_id }}" aria-label="{{ docL1.doc_description|replace('FEC', 'F.E.C.') }}" tabindex="0">{{ docL1.doc_description }}</span>
     {%- endif -%}
 
