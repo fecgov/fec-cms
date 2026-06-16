@@ -60,7 +60,6 @@ jobs:
             nvm install 24.16.0
             nvm use 24.16.0
             nvm alias default 24.16.0
-            sudo npm install -g npm
             npm install
             npm rebuild sass
             npm run build
