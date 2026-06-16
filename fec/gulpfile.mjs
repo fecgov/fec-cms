@@ -193,3 +193,10 @@ task('build-sass', series(_clearCssDirectory, _compile));
 task('build-webp-files', _buildWebpFiles);
 task('build-widgets-sass', series(_clearWidgetsDirectory, _compileWidgets));
 task('purgecss', _purgecss);
+
+task('build', series(
+  series(_clearCssDirectory, _compile), // build-sass
+  series(_clearWidgetsDirectory, _compileWidgets), // build-widgets-sass
+  _purgecss,
+  _buildWebpFiles
+));
