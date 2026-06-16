@@ -37,9 +37,9 @@ jobs:
 
       - restore_cache:
           keys:
-          - v2-fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
+          - v3-fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           # fallback to using the latest cache if no exact match is found
-          - v2-fec-cms-dependencies-
+          - v3-fec-cms-dependencies-
 
       - run:
           name: Install python dependencies
@@ -61,15 +61,14 @@ jobs:
             nvm use 24.16.0
             nvm alias default 24.16.0
             sudo npm install -g npm
-            npm install
-            npm rebuild sass
+            npm ci
             npm run build
 
       - save_cache:
           paths:
             - ./.env
-            - ./node_modules
-          key: v2-fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
+            - ~/.npm
+          key: v3-fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
 
       - run:
           name: Ensure database is available
