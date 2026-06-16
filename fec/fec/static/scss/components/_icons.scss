@@ -74,8 +74,16 @@
     @include u-icon-bg($arrow-right, $base);
   }
 
+  &.i-arrow-right-double {
+    @include u-icon-bg($arrow-right-double, $base);
+  }
+
   &.i-arrow-left {
     @include u-icon-bg($arrow-left, $base);
+  }
+
+  &.i-arrow-left-double {
+    @include u-icon-bg($arrow-left-double, $base);
   }
 
   &.i-book {
