@@ -68,7 +68,7 @@ jobs:
       - save_cache:
           paths:
             - ./.env
-            - ~/.npm
+            - ./node_modules
           key: v3-fec-cms-dependencies-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
 
       - run:
