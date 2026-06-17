@@ -291,6 +291,10 @@
 
       td {
         vertical-align: top;
+
+        a + ul { /* For ULs directly after links */
+          margin-top: .5rem;
+        }
       }
 
       .date {
