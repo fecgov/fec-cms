@@ -133,7 +133,7 @@ contributor_states = OrderedDict(sorted(utils.extend(states, {
     ('AA', 'Armed Forces Americas'),
     ('AE', 'Armed Forces Europe'),
     ('AP', 'Armed Forces Pacific'),
-    ('ZZ', 'Foreign Countries'),
+    ('ZZ', 'Foreign Countries and Other'),
 }).items(), key=operator.itemgetter(1)))
 
 parties = OrderedDict([
