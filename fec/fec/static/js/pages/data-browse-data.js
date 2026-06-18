@@ -32,3 +32,23 @@ $(function() {
     new PlotChart('.js-spent-overview', 'spent', 2).init();
   });
 });
+
+/**
+ * Add event listeners for buttons that want to remote trigger tabs and/or accordions
+ */
+const remoteEls = document.querySelectorAll('.js-remote-tabpanel, .js-remote-accordion');
+remoteEls.forEach((el) => {
+  el.addEventListener('click', handleRemoteClick.bind(this));
+});
+
+function handleRemoteClick(e) {
+  e.preventDefault();
+
+  const targetHref = new URL(e.target.getAttribute('href'));
+  const targetTabId = targetHref.searchParams.get('tab');
+  const targetAccordionId = targetHref.hash.substring(1); // (.hash also returns the #, so remove it)
+
+  $(`[role="tab"][data-name="${targetTabId}"]`).trigger('click'); // trigger the tab click
+  $(`[aria-controls="${targetAccordionId}"][aria-expanded="false"]`).trigger('click'); // trigger the accordion click
+  if (targetAccordionId) location.hash = `#${targetAccordionId}`; // Jump to the accordion
+}
