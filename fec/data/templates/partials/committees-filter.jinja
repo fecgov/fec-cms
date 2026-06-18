@@ -17,7 +17,7 @@
   <div class="accordion__content">
     {{ text.field('treasurer_name', 'Most recent treasurer') }}
     {{ parties.checkbox() }}
-    {{ states.field('state') }}
+    {{ states.field('state', list_type='states') }}
     {{ date.field('first_f1_date', 'Registration date', '') }}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Committee type</button>

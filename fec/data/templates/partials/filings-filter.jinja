@@ -32,7 +32,7 @@ Filter reports
    
     {{ typeahead.field('q_filer', 'Committee name or ID', '', allow_text=True) }}
     {{ typeahead.field('candidate_id', 'Candidate name or ID', '', dataset='candidates') }}
-    {{ states.field('state', type='Candidate') }}
+    {{ states.field('state', type='Candidate', list_type='states') }}
     {{ office.checkbox() }}
     {{ parties.checkbox() }}
   </div>

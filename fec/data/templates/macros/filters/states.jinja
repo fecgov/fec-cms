@@ -1,4 +1,4 @@
-{% macro field(name='name', id_suffix='', type='') %}
+{% macro field(name='name', id_suffix='', type='', list_type='states') %}
 <div class="filter">
   <fieldset class="js-dropdown js-filter" data-filter="checkbox">
     <legend class="label" for="state">{% if type %}{{ type }} {% endif %}State or Territory</legend>
@@ -8,7 +8,7 @@
       <div id="state-dropdown{{id_suffix}}" class="dropdown__panel dropdown-scrolling" aria-hidden="true">
         <div class="dropdown__content">
           <ul class="dropdown__list">
-            {% for state in constants.states.items() %}
+            {% for state in constants[list_type].items() %}
               <li class="dropdown__item">
                 <input name="{{ name }}" id="state-checkbox-{{state[0]}}{{id_suffix}}" type="checkbox" value="{{ state[0] }}">
                 <label class="dropdown__value" for="state-checkbox-{{ state[0] }}{{id_suffix}}">{{ state[1] }}</label>
