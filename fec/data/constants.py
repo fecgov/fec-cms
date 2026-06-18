@@ -129,6 +129,10 @@ states_excl_territories = OrderedDict([
     ('WY', 'Wyoming'),
 ])
 
+states_countries = OrderedDict(sorted(utils.extend(states_excl_territories, {
+    ('ZZ', 'Foreign Countries and Other'),
+}).items(), key=operator.itemgetter(1)))
+
 contributor_states = OrderedDict(sorted(utils.extend(states, {
     ('AA', 'Armed Forces Americas'),
     ('AE', 'Armed Forces Europe'),
