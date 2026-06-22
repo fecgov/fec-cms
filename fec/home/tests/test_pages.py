@@ -1,6 +1,10 @@
-from django.test import Client
+from django.contrib.messages.storage.fallback import FallbackStorage
+from django.core.exceptions import ValidationError
+from django.test import Client, RequestFactory
+from wagtail.models import Page
 from wagtail.test.utils import WagtailPageTests
 from ..models import Author, HomePage, RecordPage, DigestPage, PressReleasePage
+from ..wagtail_hooks import prevent_copying_unique_pages
 
 
 class SubPageTestMixin(object):
@@ -103,3 +107,28 @@ class PressReleasePageTest(SubPageTestMixin, WagtailPageTests):
             'authors-MAX_NUM_FORMS': "1000",
         }
     ]
+
+
+class UniquePageTest(WagtailPageTests):
+    def test_unique_page_clean_raises_validation_error_for_duplicate(self):
+        duplicate_home_page = HomePage(title='Duplicate home page')
+
+        with self.assertRaisesMessage(ValidationError, 'Only one HomePage allowed'):
+            duplicate_home_page.clean()
+
+    def test_unique_page_max_count_prevents_admin_creation(self):
+        root_page = Page.objects.get(depth=1)
+
+        self.assertFalse(HomePage.can_create_at(root_page))
+
+    def test_unique_page_copy_is_blocked(self):
+        home_page = HomePage.objects.get()
+        request = RequestFactory().get('/')
+        request.session = {}
+        # The copy hook adds a Wagtail admin message before redirecting.
+        request._messages = FallbackStorage(request)
+
+        response = prevent_copying_unique_pages(request, home_page)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(str(home_page.get_parent().id), response.url)

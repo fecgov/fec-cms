@@ -196,10 +196,14 @@ class UniqueModel(models.Model):
     class Meta:
         abstract = True
 
+    # Prevent standard Wagtail create forms from offering another unique page.
+    max_count = 1
+
     def clean(self):
         model = self.__class__
-        if model.objects.count() > 0 and self.id != model.objects.get().id:
-            raise ValidationError('Only one {0} allowed'.format(self.__name__))
+        duplicate_exists = model.objects.exclude(id=self.id).exists()
+        if duplicate_exists:
+            raise ValidationError('Only one {0} allowed'.format(model.__name__))
 
 
 class ContentPage(Page):
@@ -311,6 +315,11 @@ m2m_changed.connect(user_groups_changed, sender=User.groups.through)
 class HomePage(ContentPage, UniqueModel):
     page_description = 'The Homepage'
     parent_page_types = []
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(models.Value(1), name='home_homepage_unique'),
+        ]
 
     @property
     def content_section(self):
@@ -895,6 +904,11 @@ class ReportsLandingPage(ContentPage, UniqueModel):
         ('document_feed_blurb', DocumentFeedBlurb())
     ], null=True, blank=True)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(models.Value(1), name='home_reportslandingpage_unique'),
+        ]
+
     content_panels = Page.content_panels + [
         FieldPanel('intro'),
         FieldPanel('document_feeds')
@@ -1147,6 +1161,11 @@ class LegalResourcesLandingPage(ContentPage, UniqueModel):
     subpage_types = ['ResourcePage']
     template = 'home/legal/legal_resources_landing.html'
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(models.Value(1), name='home_legalresourceslandingpage_unique'),
+        ]
+
     @property
     def content_section(self):
         return 'legal'
@@ -1382,6 +1401,11 @@ class ServicesLandingPage(ContentPage, UniqueModel):
     intro = StreamField([
         ('paragraph', blocks.RichTextBlock())
     ], null=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(models.Value(1), name='home_serviceslandingpage_unique'),
+        ]
 
     content_panels = Page.content_panels + [
         FieldPanel('hero'),
