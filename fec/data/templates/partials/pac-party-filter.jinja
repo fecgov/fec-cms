@@ -22,7 +22,7 @@
     <button type="button" class="js-accordion-trigger accordion__button">Committee details</button>
     <div class="accordion__content">
       {{ text.field('treasurer_name', 'Most recent treasurer') }}
-      {{ states.field('committee_state') }}
+      {{ states.field('committee_state', list_type='states') }}
       {{ frequency.field() }}
     </div>
     <button type="button" class="js-accordion-trigger accordion__button">Committee financials</button>
