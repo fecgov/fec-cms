@@ -1403,10 +1403,6 @@ class ServicesLandingPage(UniqueModel, ContentPage):
 
     hero = stream_factory(null=True, blank=True)
 
-    intro = StreamField([
-        ('paragraph', blocks.RichTextBlock())
-    ], null=True, blank=True)
-
     class Meta:
         constraints = [
             models.UniqueConstraint(models.Value(1), name='home_serviceslandingpage_unique'),
@@ -1414,7 +1410,6 @@ class ServicesLandingPage(UniqueModel, ContentPage):
 
     content_panels = Page.content_panels + [
         FieldPanel('hero'),
-        FieldPanel('intro'),
     ]
 
     @property

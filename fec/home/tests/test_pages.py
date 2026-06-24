@@ -141,9 +141,6 @@ class UniquePageTest(WagtailPageTests):
         with self.assertRaisesMessage(ValidationError, 'Only one HomePage allowed'):
             duplicate_home_page.clean()
 
-    def test_services_landing_page_intro_is_optional(self):
-        self.assertTrue(ServicesLandingPage._meta.get_field('intro').blank)
-
     def test_unique_page_max_count_prevents_admin_creation(self):
         root_page = Page.objects.get(depth=1)
         home_page = HomePage.objects.get()
