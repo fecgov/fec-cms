@@ -24,7 +24,7 @@ Filter receipts
   {{ typeahead.field('committee_id', 'Recipient name or ID', id_suffix='_raw') }}
   {{ text.field('contributor_name', 'Source name', id_suffix='_raw') }}
   {{ text.field('contributor_city', 'Source city', id_suffix='_raw') }}
-  {{ states.field('contributor_state', id_suffix='_raw', list_type='contributor_states') }}
+  {{ states.field('contributor_state', id_suffix='_raw', list_type='states_all_contributors') }}
 </div>
 {% endblock %}
 
@@ -47,7 +47,7 @@ Filter receipts
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">More source details</button>
   <div class="accordion__content">
-    {{ states.field('contributor_state', list_type='contributor_states') }}
+    {{ states.field('contributor_state', list_type='states_all_contributors') }}
     {% include 'partials/filters/unique-receipts.jinja' %}
   </div>
   <button type="button" class="js-accordion-trigger accordion__button">Recipient committee type</button>

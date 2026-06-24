@@ -70,23 +70,27 @@ states = OrderedDict([
     ('WI', 'Wisconsin'),
     ('WY', 'Wyoming'),
 ])
-
-states_foreign = OrderedDict(sorted(utils.extend(states, {
-    ('ZZ', 'Foreign Countries and Other'),
-}).items(), key=operator.itemgetter(1)))
-
-states_territories = OrderedDict(sorted(utils.extend(states, {
+armed_forces = OrderedDict([
+    ('AA', 'Armed Forces Americas'),
+    ('AE', 'Armed Forces Europe'),
+    ('AP', 'Armed Forces Pacific'),
+])
+territories = OrderedDict([
     ('GU', 'Guam'),
     ('MP', 'Northern Mariana Islands'),
     ('PR', 'Puerto Rico'),
     ('VI', 'U.S. Virgin Islands'),
-}).items(), key=operator.itemgetter(1)))
-
-contributor_states = OrderedDict(sorted(utils.extend(states_foreign, {
-    ('AA', 'Armed Forces Americas'),
-    ('AE', 'Armed Forces Europe'),
-    ('AP', 'Armed Forces Pacific'),
-}).items(), key=operator.itemgetter(1)))
+])
+states_territories = OrderedDict(
+  sorted(utils.extend(states, territories).items(), key=operator.itemgetter(1))
+)
+states_all_contributors = OrderedDict(sorted(utils.extend(
+    states,
+    armed_forces,
+    territories,
+    {('ZZ', 'Foreign Countries and Other')},
+    ).items(), key=operator.itemgetter(1))
+)
 
 parties = OrderedDict([
     ('DEM', 'Democratic Party'),
