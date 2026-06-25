@@ -76,6 +76,7 @@ armed_forces = OrderedDict([
     ('AP', 'Armed Forces Pacific'),
 ])
 territories = OrderedDict([
+    ('AS', 'American Samoa'),
     ('GU', 'Guam'),
     ('MP', 'Northern Mariana Islands'),
     ('PR', 'Puerto Rico'),

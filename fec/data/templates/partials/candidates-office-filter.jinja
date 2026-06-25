@@ -20,7 +20,7 @@
   <div class="accordion__content">
     {{ parties.checkbox() }}
     {% if table_context['office'] in ['senate', 'house'] %}
-      {{ states.field('state', list_type='states') }}
+      {{ states.field('state', list_type='states_territories') }}
     {% endif %}
     {% if table_context['office'] == 'house' %}
       {{ districts.dropdown() }}
