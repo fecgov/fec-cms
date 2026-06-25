@@ -1,6 +1,21 @@
-from django.test import Client
+from django.contrib.messages.storage.fallback import FallbackStorage
+from django.core.exceptions import ValidationError
+from django.test import Client, RequestFactory
+from wagtail.models import Page
 from wagtail.test.utils import WagtailPageTests
-from ..models import Author, HomePage, RecordPage, DigestPage, PressReleasePage
+from ..models import (
+    Author,
+    HomePage,
+    LegalResourcesLandingPage,
+    OigLandingPage,
+    RecordPage,
+    DigestPage,
+    PressReleasePage,
+    ReportsLandingPage,
+    ServicesLandingPage,
+    UniqueModel,
+)
+from ..wagtail_hooks import prevent_copying_unique_pages
 
 
 class SubPageTestMixin(object):
@@ -103,3 +118,50 @@ class PressReleasePageTest(SubPageTestMixin, WagtailPageTests):
             'authors-MAX_NUM_FORMS': "1000",
         }
     ]
+
+
+class UniquePageTest(WagtailPageTests):
+    unique_page_models = [
+        HomePage,
+        ReportsLandingPage,
+        LegalResourcesLandingPage,
+        ServicesLandingPage,
+        OigLandingPage,
+    ]
+
+    def test_unique_page_models_use_unique_mixin_first(self):
+        # Regression check: mixin order controls whether Wagtail sees max_count.
+        for page_model in self.unique_page_models:
+            self.assertEqual(page_model.max_count, 1)
+            self.assertEqual(page_model.clean, UniqueModel.clean)
+
+    def test_unique_page_clean_raises_validation_error_for_duplicate(self):
+        duplicate_home_page = HomePage(title='Duplicate home page')
+
+        with self.assertRaisesMessage(ValidationError, 'Only one HomePage allowed'):
+            duplicate_home_page.clean()
+
+    def test_unique_page_max_count_prevents_admin_creation(self):
+        root_page = Page.objects.get(depth=1)
+        home_page = HomePage.objects.get()
+        # The add-child option is hidden only after the first page exists.
+        home_page.add_child(instance=OigLandingPage(
+            title='OIG landing page',
+            intro_message='<p>Intro</p>',
+            show_info_message=False,
+        ))
+
+        self.assertFalse(HomePage.can_create_at(root_page))
+        self.assertFalse(OigLandingPage.can_create_at(home_page))
+
+    def test_unique_page_copy_is_blocked(self):
+        home_page = HomePage.objects.get()
+        request = RequestFactory().get('/')
+        request.session = {}
+        # The copy hook adds a Wagtail admin message before redirecting.
+        request._messages = FallbackStorage(request)
+
+        response = prevent_copying_unique_pages(request, home_page)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(str(home_page.get_parent().id), response.url)
