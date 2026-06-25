@@ -336,9 +336,12 @@ Calendar.prototype.handleEventClick = function(calEvent, jsEvent) {
   }
 };
 
-// Simulate clicks when hitting enter on certain full-calendar elements
+/**
+ * Simulate clicks when hitting enter on certain full-calendar elements
+ * @param {jQuery.Event} e
+ */
 Calendar.prototype.simulateClick = function(e) {
-  if (e.keyCode === 13) {
+  if (e.which === 13) {
     $(e.target).trigger('click');
   }
 };

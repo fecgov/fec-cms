@@ -36,8 +36,15 @@ RulemakingSingle.prototype.init = function() {
  * @param {PointerEvent} e
  */
 RulemakingSingle.prototype.handlePdfLinkClick = function(e) {
-  e.preventDefault();
-  openEmbeddedPdf(e.target);
+  // Keyboard event: let the native behavior happen.
+  // Mouse event: stop the native event and open the PDF in the embedded viewer.
+  // 2026-05: e.x === 0 for Chrome keyboard events (also e.offsetX)
+  // 2026-05: e.pointerType === '' for Firefox and Safari keyboard events
+  const isKeyboardEvent = e.x === 0 || e.pointerType === '';
+  if (!isKeyboardEvent) {
+    e.preventDefault();
+    openEmbeddedPdf(e.target);
+  }
 };
 
 /**

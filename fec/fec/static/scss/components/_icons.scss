@@ -74,8 +74,16 @@
     @include u-icon-bg($arrow-right, $base);
   }
 
+  &.i-arrow-right-double {
+    @include u-icon-bg($arrow-right-double, $base);
+  }
+
   &.i-arrow-left {
     @include u-icon-bg($arrow-left, $base);
+  }
+
+  &.i-arrow-left-double {
+    @include u-icon-bg($arrow-left-double, $base);
   }
 
   &.i-book {
@@ -283,18 +291,6 @@
     width: u(1.5rem);
     height: u(1.5rem);
     @include u-icon-bg($document, $primary);
-  }
-}
-
-.icon-download--inline--left {
-  display: inline-block;
-  vertical-align: middle;
-
-  &::before {
-    content: '';
-    float: left;
-    padding: u(1.5rem);
-    @include u-icon-bg($download, $primary);
   }
 }
 

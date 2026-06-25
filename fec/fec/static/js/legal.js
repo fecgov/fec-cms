@@ -46,7 +46,7 @@ KeywordModal.prototype.handleSubmit = function(e) {
   e.preventDefault();
   var queryString = this.generateQueryString();
   this.$hiddenField.val(queryString);
-  this.$form.submit(); // TODO: jQuery deprecation? (.submit() )
+  this.$form.trigger('submit');
 };
 
 /**

@@ -3,6 +3,7 @@ repos:
     rev: v4.4.0
     hooks:
     -   id: end-of-file-fixer
+        exclude: fec/static/icons/output
 
 -   repo: https://github.com/PyCQA/flake8
     rev: 6.0.0

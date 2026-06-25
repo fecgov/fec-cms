@@ -112,8 +112,8 @@ describe('FilterTypeahead', function() {
 
   it('should submit on enter', function() {
     var handleSubmit = spy(this.FilterTypeahead, 'handleSubmit');
-    this.FilterTypeahead.handleKeypress({ keyCode: 13 });
-    expect(handleSubmit).to.have.been.calledWith({ keyCode: 13 });
+    this.FilterTypeahead.handleKeypress({ keyCode: 13, which: 13 }); // TODO: keyCode has been deprecated
+    expect(handleSubmit).to.have.been.calledWith({ keyCode: 13, which: 13 }); // TODO: keyCode has been deprecated
     this.FilterTypeahead.handleSubmit.restore();
   });
 

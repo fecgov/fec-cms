@@ -192,14 +192,23 @@ def get_content_section(page):
 
 
 class UniqueModel(models.Model):
-    """Abstract base class for unique pages."""
+    """Abstract base class for unique pages.
+
+    Keep this mixin before Page/ContentPage so Wagtail sees max_count and clean().
+    """
     class Meta:
         abstract = True
 
+    # Prevent standard Wagtail create forms from offering another unique page.
+    max_count = 1
+
     def clean(self):
+        # Preserve Wagtail/Django page validation before checking uniqueness.
+        super().clean()
         model = self.__class__
-        if model.objects.count() > 0 and self.id != model.objects.get().id:
-            raise ValidationError('Only one {0} allowed'.format(self.__name__))
+        duplicate_exists = model.objects.exclude(id=self.id).exists()
+        if duplicate_exists:
+            raise ValidationError('Only one {0} allowed'.format(model.__name__))
 
 
 class ContentPage(Page):
@@ -308,9 +317,14 @@ def user_groups_changed(sender, **kwargs):
 m2m_changed.connect(user_groups_changed, sender=User.groups.through)
 
 
-class HomePage(ContentPage, UniqueModel):
+class HomePage(UniqueModel, ContentPage):
     page_description = 'The Homepage'
     parent_page_types = []
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(models.Value(1), name='home_homepage_unique'),
+        ]
 
     @property
     def content_section(self):
@@ -883,7 +897,7 @@ class DocumentFeedPage(ContentPage):
         return constants.report_category_groups[self.category]
 
 
-class ReportsLandingPage(ContentPage, UniqueModel):
+class ReportsLandingPage(UniqueModel, ContentPage):
     page_description = 'Unique landing page - Reports'
     subpage_types = ['DocumentFeedPage']
     parent_page_types = ['AboutLandingPage']
@@ -894,6 +908,11 @@ class ReportsLandingPage(ContentPage, UniqueModel):
     document_feeds = StreamField([
         ('document_feed_blurb', DocumentFeedBlurb())
     ], null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(models.Value(1), name='home_reportslandingpage_unique'),
+        ]
 
     content_panels = Page.content_panels + [
         FieldPanel('intro'),
@@ -1141,11 +1160,16 @@ class ResourcePage(Page):
         return get_content_section(self)
 
 
-class LegalResourcesLandingPage(ContentPage, UniqueModel):
+class LegalResourcesLandingPage(UniqueModel, ContentPage):
     page_description = 'Unique landing page - Legal Resources'
     parent_page_types = ['HomePage']
     subpage_types = ['ResourcePage']
     template = 'home/legal/legal_resources_landing.html'
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(models.Value(1), name='home_legalresourceslandingpage_unique'),
+        ]
 
     @property
     def content_section(self):
@@ -1370,7 +1394,7 @@ class CourtCasePage(Page):
         return 'legal'
 
 
-class ServicesLandingPage(ContentPage, UniqueModel):
+class ServicesLandingPage(UniqueModel, ContentPage):
     page_description = 'Unique landing page - Services / Help for Candidates and Committees main landing pages for \
         Candidates, SSF, Nonconnected and Party sections'
     parent_page_types = ['HomePage']
@@ -1379,13 +1403,13 @@ class ServicesLandingPage(ContentPage, UniqueModel):
 
     hero = stream_factory(null=True, blank=True)
 
-    intro = StreamField([
-        ('paragraph', blocks.RichTextBlock())
-    ], null=True)
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(models.Value(1), name='home_serviceslandingpage_unique'),
+        ]
 
     content_panels = Page.content_panels + [
         FieldPanel('hero'),
-        FieldPanel('intro'),
     ]
 
     @property
@@ -1658,7 +1682,7 @@ class FullWidthPage(ContentPage):
         return ''
 
 
-class OigLandingPage(Page):
+class OigLandingPage(UniqueModel, Page):
     page_description = 'Unique landing page - OIG'
     parent_page_types = ['HomePage']
     intro_message = RichTextField(features=['bold', 'italic', 'link'], null=True)
@@ -1714,6 +1738,9 @@ class OigLandingPage(Page):
     ]
 
     class Meta:
+        constraints = [
+            models.UniqueConstraint(models.Value(1), name='home_oiglandingpage_unique'),
+        ]
         verbose_name = 'OIG landing page'
 
     @property
