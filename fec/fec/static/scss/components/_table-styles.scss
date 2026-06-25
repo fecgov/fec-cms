@@ -26,6 +26,10 @@
   border-width: 2px 0;
   font-family: $sans-serif;
   margin: u(2rem 0);
+
+  tr.row-active {
+    border-left: 0.5rem solid $primary;
+  }
 }
 
 .simple-table__header {
