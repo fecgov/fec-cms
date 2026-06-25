@@ -1117,27 +1117,29 @@ export const rulemakings = [
       // Array to keep track of documents already shown
       let doc_ids = [];
       let html = `<p><strong>${row.rm_name}</strong>`;
-      let first_doc;
-      if (row.key_documents && row.key_documents.length ) {
-        first_doc = row.key_documents[0];
-      }
-      else {
-        first_doc = row.documents[0];
-      }
-      const firstDocUrl = first_doc.url ? first_doc.url.replace(/#/g, '%23') : '';
+      // Make sure there is one or the other of key_documents or documents
+      if (row.key_documents?.length || row.documents?.length) {
+        let first_doc;
+        if (row.key_documents && row.key_documents.length ) {
+          first_doc = row.key_documents[0];
+        }
+        else {
+          first_doc = row.documents[0];
+        }
+        const firstDocUrl = first_doc.url ? first_doc.url.replace(/#/g, '%23') : '';
 
-        html += `<br><span class="icon icon--inline--left i-document"></span>`;
-        html +=
-          buildEntityLink(
-            first_doc.doc_type_label, firstDocUrl, first_doc.doc_type_label);
-            if (first_doc.doc_date !== null) {
-                const doc_date = moment(first_doc.doc_date).format('MM/DD/YYYY');
-                html += ` | ${doc_date}`;
-            }
-            else {
-              html += ' | Undated';
-            }
-
+          html += `<br><span class="icon icon--inline--left i-document"></span>`;
+          html +=
+            buildEntityLink(
+              first_doc.doc_type_label, firstDocUrl, first_doc.doc_type_label);
+              if (first_doc.doc_date !== null) {
+                  const doc_date = moment(first_doc.doc_date).format('MM/DD/YYYY');
+                  html += ` | ${doc_date}`;
+              }
+              else {
+                html += ' | Undated';
+              }
+        }
         html += `</p>`;
 
       const filters = new URLSearchParams(window.location.search);

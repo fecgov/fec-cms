@@ -28,7 +28,7 @@
   margin: u(2rem 0);
 
   tr.row-active {
-    border-left: 0.5rem solid $primary;
+    box-shadow: inset 3px 0px 0px 0px $primary;
   }
 }
 
