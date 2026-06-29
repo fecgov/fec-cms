@@ -88,7 +88,7 @@ const renderNullStringText = function(data, columnName) {
   }
 };
 
-// Committee page itemized tables use the optimized null-sort query shape.
+// Committee page Schedule A tables use the optimized null-sort query shape.
 const committeeTwoYearTransactionPeriodQuery = function(committeeId, cycle, params = {}) {
   return _extend(
     {
@@ -709,7 +709,10 @@ $(function() {
           $table,
           _extend({}, tableOpts, {
             path: path,
-            query: committeeTwoYearTransactionPeriodQuery(committeeId, cycle),
+            query: {
+              committee_id: committeeId,
+              two_year_transaction_period: cycle
+            },
             columns: itemizedDisbursementColumns,
             callbacks: aggregateCallbacks,
             order: [[3, 'desc']],
@@ -733,7 +736,10 @@ $(function() {
           $table,
           _extend({}, tableOpts, {
             path: path,
-            query: committeeTwoYearTransactionPeriodQuery(committeeId, cycle),
+            query: {
+              committee_id: committeeId,
+              two_year_transaction_period: cycle
+            },
             columns: ecItemizedDisbursementColumns,
             callbacks: aggregateCallbacks,
             order: [[3, 'desc']],
@@ -757,7 +763,10 @@ $(function() {
           $table,
           _extend({}, tableOpts, {
             path: path,
-            query: committeeTwoYearTransactionPeriodQuery(committeeId, cycle),
+            query: {
+              committee_id: committeeId,
+              two_year_transaction_period: cycle
+            },
             columns: nationalPartyRaisingColumns,
             callbacks: aggregateCallbacks,
             order: [[2, 'desc']],
@@ -781,7 +790,10 @@ $(function() {
           $table,
           _extend({}, tableOpts, {
             path: path,
-            query: committeeTwoYearTransactionPeriodQuery(committeeId, cycle),
+            query: {
+              committee_id: committeeId,
+              two_year_transaction_period: cycle
+            },
             columns: nationalPartySpendingColumns,
             callbacks: aggregateCallbacks,
             order: [[3, 'desc']],
