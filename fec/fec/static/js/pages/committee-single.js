@@ -88,6 +88,18 @@ const renderNullStringText = function(data, columnName) {
   }
 };
 
+// Committee page itemized tables use the optimized null-sort query shape.
+const committeeTwoYearTransactionPeriodQuery = function(committeeId, cycle, params = {}) {
+  return _extend(
+    {
+      committee_id: committeeId,
+      two_year_transaction_period: cycle,
+      sort_nulls_last: true
+    },
+    params
+  );
+};
+
 const employerColumns = [
   {
     data: 'employer',
@@ -599,11 +611,9 @@ $(function() {
           $table,
           _extend({}, tableOpts, {
             path: path,
-            query: {
-              committee_id: committeeId,
-              two_year_transaction_period: cycle,
+            query: committeeTwoYearTransactionPeriodQuery(committeeId, cycle, {
               is_individual: true
-            },
+            }),
             columns: individualContributionsColumns,
             callbacks: aggregateCallbacks,
             order: [[2, 'desc']],
@@ -627,11 +637,7 @@ $(function() {
           $table,
           _extend({}, tableOpts, {
             path: path,
-            query: {
-              committee_id: committeeId,
-              two_year_transaction_period: cycle
-              // is_individual: true
-            },
+            query: committeeTwoYearTransactionPeriodQuery(committeeId, cycle),
             columns: individualContributionsColumns,
             callbacks: aggregateCallbacks,
             order: [[3, 'desc']],
@@ -703,10 +709,7 @@ $(function() {
           $table,
           _extend({}, tableOpts, {
             path: path,
-            query: {
-              committee_id: committeeId,
-              two_year_transaction_period: cycle
-            },
+            query: committeeTwoYearTransactionPeriodQuery(committeeId, cycle),
             columns: itemizedDisbursementColumns,
             callbacks: aggregateCallbacks,
             order: [[3, 'desc']],
@@ -730,10 +733,7 @@ $(function() {
           $table,
           _extend({}, tableOpts, {
             path: path,
-            query: {
-              committee_id: committeeId,
-              two_year_transaction_period: cycle
-            },
+            query: committeeTwoYearTransactionPeriodQuery(committeeId, cycle),
             columns: ecItemizedDisbursementColumns,
             callbacks: aggregateCallbacks,
             order: [[3, 'desc']],
@@ -757,10 +757,7 @@ $(function() {
           $table,
           _extend({}, tableOpts, {
             path: path,
-            query: {
-              committee_id: committeeId,
-              two_year_transaction_period: cycle
-            },
+            query: committeeTwoYearTransactionPeriodQuery(committeeId, cycle),
             columns: nationalPartyRaisingColumns,
             callbacks: aggregateCallbacks,
             order: [[2, 'desc']],
@@ -784,10 +781,7 @@ $(function() {
           $table,
           _extend({}, tableOpts, {
             path: path,
-            query: {
-              committee_id: committeeId,
-              two_year_transaction_period: cycle
-            },
+            query: committeeTwoYearTransactionPeriodQuery(committeeId, cycle),
             columns: nationalPartySpendingColumns,
             callbacks: aggregateCallbacks,
             order: [[3, 'desc']],
