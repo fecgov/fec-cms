@@ -106,7 +106,7 @@ jobs:
           command: |
             mkdir -p $HOME/bin
             export PATH=$HOME/bin:$PATH
-            curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=8.9.0" | tar xzv -C $HOME/bin
+            curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=8.9.0" | tar xzv -C $HOME/bin
 
       - run:
           name: Deploy CMS
