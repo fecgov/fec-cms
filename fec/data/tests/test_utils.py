@@ -9,6 +9,7 @@ from data.templatetags import filters
 import data.utils as utils
 from data.utils import election_title
 import data.api_caller as api_caller
+import data.constants as constants
 
 
 class TestUtils(TestCase):
@@ -26,8 +27,23 @@ class TestUtils(TestCase):
         assert filters.fmt_year_range(None) is None
 
     def test_fmt_state_full(self):
-        value = 'ny'
-        assert filters.fmt_state_full(value) == 'New York'
+        assert filters.fmt_state_full('ny') == 'New York'
+        assert filters.fmt_state_full('pr') == 'Puerto Rico'
+
+    def test_state_territories_countries_lists(self):
+        assert constants.states['AL'] == 'Alabama'
+        assert constants.armed_forces['AA'] == 'Armed Forces Americas'
+        assert constants.territories['AS'] == 'American Samoa'
+        assert constants.states_territories['AL'] == 'Alabama'
+        assert constants.states_territories['AS'] == 'American Samoa'
+        assert constants.states_all_contributors['AL'] == 'Alabama'
+        assert constants.states_all_contributors['AA'] == 'Armed Forces Americas'
+        assert constants.states_all_contributors['AS'] == 'American Samoa'
+        assert constants.states_all_contributors['ZZ'] == 'Foreign Countries and Other'
+        assert 'AS' not in constants.states
+        assert 'ZZ' not in constants.states
+        assert 'ZZ' not in constants.territories
+        assert 'ZZ' not in constants.states_territories
 
     def test_election_url(self):
         candidate = {
