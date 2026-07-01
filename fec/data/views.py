@@ -717,15 +717,16 @@ def load_committee_history(committee_id, cycle=None):
     path = "/committee/" + committee_id + "/history/" + str(cycle)
     committee = api_caller.load_first_row_data(path, **filters)
     if committee is None:
-        # If committee has no data for cycle but commitee_id exists, call /history/ endpoint without /cycle/
+        # If committee has no data for cycle but committee_id exists, call /history/ endpoint without /cycle/
         path = "/committee/" + committee_id + "/history/"
         committee = api_caller.load_first_row_data(path, **filters)
-        # Raise 404 instead of server error for urls with non-existent comm-id and cycle query (data/committee/C00123456/?cycle=2026)
+        # Raise 404 instead of server error for urls with non-existent comm-id and cycle query
+        # (data/committee/C00123456/?cycle=2026)
         if committee is None:
             raise Http404()
 
     # (3)call endpoint: committee/{committee_id}/candidates/history/{cycle}
-    # --under tag: candidate, get all candidates associated with that commitee
+    # --under tag: candidate, get all candidates associated with that committee
     path = "/committee/" + committee_id + "/candidates/history/" + str(cycle)
     all_candidates = api_caller.load_endpoint_results(path, election_full=False)
 
@@ -785,7 +786,7 @@ def elections(request, office, cycle, state=None, district=None):
 
     if office.lower() not in ["president", "senate", "house"]:
         raise Http404()
-    if (state is not None) and (state and state.upper() not in constants.states):
+    if (state is not None) and (state and state.upper() not in constants.states_territories):
         raise Http404()
 
     election_duration = election_durations.get(office[0].upper(), 2)
@@ -826,7 +827,7 @@ def elections(request, office, cycle, state=None, district=None):
             "election_duration": election_duration,
             "cycles": cycles,
             "state": state,
-            "state_full": constants.states[state.upper()] if state else None,
+            "state_full": constants.states_territories[state.upper()] if state else None,
             "district": district,
             "title": utils.election_title(cycle, office, state, district),
             "social_image_identifier": "data",
