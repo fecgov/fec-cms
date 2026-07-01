@@ -117,7 +117,7 @@ def fmt_year_range(year):
 
 @library.filter
 def fmt_state_full(value):
-    return constants.states[value.upper()]
+    return constants.states_territories[value.upper()]
 
 
 @library.filter
