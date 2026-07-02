@@ -344,19 +344,16 @@
     </div>
   {% endif %}
 
-  {% if totals_national_party and FEATURES.nat_party_acct_dis_single %}
+  {% if totals_national_party %}
     <div id="national-party-account-spending" class="entity__figure row">
       <div class="content__section">
         <div class="heading--section heading--with-action">
           <h3 class="heading__left">National party headquarters, recounts and convention accounts</h3>
-          {#- only offer to filter the data / link to the datatable if that flag is on, too -#}
-          {% if FEATURES.nat_party_acct_receipts %}
           <a
             class="heading__right button--alt button--browse"
             href="/data/national-party-account-disbursements/?committee_id={{ committee_id }}&two_year_transaction_period={{ cycle }}"
             >Filter this data
           </a>
-          {% endif %}
         </div>
         <div class="content__section--narrow">
           <div class="row u-margin-bottom">

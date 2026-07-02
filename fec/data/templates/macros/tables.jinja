@@ -22,7 +22,7 @@
       <td class="simple-table__cell t-mono">
         
         {#- For debts values / links #}
-        {%- if item[1] and item[1]['type'] and item[1]['type']['link'] and 'debts' in item[1]['type']['link'] and FEATURES['debts'] -%}
+        {%- if item[1] and item[1]['type'] and item[1]['type']['link'] and 'debts' in item[1]['type']['link'] -%}
         <a href="/data/debts/?
         {%- if committee_id -%}
           committee_id={{ committee_id }}

@@ -1116,31 +1116,39 @@ export const rulemakings = [
     render: function (data, type, row) {
       // Array to keep track of documents already shown
       let doc_ids = [];
-
       let html = `<p><strong>${row.rm_name}</strong>`;
-      if (row.key_documents && row.key_documents.length ) {
-        html += `<br><span class="icon icon--inline--left i-document"></span>`;
-        const keyDocUrl = row.key_documents[0].url ? row.key_documents[0].url.replace(/#/g, '%23') : '';
-        html +=
-          buildEntityLink(
-            row.key_documents[0].doc_type_label, keyDocUrl, row.key_documents[0].doc_type_label);
-            if (row.key_documents[0].doc_date !== null) {
-                const doc_date = moment(row.key_documents[0].doc_date).format('MM/DD/YYYY');
-                html += ` | ${doc_date}`;
-            }
-            else {
-              html += ' | Undated';
-            }
-      }
+      // Make sure there is one or the other of key_documents or documents
+      if (row.key_documents?.length || row.documents?.length) {
+        let first_doc;
+        if (row.key_documents && row.key_documents.length ) {
+          first_doc = row.key_documents[0];
+        }
+        else {
+          first_doc = row.documents[0];
+        }
+        const firstDocUrl = first_doc.url ? first_doc.url.replace(/#/g, '%23') : '';
+
+          html += `<br><span class="icon icon--inline--left i-document"></span>`;
+          html +=
+            buildEntityLink(
+              first_doc.doc_type_label, firstDocUrl, first_doc.doc_type_label);
+              if (first_doc.doc_date !== null) {
+                  const doc_date = moment(first_doc.doc_date).format('MM/DD/YYYY');
+                  html += ` | ${doc_date}`;
+              }
+              else {
+                html += ' | Undated';
+              }
+        }
         html += `</p>`;
 
-    const filters = new URLSearchParams(window.location.search);
-    const filters_category_type = filters.has('doc_category_id');
-    const filters_keyword = filters.has('q'); //getAll('q').length;
-    const filters_proximity = filters.has('q_proximity') && filters.getAll('q_proximity').length == 2;
-    const proximity_only = filters_proximity && !filters_keyword;
+      const filters = new URLSearchParams(window.location.search);
+      const filters_category_type = filters.has('doc_category_id');
+      const filters_keyword = filters.has('q'); //getAll('q').length;
+      const filters_proximity = filters.has('q_proximity') && filters.getAll('q_proximity').length == 2;
+      const proximity_only = filters_proximity && !filters_keyword;
 
-    const current_doc_ids = filters.getAll('doc_category_id') || [];
+      const current_doc_ids = filters.getAll('doc_category_id') || [];
 
     // Note: Opening div tags are lined up with their closing divs below
        html +=

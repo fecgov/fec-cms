@@ -126,7 +126,7 @@
                 <li><a href="#total-receipts">Total receipts</a></li>
                 <li><a href="#individual-contribution-transactions">Individual contribution transactions</a></li>
                 {% endif %}
-                {% if FEATURES.nat_party_acct_rec_single and totals_national_party %}
+                {% if totals_national_party %}
                 <li><a href="#national-party-account-raising">National party headquarters, recounts and convention accounts</a></li>
                 {% endif %}
               </ul>
@@ -168,7 +168,7 @@
               {% else %}
               <li><a href="#disbursement-transactions">Refund transactions</a></li>
               {% endif %}
-              {% if FEATURES.nat_party_acct_dis_single and totals_national_party %}
+              {% if totals_national_party %}
                 <li><a href="#national-party-account-spending">National party headquarters, recounts and convention accounts</a></li>
               {% endif %}
             </ul>
