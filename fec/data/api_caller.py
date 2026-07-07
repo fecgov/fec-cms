@@ -3,10 +3,12 @@ import os
 import random
 import requests
 import inspect
+import time
 
 from collections import OrderedDict
 from operator import itemgetter
 from urllib import parse
+from urllib3.util.retry import Retry
 from django.conf import settings
 from django.http import Http404
 
@@ -19,7 +21,23 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 session = requests.Session()
-http_adapter = requests.adapters.HTTPAdapter(max_retries=2, pool_maxsize=settings.API_CALLER_POOL_MAXSIZE)
+# Retry transient API connection failures instead of letting one stale socket
+# block the whole page render.
+retry_policy = Retry(
+    total=settings.API_CALLER_RETRY_TOTAL,
+    connect=settings.API_CALLER_RETRY_TOTAL,
+    read=settings.API_CALLER_RETRY_TOTAL,
+    status=settings.API_CALLER_RETRY_TOTAL,
+    backoff_factor=0.1,
+    status_forcelist=(500, 502, 503, 504),
+    allowed_methods=frozenset(["GET"]),
+    raise_on_status=False,
+)
+http_adapter = requests.adapters.HTTPAdapter(
+    max_retries=retry_policy,
+    pool_maxsize=settings.API_CALLER_POOL_MAXSIZE,
+)
+session.mount("http://", http_adapter)
 session.mount("https://", http_adapter)
 
 
@@ -30,14 +48,19 @@ def _call_api(*path_parts, **filters):
     path = os.path.join(settings.FEC_API_VERSION, *[x.strip("/") for x in path_parts])
     url = parse.urljoin(settings.FEC_API_URL, path)
     # Timeout is set in seconds
-    timeout = 90
+    timeout = (
+        settings.API_CALLER_CONNECT_TIMEOUT,
+        settings.API_CALLER_READ_TIMEOUT,
+    )
 
+    start_time = time.time()
     results = session.get(url, params=filters, timeout=timeout)
+    elapsed_ms = int((time.time() - start_time) * 1000)
 
     # Log the caller function and API endpoint
     current_frame = inspect.currentframe()
     caller_frame = inspect.getouterframes(current_frame, 2)
-    logger.info("{0}: {1}".format(caller_frame[1][3], results.url))
+    logger.info("{0}: {1} ({2}ms)".format(caller_frame[1][3], results.url, elapsed_ms))
 
     if results.ok:
         return results.json()
