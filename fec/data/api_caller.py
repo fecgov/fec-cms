@@ -15,7 +15,6 @@ from data import constants, utils
 
 MAX_FINANCIALS_COUNT = 4
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 session = requests.Session()
