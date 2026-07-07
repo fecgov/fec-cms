@@ -29,6 +29,9 @@ FEC_API_KEY_PUBLIC_SCHEDULE_A = env.get_credential('FEC_WEB_API_KEY_PUBLIC_SCHED
 FEC_CAL_DOWNLOAD_API_KEY = env.get_credential('FEC_CAL_DOWNLOAD_API_KEY')
 API_CALLER_POOL_MAXSIZE = int(env.get_credential('API_CALLER_POOL_MAXSIZE', 10))
 API_CALLER_TIMEOUT = int(env.get_credential('API_CALLER_TIMEOUT', 90))
+API_CALLER_CONNECT_TIMEOUT = int(env.get_credential('API_CALLER_CONNECT_TIMEOUT', 3))
+API_CALLER_READ_TIMEOUT = int(env.get_credential('API_CALLER_READ_TIMEOUT', 30))
+API_CALLER_RETRY_TOTAL = int(env.get_credential('API_CALLER_RETRY_TOTAL', 2))
 FEC_DOWNLOAD_API_KEY = env.get_credential('FEC_DOWNLOAD_API_KEY', '')
 
 FEC_RECAPTCHA_SECRET_KEY = env.get_credential('FEC_RECAPTCHA_SECRET_KEY')
@@ -74,12 +77,9 @@ FEATURES = {
     'website_status': bool(env.get_credential('FEC_FEATURE_WEBSITE_STATUS', '')),
 
     # Feature flags (hiding or displaying components)
-    'adrs': bool(env.get_credential('FEC_FEATURE_ADRS', '')),
-    'afs': bool(env.get_credential('FEC_FEATURE_AFS', '')),  # Admin fines search
     'aggregatetotals': bool(env.get_credential('FEC_FEATURE_AGGR_TOTS', '')),
     'barcharts': bool(env.get_credential('FEC_FEATURE_HOME_BARCHARTS', '')),
     'contributionsbystate': bool(env.get_credential('FEC_FEATURE_CONTRIBUTIONS_BY_STATE', '')),
-    'debts': bool(env.get_credential('FEC_FEATURE_DEBTS', '')),
     'hide_election_search_map': bool(env.get_credential('FEC_HIDE_ELECTION_SEARCH_MAP', '')),
     'h4_allocated_disbursements': bool(env.get_credential('FEC_FEATURE_H4_ALLOCATED_DISBURSEMENTS', True)),
     'house_senate_overview': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW', '')),
@@ -87,11 +87,6 @@ FEATURES = {
     'house_senate_overview_summary': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_SUMMARY', '')),
     'house_senate_overview_totals': bool(env.get_credential('FEC_FEATURE_HOUSE_SENATE_OVERVIEW_TOTALS', '')),
     'map': bool(env.get_credential('FEC_FEATURE_HOME_MAP', '')),
-    'nat_party_acct_receipts': bool(env.get_credential('FEC_FEATURE_NAT_PARTY_ACCT_RECEIPTS', '')),
-    'nat_party_acct_disbursements': bool(env.get_credential('FEC_FEATURE_NAT_PARTY_ACCT_DISBURSEMENTS', '')),
-    'nat_party_acct_rec_single': bool(env.get_credential('FEC_FEATURE_NAT_PARTY_ACCT_REC_SINGLE', '')),
-    'nat_party_acct_dis_single': bool(env.get_credential('FEC_FEATURE_NAT_PARTY_ACCT_DIS_SINGLE', '')),
-    'pac_party': bool(env.get_credential('FEC_FEATURE_PAC_PARTY', '')),
     'pac_snapshot': bool(env.get_credential('FEC_FEATURE_PAC_SNAPSHOT', '')),
     'presidential_map': bool(env.get_credential('FEC_FEATURE_PRESIDENTIAL_MAP', '')),
 }
@@ -105,14 +100,10 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['feature']:
 
 # Set feature flags to True for local
 if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
-    FEATURES['adrs'] = True
-    FEATURES['afs'] = True
     FEATURES['aggregatetotals'] = True
     FEATURES['barcharts'] = True
     FEATURES['contributionsbystate'] = True
-    FEATURES['debts'] = True
     FEATURES['map'] = True
-    FEATURES['pac_party'] = True
     FEATURES['pac_snapshot'] = True
     FEATURES['presidential_map'] = True
     FEATURES['h4_allocated_disbursements'] = True
@@ -120,10 +111,6 @@ if FEC_CMS_ENVIRONMENT == ENVIRONMENTS['local']:
     FEATURES['house_senate_overview_methodology'] = True
     FEATURES['house_senate_overview_summary'] = True
     FEATURES['house_senate_overview_totals'] = True
-    FEATURES['nat_party_acct_receipts'] = True
-    FEATURES['nat_party_acct_disbursements'] = True
-    FEATURES['nat_party_acct_rec_single'] = True
-    FEATURES['nat_party_acct_dis_single'] = True
 
 # Application definition
 INSTALLED_APPS = (

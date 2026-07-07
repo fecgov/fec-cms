@@ -74,25 +74,33 @@
 
     &.sorting,
     &.sorting_asc,
-    &.sorting_desc {
+    &.sorting_desc,
+    &.dt-ordering-asc,
+    &.dt-ordering-desc,
+    &.dt-orderable-asc,
+    &.dt-orderable-desc {
       background-position: calc(100% - 1rem) 50%;
       background-repeat: no-repeat;
       cursor: pointer;
       padding-right: u(3rem);
     }
 
-    &.sorting {
+    &.sorting,
+    &.dt-orderable-asc,
+    &.dt-orderable-desc {
       background-size: u(1rem);
       @include u-icon-bg($dash, $gray);
     }
 
-    &.sorting_asc {
+    &.sorting_asc,
+    &.dt-ordering-asc {
       background-size: u(1rem);
       background-color: $gray-lightest;
       @include u-icon-bg($arrow-up-border, $primary);
     }
 
-    &.sorting_desc {
+    &.sorting_desc,
+    &.dt-ordering-desc {
       background-size: u(1rem);
       background-color: $gray-lightest;
       @include u-icon-bg($arrow-down-border, $primary);

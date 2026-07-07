@@ -133,3 +133,8 @@
     @include u-font-color($inverse);
   }
 }
+
+/* For when accordions are separated by <h4>s */
+h4:has(~ .accordion--neutral) {
+    margin: 3rem 0 1.5rem;
+}

@@ -1,9 +1,10 @@
 <section id="bulk-data" class="row" aria-hidden="true" role="tabpanel">
   <h2>Download bulk data</h2>
-  <p>Downloadable bulk data files contain data from statements and reports filed with the Commission in a form that may be useful to users performing in-depth campaign finance research. The files, which were previously located on the Commission's file transfer protocol (FTP) server, can be very large because they contain transaction-level data. The update schedule of these files varies from daily to weekly. Expand each file's accordion to read more about what is contained in the file.</p>
+  <p>Downloadable bulk data files contain data from statements and reports filed with the Commission in a form that may be useful to users performing in-depth campaign finance research. The files can be very large because they contain transaction-level data. The update schedule of these files varies from daily to weekly. Expand each file's accordion to read more about what is contained in the file.</p>
   <div class="content__section t-sans">
-    <div class="js-accordion accordion--neutral" data-content-prefix="first">
-      <button type="button" class="js-accordion-trigger accordion__button">All candidates</button>
+    <h4>Candidate files</h4>
+    <div class="js-accordion accordion--neutral" data-content-prefix="candidates">
+      <button type="button" class="js-accordion-trigger accordion__button">Candidate summary</button>
       <div class="accordion__content">
         <i class="icon i-download icon--absolute--left"></i>
         <div class="content__section--indent-left">
@@ -39,7 +40,7 @@
       </div>
       <button type="button" class="js-accordion-trigger accordion__button">Candidate master</button>
       <div class="accordion__content">
-        <h6 class="t-no-rules">Candidate master</h4>
+        <h6 class="t-no-rules">Candidate master</h6>
         <i class="icon i-download icon--absolute--left"></i>
         <div class="content__section--indent-left">
           <ul class="list--flat-bordered">
@@ -70,7 +71,10 @@
           </ul>
           <p class="u-margin--top"><a href="/campaign-finance-data/candidate-master-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
         </div>
-        <p class="icon-download--inline--left"><a href="/files/bulk-downloads/data_dictionaries/cn_header_file.csv">Header file</a></p>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <p><a href="/files/bulk-downloads/data_dictionaries/cn_header_file.csv">Header file</a></p>
+        </div>
         <p>The candidate master file contains one record for each candidate who has either registered with the Federal Election Commission or appeared on a ballot list prepared by a state elections office.</p>
       </div>
       <button type="button" class="js-accordion-trigger accordion__button">Candidate-committee linkages</button>
@@ -95,8 +99,71 @@
           </ul>
           <p class="u-margin--top"><a href="/campaign-finance-data/candidate-committee-linkage-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
         </div>
-        <p class="icon-download--inline--left"><a href="/files/bulk-downloads/data_dictionaries/ccl_header_file.csv">Header file</a></p>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <p><a href="/files/bulk-downloads/data_dictionaries/ccl_header_file.csv">Header file</a></p>
+        </div>
         <p>This file contains one record for each candidate to committee linkage.</p>
+      </div>
+      <button type="button" class="js-accordion-trigger accordion__button">Presidential candidate map exports</button>
+      <div class="accordion__content">
+        <p>This data summarizes financial information disclosed by presidential candidates who have reported at least $100,000 in contributions from individuals <strong>other than the candidate</strong>.</p>
+        <p>The {{ default_presidential_year }} files contain financial activity through the most recent filing. The historical files contain financial activity through December 31 of the corresponding election year.</p>
+        <h6 class="t-no-rules">Overall candidate summary</h6>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <ul class="list--flat-bordered u-no-margin">
+            <li><a href="/files/bulk-downloads/Presidential_Map/2024/2024_overall_summary.csv">2024</a></li>
+            <li><a href="/files/bulk-downloads/Presidential_Map/2020/2020_overall_summary.csv">2020</a></li>
+            <li><a href="/files/bulk-downloads/Presidential_Map/2016/2016_overall_summary.csv">2016</a></li>
+            <li><a href="/files/bulk-downloads/Presidential_Map/2012/2012_overall_summary.csv">2012</a></li>
+            <li><a href="/files/bulk-downloads/Presidential_Map/2008/2008_overall_summary.csv">2008</a></li>
+          </ul>
+        </div>
+        <h6 class="t-no-rules">Contribution totals by size</h6>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <ul class="list--flat-bordered u-no-margin">
+            <li><a href="/files/bulk-downloads/Presidential_Map/2024/Contributions_by_Size.csv">2024</a></li>
+            <li><a href="/files/bulk-downloads/Presidential_Map/2020/Contributions_by_Size.csv">2020</a></li>
+            <li><a href="/files/bulk-downloads/Presidential_Map/2016/Contributions_by_Size.csv">2016</a></li>
+            <li><a href="/files/bulk-downloads/Presidential_Map/2012/Contributions_by_Size.csv">2012</a></li>
+            <li><a href="/files/bulk-downloads/Presidential_Map/2008/Contributions_by_Size.csv">2008</a></li>
+          </ul>
+        </div>
+        <h6 class="t-no-rules">Contribution totals by state and three-digit zip code</h6>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <ul class="list--flat-bordered u-no-margin">
+            <li><a href="/files/bulk-downloads/Presidential_Map/2024/Contributions_by_3Zip.csv">2024</a></li>
+            <li><a href="/files/bulk-downloads/Presidential_Map/2020/Contributions_by_3Zip.csv">2020</a></li>
+            <li><a href="/files/bulk-downloads/Presidential_Map/2016/Contributions_by_3Zip.csv">2016</a></li>
+            <li><a href="/files/bulk-downloads/Presidential_Map/2012/Contributions_by_3Zip.csv">2012</a></li>
+            <li><a href="/files/bulk-downloads/Presidential_Map/2008/Contributions_by_3Zip.csv">2008</a></li>
+          </ul>
+        </div>
+        <p><a href="/campaign-finance-data/presidential-map-data/">Learn how this information is compiled</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+      </div>
+      <button type="button" class="js-accordion-trigger accordion__button">New statements of candidacy (Form 2)</button>
+      <div class="accordion__content">
+        <h6 class="t-no-rules">New statements of candidacy</h6>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <ul class="list--flat-bordered u-no-margin">
+            <li><a href="/files/bulk-downloads/2026/Form2Filer_2026.csv">2025–2026</a></li>
+            <li><a href="/files/bulk-downloads/2024/Form2Filer_2024.csv">2023–2024</a></li>
+            <li><a href="/files/bulk-downloads/2022/Form2Filer_2022.csv">2021–2022</a></li>
+            <li><a href="/files/bulk-downloads/2020/Form2Filer_2020.csv">2019–2020</a></li>
+            <li><a href="/files/bulk-downloads/2018/Form2Filer_2018.csv">2017–2018</a></li>
+            <li><a href="/files/bulk-downloads/2016/Form2Filer_2016.csv">2015–2016</a></li>
+            <li><a href="/files/bulk-downloads/2014/Form2Filer_2014.csv">2013–2014</a></li>
+            <li><a href="/files/bulk-downloads/2012/Form2Filer_2012.csv">2011–2012</a></li>
+            <li><a href="/files/bulk-downloads/2010/Form2Filer_2010.csv">2009–2010</a></li>
+            <li><a href="/files/bulk-downloads/2008/Form2Filer_2008.csv">2007-2008</a></li>
+          </ul>
+          <p class="u-margin--top"><a href="/campaign-finance-data/new-statements-candidacy-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+        </div>
+        <p>This file lists all individuals who have filed a Statement of Candidacy (FEC Form 2) with the FEC to register as a candidate for federal office (U.S. House of Representatives, U.S. Senate and U.S. President) in a given election cycle.</p>
       </div>
       <button type="button" class="js-accordion-trigger accordion__button">House/Senate current campaigns</button>
       <div class="accordion__content">
@@ -124,6 +191,30 @@
         </div>
         <p>These files contain one record for each campaign.  This record contains summary financial information.</p>
       </div>
+      <button type="button" class="js-accordion-trigger accordion__button">All candidates</button>
+      <div class="accordion__content">
+        <h6 class="t-no-rules">Candidate summary</h6>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <ul class="list--flat-bordered u-no-margin">
+            <li><a href="/files/bulk-downloads/2026/candidate_summary_2026.csv">2025–2026</a></li>
+            <li><a href="/files/bulk-downloads/2024/candidate_summary_2024.csv">2023–2024</a></li>                  
+            <li><a href="/files/bulk-downloads/2022/candidate_summary_2022.csv">2021–2022</a></li>
+            <li><a href="/files/bulk-downloads/2020/candidate_summary_2020.csv">2019–2020</a></li>
+            <li><a href="/files/bulk-downloads/2018/candidate_summary_2018.csv">2017–2018</a></li>
+            <li><a href="/files/bulk-downloads/2016/candidate_summary_2016.csv">2015–2016</a></li>
+            <li><a href="/files/bulk-downloads/2014/candidate_summary_2014.csv">2013–2014</a></li>
+            <li><a href="/files/bulk-downloads/2012/candidate_summary_2012.csv">2011–2012</a></li>
+            <li><a href="/files/bulk-downloads/2010/candidate_summary_2010.csv">2009–2010</a></li>
+            <li><a href="/files/bulk-downloads/2008/candidate_summary_2008.csv">2007-2008</a></li>
+          </ul>
+          <p class="u-margin--top"><a href="/campaign-finance-data/candidate-summary-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+        </div>
+        <p>This file contains information for each candidate who has registered with the FEC or appears on an official state ballot for an election to the U.S. House of Representatives, U.S. Senate or U.S. President.</p>
+      </div>
+    </div>
+    <h4>Committee files</h4>
+    <div class="js-accordion accordion--neutral" data-content-prefix="committees">
       <button type="button" class="js-accordion-trigger accordion__button">Committee master</button>
       <div class="accordion__content">
         <i class="icon i-download icon--absolute--left"></i>
@@ -156,8 +247,32 @@
           </ul>
           <p class="u-margin--top"><a href="/campaign-finance-data/committee-master-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
         </div>
-        <p class="icon-download--inline--left"><a href="/files/bulk-downloads/data_dictionaries/cm_header_file.csv">Header file</a></p>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <p><a href="/files/bulk-downloads/data_dictionaries/cm_header_file.csv">Header file</a></p>
+        </div>
         <p>The committee master file contains one record for each committee registered with the Federal Election Commission. This includes federal political action committees and party committees, campaign committees for presidential, house and senate candidates, as well as groups or organizations who are spending money for or against candidates for federal office.</p>
+      </div>
+      <button type="button" class="js-accordion-trigger accordion__button">Committee summary</button>
+      <div class="accordion__content">
+        <h6 class="t-no-rules">Committee summary</h6>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <ul class="list--flat-bordered u-no-margin">
+            <li><a href="/files/bulk-downloads/2026/committee_summary_2026.csv">2025–2026</a></li>
+            <li><a href="/files/bulk-downloads/2024/committee_summary_2024.csv">2023–2024</a></li>              
+            <li><a href="/files/bulk-downloads/2022/committee_summary_2022.csv">2021–2022</a></li>
+            <li><a href="/files/bulk-downloads/2020/committee_summary_2020.csv">2019–2020</a></li>
+            <li><a href="/files/bulk-downloads/2018/committee_summary_2018.csv">2017–2018</a></li>
+            <li><a href="/files/bulk-downloads/2016/committee_summary_2016.csv">2015–2016</a></li>
+            <li><a href="/files/bulk-downloads/2014/committee_summary_2014.csv">2013–2014</a></li>
+            <li><a href="/files/bulk-downloads/2012/committee_summary_2012.csv">2011–2012</a></li>
+            <li><a href="/files/bulk-downloads/2010/committee_summary_2010.csv">2009–2010</a></li>
+            <li><a href="/files/bulk-downloads/2008/committee_summary_2008.csv">2007-2008</a></li>
+          </ul>
+          <p class="u-margin--top"><a href="/campaign-finance-data/committee-summary-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+        </div>
+        <p>This file contains overall receipts and disbursements for each political committee, group or individual registered with the Federal Election Commission, along with a breakdown of overall receipts by source and totals for contributions to other committees, independent expenditures made, etc.</p>
       </div>
       <button type="button" class="js-accordion-trigger accordion__button">PAC summary</button>
       <div class="accordion__content">
@@ -184,6 +299,119 @@
           <p class="u-margin--top"><a href="/campaign-finance-data/pac-and-party-summary-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
         </div>
         <p>This file gives overall receipts and disbursements for each PAC and party committee registered with the commission, along with a breakdown of overall receipts by source and totals for contributions to other committees, independent expenditures made and other information.</p>
+      </div>
+      <button type="button" class="js-accordion-trigger accordion__button">Leadership PACs and sponsors</button>
+      <div class="accordion__content">
+        <h6 class="t-no-rules">Leadership PACs and sponsors</h6>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <ul class="list--flat-bordered u-no-margin">
+            <li><a href="/files/bulk-downloads/data.fec.gov/leadership2026.csv">2025–2026</a></li>
+            <li><a href="/files/bulk-downloads/data.fec.gov/leadership2024.csv">2023–2024</a></li>
+            <li><a href="/files/bulk-downloads/data.fec.gov/leadership2022.csv">2021–2022</a></li>
+            <li><a href="/files/bulk-downloads/data.fec.gov/leadership2020.csv">2019–2020</a></li>
+            <li><a href="/files/bulk-downloads/data.fec.gov/leadership2018.csv">2017–2018</a></li>
+            <li><a href="/files/bulk-downloads/data.fec.gov/leadership2016.csv">2015–2016</a></li>
+            <li><a href="/files/bulk-downloads/data.fec.gov/leadership2014.csv">2013–2014</a></li>
+            <li><a href="/files/bulk-downloads/data.fec.gov/leadership2012.csv">2011–2012</a></li>
+            <li><a href="/files/bulk-downloads/data.fec.gov/leadership2010.csv">2009–2010</a></li>
+          </ul>
+          <p class="u-margin--top"><a href="/campaign-finance-data/leadership-pacs-and-sponsors-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+        </div>
+        <p>Candidates and members of Congress can create "leadership PACs" to raise funds to support other candidates for federal office. This file lists the PACs who have registered with the FEC as a leadership PAC.</p>
+      </div>
+      <button type="button" class="js-accordion-trigger accordion__button">New statements of organization (Form 1)</button>
+      <div class="accordion__content">
+        <h6 class="t-no-rules">New committee registrants</h6>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <ul class="list--flat-bordered u-no-margin">
+            <li><a href="/files/bulk-downloads/2026/Form1Filer_2026.csv">2025-2026</a></li>
+            <li><a href="/files/bulk-downloads/2024/Form1Filer_2024.csv">2023-2024</a></li>
+            <li><a href="/files/bulk-downloads/2022/Form1Filer_2022.csv">2021-2022</a></li>
+            <li><a href="/files/bulk-downloads/2020/Form1Filer_2020.csv">2019–2020</a></li>
+            <li><a href="/files/bulk-downloads/2018/Form1Filer_2018.csv">2017–2018</a></li>
+            <li><a href="/files/bulk-downloads/2016/Form1Filer_2016.csv">2015–2016</a></li>
+            <li><a href="/files/bulk-downloads/2014/Form1Filer_2014.csv">2013–2014</a></li>
+            <li><a href="/files/bulk-downloads/2012/Form1Filer_2012.csv">2011–2012</a></li>
+            <li><a href="/files/bulk-downloads/2010/Form1Filer_2010.csv">2009–2010</a></li>
+          </ul>
+          <p class="u-margin--top"><a href="/campaign-finance-data/new-committee-registrations-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+        </div>
+        <p>This file lists all committees that have filed an initial Statement of Organization (FEC Form 1) with the FEC to register as a Federal committee since January 1, 2009.</p>
+      </div>
+      <button type="button" class="js-accordion-trigger accordion__button">Lobbyist/registrant committees</button>
+      <div class="accordion__content">
+        <h6 class="t-no-rules">Lobbyist/registrant committees</h6>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <ul class="list--flat-bordered u-no-margin">
+            <li><a href="/files/bulk-downloads/data.fec.gov/lobbyist.csv">2007–2026</a></li>
+          </ul>
+          <p class="u-margin--top"><a href="/campaign-finance-data/lobbyistregistrant-committees-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+        </div>
+        <p>The list of PACs that are established or controlled by lobbyists or others registered with Congress for lobby disclosure. Campaigns, parties and leadership PACs who received bundled contributions from these PACs may be required to disclose that bundling activity to the FEC.</p>
+      </div>
+    </div>
+    <h4>Transaction files</h4>
+    <div class="js-accordion accordion--neutral" data-content-prefix="transactions">
+      <button type="button" class="js-accordion-trigger accordion__button">Any transaction from one committee to another</button>
+      <div class="accordion__content">
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <ul class="list--flat-bordered u-margin--bottom">
+            <li><a href="/files/bulk-downloads/2026/oth26.zip">2025–2026</a></li>
+            <li><a href="/files/bulk-downloads/2024/oth24.zip">2023–2024</a></li>            
+            <li><a href="/files/bulk-downloads/2022/oth22.zip">2021–2022</a></li>
+            <li><a href="/files/bulk-downloads/2020/oth20.zip">2019–2020</a></li>
+            <li><a href="/files/bulk-downloads/2018/oth18.zip">2017–2018</a></li>
+            <li><a href="/files/bulk-downloads/2016/oth16.zip">2015–2016</a></li>
+            <li><a href="/files/bulk-downloads/2014/oth14.zip">2013–2014</a></li>
+            <li><a href="/files/bulk-downloads/2012/oth12.zip">2011–2012</a></li>
+            <li><a href="/files/bulk-downloads/2010/oth10.zip">2009–2010</a></li>
+            <li><a href="/files/bulk-downloads/2008/oth08.zip">2007-2008</a></li>
+            <li><a href="/files/bulk-downloads/2006/oth06.zip">2005–2006</a></li>
+            <li><a href="/files/bulk-downloads/2004/oth04.zip">2003–2004</a></li>
+            <li><a href="/files/bulk-downloads/2002/oth02.zip">2001-2002</a></li>
+            <li><a href="/files/bulk-downloads/2000/oth00.zip">1999–2000</a></li>
+            <li><a href="/files/bulk-downloads/1998/oth98.zip">1997–1998</a></li>
+            <li><a href="/files/bulk-downloads/1996/oth96.zip">1995–1996</a></li>
+            <li><a href="/files/bulk-downloads/1994/oth94.zip">1993–1994</a></li>
+            <li><a href="/files/bulk-downloads/1992/oth92.zip">1991–1992</a></li>
+            <li><a href="/files/bulk-downloads/1990/oth90.zip">1989–1990</a></li>
+            <li><a href="/files/bulk-downloads/1988/oth88.zip">1987–1988</a></li>
+            <li><a href="/files/bulk-downloads/1986/oth86.zip">1985–1986</a></li>
+            <li><a href="/files/bulk-downloads/1984/oth84.zip">1983–1984</a></li>
+            <li><a href="/files/bulk-downloads/1982/oth82.zip">1981–1982</a></li>
+            <li><a href="/files/bulk-downloads/1980/oth80.zip">1979–1980</a></li>
+          </ul>
+          <p class="u-margin--top"><a href="/campaign-finance-data/any-transaction-one-committee-another-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+        </div>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <p><a href="/files/bulk-downloads/data_dictionaries/oth_header_file.csv">Header file</a></p>
+        </div>
+        <p>The itemized records (miscellaneous transactions) file contains all transactions (contributions, transfers, etc. among federal committees). It contains all data in the itemized committee contributions file plus PAC contributions to party committees, party transfers from state committee to state committee, and party transfers from national committee to state committee. This file only includes federal transfers not soft money transactions.</p>
+      </div>
+      <button type="button" class="js-accordion-trigger accordion__button">Communication costs</button>
+      <div class="accordion__content">
+        <h6 class="t-no-rules">Communication costs</h6>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <ul class="list--flat-bordered u-no-margin">
+            <li><a href="/files/bulk-downloads/2026/CommunicationCosts_2026.csv">2025–2026</a></li>
+            <li><a href="/files/bulk-downloads/2024/CommunicationCosts_2024.csv">2023–2024</a></li>
+            <li><a href="/files/bulk-downloads/2022/CommunicationCosts_2022.csv">2021–2022</a></li>   
+            <li><a href="/files/bulk-downloads/2020/CommunicationCosts_2020.csv">2019–2020</a></li>
+            <li><a href="/files/bulk-downloads/2018/CommunicationCosts_2018.csv">2017–2018</a></li>
+            <li><a href="/files/bulk-downloads/2016/CommunicationCosts_2016.csv">2015–2016</a></li>
+            <li><a href="/files/bulk-downloads/2014/CommunicationCosts_2014.csv">2013–2014</a></li>
+            <li><a href="/files/bulk-downloads/2012/CommunicationCosts_2012.csv">2011–2012</a></li>
+            <li><a href="/files/bulk-downloads/2010/CommunicationCosts_2010.csv">2009–2010</a></li>
+          </ul>
+          <p class="u-margin--top"><a href="/campaign-finance-data/communication-costs-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+        </div>
+        <p>This file contains specific disbursement transactions disclosed to the Commission as communication costs by corporations and labor organizations.</p>
       </div>
       <button type="button" class="js-accordion-trigger accordion__button">Contributions by individuals</button>
       <div class="accordion__content">
@@ -217,10 +445,13 @@
           </ul>
           <p class="u-margin--top"><a href="/campaign-finance-data/contributions-individuals-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
         </div>
-        <p class="icon-download--inline--left"><a href="/files/bulk-downloads/data_dictionaries/indiv_header_file.csv">Header file</a></p>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <p><a href="/files/bulk-downloads/data_dictionaries/indiv_header_file.csv">Header file</a></p>
+        </div>
         <p>The individual contributions file contains each contribution from an individual to a federal committee. It includes the ID number of the committee receiving the contribution, the name, city, state, zip code, and place of business of the contributor along with the date and amount of the contribution.</p>
       </div>
-      <button type="button" class="js-accordion-trigger accordion__button">Contributions from committees to candidates & independent expenditures</button>
+      <button type="button" class="js-accordion-trigger accordion__button">Contributions from committees to candidates and independent expenditures</button>
       <div class="accordion__content">
         <i class="icon i-download icon--absolute--left"></i>
         <div class="content__section--indent-left">
@@ -252,43 +483,63 @@
           </ul>
           <p class="u-margin--top"><a href="/campaign-finance-data/contributions-committees-candidates-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
         </div>
-        <p class="icon-download--inline--left"><a href="/files/bulk-downloads/data_dictionaries/pas2_header_file.csv">Header file</a></p>
-        <p>The itemized committee contributions file contains each contribution or independent expenditure made by a PAC, party committee, candidate committee, or other federal committee to a candidate during the two-year election cycle.</p>
-      </div>
-      <button type="button" class="js-accordion-trigger accordion__button">Any transaction from one committee to another</button>
-      <div class="accordion__content">
         <i class="icon i-download icon--absolute--left"></i>
         <div class="content__section--indent-left">
-          <ul class="list--flat-bordered u-margin--bottom">
-            <li><a href="/files/bulk-downloads/2026/oth26.zip">2025–2026</a></li>
-            <li><a href="/files/bulk-downloads/2024/oth24.zip">2023–2024</a></li>            
-            <li><a href="/files/bulk-downloads/2022/oth22.zip">2021–2022</a></li>
-            <li><a href="/files/bulk-downloads/2020/oth20.zip">2019–2020</a></li>
-            <li><a href="/files/bulk-downloads/2018/oth18.zip">2017–2018</a></li>
-            <li><a href="/files/bulk-downloads/2016/oth16.zip">2015–2016</a></li>
-            <li><a href="/files/bulk-downloads/2014/oth14.zip">2013–2014</a></li>
-            <li><a href="/files/bulk-downloads/2012/oth12.zip">2011–2012</a></li>
-            <li><a href="/files/bulk-downloads/2010/oth10.zip">2009–2010</a></li>
-            <li><a href="/files/bulk-downloads/2008/oth08.zip">2007-2008</a></li>
-            <li><a href="/files/bulk-downloads/2006/oth06.zip">2005–2006</a></li>
-            <li><a href="/files/bulk-downloads/2004/oth04.zip">2003–2004</a></li>
-            <li><a href="/files/bulk-downloads/2002/oth02.zip">2001-2002</a></li>
-            <li><a href="/files/bulk-downloads/2000/oth00.zip">1999–2000</a></li>
-            <li><a href="/files/bulk-downloads/1998/oth98.zip">1997–1998</a></li>
-            <li><a href="/files/bulk-downloads/1996/oth96.zip">1995–1996</a></li>
-            <li><a href="/files/bulk-downloads/1994/oth94.zip">1993–1994</a></li>
-            <li><a href="/files/bulk-downloads/1992/oth92.zip">1991–1992</a></li>
-            <li><a href="/files/bulk-downloads/1990/oth90.zip">1989–1990</a></li>
-            <li><a href="/files/bulk-downloads/1988/oth88.zip">1987–1988</a></li>
-            <li><a href="/files/bulk-downloads/1986/oth86.zip">1985–1986</a></li>
-            <li><a href="/files/bulk-downloads/1984/oth84.zip">1983–1984</a></li>
-            <li><a href="/files/bulk-downloads/1982/oth82.zip">1981–1982</a></li>
-            <li><a href="/files/bulk-downloads/1980/oth80.zip">1979–1980</a></li>
-          </ul>
-          <p class="u-margin--top"><a href="/campaign-finance-data/any-transaction-one-committee-another-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+          <p><a href="/files/bulk-downloads/data_dictionaries/pas2_header_file.csv">Header file</a></p>
         </div>
-        <p class="icon-download--inline--left"><a href="/files/bulk-downloads/data_dictionaries/oth_header_file.csv">Header file</a></p>
-        <p>The itemized records (miscellaneous transactions) file contains all transactions (contributions, transfers, etc. among federal committees). It contains all data in the itemized committee contributions file plus PAC contributions to party committees, party transfers from state committee to state committee, and party transfers from national committee to state committee. This file only includes federal transfers not soft money transactions.</p>
+        <p>The itemized committee contributions file contains each contribution or independent expenditure made by a PAC, party committee, candidate committee, or other federal committee to a candidate during the two-year election cycle.</p>
+      </div>
+      <button type="button" class="js-accordion-trigger accordion__button">Electioneering communications</button>
+      <div class="accordion__content">
+        <h6 class="t-no-rules">Electioneering communications</h6>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <ul class="list--flat-bordered u-no-margin">
+            <li><a href="/files/bulk-downloads/2026/ElectioneeringComm_2026.csv">2025–2026</a></li>
+            <li><a href="/files/bulk-downloads/2024/ElectioneeringComm_2024.csv">2023–2024</a></li>
+            <li><a href="/files/bulk-downloads/2022/ElectioneeringComm_2022.csv">2021–2022</a></li>
+            <li><a href="/files/bulk-downloads/2020/ElectioneeringComm_2020.csv">2019–2020</a></li>
+            <li><a href="/files/bulk-downloads/2018/ElectioneeringComm_2018.csv">2017–2018</a></li>
+            <li><a href="/files/bulk-downloads/2016/ElectioneeringComm_2016.csv">2015–2016</a></li>
+            <li><a href="/files/bulk-downloads/2014/ElectioneeringComm_2014.csv">2013–2014</a></li>
+            <li><a href="/files/bulk-downloads/2012/ElectioneeringComm_2012.csv">2011–2012</a></li>
+            <li><a href="/files/bulk-downloads/2010/ElectioneeringComm_2010.csv">2009–2010</a></li>
+          </ul>
+          <p class="u-margin--top"><a href="/campaign-finance-data/electioneering-communications-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+        </div>
+        <p>This file contains specific disbursement transactions disclosed to the Commission as electioneering communications.</p>
+      </div>
+      <button type="button" class="js-accordion-trigger accordion__button">Independent expenditures (24- and 48-Hour Reports)</button>
+      <div class="accordion__content">
+        <h6 class="t-no-rules">Independent expenditures</h6>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <ul class="list--flat-bordered u-no-margin">
+            <li><a href="/files/bulk-downloads/2026/independent_expenditure_2026.csv">2025–2026</a></li>
+            <li><a href="/files/bulk-downloads/2024/independent_expenditure_2024.csv">2023–2024</a></li>                 
+            <li><a href="/files/bulk-downloads/2022/independent_expenditure_2022.csv">2021–2022</a></li>
+            <li><a href="/files/bulk-downloads/2020/independent_expenditure_2020.csv">2019–2020</a></li>
+            <li><a href="/files/bulk-downloads/2018/independent_expenditure_2018.csv">2017–2018</a></li>
+            <li><a href="/files/bulk-downloads/2016/independent_expenditure_2016.csv">2015–2016</a></li>
+            <li><a href="/files/bulk-downloads/2014/independent_expenditure_2014.csv">2013–2014</a></li>
+            <li><a href="/files/bulk-downloads/2012/independent_expenditure_2012.csv">2011–2012</a></li>
+            <li><a href="/files/bulk-downloads/2010/independent_expenditure_2010.csv">2009–2010</a></li>
+          </ul>
+          <p class="u-margin--top"><a href="/campaign-finance-data/independent-expenditures-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+        </div>
+        <p>This file contains "24-hour" and "48-hour" reports of independent expenditures filed during the current election cycle and for election cycles through 2010. The file contains detailed information about independent expenditures, including who was paid, the purpose of the disbursement, date and amount of the expenditure and the candidate for or against whom the expenditure was made.</p>
+      </div>
+      <button type="button" class="js-accordion-trigger accordion__button">Lobbyist bundled filings</button>
+      <div class="accordion__content">
+        <h6 class="t-no-rules">Lobbyist bundled filings</h6>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+            <ul class="list--flat-bordered u-no-margin">
+            <li><a href="/files/bulk-downloads/data.fec.gov/lobbyist_bundle.csv">2009–2026</a></li>
+          </ul>
+          <p class="u-margin--top"><a href="/campaign-finance-data/lobbyist-bundled-contributions-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+        </div>
+        <p>The list of PACs that are established or controlled by lobbyists or others registered with Congress for lobby disclosure. Campaigns, parties and leadership PACs who received bundled contributions from these PACs may be required to disclose that bundling activity to the FEC.</p>
       </div>
       <button type="button" class="js-accordion-trigger accordion__button">Operating expenditures</button>
       <div class="accordion__content">
@@ -310,21 +561,64 @@
           </ul>
           <p class="u-margin--top"><a href="/campaign-finance-data/operating-expenditures-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
         </div>
-        <p class="icon-download--inline--left"><a href="/files/bulk-downloads/data_dictionaries/oppexp_header_file.csv">Header file</a></p>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <p><a href="/files/bulk-downloads/data_dictionaries/oppexp_header_file.csv">Header file</a></p>
+        </div>
         <p>This file contains disbursements reported on FEC Form 3 Line 17, FEC Form 3P Line 23and FEC Form 3X Lines 21(a)(i), 21(a)(ii) and 21(b).</p>
       </div>
-      <button type="button" class="js-accordion-trigger accordion__button">Electronically filed reports (.fec files)</button>
+    </div>
+    <h4>Other files</h4>
+    <div class="js-accordion accordion--neutral" data-content-prefix="other">
+    <button type="button" class="js-accordion-trigger accordion__button">False and fictitious filings</button>
       <div class="accordion__content">
-        <p class="icon-download--inline--left"><a href="https://cg-519a459a-0ea3-42c2-b7bc-fa1143481f74.s3-us-gov-west-1.amazonaws.com/bulk-downloads/electronic/eFilingFormats.zip">File formats, header file and metadata</a></p>
-        <p><a href="https://cg-519a459a-0ea3-42c2-b7bc-fa1143481f74.s3-us-gov-west-1.amazonaws.com/bulk-downloads/index.html?prefix=bulk-downloads/electronic/">Download files by day</a> &#187;</p>
+        <h6 class="t-no-rules">False and fictitious filings</h6>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <ul class="list--flat-bordered u-no-margin">
+            <li><a href="/files/bulk-downloads/data.fec.gov/FalseFictitiousFilings.csv">2016–2026</a></li>
+          </ul>
+          <p class="u-margin--top"><a href="/campaign-finance-data/false-fictitious-filings-file-description/">Data description for this file</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+        </div>
+        <p>The FEC works to ensure all filings are accurate and complete. As part of that process, the Commission asks filers whose registration forms contain questionable information to verify their accuracy. This page lists filers that did not respond and verify their information.</p>
+      </div>
+      <button type="button" class="js-accordion-trigger accordion__button">Electronically filed reports (.fec)</button>
+      <div class="accordion__content">
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <p><a href="https://cg-519a459a-0ea3-42c2-b7bc-fa1143481f74.s3-us-gov-west-1.amazonaws.com/bulk-downloads/electronic/eFilingFormats.zip">File formats, header file and metadata</a></p>
+          <p><a href="https://cg-519a459a-0ea3-42c2-b7bc-fa1143481f74.s3-us-gov-west-1.amazonaws.com/bulk-downloads/index.html?prefix=bulk-downloads/electronic/">Download files by day</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+        </div>
         <p>Daily compilation of electronically filed reports and statements.</p>
       </div>
-      <button type="button" class="js-accordion-trigger accordion__button">Paper filed reports (.fec files)</button>
+      <button type="button" class="js-accordion-trigger accordion__button">Paper filed reports (.fec)</button>
       <div class="accordion__content">
-        <p class="icon-download--inline--left"><a href="https://cg-519a459a-0ea3-42c2-b7bc-fa1143481f74.s3-us-gov-west-1.amazonaws.com/bulk-downloads/paper/PaperFormats.zip">File formats, header file and metadata</a></p>
-        <p><a href="https://cg-519a459a-0ea3-42c2-b7bc-fa1143481f74.s3-us-gov-west-1.amazonaws.com/bulk-downloads/index.html?prefix=bulk-downloads/paper/">Download files by day</a> &#187;</p>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <p><a href="https://cg-519a459a-0ea3-42c2-b7bc-fa1143481f74.s3-us-gov-west-1.amazonaws.com/bulk-downloads/paper/PaperFormats.zip">File formats, header file and metadata</a></p>
+          <p><a href="https://cg-519a459a-0ea3-42c2-b7bc-fa1143481f74.s3-us-gov-west-1.amazonaws.com/bulk-downloads/index.html?prefix=bulk-downloads/paper/">Download files by day</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+        </div>
         <p>A paper report submitted to the Commission is a committee's official campaign finance disclosure filing for paper filers. If there are any discrepancies between the paper report and the electronic data file received from our data entry contractor, the paper report takes precedence. </p>
       </div>
+      <button type="button" class="js-accordion-trigger accordion__button">Postgres database dump files</button>
+      <div class="accordion__content">
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <p><a href="https://www.fec.gov/files/bulk-downloads/index.html?prefix=bulk-downloads/data-dump/schedules/">Dump files</a></p>
+          <p><a href="https://cg-519a459a-0ea3-42c2-b7bc-fa1143481f74.s3-us-gov-west-1.amazonaws.com/bulk-downloads/data-dump/schedules/README.txt">Readme</a><i class="icon icon--small i-arrow-right icon--inline--right"></i></p>
+        </div>
+        <p>The PostgreSQL database dump files contain data from 1975 to present from Schedule A, Schedule B, Schedule E and committee history. In addition, you will find a readme file with basic information about how to restore the PG dump files. Note: these files can be very large.</p>
+      </div>
+      <button type="button" class="js-accordion-trigger accordion__button">Senate unofficial electronic filings</button>
+      <div class="accordion__content">
+        <h6 class="t-no-rules">Senate unofficial electronic filings</h6>
+        <i class="icon i-download icon--absolute--left"></i>
+        <div class="content__section--indent-left">
+          <ul class="list--flat-bordered u-no-margin">
+            <li><a href="https://docquery.fec.gov/senate/">2008–2018</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
-   </div>
+  </div>
 </section>

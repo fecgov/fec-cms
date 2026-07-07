@@ -578,6 +578,15 @@ const defaultCallbacks = {
   afterRender: function() {} //eslint-disable-line no-empty-function
 };
 
+const hasQueryValue = function(value) {
+  return Array.isArray(value) ? value.length > 0 : value !== undefined && value !== null && value !== '';
+};
+
+// This query shape uses a faster API index when nulls sort last.
+const hasCommitteeTwoYearTransactionPeriod = function(query) {
+  return hasQueryValue(query.committee_id) && hasQueryValue(query.two_year_transaction_period);
+};
+
 /**
  * The FEC's class of DataTable (the `_FEC` suffix is to differentiate between this and
  * datatables v1's '.Datatable' jQuery plugin and
@@ -1025,9 +1034,17 @@ DataTable_FEC.prototype.buildUrl = function(data, paginate, download) {
       api_key: window.DOWNLOAD_API_KEY
     });
   }
+  query = _extend({}, query, this.opts.query || {});
+  // Keep broad searches unchanged; only target committee two-year lookups.
+  if (
+    this.opts.sortNullsLastForCommitteeTwoYearTransactionPeriod &&
+    hasCommitteeTwoYearTransactionPeriod(query)
+  ) {
+    query.sort_nulls_last = true;
+  }
   return buildUrl(
     this.opts.path,
-    _extend({}, query, this.opts.query || {})
+    query
   );
 };
 

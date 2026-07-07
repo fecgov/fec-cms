@@ -1,3 +1,5 @@
+from django.contrib import messages
+from django.shortcuts import redirect
 from wagtail.admin.ui.tables import Column, DateColumn
 from wagtail.admin.ui.tables.pages import BulkActionsColumn, PageStatusColumn, PageTitleColumn
 from wagtail.admin.viewsets.base import ViewSetGroup
@@ -6,7 +8,7 @@ from wagtail.admin.viewsets.pages import PageListingViewSet
 from wagtail.admin.views.pages.listing import IndexView
 from wagtail import hooks
 from home.models import (Author, DigestPage, FecTimelineItem, HomePageBannerAnnouncement, PressReleasePage,
-                         RecordPage, TipsForTreasurersPage)
+                         RecordPage, TipsForTreasurersPage, UniqueModel)
 
 
 class AuthorModelViewSet(ModelViewSet):
@@ -87,11 +89,11 @@ class BannerPageIndexView(IndexView):
 class HomePageBannerViewSet(PageListingViewSet):
     menu_label = 'Home page banner announcements'
     model = HomePageBannerAnnouncement
-    #ordering = ['-date_active'] # might work in Wagtail 7
+    # ordering = ['-date_active']  # might work in Wagtail 7
     columns = [
         PageTitleColumn('description', label='Title', sort_key='page_description'),
         Column('date_active', label='Date active', sort_key='date_active'),
-        Column('date_inactive', label='Date inactive' , sort_key='date_inactive'),
+        Column('date_inactive', label='Date inactive', sort_key='date_inactive'),
         PageStatusColumn('status', label='Status', sort_key='status'),
     ]
     name = 'home_page_banner_announcements'
@@ -112,3 +114,16 @@ class UpdatesViewSetGroup(ViewSetGroup):
 @hooks.register('register_admin_viewset')
 def register_viewset():
     return [author_model_view_set, UpdatesViewSetGroup()]
+
+
+@hooks.register('before_copy_page')
+def prevent_copying_unique_pages(request, page):
+    # Wagtail's copy view should enforce max_count for unique page models.
+    specific_page = page.specific
+    if isinstance(specific_page, UniqueModel):
+        page_type = specific_page.__class__.__name__
+        messages.error(
+            request,
+            'Unique page types cannot be copied. Edit the existing {0} instead.'.format(page_type)
+        )
+        return redirect('wagtailadmin_explore', page.get_parent().id)

@@ -41,7 +41,6 @@ class TestDatatablesRender(TestCase):
         assert response.status_code == 200
 
     # H4 allocated federal/nonfederal disbursements
-
     # TODO: remove the conditional with the flag
     if settings.FEATURES.get('h4_allocated_disbursements'):
         def test_allocated_federal_nonfederal_disbursements(self):
@@ -49,21 +48,17 @@ class TestDatatablesRender(TestCase):
             assert response.status_code == 200
 
     # Loans
-
     def test_loans(self):
         response = client.get('/data/loans/', follow=True)
         assert response.status_code == 200
 
     # Debts
-
     # TODO: debts dates (remove the conditional with the flag)
-    if settings.FEATURES.get('debts'):
-        def test_debts(self):
-            response = client.get('/data/debts/', follow=True)
-            assert response.status_code == 200
+    def test_debts(self):
+        response = client.get('/data/debts/', follow=True)
+        assert response.status_code == 200
 
     # Candidates
-
     def test_all_candidates(self):
         response = client.get('/data/candidates/', follow=True)
         assert response.status_code == 200
@@ -81,13 +76,11 @@ class TestDatatablesRender(TestCase):
         assert response.status_code == 200
 
     # Committees
-
     def test_all_committees(self):
         response = client.get('/data/committees/', follow=True)
         assert response.status_code == 200
 
     # Filings and reports
-
     def test_all_filings(self):
         response = client.get('/data/filings/', follow=True)
         assert response.status_code == 200
@@ -105,23 +98,15 @@ class TestDatatablesRender(TestCase):
         assert response.status_code == 200
 
     # National party accounts
-
     def test_national_party_account_receipts(self):
-        # TODO: remove the conditional with the flag
-        if settings.FEATURES.get('nat_party_acct_receipts'):
-            response = client.get('/data/national-party-account-receipts/', follow=True)
-            assert response.status_code == 200
+        response = client.get('/data/national-party-account-receipts/', follow=True)
+        assert response.status_code == 200
 
     def test_national_party_account_disbursements(self):
-        # TODO: remove the conditional with the flag
-        if settings.FEATURES.get('nat_party_acct_disbursements'):
-            response = client.get('/data/national-party-account-disbursements/', follow=True)
-            assert response.status_code == 200
-    
-    # Rulemakings
+        response = client.get('/data/national-party-account-disbursements/', follow=True)
+        assert response.status_code == 200
 
+    # Rulemakings
     def test_rulemakings(self):
-        # TODO: remove the conditional with the flag
-        if settings.FEATURES.get('rulemakings'):
             response = client.get('/legal/search/rulemakings/', follow=True)
             assert response.status_code == 200
