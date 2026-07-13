@@ -36,14 +36,19 @@ def _call_api(*path_parts, **filters):
     # Log the caller function and API endpoint
     current_frame = inspect.currentframe()
     caller_frame = inspect.getouterframes(current_frame, 2)
-    logger.info("{0}: {1}".format(caller_frame[1][3], results.url))
+    parsed = parse.urlparse(results.url)
+    params = parse.parse_qs(parsed.query, keep_blank_values=True)
+    params.pop("api_key", None)
+    safe_url = parsed._replace(query=parse.urlencode(params, doseq=True)).geturl()
+    logger.info("{0}: {1}".format(caller_frame[1][3], safe_url))
 
     if results.ok:
         return results.json()
     else:
+        safe_filters = {k: v for k, v in filters.items() if k != "api_key"}
         logger.error(
             "API ERROR with status {0} for {1} with filters: {2}".format(
-                results.status_code, url, filters
+                results.status_code, safe_url, safe_filters
             )
         )
 
