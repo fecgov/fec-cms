@@ -4,7 +4,7 @@
 //
 .mega-container {
   a:not(.mega__page-link, .button) {
-    border-bottom: none;
+    border-bottom: 1px dotted #fff0; // Add a clear border to avoid layout shift when hovering
 
     &:hover {
       border-bottom: 1px dotted $inverse;
@@ -13,6 +13,7 @@
 
   ul {
     margin-left: 0;
+    position: relative;
   }
 }
 
@@ -88,7 +89,6 @@
 
 .mega__item {
   break-inside: avoid;
-  float: left;
   line-height: 1.2;
   margin-bottom: u(1.5rem);
   position: relative;
