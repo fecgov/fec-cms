@@ -103,7 +103,7 @@ ElectionSummary.prototype.init = function() {
       .then(data => {
         // Add the the by-party totals
         allTotals[party] = data.results;
-        // TODO: Some way to just run this once instead of 3 times (for each iteration)
+        // TODO: async way to just run this once instead of 3 times (for each iteration)
         instance.handleDataLoaded(allTotals);
       })
       .catch(() => {
