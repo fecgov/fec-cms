@@ -12,8 +12,9 @@ from django.shortcuts import get_object_or_404, render
 from wagtail.documents.models import Document
 
 from fec.forms import ContactRAD, fetch_categories  # form_categories
-from home.models import (CommissionerPage, DigestPage, MeetingPage,
-                         PressReleasePage, RecordPage, TipsForTreasurersPage)
+from home.models import (CommissionerPage, DigestPage, EmbedSnippet,
+                         MeetingPage, PressReleasePage, RecordPage,
+                         TipsForTreasurersPage)
 
 
 logging.basicConfig(level=logging.INFO)
@@ -454,11 +455,13 @@ def index_meetings(request):
 
 
 def guides(request):
+    # Temporary until guide pages can be templatized in Wagtail.
+    guides_info_message = EmbedSnippet.objects.filter(title="NRSC v. FEC").first()
     page_context = {"content_section": "help", "title": "Guides"}
     return render(
         request,
         "home/candidate-and-committee-services/guides.html",
-        {"self": page_context},
+        {"self": page_context, "guides_info_message": guides_info_message},
     )
 
 
