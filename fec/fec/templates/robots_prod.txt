@@ -37,6 +37,7 @@ Disallow: /legal/search/enforcement/?*
 Disallow: /legal/search/murs/?*
 Disallow: /legal/search/matters-under-review/?*
 Disallow: /legal/search/regulations/?*
+Disallow: /legal/search/rulemakings/?*
 Disallow: /legal/search/statutes/?*
 Disallow: /search/?*
 Sitemap: https://www.fec.gov/sitemap-wagtail.xml
@@ -81,5 +82,6 @@ Disallow: /legal/search/enforcement/?*
 Disallow: /legal/search/murs/?*
 Disallow: /legal/search/matters-under-review/?*
 Disallow: /legal/search/regulations/?*
+Disallow: /legal/search/rulemakings/?*
 Disallow: /legal/search/statutes/?*
 Disallow: /search/?*
