@@ -47,5 +47,4 @@ Disallow: /legal/search/murs/?*
 Disallow: /legal/search/matters-under-review/?*
 Disallow: /legal/search/regulations/?*
 Disallow: /legal/search/statutes/?*
-
 Disallow: /search/?*
