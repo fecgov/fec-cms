@@ -25,6 +25,7 @@ Disallow: /data/filings/?*
 Disallow: /data/independent-expenditures/?*
 Disallow: /data/legal/search/?*
 Disallow: /data/legal/search/advisory-opinions/?*
+Disallow: /data/legal/search/enforcement/?*
 Disallow: /data/legal/search/murs/?*
 Disallow: /data/loans/?*
 Disallow: /data/party-coordinated-expenditures/?*
