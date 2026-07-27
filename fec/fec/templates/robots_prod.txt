@@ -24,9 +24,13 @@ Disallow: /data/electioneering-communications/?*
 Disallow: /data/filings/?*
 Disallow: /data/independent-expenditures/?*
 Disallow: /data/legal/search/?*
+Disallow: /data/legal/search/admin-fines/?*
+Disallow: /data/legal/search/adrs/?*
 Disallow: /data/legal/search/advisory-opinions/?*
 Disallow: /data/legal/search/enforcement/?*
 Disallow: /data/legal/search/murs/?*
+Disallow: /data/legal/search/regulations/?*
+Disallow: /data/legal/search/statutes/?*
 Disallow: /data/loans/?*
 Disallow: /data/party-coordinated-expenditures/?*
 Disallow: /data/receipts/?*
@@ -34,4 +38,14 @@ Disallow: /data/receipts/individual-contributions/?*
 Disallow: /data/reports/house-senate/?*
 Disallow: /data/reports/presidential/?*
 Disallow: /data/search/?*
+Disallow: /legal/search/?*
+Disallow: /legal/search/admin-fines/?*
+Disallow: /legal/search/adrs/?*
+Disallow: /legal/search/advisory-opinions/?*
+Disallow: /legal/search/enforcement/?*
+Disallow: /legal/search/murs/?*
+Disallow: /legal/search/matters-under-review/?*
+Disallow: /legal/search/regulations/?*
+Disallow: /legal/search/statutes/?*
+
 Disallow: /search/?*
