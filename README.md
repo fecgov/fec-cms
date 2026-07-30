@@ -4,7 +4,7 @@
 **package.json**
 [![[Known Vulnerabilities]](https://snyk.io/test/github/fecgov/fec-cms/badge.svg)](https://snyk.io/test/github/fecgov/fec-cms?targetFile=package.json)
 **requirements.txt**
-[![[Known Vulnerabilities]](https://snyk.io/test/github/fecgov/fec-cms/badge.svg)](https://snyk.io/test/github/fecgov/fec-cms?targetFile=requirements.txt)
+[![[Known Vulnerabilities]](https://snyk.io/test/github/fecgov/fec-cms/badge.svg)](http://web.archive.org/web/20240927140251/https://snyk.io/test/github/fecgov/fec-cms?targetFile=requirements.txt)
 
 **Master**
 [![Test Coverage](https://img.shields.io/codecov/c/github/fecgov/fec-cms/master.svg)](https://codecov.io/github/fecgov/fec-cms)
@@ -61,7 +61,7 @@ run into problems please
       includes `npm`).
     * PostgreSQL (the latest 15 release).
          * Read a [Mac OSX tutorial](https://www.moncefbelyamani.com/how-to-install-postgresql-on-a-mac-with-homebrew-and-lunchy/).
-         * Read a [Windows tutorial](https://www.postgresqltutorial.com/install-postgresql/).
+         * Read a [Windows tutorial](http://web.archive.org/web/20211127092619/https://www.postgresqltutorial.com/install-postgresql/).
          * Read a [Linux tutorial](https://www.postgresql.org/docs/13/installation.html)
            (or follow your OS package manager).
 
