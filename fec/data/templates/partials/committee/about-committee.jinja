@@ -147,7 +147,7 @@
                     <p class="callout__subtitle u-no-margin">Presidential candidate | {{ candidate.party_full |capitalize}}</p>
                 {% elif candidate.office == 'S' or candidate.office == 'H' %}
                     <p class="callout__subtitle u-no-margin">Candidate for {{ constants.house_senate_types[candidate.office] }} |</p>
-                    <p class="callout__subtitle u-no-margin">{{ constants.states[candidate.state] }} | {{ candidate.party_full |capitalize}}</p>
+                    <p class="callout__subtitle u-no-margin">{{ constants.states_territories[candidate.state] }} | {{ candidate.party_full |capitalize}}</p>
                 {% endif %}
                   </div>
                 </div>

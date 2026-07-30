@@ -15,68 +15,10 @@ DEFAULT_TIME_PERIOD = 2026  # Change after the April quarterly report (4/15/27)
 DEFAULT_ELECTION_YEAR = 2026  # Change after election day (11/3/26)
 DEFAULT_PRESIDENTIAL_YEAR = 2028  # Change after April quarterly after mid-terms (4/15/29)
 DISTRICT_MAP_CUTOFF = 2012  # The earliest year we show district maps for on election pages
+
 states = OrderedDict([
     ('AL', 'Alabama'),
     ('AK', 'Alaska'),
-    ('AS', 'American Samoa'),
-    ('AZ', 'Arizona'),
-    ('AR', 'Arkansas'),
-    ('CA', 'California'),
-    ('CO', 'Colorado'),
-    ('CT', 'Connecticut'),
-    ('DE', 'Delaware'),
-    ('DC', 'District of Columbia'),
-    ('FL', 'Florida'),
-    ('GA', 'Georgia'),
-    ('GU', 'Guam'),
-    ('HI', 'Hawaii'),
-    ('ID', 'Idaho'),
-    ('IL', 'Illinois'),
-    ('IN', 'Indiana'),
-    ('IA', 'Iowa'),
-    ('KS', 'Kansas'),
-    ('KY', 'Kentucky'),
-    ('LA', 'Louisiana'),
-    ('ME', 'Maine'),
-    ('MD', 'Maryland'),
-    ('MA', 'Massachusetts'),
-    ('MI', 'Michigan'),
-    ('MN', 'Minnesota'),
-    ('MS', 'Mississippi'),
-    ('MO', 'Missouri'),
-    ('MT', 'Montana'),
-    ('NE', 'Nebraska'),
-    ('NV', 'Nevada'),
-    ('NH', 'New Hampshire'),
-    ('NJ', 'New Jersey'),
-    ('NM', 'New Mexico'),
-    ('NY', 'New York'),
-    ('NC', 'North Carolina'),
-    ('ND', 'North Dakota'),
-    ('MP', 'Northern Mariana Islands'),
-    ('OH', 'Ohio'),
-    ('OK', 'Oklahoma'),
-    ('OR', 'Oregon'),
-    ('PA', 'Pennsylvania'),
-    ('PR', 'Puerto Rico'),
-    ('RI', 'Rhode Island'),
-    ('SC', 'South Carolina'),
-    ('SD', 'South Dakota'),
-    ('TN', 'Tennessee'),
-    ('TX', 'Texas'),
-    ('VI', 'U.S. Virgin Islands'),
-    ('UT', 'Utah'),
-    ('VT', 'Vermont'),
-    ('VA', 'Virginia'),
-    ('WA', 'Washington'),
-    ('WV', 'West Virginia'),
-    ('WI', 'Wisconsin'),
-    ('WY', 'Wyoming'),
-])
-
-states_excl_territories = OrderedDict([
-    ('AL', 'Alabama'),
-    ('AK', 'Alaska'),
     ('AZ', 'Arizona'),
     ('AR', 'Arkansas'),
     ('CA', 'California'),
@@ -127,13 +69,28 @@ states_excl_territories = OrderedDict([
     ('WI', 'Wisconsin'),
     ('WY', 'Wyoming'),
 ])
-
-contributor_states = OrderedDict(sorted(utils.extend(states, {
+armed_forces = OrderedDict([
     ('AA', 'Armed Forces Americas'),
     ('AE', 'Armed Forces Europe'),
     ('AP', 'Armed Forces Pacific'),
-    ('ZZ', 'Foreign Countries'),
-}).items(), key=operator.itemgetter(1)))
+])
+territories = OrderedDict([
+    ('AS', 'American Samoa'),
+    ('GU', 'Guam'),
+    ('MP', 'Northern Mariana Islands'),
+    ('PR', 'Puerto Rico'),
+    ('VI', 'U.S. Virgin Islands'),
+])
+states_territories = OrderedDict(
+  sorted(utils.extend(states, territories).items(), key=operator.itemgetter(1))
+)
+states_all_contributors = OrderedDict(sorted(utils.extend(
+    states,
+    armed_forces,
+    territories,
+    {('ZZ', 'Foreign Countries and Other')},
+    ).items(), key=operator.itemgetter(1))
+)
 
 parties = OrderedDict([
     ('DEM', 'Democratic Party'),

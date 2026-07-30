@@ -117,7 +117,7 @@ def fmt_year_range(year):
 
 @library.filter
 def fmt_state_full(value):
-    return constants.states[value.upper()]
+    return constants.states_territories[value.upper()]
 
 
 @library.filter
@@ -167,7 +167,7 @@ def filesize(value):
 
 @library.filter
 def compare(string, string_1):
-    """Compares two strings to determine if they are nearly identical or semantically similar. 
+    """Compares two strings to determine if they are nearly identical or semantically similar.
     Returns False if `string` is >= than 50% similar to `string_1`. Else returns True.
     Uses difflib.SequenceMatcher: https://docs.python.org/3/library/difflib.html
     """
@@ -180,14 +180,14 @@ def compare(string, string_1):
 
     if similarity_ratio >= threshold:
         return False
-        
+
     else:
         return True
 
 
 @library.filter
 def compare_commenter(string, string_1):
-    """Convert `string_1` from "LastName, FirstName" format to "FirstName LastName" 
+    """Convert `string_1` from "LastName, FirstName" format to "FirstName LastName"
     Returns False if `converted_string_1` is in `string`.
     Returns False if `string` == 'Comment'.
     Else returns True.

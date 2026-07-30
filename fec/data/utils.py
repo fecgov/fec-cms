@@ -75,7 +75,7 @@ def election_title(cycle, office, state=None, district=None):
         [str(cycle), 'Election', 'United States', office.capitalize()])
     parts = [base]
     if state:
-        parts.append(constants.states[state.upper()])
+        parts.append(constants.states_territories[state.upper()])
     if district:
         parts.append('District {0}'.format(district))
     return ' - '.join(parts)
