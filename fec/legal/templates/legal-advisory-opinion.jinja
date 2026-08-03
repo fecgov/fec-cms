@@ -43,7 +43,14 @@
           <h2>Documents</h2>
           {% if final_opinion %}
             <div class="content__section">
-              <a class="button button--cta button--document button--lg" href="{{ final_opinion.url }}">Final opinion</a> <span class="t-sans u-padding--left">{{ final_opinion.date | date(fmt='%B %d, %Y') }}</span>
+              <a class="button button--cta button--document button--lg" href="{{ final_opinion.url }}">Final opinion</a>
+              <span class="t-sans u-padding--left">
+                {% if advisory_opinion.issue_date %}
+                  {{ advisory_opinion.issue_date | date(fmt='%B %d, %Y') }}
+                {% else %}
+                  Not dated
+                {% endif %}
+              </span>
             </div>
           {% endif %}
           <table class="data-table simple-table" style="table-layout: auto;">

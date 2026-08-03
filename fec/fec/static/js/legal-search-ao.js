@@ -368,7 +368,7 @@ LegalSearchAo.prototype.refreshTable = function(response) {
     newRow += `
           <td class="simple-table__cell">
             <div class="t-sans">
-              ${['Pending','Withdrawn'].includes(advisory_opinion.status) ? advisory_opinion.status : new Date(advisory_opinion.issue_date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
+              ${['Pending','Withdrawn'].includes(advisory_opinion.status) ? advisory_opinion.status : advisory_opinion.issue_date ? new Date(advisory_opinion.issue_date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) : 'Not dated'}
             </div>
           </td>`;
     newRow += `
