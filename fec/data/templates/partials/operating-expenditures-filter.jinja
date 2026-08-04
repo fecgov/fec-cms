@@ -26,7 +26,7 @@ Filter operating expenditures
   <div class="accordion__content">
     {{ typeahead.field('recipient_name', 'Recipient name or ID', allow_text=True) }}
     {{ text.field('recipient_city', 'City') }}
-    {{ states.field('recipient_state')}}
+    {{ states.field('recipient_state', list_type='states')}}
   </div>
 
   <button type="button" class="js-accordion-trigger accordion__button">Transaction information</button>

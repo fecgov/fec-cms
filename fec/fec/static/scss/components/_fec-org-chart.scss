@@ -264,9 +264,9 @@ $orgChart_lineSolidDark: thin solid $orgChart_colorStandard;
   #fec-orgchart {
     display: grid;
     grid-template-areas:
-      'comms comms comms comms ig'
-      '1fr 1fr 1fr 1fr ig';
-    grid-template-columns: repeat(5, 1fr);
+      'comms comms comms ig'
+      '1fr 1fr 1fr ig';
+    grid-template-columns: repeat(4, 1fr);
     grid-template-rows: auto;
     grid-row-gap: 0;
     grid-column-gap: 0;

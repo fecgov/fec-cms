@@ -14,7 +14,7 @@
   {{ years.years('election_year', 'Election year', end_year=constants.END_YEAR + 4) }}
   {{ office.checkbox() }}
   {{ parties.checkbox() }}
-  {{ states.field('state') }}
+  {{ states.field('state', list_type='states_territories') }}
   {{ districts.dropdown() }}
   {% include 'partials/filters/active-candidates.jinja' %}
   {{ date.field('first_file_date', 'Date first filed statement of candidacy', '') }}
