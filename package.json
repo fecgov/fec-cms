@@ -37,6 +37,9 @@
     "react-dom": "^16.8.2",
     "react-input-mask": "^2.0.3"
   },
+  "overrides": {
+    "immutable": "4.3.9"
+  },
   "devDependencies": {
     "@babel/core": "^7.29.0",
     "@babel/eslint-parser": "^7.28.6",
