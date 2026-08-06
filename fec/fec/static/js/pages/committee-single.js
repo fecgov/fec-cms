@@ -469,7 +469,6 @@ const filingsReportsColumns = getColumns(filings, [
 ]);
 
 $(function() {
-  let $mapTable;
   // Reset time period to the fallback_cycle, which is the LAST_CYCLE_HAS_FINANCIAL.
   if (window.context.cycleOutOfRange == 'true') {
     const lastCycle = Number(window.context.lastCycleHasFinancial);
@@ -478,8 +477,9 @@ $(function() {
     window.context.cycle = lastCycle;
   }
 
-  // Set up data tables
-  $('.data-table').each(function(index, table) {
+  function initCommitteeTables($tables) {
+    let $mapTable;
+    $tables.each(function(index, table) {
     const $table = $(table);
     const committeeId = $table.attr('data-committee');
     const query = {
@@ -1092,7 +1092,46 @@ $(function() {
         DataTable_FEC.defer($table, opts);
         break;
     }
+    });
+    return $mapTable;
+  }
+
+  function loadCommitteeTab($tab) {
+    const tabName = $tab.attr('data-name');
+    const $panel = $('#' + URI($tab.attr('href')).fragment());
+
+    // Replace only deferred tab placeholders with server rendered partials.
+    if (
+      $panel.attr('data-deferred-panel') !== tabName ||
+      $panel.attr('data-loading')
+    ) {
+      return;
+    }
+
+    $panel.attr('data-loading', 'true');
+    $.get($tab.attr('data-tab-url'))
+      .done(function(html) {
+        const $html = $(html);
+        $html.attr('aria-hidden', null);
+        $html.attr('data-loaded-panel', tabName);
+        $panel.replaceWith($html);
+        initCommitteeTables($html.find('.data-table'));
+      })
+      .fail(function() {
+        window.location.href = $tab.attr('href');
+      });
+  }
+
+  $('[role="tab"][data-tab-url]').each(function(index, tab) {
+    const $tab = $(tab);
+    // The tablist opens the panel first; this then fills its placeholder.
+    events.on('tabs.show.' + $tab.attr('data-name'), function() {
+      loadCommitteeTab($tab);
+    });
   });
+
+  // Set up data tables
+  const $mapTable = initCommitteeTables($('.data-table'));
 
   // Set up state map
   const $map = $('.state-map');

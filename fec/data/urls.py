@@ -9,6 +9,8 @@ urlpatterns = [
     re_path(r'^data/search/$', views.search),
     re_path(r'^data/browse-data/$', views.browse_data, name='browse-data'),
     re_path(r'^data/candidate/(?P<candidate_id>\w+)/$', views.candidate),
+    re_path(r'^data/committee/(?P<committee_id>\w+)/tab/(?P<tab_name>[\w-]+)/$',
+            views.committee_tab, name='committee-tab'),
     re_path(r'^data/committee/(?P<committee_id>\w+)/$',
             views.committee, name='committee-by-id'),
     re_path(r'^data/elections/(?P<office>\w+)/(?P<state>\w+)/(?P<district>\w+)/(?P<cycle>[0-9]+)/$',
@@ -58,7 +60,7 @@ urlpatterns = [
     re_path(r'^data/national-party-account-receipts/$',
             views_datatables.national_party_account_receipts),
     re_path(r'^data/national-party-account-disbursements/$',
-                views_datatables.national_party_account_disbursements)
+            views_datatables.national_party_account_disbursements)
 ]
 
 if settings.FEATURES.get('presidential_map'):
