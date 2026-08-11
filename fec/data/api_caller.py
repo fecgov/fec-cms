@@ -1,6 +1,7 @@
 import logging
 import os
 import random
+import re
 import requests
 import inspect
 import time
@@ -19,6 +20,28 @@ MAX_FINANCIALS_COUNT = 4
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+class _RedactApiKeyFilter(logging.Filter):
+    _pattern = re.compile(r'([\?&]api_key=)[^&\s]+')
+
+    def filter(self, record):
+        record.msg = self._pattern.sub(r'\1[REDACTED]', str(record.msg))
+        if record.args:
+            if isinstance(record.args, dict):
+                record.args = {
+                    k: self._pattern.sub(r'\1[REDACTED]', str(v))
+                    for k, v in record.args.items()
+                }
+            else:
+                record.args = tuple(
+                    self._pattern.sub(r'\1[REDACTED]', str(a))
+                    for a in record.args
+                )
+        return True
+
+
+logging.getLogger("urllib3").addFilter(_RedactApiKeyFilter)
 
 session = requests.Session()
 # Retry transient API connection failures instead of letting one stale socket
