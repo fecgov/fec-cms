@@ -1,5 +1,6 @@
 
 import datetime
+import unittest
 from unittest import mock
 import io
 import logging
@@ -13,6 +14,34 @@ from legal import views
 from legal.views import parse_query
 
 client = Client()
+
+
+class TestLegalSearchUtils(unittest.TestCase):
+    def test_sort_ao_documents_handles_missing_issue_date(self):
+        ao = {
+            'issue_date': None,
+            'documents': [
+                {
+                    'ao_doc_category_id': 'F',
+                    'date': '2024-01-15',
+                    'description': 'Final Opinion',
+                    'document_id': 2,
+                },
+                {
+                    'ao_doc_category_id': 'R',
+                    'date': '2024-02-01',
+                    'description': 'Request',
+                    'document_id': 1,
+                },
+            ],
+        }
+
+        sorted_documents = api_caller._get_sorted_documents(ao)
+
+        self.assertEqual(
+            [doc['description'] for doc in sorted_documents],
+            ['Request', 'Final Opinion']
+        )
 
 
 class TestLegalSearch(TestCase):

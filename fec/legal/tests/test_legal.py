@@ -59,6 +59,42 @@ class TestLegal(unittest.TestCase):
         ])
 
 
+class TestAdvisoryOpinionPage(unittest.TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    @mock.patch.object(api_caller, 'load_legal_advisory_opinion')
+    def test_advisory_opinion_page_handles_missing_issue_date(self, mock_load_ao):
+        final_opinion = {
+            'ao_doc_category_id': 'F',
+            'category': 'Final Opinion',
+            'date': '2024-01-15',
+            'description': 'Final Opinion',
+            'document_id': 2,
+            'url': '/files/legal/aos/2024-01/final.pdf',
+        }
+        mock_load_ao.return_value = {
+            'no': '2024-01',
+            'name': 'Test AO',
+            'summary': 'Test summary',
+            'issue_date': '',
+            'documents': [final_opinion],
+            'sorted_documents': [final_opinion],
+            'entities': [],
+            'statutory_citations': [],
+            'regulatory_citations': [],
+            'ao_citations': [],
+            'aos_cited_by': [],
+        }
+
+        request = self.factory.get('/data/legal/advisory-opinions/2024-01/')
+        response = views.advisory_opinion_page(request, '2024-01')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Final opinion', response.content)
+        self.assertIn(b'Not dated', response.content)
+
+
 class TestLegalDocumentRedirect(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
