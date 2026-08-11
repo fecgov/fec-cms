@@ -153,6 +153,9 @@
 }
 
 @media print {
+  #feedback-form {
+    display: none;
+  }
   .feedback__toggle {
     display: none;
   }
