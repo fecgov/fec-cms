@@ -37,6 +37,12 @@
     "react-dom": "^16.8.2",
     "react-input-mask": "^2.0.3"
   },
+  "_comments": {
+    "overrides": "Add overides block to force a specific version of a deeply nested (transitive) dependency and ensures version consistency across all dependencies ."
+  },
+  "overrides": {
+    "immutable": "5.1.8"
+  },
   "devDependencies": {
     "@babel/core": "^7.29.0",
     "@babel/eslint-parser": "^7.28.6",
