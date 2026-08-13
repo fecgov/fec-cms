@@ -10,7 +10,7 @@
 
 {% block filters %}
   <div class="filters__inner">
-    {{ legal.keyword_search(result_type, query) }}
+    {{ legal.keyword_search(result_type, query, error_message=legal_search_error if legal_search_error and 'search' in legal_search_error_fields|default([]) else None) }}
   </div>
 {% endblock %}
 

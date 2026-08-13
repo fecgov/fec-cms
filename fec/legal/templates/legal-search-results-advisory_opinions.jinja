@@ -26,8 +26,8 @@
 <div class="js-accordion accordion--neutral restricted-fields" data-content-prefix="filter" data-open-first="true">
   <button type="button" class="js-accordion-trigger accordion__button">Documents</button>
   <div class="accordion__content">
-    {{ legal.keyword_search(result_type, query) }}
-    {{ proximity.field('keyword-proximity', 'Proximity') }}
+    {{ legal.keyword_search(result_type, query, error_message=legal_search_error if legal_search_error and 'search' in legal_search_error_fields|default([]) else None) }}
+    {{ proximity.field('keyword-proximity', 'Proximity', error_message=legal_search_error if legal_search_error and 'q_proximity' in legal_search_error_fields|default([]) else None) }}
     <div class="filter js-filter" id="ao_is_pending-field" data-filter="checkbox">
       <div>
         <input type="checkbox" id="ao_is_pending" name="ao_is_pending" value="true" {% if ao_is_pending == 'true' %}checked{% endif %}>
@@ -74,6 +74,7 @@
 {% endblock %}
 
 {% block message %}
+{% if not legal_search_error %}
 <div class="data-container__tags u-no-padding-left">
   <div class="js-filter-tags data-container__tags u-no-padding-left">
     <div>
@@ -89,6 +90,7 @@
     </div>
   </div>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block results %}

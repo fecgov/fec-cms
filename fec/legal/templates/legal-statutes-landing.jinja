@@ -20,8 +20,9 @@
           <div class="usa-width-one-whole">
             <form action="/data/legal/search/statutes" autocomplete="off" class="search__container  js-search">
               <label for="search-input" class="label">Search statutes</label>
+              <div class="t-note t-sans">Limit {{ LEGAL_SEARCH_MAX_QUERY_LENGTH }} characters</div>
               <div class="combo combo--search--medium combo--search--inline">
-                <input id="search-input" type="text" name="search" class="combo__input">
+                <input id="search-input" type="text" name="search" class="combo__input" maxlength="{{ LEGAL_SEARCH_MAX_QUERY_LENGTH }}">
                 <button class="combo__button button--search button--standard" type="submit">
                   <span class="u-visually-hidden">Search</span>
                 </button>

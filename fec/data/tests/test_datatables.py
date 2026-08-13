@@ -1,6 +1,10 @@
+from unittest import mock
+
 from django.test import Client
+from django.test import RequestFactory
 from django.test import TestCase
 
+from data import views_datatables
 from fec import settings  # TODO: remove the import with the flags
 
 client = Client()
@@ -108,5 +112,30 @@ class TestDatatablesRender(TestCase):
 
     # Rulemakings
     def test_rulemakings(self):
-            response = client.get('/legal/search/rulemakings/', follow=True)
-            assert response.status_code == 200
+        response = client.get('/legal/search/rulemakings/', follow=True)
+        assert response.status_code == 200
+
+
+class TestRulemakingSearchQueryLimit:
+    expected_error = (
+        b"Search terms must be 10 characters or fewer. "
+        b"Please shorten your search and try again."
+    )
+
+    def setup_method(self):
+        self.factory = RequestFactory()
+
+    @mock.patch.object(views_datatables.settings, 'LEGAL_SEARCH_MAX_QUERY_LENGTH', 10)
+    def test_rulemaking_search_rejects_q_over_character_limit(self):
+        request = self.factory.get(
+            '/legal/search/rulemakings/',
+            {'q': 'x' * 11}
+        )
+
+        response = views_datatables.rulemaking(request)
+
+        assert response.status_code == 400
+        assert self.expected_error in response.content
+        assert response.content.count(self.expected_error) == 1
+        assert b'value="xxxxxxxxxxx"' not in response.content
+        assert b'maxlength="' in response.content

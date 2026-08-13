@@ -21,7 +21,15 @@ export default function KeywordModal() {
   );
   this.$excludeField = this.$elm.find('#keywords-none');
   this.$submit = this.$elm.find('button[type="submit"]');
+  this.$error = this.$elm.find('.js-keyword-modal-error');
+  this.$errorMessage = this.$error.find('p');
+  this.maxQueryLength = parseInt(this.$form.data('maxQueryLength'), 10) || 0;
+  this.queryLengthError = this.$form.data('queryLengthError') || '';
   this.$submit.on('click', this.handleSubmit.bind(this));
+  this.$elm.find('input[type="text"]').on(
+    'input',
+    this.hideQueryLengthError.bind(this)
+  );
 
   this.dialog = new A11yDialog(this.elm);
 
@@ -47,6 +55,8 @@ export default function KeywordModal() {
 KeywordModal.prototype.handleSubmit = function(e) {
   e.preventDefault();
   const searchQuery = this.generateQueryString();
+  if (!this.validateQueryLength(searchQuery)) return;
+
   let query = URI(window.location.search)
     .removeSearch('search')
     .addSearch('search', searchQuery);
@@ -78,6 +88,7 @@ KeywordModal.prototype.generateQueryString = function() {
   if (this.$excludeField.val()) {
     excludeQuery = self.parseValue(this.$excludeField);
   }
+  // Validate the generated string, including operators added below.
   var queryString = includeQuery + excludeQuery;
   return queryString;
 };
@@ -108,6 +119,30 @@ KeywordModal.prototype.parseValue = function($input) {
       })
       .join('');
   }
+};
+
+KeywordModal.prototype.validateQueryLength = function(queryString) {
+  // queryString includes generated Boolean syntax: (), quotes, +, |, and -.
+  if (this.maxQueryLength && queryString.length > this.maxQueryLength) {
+    this.showQueryLengthError();
+    return false;
+  }
+
+  this.hideQueryLengthError();
+  return true;
+};
+
+KeywordModal.prototype.showQueryLengthError = function() {
+  if (!this.$error.length) return;
+
+  this.$errorMessage.text(this.queryLengthError);
+  this.$error.removeAttr('hidden');
+};
+
+KeywordModal.prototype.hideQueryLengthError = function() {
+  if (!this.$error.length) return;
+
+  this.$error.attr('hidden', 'hidden');
 };
 
 /**

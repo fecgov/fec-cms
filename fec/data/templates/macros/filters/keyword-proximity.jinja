@@ -1,4 +1,4 @@
-{% macro field(name, title='Proximity') %}
+{% macro field(name, title='Proximity', error_message=None) %}
 <div
   class="filter js-filter keyword-proximity-filter"
   data-filter="keyword-proximity"
@@ -28,7 +28,8 @@
 
     <div class="" data-filter="q_proximity">
       <label for="proximity-keyword-0">Keyword or exact phrase</label>
-      <input type="text" id="proximity-keyword-0" name="q_proximity" class="js-keyword">
+      <div class="t-note t-sans">Limit {{ LEGAL_SEARCH_MAX_QUERY_LENGTH }} characters</div>
+      <input type="text" id="proximity-keyword-0" name="q_proximity" class="js-keyword" maxlength="{{ LEGAL_SEARCH_MAX_QUERY_LENGTH }}">
     </div>
   
     <div class="" data-filter="max_gaps">
@@ -46,8 +47,12 @@
 
     <div class="" data-filter="q_proximity">
       <label for="proximity-keyword-1">Keyword or exact phrase</label>
-      <input type="text" id="proximity-keyword-1" name="q_proximity" class="js-keyword">
+      <div class="t-note t-sans">Limit {{ LEGAL_SEARCH_MAX_QUERY_LENGTH }} characters</div>
+      <input type="text" id="proximity-keyword-1" name="q_proximity" class="js-keyword" maxlength="{{ LEGAL_SEARCH_MAX_QUERY_LENGTH }}">
     </div>
+    {% if error_message %}
+      <div class="message filter__message message--error" role="alert">{{ error_message }}</div>
+    {% endif %}
   </fieldset>
 </div>
 {% endmacro %}
