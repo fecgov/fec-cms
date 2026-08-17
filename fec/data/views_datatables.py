@@ -6,8 +6,18 @@ from collections import OrderedDict
 from data import api_caller
 from data import constants
 from data import utils
+from fec import settings
 
 import datetime
+
+
+def get_legal_search_query_length_error():
+    max_length = settings.LEGAL_SEARCH_MAX_QUERY_LENGTH
+    return (
+        f"Search terms must be {max_length} characters or fewer. "
+        "Please shorten your search and try again."
+    )
+
 
 def candidates(request):
     candidates = api_caller._call_api('candidates')
@@ -282,16 +292,28 @@ def reports(request, form_type):
         'social_image_identifier': 'data',
     })
 
+
 def rulemaking(request):
     rm_year_opts = {year: year for year in range(datetime.datetime.now().year, 1988, -1)}
-   
+    query = request.GET.get('q', '')
+    legal_search_error = None
+    legal_search_error_fields = []
+
+    if len(query) > settings.LEGAL_SEARCH_MAX_QUERY_LENGTH:
+        query = ''
+        legal_search_error = get_legal_search_query_length_error()
+        legal_search_error_fields = ['q']
+
     return render(request, 'datatable.jinja', {
         'has_keyword_modal': True,
         'parent': 'data',
+        'query': query,
         'result_type': 'rulemakings',
         'slug': 'rulemakings',
         'title': 'Rulemakings',
         'columns': constants.table_columns['rulemakings'],
+        'legal_search_error': legal_search_error,
+        'legal_search_error_fields': legal_search_error_fields,
         'rm_year_opts': rm_year_opts,
         'social_image_identifier': 'data',
-    })
+    }, status=400 if legal_search_error else 200)

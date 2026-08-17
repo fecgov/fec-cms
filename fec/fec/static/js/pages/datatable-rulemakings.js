@@ -17,6 +17,8 @@ $(function() {
 KeywordModal.prototype.handleSubmit = function(e) {
   e.preventDefault();
   const searchQuery = this.generateQueryString();
+  if (!this.validateQueryLength(searchQuery)) return;
+
   this.dialog.hide();
   // Event record for GTM
   this.fireEvent('Keyword modal query: ' + searchQuery);
@@ -28,6 +30,41 @@ KeywordModal.prototype.handleSubmit = function(e) {
  if (document.querySelector('.js-keyword-modal')) {
     new KeywordModal();
   }
+
+const $queryInput = $('input[name="q"]');
+const maxQueryLength = parseInt($queryInput.attr('maxlength'), 10) || 0;
+const queryLengthError = $queryInput.data('queryLengthError') || '';
+const $queryLengthError = $('.js-rulemaking-query-error');
+
+const isQueryOverLimit = function(value) {
+  return maxQueryLength && value.length > maxQueryLength;
+};
+
+const showQueryLengthError = function() {
+  if (!$queryLengthError.length) return;
+
+  $queryLengthError.text(queryLengthError).removeAttr('hidden');
+};
+
+const hideQueryLengthError = function() {
+  if (!$queryLengthError.length) return;
+
+  $queryLengthError.attr('hidden', 'hidden');
+};
+
+// Remove over-limit URL search terms before the datatable filter layer reads them.
+const initialQueryParams = new URLSearchParams(window.location.search);
+const initialQ = initialQueryParams.get('q') || '';
+if (isQueryOverLimit(initialQ)) {
+  const query = URI(window.location.search)
+    .removeSearch('q')
+    .removeSearch('q_exclude');
+  window.history.replaceState(
+    null,
+    '',
+    window.location.pathname + query.toString()
+  );
+}
 
 const validationStates = {
   empty: 'EMPTY',
@@ -64,6 +101,15 @@ let q_ex;
 let q_all;
 const handleKeywordSearchChange = function(e) {
   const new_val = e.target.value; //$('input[name="q"]').val();
+  if (isQueryOverLimit(new_val)) {
+    q_all = undefined;
+    q_ex = undefined;
+    $('.tags .tag__item[data-id="search-input"]').closest('li').remove();
+    showQueryLengthError();
+    return;
+  }
+
+  hideQueryLengthError();
   const currentTag = document.querySelectorAll('.tags .tag__item[data-id="search-input"]');
   // If there's already a tag, we need to change its label
   if (currentTag.length >= 1) {
@@ -78,11 +124,13 @@ const handleKeywordSearchChange = function(e) {
   }
   else {
     //Zero second, setTimout to push this to end of script stack to ensure '.tags' is loaded before appending to it for refresh or links with  q in querystring
+    if (new_val.length > 0) {
     setTimeout(() => {
     $('.tags').attr('aria-hidden', 'false').append(`<li data-tag-category="q" class="tag__category"><div data-id="search-input" data-removable="true" class="tag__item">${new_val}
     <button class="button js-close tag__remove"><span class="u-visually-hidden">Remove</span></button>
     </div></li>`);
     }, 0);
+    }
   }
 
   const new_queryParams = {};
@@ -195,7 +243,10 @@ $table.on('preXhr.dt', function (e, settings, data) {
       const params = new URLSearchParams(window.location.search);
       const init_q_param = params.getAll('q');
       if (init_q_param.length) {
-        $('input[name="q"]').val(init_q_param);
+        const initQ = init_q_param.join(' ');
+        if (isQueryOverLimit(initQ)) return;
+
+        $('input[name="q"]').val(initQ);
         $('input[name="q"]').trigger('change');
       }
     }
