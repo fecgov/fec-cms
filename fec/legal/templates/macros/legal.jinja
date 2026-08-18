@@ -1,4 +1,4 @@
-{% macro keyword_search(result_type, query, name='Document keyword') %}
+{% macro keyword_search(result_type, query, name='Document keyword', error_message=None) %}
 <div class="filter">
   <label class="label t-inline-block" for="search-input">{{ name }}</label>
   <div class="tooltip__container">
@@ -7,8 +7,9 @@
       <p class="tooltip__content tooltip__content">Refine a keyword search by using + (and), | (or), " " (exact phrase), - (but not), to expand or limit results. Search returns a maximum 6 keyword matches per document.</p>
    </div>
   </div>
+  <div class="t-note t-sans">Limit {{ LEGAL_SEARCH_MAX_QUERY_LENGTH }} characters</div>
   <div class="combo combo--search--mini no-mar-b">
-    <input id="search-input" type="text" name="search" class="combo__input" value="{{ query }}">
+    <input id="search-input" type="text" name="search" class="combo__input" value="{{ query }}" maxlength="{{ LEGAL_SEARCH_MAX_QUERY_LENGTH }}">
     <button class="combo__button button--search button--standard" type="submit">
       <span class="u-visually-hidden">Search</span>
     </button>
@@ -23,6 +24,9 @@
       <span class="t-note t-sans search__example">Examples: spending; 52 U.S.C §30123</span>
     {% endif %} #}
   </div>
+  {% if error_message %}
+  <div class="message filter__message message--error" role="alert">{{ error_message }}</div>
+  {% endif %}
   <button type="button" class="button--keywords" aria-controls="keyword-modal" data-a11y-dialog-show="keyword-modal">Boolean filters</button>
 </div>
 {% endmacro %}
@@ -86,7 +90,7 @@
   </fieldset>
 {% endmacro %}
 
-{% macro search(location, result_type, query, button_color="button--standard", select_class="select--alt-primary") %}
+{% macro search(location, result_type, query, button_color="button--standard", select_class="select--alt-primary", error_message=None) %}
 {% if location == 'hero' %}
   {% set size = 'combo--search--large' %}
 {% endif %}
@@ -102,11 +106,18 @@
       aria-label="Search for legal documents"
       autocomplete="off"
       autocorrect="off" autocapitalize="off" spellcheck="false"
+      maxlength="{{ LEGAL_SEARCH_MAX_QUERY_LENGTH }}"
       value="{{ query or '' }}">
     <button type="submit" class="combo__button button--search {{ button_color }}">
       <span class="u-visually-hidden">Search</span>
     </button>
   </div>
+  <div class="t-note t-sans">Limit {{ LEGAL_SEARCH_MAX_QUERY_LENGTH }} characters</div>
+  {% if error_message %}
+  <div class="message message--inverse message--inverse-alt message--error message--mini" role="alert">
+    <p>{{ error_message }}</p>
+  </div>
+  {% endif %}
 </form>
 {% endmacro %}
 
@@ -172,7 +183,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro keyword_search_q(result_type, query ) %}
+{% macro keyword_search_q(result_type, query, error_message=None) %}
 <div class="filter" data-filter="text">
   <label class="label t-inline-block" for="search-input">Document keyword</label>
   <div class="tooltip__container">
@@ -181,8 +192,17 @@
       <p class="tooltip__content tooltip__content">Refine a keyword search by using + (and), | (or), " " (exact phrase), - (but not), to expand or limit results. Search returns a maximum 6 keyword matches per document.</p>
    </div>
   </div>
+  <div class="t-note t-sans">Limit {{ LEGAL_SEARCH_MAX_QUERY_LENGTH }} characters</div>
   <div class="combo combo--search--mini no-mar-b">
-    <input id="search-input" type="text" name="q" class="combo__input" value="">
+    <input
+      id="search-input"
+      type="text"
+      name="q"
+      class="combo__input"
+      value="{{ query or '' }}"
+      maxlength="{{ LEGAL_SEARCH_MAX_QUERY_LENGTH }}"
+      data-query-length-error="Search terms must be {{ LEGAL_SEARCH_MAX_QUERY_LENGTH }} characters or fewer. Please shorten your search and try again."
+    >
     <button class="combo__button button--search button--standard" type="button">
       <span class="u-visually-hidden">Search</span>
     </button>
@@ -197,6 +217,11 @@
       <span class="t-note t-sans search__example">Examples: spending; 52 U.S.C §30123</span>
     {% endif %} #}
   </div>
+  {% if error_message %}
+  <div class="message filter__message message--error js-rulemaking-query-error" role="alert">{{ error_message }}</div>
+  {% else %}
+  <div class="message filter__message message--error js-rulemaking-query-error" role="alert" hidden></div>
+  {% endif %}
   <button type="button" class="button--keywords" aria-controls="keyword-modal" data-a11y-dialog-show="keyword-modal">Boolean filters</button>
 </div>
 {% endmacro %}

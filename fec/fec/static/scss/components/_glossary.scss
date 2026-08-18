@@ -115,6 +115,9 @@
 }
 
 @media print {
+  #glossary {
+    display: none;
+  }
   .term {
     background-image: none;
     margin-right: 0;

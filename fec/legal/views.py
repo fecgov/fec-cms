@@ -22,6 +22,32 @@ from fec import settings  # rulemaking comments
 logger = logging.getLogger(__name__)
 
 
+def get_legal_search_query_length_error():
+    max_length = settings.LEGAL_SEARCH_MAX_QUERY_LENGTH
+    return (
+        f"Search terms must be {max_length} characters or fewer. "
+        "Please shorten your search and try again."
+    )
+
+
+def validate_legal_search_query(query, q_proximities=None, query_exclude=''):
+    max_length = settings.LEGAL_SEARCH_MAX_QUERY_LENGTH
+    error_fields = []
+    # Count include and exclude terms together when they arrive separately.
+    combined_query = f"{query} {query_exclude}".strip()
+
+    if len(combined_query) > max_length:
+        error_fields.append('search')
+
+    if any(len(q_proximity) > max_length for q_proximity in (q_proximities or [])):
+        error_fields.append('q_proximity')
+
+    if not error_fields:
+        return None, []
+
+    return get_legal_search_query_length_error(), error_fields
+
+
 def get_s3_client():
     return boto3.client(
         's3',
@@ -761,6 +787,20 @@ def legal_search(request):
     updated_ecfr_query_string = transform_ecfr_query_string(original_query)
     result_type = request.GET.get('search_type', 'all')
     results = {}
+    legal_search_error, legal_search_error_fields = validate_legal_search_query(original_query)
+    if legal_search_error:
+        return render(request, 'legal-search-results.jinja', {
+            'parent': 'legal',
+            'query': '',
+            'q_proximities': None,
+            'results': results,
+            'result_type': result_type,
+            'category_order': get_legal_category_order(results, result_type),
+            'legal_search_error': legal_search_error,
+            'legal_search_error_fields': legal_search_error_fields,
+            'social_image_identifier': 'legal',
+        }, status=400)
+
     query, query_exclude = parse_query(original_query)
 
     # Only hit the API if there's an actual query
@@ -860,34 +900,6 @@ def legal_doc_search_ao(request):
     q_proximities = request.GET.getlist('q_proximity', [])
     max_gaps = request.GET.get('max_gaps', '')
 
-    query, query_exclude = parse_query(original_query)
-
-    # Call the function and unpack its return values
-    results = api_caller.load_legal_search_results(
-        query,
-        query_exclude,
-        'advisory_opinions',
-        offset=offset,
-        limit=limit,
-        ao_no=ao_no,
-        sort=sort,
-        ao_requestor=ao_requestor,
-        ao_requestor_type=ao_requestor_type_ids,
-        ao_is_pending=ao_is_pending,
-        ao_min_issue_date=ao_min_issue_date,
-        ao_max_issue_date=ao_max_issue_date,
-        ao_min_request_date=ao_min_request_date,
-        ao_max_request_date=ao_max_request_date,
-        ao_entity_name=ao_entity_name,
-        ao_doc_category_id=ao_doc_category_ids,
-        ao_regulatory_citation=ao_regulatory_citation,
-        ao_statutory_citation=ao_statutory_citation,
-        ao_citation_require_all=ao_citation_require_all,
-        ao_year=ao_year,
-        max_gaps=max_gaps,
-        q_proximity=q_proximities,
-    )
-
     # Define AO document categories dictionary
     ao_document_categories = {
         'F': 'Final Opinion',
@@ -936,12 +948,52 @@ def legal_doc_search_ao(request):
         'sortType': sort.replace('-', '')
     }
 
-    for ao in results['advisory_opinions']:
-        for index, doc in enumerate(ao['documents']):
-            # Checks if the selected document category filters matching the document categories
-            doc['category_match'] = str(doc['ao_doc_category_id']) in ao_doc_category_ids
-            # Checks for document keyword text match
-            doc['text_match'] = str(index) in ao['document_highlights']
+    legal_search_error, legal_search_error_fields = validate_legal_search_query(original_query, q_proximities)
+    if legal_search_error:
+        query = ''
+        results = {
+            'advisory_opinions': [],
+            'advisory_opinions_returned': 0,
+            'limit': limit,
+            'offset': offset,
+            'total_advisory_opinions': 0,
+            'total_all': 0,
+        }
+    else:
+        query, query_exclude = parse_query(original_query)
+
+        # Call the function and unpack its return values
+        results = api_caller.load_legal_search_results(
+            query,
+            query_exclude,
+            'advisory_opinions',
+            offset=offset,
+            limit=limit,
+            ao_no=ao_no,
+            sort=sort,
+            ao_requestor=ao_requestor,
+            ao_requestor_type=ao_requestor_type_ids,
+            ao_is_pending=ao_is_pending,
+            ao_min_issue_date=ao_min_issue_date,
+            ao_max_issue_date=ao_max_issue_date,
+            ao_min_request_date=ao_min_request_date,
+            ao_max_request_date=ao_max_request_date,
+            ao_entity_name=ao_entity_name,
+            ao_doc_category_id=ao_doc_category_ids,
+            ao_regulatory_citation=ao_regulatory_citation,
+            ao_statutory_citation=ao_statutory_citation,
+            ao_citation_require_all=ao_citation_require_all,
+            ao_year=ao_year,
+            max_gaps=max_gaps,
+            q_proximity=q_proximities,
+        )
+
+        for ao in results['advisory_opinions']:
+            for index, doc in enumerate(ao['documents']):
+                # Checks if the selected document category filters matching the document categories
+                doc['category_match'] = str(doc['ao_doc_category_id']) in ao_doc_category_ids
+                # Checks for document keyword text match
+                doc['text_match'] = str(index) in ao['document_highlights']
 
     return render(request, 'legal-search-results-advisory_opinions.jinja', {
         'parent': 'legal',
@@ -965,7 +1017,7 @@ def legal_doc_search_ao(request):
         'ao_citation_require_all': ao_citation_require_all,
         'category_order': get_legal_category_order(results, 'advisory_opinions'),
         'max_gaps': max_gaps,
-        'q_proximities': q_proximities,
+        'q_proximities': [] if legal_search_error else q_proximities,
         'social_image_identifier': 'legal',
         'selected_ao_doc_category_ids': ao_doc_category_ids,
         'selected_ao_doc_category_names': ao_document_category_names,
@@ -973,8 +1025,10 @@ def legal_doc_search_ao(request):
         'selected_ao_requestor_type_names': ao_requestor_type_names,
         'ao_year': ao_year,
         'ao_year_opts': ao_year_opts,
+        'legal_search_error': legal_search_error,
+        'legal_search_error_fields': legal_search_error_fields,
         'is_loading': True,  # Indicate that the page is loading initially
-    })
+    }, status=400 if legal_search_error else 200)
 
 
 def legal_doc_search_mur(request):
@@ -1002,42 +1056,11 @@ def legal_doc_search_mur(request):
     q_proximities = request.GET.getlist('q_proximity', [])
     max_gaps = request.GET.get('max_gaps', '0')
 
-    query, query_exclude = parse_query(original_query)
-
     # For JS sorting
     sort_dir = ('descending' if sort == '-case_no' or sort == '' or
                 sort == 'null' else 'ascending')
     sort_dir_option = 'descending' if sort_dir == 'ascending' else 'ascending'
     sort_class = sort_dir[0:-6]
-
-    # Call the function and unpack its return values
-    results = api_caller.load_legal_search_results(
-        query,
-        query_exclude,
-        'murs',
-        offset=offset,
-        limit=limit,
-        case_no=case_no,
-        sort=sort,
-        case_citation_require_all=case_citation_require_all,
-        case_doc_category_id=case_doc_category_ids,
-        case_max_close_date=case_max_close_date,
-        case_max_document_date=case_max_document_date,
-        case_max_open_date=case_max_open_date,
-        case_max_penalty_amount=case_max_penalty_amount,
-        case_min_close_date=case_min_close_date,
-        case_min_document_date=case_min_document_date,
-        case_min_open_date=case_min_open_date,
-        case_min_penalty_amount=case_min_penalty_amount,
-        case_regulatory_citation=case_regulatory_citation,
-        case_respondents=case_respondents,
-        case_statutory_citation=case_statutory_citation,
-        mur_disposition_category_id=mur_disposition_category_ids,
-        primary_subject_id=primary_subject_id,
-        secondary_subject_id=secondary_subject_id,
-        q_proximity=q_proximities,
-        max_gaps=max_gaps,
-    )
 
     # Define MUR document categories dictionary
     mur_document_categories = {
@@ -1083,16 +1106,59 @@ def legal_doc_search_mur(request):
         'secondary_subject_id': secondary_subject_id,
         'secondary_subject_ids': secondary_subject_ids,
     }
+    legal_search_error, legal_search_error_fields = validate_legal_search_query(original_query, q_proximities)
+    if legal_search_error:
+        results = {
+            'limit': limit,
+            'murs': [],
+            'murs_returned': 0,
+            'offset': offset,
+            'total_all': 0,
+            'total_murs': 0,
+        }
+    else:
+        query, query_exclude = parse_query(original_query)
 
-    for mur in results['murs']:
-        # Process MUR subjects
-        mur['subject_list'] = process_mur_subjects(mur)
+        # Call the function and unpack its return values
+        results = api_caller.load_legal_search_results(
+            query,
+            query_exclude,
+            'murs',
+            offset=offset,
+            limit=limit,
+            case_no=case_no,
+            sort=sort,
+            case_citation_require_all=case_citation_require_all,
+            case_doc_category_id=case_doc_category_ids,
+            case_max_close_date=case_max_close_date,
+            case_max_document_date=case_max_document_date,
+            case_max_open_date=case_max_open_date,
+            case_max_penalty_amount=case_max_penalty_amount,
+            case_min_close_date=case_min_close_date,
+            case_min_document_date=case_min_document_date,
+            case_min_open_date=case_min_open_date,
+            case_min_penalty_amount=case_min_penalty_amount,
+            case_regulatory_citation=case_regulatory_citation,
+            case_respondents=case_respondents,
+            case_statutory_citation=case_statutory_citation,
+            mur_disposition_category_id=mur_disposition_category_ids,
+            primary_subject_id=primary_subject_id,
+            secondary_subject_id=secondary_subject_id,
+            q_proximity=q_proximities,
+            max_gaps=max_gaps,
+        )
 
-        for index, doc in enumerate(mur['documents']):
-            # Checks if the selected document category filters matching the document categories
-            doc['category_match'] = mur['mur_type'] != 'archived' and str(doc['doc_order_id']) in case_doc_category_ids
-            # Checks for document keyword text match
-            doc['text_match'] = str(index) in mur['document_highlights']
+        for mur in results['murs']:
+            # Process MUR subjects
+            mur['subject_list'] = process_mur_subjects(mur)
+
+            for index, doc in enumerate(mur['documents']):
+                # Checks if the selected document category filters matching the document categories
+                doc['category_match'] = (
+                    mur['mur_type'] != 'archived' and str(doc['doc_order_id']) in case_doc_category_ids
+                )
+                # Checks for document keyword text match
+                doc['text_match'] = str(index) in mur['document_highlights']
 
     return render(request, 'legal-search-results-murs.jinja', {
         'parent': 'legal',
@@ -1113,7 +1179,7 @@ def legal_doc_search_mur(request):
         'case_max_open_date': case_max_open_date,
         'case_min_close_date': case_min_close_date,
         'case_max_close_date': case_max_close_date,
-        'query': original_query,
+        'query': '' if legal_search_error else original_query,
         'ARCHIVED_MUR_EXCEPTION': constants.ARCHIVED_MUR_EXCEPTION,
         'social_image_identifier': 'legal',
         'selected_doc_category_ids': case_doc_category_ids,
@@ -1131,9 +1197,11 @@ def legal_doc_search_mur(request):
         'case_citation_require_all': case_citation_require_all,
         'case_regulatory_citation': case_regulatory_citation,
         'case_statutory_citation': case_statutory_citation,
-        'q_proximities': q_proximities,
+        'q_proximities': [] if legal_search_error else q_proximities,
         'max_gaps': max_gaps,
-    })
+        'legal_search_error': legal_search_error,
+        'legal_search_error_fields': legal_search_error_fields,
+    }, status=400 if legal_search_error else 200)
 
 
 def legal_doc_search_adr(request):
@@ -1155,29 +1223,6 @@ def legal_doc_search_adr(request):
     q_proximities = request.GET.getlist('q_proximity', [])
     max_gaps = request.GET.get('max_gaps', '0')
 
-    query, query_exclude = parse_query(original_query)
-
-    results = api_caller.load_legal_search_results(
-        query,
-        query_exclude,
-        'adrs',
-        offset=offset,
-        limit=limit,
-        case_no=case_no,
-        case_respondents=case_respondents,
-        case_min_penalty_amount=case_min_penalty_amount,
-        case_max_penalty_amount=case_max_penalty_amount,
-        case_min_document_date=case_min_document_date,
-        case_max_document_date=case_max_document_date,
-        case_min_open_date=case_min_open_date,
-        case_max_open_date=case_max_open_date,
-        case_min_close_date=case_min_close_date,
-        case_max_close_date=case_max_close_date,
-        case_doc_category_id=case_doc_category_ids,
-        q_proximity=q_proximities,
-        max_gaps=max_gaps,
-    )
-
     # Define ADR document categories dictionary
     adr_document_categories = {
         '1001': 'Settlement Agreements',
@@ -1190,13 +1235,46 @@ def legal_doc_search_adr(request):
 
     # Return the selected document category name
     adr_document_category_names = [adr_document_categories.get(id) for id in case_doc_category_ids]
+    legal_search_error, legal_search_error_fields = validate_legal_search_query(original_query, q_proximities)
+    if legal_search_error:
+        results = {
+            'adrs': [],
+            'adrs_returned': 0,
+            'limit': limit,
+            'offset': offset,
+            'total_adrs': 0,
+            'total_all': 0,
+        }
+    else:
+        query, query_exclude = parse_query(original_query)
 
-    for adr in results['adrs']:
-        for index, doc in enumerate(adr['documents']):
-            # Checks if the selected document category filters matching the document categories
-            doc['category_match'] = str(doc['doc_order_id']) in case_doc_category_ids
-            # Checks for document keyword text match
-            doc['text_match'] = str(index) in adr['document_highlights']
+        results = api_caller.load_legal_search_results(
+            query,
+            query_exclude,
+            'adrs',
+            offset=offset,
+            limit=limit,
+            case_no=case_no,
+            case_respondents=case_respondents,
+            case_min_penalty_amount=case_min_penalty_amount,
+            case_max_penalty_amount=case_max_penalty_amount,
+            case_min_document_date=case_min_document_date,
+            case_max_document_date=case_max_document_date,
+            case_min_open_date=case_min_open_date,
+            case_max_open_date=case_max_open_date,
+            case_min_close_date=case_min_close_date,
+            case_max_close_date=case_max_close_date,
+            case_doc_category_id=case_doc_category_ids,
+            q_proximity=q_proximities,
+            max_gaps=max_gaps,
+        )
+
+        for adr in results['adrs']:
+            for index, doc in enumerate(adr['documents']):
+                # Checks if the selected document category filters matching the document categories
+                doc['category_match'] = str(doc['doc_order_id']) in case_doc_category_ids
+                # Checks for document keyword text match
+                doc['text_match'] = str(index) in adr['document_highlights']
 
     return render(request, 'legal-search-results-adrs.jinja', {
         'parent': 'legal',
@@ -1213,14 +1291,16 @@ def legal_doc_search_adr(request):
         'case_max_open_date': case_max_open_date,
         'case_min_close_date': case_min_close_date,
         'case_max_close_date': case_max_close_date,
-        'query': original_query,
+        'query': '' if legal_search_error else original_query,
         'social_image_identifier': 'legal',
         'selected_doc_category_ids': case_doc_category_ids,
         'selected_doc_category_names': adr_document_category_names,
         'is_loading': True,  # Indicate that the page is loading initially
-        'q_proximities': q_proximities,
+        'q_proximities': [] if legal_search_error else q_proximities,
         'max_gaps': max_gaps,
-    })
+        'legal_search_error': legal_search_error,
+        'legal_search_error_fields': legal_search_error_fields,
+    }, status=400 if legal_search_error else 200)
 
 
 def legal_doc_search_af(request):
@@ -1236,29 +1316,39 @@ def legal_doc_search_af(request):
     case_max_document_date = request.GET.get('case_max_document_date', '')
     q_proximities = request.GET.getlist('q_proximity', [])
     max_gaps = request.GET.get('max_gaps', '0')
+    legal_search_error, legal_search_error_fields = validate_legal_search_query(original_query, q_proximities)
+    if legal_search_error:
+        results = {
+            'admin_fines': [],
+            'admin_fines_returned': 0,
+            'limit': limit,
+            'offset': offset,
+            'total_admin_fines': 0,
+            'total_all': 0,
+        }
+    else:
+        query, query_exclude = parse_query(original_query)
 
-    query, query_exclude = parse_query(original_query)
+        results = api_caller.load_legal_search_results(
+            query,
+            query_exclude,
+            'admin_fines',
+            offset=offset,
+            limit=limit,
+            case_no=case_no,
+            af_name=af_name,
+            case_min_penalty_amount=case_min_penalty_amount,
+            case_max_penalty_amount=case_max_penalty_amount,
+            case_min_document_date=case_min_document_date,
+            case_max_document_date=case_max_document_date,
+            q_proximity=q_proximities,
+            max_gaps=max_gaps,
 
-    results = api_caller.load_legal_search_results(
-        query,
-        query_exclude,
-        'admin_fines',
-        offset=offset,
-        limit=limit,
-        case_no=case_no,
-        af_name=af_name,
-        case_min_penalty_amount=case_min_penalty_amount,
-        case_max_penalty_amount=case_max_penalty_amount,
-        case_min_document_date=case_min_document_date,
-        case_max_document_date=case_max_document_date,
-        q_proximity=q_proximities,
-        max_gaps=max_gaps,
-
-    )
-    for af in results['admin_fines']:
-        for index, doc in enumerate(af['documents']):
-            # Checks for document keyword text match
-            doc['text_match'] = str(index) in af['document_highlights']
+        )
+        for af in results['admin_fines']:
+            for index, doc in enumerate(af['documents']):
+                # Checks for document keyword text match
+                doc['text_match'] = str(index) in af['document_highlights']
 
     return render(request, 'legal-search-results-afs.jinja', {
         'parent': 'legal',
@@ -1270,39 +1360,48 @@ def legal_doc_search_af(request):
         'case_max_document_date': case_max_document_date,
         'case_min_penalty_amount': case_min_penalty_amount,
         'case_max_penalty_amount': case_max_penalty_amount,
-        'query': original_query,
+        'query': '' if legal_search_error else original_query,
         'social_image_identifier': 'legal',
         'is_loading': True,  # Indicate that the page is loading initially
 
-        'q_proximities': q_proximities,
+        'q_proximities': [] if legal_search_error else q_proximities,
         'max_gaps': max_gaps,
-    })
+        'legal_search_error': legal_search_error,
+        'legal_search_error_fields': legal_search_error_fields,
+    }, status=400 if legal_search_error else 200)
 
 
 def legal_doc_search_regulations(request):
     results = {}
     query = request.GET.get('search', '')
-    page = request.GET.get('page', 1)
-    updated_ecfr_query_string = transform_ecfr_query_string(query)
-    ecfr_results = ecfr_caller.fetch_ecfr_data(updated_ecfr_query_string,
-                                               page=page)
+    legal_search_error, legal_search_error_fields = validate_legal_search_query(query)
+    if legal_search_error:
+        results = {'regulations': [], 'total_all': 0}
+        current_page = 1
+        total_pages = 0
+        total_count = 0
+    else:
+        page = request.GET.get('page', 1)
+        updated_ecfr_query_string = transform_ecfr_query_string(query)
+        ecfr_results = ecfr_caller.fetch_ecfr_data(updated_ecfr_query_string,
+                                                   page=page)
 
-    regulations = [{
-                'highlights': [obj['full_text_excerpt']],
-                'name': obj['headings']['section'],
-                'no': obj['hierarchy']['section'],
-                'type': None,
-                'url':  (
-                    'https://www.ecfr.gov/current/title-11/'
-                    f"chapter-{obj['hierarchy']['chapter']}/"
-                    f"section-{obj['hierarchy']['section']}"
-                )
-                } for obj in ecfr_results['results']]
-    current_page = ecfr_results['meta']['current_page']
-    total_pages = ecfr_results['meta']['total_pages']
-    total_count = ecfr_results['meta']['total_count']
-    results['regulations'] = regulations
-    results['total_all'] = total_count
+        regulations = [{
+                    'highlights': [obj['full_text_excerpt']],
+                    'name': obj['headings']['section'],
+                    'no': obj['hierarchy']['section'],
+                    'type': None,
+                    'url':  (
+                        'https://www.ecfr.gov/current/title-11/'
+                        f"chapter-{obj['hierarchy']['chapter']}/"
+                        f"section-{obj['hierarchy']['section']}"
+                    )
+                    } for obj in ecfr_results['results']]
+        current_page = ecfr_results['meta']['current_page']
+        total_pages = ecfr_results['meta']['total_pages']
+        total_count = ecfr_results['meta']['total_count']
+        results['regulations'] = regulations
+        results['total_all'] = total_count
 
     return render(request, 'legal-search-results-regulations.jinja', {
         'parent': 'legal',
@@ -1312,32 +1411,46 @@ def legal_doc_search_regulations(request):
         'total_count': total_count,
         'limit': 20,
         'result_type': 'regulations',
-        'query': query,
+        'query': '' if legal_search_error else query,
+        'legal_search_error': legal_search_error,
+        'legal_search_error_fields': legal_search_error_fields,
         'social_image_identifier': 'legal',
-    })
+    }, status=400 if legal_search_error else 200)
 
 
 def legal_doc_search_statutes(request):
     original_query = request.GET.get('search', '')
     results = {}
     offset = request.GET.get('offset', 0)
+    legal_search_error, legal_search_error_fields = validate_legal_search_query(original_query)
+    if legal_search_error:
+        results = {
+            'limit': 20,
+            'offset': offset,
+            'statutes': [],
+            'statutes_returned': 0,
+            'total_all': 0,
+            'total_statutes': 0,
+        }
+    else:
+        query, query_exclude = parse_query(original_query)
 
-    query, query_exclude = parse_query(original_query)
-
-    results = api_caller.load_legal_search_results(
-            query,
-            query_exclude,
-            'statutes',
-            offset=offset,
-        )
+        results = api_caller.load_legal_search_results(
+                query,
+                query_exclude,
+                'statutes',
+                offset=offset,
+            )
 
     return render(request, 'legal-search-results-statutes.jinja', {
         'parent': 'legal',
         'results': results,
         'result_type': 'statutes',
-        'query': original_query,
+        'query': '' if legal_search_error else original_query,
+        'legal_search_error': legal_search_error,
+        'legal_search_error_fields': legal_search_error_fields,
         'social_image_identifier': 'legal',
-    })
+    }, status=400 if legal_search_error else 200)
 
 
 def get_legal_category_order(results, result_type):

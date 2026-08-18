@@ -55,6 +55,12 @@ Search legal resources
 
       <section class="main__content--right">
         <div class="overlay is-loading position-top"></div>
+        {% if legal_search_error and 'search' in legal_search_error_fields|default([]) %}
+        <div class="message filter__message message--error" role="alert">
+          <p>{{ legal_search_error }}</p>
+        </div>
+        {% endif %}
+        {% if not legal_search_error %}
         {% if query %}
         <h1 class="main__title data-container__head js-results">Results for &ldquo;{{ query }}&rdquo; in {{document_types[result_type]}}</h1>
         {% endif %}
@@ -189,6 +195,7 @@ Search legal resources
         </div>
         {% endif %}
         {% endfor %}
+        {% endif %}
       </section>
     </div>
   </div>

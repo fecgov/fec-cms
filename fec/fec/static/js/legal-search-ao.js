@@ -55,7 +55,7 @@ export default function LegalSearchAo() {
  */
 LegalSearchAo.prototype.initPageParts = function() {
   const tableExists = document.querySelector('.panel__main.legal-search-results');
-  const paginationExists = document.querySelector('.results-info');
+  const paginationExists = document.querySelector('.js-legal-search-pagination');
   const noResultsMessageExists = document.querySelector('.u-padding--left.u-padding--right .message.message--no-icon');
 
   // We're inserting html after the widgets, so let's insert the pagination first,
@@ -368,7 +368,7 @@ LegalSearchAo.prototype.refreshTable = function(response) {
     newRow += `
           <td class="simple-table__cell">
             <div class="t-sans">
-              ${['Pending','Withdrawn'].includes(advisory_opinion.status) ? advisory_opinion.status : new Date(advisory_opinion.issue_date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
+              ${['Pending','Withdrawn'].includes(advisory_opinion.status) ? advisory_opinion.status : advisory_opinion.issue_date ? new Date(advisory_opinion.issue_date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) : 'Not dated'}
             </div>
           </td>`;
     newRow += `
@@ -581,7 +581,7 @@ LegalSearchAo.prototype.updateFiltersOnSuccess = function(changeCount) {
  * @param {number} resultsCount
  */
 LegalSearchAo.prototype.updatePagination = function(resultsCount) {
-  if (!this.paginationElements) return; // If we can't find the pagination holder, no reason to continue
+  if (!this.paginationElements || this.paginationElements.length === 0) return; // If we can't find the pagination holder, no reason to continue
 
   // Toggle major components on whether we have results
   if (resultsCount > 0) {
@@ -750,7 +750,7 @@ const template_no_table = `<div class="panel__main legal-search-results js-legal
   </table>
 </div>`;
 
-const template_no_pagination = `<div class="results-info u-border-top-base">
+const template_no_pagination = `<div class="results-info u-border-top-base js-legal-search-pagination">
   <div class="dataTables_length">
     <label for="results-length">Results per page: 
       <select name="results_length" aria-controls="results" class="results-length">
