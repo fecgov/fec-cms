@@ -10,13 +10,14 @@
 
 {% block filters %}
   <div class="filters__inner">
-    {{ legal.keyword_search(result_type, query) }}
+    {{ legal.keyword_search(result_type, query, error_message=legal_search_error if legal_search_error and 'search' in legal_search_error_fields|default([]) else None) }}
     <div class="filter">
       <legend class="label">Proximity</legend>
       <p class="t-sans search__example filter__message u-no-margin-top">Search the maximum number of words between keywords or exact phrases. Proximity terms will not be highlighted in search results.</p>
       <label class="u-no-margin-bottom t-bold" for="q_proximity">Keyword or exact phrase</label>
       <span class="t-note t-sans">Both keyword fields needed</span>
-      <input type="text" id="q_proximity-0" name="q_proximity" value="{{ q_proximities[0] | default('')}}">
+      <div class="t-note t-sans">Limit {{ LEGAL_SEARCH_MAX_QUERY_LENGTH }} characters</div>
+      <input type="text" id="q_proximity-0" name="q_proximity" value="{{ q_proximities[0] | default('')}}" maxlength="{{ LEGAL_SEARCH_MAX_QUERY_LENGTH }}">
       <div class="increment-decrement__container">
         <span class="t-inline t-sans">Within</span><button class="button--decrement js-step-button" type="button" {% if max_gaps =='0' %}disabled{% endif %} tabindex="0"></button> 
           <input id="max_gaps" name="max_gaps" min="0" value="{{max_gaps | default('0') }}"  tabindex="0">
@@ -24,7 +25,11 @@
       </div>
       <label class="u-no-margin-bottom t-bold" for="q_proximity">Keyword or exact phrase</label>
       <span class="t-note t-sans">Both keyword fields needed</span>
-      <input type="text" id="q_proximity-1" name="q_proximity" value="{{ q_proximities[1] | default('') }}">
+      <div class="t-note t-sans">Limit {{ LEGAL_SEARCH_MAX_QUERY_LENGTH }} characters</div>
+      <input type="text" id="q_proximity-1" name="q_proximity" value="{{ q_proximities[1] | default('') }}" maxlength="{{ LEGAL_SEARCH_MAX_QUERY_LENGTH }}">
+      {% if legal_search_error and 'q_proximity' in legal_search_error_fields|default([]) %}
+      <div class="message filter__message message--error" role="alert">{{ legal_search_error }}</div>
+      {% endif %}
     </div>
     <div class="filter">
       <label class="label" for="case_no">ADR number</label>
@@ -110,6 +115,7 @@
   </div>
 {% endblock %}
 {% block message %}
+{% if not legal_search_error %}
 <div class="data-container__tags u-no-padding-left">
   <div class="row">
     <h3 class="tags__title">Viewing <span class="tags__count">{{ results.total_adrs }}</span>  filtered results for:</h3>
@@ -196,6 +202,7 @@
     </ul>
   </div>
 </div>
+{% endif %}
 {% endblock %}
 {% block results %}
   {% with results=results %}

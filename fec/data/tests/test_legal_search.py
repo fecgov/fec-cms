@@ -6,6 +6,7 @@ import io
 import logging
 
 from django.test import Client
+from django.test import RequestFactory
 from django.test import TestCase
 from data import api_caller
 from data import ecfr_caller
@@ -255,3 +256,223 @@ class TestParseQuery:
         query = ""
         result = parse_query(query)
         assert result == ("", "")
+
+
+class TestLegalSearchQueryLimit:
+    expected_error = (
+        b"Search terms must be 10 characters or fewer. "
+        b"Please shorten your search and try again."
+    )
+    no_results_message = (
+        b"Sorry, we didn&rsquo;t find any documents matching your search."
+    )
+
+    def setup_method(self):
+        self.factory = RequestFactory()
+
+    @mock.patch.object(views.settings, 'LEGAL_SEARCH_MAX_QUERY_LENGTH', 10)
+    def test_query_exclude_counts_toward_character_limit(self):
+        error, error_fields = views.validate_legal_search_query(
+            'ok',
+            query_exclude='x' * 8
+        )
+
+        assert error == self.expected_error.decode()
+        assert error_fields == ['search']
+
+    @mock.patch.object(api_caller, 'load_legal_search_results')
+    @mock.patch.object(views.settings, 'LEGAL_SEARCH_MAX_QUERY_LENGTH', 10)
+    def test_search_rejects_query_over_character_limit(
+        self,
+        load_legal_search_results
+    ):
+        request = self.factory.get(
+            '/data/legal/search/',
+            {'search': 'x' * 11, 'search_type': 'all'}
+        )
+
+        response = views.legal_search(request)
+
+        assert response.status_code == 400
+        assert self.expected_error in response.content
+        assert response.content.count(self.expected_error) == 1
+        assert b'message filter__message message--error' in response.content
+        assert response.content.index(b'main__content--right') < response.content.index(self.expected_error)
+        assert b'x' * 11 not in response.content
+        load_legal_search_results.assert_not_called()
+
+    @mock.patch.object(api_caller, 'load_legal_search_results')
+    @mock.patch.object(views.settings, 'LEGAL_SEARCH_MAX_QUERY_LENGTH', 10)
+    def test_mur_search_rejects_query_over_character_limit(
+        self,
+        load_legal_search_results
+    ):
+        request = self.factory.get(
+            '/data/legal/search/murs/',
+            {'search': 'x' * 11, 'case_no': '1234'}
+        )
+
+        response = views.legal_doc_search_mur(request)
+
+        assert response.status_code == 400
+        assert self.expected_error in response.content
+        assert response.content.count(self.expected_error) == 1
+        assert b'No results' in response.content
+        assert self.no_results_message in response.content
+        assert b'js-filter-tags' not in response.content
+        assert b'tag__category' not in response.content
+        assert b'x' * 11 not in response.content
+        load_legal_search_results.assert_not_called()
+
+    @mock.patch.object(api_caller, 'load_legal_search_results')
+    @mock.patch.object(views.settings, 'LEGAL_SEARCH_MAX_QUERY_LENGTH', 10)
+    def test_mur_search_rejects_combined_query_and_exclude_over_character_limit(
+        self,
+        load_legal_search_results
+    ):
+        request = self.factory.get(
+            '/data/legal/search/murs/',
+            {'search': 'ok -' + 'x' * 8}
+        )
+
+        response = views.legal_doc_search_mur(request)
+
+        assert response.status_code == 400
+        assert self.expected_error in response.content
+        assert response.content.count(self.expected_error) == 1
+        assert b'No results' in response.content
+        assert self.no_results_message in response.content
+        assert b'x' * 8 not in response.content
+        load_legal_search_results.assert_not_called()
+
+    @mock.patch.object(api_caller, 'load_legal_search_results')
+    @mock.patch.object(views.settings, 'LEGAL_SEARCH_MAX_QUERY_LENGTH', 10)
+    def test_mur_search_rejects_q_proximity_over_character_limit(
+        self,
+        load_legal_search_results
+    ):
+        request = self.factory.get(
+            '/data/legal/search/murs/',
+            {'search': 'okay', 'case_no': '1234', 'q_proximity': ['okay', 'x' * 11]}
+        )
+
+        response = views.legal_doc_search_mur(request)
+
+        assert response.status_code == 400
+        assert self.expected_error in response.content
+        assert response.content.count(self.expected_error) == 1
+        assert b'No results' in response.content
+        assert self.no_results_message in response.content
+        assert b'js-filter-tags' not in response.content
+        assert b'tag__category' not in response.content
+        assert b'x' * 11 not in response.content
+        load_legal_search_results.assert_not_called()
+
+    @mock.patch.object(api_caller, 'load_legal_search_results')
+    @mock.patch.object(views.settings, 'LEGAL_SEARCH_MAX_QUERY_LENGTH', 10)
+    def test_ao_search_rejects_q_proximity_over_character_limit(
+        self,
+        load_legal_search_results
+    ):
+        request = self.factory.get(
+            '/data/legal/search/advisory-opinions/',
+            {'search': 'okay', 'ao_no': '2024-01', 'q_proximity': ['okay', 'x' * 11]}
+        )
+
+        response = views.legal_doc_search_ao(request)
+
+        assert response.status_code == 400
+        assert self.expected_error in response.content
+        assert response.content.count(self.expected_error) == 1
+        assert b'No results' in response.content
+        assert self.no_results_message in response.content
+        assert b'js-filter-tags' not in response.content
+        assert b'tag__category' not in response.content
+        assert b'x' * 11 not in response.content
+        load_legal_search_results.assert_not_called()
+
+    @mock.patch.object(api_caller, 'load_legal_search_results')
+    @mock.patch.object(views.settings, 'LEGAL_SEARCH_MAX_QUERY_LENGTH', 10)
+    def test_adr_search_rejects_q_proximity_over_character_limit(
+        self,
+        load_legal_search_results
+    ):
+        request = self.factory.get(
+            '/data/legal/search/adrs/',
+            {'search': 'okay', 'case_no': '1234', 'q_proximity': ['okay', 'x' * 11]}
+        )
+
+        response = views.legal_doc_search_adr(request)
+
+        assert response.status_code == 400
+        assert self.expected_error in response.content
+        assert response.content.count(self.expected_error) == 1
+        assert b'No results' in response.content
+        assert self.no_results_message in response.content
+        assert b'js-filter-tags' not in response.content
+        assert b'tag__category' not in response.content
+        assert b'x' * 11 not in response.content
+        load_legal_search_results.assert_not_called()
+
+    @mock.patch.object(api_caller, 'load_legal_search_results')
+    @mock.patch.object(views.settings, 'LEGAL_SEARCH_MAX_QUERY_LENGTH', 10)
+    def test_af_search_rejects_q_proximity_over_character_limit(
+        self,
+        load_legal_search_results
+    ):
+        request = self.factory.get(
+            '/data/legal/search/admin-fines/',
+            {'search': 'okay', 'case_no': '1234', 'q_proximity': ['okay', 'x' * 11]}
+        )
+
+        response = views.legal_doc_search_af(request)
+
+        assert response.status_code == 400
+        assert self.expected_error in response.content
+        assert response.content.count(self.expected_error) == 1
+        assert b'js-filter-tags' not in response.content
+        assert b'tag__category' not in response.content
+        assert b'x' * 11 not in response.content
+        load_legal_search_results.assert_not_called()
+
+    @mock.patch.object(ecfr_caller, 'fetch_ecfr_data')
+    @mock.patch.object(views.settings, 'LEGAL_SEARCH_MAX_QUERY_LENGTH', 10)
+    def test_regulations_search_rejects_query_over_character_limit(
+        self,
+        fetch_ecfr_data
+    ):
+        request = self.factory.get(
+            '/data/legal/search/regulations/',
+            {'search': 'x' * 11}
+        )
+
+        response = views.legal_doc_search_regulations(request)
+
+        assert response.status_code == 400
+        assert self.expected_error in response.content
+        assert response.content.count(self.expected_error) == 1
+        assert b'No results' in response.content
+        assert self.no_results_message in response.content
+        assert b'x' * 11 not in response.content
+        fetch_ecfr_data.assert_not_called()
+
+    @mock.patch.object(api_caller, 'load_legal_search_results')
+    @mock.patch.object(views.settings, 'LEGAL_SEARCH_MAX_QUERY_LENGTH', 10)
+    def test_statutes_search_rejects_query_over_character_limit(
+        self,
+        load_legal_search_results
+    ):
+        request = self.factory.get(
+            '/data/legal/search/statutes/',
+            {'search': 'x' * 11}
+        )
+
+        response = views.legal_doc_search_statutes(request)
+
+        assert response.status_code == 400
+        assert self.expected_error in response.content
+        assert response.content.count(self.expected_error) == 1
+        assert b'No results' in response.content
+        assert self.no_results_message in response.content
+        assert b'x' * 11 not in response.content
+        load_legal_search_results.assert_not_called()

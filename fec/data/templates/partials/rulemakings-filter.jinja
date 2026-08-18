@@ -14,7 +14,7 @@
   </div>
   <form id="rulemaking-filters" action="">
     <div class="filters__inner">
-      {{ legal.keyword_search_q(result_type, query) }}
+      {{ legal.keyword_search_q(result_type, query, error_message=legal_search_error if legal_search_error and 'q' in legal_search_error_fields|default([]) else None) }}
       {{ proximity.field('keyword-proximity', title='Proximity') }}
       <div class="filter js-filter" data-filter="checkbox">
         <input id="is_open_for_comment" name="is_open_for_comment" type="checkbox" value="true">
