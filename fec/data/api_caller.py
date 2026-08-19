@@ -41,9 +41,14 @@ session.mount("http://", http_adapter)
 session.mount("https://", http_adapter)
 
 
+def _call_legal_api(*path_parts, **filters):
+    filters["api_key"] = settings.FEC_LEGAL_API_KEY_PRIVATE
+    return _call_api(*path_parts, **filters)
+
+
 def _call_api(*path_parts, **filters):
     if settings.FEC_API_KEY_PRIVATE:
-        filters["api_key"] = settings.FEC_API_KEY_PRIVATE
+        filters.setdefault("api_key", settings.FEC_API_KEY_PRIVATE)
 
     path = os.path.join(settings.FEC_API_VERSION, *[x.strip("/") for x in path_parts])
     url = parse.urljoin(settings.FEC_API_URL, path)
@@ -106,7 +111,7 @@ def load_legal_search_results(query, query_exclude="", query_type="all", offset=
     filters["q"] = query
     filters["q_exclude"] = query_exclude
 
-    results = _call_api("legal", "search", **filters)
+    results = _call_legal_api("legal", "search", **filters)
     results["limit"] = limit
     results["offset"] = offset
 
@@ -146,7 +151,7 @@ def find_legal_document_by_filename(filename):
         filename = filename[:-4]
 
     # Search for the document using the legal search API
-    results = _call_api("legal", "search", filename=filename)
+    results = _call_legal_api("legal", "search", filename=filename)
 
     if not results:
         return None
@@ -183,7 +188,7 @@ def find_rulemaking_document_by_doc_id(doc_id):
     Returns:
         str: The full URL to the document, or None if not found
     """
-    results = _call_api("/rulemaking/search/", doc_id=doc_id)
+    results = _call_legal_api("/rulemaking/search/", doc_id=doc_id)
 
     if not results:
         return None
@@ -215,7 +220,7 @@ def find_rulemaking_document_by_doc_id(doc_id):
 
 def load_legal_advisory_opinion(ao_no):
     url = "/legal/docs/advisory_opinions/"
-    results = _call_api(url, parse.quote(ao_no))
+    results = _call_legal_api(url, parse.quote(ao_no))
 
     if not (results and "docs" in results and results["docs"]):
         raise Http404()
@@ -229,7 +234,7 @@ def load_legal_advisory_opinion(ao_no):
 def load_legal_mur(mur_no, requested_mur_type='current'):
 
     url = "/legal/docs/murs/"
-    murs = _call_api(url, parse.quote(mur_no))
+    murs = _call_legal_api(url, parse.quote(mur_no))
 
     if not murs:
         raise Http404
@@ -278,7 +283,7 @@ def load_legal_mur(mur_no, requested_mur_type='current'):
 def load_legal_adr(adr_no):
 
     url = "/legal/docs/adrs/"
-    adr = _call_api(url, parse.quote(adr_no))
+    adr = _call_legal_api(url, parse.quote(adr_no))
 
     if not adr:
         raise Http404
@@ -334,7 +339,7 @@ def load_legal_adr(adr_no):
 
 def load_legal_admin_fines(admin_fine_no):
     url = "/legal/docs/admin_fines/"
-    admin_fine = _call_api(url, parse.quote(admin_fine_no))
+    admin_fine = _call_legal_api(url, parse.quote(admin_fine_no))
     if not admin_fine:
         raise Http404
     admin_fine = admin_fine["docs"][0]
@@ -361,7 +366,7 @@ def load_legal_rulemaking(rm_no):
     cache_bust = random.randint(1, 999999999)
 
     url = "/rulemaking/search/"
-    response = _call_api(url, rm_no=rm_no, _t=cache_bust)
+    response = _call_legal_api(url, rm_no=rm_no, _t=cache_bust)
     return response["rulemakings"][0] if response["rulemakings"] else {}
 
 
