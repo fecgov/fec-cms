@@ -91,6 +91,16 @@
     width: 100%;
   }
 
+   .dropdown-msg {
+    padding: u(1rem);
+    line-height: u(2rem);
+    color: $neutral-base;
+
+      a {
+        color: $base;
+      }
+   }
+
   // For scrolling dropdowns, force the scrollbars to appear,
   // flip its x to move the scroll to the left, then flip its content back
   &.dropdown-scrolling {
