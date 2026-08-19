@@ -491,7 +491,7 @@ export const filings = {
       return reportType({
         doc_description: doc_description,
         amendment_version: amendment_version,
-        safe_size: row.pages < 100000,
+        large_pdf: row.pages >= 100000,
         fec_url: fec_url,
         pdf_url: pdf_url,
         csv_url: csv_url,

@@ -30,10 +30,10 @@
       {{/if}}
       {{#if pdf_url}}
       <li class="dropdown__item">
-        {{#if safe_size}}
-        <a class="dropdown__value" target="_blank" href="{{ pdf_url }}">.pdf</a>
+        {{#if large_pdf }}
+          <p class="dropdown-msg">.pdf not available for reports 100,000 pages or more. Request data at <a href="mailto:efiletechsupport@fec.gov">efiletechsupport@fec.gov</a></p>
         {{else}}
-        <p class="dropdown-msg">.pdf not available for reports 100,000 pages or more. Request data at <a href="mailto:efiletechsupport@fec.gov">efiletechsupport@fec.gov</a></p>
+          <a class="dropdown__value" target="_blank" href="{{ pdf_url }}">.pdf</a>
         {{/if}}
       </li>
       {{/if}}
