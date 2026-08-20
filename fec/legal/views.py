@@ -839,7 +839,7 @@ def legal_search(request):
             filters['q_exclude'] = query_exclude
             filters['hits_returned'] = 3
             filters['from_hit'] = 0
-            response = api_caller._call_api(url, **filters)
+            response = api_caller._call_legal_api(url, **filters)
             # Only set results if the response has the expected keys
             if 'rulemakings' in response and 'total_rulemakings' in response:
                 # Encode # characters in document URLs to prevent URL bucket issues
