@@ -42,7 +42,8 @@ session.mount("https://", http_adapter)
 
 
 def _call_legal_api(*path_parts, **filters):
-    filters["api_key"] = settings.FEC_LEGAL_API_KEY_PRIVATE
+    if settings.FEC_LEGAL_API_KEY_PRIVATE:
+        filters["api_key"] = settings.FEC_LEGAL_API_KEY_PRIVATE
     return _call_api(*path_parts, **filters)
 
 
