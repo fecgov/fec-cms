@@ -7,6 +7,7 @@ import { default as URI } from 'urijs';
 
 import { buildEntityLink, buildTotalLink, getColumns, getSizeParams, sizeInfo } from '../modules/column-helpers.js';
 import { candidateColumn, currencyColumn, dateColumn, filings, supportOpposeColumn } from '../modules/columns.js';
+import CycleSelect from '../modules/cycle-select.js';
 import Dropdown from '../modules/dropdowns.js';
 import initEvents from '../modules/events.js';
 import { renderModal, renderRow } from '../modules/filings.js';
@@ -98,6 +99,30 @@ const committeeTwoYearTransactionPeriodQuery = function(committeeId, cycle, para
     },
     params
   );
+};
+
+// Deferred tab links are rendered before client-side cycle changes. Preserve the
+// active cycle when requesting a tab partial so its tables and selects stay in sync.
+const currentTabUrl = function($tab) {
+  const tabUrl = URI($tab.attr('data-tab-url'));
+  const query = URI.parseQuery(window.location.search);
+
+  if (query.cycle) {
+    tabUrl.removeQuery('cycle').addQuery('cycle', query.cycle);
+  }
+
+  return tabUrl.toString();
+};
+
+const currentTabHref = function($tab) {
+  const tabHref = URI($tab.attr('href'));
+  const query = URI.parseQuery(window.location.search);
+
+  if (query.cycle) {
+    tabHref.removeQuery('cycle').addQuery('cycle', query.cycle);
+  }
+
+  return tabHref.toString();
 };
 
 const employerColumns = [
@@ -1109,16 +1134,19 @@ $(function() {
     }
 
     $panel.attr('data-loading', 'true');
-    $.get($tab.attr('data-tab-url'))
+    const tabUrl = currentTabUrl($tab);
+
+    $.get(tabUrl)
       .done(function(html) {
         const $html = $(html);
         $html.attr('aria-hidden', null);
         $html.attr('data-loaded-panel', tabName);
         $panel.replaceWith($html);
+        CycleSelect.init($html);
         initCommitteeTables($html.find('.data-table'));
       })
       .fail(function() {
-        window.location.href = $tab.attr('href');
+        window.location.href = currentTabHref($tab);
       });
   }
 

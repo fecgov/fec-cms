@@ -134,4 +134,30 @@ describe('cycle select', function() {
       expect(CycleSelect.prototype.setUrl).to.have.been.calledWith(url.toString());
     });
   });
+
+  describe('scoped initialization', function() {
+    beforeEach(function() {
+      this.$fixture.empty().append(
+        '<div class="loaded-tab">' +
+          '<select class="js-cycle" data-cycle-location="query">' +
+            '<option value="2012"></option>' +
+            '<option value="2014"></option>' +
+          '</select>' +
+        '</div>'
+      );
+    });
+
+    it('initializes cycle selects inside a context', function() {
+      CycleSelect.init(this.$fixture.find('.loaded-tab'));
+      this.$fixture.find('.js-cycle').val('2014').trigger('change');
+      expect(CycleSelect.prototype.setUrl).to.have.been.calledWith(window.location.href + '?cycle=2014');
+    });
+
+    it('does not bind the same cycle select twice', function() {
+      CycleSelect.init(this.$fixture);
+      CycleSelect.init(this.$fixture);
+      this.$fixture.find('.js-cycle').val('2014').trigger('change');
+      expect(CycleSelect.prototype.setUrl).to.have.been.calledOnce;
+    });
+  });
 });
