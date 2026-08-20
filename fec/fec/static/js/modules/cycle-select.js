@@ -88,12 +88,30 @@ CycleSelect.prototype.setTimePeriod = function(min, max) {
 };
 
 CycleSelect.build = function($elm) {
-  var location = $elm.data('cycle-location');
-  if (location === 'query') {
-    return new QueryCycleSelect($elm);
-  } else if (location === 'path') {
-    return new PathCycleSelect($elm);
+  // Deferred committee tabs can re-run cycle initialization after the page load.
+  // Store the instance on the select so change handlers are only bound once.
+  if ($elm.data('cycle-select-init')) {
+    return;
   }
+
+  var location = $elm.data('cycle-location');
+  var cycleSelect;
+  if (location === 'query') {
+    cycleSelect = new QueryCycleSelect($elm);
+  } else if (location === 'path') {
+    cycleSelect = new PathCycleSelect($elm);
+  }
+
+  if (cycleSelect) {
+    $elm.data('cycle-select-init', cycleSelect);
+  }
+  return cycleSelect;
+};
+
+CycleSelect.init = function($context) {
+  $context.find('.js-cycle').each(function(idx, elm) {
+    CycleSelect.build($(elm));
+  });
 };
 
 CycleSelect.prototype.handleChange = function(e) {

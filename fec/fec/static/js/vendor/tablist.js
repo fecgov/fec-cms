@@ -28,7 +28,8 @@ function show($target, push) {
   });
   // Toggle panels
   $($container + ' [role="tabpanel"]').attr('aria-hidden', 'true');
-  const $panel = $('#' + $target.attr('href').substring(1));
+  // Tab hrefs may include query params before the panel fragment.
+  const $panel = $('#' + URI($target.attr('href')).fragment());
   $panel.attr('aria-hidden', null);
   const name = $target.closest('[role="tablist"]').attr('data-name');
   const value = $target.attr('data-name');
@@ -67,7 +68,7 @@ export function onShow($elm, callback) {
   if ($panel.is(':visible')) {
     callback();
   } else {
-    const $trigger = $('[href="#' + $panel.attr('id') + '"]');
+    const $trigger = $('[role="tab"][href$="#' + $panel.attr('id') + '"]');
     const event = 'tabs.show.' + $trigger.attr('data-name');
     events.once(event, callback);
   }
