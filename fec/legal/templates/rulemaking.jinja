@@ -184,7 +184,7 @@
         </tr>
       </thead>
       <tbody>
-        {%- if press_public_guidance_documents and press_public_guidance_documents|length > 1000 -%}
+        {%- if press_public_guidance_documents and press_public_guidance_documents|length > 0 -%}
           {%- for doc in press_public_guidance_documents -%}
         <tr class="{{ loop.cycle('odd', 'even') }}">
           <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank" aria-label="{{ doc.label|replace('FEC', 'F.E.C.') }}">{{ doc.label }}</a></td>
