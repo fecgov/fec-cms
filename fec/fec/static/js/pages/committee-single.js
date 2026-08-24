@@ -7,6 +7,7 @@ import { default as URI } from 'urijs';
 
 import { buildEntityLink, buildTotalLink, getColumns, getSizeParams, sizeInfo } from '../modules/column-helpers.js';
 import { candidateColumn, currencyColumn, dateColumn, filings, supportOpposeColumn } from '../modules/columns.js';
+import CycleSelect from '../modules/cycle-select.js';
 import Dropdown from '../modules/dropdowns.js';
 import initEvents from '../modules/events.js';
 import { renderModal, renderRow } from '../modules/filings.js';
@@ -98,6 +99,30 @@ const committeeTwoYearTransactionPeriodQuery = function(committeeId, cycle, para
     },
     params
   );
+};
+
+// Deferred tab links are rendered before client-side cycle changes. Preserve the
+// active cycle when requesting a tab partial so its tables and selects stay in sync.
+const currentTabUrl = function($tab) {
+  const tabUrl = URI($tab.attr('data-tab-url'));
+  const query = URI.parseQuery(window.location.search);
+
+  if (query.cycle) {
+    tabUrl.removeQuery('cycle').addQuery('cycle', query.cycle);
+  }
+
+  return tabUrl.toString();
+};
+
+const currentTabHref = function($tab) {
+  const tabHref = URI($tab.attr('href'));
+  const query = URI.parseQuery(window.location.search);
+
+  if (query.cycle) {
+    tabHref.removeQuery('cycle').addQuery('cycle', query.cycle);
+  }
+
+  return tabHref.toString();
 };
 
 const employerColumns = [
@@ -469,7 +494,6 @@ const filingsReportsColumns = getColumns(filings, [
 ]);
 
 $(function() {
-  let $mapTable;
   // Reset time period to the fallback_cycle, which is the LAST_CYCLE_HAS_FINANCIAL.
   if (window.context.cycleOutOfRange == 'true') {
     const lastCycle = Number(window.context.lastCycleHasFinancial);
@@ -478,8 +502,9 @@ $(function() {
     window.context.cycle = lastCycle;
   }
 
-  // Set up data tables
-  $('.data-table').each(function(index, table) {
+  function initCommitteeTables($tables) {
+    let $mapTable;
+    $tables.each(function(index, table) {
     const $table = $(table);
     const committeeId = $table.attr('data-committee');
     const query = {
@@ -1092,7 +1117,49 @@ $(function() {
         DataTable_FEC.defer($table, opts);
         break;
     }
+    });
+    return $mapTable;
+  }
+
+  function loadCommitteeTab($tab) {
+    const tabName = $tab.attr('data-name');
+    const $panel = $('#' + URI($tab.attr('href')).fragment());
+
+    // Replace only deferred tab placeholders with server rendered partials.
+    if (
+      $panel.attr('data-deferred-panel') !== tabName ||
+      $panel.attr('data-loading')
+    ) {
+      return;
+    }
+
+    $panel.attr('data-loading', 'true');
+    const tabUrl = currentTabUrl($tab);
+
+    $.get(tabUrl)
+      .done(function(html) {
+        const $html = $(html);
+        $html.attr('aria-hidden', null);
+        $html.attr('data-loaded-panel', tabName);
+        $panel.replaceWith($html);
+        CycleSelect.init($html);
+        initCommitteeTables($html.find('.data-table'));
+      })
+      .fail(function() {
+        window.location.href = currentTabHref($tab);
+      });
+  }
+
+  $('[role="tab"][data-tab-url]').each(function(index, tab) {
+    const $tab = $(tab);
+    // The tablist opens the panel first; this then fills its placeholder.
+    events.on('tabs.show.' + $tab.attr('data-name'), function() {
+      loadCommitteeTab($tab);
+    });
   });
+
+  // Set up data tables
+  const $mapTable = initCommitteeTables($('.data-table'));
 
   // Set up state map
   const $map = $('.state-map');

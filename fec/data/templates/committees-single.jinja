@@ -59,6 +59,7 @@
   <div class="data-container__wrapper">
     <nav class="sidebar side-nav-alt">
       <ul class="tablist" role="tablist" data-name="tab">
+        {# href keeps full page ?tab= URLs shareable; data-tab-url loads the partial on click. #}
         {% if committee_type not in ['C', 'E'] %}
         <li class="side-nav__item" role="presentation">
           <a
@@ -85,7 +86,8 @@
             data-name="about-committee"
             tabindex="0"
             aria-controls="panel2"
-            href="#section-2">About this committee</a>
+            data-tab-url="/data/committee/{{ committee_id }}/tab/about-committee/?cycle={{ cycle }}"
+            href="?cycle={{ cycle }}&tab=about-committee#section-2">About this committee</a>
         </li>
         {% elif committee_type == 'E' %}
         <li class="side-nav__item" role="presentation">
@@ -95,7 +97,8 @@
             data-name="about-committee"
             tabindex="0"
             aria-controls="panel2"
-            href="#section-2">About this filer</a>
+            data-tab-url="/data/committee/{{ committee_id }}/tab/about-committee/?cycle={{ cycle }}"
+            href="?cycle={{ cycle }}&tab=about-committee#section-2">About this filer</a>
         </li>
         {% else %}
         <li class="side-nav__item" role="presentation">
@@ -105,7 +108,8 @@
             data-name="about-committee"
             tabindex="0"
             aria-controls="panel1"
-            href="#section-2">About this committee</a>
+            data-tab-url="/data/committee/{{ committee_id }}/tab/about-committee/?cycle={{ cycle }}"
+            href="?cycle={{ cycle }}&tab=about-committee#section-2">About this committee</a>
         </li>
         {% endif %}
         {% if committee_type not in ['C', 'E'] %}
@@ -181,7 +185,8 @@
             data-name="filings"
             tabindex="0"
             aria-controls="panel5"
-            href="#section-5">Filings</a>
+            data-tab-url="/data/committee/{{ committee_id }}/tab/filings/?cycle={{ cycle }}"
+            href="?cycle={{ cycle }}&tab=filings#section-5">Filings</a>
             <ul>
               {% if has_raw_filings %}
               <li><a href="#raw-filings">Raw electronic filings</a></li>
@@ -215,7 +220,16 @@
     </nav>
 
     {% include 'partials/loading-tab.jinja' %}
-    {% include 'partials/committee/about-committee.jinja' %}
+    {# Inactive server-rendered tabs start as placeholders and load on tab click. #}
+    {% if active_tab == 'about-committee' %}
+      {% include 'partials/committee/about-committee.jinja' %}
+    {% else %}
+      <section id="section-2" role="tabpanel" aria-hidden="true" data-deferred-panel="about-committee">
+        <div class="container overlay__container">
+          <div class="overlay overlay--neutral is-loading"></div>
+        </div>
+      </section>
+    {% endif %}
  
     {% if committee_type not in ['C', 'E'] %}
       {% include 'partials/committee/financial-summary.jinja' %}
@@ -224,7 +238,15 @@
       {% include 'partials/committee/raising.jinja' %}
     {% endif %}
     {% include 'partials/committee/spending.jinja' %}
-    {% include 'partials/committee/filings.jinja' %}
+    {% if active_tab == 'filings' %}
+      {% include 'partials/committee/filings.jinja' %}
+    {% else %}
+      <section id="section-5" role="tabpanel" aria-hidden="true" data-deferred-panel="filings">
+        <div class="container overlay__container">
+          <div class="overlay overlay--neutral is-loading"></div>
+        </div>
+      </section>
+    {% endif %}
   </div>
 
 {% endblock %}
