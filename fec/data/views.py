@@ -35,6 +35,12 @@ validListUrlParamValues = ["P", "S", "H"]
 # INITIALLY USED BY raising() AND spending() FOR VALIDATING URL PARAMETERS,
 # THE list URL PARAM
 
+# Only tabs with server side data are requested as partial renders.
+COMMITTEE_TAB_PARTIALS = {
+    "about-committee": "partials/committee/about-committee.jinja",
+    "filings": "partials/committee/filings.jinja",
+}
+
 
 def to_date(committee, cycle):
     if committee["committee_type"] in ["H", "S", "P"]:
@@ -353,10 +359,11 @@ def candidate(request, candidate_id):
     return render(request, "candidates-single.jinja", candidate)
 
 
-def get_committee(committee_id, cycle):
+def get_committee_base_context(committee_id, cycle, requested_tab=None):
     """
-    Given a committee_id and cycle, call the API and get the committee
-    and committee financial data needed to render the committee profile page
+    Load committee context shared by full page and tab partial renders.
+    Full page financial reports/totals are added separately so tab partials
+    can avoid those API calls.
     """
     committee, all_candidates, cycle = load_committee_history(committee_id, cycle)
     # When there are multiple candidate records of various offices (H, S, P)
@@ -389,6 +396,7 @@ def get_committee(committee_id, cycle):
         candidate["related_cycle"] = cycle if election_years else None
 
     report_type = report_types.get(committee["committee_type"], "pac-party")
+    active_tab = requested_tab or get_default_committee_tab(committee["committee_type"])
 
     cycle_out_of_range, fallback_cycle, cycles = load_cycle_data(committee, cycle)
 
@@ -398,9 +406,7 @@ def get_committee(committee_id, cycle):
     # we set cycle = fallback_cycle
     cycle = fallback_cycle if cycle_out_of_range else cycle
 
-    reports, totals, totals_national_party = load_reports_and_totals(
-        committee_id, cycle, cycle_out_of_range, fallback_cycle
-    )
+    min_receipt_date = utils.three_days_ago()
 
     # Check organization types to determine SSF status
     is_ssf = committee.get("organization_type") in ["W", "C", "L", "V", "M", "T"]
@@ -436,30 +442,6 @@ def get_committee(committee_id, cycle):
         "cycleOutOfRange": cycle_out_of_range,
         "lastCycleHasFinancial": fallback_cycle,
     }
-
-    # sponsor_candidates saves a sponsor candidate list.
-    sponsors_candidate_ids = committee.get("sponsor_candidate_ids")
-    sponsor_candidates = []
-    if sponsors_candidate_ids:
-        path = "/candidate/{}/history/"
-        filters = {"per_page": 1}
-        for sponsor_id in sponsors_candidate_ids:
-            election_years = []
-            sponsor_candidate = load_most_recent_candidate(sponsor_id)
-            # Handle API returning no results
-            if sponsor_candidate:
-                for election_year in sponsor_candidate["election_years"]:
-                    start_of_election_period = (
-                        election_year - election_durations[sponsor_candidate["office"]]
-                    )
-                    if start_of_election_period < cycle and cycle <= election_year:
-                        election_years.append(election_year)
-
-                # For each sponsor_candidate, set related_cycle
-                # to the candidate's time period
-                # relative to the selected cycle.
-                sponsor_candidate["related_cycle"] = cycle if election_years else None
-                sponsor_candidates.append(sponsor_candidate)
 
     # Human-friendly text and glossary links for the front-end
     com_org_type = committee.get('organization_type')
@@ -557,20 +539,61 @@ def get_committee(committee_id, cycle):
         "is_inaugural": is_inaugural,
         "current_committee_status": current_committee_status,
         "cycle_out_of_range": cycle_out_of_range,
+        "active_tab": active_tab,
         "parent": parent,
         "result_type": result_type,
         "report_type": report_type,
-        "reports": reports,
-        "totals": totals,
-        "totals_national_party": totals_national_party,
-        "min_receipt_date": utils.three_days_ago(),
-        "context_vars": context_vars,
+        "min_receipt_date": min_receipt_date,
         "party_full": committee["party_full"],
         "social_image_identifier": "data",
         "year": year,
         "timePeriod": time_period_js,
-        "sponsor_candidates": sponsor_candidates,
+        "sponsor_candidates": [],
+        "has_raw_filings": False,
+        "filings_lookup": {
+            "reports": ["F3", "F3X", "F3P", "F3L", "F4", "F5", "F7", "F13"],
+            "notices": ["F5", "F24", "F6", "F9", "F10", "F11"],
+            "statements": ["F1"],
+            "other": ["F1M", "F8", "F99", "F12"],
+        },
+        "statement_of_organization": None,
     }
+
+    # Add message for a committee that was formerly an authorized candidate committee.
+    if committee['former_candidate_id']:
+        template_variables["former_committee_name"] = committee['former_committee_name']
+        template_variables["former_authorized_candidate_name"] = committee['former_candidate_name']
+        template_variables["former_authorized_candidate_id"] = committee['former_candidate_id']
+
+    return template_variables
+
+
+def get_committee(committee_id, cycle, requested_tab=None):
+    """
+    Given a committee_id and cycle, call the API and get the committee
+    and committee financial data needed to render the committee profile page
+    """
+    template_variables = get_committee_base_context(
+        committee_id,
+        cycle,
+        requested_tab,
+    )
+    committee = template_variables["committee"]
+    cycle = template_variables["cycle"]
+    cycle_out_of_range = template_variables["cycle_out_of_range"]
+    fallback_cycle = template_variables["context_vars"]["lastCycleHasFinancial"]
+
+    reports, totals, totals_national_party = load_reports_and_totals(
+        committee_id, cycle, cycle_out_of_range, fallback_cycle
+    )
+    template_variables.update({
+        "reports": reports,
+        "totals": totals,
+        "totals_national_party": totals_national_party,
+    })
+
+    add_committee_tab_context(template_variables)
+
     # Format the current two-year-period's totals
     if reports and totals:
         # IE-only committees
@@ -596,49 +619,43 @@ def get_committee(committee_id, cycle):
             template_variables["spending_summary"] = utils.process_spending_data(totals)
             template_variables["cash_summary"] = utils.process_cash_data(totals)
 
-    # When cycle >= constants.DEFAULT_TIME_PERIOD, check for raw filings in the last three days
-    if cycle >= constants.DEFAULT_TIME_PERIOD:
-        # (4)call efile/filings under tag: efiling
-        path = "/efile/filings/"
-        filters = {
-            "committee_id": committee["committee_id"],
-            "min_receipt_date": template_variables["min_receipt_date"]
-        }
-        raw_filings = api_caller.load_endpoint_results(path, **filters)
+    return template_variables
 
-        template_variables["has_raw_filings"] = True if raw_filings else False
-    else:
-        template_variables["has_raw_filings"] = False
 
-    # Needed for filings tab
-    template_variables["filings_lookup"] = {
-        "reports": ["F3", "F3X", "F3P", "F3L", "F4", "F5", "F7", "F13"],
-        "notices": ["F5", "F24", "F6", "F9", "F10", "F11"],
-        "statements": ["F1"],
-        "other": ["F1M", "F8", "F99", "F12"],
-    }
-
-    # Call /filings?committee_id=C00693234&form_type=F1
-    # Get the statements of organization
-    statement_of_organization = api_caller.load_committee_statement_of_organization(
-        committee_id
+def get_committee_tab(committee_id, cycle, requested_tab):
+    # Partial tab renders use the shared page context plus only tab specific data.
+    template_variables = get_committee_base_context(
+        committee_id,
+        cycle,
+        requested_tab,
     )
+    add_committee_tab_context(template_variables)
+    return template_variables
 
-    if statement_of_organization:
-        statement_of_organization["receipt_date"] = format_receipt_date(
-            statement_of_organization["receipt_date"]
+
+def add_committee_tab_context(template_variables):
+    # Full page ?tab= URLs and partial tab endpoints share this tab specific data.
+    active_tab = template_variables["active_tab"]
+    committee = template_variables["committee"]
+    cycle = template_variables["cycle"]
+
+    # Defer About tab only API calls until the About tab is requested.
+    if active_tab == "about-committee":
+        template_variables["statement_of_organization"] = (
+            load_committee_statement_of_organization(committee["committee_id"])
+        )
+        template_variables["sponsor_candidates"] = load_sponsor_candidates(
+            committee,
+            cycle,
         )
 
-    template_variables["statement_of_organization"] = statement_of_organization
-
-    # Add message for a committee that was formerly an authorized candidate committee.
-    # These committees are now unauthorized committees.
-    if committee['former_candidate_id']:
-        template_variables["former_committee_name"] = committee['former_committee_name']
-        template_variables["former_authorized_candidate_name"] = committee['former_candidate_name']
-        template_variables["former_authorized_candidate_id"] = committee['former_candidate_id']
-
-    return template_variables
+    # Defer the raw filings availability check until the Filings tab is requested.
+    template_variables["has_raw_filings"] = should_show_raw_filings(
+        active_tab,
+        committee["committee_id"],
+        cycle,
+        template_variables["min_receipt_date"],
+    )
 
 
 def committee(request, committee_id):
@@ -648,9 +665,92 @@ def committee(request, committee_id):
     """
 
     cycle = request.GET.get("cycle", None)
-    committee = get_committee(committee_id, cycle)
+    requested_tab = request.GET.get("tab", None)
+    committee = get_committee(committee_id, cycle, requested_tab)
 
     return render(request, "committees-single.jinja", committee)
+
+
+def committee_tab(request, committee_id, tab_name):
+    # Used by in page tab clicks, direct ?tab= URLs still render the full page.
+    if tab_name not in COMMITTEE_TAB_PARTIALS:
+        raise Http404()
+
+    cycle = request.GET.get("cycle", None)
+    committee = get_committee_tab(committee_id, cycle, tab_name)
+
+    return render(request, COMMITTEE_TAB_PARTIALS[tab_name], committee)
+
+
+def get_default_committee_tab(committee_type):
+    if committee_type not in ["C", "E"]:
+        return "summary"
+    return "about-committee"
+
+
+def should_show_raw_filings(active_tab, committee_id, cycle, min_receipt_date):
+    if active_tab != "filings" or cycle < constants.DEFAULT_TIME_PERIOD:
+        return False
+
+    path = "/efile/filings/"
+    filters = {
+        "committee_id": committee_id,
+        "min_receipt_date": min_receipt_date,
+    }
+    raw_filings = api_caller.load_endpoint_results(path, **filters)
+
+    return True if raw_filings else False
+
+
+def load_committee_statement_of_organization(committee_id):
+    # Call /filings?committee_id=C00693234&form_type=F1
+    # Get the statements of organization
+    statement_of_organization = api_caller.load_committee_statement_of_organization(
+        committee_id
+    )
+
+    if statement_of_organization:
+        statement_of_organization = statement_of_organization.copy()
+        statement_of_organization["receipt_date"] = format_receipt_date(
+            statement_of_organization["receipt_date"]
+        )
+
+    return statement_of_organization
+
+
+def load_sponsor_candidates(committee, cycle):
+    sponsors_candidate_ids = committee.get("sponsor_candidate_ids")
+    if not sponsors_candidate_ids:
+        return []
+
+    sponsor_candidates = [
+        load_sponsor_candidate(sponsor_id, cycle)
+        for sponsor_id in sponsors_candidate_ids
+    ]
+
+    return [candidate for candidate in sponsor_candidates if candidate]
+
+
+def load_sponsor_candidate(sponsor_id, cycle):
+    election_years = []
+    sponsor_candidate = load_most_recent_candidate(sponsor_id)
+    # Handle API returning no results
+    if not sponsor_candidate:
+        return None
+
+    sponsor_candidate = sponsor_candidate.copy()
+    for election_year in sponsor_candidate["election_years"]:
+        start_of_election_period = (
+            election_year - election_durations[sponsor_candidate["office"]]
+        )
+        if start_of_election_period < cycle and cycle <= election_year:
+            election_years.append(election_year)
+
+    # For each sponsor_candidate, set related_cycle
+    # to the candidate's time period relative to the selected cycle.
+    sponsor_candidate["related_cycle"] = cycle if election_years else None
+
+    return sponsor_candidate
 
 
 def load_most_recent_candidate(candidate_id):

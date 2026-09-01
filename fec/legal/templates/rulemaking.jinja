@@ -31,7 +31,6 @@
     </div>
     {%- endfor -%}
   {%- endif -%}{# end: if docs can receive comments #}
-  {%- if key_documents -%}{# Include the Key Documents bits only if there are docs to include #}
     <h2>Key documents</h2>
     <table class="simple-table simple-table--display" tabindex="0" aria-label="Key documents">
       <thead>
@@ -41,15 +40,18 @@
         </tr>
       </thead>
       <tbody>
+  {%- if key_documents and key_documents|length > 0 -%}
     {%- for doc in key_documents -%}
         <tr>
           <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank">{{ doc.label }}</a></td>
           <td class="date">{{ doc.doc_date|date_full(fmt='%m/%d/%Y', time_tag=True) if doc.doc_date else '' }}</td>
         </tr>
     {%- endfor -%}
+  {%- else -%}
+        <tr><td colspan="2">No data available in table</td></tr>
+  {%- endif -%}
       </tbody>
-    </table>
-  {%- endif %}{# end: if key_documents -#}
+    </table>{# Close Key Documents -#}
 
     <h2>All documents</h2>
     <table class="simple-table simple-table--display" tabindex="0" aria-label="All documents">
@@ -174,8 +176,6 @@
       </tbody>
     </table>
 
-    {# Only show if there are docs to include #}
-    {%- if press_public_guidance_documents -%}
     <h2 tabindex="0">Press and public guidance</h2>
     <table class="simple-table simple-table--display" tabindex="0" aria-label="Press and public guidance documents">
       <thead>
@@ -184,14 +184,17 @@
         </tr>
       </thead>
       <tbody>
-        {%- for doc in press_public_guidance_documents -%}
+        {%- if press_public_guidance_documents and press_public_guidance_documents|length > 0 -%}
+          {%- for doc in press_public_guidance_documents -%}
         <tr class="{{ loop.cycle('odd', 'even') }}">
           <td><a class="embed-pdf" href="{{ CANONICAL_BASE }}{{ doc.url }}" data-doc_id="{{ doc.doc_id }}" target="_blank" aria-label="{{ doc.label|replace('FEC', 'F.E.C.') }}">{{ doc.label }}</a></td>
         </tr>
-        {%- endfor -%}
+          {%- endfor -%}
+        {%- else -%}
+        <tr><td>No data available in table</td></tr>
+        {%- endif -%}
       </tbody>
     </table>
-    {%- endif -%}
 
     <h2>Entities</h2>
     <table class="simple-table simple-table--display" tabindex="0" aria-label="Entities">
@@ -202,12 +205,16 @@
         </tr>
       </thead>
       <tbody>
-        {%- for entity in rm_entities -%}
+        {%- if rm_entities and rm_entities|length > 0 -%}
+          {%- for entity in rm_entities -%}
         <tr class="{{ loop.cycle('odd', 'even') }}" data-sort="{{ loop.index0 }}">
           <td tabindex="0" aria-label="{{ entity.name }}, {{ entity.role }}">{{ entity.name }}</td>
           <td>{{ entity.role }}</td>
         </tr>
-        {%- endfor -%}
+          {%- endfor -%}
+        {%- else -%}
+        <tr><td colspan="2">No data available in table</td></tr>
+        {%- endif -%}
       </tbody>
     </table>
   </div>

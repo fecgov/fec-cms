@@ -2,6 +2,9 @@ from unittest import TestCase
 from unittest import mock
 import copy
 
+from django.http import Http404
+from django.test import RequestFactory
+
 from data import views, api_caller
 
 
@@ -192,10 +195,6 @@ class TestCommittee(TestCase):
             self.STOCK_TOTALS,
             False
         )
-        load_endpoint_results_mock.return_value = mock.MagicMock()
-        load_committee_statement_of_organization_mock.return_value = {
-            "receipt_date": "2019-11-30T00:00:00"
-        }
         template_variables = views.get_committee("C001", 2018)
 
         committee = template_variables.get("committee")
@@ -232,9 +231,10 @@ class TestCommittee(TestCase):
         assert template_variables["result_type"] == "committees"
         assert template_variables["report_type"] == "pac-party"
         assert template_variables["reports"] == self.STOCK_REPORTS
-        assert template_variables["statement_of_organization"] == {
-            "receipt_date": "11/30/2019"
-        }
+        assert template_variables["has_raw_filings"] is False
+        assert template_variables["statement_of_organization"] is None
+        load_endpoint_results_mock.assert_not_called()
+        load_committee_statement_of_organization_mock.assert_not_called()
 
     def test_ie_summary(
         self,
@@ -540,6 +540,218 @@ class TestCommittee(TestCase):
         # JS and Python cycle should equal fallback cycle
         assert template_variables["context_vars"]["cycle"] == 2018
         assert template_variables["cycle"] == 2018
+
+    def test_about_tab_loads_statement_of_organization(
+        self,
+        load_committee_history_mock,
+        load_cycle_data_mock,
+        load_reports_and_totals_mock,
+        load_endpoint_results_mock,
+        load_committee_statement_of_organization_mock,
+    ):
+        cycle = 2018
+
+        test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
+        load_committee_history_mock.return_value = (test_committee, [], cycle)
+        load_cycle_data_mock.return_value = (False, 2018, [2018])
+        load_reports_and_totals_mock.return_value = (
+            self.STOCK_REPORTS,
+            self.STOCK_TOTALS,
+            False
+        )
+        load_committee_statement_of_organization_mock.return_value = {
+            "receipt_date": "2019-11-30T00:00:00"
+        }
+
+        template_variables = views.get_committee(
+            "C001",
+            cycle,
+            requested_tab="about-committee",
+        )
+
+        assert template_variables["statement_of_organization"] == {
+            "receipt_date": "11/30/2019"
+        }
+        load_committee_statement_of_organization_mock.assert_called_once_with("C001")
+        load_endpoint_results_mock.assert_not_called()
+
+    def test_filings_tab_checks_raw_filings(
+        self,
+        load_committee_history_mock,
+        load_cycle_data_mock,
+        load_reports_and_totals_mock,
+        load_endpoint_results_mock,
+        load_committee_statement_of_organization_mock,
+    ):
+        cycle = views.constants.DEFAULT_TIME_PERIOD
+
+        test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
+        test_committee["cycles_has_activity"] = [cycle]
+        load_committee_history_mock.return_value = (test_committee, [], cycle)
+        load_cycle_data_mock.return_value = (False, cycle, [cycle])
+        load_reports_and_totals_mock.return_value = (
+            self.STOCK_REPORTS,
+            self.STOCK_TOTALS,
+            False
+        )
+        load_endpoint_results_mock.return_value = [{"file_number": 123}]
+
+        template_variables = views.get_committee(
+            "C001",
+            cycle,
+            requested_tab="filings",
+        )
+
+        assert template_variables["has_raw_filings"] is True
+        load_endpoint_results_mock.assert_called_once_with(
+            "/efile/filings/",
+            committee_id="C001",
+            min_receipt_date=template_variables["min_receipt_date"],
+        )
+        load_committee_statement_of_organization_mock.assert_not_called()
+
+    def test_about_partial_skips_full_page_financial_calls(
+        self,
+        load_committee_history_mock,
+        load_cycle_data_mock,
+        load_reports_and_totals_mock,
+        load_endpoint_results_mock,
+        load_committee_statement_of_organization_mock,
+    ):
+        cycle = 2018
+
+        test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
+        load_committee_history_mock.return_value = (test_committee, [], cycle)
+        load_cycle_data_mock.return_value = (False, 2018, [2018])
+        load_committee_statement_of_organization_mock.return_value = {
+            "receipt_date": "2019-11-30T00:00:00"
+        }
+
+        template_variables = views.get_committee_tab(
+            "C001",
+            cycle,
+            "about-committee",
+        )
+
+        assert template_variables["statement_of_organization"] == {
+            "receipt_date": "11/30/2019"
+        }
+        load_reports_and_totals_mock.assert_not_called()
+        load_committee_statement_of_organization_mock.assert_called_once_with("C001")
+        load_endpoint_results_mock.assert_not_called()
+
+    def test_filings_partial_skips_full_page_financial_calls(
+        self,
+        load_committee_history_mock,
+        load_cycle_data_mock,
+        load_reports_and_totals_mock,
+        load_endpoint_results_mock,
+        load_committee_statement_of_organization_mock,
+    ):
+        cycle = views.constants.DEFAULT_TIME_PERIOD
+
+        test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
+        test_committee["cycles_has_activity"] = [cycle]
+        load_committee_history_mock.return_value = (test_committee, [], cycle)
+        load_cycle_data_mock.return_value = (False, cycle, [cycle])
+        load_endpoint_results_mock.return_value = [{"file_number": 123}]
+
+        template_variables = views.get_committee_tab(
+            "C001",
+            cycle,
+            "filings",
+        )
+
+        assert template_variables["has_raw_filings"] is True
+        load_reports_and_totals_mock.assert_not_called()
+        load_endpoint_results_mock.assert_called_once_with(
+            "/efile/filings/",
+            committee_id="C001",
+            min_receipt_date=template_variables["min_receipt_date"],
+        )
+        load_committee_statement_of_organization_mock.assert_not_called()
+
+    def test_committee_about_tab_view_renders_partial(
+        self,
+        load_committee_history_mock,
+        load_cycle_data_mock,
+        load_reports_and_totals_mock,
+        load_endpoint_results_mock,
+        load_committee_statement_of_organization_mock,
+    ):
+        cycle = 2018
+
+        test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
+        load_committee_history_mock.return_value = (test_committee, [], cycle)
+        load_cycle_data_mock.return_value = (False, 2018, [2018])
+        load_committee_statement_of_organization_mock.return_value = {
+            "pdf_url": "https://docquery.fec.gov/pdf/123/123.pdf",
+            "receipt_date": "2019-11-30T00:00:00",
+        }
+        request = RequestFactory().get(
+            "/data/committee/C001/tab/about-committee/",
+            {"cycle": cycle},
+        )
+
+        response = views.committee_tab(request, "C001", "about-committee")
+
+        assert response.status_code == 200
+        assert b"About this committee" in response.content
+        assert b"Statement of organization" in response.content
+        load_reports_and_totals_mock.assert_not_called()
+        load_committee_statement_of_organization_mock.assert_called_once_with("C001")
+        load_endpoint_results_mock.assert_not_called()
+
+    def test_committee_filings_tab_view_renders_partial(
+        self,
+        load_committee_history_mock,
+        load_cycle_data_mock,
+        load_reports_and_totals_mock,
+        load_endpoint_results_mock,
+        load_committee_statement_of_organization_mock,
+    ):
+        cycle = views.constants.DEFAULT_TIME_PERIOD
+
+        test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
+        test_committee["cycles_has_activity"] = [cycle]
+        load_committee_history_mock.return_value = (test_committee, [], cycle)
+        load_cycle_data_mock.return_value = (False, cycle, [cycle])
+        load_endpoint_results_mock.return_value = [{"file_number": 123}]
+        request = RequestFactory().get(
+            "/data/committee/C001/tab/filings/",
+            {"cycle": cycle},
+        )
+
+        response = views.committee_tab(request, "C001", "filings")
+
+        assert response.status_code == 200
+        assert b"Committee filings" in response.content
+        assert b"Raw electronic filings" in response.content
+        load_reports_and_totals_mock.assert_not_called()
+        load_endpoint_results_mock.assert_called_once()
+        load_committee_statement_of_organization_mock.assert_not_called()
+
+    def test_committee_tab_view_rejects_invalid_tab(
+        self,
+        load_committee_history_mock,
+        load_cycle_data_mock,
+        load_reports_and_totals_mock,
+        load_endpoint_results_mock,
+        load_committee_statement_of_organization_mock,
+    ):
+        request = RequestFactory().get(
+            "/data/committee/C001/tab/not-a-tab/",
+            {"cycle": 2018},
+        )
+
+        with self.assertRaises(Http404):
+            views.committee_tab(request, "C001", "not-a-tab")
+
+        load_committee_history_mock.assert_not_called()
+        load_cycle_data_mock.assert_not_called()
+        load_reports_and_totals_mock.assert_not_called()
+        load_endpoint_results_mock.assert_not_called()
+        load_committee_statement_of_organization_mock.assert_not_called()
 
 
 @mock.patch.object(api_caller, "load_endpoint_results")

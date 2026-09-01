@@ -46,9 +46,7 @@ $(function() {
   });
 
   // Initialize cycle selects
-  $('.js-cycle').each(function(idx, elm) {
-    CycleSelect.build($(elm));
-  });
+  CycleSelect.init($(document));
 
   initToggles();
   downloadHydrate();
