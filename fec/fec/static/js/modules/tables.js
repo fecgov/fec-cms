@@ -249,7 +249,6 @@ export function modalRenderFactory(template, fetch) {
         if ($target.is('a')) return true;
         if ($target.is('.dropdown-msg')) return true;
 
-
         // Hide any other open rows
         // For each row
         let toggledSelfClosed = false;
