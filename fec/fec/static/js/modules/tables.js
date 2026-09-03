@@ -247,6 +247,8 @@ export function modalRenderFactory(template, fetch) {
 
         // If the click target is a link, stop here. Don't toggle any rows
         if ($target.is('a')) return true;
+        if ($target.is('.dropdown-msg')) return true;
+
 
         // Hide any other open rows
         // For each row
