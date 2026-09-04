@@ -32,16 +32,9 @@
       <li class="dropdown__item">
         {{#if large_pdf }}
           <p class="dropdown-msg">
-          .pdf not available for reports 100,000 pages or more. Request data at
+           .pdf not available for reports 100,000 pages or more. Request data at
            <a href="mailto:efiletechsupport@fec.gov" aria-label="Request data at efiletechsupport@fec.gov">efiletechsupport@fec.gov</a>
-           </p>
-          {{!-- <a class="dropdown-msg"
-          aria-label=".pdf not available for reports 100,000 pages or more. Request data at efiletechsupport@fec.gov, email technical support."
-          href="mailto:efiletechsupport@fec.gov">
-          .pdf not available for reports 100,000 pages or more. Request data at
-           <span>efiletechsupport@fec.gov</span>
-           </a> --}}
-
+          </p>
         {{else}}
           <a class="dropdown__value" target="_blank" href="{{ pdf_url }}">.pdf</a>
         {{/if}}

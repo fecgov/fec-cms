@@ -111,7 +111,7 @@ Dropdown.prototype.handleFocusAway = function(e) {
     !this.$panel.has($target).length &&
     !this.$panel.is($target) &&
     !$target.is(this.$button) &&
-    !this.$panel.has('p.dropdown-msg')
+    !this.$panel.has('p.dropdown-msg').length
   ) {
     this.hide();
   }
