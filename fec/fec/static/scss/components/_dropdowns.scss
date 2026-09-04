@@ -91,6 +91,44 @@
     width: 100%;
   }
 
+  .dropdown-msg {
+    color: $neutral-base !important;;
+    display: block;
+    line-height: 1.7rem;
+    padding: u(.5rem 1rem .5rem .7rem);
+    cursor: default;
+
+    &:hover {
+      background-color: $gray-light;
+    }
+
+    a {
+      color: $base !important;
+      border-bottom: 1px dotted $primary;
+      &:hover {
+        border-bottom: 1px dotted $primary-contrast;
+      }
+    }
+  }
+
+  /* .dropdown-msg {
+    color: $neutral-base !important;;
+    display: block;
+    line-height: 1.7rem;
+    padding: u(.5rem 1rem .5rem .7rem);
+
+    &:hover {
+      background-color: $gray-light;
+    }
+
+    span {
+      color: $base !important;
+      border-bottom: 1px dotted $primary;
+      &:hover {
+        border-bottom: 1px dotted $primary-contrast;
+      }
+    }
+  } */
   // For scrolling dropdowns, force the scrollbars to appear,
   // flip its x to move the scroll to the left, then flip its content back
   &.dropdown-scrolling {
@@ -124,7 +162,7 @@
     color: $base;
     display: block;
     margin: 0;
-    padding: u(0.5rem 1rem 0.5rem 1.5rem);
+    padding: u(.5rem .75rem);
     max-width: 100%;
     white-space: nowrap;
 
