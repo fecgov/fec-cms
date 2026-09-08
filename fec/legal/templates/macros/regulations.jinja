@@ -1,0 +1,14 @@
+{% macro previous_links(citations) -%}
+  {% for citation in citations %}
+    {% if not loop.first %}{% if citation.transition == 'then' %}, then{% else %} and{% endif %}{% endif %}
+    <a href="{{ citation.url }}"{% if citation.external %} target="_blank" rel="noopener noreferrer"{% endif %}>§ {{ citation.citation }}</a>
+  {% endfor %}
+{%- endmacro %}
+
+{% macro related(section, category, label, spacing='') %}
+  <div class="rich-text {{ spacing }}" aria-live="polite"
+       data-regulation-related-url="/legal/regulations/{{ section }}/related/{{ category }}/"
+       data-regulation-related-label="{{ label }}">
+    <a href="/legal/regulations/{{ section }}/related/{{ category }}/">View {{ label }}</a>
+  </div>
+{% endmacro %}

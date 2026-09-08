@@ -1,8 +1,7 @@
 from django.urls import re_path
 from django.views.generic.base import RedirectView
-from django.conf import settings
 
-from legal import views
+from legal import regulations, views
 from data import views_datatables
 
 urlpatterns = [
@@ -55,6 +54,29 @@ urlpatterns = [
 
     re_path(r'^legal/search/regulations/$', views.legal_doc_search_regulations),
     re_path(r'^data/legal/search/regulations/$', views.legal_doc_search_regulations),  # TODO: retire
+
+    re_path(
+        r'^legal/regulations/subchapter/(?P<identifier>[\w.-]+)/$',
+        regulations.regulation_hierarchy_page,
+        {'hierarchy_type': 'subchapter'},
+    ),
+    re_path(
+        r'^legal/regulations/part/(?P<part>[\w.-]+)/subpart/(?P<identifier>[\w.-]+)/$',
+        regulations.regulation_hierarchy_page,
+        {'hierarchy_type': 'subpart'},
+    ),
+    re_path(
+        r'^legal/regulations/part/(?P<identifier>[\w.-]+)/$',
+        regulations.regulation_hierarchy_page,
+        {'hierarchy_type': 'part'},
+    ),
+    re_path(
+        r'^legal/regulations/(?P<section>[\w.-]+)/related/'
+        r'(?P<related_type>rulemakings|advisory-opinions|murs)/$',
+        regulations.regulation_related_content,
+    ),
+    re_path(r'^legal/regulations/(?P<section>[\w.-]+)/$', regulations.regulation_page),
+    re_path(r'^data/legal/regulations/(?P<section>[\w.-]+)/$', regulations.regulation_page),  # TODO: retire
 
 
     # Search

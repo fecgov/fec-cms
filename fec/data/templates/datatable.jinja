@@ -42,7 +42,7 @@
             {% endif %}
           </noscript>
           <noscript>
-          {% if query %}
+          {% if query is mapping and query['page'] %}
             <div class="results-info">
               <div class="dt-paging paging_simple">
                 {% if query['page']|int > 1 %}

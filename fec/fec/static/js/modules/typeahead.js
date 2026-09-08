@@ -65,6 +65,13 @@ function formatCitationRegulation(result) {
   };
 }
 
+function formatCitationStatute(result) {
+  return {
+    name: result.citation_text,
+    type: 'citationStatute'
+  };
+}
+
 function getUrl_names(resource) {
   return URI(window.API_LOCATION)
     .path([window.API_VERSION, 'names', resource, ''].join('/'))
@@ -156,7 +163,7 @@ const citationStatuteEngine = createEngine({
     url: getUrl_legal('citation/statute'),
     wildcard: '%QUERY',
     transform: function(response) {
-      return _map(response.citations, formatCitationRegulation);
+      return _map(response.citations, formatCitationStatute);
     }
   }
 });
@@ -295,95 +302,31 @@ export const legalDataset = {
   }
 };
 
-const regulationDataset = {
-  name: 'regulation',
-  display: 'name',
-  limit: 10,
-  source: citationRegulationEngine,
-  templates: {
-    header: '<span class="tt-suggestion__header">Select a citation:</span>',
-    pending:
-      '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
-    notFound: compileHBS(''), // This has to be empty to not show anything
-    suggestion: function(datum) {
-      return (
-        '<span>' + datum.name + '</span>'
-      );
+function citationDataset(name, source) {
+  return {
+    name: name,
+    display: 'name',
+    limit: 10,
+    source: source,
+    templates: {
+      header: '<span class="tt-suggestion__header">Select a citation:</span>',
+      pending: '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
+      notFound: compileHBS(''),
+      suggestion: compileHBS('<span>{{ name }}</span>')
     }
-  }
-};
+  };
+}
 
-const aoRegulatoryCitationDataset = {
-  name: 'aoRegulatoryCitation',
-  display: 'name',
-  limit: 10,
-  source: citationRegulationEngine,
-  templates: {
-    header: '<span class="tt-suggestion__header">Select a citation:</span>',
-    pending:
-      '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
-    notFound: compileHBS(''), // This has to be empty to not show anything
-    suggestion: function(datum) {
-      return (
-        '<span>' + datum.name + '</span>'
-      );
-    }
-  }
-};
-
-const aoStatutoryCitationDataset = {
-  name: 'aoStatutoryCitation',
-  display: 'name',
-  limit: 10,
-  source: citationStatuteEngine,
-  templates: {
-    header: '<span class="tt-suggestion__header">Select a citation:</span>',
-    pending:
-      '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
-    notFound: compileHBS(''), // This has to be empty to not show anything
-    suggestion: function(datum) {
-      return (
-        '<span>' + datum.name + '</span>'
-      );
-    }
-  }
-};
-
-const caseRegulatoryCitationDataset = {
-  name: 'caseRegulatoryCitation',
-  display: 'name',
-  limit: 10,
-  source: citationRegulationEngine,
-  templates: {
-    header: '<span class="tt-suggestion__header">Select a citation:</span>',
-    pending:
-      '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
-    notFound: compileHBS(''), // This has to be empty to not show anything
-    suggestion: function(datum) {
-      return (
-        '<span>' + datum.name + '</span>'
-      );
-    }
-  }
-};
-
-const caseStatutoryCitationDataset = {
-  name: 'caseStatutoryCitation',
-  display: 'name',
-  limit: 10,
-  source: citationStatuteEngine,
-  templates: {
-    header: '<span class="tt-suggestion__header">Select a citation:</span>',
-    pending:
-      '<span class="tt-suggestion__loading">Loading citations&hellip;</span>',
-    notFound: compileHBS(''), // This has to be empty to not show anything
-    suggestion: function(datum) {
-      return (
-        '<span>' + datum.name + '</span>'
-      );
-    }
-  }
-};
+const regulationDataset = citationDataset('regulation', function(query, sync, async) {
+  const onlyTitle11 = callback => results => callback(
+    results.filter(result => /^11\s+C\.?F\.?R\.?\b/i.test(result.name))
+  );
+  citationRegulationEngine.ttAdapter()(query, onlyTitle11(sync), onlyTitle11(async));
+});
+const aoRegulatoryCitationDataset = citationDataset('aoRegulatoryCitation', citationRegulationEngine);
+const aoStatutoryCitationDataset = citationDataset('aoStatutoryCitation', citationStatuteEngine);
+const caseRegulatoryCitationDataset = citationDataset('caseRegulatoryCitation', citationRegulationEngine);
+const caseStatutoryCitationDataset = citationDataset('caseStatutoryCitation', citationStatuteEngine);
 
 export const datasets = {
   candidates: candidateDataset,

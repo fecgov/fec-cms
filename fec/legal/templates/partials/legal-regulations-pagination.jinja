@@ -1,28 +1,28 @@
-<div class="results-info">
-<div class="dataTables_info">
-{% if current_page > 1 %}
-{{ current_page * limit - limit + 1 }}
-{% else %}
-{{ current_page }}
+{% if total_count %}
+<nav class="results-info u-border-top-base legal-regulations-pagination" aria-label="Regulations search results pagination">
+  <div class="dataTables_info">
+    Showing {{ pagination.start }}&ndash;{{ pagination.end }} of {{ total_count }} results
+  </div>
+  {% if total_pages > 1 %}
+  <div class="dataTables_paginate">
+    {% if pagination.previous_url %}
+      <a class="paginate_button previous" href="{{ pagination.previous_url }}">Previous</a>
+    {% else %}
+      <span class="paginate_button previous is-disabled">Previous</span>
+    {% endif %}
+    {% for page in pagination.pages %}
+      {% if page == current_page %}
+        <span class="paginate_button current" aria-current="page">{{ page }}</span>
+      {% else %}
+        <a class="paginate_button" href="{{ pagination.page_urls[page] }}">{{ page }}</a>
+      {% endif %}
+    {% endfor %}
+    {% if pagination.next_url %}
+      <a class="paginate_button next" href="{{ pagination.next_url }}">Next</a>
+    {% else %}
+      <span class="paginate_button next is-disabled">Next</span>
+    {% endif %}
+  </div>
+  {% endif %}
+</nav>
 {% endif %}
-&ndash;
-{% if current_page * limit < total_count %}
-{{ current_page * limit }} 
-{% else %}
-{{ total_count }}
-{% endif %}
-of {{ total_count }}</div>
-<div class="dataTables_paginate">
-{% if current_page > 1 %}
-<a class="paginate_button previous" href="/data/legal/search/regulations/?search={{ query }}&page={{ current_page | int - 1 }}">Previous</a>
-{% else %}
-<span class="paginate_button previous is-disabled">Previous</span>
-{% endif %}
-{% if total_count / limit  > current_page %}
-<a class="paginate_button next" href="/data/legal/search/regulations/?search={{ query }}&page={{ current_page | int + 1 }}">Next</a>
-{# <h1>{{ results.page | int }}</h1> #}
-{% else %}
-<span class="paginate_button next is-disabled">Next</span>
-{% endif %}
-</div>
-</div>

@@ -102,6 +102,11 @@ Search legal resources
           {% endif %}
 
           {% elif category == "regulations" %}
+          {% if results.get("regulations_error") %}
+          <div class="message message--error" role="alert">
+            <p>{{ results.get("regulations_error") }}</p>
+          </div>
+          {% endif %}
           {% if results["total_" + category] %}
           {% with regulations = results[category] %}
           {% include 'partials/legal-search-results-regulation.jinja' %}

@@ -1,0 +1,16 @@
+{% if error_message %}
+  <div>{{ error_message }}</div>
+{% elif fec_history.explanations %}
+  <ul class="list--unstyled">
+    {% for document in fec_history.explanations %}
+      <li class="u-margin--bottom">
+        {% if document.rm_no %}
+          <a href="{{ document.url }}">REG {{ document.rm_no }}</a>
+          <div>{{ document.rm_name }}</div>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <div>No rulemaking documents found for this regulatory citation.</div>
+{% endif %}

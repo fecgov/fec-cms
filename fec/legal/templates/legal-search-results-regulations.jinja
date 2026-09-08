@@ -1,6 +1,7 @@
 {% extends "layouts/legal-doc-search-results.jinja" %}
 {% import 'macros/legal.jinja' as legal %}
-{% set document_type_display_name = 'Regulations' %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+{% set document_type_display_name = 'Title 11 regulations' %}
 
 {% block header %}
 <header class="page-header slab slab--primary">
@@ -8,13 +9,37 @@
 </header>
 {% endblock %}
 
+
 {% block filters %}
     <div class="filters__inner">
       {{ legal.keyword_search(result_type, query, error_message=legal_search_error if legal_search_error and 'search' in legal_search_error_fields|default([]) else None) }}
+      <div class="filter">
+      {{ typeahead.field('regulatory_citation', 'Regulatory citation', False, dataset='regulations', allow_text=False, single_select=True) }}
+      </div>
     </div>
 {% endblock %}
 
+{% block message %}
+{% if regulations_api_error %}
+  <div class="message message--error" role="alert">
+    <p>{{ regulations_api_error }}</p>
+  </div>
+{% endif %}
+{% endblock %}
+
 {% block results %}
+{% if is_browse %}
+{% with regulation_parts = results.regulation_parts %}
+<div class="data-container__datatable">
+  {% if results.regulation_chapter %}
+  <div class="legal-regulation-browser__heading">
+    <h2>Chapter I &mdash; {{ results.regulation_chapter.label_description }}</h2>
+  </div>
+  {% endif %}
+  {% include 'partials/legal-regulation-parts.jinja' %}
+</div>
+{% endwith %}
+{% else %}
 {% with regulations = results.regulations %}
 <div class="data-container__datatable">
   {% include 'partials/legal-search-results-regulation.jinja' %}
@@ -24,4 +49,5 @@
 {% with results=results %}
 {% include 'partials/legal-regulations-pagination.jinja' %}
 {% endwith %}
+{% endif %}
 {% endblock %}

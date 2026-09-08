@@ -1,0 +1,238 @@
+{% extends "legal-search-results-regulations.jinja" %}
+{% import 'macros/legal.jinja' as legal %}
+{% import 'macros/regulations.jinja' as regulation_ui %}
+{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
+
+{% block title %}
+  {% if regulation %}
+    {{ regulation.heading_text }}
+  {% else %}
+    11 CFR {{ section }}{% if reserved_label %} [Reserved]{% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block message %}
+  {% if regulations_api_error %}
+    <div class="message message--error" role="alert">
+      <p>{{ regulations_api_error }}</p>
+    </div>
+  {% elif historical_only %}
+    <div class="message message--info" role="status">
+      {% if reserved_label %}
+        <p>This section is reserved in the current eCFR and has no regulatory text. Historical and related legal records are shown in the timeline of changes section.</p>
+      {% else %}
+        <p>This section does not have current eCFR text. Historical and related legal records are shown in the timeline of changes section.</p>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block filters %}
+  <div class="filters__inner">
+    {{ legal.keyword_search(result_type, query) }}
+    {{ typeahead.field('regulatory_citation', 'Regulatory citation', False, dataset='regulations', allow_text=False, single_select=True) }}
+  </div>
+{% endblock %}
+
+{% block title_action %}
+  <a
+    class="button--alt button--back legal-regulation__back-link t-sans"
+    href="{{ return_url }}"
+  >Back to regulation search results</a>
+{% endblock %}
+
+{% block results_main_open %}
+  <div class="legal-regulation__main-column">
+{% endblock %}
+
+{% block results_main_close %}
+  </div>
+{% endblock %}
+
+{% block results_sidebar %}
+  <div class="sidebar-container legal-regulation__sidebar-container">
+    <aside class="sidebar sidebar--neutral legal-regulation__sidebar">
+      <h2 class="sidebar__title">eCFR timeline of changes</h2>
+      <div class="sidebar__content">
+        {% if timeline_api_error %}
+          <p>{{ timeline_api_error }}</p>
+        {% elif timeline %}
+          <p class="t-note">eCFR comparison links are available from January 3, 2017 onward. The earliest available eCFR version is December 23, 2016. For earlier Title 11 history, reference FEC Historical E&amp;J records.</p>
+          <ul class="list--unstyled">
+            {% for item in timeline %}
+              <li class="u-margin--bottom">
+                <div class="t-bold">{{ item.action }}</div>
+                {% if item.issue_date %}
+                  <div class="t-note">Issue date: {{ item.issue_date }}</div>
+                {% endif %}
+                {% if item.amendment_date and item.amendment_date != item.issue_date %}
+                  <br />
+                  <div class="t-note">Amendment date: {{ item.amendment_date }}</div>
+                {% endif %}
+                {% if item.compare_url %}
+                  <div><a href="{{ item.compare_url }}">Compare with current eCFR</a></div>
+                {% elif item.historical_url %}
+                  <div><a href="{{ item.historical_url }}">Open historical version</a></div>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No eCFR timeline data available for this section.</p>
+        {% endif %}
+      </div>
+      <h2 class="sidebar__title">FEC historical E&amp;J records</h2>
+      <div class="sidebar__content">
+        {% if historical_regulation_event_groups %}
+          <p class="t-note u-padding--bottom">Historical E&amp;J records sometimes discuss the provision under a broader parent citation. For example, material relevant to former § 100.7(b)(11)(i)(B)(1) is cited under § 100.7(b)(11)(i)(B).</p>
+          <ul class="list--unstyled legal-regulation__history-list">
+            {% for group in historical_regulation_event_groups %}
+              <li class="legal-regulation__history-record" id="{{ group.anchor_id }}">
+                <div class="legal-regulation__history-citation">
+                  {{ group.section }}{% if group.subsection %}{{ group.subsection }}{% endif %}
+                </div>
+                <div class="legal-regulation__history-details">
+                  {% if group.redesignation %}
+                    <div class="legal-regulation__previous-citation">
+                      {% if group.previous_citation_preview %}
+                        {% set preview = group.previous_citation_preview %}
+                        {% set accordion_prefix = 'previous-citation-' ~ section|replace('.', '-') ~ '-history-' ~ loop.index0 %}
+                        {% include 'partials/legal-regulation-previous-citation.jinja' %}
+                      {% elif group.redesignation.previous_citations %}
+                        Previously cited at
+                        {{ regulation_ui.previous_links(group.redesignation.previous_citations) }}
+                      {% else %}
+                        {{ group.redesignation.description }}
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                  <ul class="list--unstyled">
+                    {% for event in group.events %}
+                      <li class="legal-regulation__history-event">
+                        {% if event.label %}
+                          {% if event.source_url %}<a href="{{ event.source_url }}" target="_blank" rel="noopener noreferrer">{% endif %}
+                          <span class="legal-regulation__history-subject">{{ event.label }}</span>{% if event.date %} <span class="legal-regulation__history-date">({{ event.date }})</span>{% endif %}
+                          {% if event.source_url %}</a>{% endif %}
+                        {% elif event.date %}
+                          <span class="legal-regulation__history-date">({{ event.date }})</span>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No FEC historical E&amp;J records available for this section.</p>
+        {% endif %}
+      </div>
+      {% if historical_redesignation_events %}
+        <h2 class="sidebar__title">Redesignations</h2>
+        <div class="sidebar__content">
+          <ul class="list--unstyled">
+            {% for event in historical_redesignation_events %}
+              <li class="u-margin--bottom">
+                {{ event.section }}{% if event.subsection %}{{ event.subsection }}{% endif %} -
+                {% if event.previous_citation_preview %}
+                  {% set preview = event.previous_citation_preview %}
+                  {% set accordion_prefix = 'previous-citation-' ~ section|replace('.', '-') ~ '-redesignation-' ~ loop.index0 %}
+                  {% include 'partials/legal-regulation-previous-citation.jinja' %}
+                {% elif event.previous_citations %}
+                  Previously cited at
+                  {{ regulation_ui.previous_links(event.previous_citations) }}
+                {% else %}
+                  {{ event.label }}
+                {% endif %}
+                {% if event.date %} ({{ event.date }}){% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </aside>
+  </div>
+{% endblock %}
+
+{% block results %}
+<div class="legal-regulation">
+  <div class="row legal-regulation__layout">
+    <div class="main__content">
+      <header class="legal-regulation__section-heading">
+        {% if section_nav.part %}
+          <h2 class="legal-regulation__part t-bold">Part {{ section_nav.part.no }} &mdash; {{ section_nav.part.description }}</h2>
+        {% endif %}
+        {% if not regulation and reserved_label %}
+          <h3>{{ reserved_label }}</h3>
+        {% endif %}
+      </header>
+      {% if regulation or reserved_label %}
+        <section class="content__section">
+          {% if regulation %}
+            <div class="rich-text">
+              <h3>{{ regulation.heading|safe }}</h3>
+              {% for block in regulation.body %}
+                {{ block|safe }}
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% if section_nav.previous or section_nav.next %}
+            <div class="grid grid--2-wide u-border-top-base u-padding--top u-margin--top">
+              <div class="grid__item">
+                {% if section_nav.previous %}
+                  <a class="button--alt button--back legal-regulation__previous-section-link" href="{{ section_nav.previous.url }}">
+                    <div>Previous section - § {{ section_nav.previous.no }}</div>
+                  </a>
+                  <h3 class="t-sans">{{ section_nav.previous.description }}</h3>
+                {% endif %}
+              </div>
+              <div class="grid__item t-right-aligned">
+                {% if section_nav.next %}
+                  <a class="button--alt button--go legal-regulation__next-section-link" href="{{ section_nav.next.url }}">
+                    <div>Next section - § {{ section_nav.next.no }}</div>
+                  </a>
+                  <h3 class="t-sans">{{ section_nav.next.description }}</h3>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        </section>
+      {% endif %}
+
+      <section id="legal-citations" class="content__section">
+        <div class="sidebar--neutral t-sans">
+          <h4 class="sidebar__title">Legal citations</h4>
+          <div class="sidebar__content">
+            <div class="grid grid--2-wide">
+              {# Statutes #}
+              <div class="grid__item">
+                <div class="t-bold">Statutes</div>
+                <div class="rich-text u-margin--bottom--large">
+                  {% if regulation.statutory_citations %}
+                    <ul class="list--unstyled">
+                      {% for citation in regulation.statutory_citations %}
+                        <li class="u-margin--bottom">{% if citation.url %}<a href="{{ citation.url }}">{{ citation.label }}</a>{% else %}{{ citation.label }}{% endif %}</li>
+                      {% endfor %}
+                    </ul>
+                  {% else %}
+                    <div>No statutory citations found for this regulatory citation.</div>
+                  {% endif %}
+                </div>
+                <div class="t-bold">Rulemakings</div>
+                {{ regulation_ui.related(section, 'rulemakings', 'rulemakings', '') }}
+              </div>
+              {# AOs and MURs #}
+              <div class="grid__item">
+                <div class="t-bold">AOs citing this regulation</div>
+                {{ regulation_ui.related(section, 'advisory-opinions', 'advisory opinions', 'u-margin--bottom--large') }}
+                <div class="t-bold">MURs citing this regulation</div>
+                {{ regulation_ui.related(section, 'murs', 'MURs', '') }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+{% endblock %}

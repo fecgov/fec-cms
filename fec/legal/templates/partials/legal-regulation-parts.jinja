@@ -1,0 +1,35 @@
+<div class="simple-table simple-table--responsive simple-table--display legal-regulation-browser__table" role="table" aria-label="Title 11 parts">
+  <div class="simple-table__header" role="row">
+    <div class="simple-table__header-cell" role="columnheader">Part</div>
+    <div class="simple-table__header-cell" role="columnheader">Description</div>
+    <div class="simple-table__header-cell" role="columnheader">Sections</div>
+    <div class="simple-table__header-cell" role="columnheader"><span class="u-visually-hidden">Open part</span></div>
+  </div>
+  <div class="simple-table__row-group" role="rowgroup">
+  {% for part in regulation_parts %}
+    {% if part.type == 'subchapter' %}
+      <div class="legal-regulation-browser__heading" role="row">
+        <div role="cell" aria-colspan="4">
+        <h2 class="t-sans">{{ part.citation }}{% if part.description and part.description != part.citation %} &mdash; {{ part.description }}{% endif %}{% if part.reserved %} <span class="t-note">[Reserved]</span>{% endif %}</h2>
+        </div>
+      </div>
+    {% else %}
+    <div class="simple-table__row legal-search-result legal-regulation-browser__row legal-regulation-browser__row--level-{{ part.level }}" role="row">
+      <div class="simple-table__cell" role="cell">
+        <h3 class="t-sans">{{ part.identifier }}</h3>
+      </div>
+      <div class="simple-table__cell" role="cell">
+        <h3 class="t-sans"><a class="legal-search-result__name" title="{{ part.citation }}" href="{{ part.url }}">{{ part.description }}</a></h3>
+      </div>
+      <div class="simple-table__cell" role="cell">
+        <p>{% if part.section_range %}{{ part.section_range }}{% else %}&mdash;{% endif %}</p>
+      </div>
+      <div class="simple-table__cell legal-regulation-browser__action" role="cell">
+        <a class="legal-regulation-browser__link icon i-arrow-right-circle" title="Open {{ part.citation }}" aria-label="Open {{ part.citation }}" href="{{ part.url }}">
+        </a>
+      </div>
+    </div>
+    {% endif %}
+  {% endfor %}
+  </div>
+</div>

@@ -87,6 +87,7 @@ export default function FilterTypeahead(selector, dataset, allowText) {
   this.$elm = $(selector);
   this.dataset = dataset;
   this.allowText = allowText;
+  this.singleSelect = this.$elm.data('single-select') !== undefined;
 
   this.$field = this.$elm.find('input[type="text"]');
   this.fieldName = this.$elm.data('name') || this.$field.attr('name');
@@ -150,6 +151,10 @@ FilterTypeahead.prototype.setFirstItem = function() {
  */
 FilterTypeahead.prototype.handleSelected = function(e, datum) {
   let identifier = datum.id || datum.name;
+
+  if (this.singleSelect) {
+    this.$selected.empty();
+  }
 
   const id = formatId(identifier);
   this.appendCheckbox({

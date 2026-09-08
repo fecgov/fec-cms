@@ -1,0 +1,27 @@
+<div class="js-accordion accordion--neutral" data-content-prefix="{{ accordion_prefix }}">
+  <button type="button" class="js-accordion-trigger accordion__button" aria-expanded="false">
+    {{ preview.label }}
+  </button>
+  <div class="accordion__content" aria-hidden="true">
+    <ul class="list--unstyled">
+      {% for event in preview.events %}
+        <li class="u-margin--bottom">
+          {% if event.source_url %}<a href="{{ event.source_url }}" target="_blank" rel="noopener noreferrer">{% endif %}
+          {{ event.section }}{% if event.subsection %}{{ event.subsection }}{% endif %} — {{ event.label }}{% if event.date %} ({{ event.date }}){% endif %}
+          {% if event.source_url %}</a>{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+    {% if preview.earlier_citations %}
+      <p class="t-note">
+        This provision has earlier citations:
+        {% for citation in preview.earlier_citations %}{% if not loop.first %}, {% endif %}<a href="{{ citation.url }}"{% if citation.external %} target="_blank" rel="noopener noreferrer"{% endif %}>§ {{ citation.citation }}</a>{% endfor %}.
+        These links are not expanded here.
+      </p>
+    {% endif %}
+    <p>
+      View the full history for
+      {% for citation in preview.history_citations %}{% if not loop.first %}{% if citation.transition == 'then' %}, then{% else %} and{% endif %}{% endif %} <a href="{{ citation.url }}"{% if citation.external %} target="_blank" rel="noopener noreferrer"{% endif %}>§ {{ citation.citation }}</a>{% endfor %}
+    </p>
+  </div>
+</div>

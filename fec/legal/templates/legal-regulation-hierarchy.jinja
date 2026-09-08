@@ -1,0 +1,56 @@
+{% extends "legal-search-results-regulations.jinja" %}
+
+{% set hierarchy_title = hierarchy.type|title if hierarchy else 'Regulations' %}
+
+{% block title %}
+  {% if hierarchy %}{{ hierarchy_title }} {{ hierarchy.identifier }}{% else %}Regulations{% endif %}
+{% endblock %}
+
+{% block title_action %}
+  <a class="button--alt button--back legal-regulation__back-link legal-regulation-browser__back-link t-sans" href="{{ return_url }}">Back to regulation search results</a>
+{% endblock %}
+
+{% block message %}
+  {% if hierarchy_error %}
+    <div class="message message--error" role="alert"><p>{{ hierarchy_error }}</p></div>
+  {% endif %}
+{% endblock %}
+
+{% block results %}
+  {% if hierarchy %}
+    <div class="data-container__datatable">
+      <div class="legal-regulation-hierarchy">
+        <header class="legal-regulation__section-heading">
+          <h2>{{ hierarchy_title }} {{ hierarchy.identifier }}{% if hierarchy.description %} &mdash; {{ hierarchy.description }}{% endif %}</h2>
+        </header>
+        <div class="simple-table simple-table--responsive simple-table--display" role="table" aria-label="Regulation contents">
+          <div class="simple-table__header" role="row">
+            <div class="simple-table__header-cell cell--15" role="columnheader">Citation</div>
+            <div class="simple-table__header-cell" role="columnheader">Description</div>
+          </div>
+          <div class="simple-table__row-group" role="rowgroup">
+            {% for item in hierarchy.contents %}
+              {% if item.type == 'section' %}
+                <div class="simple-table__row legal-search-result" role="row">
+                  <div class="simple-table__cell" role="cell">
+                    <a title="Section {{ item.identifier }}" href="{{ item.url }}">&sect; {{ item.identifier }}</a>
+                  </div>
+                  <div class="simple-table__cell" role="cell">
+                    <div class="legal-search-result__name">{{ item.description }}{% if item.reserved %} <span class="t-note">[Reserved]</span>{% endif %}</div>
+                  </div>
+                </div>
+              {% else %}
+                <div class="simple-table__row legal-search-result" role="row">
+                  <div class="simple-table__cell" role="cell"><a href="{{ item.url }}"><strong>{{ item.type|title }} {{ item.identifier }}</strong></a></div>
+                  <div class="simple-table__cell" role="cell"><div class="legal-search-result__name">{{ item.description }}</div></div>
+                </div>
+              {% endif %}
+            {% else %}
+              <div role="row"><div role="cell" aria-colspan="2" class="u-padding--top u-padding--bottom">No regulations found.</div></div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

@@ -32,7 +32,7 @@
       <div class="filters__aside">
     <div class="button--notebook u-margin--top t-sans">Use the legal search guide to learn more about <a href="/legal-resources/how-to-use-fec-legal-search-systems/">how to use FEC legal search systems</a>.</div>
   </div>
-      <form id="category-filters" action="/data/legal/search/{{ result_type | replace('_', '-') }}">
+      <form id="category-filters" action="/data/legal/search/{{ result_type | replace('_', '-') }}/">
         <input id="search-type" type="hidden" name="search_type" value="{{ result_type }}">
         {% block filters %}
         {% endblock %}
@@ -40,9 +40,11 @@
     </div>
   </div>
   <div id="results-{{ result_type }}" class="content__section u-no-padding">
+    {% block results_main_open %}{% endblock %}
     <div class="data-container__widgets u-no-border">
       <div class="data-container__head">
         <h1 class="data-container__title">{{ document_type_display_name }}</h1>
+        {% block title_action %}{% endblock %}
       </div>
       {% if document_type_display_name == 'Statutes' %}
       <div class="u-padding--left u-padding--right">
@@ -77,6 +79,8 @@
       </div>
     </div>
     {% endif %}
+    {% block results_main_close %}{% endblock %}
+    {% block results_sidebar %}{% endblock %}
   </div>
 </section>
 
@@ -263,16 +267,18 @@
    
     
 
-  // For incrment/decrement field
-
-document.querySelector('.increment-decrement__container input').addEventListener("input", function(event) {
-  if (event.target.value == 0){
-    event.target.previousElementSibling.setAttribute('disabled','disabled');
+  // Some legal pages do not include a stepper control.
+  const incrementInput = document.querySelector('.increment-decrement__container input');
+  if (incrementInput) {
+    incrementInput.addEventListener("input", function(event) {
+      if (event.target.value == 0){
+        event.target.previousElementSibling.setAttribute('disabled','disabled');
+      }
+      else {
+        event.target.previousElementSibling.removeAttribute('disabled');
+      }
+    });
   }
-  else {
-   event.target.previousElementSibling.removeAttribute('disabled');
-  }
-   });
 
 
 const stepUpDown = function(event) {

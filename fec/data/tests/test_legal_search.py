@@ -11,7 +11,7 @@ from django.test import TestCase
 from data import api_caller
 from data import ecfr_caller
 from data import legal_test_data
-from legal import views
+from legal import regulations, views
 from legal.views import parse_query
 
 client = Client()
@@ -122,7 +122,7 @@ class TestLegalSearch(TestCase):
         )
 
         # Apply transformation
-        updated_ecfr_query_string = views.transform_ecfr_query_string(
+        updated_ecfr_query_string = regulations.transform_ecfr_query_string(
             input_query_string
         )
 

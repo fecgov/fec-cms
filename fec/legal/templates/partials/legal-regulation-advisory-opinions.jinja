@@ -1,0 +1,11 @@
+{% if error_message %}
+  <div>{{ error_message }}</div>
+{% elif advisory_opinions %}
+  {% for advisory_opinion in advisory_opinions %}
+    <div><a href="/data/legal/advisory-opinions/{{ advisory_opinion.ao_no }}/">AO {{ advisory_opinion.ao_no }}</a></div>
+    {% if advisory_opinion.name %}<div><i>{{ advisory_opinion.name }}</i></div>{% endif %}
+    {% if not loop.last %}<br>{% endif %}
+  {% endfor %}
+{% else %}
+  <div>No advisory opinions found for this regulatory citation.</div>
+{% endif %}

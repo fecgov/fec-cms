@@ -2,7 +2,7 @@
 // import './setup.js';
 import * as sinonChai from 'sinon-chai';
 import { expect, use } from 'chai';
-import { spy } from 'sinon/pkg/sinon-esm';
+import { spy, stub } from 'sinon/pkg/sinon-esm';
 use(sinonChai);
 // (end common)
 
@@ -41,6 +41,41 @@ describe('FilterTypeahead', function() {
   it('should initialize', function() {
     var typeahead = this.FilterTypeahead.$elm.find('.twitter-typeahead');
     expect(typeahead.length).to.equal(1);
+  });
+
+  it('replaces selections only for single-select filters', function() {
+    for (const singleSelect of [false, true]) {
+      this.FilterTypeahead.singleSelect = singleSelect;
+      this.FilterTypeahead.$selected.empty();
+      this.FilterTypeahead.handleSelected({}, { id: '1', name: 'First' });
+      this.FilterTypeahead.handleSelected({}, { id: '2', name: 'Second' });
+      expect(this.FilterTypeahead.$selected.find('input').length).to.equal(singleSelect ? 1 : 2);
+    }
+  });
+
+  it('escapes citation suggestion text from the API', function() {
+    const suggestion = datasets.regulations.templates.suggestion({ name: '<img src=x onerror=alert(1)>' });
+    expect(suggestion).to.contain('&lt;img');
+    expect(suggestion).not.to.contain('<img');
+  });
+
+  it('limits Title 11 only in the regulation reader', function() {
+    const engine = datasets.aoRegulatoryCitations.source;
+    const records = [{ name: '11 CFR 100.1' }, { name: '11 C.F.R. 100.2' }, { name: '31 CFR 900.1' }];
+    const adapter = stub(engine, 'ttAdapter').returns((query, sync, async) => {
+      sync(records);
+      async(records);
+    });
+    try {
+      const sync = spy();
+      const async = spy();
+      datasets.regulations.source('CFR', sync, async);
+      expect(sync.firstCall.args[0]).to.deep.equal(records.slice(0, 2));
+      expect(async.firstCall.args[0]).to.deep.equal(records.slice(0, 2));
+      expect(datasets.caseRegulatoryCitations.source).to.equal(engine);
+    } finally {
+      adapter.restore();
+    }
   });
 
   it('should set firstItem', function() {
