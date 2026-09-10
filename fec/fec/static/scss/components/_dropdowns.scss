@@ -102,8 +102,12 @@
     &:hover {
       background-color: $gray-light;
     }
+    
     a {
       color: $base !important;
+      &:hover {
+        border-bottom: 1px dotted $aqua !important;
+      }
     }
   }
 
