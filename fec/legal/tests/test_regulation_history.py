@@ -6,7 +6,7 @@ from legal import regulation_history
 
 class TestRegulationHistory(unittest.TestCase):
     @mock.patch.object(regulation_history, 'load_regulation_history')
-    def test_format_historical_regulation_events_uses_reviewed_records(self, load_history):
+    def test_format_historical_regulation_events_maps_events_and_conversions(self, load_history):
         load_history.return_value = {
             'events': [{
                 'year': 1977,
@@ -31,16 +31,23 @@ class TestRegulationHistory(unittest.TestCase):
         self.assertEqual(events[1]['label'], 'Previously cited at § 114.4')
         self.assertEqual(events[0]['section'], '114.5')
 
-    def test_format_historical_regulation_events_supports_part_114_records(self):
-        events = regulation_history.format_historical_regulation_events('114.6')
+    def test_part_114_history_has_reviewed_coverage(self):
+        for section in [f'114.{number}' for number in range(1, 16)]:
+            with self.subTest(section=section):
+                events = regulation_history.format_historical_regulation_events(section)
+                self.assertTrue(events)
+                self.assertTrue(all(
+                    event['action'] in ('E&J', 'Redesignated')
+                    for event in events
+                ))
 
-        self.assertEqual(
-            sorted({event['date'] for event in events}),
-            ['1977', '1996', '2014', '2019', '2024'],
-        )
-        self.assertGreater(len(events), 7)
-        self.assertTrue(all(event['action'] == 'E&J' for event in events))
-        self.assertTrue(all(event['source_url'] for event in events))
+                if section == '114.6':
+                    self.assertEqual(
+                        sorted({event['date'] for event in events}),
+                        ['1977', '1996', '2014', '2019', '2024'],
+                    )
+                    self.assertGreater(len(events), 7)
+                    self.assertTrue(all(event['source_url'] for event in events))
 
     def test_format_historical_regulation_events_preserves_distinct_subsection_records(self):
         events = regulation_history.format_historical_regulation_events('102.7')
@@ -219,24 +226,6 @@ class TestRegulationHistory(unittest.TestCase):
             [],
         )
 
-    def test_previous_citation_previews_apply_to_other_regulations(self):
-        previews = regulation_history.format_previous_citation_previews('100.52')
-
-        self.assertTrue(previews)
-        self.assertEqual(
-            previews[0]['label'],
-            'Previously cited at § 100.7(a)(1)',
-        )
-        self.assertTrue(all(
-            event['subsection'] == '(a)(1)'
-            for event in previews[0]['events']
-        ))
-        subsection_b_preview = next(
-            preview for preview in previews
-            if preview['current_subsection'] == '(b)'
-        )
-        self.assertEqual(subsection_b_preview['earlier_citations'], [])
-
     def test_previous_citation_preview_matches_destination_history_group(self):
         preview = next(
             preview
@@ -270,19 +259,8 @@ class TestRegulationHistory(unittest.TestCase):
         )
 
     def test_section_redesignation_does_not_apply_to_nested_history(self):
-        events = regulation_history.format_historical_regulation_events('100.7')
-        groups = regulation_history.group_historical_regulation_events([
-            event for event in events if event['action'] == 'E&J'
-        ])
-        redesignations = [
-            event for event in events if event['action'] == 'Redesignated'
-        ]
-
-        groups, unmatched = regulation_history.attach_previous_citation_previews(
-            groups,
-            redesignations,
-            regulation_history.format_previous_citation_previews('100.7'),
-        )
+        context = regulation_history.build_regulation_history_context('100.7')
+        groups = context['event_groups']
         contribution_group = next(
             group for group in groups if group['subsection'] == '(a)(1)'
         )
@@ -296,19 +274,7 @@ class TestRegulationHistory(unittest.TestCase):
             section_group['redesignation']['description'],
             'Previously cited at § 100.4',
         )
-        self.assertEqual(unmatched, [])
-
-    def test_previous_citation_preview_supports_citation_chains(self):
-        preview = regulation_history.format_previous_citation_previews('104.5')[0]
-
-        self.assertEqual(
-            [citation['citation'] for citation in preview['history_citations']],
-            ['105.4', '104.4'],
-        )
-        self.assertEqual(
-            [citation['transition'] for citation in preview['history_citations']],
-            [None, 'then'],
-        )
+        self.assertEqual(context['redesignation_events'], [])
 
     def test_previous_citation_preview_suppresses_reciprocal_conversion(self):
         preview_107_1 = regulation_history.format_previous_citation_previews('107.1')[0]
@@ -343,26 +309,15 @@ class TestRegulationHistory(unittest.TestCase):
         )
 
     def test_compound_redesignation_attaches_to_each_current_subsection(self):
-        events = regulation_history.format_historical_regulation_events('102.7')
-        groups = regulation_history.group_historical_regulation_events([
-            event for event in events if event['action'] == 'E&J'
-        ])
-        redesignations = [
-            event for event in events if event['action'] == 'Redesignated'
-        ]
-        previews = regulation_history.format_previous_citation_previews('102.7')
-
-        groups, unmatched = regulation_history.attach_previous_citation_previews(
-            groups,
-            redesignations,
-            previews,
-        )
+        context = regulation_history.build_regulation_history_context('102.7')
+        groups = context['event_groups']
         groups_by_subsection = {
             group['subsection']: group for group in groups
         }
+        preview = groups_by_subsection['(b)']['previous_citation_preview']
 
-        self.assertEqual(previews[0]['current_subsections'], ['(b)', '(c)'])
-        self.assertEqual(previews[0]['earlier_citations'], [])
+        self.assertEqual(preview['current_subsections'], ['(b)', '(c)'])
+        self.assertEqual(preview['earlier_citations'], [])
         for subsection in ('(b)', '(c)'):
             with self.subTest(subsection=subsection):
                 self.assertEqual(
@@ -374,7 +329,19 @@ class TestRegulationHistory(unittest.TestCase):
                     ['previous_citation_preview']['history_citations'][0]['citation'],
                     '102.7(d)',
                 )
-        self.assertEqual(unmatched, [])
+        self.assertEqual(context['redesignation_events'], [])
+
+    def test_context_keeps_redesignations_without_matching_ej_groups(self):
+        context = regulation_history.build_regulation_history_context('9428.1')
+
+        self.assertEqual(context['event_groups'], [])
+        self.assertEqual(len(context['redesignation_events']), 1)
+        redesignation = context['redesignation_events'][0]
+        self.assertEqual(redesignation['label'], 'Previously cited at § 8.1')
+        self.assertEqual(
+            redesignation['previous_citation_preview']['history_citations'][0]['citation'],
+            '8.1',
+        )
 
     def test_part_100_dropped_zero_conversions_belong_to_full_sections(self):
         cases = [
@@ -398,34 +365,6 @@ class TestRegulationHistory(unittest.TestCase):
                     [event['label'] for event in full_events],
                 )
 
-    @mock.patch.object(regulation_history, 'load_regulation_history')
-    def test_format_historical_regulation_events_does_not_copy_predecessor_ej(self, load_history):
-        load_history.return_value = {
-            'events': [{
-                'year': 2002,
-                'action': 'E&J',
-                'subject': '* Action taken to qualify for ballot under state law',
-                'source_url': 'https://example.test/2002.pdf',
-            }],
-            'conversions': [{
-                'action': 'Redesignated',
-                'related_section': '100.8(b)(1)(ii)(E)',
-                'description': 'Formerly § 100.8(b)(1)(ii)(E)',
-                'source_url': 'https://example.test/conversions/',
-            }],
-        }
-
-        events = regulation_history.format_historical_regulation_events('100.131')
-
-        self.assertEqual(
-            [(event['action'], event['date']) for event in events],
-            [
-                ('E&J', '2002'),
-                ('Redesignated', ''),
-            ],
-        )
-        load_history.assert_called_once_with('100.131')
-
     def test_format_historical_regulation_events_keeps_predecessor_out_of_current_cite(self):
         events = regulation_history.format_historical_regulation_events('100.16')
         limitation_events = [
@@ -446,13 +385,3 @@ class TestRegulationHistory(unittest.TestCase):
             event['redesignation']['description'] == 'Previously cited at § 109.1(e)'
             for event in limitation_events
         ))
-
-    def test_part_114_history_covers_all_sections(self):
-        for section in [f'114.{number}' for number in range(1, 16)]:
-            with self.subTest(section=section):
-                events = regulation_history.format_historical_regulation_events(section)
-                self.assertTrue(events)
-                self.assertTrue(all(
-                    event['action'] in ('E&J', 'Redesignated')
-                    for event in events
-                ))

@@ -233,6 +233,17 @@ def test_section_renders_before_related_api_requests(ecfr):
     assert b'eCFR issue date' not in response.content
     soup = BeautifulSoup(response.content, 'html.parser')
     assert len(soup.select('[data-regulation-related-url] > a[href]')) == 3
+    parent_history = soup.select_one('#historical-ej-100-6')
+    assert parent_history is not None
+    assert 'Election (1975)' in parent_history.get_text(' ', strip=True)
+    previous_citation = soup.select_one(
+        '#historical-ej-100-6-a .legal-regulation__previous-citation'
+    )
+    assert previous_citation is not None
+    assert 'Previously cited at § 100.15' in previous_citation.get_text(' ', strip=True)
+    assert previous_citation.select_one(
+        'a[href="/legal/regulations/100.15/#historical-ej-100-15"]'
+    )
     legal_api.assert_not_called()
     rulemaking_api.assert_not_called()
 

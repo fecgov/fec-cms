@@ -1,12 +1,65 @@
+import json
+import tempfile
 import unittest
+from pathlib import Path
+from unittest import mock
 
-from home.management.commands.import_regulation_history import (
-    parse_citation_index,
-    parse_conversion_table,
-)
+from home.management.commands import import_regulation_history as importer
+
+
+parse_citation_index = importer.parse_citation_index
+parse_conversion_table = importer.parse_conversion_table
 
 
 class TestImportRegulationHistory(unittest.TestCase):
+    @mock.patch.object(importer, 'CONVERSION_TABLE_URLS', ['/conversions/'])
+    @mock.patch.object(importer, 'CITATION_INDEX_URLS', ['/citations/'])
+    @mock.patch.object(importer.requests, 'Session')
+    def test_command_dry_run_and_write_build_merged_index(self, session_class):
+        citation_response = mock.Mock(text='''<table>
+            <tr><td>114.5</td><td>-</td><td>Later record</td><td>1980</td></tr>
+            <tr><td>-</td><td>-</td><td>Earlier record</td><td>1977</td></tr>
+        </table>''')
+        conversion_response = mock.Mock(text='''<table>
+            <tr><td>114.5</td><td>-</td><td>114.4</td></tr>
+            <tr><td>200.1</td><td>-</td><td>200.2</td></tr>
+        </table>''')
+        session = session_class.return_value
+        session.get.side_effect = [
+            citation_response, conversion_response,
+            citation_response, conversion_response,
+        ]
+
+        with tempfile.TemporaryDirectory() as directory:
+            output_path = Path(directory) / 'history.json'
+            command = importer.Command()
+            command.handle(dry_run=True, output=str(output_path), timeout=7)
+            self.assertFalse(output_path.exists())
+
+            command.handle(dry_run=False, output=str(output_path), timeout=7)
+            history = json.loads(output_path.read_text())
+
+        self.assertEqual(
+            [event['year'] for event in history['114.5']['events']],
+            [1977, 1980],
+        )
+        self.assertEqual(
+            history['114.5']['conversions'][0]['related_section'],
+            '114.4',
+        )
+        self.assertEqual(history['200.1']['events'], [])
+        self.assertEqual(
+            history['200.1']['conversions'][0]['related_section'],
+            '200.2',
+        )
+        self.assertEqual(session.get.call_count, 4)
+        session.get.assert_any_call(
+            'https://www.fec.gov/citations/',
+            timeout=7,
+        )
+        citation_response.raise_for_status.assert_called()
+        conversion_response.raise_for_status.assert_called()
+
     def test_same_pdf_does_not_collapse_distinct_subjects(self):
         events = parse_citation_index('''<table>
             <tr><td>102.7</td><td>(a)</td><td>Treasurer</td>
