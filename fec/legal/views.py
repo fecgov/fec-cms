@@ -1363,10 +1363,11 @@ def legal_doc_search_regulations(request):
             )
         structure = ecfr_caller.fetch_ecfr_structure()
         regulation_parts = regulations.format_ecfr_regulation_parts(structure, regulatory_citation)
+        return_context = regulations.regulation_return_context(request, from_search=True)
         for part in regulation_parts:
-            part['url'] = regulations.append_return_url(
+            part['url'] = regulations.append_return_context(
                 part['url'],
-                request.get_full_path(),
+                return_context,
             )
         current_page = 1
         total_pages = 1 if regulation_parts else 0
@@ -1391,10 +1392,11 @@ def legal_doc_search_regulations(request):
         if ecfr_results.get('error'):
             regulations_api_error = ecfr_results.get('error_message')
         results['regulations'] = regulation_results
+        return_context = regulations.regulation_return_context(request, from_search=True)
         for regulation in regulation_results:
-            regulation['url'] = regulations.append_return_url(
+            regulation['url'] = regulations.append_return_context(
                 regulation['url'],
-                request.get_full_path(),
+                return_context,
             )
         results['total_all'] = total_count
 

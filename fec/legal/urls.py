@@ -52,7 +52,11 @@ urlpatterns = [
     re_path(r'^legal/search/statutes/$', views.legal_doc_search_statutes),  # search
     re_path(r'^data/legal/search/statutes/$', views.legal_doc_search_statutes),  # TODO: retire
 
-    re_path(r'^legal/search/regulations/$', views.legal_doc_search_regulations),
+    re_path(
+        r'^legal/search/regulations/$',
+        views.legal_doc_search_regulations,
+        name='legal-search-regulations',
+    ),
     re_path(r'^data/legal/search/regulations/$', views.legal_doc_search_regulations),  # TODO: retire
 
     re_path(

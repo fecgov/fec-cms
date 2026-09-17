@@ -170,16 +170,32 @@ def test_citation_input_formats(citation):
     assert regulations.normalize_regulatory_citation_filter(citation) == '100'
 
 
-@pytest.mark.parametrize('value', ['https://evil.test', '//evil.test', '/\\evil.test', 'javascript:alert(1)'])
-def test_back_link_rejects_external_urls(value):
-    request = RequestFactory().get('/', {'return_url': value})
-    assert regulations.valid_return_url(request) == '/legal/search/regulations/'
+def test_back_link_rejects_unknown_return_context():
+    request = RequestFactory().get('/', {'return_to': 'https://evil.test', 'search': 'loans'})
+    assert regulations.regulation_return_url(request) == '/legal/search/regulations/'
 
 
-def test_back_link_preserves_query_and_anchor():
-    url = '/legal/search/regulations/?search=loans&page=2#results-regulations'
-    request = RequestFactory().get('/', {'return_url': url})
-    assert regulations.valid_return_url(request) == url
+def test_named_return_context_avoids_nested_url():
+    request = RequestFactory().get('/', {'search': 'loans', 'page': 2})
+    context = regulations.regulation_return_context(request, from_search=True)
+    url = regulations.append_return_context(
+        '/legal/regulations/100.6/',
+        context,
+    )
+    assert url == (
+        '/legal/regulations/100.6/'
+        '?return_to=regulations-search&search=loans&page=2'
+    )
+    assert 'return_url' not in url
+
+
+def test_named_back_link_preserves_query_and_adds_results_anchor():
+    request = RequestFactory().get('/', {
+        'return_to': 'regulations-search', 'search': 'loans', 'page': 2,
+    })
+    assert regulations.regulation_return_url(request) == (
+        '/legal/search/regulations/?search=loans&page=2#results-regulations'
+    )
 
 
 def test_rulemaking_list_needs_no_document_and_sorts_numbers():
@@ -253,10 +269,10 @@ def test_browse_and_part_filter(ecfr, citation):
 def test_section_redirect_and_hierarchy_back_link(ecfr):
     request = RequestFactory().get('/', {'regulatory_citation': '11 CFR 100.6'})
     assert views.legal_doc_search_regulations(request).url.startswith('/legal/regulations/100.6/')
-    request = RequestFactory().get('/', {'return_url': '/legal/search/regulations/?page=2'})
+    request = RequestFactory().get('/', {'return_to': 'regulations-search', 'page': 2})
     response = regulations.regulation_hierarchy_page(request, 'part', '100')
     assert b'/legal/search/regulations/?page=2' in response.content
-    assert b'/legal/regulations/100.7/' in response.content
+    assert b'/legal/regulations/100.7/?return_to=regulations-search&amp;page=2' in response.content
 
 
 def test_pagination_retains_search_and_citation():

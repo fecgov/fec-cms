@@ -8,7 +8,7 @@ from urllib.parse import urlencode
 import requests
 from django.http import Http404
 from django.shortcuts import render
-from django.utils.http import url_has_allowed_host_and_scheme
+from django.urls import reverse
 
 from data import api_caller, ecfr_caller
 from legal.regulation_history import build_regulation_history_context
@@ -16,6 +16,8 @@ from legal.regulation_text import format_ecfr_html_section, format_ecfr_timeline
 
 logger = logging.getLogger(__name__)
 ECFR_REGULATION_SECTION_PATTERN = re.compile(r'^\d+\.\d+[A-Za-z0-9-]*$')
+REGULATION_SEARCH_RETURN_NAME = 'regulations-search'
+REGULATION_SEARCH_PARAMS = ('search', 'regulatory_citation', 'page', 'show_results')
 
 
 def transform_ecfr_query_string(query_string):
@@ -51,18 +53,40 @@ def ecfr_section_url(section):
     return f"/legal/regulations/{section}/"
 
 
-def append_return_url(url, return_url):
-    if not return_url:
+def regulation_return_context(request, from_search=False):
+    """Return the allowlisted context needed to get back to regulation search."""
+    if not from_search and request.GET.get('return_to') != REGULATION_SEARCH_RETURN_NAME:
+        return {}
+
+    context = {'return_to': REGULATION_SEARCH_RETURN_NAME}
+    for name in REGULATION_SEARCH_PARAMS:
+        value = request.GET.get(name)
+        if value:
+            context[name] = value
+    return context
+
+
+def append_return_context(url, context):
+    if not context:
         return url
     separator = '&' if '?' in url else '?'
-    return f"{url}{separator}{urlencode({'return_url': return_url})}"
+    return f'{url}{separator}{urlencode(context)}'
 
 
-def valid_return_url(request, default='/legal/search/regulations/'):
-    candidate = request.GET.get('return_url', '')
-    if candidate.startswith('/') and url_has_allowed_host_and_scheme(candidate, allowed_hosts=set()):
-        return candidate
-    return default
+def regulation_return_url(request):
+    url = reverse('legal-search-regulations')
+    context = regulation_return_context(request)
+    if not context:
+        return url
+
+    search_params = {
+        name: context[name]
+        for name in REGULATION_SEARCH_PARAMS
+        if name in context
+    }
+    if search_params:
+        url = f'{url}?{urlencode(search_params)}'
+    return f'{url}#results-regulations'
 
 
 def regulation_search_page_url(request, page):
@@ -318,7 +342,10 @@ def regulation_hierarchy_page(request, hierarchy_type, identifier, part=None):
             'contents': format_ecfr_hierarchy_contents(node),
         }
         for item in hierarchy['contents']:
-            item['url'] = append_return_url(item['url'], request.get_full_path())
+            item['url'] = append_return_context(
+                item['url'],
+                regulation_return_context(request),
+            )
     return render(request, 'legal-regulation-hierarchy.jinja', {
         'hierarchy': hierarchy,
         'hierarchy_error': structure.get('error_message') if error else None,
@@ -327,7 +354,7 @@ def regulation_hierarchy_page(request, hierarchy_type, identifier, part=None):
         'query': '',
         'regulatory_citation': '',
         'is_browse': False,
-        'return_url': valid_return_url(request),
+        'back_url': regulation_return_url(request),
     }, status=502 if error else 200)
 
 
@@ -460,13 +487,14 @@ def regulation_page(request, section):
     if not regulation and not regulations_api_error and not historical_only:
         raise Http404
 
-    return_url = valid_return_url(request)
+    return_context = regulation_return_context(request)
+    back_url = regulation_return_url(request)
     if section_nav:
         for direction in ('previous', 'next'):
             if section_nav.get(direction):
-                section_nav[direction]['url'] = append_return_url(
+                section_nav[direction]['url'] = append_return_context(
                     section_nav[direction]['url'],
-                    return_url,
+                    return_context,
                 )
 
     return render(request, 'legal-regulation.jinja', {
@@ -490,7 +518,7 @@ def regulation_page(request, section):
         'reserved_label': reserved_label,
         'regulations_api_error': regulations_api_error,
         'section_nav': section_nav,
-        'return_url': return_url,
+        'back_url': back_url,
         'timeline': timeline,
         'timeline_api_error': timeline_api_error,
         'historical_regulation_event_groups': regulation_history['event_groups'],
