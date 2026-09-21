@@ -166,6 +166,22 @@ class TestImportRegulationHistory(unittest.TestCase):
             'Previously cited at § 105.4, then § 104.4',
         )
 
+    def test_parse_conversion_table_preserves_unavailable_previous_ej(self):
+        conversions = parse_conversion_table(
+            """
+            <table>
+              <tr><th>Current Regulation</th><th></th><th>Previously Cited at:</th></tr>
+              <tr><td>2.5</td><td>(a)</td><td>3.2(b)(2); no E&amp;J available</td></tr>
+              <tr><td>2.4</td><td>-</td><td>3.2</td></tr>
+            </table>
+            """,
+            'https://www.fec.gov/legal-resources/conversions/',
+        )
+
+        self.assertEqual(conversions['2.5'][0]['related_section'], '3.2(b)(2)')
+        self.assertTrue(conversions['2.5'][0]['previous_ej_unavailable'])
+        self.assertNotIn('previous_ej_unavailable', conversions['2.4'][0])
+
     def test_parse_conversion_table_corrects_dropped_zero_sequences(self):
         conversions = parse_conversion_table(
             """

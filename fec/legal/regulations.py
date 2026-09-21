@@ -522,6 +522,5 @@ def regulation_page(request, section):
         'timeline': timeline,
         'timeline_api_error': timeline_api_error,
         'historical_regulation_event_groups': regulation_history['event_groups'],
-        'historical_redesignation_events': regulation_history['redesignation_events'],
         'social_image_identifier': 'legal',
     }, status=502 if regulations_api_error else 200)

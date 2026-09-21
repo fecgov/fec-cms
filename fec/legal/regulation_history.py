@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import re
+from collections import Counter
 from functools import lru_cache
 
 logger = logging.getLogger(__name__)
@@ -143,6 +144,7 @@ def previous_citation_links(related_section):
             target_subsection,
         )
         if target_subsection is None:
+            # Keep the citation navigable with a fallback.
             url = HISTORICAL_EJ_INDEX_FALLBACKS.get(
                 section.split('.', 1)[0],
                 f'/legal/regulations/{section}/',
@@ -239,15 +241,20 @@ def format_historical_regulation_events(section):
     history = load_regulation_history(section)
     conversions = [dict(item) for item in history.get('conversions', [])]
 
+    # Each conversion table row maps a current citation to its earlier citation(s).
     for conversion in conversions:
         conversion['previous_citations'] = previous_citation_links(
             conversion.get('related_section', '')
         )
+        if conversion.get('previous_ej_unavailable'):
+            for citation in conversion['previous_citations']:
+                citation['ej_unavailable'] = True
 
     events = []
     seen_events = set()
     indexed_events = history.get('events', [])
-    # Attach compound conversion targets to each actual subsection group.
+    # Keep a multi-subsection conversion together instead of repeating it
+    # beside every E&J in the range.
     available_subsections = {
         event.get('subsection', '') for event in indexed_events
     }
@@ -257,10 +264,13 @@ def format_historical_regulation_events(section):
             conversion.get('current_subsection', ''),
             available_subsections,
         )
+        if len(conversion['current_subsections']) > 1:
+            continue
         for current_subsection in conversion['current_subsections']:
             redesignations_by_subsection[current_subsection] = conversion
 
     for event in indexed_events:
+        subject = event.get('subject') or 'Explanation and Justification'
         event_identity = (
             event.get('action', 'E&J'),
             event.get('year'),
@@ -276,7 +286,8 @@ def format_historical_regulation_events(section):
             'date': str(event['year']) if event.get('year') else '',
             'section': section,
             'subsection': event.get('subsection', ''),
-            'label': event.get('subject') or 'Explanation and Justification',
+            'label': subject,
+            'has_previous_citation': subject.lstrip().startswith('*'),
             'redesignation': redesignations_by_subsection.get(
                 event.get('subsection', '')
             ),
@@ -317,229 +328,52 @@ def previous_history_targets(previous_section, citation):
     return cited_subsection, history_subsection
 
 
-def reciprocal_conversion_subject(
-    section,
-    history,
-    current_subsections,
-    previous_section,
-    cited_subsection,
-):
-    """Use the starred subject to limit previews for reciprocal citation swaps."""
-    if previous_section == section:
-        return None
-
-    previous_history = load_regulation_history(previous_section)
-    previous_subsections = {
-        event.get('subsection', '')
-        for event in previous_history.get('events', [])
-    }
-    is_reciprocal = False
-    for conversion in previous_history.get('conversions', []):
-        targets = expand_current_subsection_targets(
-            conversion.get('current_subsection', ''),
-            previous_subsections,
-        )
-        if cited_subsection not in targets:
-            continue
-        cited_sections = {
-            link['citation'].split('(', 1)[0]
-            for link in previous_citation_links(
-                conversion.get('related_section', '')
-            )
-        }
-        if section in cited_sections:
-            is_reciprocal = True
-            break
-
-    if not is_reciprocal:
-        return None
-
-    for event in history.get('events', []):
-        subject = event.get('subject', '')
-        if (
-            event.get('subsection', '') in current_subsections
-            and subject.lstrip().startswith('*')
-        ):
-            return normalize_history_subject(subject)
-    return None
-
-
-def earlier_citation_links(section, preview_targets):
-    """Return link-only citations that precede a one-level history preview."""
-    links = []
-    seen_sections = set()
-    for previous_section, cited_subsection, _ in preview_targets:
-        previous_history = load_regulation_history(previous_section)
-        available_subsections = {
-            event.get('subsection', '')
-            for event in previous_history.get('events', [])
-        }
-        for conversion in previous_history.get('conversions', []):
-            targets = expand_current_subsection_targets(
-                conversion.get('current_subsection', ''),
-                available_subsections,
-            )
-            if cited_subsection not in targets:
-                continue
-            for citation in previous_citation_links(
+@lru_cache(maxsize=1)
+def reverse_citation_changes():
+    """Find newer citations to display on each former citation's E&J page."""
+    changes = {}
+    for current_section, history in load_regulation_history_index().items():
+        for conversion in history.get('conversions', []):
+            current_subsection = conversion.get('current_subsection', '')
+            destination = {
+                'citation': f'{current_section}{current_subsection}',
+                'display_citation': re.sub(
+                    r'(?<=\))\s*-\s*(?=\()',
+                    '–',
+                    f'{current_section}{current_subsection}',
+                ),
+                'source_url': conversion.get('source_url'),
+                'url': (
+                    f'/legal/regulations/{current_section}/'
+                    f'#{historical_ej_anchor(current_section, current_subsection)}'
+                ),
+            }
+            for previous_citation in previous_citation_links(
                 conversion.get('related_section', '')
             ):
-                citation_section = citation['citation'].split('(', 1)[0]
-                # Avoid following reciprocal citation swaps back to this page.
-                if citation_section == section or citation_section in seen_sections:
-                    continue
-                seen_sections.add(citation_section)
-                links.append({**citation, 'citation': citation_section})
-    return links
-
-
-def format_previous_citation_previews(section):
-    """Preview immediate predecessors; still-earlier citations remain links."""
-    previews = []
-    history = load_regulation_history(section)
-    available_subsections = {
-        event.get('subsection', '') for event in history.get('events', [])
-    }
-    formatted_history = {}
-    for conversion in history.get('conversions', []):
-        current_subsections = expand_current_subsection_targets(
-            conversion.get('current_subsection', ''),
-            available_subsections,
-        )
-        preview_events = []
-        preview_sections = []
-        preview_targets = []
-        history_citations = []
-        seen_events = set()
-        for citation in previous_citation_links(
-            conversion.get('related_section', '')
-        ):
-            citation_match = REGULATION_CITATION_PATTERN.match(citation['citation'])
-            if not citation_match:
-                continue
-            previous_section, previous_subsection = citation_match.groups()
-            history_citations.append(citation)
-            if previous_section not in preview_sections:
-                preview_sections.append(previous_section)
-
-            target = previous_history_targets(
-                previous_section,
-                citation['citation'],
-            )
-            if not target:
-                continue
-            cited_subsection, target_subsection = target
-            preview_targets.append((
-                previous_section,
-                cited_subsection,
-                target_subsection,
-            ))
-
-            subject_filter = reciprocal_conversion_subject(
-                section,
-                history,
-                current_subsections,
-                previous_section,
-                cited_subsection,
-            )
-            # Match the destination page's group, including parent fallback.
-            if previous_section not in formatted_history:
-                formatted_history[previous_section] = (
-                    format_historical_regulation_events(previous_section)
+                match = REGULATION_CITATION_PATTERN.match(
+                    previous_citation['citation']
                 )
-            for event in formatted_history[previous_section]:
-                if event.get('action') != 'E&J':
+                if not match:
                     continue
-                event_subsection = event.get('subsection', '')
-                if event_subsection != target_subsection:
-                    continue
-                if (
-                    subject_filter
-                    and normalize_history_subject(event.get('label')) != subject_filter
-                ):
-                    continue
-                event_identity = (
+                previous_section = match.group(1)
+                target = previous_history_targets(
                     previous_section,
-                    event_subsection,
-                    event.get('date'),
-                    event.get('label'),
-                    event.get('source_url'),
+                    previous_citation['citation'],
                 )
-                if event_identity in seen_events:
+                # §100.7(b)(17)(vi) may link to its parent E&J at §100.7(b)(17),
+                # but only the exact former citation gets a "Later citation" label.
+                if not target or target[1] != target[0]:
                     continue
-                seen_events.add(event_identity)
-                preview_events.append({
-                    'section': previous_section,
-                    'date': event.get('date', ''),
-                    'label': event.get('label') or 'Explanation and Justification',
-                    'source_url': event.get('source_url'),
-                    'subsection': event_subsection,
-                })
-
-        preview_events.sort(key=regulation_history_sort_key)
-
-        earlier_citations = earlier_citation_links(section, preview_targets)
-
-        # Keep a link when there is no history to expand.
-        if not preview_events:
-            continue
-
-        previews.append({
-            'current_subsection': conversion.get('current_subsection', ''),
-            'current_subsections': current_subsections,
-            'label': conversion.get('description') or 'Previous citation',
-            'sections': preview_sections,
-            'history_citations': history_citations,
-            'events': preview_events,
-            'earlier_citations': earlier_citations,
-        })
-
-    return previews
-
-
-def attach_previous_citation_previews(groups, redesignation_events, previews):
-    """Attach previews to E&J groups and return only unmatched redesignations."""
-    previews_by_target = {
-        (target, preview['label']): preview
-        for preview in previews
-        for target in preview.get(
-            'current_subsections',
-            [preview.get('current_subsection', '')],
-        )
-    }
-    previews_by_conversion = {
-        (preview.get('current_subsection', ''), preview['label']): preview
-        for preview in previews
-    }
-    displayed_conversion_keys = set()
-    for group in groups:
-        redesignation = group.get('redesignation') or {}
-        if not redesignation:
-            continue
-        conversion_identity = (
-            redesignation.get('current_subsection', ''),
-            redesignation.get('description'),
-        )
-        displayed_conversion_keys.add(conversion_identity)
-        group['previous_citation_preview'] = previews_by_target.get((
-            group.get('subsection', ''),
-            redesignation.get('description'),
-        ))
-
-    unmatched_redesignations = []
-    for event in redesignation_events:
-        conversion_identity = (event.get('subsection', ''), event.get('label'))
-        if conversion_identity in displayed_conversion_keys:
-            continue
-        event['previous_citation_preview'] = previews_by_conversion.get(
-            conversion_identity
-        )
-        unmatched_redesignations.append(event)
-    return groups, unmatched_redesignations
+                key = (previous_section, target[1])
+                destinations = changes.setdefault(key, [])
+                if destination not in destinations:
+                    destinations.append(destination)
+    return changes
 
 
 def build_regulation_history_context(section):
-    """Prepare E&J groups and unattached redesignations for the page sidebar."""
+    """Group E&Js and citation changes under the citations they describe."""
     events = format_historical_regulation_events(section)
     ej_groups = group_historical_regulation_events([
         event for event in events if event.get('action') == 'E&J'
@@ -547,14 +381,102 @@ def build_regulation_history_context(section):
     redesignations = [
         event for event in events if event.get('action') == 'Redesignated'
     ]
-    previews = format_previous_citation_previews(section)
-    ej_groups, redesignations = attach_previous_citation_previews(
-        ej_groups,
-        redesignations,
-        previews,
+    reverse_changes = reverse_citation_changes()
+    for group in ej_groups:
+        # The index asterisk marks an affected E&J; the conversion table
+        # supplies the actual earlier/later citation relationship.
+        group['show_event_citation_changes'] = any(
+            event.get('has_previous_citation') and event.get('redesignation')
+            for event in group['events']
+        )
+        for event in group['events']:
+            if event.get('has_previous_citation'):
+                event['label'] = re.sub(r'^\s*\*\s*', '', event['label'])
+        destinations = reverse_changes.get(group['citation'], [])
+        if destinations:
+            for event in group['events']:
+                if event.get('has_previous_citation') and not event.get('redesignation'):
+                    event['redesignated_as'] = destinations
+
+    section_group = next(
+        (group for group in ej_groups if not group.get('subsection')),
+        None,
     )
+    top_level_mappings = [
+        {
+            'current_citation': f"{section}{event['subsection']}",
+            'current_subsection': event['subsection'],
+            'previous_citations': event.get('previous_citations', []),
+        }
+        for event in redesignations
+        if event.get('subsection')
+        and (
+            '-' in event['subsection']
+            or len(REGULATION_SUBSECTION_PATTERN.findall(event['subsection'])) == 1
+        )
+    ]
+    referenced_event = next((
+        event for event in section_group.get('events', [])
+        if event.get('has_previous_citation') and not event.get('redesignation')
+    ), None) if section_group else None
+    if referenced_event and top_level_mappings:
+        # The section-level E&J summarizes changes that are detailed on its
+        # subsection records, so avoid repeating those earlier citations.
+        referenced_event['label'] = re.sub(r'^\s*\*\s*', '', referenced_event['label'])
+        referenced_event['citation_change_summary'] = {
+            'mappings': top_level_mappings,
+            'source_url': redesignations[0].get('source_url'),
+        }
+
+        for mapping in top_level_mappings:
+            mapping['anchor_id'] = historical_ej_anchor(
+                section, mapping['current_subsection']
+            )
+        referenced_event['citation_change_summary']['links_to_subsections'] = True
+
+    # When several conversions name one citation, list them together instead
+    # of attaching only the last one to its E&J record.
+    conversion_counts = Counter(event['subsection'] for event in redesignations)
+    for group in ej_groups:
+        if conversion_counts[group['subsection']] > 1:
+            group['redesignation'] = None
+            for event in group['events']:
+                event['redesignation'] = None
+
+    displayed_conversions = {
+        (
+            group['redesignation'].get('current_subsection', ''),
+            group['redesignation'].get('description'),
+        )
+        for group in ej_groups if group.get('redesignation')
+    }
+    # Keep conversion rows visible when no E&J group displays them.
+    unmatched_redesignations = [
+        event for event in redesignations
+        if (event.get('subsection', ''), event.get('label'))
+        not in displayed_conversions
+    ]
+
+    groups_by_subsection = {group['subsection']: group for group in ej_groups}
+    for event in unmatched_redesignations:
+        subsection = event.get('subsection', '')
+        group = groups_by_subsection.get(subsection)
+        if group is None:
+            group = {
+                'citation': (section, subsection),
+                'section': section,
+                'subsection': subsection,
+                'anchor_id': historical_ej_anchor(section, subsection),
+                'redesignation': None,
+                'events': [],
+            }
+            groups_by_subsection[subsection] = group
+            ej_groups.append(group)
+        group.setdefault('additional_redesignations', []).append(event)
+
+    ej_groups.sort(key=lambda group: regulation_history_sort_key(group))
+
     return {
         'events': events,
         'event_groups': ej_groups,
-        'redesignation_events': redesignations,
     }

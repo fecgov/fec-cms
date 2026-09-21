@@ -81,10 +81,10 @@
           <p>No eCFR timeline data available for this section.</p>
         {% endif %}
       </div>
-      <h2 class="sidebar__title">FEC historical E&amp;J records</h2>
+      <h2 class="sidebar__title">FEC historical E&amp;J records and citation changes</h2>
       <div class="sidebar__content">
         {% if historical_regulation_event_groups %}
-          <p class="t-note u-padding--bottom">Historical E&amp;J records sometimes discuss the provision under a broader parent citation. For example, material relevant to former § 100.7(b)(11)(i)(B)(1) is cited under § 100.7(b)(11)(i)(B).</p>
+          <p class="t-note u-padding--bottom">E&amp;J documents and citation changes come from separate FEC indexes. Some E&amp;Js discuss a provision under a broader parent citation.</p>
           <ul class="list--unstyled legal-regulation__history-list">
             {% for group in historical_regulation_event_groups %}
               <li class="legal-regulation__history-record" id="{{ group.anchor_id }}">
@@ -92,33 +92,91 @@
                   {{ group.section }}{% if group.subsection %}{{ group.subsection }}{% endif %}
                 </div>
                 <div class="legal-regulation__history-details">
-                  {% if group.redesignation %}
+                  {% if group.redesignation and not group.show_event_citation_changes %}
                     <div class="legal-regulation__previous-citation">
-                      {% if group.previous_citation_preview %}
-                        {% set preview = group.previous_citation_preview %}
-                        {% set accordion_prefix = 'previous-citation-' ~ section|replace('.', '-') ~ '-history-' ~ loop.index0 %}
-                        {% include 'partials/legal-regulation-previous-citation.jinja' %}
-                      {% elif group.redesignation.previous_citations %}
-                        Previously cited at
-                        {{ regulation_ui.previous_links(group.redesignation.previous_citations) }}
+                      {% if group.redesignation.previous_citations %}
+                        {% set previous_citations = group.redesignation.previous_citations %}
+                        {% include 'partials/legal-regulation-citation-change.jinja' %}
+                        {% if group.redesignation.source_url %}
+                          <div><a href="{{ group.redesignation.source_url }}" target="_blank" rel="noopener noreferrer">View the FEC conversion table</a></div>
+                        {% endif %}
                       {% else %}
                         {{ group.redesignation.description }}
                       {% endif %}
                     </div>
                   {% endif %}
-                  <ul class="list--unstyled">
+                  {% if group.events %}<ul class="list--unstyled">
                     {% for event in group.events %}
                       <li class="legal-regulation__history-event">
                         {% if event.label %}
                           {% if event.source_url %}<a href="{{ event.source_url }}" target="_blank" rel="noopener noreferrer">{% endif %}
                           <span class="legal-regulation__history-subject">{{ event.label }}</span>{% if event.date %} <span class="legal-regulation__history-date">({{ event.date }})</span>{% endif %}
                           {% if event.source_url %}</a>{% endif %}
+                          {# Section-wide changes point to detailed subsection records when possible. #}
+                          {% if event.citation_change_summary %}
+                            <div class="legal-regulation__previous-citation u-margin--top">
+                              {% if event.citation_change_summary.links_to_subsections %}
+                                {% if event.citation_change_summary.mappings|length > 1 %}Earlier citations vary by subsection. Refer to{% else %}Refer to earlier citation details for{% endif %}
+                                {% for mapping in event.citation_change_summary.mappings %}
+                                  <a href="#{{ mapping.anchor_id }}">§ {{ mapping.current_citation }}</a>{% if not loop.last %}{% if loop.revindex == 2 %} and {% else %}, {% endif %}{% endif %}
+                                {% endfor %} below.
+                              {% else %}
+                                <ul>
+                                  {% for mapping in event.citation_change_summary.mappings %}
+                                    <li class="u-margin--bottom">
+                                      <div>§ {{ mapping.current_citation }}</div>
+                                      {% set previous_citations = mapping.previous_citations %}
+                                      {% include 'partials/legal-regulation-citation-change.jinja' %}
+                                    </li>
+                                  {% endfor %}
+                                </ul>
+                                {% if event.citation_change_summary.source_url %}
+                                  <p><a href="{{ event.citation_change_summary.source_url }}" target="_blank" rel="noopener noreferrer">View the FEC conversion table</a></p>
+                                {% endif %}
+                              {% endif %}
+                            </div>
+                          {% elif event.has_previous_citation and event.redesignation %}
+                            <div class="legal-regulation__previous-citation u-margin--top">
+                              {% set previous_citations = event.redesignation.previous_citations %}
+                              {% include 'partials/legal-regulation-citation-change.jinja' %}
+                              {% if event.redesignation.source_url %}
+                                <div><a href="{{ event.redesignation.source_url }}" target="_blank" rel="noopener noreferrer">View the FEC conversion table</a></div>
+                              {% endif %}
+                            </div>
+                          {% elif event.redesignated_as %}
+                            {# Reverse conversion links point from a former E&J to its later citation. #}
+                            <div class="legal-regulation__previous-citation u-margin--top">
+                              <div>Later citation{% if event.redesignated_as|length > 1 %}s{% endif %}:</div>
+                              <ul class="list--unstyled">
+                                {% for destination in event.redesignated_as %}
+                                  <li><a href="{{ destination.url }}">§ {{ destination.display_citation }}</a></li>
+                                {% endfor %}
+                              </ul>
+                              {% set conversion_sources = event.redesignated_as|map(attribute='source_url')|reject('none')|unique|list %}
+                              {% for source_url in conversion_sources %}
+                                <div><a href="{{ source_url }}" target="_blank" rel="noopener noreferrer">View the FEC conversion table</a></div>
+                              {% endfor %}
+                            </div>
+                          {% endif %}
                         {% elif event.date %}
                           <span class="legal-regulation__history-date">({{ event.date }})</span>
                         {% endif %}
                       </li>
                     {% endfor %}
-                  </ul>
+                  </ul>{% endif %}
+                  {% for change in group.additional_redesignations %}
+                    <div class="legal-regulation__previous-citation{% if group.events %} u-margin--top{% endif %}">
+                      {% if change.previous_citations %}
+                        {% set previous_citations = change.previous_citations %}
+                        {% include 'partials/legal-regulation-citation-change.jinja' %}
+                        {% if change.source_url %}
+                          <div><a href="{{ change.source_url }}" target="_blank" rel="noopener noreferrer">View the FEC conversion table</a></div>
+                        {% endif %}
+                      {% else %}
+                        {{ change.label }}
+                      {% endif %}
+                    </div>
+                  {% endfor %}
                 </div>
               </li>
             {% endfor %}
@@ -127,29 +185,6 @@
           <p>No FEC historical E&amp;J records available for this section.</p>
         {% endif %}
       </div>
-      {% if historical_redesignation_events %}
-        <h2 class="sidebar__title">Redesignations</h2>
-        <div class="sidebar__content">
-          <ul class="list--unstyled">
-            {% for event in historical_redesignation_events %}
-              <li class="u-margin--bottom">
-                {{ event.section }}{% if event.subsection %}{{ event.subsection }}{% endif %} -
-                {% if event.previous_citation_preview %}
-                  {% set preview = event.previous_citation_preview %}
-                  {% set accordion_prefix = 'previous-citation-' ~ section|replace('.', '-') ~ '-redesignation-' ~ loop.index0 %}
-                  {% include 'partials/legal-regulation-previous-citation.jinja' %}
-                {% elif event.previous_citations %}
-                  Previously cited at
-                  {{ regulation_ui.previous_links(event.previous_citations) }}
-                {% else %}
-                  {{ event.label }}
-                {% endif %}
-                {% if event.date %} ({{ event.date }}){% endif %}
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      {% endif %}
     </aside>
   </div>
 {% endblock %}

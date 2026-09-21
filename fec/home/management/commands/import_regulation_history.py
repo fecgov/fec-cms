@@ -79,6 +79,7 @@ def parse_citation_index(html, source_url):
     current_subject = ''
     current_subsection = ''
 
+    # Blank citation cells continue the preceding section/subsection row.
     for row in soup.select('table tr'):
         cells = row.find_all(['td', 'th'])
         if len(cells) < 4:
@@ -160,6 +161,8 @@ def parse_conversion_table(html, source_url):
 
         next_citations = [None] * len(rows)
         next_citation = None
+        # If a table shows 100.79, 100.8, 100.81, treat 100.8 as 100.80.
+        # Look ahead so we only make that correction when both neighbors agree.
         for index in range(len(rows) - 1, -1, -1):
             next_citations[index] = next_citation
             if re.fullmatch(r'\d+\.\d+', rows[index][0]):
@@ -182,7 +185,9 @@ def parse_conversion_table(html, source_url):
                 current_section = current
             if not current_section or not previous or previous == '-':
                 continue
-            if 'no e&j' in previous.lower():
+            # Ex: "3.2(b)(2); no E&J available" names only 3.2(b)(2) as a former cite.
+            previous_ej_unavailable = 'no e&j' in previous.lower()
+            if previous_ej_unavailable:
                 previous = re.split('no e&j', previous, flags=re.IGNORECASE)[0].strip(' ,;')
             if not previous or previous == '-':
                 continue
@@ -193,13 +198,16 @@ def parse_conversion_table(html, source_url):
             if current_citation == previous:
                 continue
 
-            conversions.setdefault(current_section, []).append({
+            conversion = {
                 'action': 'Redesignated',
                 'current_subsection': subsection if subsection != '-' else '',
                 'related_section': previous,
                 'description': format_previous_citations(previous),
                 'source_url': source_url,
-            })
+            }
+            if previous_ej_unavailable:
+                conversion['previous_ej_unavailable'] = True
+            conversions.setdefault(current_section, []).append(conversion)
 
     return conversions
 
