@@ -146,7 +146,7 @@ describe('data table', function() {
       var url = this.table.buildUrl(data);
       var expected = buildUrl(['path', 'to', 'endpoint'], {
         sort_hide_null: 'false',
-        sort_nulls_last: 'true',
+        sort_nulls_last: 'false',
         party: 'DFL',
         sort: '-office',
         per_page: 30,
@@ -154,6 +154,39 @@ describe('data table', function() {
         extra: 'true'
       });
       expect(URI(url).equals(expected)).to.be.true;
+    });
+
+    it('omits sort_nulls_last from Schedule B requests', function() {
+      const paths = [
+        ['schedules', 'schedule_b'],
+        ['schedules', 'schedule_b', 'by_purpose'],
+        ['schedules', 'schedule_b', 'by_recipient'],
+        ['schedules', 'schedule_b', 'by_recipient_id'],
+        ['schedules', 'schedule_b', 'efile']
+      ];
+      this.table.opts.query = { sort_nulls_last: false };
+
+      paths.forEach(path => {
+        this.table.opts.path = path;
+        const url = this.table.buildUrl({ order: [{ column: 1, dir: 'desc' }] }, false);
+        expect(URI.parseQuery(URI(url).search())).not.to.have.property('sort_nulls_last');
+      });
+    });
+
+    it('uses sort_nulls_last=false for Schedule A requests', function() {
+      const paths = [
+        ['schedules', 'schedule_a'],
+        ['schedules', 'schedule_a', 'efile'],
+        ['schedules', 'schedule_a', 'by_state'],
+        ['schedules', 'schedule_a', 'by_size', 'by_candidate']
+      ];
+      this.table.opts.query = { sort_nulls_last: true };
+
+      paths.forEach(path => {
+        this.table.opts.path = path;
+        const url = this.table.buildUrl({ order: [{ column: 1, dir: 'desc' }] }, false);
+        expect(URI.parseQuery(URI(url).search()).sort_nulls_last).to.equal('false');
+      });
     });
 
     it('renders data', function() {

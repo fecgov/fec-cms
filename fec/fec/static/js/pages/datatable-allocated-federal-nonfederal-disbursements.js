@@ -14,7 +14,7 @@ $(function() {
     title: 'Allocated federal/nonfederal disbursements',
     path: ['schedules', 'schedule_h4'],
     columns: cols_allocatedFederalNonfederalDisbursements,
-    query: { sort_nulls_last: true },
+    query: { sort_nulls_last: false },
     paginator: SeekPaginator,
     order: [[6, 'desc']],
     useFilters: true,
