@@ -32,11 +32,13 @@
       <div class="filters__aside">
     <div class="button--notebook u-margin--top t-sans">Use the legal search guide to learn more about <a href="/legal-resources/how-to-use-fec-legal-search-systems/">how to use FEC legal search systems</a>.</div>
   </div>
-      <form id="category-filters" action="/data/legal/search/{{ result_type | replace('_', '-') }}/">
-        <input id="search-type" type="hidden" name="search_type" value="{{ result_type }}">
-        {% block filters %}
-        {% endblock %}
-      </form>
+      {% block filter_form %}
+        <form id="category-filters" action="/data/legal/search/{{ result_type | replace('_', '-') }}/">
+          <input id="search-type" type="hidden" name="search_type" value="{{ result_type }}">
+          {% block filters %}
+          {% endblock %}
+        </form>
+      {% endblock %}
     </div>
   </div>
   <div id="results-{{ result_type }}" class="content__section u-no-padding">
@@ -65,7 +67,11 @@
     <div class="u-padding--left u-padding--right js-legal-search-no-results">
       <div class="message message--no-icon">
         <h2 class="message__title">No results</h2>
-        <p>Sorry, we didn&rsquo;t find any documents matching {% if query %}<span class="t-bold">{{ query }}</span>{% else %}your search{% endif %}.</p>
+        {% if result_type == 'regulations' and citation_lookup and not regulations_api_error %}
+          <p>We didn&rsquo;t find any Title 11 regulation citations for {{ citation_lookup.label }}.</p>
+        {% else %}
+          <p>Sorry, we didn&rsquo;t find any documents matching {% if query %}<span class="t-bold">{{ query }}</span>{% else %}your search{% endif %}.</p>
+        {% endif %}
         <div class="message--alert__bottom">
           <p>Think this was a mistake?</p>
           <ul class="list--buttons">

@@ -467,6 +467,140 @@ def test_pagination_retains_search_and_ignores_removed_filter():
     assert urlsplit(url).fragment == 'results-regulations'
 
 
+def test_mur_regulation_results_are_unique_sections():
+    results = regulations.format_mur_regulation_results([{
+        'dispositions': [
+            {'citations': [
+                {'type': 'statute', 'title': '52', 'text': '30101(17)'},
+                {'type': 'regulation', 'title': '11', 'text': '100.22(a)'},
+                {'type': 'regulation', 'title': '11', 'text': '100.22(b)'},
+                {'type': 'regulation', 'title': '11', 'text': '110.11(a)-(c)'},
+                {'type': 'regulation', 'title': '11', 'text': '111.1<script>'},
+            ]},
+        ],
+    }])
+    assert [(result['no'], result['name']) for result in results] == [
+        ('100.22', '11 CFR §100.22(a)'),
+        ('110.11', '11 CFR §110.11(a)-(c)'),
+        ('111.1', '11 CFR §111.1&lt;script&gt;'),
+    ]
+
+
+def test_ao_regulation_results_are_unique_title_11_sections():
+    results = regulations.format_ao_regulation_results([{
+        'regulatory_citations': [
+            {'title': 52, 'part': 301, 'section': 1},
+            {'title': 11, 'part': 100, 'section': 22},
+            {'title': 11, 'part': 100, 'section': 22},
+            {'title': 11, 'part': 109, 'section': 21},
+        ],
+    }])
+    assert [(result['no'], result['name']) for result in results] == [
+        ('100.22', '11 CFR §100.22'),
+        ('109.21', '11 CFR §109.21'),
+    ]
+
+
+def test_ao_number_filter_returns_cited_regulations():
+    advisory_opinion = {
+        'ao_no': '2024-01',
+        'name': 'Texas Majority PAC',
+        'regulatory_citations': [
+            {'title': 11, 'part': 100, 'section': 26},
+            {'title': 11, 'part': 109, 'section': 21},
+        ],
+    }
+    with mock.patch.object(
+        api_caller,
+        'load_legal_search_results',
+        return_value={'advisory_opinions': [advisory_opinion]},
+    ) as api:
+        response = views.legal_doc_search_regulations(RequestFactory().get(
+            '/legal/search/regulations/', {'ao_number': 'AO 2024-01'},
+        ))
+    soup = BeautifulSoup(response.content, 'html.parser')
+    assert [
+        link.get_text(' ', strip=True)
+        for link in soup.select('.legal-search-result > div:first-child a')
+    ] == ['§ 100.26', '§ 109.21']
+    message = soup.select_one('.message--info')
+    assert message.select_one('a').get_text(strip=True) == 'AO 2024-01'
+    assert 'Texas Majority PAC' in message.get_text(' ', strip=True)
+    assert soup.select_one('#ao-number-input')['value'] == 'AO 2024-01'
+    assert soup.select_one('#ao-number-input').find_parent('form')['id'] == 'regulation-ao-search'
+    assert 'ao_number=AO+2024-01' in soup.select_one('.legal-search-result a')['href']
+    api.assert_called_once_with(
+        '', query_type='advisory_opinions', offset=0, limit=20,
+        ao_no='2024-01', ao_doc_category_id='F',
+    )
+
+
+def test_invalid_ao_number_does_not_call_api():
+    with mock.patch.object(api_caller, 'load_legal_search_results') as api:
+        response = views.legal_doc_search_regulations(RequestFactory().get(
+            '/legal/search/regulations/', {'ao_number': 'not a number'},
+        ))
+    assert response.status_code == 400
+    assert b'Enter an AO number in YYYY-NN format.' in response.content
+    api.assert_not_called()
+
+
+def test_mur_number_filter_returns_cited_regulations():
+    mur = {
+        'no': '8253',
+        'name': 'Turn AZ Blue PAC',
+        'dispositions': [{'citations': [
+            {'type': 'regulation', 'title': '11', 'text': '100.5'},
+            {'type': 'regulation', 'title': '11', 'text': '100.22'},
+        ]}],
+    }
+    with mock.patch.object(api_caller, 'load_legal_search_results', return_value={'murs': [mur]}) as api:
+        response = views.legal_doc_search_regulations(RequestFactory().get(
+            '/legal/search/regulations/', {'mur_number': 'MUR #8253'},
+        ))
+    soup = BeautifulSoup(response.content, 'html.parser')
+    assert [link.get_text(' ', strip=True) for link in soup.select('.legal-search-result > div:first-child a')] == [
+        '§ 100.5', '§ 100.22',
+    ]
+    message = soup.select_one('.message--info')
+    assert message.select_one('a').get_text(strip=True) == 'MUR #8253'
+    assert 'Turn AZ Blue PAC' in message.get_text(' ', strip=True)
+    assert soup.select_one('#mur-number-input')['value'] == 'MUR #8253'
+    assert soup.select_one('#mur-number-input').find_parent('form')['id'] == 'regulation-mur-search'
+    assert soup.select_one('#search-input').find_parent('form')['id'] == 'regulation-keyword-search'
+    assert 'mur_number=MUR+%238253' in soup.select_one('.legal-search-result a')['href']
+    api.assert_called_once_with('', query_type='murs', offset=0, limit=20, case_no='8253')
+
+
+def test_invalid_mur_number_does_not_call_api():
+    with mock.patch.object(api_caller, 'load_legal_search_results') as api:
+        response = views.legal_doc_search_regulations(RequestFactory().get(
+            '/legal/search/regulations/', {'mur_number': 'not a number'},
+        ))
+    assert response.status_code == 400
+    assert b'Enter a MUR number using numbers only.' in response.content
+    api.assert_not_called()
+
+
+def test_regulation_search_methods_cannot_be_combined():
+    with mock.patch.object(api_caller, 'load_legal_search_results') as legal_api, \
+            mock.patch.object(ecfr_caller, 'fetch_ecfr_data') as ecfr_api:
+        response = views.legal_doc_search_regulations(RequestFactory().get(
+            '/legal/search/regulations/', {
+                'search': 'contribution',
+                'ao_number': '2024-01',
+                'mur_number': '8253',
+            },
+        ))
+    assert response.status_code == 400
+    assert b'Search by regulation keyword, AO number, or MUR number.' in response.content
+    assert b'value="contribution"' in response.content
+    assert b'value="2024-01"' in response.content
+    assert b'value="8253"' in response.content
+    legal_api.assert_not_called()
+    ecfr_api.assert_not_called()
+
+
 @pytest.mark.parametrize(('category', 'result_key', 'filters', 'record', 'label'), [
     ('advisory-opinions', 'advisory_opinions',
      {'ao_doc_category_id': 'F', 'ao_citation_require_all': 'false', 'ao_regulatory_citation': '11 CFR §100.6'},

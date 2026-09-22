@@ -1,5 +1,6 @@
 """Title 11 navigation, section views, and deferred legal citations."""
 
+import html
 import logging
 import re
 from concurrent.futures import ThreadPoolExecutor
@@ -17,7 +18,7 @@ from legal.regulation_text import format_ecfr_html_section, format_ecfr_timeline
 logger = logging.getLogger(__name__)
 ECFR_REGULATION_SECTION_PATTERN = re.compile(r'^\d+\.\d+[A-Za-z0-9-]*$')
 REGULATION_SEARCH_RETURN_NAME = 'regulations-search'
-REGULATION_SEARCH_PARAMS = ('search', 'page')
+REGULATION_SEARCH_PARAMS = ('search', 'ao_number', 'mur_number', 'page')
 
 
 def transform_ecfr_query_string(query_string):
@@ -59,7 +60,13 @@ def regulation_return_context(request, from_search=False):
         return {}
 
     context = {'return_to': REGULATION_SEARCH_RETURN_NAME}
-    for name in REGULATION_SEARCH_PARAMS:
+    if request.GET.get('ao_number'):
+        names = ('ao_number', 'page')
+    elif request.GET.get('mur_number'):
+        names = ('mur_number', 'page')
+    else:
+        names = REGULATION_SEARCH_PARAMS
+    for name in names:
         value = request.GET.get(name)
         if value:
             context[name] = value
@@ -90,14 +97,95 @@ def regulation_return_url(request):
 
 
 def regulation_search_page_url(request, page):
-    params = {}
-    query = request.GET.get('search')
-    if query:
-        params['search'] = query
+    params = {
+        name: request.GET.get(name)
+        for name in REGULATION_SEARCH_PARAMS
+        if name != 'page' and request.GET.get(name)
+    }
     params['page'] = page
     return '/legal/search/regulations/?{}#results-regulations'.format(
         urlencode(params)
     )
+
+
+def normalize_mur_number(value):
+    """Accept a bare number or a label such as ``MUR #8253``."""
+    match = re.fullmatch(r'\s*(?:MUR\s*#?\s*)?(\d+)\s*', value or '', re.IGNORECASE)
+    return match.group(1) if match else ''
+
+
+def normalize_ao_number(value):
+    """Accept a bare AO number or a label such as ``AO 2024-01``."""
+    match = re.fullmatch(r'\s*(?:AO\s*#?\s*)?(\d{4}-\d+)\s*', value or '', re.IGNORECASE)
+    return match.group(1) if match else ''
+
+
+def _add_citation_result(results, seen, section, label):
+    if section in seen:
+        return
+    seen.add(section)
+    results.append({
+        'doc_id': None,
+        'document_highlights': {},
+        'highlights': [],
+        'name': html.escape(label),
+        'no': section,
+        'type': None,
+        'url': ecfr_section_url(section),
+    })
+
+
+def format_ao_regulation_results(advisory_opinions):
+    """Return unique Title 11 sections cited by advisory opinions."""
+    results = []
+    seen = set()
+    for advisory_opinion in advisory_opinions:
+        for citation in advisory_opinion.get('regulatory_citations') or []:
+            if str(citation.get('title') or '11') != '11':
+                continue
+            part = citation.get('part')
+            cited_section = citation.get('section')
+            if part is None or cited_section is None:
+                continue
+            citation_text = f'{part}.{cited_section}'
+            match = re.match(r'(\d+\.\d+[A-Za-z0-9-]*)', citation_text)
+            if not match:
+                continue
+            section = match.group(1)
+            _add_citation_result(results, seen, section, f'11 CFR §{citation_text}')
+    return results
+
+
+def format_mur_regulation_results(murs):
+    """Return unique Title 11 sections cited in one or more MUR records."""
+    citations = []
+    for mur in murs:
+        # Current and archived MURs store citations in different locations.
+        for disposition in mur.get('dispositions') or []:
+            citations.extend(disposition.get('citations') or [])
+        archived = mur.get('citations') or {}
+        citations.extend(archived.get('regulations') or [])
+
+    results = []
+    seen = set()
+    for citation in citations:
+        if citation.get('type') not in (None, 'regulation'):
+            continue
+        if str(citation.get('title') or '11') != '11':
+            continue
+        citation_text = citation.get('text') or ''
+        match = re.search(r'(\d+\.\d+[A-Za-z0-9-]*)', citation_text)
+        if not match:
+            continue
+        section = match.group(1)
+        label = (
+            citation_text
+            if re.search(r'\bC\.?F\.?R\.?', citation_text, re.IGNORECASE)
+            else f'11 CFR §{citation_text}'
+        )
+        # Subsection citations share one regulation-section result.
+        _add_citation_result(results, seen, section, label)
+    return results
 
 
 def ecfr_hierarchy_url(node_type, identifier, part=None):
@@ -342,6 +430,8 @@ def regulation_hierarchy_page(request, hierarchy_type, identifier, part=None):
         'results': {'total_all': int(bool(hierarchy))},
         'result_type': 'regulations',
         'query': '',
+        'ao_number': request.GET.get('ao_number', ''),
+        'mur_number': request.GET.get('mur_number', ''),
         'is_browse': False,
         'back_url': regulation_return_url(request),
     }, status=502 if error else 200)
@@ -497,6 +587,8 @@ def regulation_page(request, section):
         'limit': 20,
         'result_type': 'regulations',
         'query': '',
+        'ao_number': request.GET.get('ao_number', ''),
+        'mur_number': request.GET.get('mur_number', ''),
         'is_browse': False,
         'legal_search_error': None,
         'legal_search_error_fields': [],

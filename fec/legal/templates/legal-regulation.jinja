@@ -1,5 +1,4 @@
 {% extends "legal-search-results-regulations.jinja" %}
-{% import 'macros/legal.jinja' as legal %}
 {% import 'macros/regulations.jinja' as regulation_ui %}
 
 {% block title %}
@@ -24,12 +23,6 @@
       {% endif %}
     </div>
   {% endif %}
-{% endblock %}
-
-{% block filters %}
-  <div class="filters__inner">
-    {{ legal.keyword_search(result_type, query) }}
-  </div>
 {% endblock %}
 
 {% block title_action %}

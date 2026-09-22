@@ -9,16 +9,49 @@
 {% endblock %}
 
 
-{% block filters %}
-    <div class="filters__inner">
+{% block filter_form %}
+  <div class="filters__inner">
+    <form id="regulation-keyword-search" action="/data/legal/search/regulations/">
+      <input type="hidden" name="search_type" value="regulations">
       {{ legal.keyword_search(result_type, query, error_message=legal_search_error if legal_search_error and 'search' in legal_search_error_fields|default([]) else None) }}
-    </div>
+    </form>
+    <p class="t-bold t-sans">or</p>
+    <form id="regulation-ao-search" action="/data/legal/search/regulations/">
+      <input type="hidden" name="search_type" value="regulations">
+      {{ legal.citation_number_search(
+        'ao-number-input',
+        'ao_number',
+        'AO number/AOs cited',
+        ao_number_input|default(ao_number|default('')),
+        'Find regulations cited by this advisory opinion',
+        error_message=legal_search_error if legal_search_error and 'ao_number' in legal_search_error_fields|default([]) else None
+      ) }}
+    </form>
+    <p class="t-bold t-sans">or</p>
+    <form id="regulation-mur-search" action="/data/legal/search/regulations/">
+      <input type="hidden" name="search_type" value="regulations">
+      {{ legal.citation_number_search(
+        'mur-number-input',
+        'mur_number',
+        'MUR number/MURs cited',
+        mur_number_input|default(mur_number|default('')),
+        'Find regulations cited by this MUR',
+        error_message=legal_search_error if legal_search_error and 'mur_number' in legal_search_error_fields|default([]) else None,
+        inputmode='numeric'
+      ) }}
+    </form>
+  </div>
 {% endblock %}
 
 {% block message %}
 {% if regulations_api_error %}
   <div class="message message--error" role="alert">
     <p>{{ regulations_api_error }}</p>
+  </div>
+{% endif %}
+{% if citation_lookup and citation_lookup.document %}
+  <div class="message message--info">
+    <p>Showing regulations cited by <a href="{{ citation_lookup.url }}">{{ citation_lookup.label }}</a>{% if citation_lookup.document.name %}, {{ citation_lookup.document.name }}{% endif %}.</p>
   </div>
 {% endif %}
 {% endblock %}

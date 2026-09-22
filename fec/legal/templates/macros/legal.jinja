@@ -31,6 +31,21 @@
 </div>
 {% endmacro %}
 
+{% macro citation_number_search(input_id, name, label, value, button_label, error_message=None, inputmode=None) %}
+<div class="filter">
+  <label class="label" for="{{ input_id }}">{{ label }}</label>
+  <div class="combo combo--search--mini no-mar-b">
+    <input id="{{ input_id }}" type="text"{% if inputmode %} inputmode="{{ inputmode }}"{% endif %} name="{{ name }}" class="combo__input" value="{{ value }}">
+    <button class="combo__button button--go button--standard" type="submit">
+      <span class="u-visually-hidden">{{ button_label }}</span>
+    </button>
+  </div>
+  {% if error_message %}
+  <div class="message filter__message message--error" role="alert">{{ error_message }}</div>
+  {% endif %}
+</div>
+{% endmacro %}
+
 {% macro text_filter(name, label, value) %}
   <div class="filter">
     <label class="label" for="{{name}}-filter">{{ label }}</label>

@@ -1343,14 +1343,89 @@ def legal_doc_search_af(request):
 def legal_doc_search_regulations(request):
     results = {}
     query = request.GET.get('search', '')
+    ao_number_input = request.GET.get('ao_number', '')
+    mur_number_input = request.GET.get('mur_number', '')
+    ao_number = regulations.normalize_ao_number(ao_number_input)
+    mur_number = regulations.normalize_mur_number(mur_number_input)
     regulations_api_error = None
-    is_browse = not query
+    citation_lookup = None
+    # Keyword, AO, and MUR searches are separate modes.
+    search_inputs = {
+        'search': query,
+        'ao_number': ao_number_input,
+        'mur_number': mur_number_input,
+    }
+    active_searches = [name for name, value in search_inputs.items() if value]
+    has_conflicting_filters = len(active_searches) > 1
+    search_mode = active_searches[0] if len(active_searches) == 1 else None
+    is_browse = not active_searches
     legal_search_error, legal_search_error_fields = validate_legal_search_query(query)
+    if has_conflicting_filters:
+        legal_search_error = 'Search by regulation keyword, AO number, or MUR number.'
+        legal_search_error_fields = active_searches
+    elif search_mode == 'ao_number' and not ao_number:
+        legal_search_error = 'Enter an AO number in YYYY-NN format.'
+        legal_search_error_fields = ['ao_number']
+    elif search_mode == 'mur_number' and not mur_number:
+        legal_search_error = 'Enter a MUR number using numbers only.'
+        legal_search_error_fields = ['mur_number']
     if legal_search_error:
         results = {'regulations': [], 'total_all': 0}
         current_page = 1
         total_pages = 0
         total_count = 0
+    elif search_mode in ('ao_number', 'mur_number'):
+        if search_mode == 'ao_number':
+            result_key = 'advisory_opinions'
+            document_number = ao_number
+            number_field = 'ao_no'
+            formatter = regulations.format_ao_regulation_results
+            api_filters = {'ao_no': ao_number, 'ao_doc_category_id': 'F'}
+            citation_lookup = {
+                'label': f'AO {ao_number}',
+                'url': f'/data/legal/advisory-opinions/{ao_number}/',
+            }
+            unavailable_message = 'AO citations are temporarily unavailable. Please try again.'
+        else:
+            result_key = 'murs'
+            document_number = mur_number
+            number_field = 'no'
+            formatter = regulations.format_mur_regulation_results
+            api_filters = {'case_no': mur_number}
+            citation_lookup = {
+                'label': f'MUR #{mur_number}',
+                'url': f'/data/legal/matter-under-review/{mur_number}/',
+            }
+            unavailable_message = 'MUR citations are temporarily unavailable. Please try again.'
+
+        citation_lookup['document'] = None
+        legal_results = api_caller.load_legal_search_results(
+            '', query_type=result_key, offset=0, limit=20, **api_filters,
+        )
+        if result_key not in legal_results:
+            regulations_api_error = unavailable_message
+            regulation_results = []
+        else:
+            # Keep exact matches if the upstream number search is broader.
+            matching_documents = [
+                document for document in legal_results[result_key]
+                if str(document.get(number_field)) == document_number
+            ]
+            citation_lookup['document'] = (
+                matching_documents[0] if matching_documents else None
+            )
+            regulation_results = formatter(matching_documents)
+
+        return_context = regulations.regulation_return_context(request, from_search=True)
+        for regulation in regulation_results:
+            regulation['url'] = regulations.append_return_context(
+                regulation['url'], return_context,
+            )
+        results['regulations'] = regulation_results
+        results['total_all'] = len(regulation_results)
+        current_page = 1
+        total_pages = 1 if regulation_results else 0
+        total_count = len(regulation_results)
     elif is_browse:
         structure = ecfr_caller.fetch_ecfr_structure()
         regulation_parts = regulations.format_ecfr_regulation_parts(structure)
@@ -1432,7 +1507,14 @@ def legal_doc_search_regulations(request):
         'total_count': total_count,
         'limit': 20,
         'result_type': 'regulations',
-        'query': '' if legal_search_error else query,
+        'query': query if has_conflicting_filters else (
+            '' if legal_search_error or search_mode != 'search' else query
+        ),
+        'ao_number': ao_number,
+        'ao_number_input': ao_number_input,
+        'mur_number': mur_number,
+        'mur_number_input': mur_number_input,
+        'citation_lookup': citation_lookup,
         'is_browse': is_browse,
         'legal_search_error': legal_search_error,
         'legal_search_error_fields': legal_search_error_fields,
