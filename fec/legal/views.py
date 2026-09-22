@@ -11,7 +11,6 @@ import requests  # reCAPTCHA for rulemaking comments
 from botocore.client import Config  # rulemaking comments
 from datetime import timezone  # rulemaking comments
 import logging
-from urllib.parse import urlencode
 
 from data import api_caller
 from data import ecfr_caller
@@ -1344,10 +1343,7 @@ def legal_doc_search_af(request):
 def legal_doc_search_regulations(request):
     results = {}
     query = request.GET.get('search', '')
-    regulatory_citation = request.GET.get('regulatory_citation', '')
-    regulatory_section = regulations.normalize_regulatory_section_filter(regulatory_citation)
     regulations_api_error = None
-    show_results = request.GET.get('show_results') == 'true'
     is_browse = not query
     legal_search_error, legal_search_error_fields = validate_legal_search_query(query)
     if legal_search_error:
@@ -1356,13 +1352,8 @@ def legal_doc_search_regulations(request):
         total_pages = 0
         total_count = 0
     elif is_browse:
-        if '.' in regulatory_section and not show_results:
-            query_string = urlencode({'regulatory_citation': regulatory_citation})
-            return redirect(
-                f"{regulations.ecfr_section_url(regulatory_section)}?{query_string}"
-            )
         structure = ecfr_caller.fetch_ecfr_structure()
-        regulation_parts = regulations.format_ecfr_regulation_parts(structure, regulatory_citation)
+        regulation_parts = regulations.format_ecfr_regulation_parts(structure)
         return_context = regulations.regulation_return_context(request, from_search=True)
         for part in regulation_parts:
             part['url'] = regulations.append_return_context(
@@ -1442,7 +1433,6 @@ def legal_doc_search_regulations(request):
         'limit': 20,
         'result_type': 'regulations',
         'query': '' if legal_search_error else query,
-        'regulatory_citation': '' if legal_search_error else regulatory_citation,
         'is_browse': is_browse,
         'legal_search_error': legal_search_error,
         'legal_search_error_fields': legal_search_error_fields,

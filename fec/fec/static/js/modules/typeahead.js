@@ -317,12 +317,6 @@ function citationDataset(name, source) {
   };
 }
 
-const regulationDataset = citationDataset('regulation', function(query, sync, async) {
-  const onlyTitle11 = callback => results => callback(
-    results.filter(result => /^11\s+C\.?F\.?R\.?\b/i.test(result.name))
-  );
-  citationRegulationEngine.ttAdapter()(query, onlyTitle11(sync), onlyTitle11(async));
-});
 const aoRegulatoryCitationDataset = citationDataset('aoRegulatoryCitation', citationRegulationEngine);
 const aoStatutoryCitationDataset = citationDataset('aoStatutoryCitation', citationStatuteEngine);
 const caseRegulatoryCitationDataset = citationDataset('caseRegulatoryCitation', citationRegulationEngine);
@@ -333,7 +327,6 @@ export const datasets = {
   committees: committeeDataset,
   auditCandidates: auditCandidateDataset,
   auditCommittees: auditCommitteeDataset,
-  regulations: regulationDataset,
   aoRegulatoryCitations: aoRegulatoryCitationDataset,
   aoStatutoryCitations: aoStatutoryCitationDataset,
   caseRegulatoryCitations: caseRegulatoryCitationDataset,

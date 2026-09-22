@@ -164,12 +164,6 @@ def test_hierarchy_reserved_ranges_and_navigation(structure):
     assert regulations.find_reserved_ecfr_section(structure, '100.8') == '[Reserved]'
 
 
-@pytest.mark.parametrize('citation', ['11 CFR 100.6', '11 C.F.R. §100.6', '§ 100.6', '100.6'])
-def test_citation_input_formats(citation):
-    assert regulations.normalize_regulatory_section_filter(citation) == '100.6'
-    assert regulations.normalize_regulatory_citation_filter(citation) == '100'
-
-
 def test_back_link_rejects_unknown_return_context():
     request = RequestFactory().get('/', {'return_to': 'https://evil.test', 'search': 'loans'})
     assert regulations.regulation_return_url(request) == '/legal/search/regulations/'
@@ -232,6 +226,7 @@ def test_section_renders_before_related_api_requests(ecfr):
     assert b'52 U.S.C. 30101(6)' in response.content
     assert b'eCFR issue date' not in response.content
     soup = BeautifulSoup(response.content, 'html.parser')
+    assert soup.select_one('#regulatory_citation-field') is None
     assert len(soup.select('[data-regulation-related-url] > a[href]')) == 3
     parent_history = soup.select_one('#historical-ej-100-6')
     assert parent_history is not None
@@ -258,7 +253,7 @@ def test_100_82_renders_ej_and_conversion_links_separately(ecfr, section_html):
     parent_event = soup.select_one(
         '#historical-ej-100-82 .legal-regulation__history-event'
     )
-    assert 'Earlier citations vary by subsection.' in parent_event.get_text(
+    assert 'Earlier citations vary by subsection. Refer to the current subsection entries for' in parent_event.get_text(
         ' ', strip=True
     )
     assert parent_event.select_one(
@@ -267,6 +262,9 @@ def test_100_82_renders_ej_and_conversion_links_separately(ecfr, section_html):
     assert parent_event.select_one(
         'a[href="#historical-ej-100-82-e"]'
     ).get_text(' ', strip=True) == '§ 100.82(e)'
+    assert 'below for earlier citation details.' in parent_event.get_text(
+        ' ', strip=True
+    )
     assert 'Earlier citation:' not in parent_event.get_text(' ', strip=True)
     assert 'View the full history' not in parent_event.get_text(' ', strip=True)
     assert 'View the FEC conversion table' not in parent_event.get_text(
@@ -439,30 +437,32 @@ def test_unknown_regulation_is_404(ecfr):
         regulations.regulation_page(RequestFactory().get('/'), '9999.999')
 
 
-@pytest.mark.parametrize('citation', ['', '11 C.F.R. 100'])
-def test_browse_and_part_filter(ecfr, citation):
+@pytest.mark.parametrize('citation', ['', '11 C.F.R. 100', '11 CFR 100.6'])
+def test_browse_ignores_removed_citation_filter(ecfr, citation):
     response = views.legal_doc_search_regulations(RequestFactory().get(
         '/legal/search/regulations/', {'regulatory_citation': citation},
     ))
     assert response.status_code == 200
     assert b'Definitions' in response.content
-    assert (b'Privacy Act' in response.content) == (not citation)
+    assert b'Privacy Act' in response.content
+    assert b'id="regulatory_citation-field"' not in response.content
 
 
-def test_section_redirect_and_hierarchy_back_link(ecfr):
-    request = RequestFactory().get('/', {'regulatory_citation': '11 CFR 100.6'})
-    assert views.legal_doc_search_regulations(request).url.startswith('/legal/regulations/100.6/')
+def test_hierarchy_back_link(ecfr):
     request = RequestFactory().get('/', {'return_to': 'regulations-search', 'page': 2})
     response = regulations.regulation_hierarchy_page(request, 'part', '100')
     assert b'/legal/search/regulations/?page=2' in response.content
     assert b'/legal/regulations/100.7/?return_to=regulations-search&amp;page=2' in response.content
 
 
-def test_pagination_retains_search_and_citation():
-    request = RequestFactory().get('/', {'search': 'loans', 'regulatory_citation': '11 CFR 100'})
+def test_pagination_retains_search_and_ignores_removed_filter():
+    request = RequestFactory().get('/', {
+        'search': 'loans', 'regulatory_citation': '11 CFR 100',
+        'show_results': 'true',
+    })
     url = regulations.regulation_search_page_url(request, 2)
     assert parse_qs(urlsplit(url).query) == {
-        'search': ['loans'], 'regulatory_citation': ['11 CFR 100'], 'page': ['2'],
+        'search': ['loans'], 'page': ['2'],
     }
     assert urlsplit(url).fragment == 'results-regulations'
 

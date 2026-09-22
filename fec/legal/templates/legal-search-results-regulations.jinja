@@ -1,6 +1,5 @@
 {% extends "layouts/legal-doc-search-results.jinja" %}
 {% import 'macros/legal.jinja' as legal %}
-{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 {% set document_type_display_name = 'Title 11 regulations' %}
 
 {% block header %}
@@ -13,9 +12,6 @@
 {% block filters %}
     <div class="filters__inner">
       {{ legal.keyword_search(result_type, query, error_message=legal_search_error if legal_search_error and 'search' in legal_search_error_fields|default([]) else None) }}
-      <div class="filter">
-      {{ typeahead.field('regulatory_citation', 'Regulatory citation', False, dataset='regulations', allow_text=False, single_select=True) }}
-      </div>
     </div>
 {% endblock %}
 

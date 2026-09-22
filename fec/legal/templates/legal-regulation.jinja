@@ -1,7 +1,6 @@
 {% extends "legal-search-results-regulations.jinja" %}
 {% import 'macros/legal.jinja' as legal %}
 {% import 'macros/regulations.jinja' as regulation_ui %}
-{% import 'macros/filters/typeahead-filter.jinja' as typeahead %}
 
 {% block title %}
   {% if regulation %}
@@ -30,7 +29,6 @@
 {% block filters %}
   <div class="filters__inner">
     {{ legal.keyword_search(result_type, query) }}
-    {{ typeahead.field('regulatory_citation', 'Regulatory citation', False, dataset='regulations', allow_text=False, single_select=True) }}
   </div>
 {% endblock %}
 
@@ -116,10 +114,10 @@
                           {% if event.citation_change_summary %}
                             <div class="legal-regulation__previous-citation u-margin--top">
                               {% if event.citation_change_summary.links_to_subsections %}
-                                {% if event.citation_change_summary.mappings|length > 1 %}Earlier citations vary by subsection. Refer to{% else %}Refer to earlier citation details for{% endif %}
+                                {% if event.citation_change_summary.mappings|length > 1 %}Earlier citations vary by subsection. Refer to the current subsection entries for{% else %}Refer to the current subsection entry for{% endif %}
                                 {% for mapping in event.citation_change_summary.mappings %}
                                   <a href="#{{ mapping.anchor_id }}">§ {{ mapping.current_citation }}</a>{% if not loop.last %}{% if loop.revindex == 2 %} and {% else %}, {% endif %}{% endif %}
-                                {% endfor %} below.
+                                {% endfor %} below for earlier citation details.
                               {% else %}
                                 <ul>
                                   {% for mapping in event.citation_change_summary.mappings %}

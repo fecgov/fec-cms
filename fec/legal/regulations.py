@@ -17,7 +17,7 @@ from legal.regulation_text import format_ecfr_html_section, format_ecfr_timeline
 logger = logging.getLogger(__name__)
 ECFR_REGULATION_SECTION_PATTERN = re.compile(r'^\d+\.\d+[A-Za-z0-9-]*$')
 REGULATION_SEARCH_RETURN_NAME = 'regulations-search'
-REGULATION_SEARCH_PARAMS = ('search', 'regulatory_citation', 'page', 'show_results')
+REGULATION_SEARCH_PARAMS = ('search', 'page')
 
 
 def transform_ecfr_query_string(query_string):
@@ -90,10 +90,13 @@ def regulation_return_url(request):
 
 
 def regulation_search_page_url(request, page):
-    params = request.GET.copy()
+    params = {}
+    query = request.GET.get('search')
+    if query:
+        params['search'] = query
     params['page'] = page
     return '/legal/search/regulations/?{}#results-regulations'.format(
-        params.urlencode()
+        urlencode(params)
     )
 
 
@@ -146,25 +149,13 @@ def find_reserved_ecfr_section(structure, section):
     return walk(chapter)
 
 
-def normalize_regulatory_citation_filter(citation):
-    return normalize_regulatory_section_filter(citation).split('.', 1)[0]
-
-
-def normalize_regulatory_section_filter(citation):
-    citation = (citation or '').strip().lower().replace('§', '')
-    citation = re.sub(r'^(11\s*)?c\.?f\.?r\.?\s*', '', citation)
-    match = re.fullmatch(r'\s*(\d+(?:\.\d+[a-z0-9-]*)?)(?:\([^)]+\))*\s*', citation)
-    return match.group(1) if match else ''
-
-
-def format_ecfr_regulation_parts(structure, regulatory_citation=''):
+def format_ecfr_regulation_parts(structure):
     """Return the browsable Title 11 hierarchy for the regulations table."""
     # Title 11 contains one FEC chapter; ignore other agencies if added later.
     chapter = find_ecfr_node(structure, 'chapter', 'I')
     if not chapter:
         return []
 
-    citation_part = normalize_regulatory_citation_filter(regulatory_citation)
     rows = []
 
     def hierarchy_sort_key(node):
@@ -179,14 +170,13 @@ def format_ecfr_regulation_parts(structure, regulatory_citation=''):
             return (float('inf'), float('inf'))
         return (int(match.group(1)), int(match.group(2) or -1))
 
-    def collect(node, part=None, include=True, level=0):
+    def collect(node, part=None, level=0):
         node_type = node.get('type')
         identifier = node.get('identifier') or ''
         if node_type == 'part':
             part = identifier
-            include = not citation_part or identifier == citation_part
 
-        if node_type in ('subchapter', 'part', 'subpart') and include:
+        if node_type in ('subchapter', 'part', 'subpart'):
             rows.append({
                 'type': node_type,
                 'part': part,
@@ -200,7 +190,7 @@ def format_ecfr_regulation_parts(structure, regulatory_citation=''):
             })
 
         for child in sorted(node.get('children', []), key=hierarchy_sort_key):
-            collect(child, part=part, include=include, level=level + 1)
+            collect(child, part=part, level=level + 1)
 
     collect(chapter, level=-1)
     return rows
@@ -352,7 +342,6 @@ def regulation_hierarchy_page(request, hierarchy_type, identifier, part=None):
         'results': {'total_all': int(bool(hierarchy))},
         'result_type': 'regulations',
         'query': '',
-        'regulatory_citation': '',
         'is_browse': False,
         'back_url': regulation_return_url(request),
     }, status=502 if error else 200)
@@ -508,7 +497,6 @@ def regulation_page(request, section):
         'limit': 20,
         'result_type': 'regulations',
         'query': '',
-        'regulatory_citation': section,
         'is_browse': False,
         'legal_search_error': None,
         'legal_search_error_fields': [],
