@@ -49,6 +49,7 @@
     <p>{{ regulations_api_error }}</p>
   </div>
 {% endif %}
+{% include 'partials/legal-filter-tags.jinja' %}
 {% if citation_lookup and citation_lookup.document %}
   <div class="message message--info">
     <p>Showing regulations cited by <a href="{{ citation_lookup.url }}">{{ citation_lookup.label }}</a>{% if citation_lookup.document.name %}, {{ citation_lookup.document.name }}{% endif %}.</p>

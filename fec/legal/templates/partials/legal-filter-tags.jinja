@@ -1,0 +1,21 @@
+{% if filter_tags %}
+<div class="data-container__tags u-no-padding-left">
+  <div class="row">
+    <h3 class="tags__title">
+      Viewing <span class="tags__count">{{ total_count }}</span> filtered results for:
+    </h3>
+  </div>
+  <ul class="tags">
+    {% for tag in filter_tags %}
+    <li data-tag-category="{{ tag.category }}" class="tag__category">
+      <div data-removable="true" class="tag__item">
+        {{ tag.label }}
+        <a class="button regulation-filter-tag__remove" href="{{ tag.remove_url }}">
+          <span class="u-visually-hidden">Remove {{ tag.label }} filter</span>
+        </a>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}

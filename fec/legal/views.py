@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponseGone, HttpResponseRedirect
+from django.urls import reverse
 
 import datetime
 import re
@@ -1414,7 +1415,14 @@ def legal_doc_search_regulations(request):
             citation_lookup['document'] = (
                 matching_documents[0] if matching_documents else None
             )
-            regulation_results = formatter(matching_documents)
+            descriptions = {}
+            if matching_documents:
+                structure = ecfr_caller.fetch_ecfr_structure()
+                if not structure.get('error'):
+                    descriptions = regulations.ecfr_section_descriptions(
+                        structure
+                    )
+            regulation_results = formatter(matching_documents, descriptions)
 
         return_context = regulations.regulation_return_context(request, from_search=True)
         for regulation in regulation_results:
@@ -1499,6 +1507,22 @@ def legal_doc_search_regulations(request):
         for page in pagination['pages']
     }
 
+    filter_tags = []
+    if not legal_search_error and search_mode:
+        labels = {
+            'search': query,
+            'ao_number': f'AO {ao_number}',
+            'mur_number': f'MUR #{mur_number}',
+        }
+        filter_tags.append({
+            'category': search_mode,
+            'label': labels[search_mode],
+            'remove_url': (
+                f"{reverse('legal-search-regulations')}"
+                '?search_type=regulations#results-regulations'
+            ),
+        })
+
     return render(request, 'legal-search-results-regulations.jinja', {
         'parent': 'legal',
         'results': results,
@@ -1519,6 +1543,7 @@ def legal_doc_search_regulations(request):
         'legal_search_error': legal_search_error,
         'legal_search_error_fields': legal_search_error_fields,
         'regulations_api_error': regulations_api_error,
+        'filter_tags': filter_tags,
         'social_image_identifier': 'legal',
         'pagination': pagination,
     }, status=400 if legal_search_error else 200)

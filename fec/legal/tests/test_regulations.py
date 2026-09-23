@@ -183,6 +183,18 @@ def test_named_return_context_avoids_nested_url():
     assert 'return_url' not in url
 
 
+def test_return_context_precedes_paragraph_anchor():
+    context = {'return_to': 'regulations-search', 'mur_number': '7382'}
+    url = regulations.append_return_context(
+        '/legal/regulations/110.20/#p-110.20(i)',
+        context,
+    )
+    assert url == (
+        '/legal/regulations/110.20/'
+        '?return_to=regulations-search&mur_number=7382#p-110.20(i)'
+    )
+
+
 def test_named_back_link_preserves_query_and_adds_results_anchor():
     request = RequestFactory().get('/', {
         'return_to': 'regulations-search', 'search': 'loans', 'page': 2,
@@ -446,6 +458,7 @@ def test_browse_ignores_removed_citation_filter(ecfr, citation):
     assert b'Definitions' in response.content
     assert b'Privacy Act' in response.content
     assert b'id="regulatory_citation-field"' not in response.content
+    assert b'class="tag__item"' not in response.content
 
 
 def test_hierarchy_back_link(ecfr):
@@ -467,7 +480,7 @@ def test_pagination_retains_search_and_ignores_removed_filter():
     assert urlsplit(url).fragment == 'results-regulations'
 
 
-def test_mur_regulation_results_are_unique_sections():
+def test_mur_regulation_results_preserve_unique_subsection_citations():
     results = regulations.format_mur_regulation_results([{
         'dispositions': [
             {'citations': [
@@ -478,11 +491,19 @@ def test_mur_regulation_results_are_unique_sections():
                 {'type': 'regulation', 'title': '11', 'text': '111.1<script>'},
             ]},
         ],
-    }])
-    assert [(result['no'], result['name']) for result in results] == [
-        ('100.22', '11 CFR §100.22(a)'),
-        ('110.11', '11 CFR §110.11(a)-(c)'),
-        ('111.1', '11 CFR §111.1&lt;script&gt;'),
+    }], {
+        '100.22': 'Express advocacy',
+        '110.11': 'Communications; advertising; disclaimers',
+        '111.1': 'Definitions',
+    })
+    assert [
+        (result['citation'], result['name'], result['url']) for result in results
+    ] == [
+        ('11 CFR §100.22(a)', 'Express advocacy', '/legal/regulations/100.22/#p-100.22(a)'),
+        ('11 CFR §100.22(b)', 'Express advocacy', '/legal/regulations/100.22/#p-100.22(b)'),
+        ('11 CFR §110.11(a)-(c)', 'Communications; advertising; disclaimers',
+         '/legal/regulations/110.11/#p-110.11(a)'),
+        ('11 CFR §111.1', 'Definitions', '/legal/regulations/111.1/'),
     ]
 
 
@@ -494,10 +515,10 @@ def test_ao_regulation_results_are_unique_title_11_sections():
             {'title': 11, 'part': 100, 'section': 22},
             {'title': 11, 'part': 109, 'section': 21},
         ],
-    }])
-    assert [(result['no'], result['name']) for result in results] == [
-        ('100.22', '11 CFR §100.22'),
-        ('109.21', '11 CFR §109.21'),
+    }], {'100.22': 'Express advocacy', '109.21': 'Coordinated communications'})
+    assert [(result['citation'], result['name']) for result in results] == [
+        ('11 CFR §100.22', 'Express advocacy'),
+        ('11 CFR §109.21', 'Coordinated communications'),
     ]
 
 
@@ -510,11 +531,16 @@ def test_ao_number_filter_returns_cited_regulations():
             {'title': 11, 'part': 109, 'section': 21},
         ],
     }
+    citation_structure = {'children': [
+        {'type': 'section', 'identifier': '100.26', 'label_description': 'Expenditures'},
+        {'type': 'section', 'identifier': '109.21', 'label_description': 'Coordinated communications'},
+    ]}
     with mock.patch.object(
-        api_caller,
-        'load_legal_search_results',
+        api_caller, 'load_legal_search_results',
         return_value={'advisory_opinions': [advisory_opinion]},
-    ) as api:
+    ) as api, mock.patch.object(
+        ecfr_caller, 'fetch_ecfr_structure', return_value=citation_structure,
+    ):
         response = views.legal_doc_search_regulations(RequestFactory().get(
             '/legal/search/regulations/', {'ao_number': 'AO 2024-01'},
         ))
@@ -522,13 +548,26 @@ def test_ao_number_filter_returns_cited_regulations():
     assert [
         link.get_text(' ', strip=True)
         for link in soup.select('.legal-search-result > div:first-child a')
-    ] == ['§ 100.26', '§ 109.21']
+    ] == ['11 CFR §100.26', '11 CFR §109.21']
+    assert [
+        item.get_text(' ', strip=True)
+        for item in soup.select('.legal-search-result__name')
+    ] == ['Expenditures', 'Coordinated communications']
     message = soup.select_one('.message--info')
     assert message.select_one('a').get_text(strip=True) == 'AO 2024-01'
     assert 'Texas Majority PAC' in message.get_text(' ', strip=True)
     assert soup.select_one('#ao-number-input')['value'] == 'AO 2024-01'
     assert soup.select_one('#ao-number-input').find_parent('form')['id'] == 'regulation-ao-search'
     assert 'ao_number=AO+2024-01' in soup.select_one('.legal-search-result a')['href']
+    tag = soup.select_one('[data-tag-category="ao_number"] .tag__item')
+    assert tag.get_text(' ', strip=True) == (
+        'AO 2024-01 Remove AO 2024-01 filter'
+    )
+    assert tag.select_one('.regulation-filter-tag__remove')['href'] == (
+        '/legal/search/regulations/'
+        '?search_type=regulations#results-regulations'
+    )
+    assert soup.select_one('.tags__count').get_text(strip=True) == '2'
     api.assert_called_once_with(
         '', query_type='advisory_opinions', offset=0, limit=20,
         ao_no='2024-01', ao_doc_category_id='F',
@@ -542,6 +581,7 @@ def test_invalid_ao_number_does_not_call_api():
         ))
     assert response.status_code == 400
     assert b'Enter an AO number in YYYY-NN format.' in response.content
+    assert b'class="tag__item"' not in response.content
     api.assert_not_called()
 
 
@@ -554,14 +594,26 @@ def test_mur_number_filter_returns_cited_regulations():
             {'type': 'regulation', 'title': '11', 'text': '100.22'},
         ]}],
     }
-    with mock.patch.object(api_caller, 'load_legal_search_results', return_value={'murs': [mur]}) as api:
+    citation_structure = {'children': [
+        {'type': 'section', 'identifier': '100.5', 'label_description': 'Political committee'},
+        {'type': 'section', 'identifier': '100.22', 'label_description': 'Express advocacy'},
+    ]}
+    with mock.patch.object(
+        api_caller, 'load_legal_search_results', return_value={'murs': [mur]},
+    ) as api, mock.patch.object(
+        ecfr_caller, 'fetch_ecfr_structure', return_value=citation_structure,
+    ):
         response = views.legal_doc_search_regulations(RequestFactory().get(
             '/legal/search/regulations/', {'mur_number': 'MUR #8253'},
         ))
     soup = BeautifulSoup(response.content, 'html.parser')
     assert [link.get_text(' ', strip=True) for link in soup.select('.legal-search-result > div:first-child a')] == [
-        '§ 100.5', '§ 100.22',
+        '11 CFR §100.5', '11 CFR §100.22',
     ]
+    assert [
+        item.get_text(' ', strip=True)
+        for item in soup.select('.legal-search-result__name')
+    ] == ['Political committee', 'Express advocacy']
     message = soup.select_one('.message--info')
     assert message.select_one('a').get_text(strip=True) == 'MUR #8253'
     assert 'Turn AZ Blue PAC' in message.get_text(' ', strip=True)
@@ -569,7 +621,80 @@ def test_mur_number_filter_returns_cited_regulations():
     assert soup.select_one('#mur-number-input').find_parent('form')['id'] == 'regulation-mur-search'
     assert soup.select_one('#search-input').find_parent('form')['id'] == 'regulation-keyword-search'
     assert 'mur_number=MUR+%238253' in soup.select_one('.legal-search-result a')['href']
+    tag = soup.select_one('[data-tag-category="mur_number"] .tag__item')
+    assert tag.get_text(' ', strip=True) == 'MUR #8253 Remove MUR #8253 filter'
+    assert tag.select_one('.regulation-filter-tag__remove')['href'] == (
+        '/legal/search/regulations/'
+        '?search_type=regulations#results-regulations'
+    )
+    assert soup.select_one('.tags__count').get_text(strip=True) == '2'
     api.assert_called_once_with('', query_type='murs', offset=0, limit=20, case_no='8253')
+
+
+def test_keyword_filter_renders_removable_tag():
+    ecfr_results = {
+        'results': [{
+            'hierarchy': {'section': '100.6'},
+            'headings': {'section': 'Connected organization'},
+            'full_text_excerpt': 'A connected organization...',
+        }],
+        'meta': {'current_page': 1, 'total_pages': 1, 'total_count': 1},
+    }
+    with mock.patch.object(
+        ecfr_caller, 'fetch_ecfr_data', return_value=ecfr_results,
+    ):
+        response = views.legal_doc_search_regulations(RequestFactory().get(
+            '/legal/search/regulations/', {'search': 'connected organization'},
+        ))
+
+    soup = BeautifulSoup(response.content, 'html.parser')
+    tag = soup.select_one('[data-tag-category="search"] .tag__item')
+    assert tag.get_text(' ', strip=True) == (
+        'connected organization Remove connected organization filter'
+    )
+    assert tag.select_one('.regulation-filter-tag__remove')['href'] == (
+        '/legal/search/regulations/'
+        '?search_type=regulations#results-regulations'
+    )
+    assert soup.select_one('.tags__count').get_text(strip=True) == '1'
+
+
+def test_mur_regulation_subsection_links_to_reader_paragraph():
+    mur = {
+        'no': '7382',
+        'name': 'Thom Tillis Committee, et al.',
+        'dispositions': [{'citations': [
+            {'type': 'regulation', 'title': '11', 'text': '110.20(i)'},
+        ]}],
+    }
+    structure = {'children': [{
+        'type': 'section',
+        'identifier': '110.20',
+        'label_description': (
+            'Prohibition on contributions, donations, expenditures, independent '
+            'expenditures, and disbursements by foreign nationals'
+        ),
+    }]}
+    with mock.patch.object(
+        api_caller, 'load_legal_search_results', return_value={'murs': [mur]},
+    ), mock.patch.object(
+        ecfr_caller, 'fetch_ecfr_structure', return_value=structure,
+    ):
+        response = views.legal_doc_search_regulations(RequestFactory().get(
+            '/legal/search/regulations/', {'mur_number': '7382'},
+        ))
+
+    soup = BeautifulSoup(response.content, 'html.parser')
+    result = soup.select_one('.legal-search-result')
+    link = result.select_one('a')
+    assert link.get_text(' ', strip=True) == '11 CFR §110.20(i)'
+    assert link['href'] == (
+        '/legal/regulations/110.20/'
+        '?return_to=regulations-search&mur_number=7382#p-110.20(i)'
+    )
+    assert 'Prohibition on contributions' in result.select_one(
+        '.legal-search-result__name'
+    ).get_text(' ', strip=True)
 
 
 def test_invalid_mur_number_does_not_call_api():
