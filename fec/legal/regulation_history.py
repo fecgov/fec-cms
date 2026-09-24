@@ -49,7 +49,7 @@ def load_regulation_history(section):
 
 
 def regulation_history_sort_key(event):
-    """Group E&Js by CFR citation, then order each group oldest first."""
+    """Group E&Js by CFR citation, then order each group newest first."""
     section_parts = tuple(
         (0, int(part)) if part.isdigit() else (1, part.lower())
         for part in re.split(r'(\d+)', event.get('section', ''))
@@ -79,7 +79,8 @@ def regulation_history_sort_key(event):
     return (
         section_parts,
         tuple(subsection_parts),
-        int(date) if date.isdigit() else 9999,
+        0 if event.get('action') == 'E&J' else 1,
+        -int(date) if date.isdigit() else float('inf'),
     )
 
 
@@ -92,6 +93,13 @@ def historical_ej_anchor(section, subsection=''):
 def normalize_history_subject(subject):
     """Return a subject suitable for comparison across citation-index rows."""
     return re.sub(r'^[*\s]+', '', subject or '').strip().lower()
+
+
+def display_history_subject(subject):
+    """Use clearer display text for generic removed section subjects."""
+    if subject == 'Removed and reserved':
+        return 'Section removed and reserved'
+    return subject
 
 
 def closest_historical_ej_subsection(section, subsection):
@@ -237,6 +245,66 @@ def group_historical_regulation_events(events):
     return groups
 
 
+def group_historical_regulation_subjects(events):
+    """Group a citation's E&J documents by the same subject."""
+    subject_groups = []
+    groups_by_subject = {}
+    for event in events:
+        subject_key = normalize_history_subject(event.get('label'))
+        subject_group = groups_by_subject.get(subject_key)
+        if subject_group is None:
+            subject_group = {
+                'label': event.get('label'),
+                'events': [],
+            }
+            groups_by_subject[subject_key] = subject_group
+            subject_groups.append(subject_group)
+        subject_group['events'].append(event)
+
+    for subject_group in subject_groups:
+        year_counts = Counter(
+            event.get('date') for event in subject_group['events']
+        )
+        year_positions = Counter()
+        for event in subject_group['events']:
+            year = event.get('date')
+            year_positions[year] += 1
+            event['document_label'] = year
+            if year_counts[year] > 1:
+                event['document_label'] = (
+                    f'{year} (document {year_positions[year]})'
+                )
+
+    return subject_groups
+
+
+def combine_group_citation_changes(changes):
+    """Combine citation-level conversion rows into one display note."""
+    previous_citations = []
+    descriptions = []
+    source_urls = []
+    for change in changes:
+        citations = change.get('previous_citations', [])
+        if citations:
+            for citation in citations:
+                if citation not in previous_citations:
+                    previous_citations.append(citation)
+        else:
+            description = change.get('description') or change.get('label')
+            if description and description not in descriptions:
+                descriptions.append(description)
+
+        source_url = change.get('source_url')
+        if source_url and source_url not in source_urls:
+            source_urls.append(source_url)
+
+    return {
+        'previous_citations': previous_citations,
+        'descriptions': descriptions,
+        'source_urls': source_urls,
+    }
+
+
 def format_historical_regulation_events(section):
     history = load_regulation_history(section)
     conversions = [dict(item) for item in history.get('conversions', [])]
@@ -271,6 +339,7 @@ def format_historical_regulation_events(section):
 
     for event in indexed_events:
         subject = event.get('subject') or 'Explanation and Justification'
+        subject = display_history_subject(subject)
         event_identity = (
             event.get('action', 'E&J'),
             event.get('year'),
@@ -306,7 +375,7 @@ def format_historical_regulation_events(section):
             'source_url': conversion.get('source_url'),
         })
 
-    # Match the citation index: parent cite, nested subsections, then oldest E&J.
+    # Match CFR order: parent cite, nested subsections, then newest E&J.
     return sorted(events, key=regulation_history_sort_key)
 
 
@@ -475,6 +544,23 @@ def build_regulation_history_context(section):
         group.setdefault('additional_redesignations', []).append(event)
 
     ej_groups.sort(key=lambda group: regulation_history_sort_key(group))
+
+    for group in ej_groups:
+        if group.get('events'):
+            group['subject_groups'] = group_historical_regulation_subjects(
+                group['events']
+            )
+
+        citation_changes = []
+        if group.get('redesignation') and not group.get(
+            'show_event_citation_changes'
+        ):
+            citation_changes.append(group['redesignation'])
+        citation_changes.extend(group.get('additional_redesignations', []))
+        if citation_changes:
+            group['citation_note'] = combine_group_citation_changes(
+                citation_changes
+            )
 
     return {
         'events': events,

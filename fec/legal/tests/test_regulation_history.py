@@ -64,6 +64,26 @@ class TestRegulationHistory(unittest.TestCase):
         )
 
     @mock.patch.object(regulation_history, 'load_regulation_history')
+    def test_removed_and_reserved_subject_names_the_section(self, load_history):
+        load_history.return_value = {
+            'events': [
+                {'year': 2002, 'subject': 'Removed and reserved'},
+                {'year': 2003, 'subject': 'Interim; removed and reserved'},
+            ],
+            'conversions': [],
+        }
+
+        events = regulation_history.format_historical_regulation_events('100.23')
+
+        self.assertEqual(
+            [event['label'] for event in events],
+            [
+                'Interim; removed and reserved',
+                'Section removed and reserved',
+            ],
+        )
+
+    @mock.patch.object(regulation_history, 'load_regulation_history')
     def test_format_historical_events_groups_citations_then_years(
         self,
         load_history,
@@ -88,14 +108,14 @@ class TestRegulationHistory(unittest.TestCase):
         self.assertEqual(
             [(event['subsection'], event['date']) for event in events],
             [
-                ('', '1975'),
                 ('', '2003'),
-                ('(a)', '1977'),
+                ('', '1975'),
                 ('(a)', '2002'),
+                ('(a)', '1977'),
                 ('(a)(2)', '2002'),
                 ('(a)(10)', '2002'),
-                ('(b)', '1977'),
                 ('(b)', '1980'),
+                ('(b)', '1977'),
             ],
         )
         self.assertEqual(
@@ -107,11 +127,11 @@ class TestRegulationHistory(unittest.TestCase):
                 for group in groups
             ],
             [
-                ('', ['1975', '2003']),
-                ('(a)', ['1977', '2002']),
+                ('', ['2003', '1975']),
+                ('(a)', ['2002', '1977']),
                 ('(a)(2)', ['2002']),
                 ('(a)(10)', ['2002']),
-                ('(b)', ['1977', '1980']),
+                ('(b)', ['1980', '1977']),
             ],
         )
 
@@ -250,6 +270,20 @@ class TestRegulationHistory(unittest.TestCase):
         self.assertEqual(redesignation['label'], 'Previously cited at § 8.1')
         self.assertEqual(redesignation['previous_citations'][0]['citation'], '8.1')
 
+    def test_multiple_group_citation_changes_share_one_note(self):
+        context = regulation_history.build_regulation_history_context('2.8')
+        group = context['event_groups'][0]
+
+        self.assertEqual(
+            [
+                citation['citation']
+                for citation in group['citation_note']['previous_citations']
+            ],
+            ['3.5', '3.6'],
+        )
+        self.assertEqual(len(group['citation_note']['source_urls']), 1)
+        self.assertEqual(group['citation_note']['descriptions'], [])
+
     def test_100_82_explains_section_level_citation_changes(self):
         context = regulation_history.build_regulation_history_context('100.82')
         section_group = next(
@@ -303,6 +337,39 @@ class TestRegulationHistory(unittest.TestCase):
             not event['label'].startswith('*')
             for group in context['event_groups']
             for event in group['events']
+        ))
+
+    def test_groups_matching_subjects_and_labels_duplicate_years(self):
+        context = regulation_history.build_regulation_history_context('100.82')
+        groups = {
+            group['subsection']: group for group in context['event_groups']
+        }
+
+        self.assertEqual(
+            groups['']['subject_groups'][0]['label'],
+            'Bank loans',
+        )
+        self.assertEqual(
+            [
+                event['document_label']
+                for event in groups['']['subject_groups'][0]['events']
+            ],
+            ['2024', '2014', '2002'],
+        )
+        self.assertEqual(
+            [
+                event['document_label']
+                for event in groups['(e)(1)(ii)']['subject_groups'][0]['events']
+            ],
+            ['2024', '2002 (document 1)', '2002 (document 2)'],
+        )
+
+        other_context = regulation_history.build_regulation_history_context(
+            '100.54'
+        )
+        self.assertTrue(all(
+            bool(group.get('subject_groups')) == bool(group.get('events'))
+            for group in other_context['event_groups']
         ))
 
     def test_parent_without_subsection_records_links_to_conversion_row(self):

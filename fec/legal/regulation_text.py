@@ -8,6 +8,10 @@ from urllib.parse import urlsplit, urlunsplit
 from bs4 import BeautifulSoup, Comment, NavigableString
 
 ECFR_COMPARE_START_DATE = '2017-01-03'
+ECFR_SECTION_SOURCE_NOTE = re.compile(
+    r'^\[\s*\d+\s+FR\s+\d+\b.*\]\.?$',
+    re.IGNORECASE,
+)
 
 
 def ecfr_compare_path(ancestry, section):
@@ -155,6 +159,12 @@ def extract_statutory_citations(elements):
     return list(citations.values())
 
 
+def is_ecfr_section_source_note(paragraph):
+    """Identify the bracketed Federal Register note below a section's text."""
+    value = re.sub(r'\s+', ' ', paragraph.get_text(' ', strip=True))
+    return bool(ECFR_SECTION_SOURCE_NOTE.fullmatch(value))
+
+
 def format_ecfr_html_section(section_html, section):
     """Extract one section from the canonical eCFR HTML reader page."""
     if not section_html:
@@ -196,11 +206,20 @@ def format_ecfr_html_section(section_html, section):
         lambda tag: tag.name in ('div', 'section', 'article')
         and any('section' in name.lower() for name in (tag.get('class') or []))
     ) or heading.parent
-    statutory_citations = extract_statutory_citations([heading, *container.find_all(['p', 'li'])])
+    content_elements = [
+        element for element in container.find_all(['p', 'li'])
+        if not (
+            element.name == 'p'
+            and is_ecfr_section_source_note(element)
+        )
+    ]
+    statutory_citations = extract_statutory_citations([heading, *content_elements])
     # Preserve eCFR paragraph IDs and indentation so anchors remain usable locally.
     body = []
     previous_paragraph_level = 0
     for paragraph in container.find_all('p'):
+        if is_ecfr_section_source_note(paragraph):
+            continue
         paragraph_html = ecfr_html_inner_html(paragraph, preserve_links=True)
         if paragraph_html:
             marker_match = re.match(

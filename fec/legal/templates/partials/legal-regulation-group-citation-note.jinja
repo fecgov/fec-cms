@@ -1,0 +1,10 @@
+{% if group.citation_note.previous_citations %}
+  {% set previous_citations = group.citation_note.previous_citations %}
+  {% include 'partials/legal-regulation-citation-change.jinja' %}
+{% endif %}
+{% for description in group.citation_note.descriptions %}
+  <div>{{ description }}</div>
+{% endfor %}
+{% for source_url in group.citation_note.source_urls %}
+  <div><a href="{{ source_url }}" target="_blank" rel="noopener noreferrer">View the FEC conversion table</a></div>
+{% endfor %}
