@@ -89,18 +89,6 @@ const renderNullStringText = function(data, columnName) {
   }
 };
 
-// Committee page Schedule A tables use the optimized null-sort query shape.
-const committeeTwoYearTransactionPeriodQuery = function(committeeId, cycle, params = {}) {
-  return _extend(
-    {
-      committee_id: committeeId,
-      two_year_transaction_period: cycle,
-      sort_nulls_last: true
-    },
-    params
-  );
-};
-
 // Deferred tab links are rendered before client-side cycle changes. Preserve the
 // active cycle when requesting a tab partial so its tables and selects stay in sync.
 const currentTabUrl = function($tab) {
@@ -636,9 +624,12 @@ $(function() {
           $table,
           _extend({}, tableOpts, {
             path: path,
-            query: committeeTwoYearTransactionPeriodQuery(committeeId, cycle, {
-              is_individual: true
-            }),
+            query: {
+              committee_id: committeeId,
+              two_year_transaction_period: cycle,
+              is_individual: true,
+              sort_nulls_last: false
+            },
             columns: individualContributionsColumns,
             callbacks: aggregateCallbacks,
             order: [[2, 'desc']],
@@ -662,7 +653,12 @@ $(function() {
           $table,
           _extend({}, tableOpts, {
             path: path,
-            query: committeeTwoYearTransactionPeriodQuery(committeeId, cycle),
+            query: {
+              committee_id: committeeId,
+              two_year_transaction_period: cycle,
+              sort_nulls_last: false
+              // is_individual: true
+            },
             columns: individualContributionsColumns,
             callbacks: aggregateCallbacks,
             order: [[3, 'desc']],

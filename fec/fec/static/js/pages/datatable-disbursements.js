@@ -14,7 +14,6 @@ $(function() {
     title: 'Disbursements',
     path: ['schedules', 'schedule_b'],
     columns: cols_disbursements,
-    query: { sort_nulls_last: false },
     paginator: SeekPaginator,
     order: [[4, 'desc']],
     useFilters: true,

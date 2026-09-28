@@ -579,15 +579,6 @@ const defaultCallbacks = {
   afterRender: function() {} //eslint-disable-line no-empty-function
 };
 
-const hasQueryValue = function(value) {
-  return Array.isArray(value) ? value.length > 0 : value !== undefined && value !== null && value !== '';
-};
-
-// This query shape uses a faster API index when nulls sort last.
-const hasCommitteeTwoYearTransactionPeriod = function(query) {
-  return hasQueryValue(query.committee_id) && hasQueryValue(query.two_year_transaction_period);
-};
-
 /**
  * The FEC's class of DataTable (the `_FEC` suffix is to differentiate between this and
  * datatables v1's '.Datatable' jQuery plugin and
@@ -1019,7 +1010,7 @@ DataTable_FEC.prototype.buildUrl = function(data, paginate, download) {
   );
   } else{
   query = _extend(
-    { sort_hide_null: false, sort_nulls_last: true }, // eslint-disable-line camelcase
+    { sort_hide_null: false, sort_nulls_last: false }, // eslint-disable-line camelcase
     this.filters || {}
   );
  }
@@ -1035,18 +1026,15 @@ DataTable_FEC.prototype.buildUrl = function(data, paginate, download) {
       api_key: window.DOWNLOAD_API_KEY
     });
   }
-  query = _extend({}, query, this.opts.query || {});
-  // Keep broad searches unchanged; only target committee two-year lookups.
-  if (
-    this.opts.sortNullsLastForCommitteeTwoYearTransactionPeriod &&
-    hasCommitteeTwoYearTransactionPeriod(query)
-  ) {
-    query.sort_nulls_last = true;
+  const requestQuery = _extend({}, query, this.opts.query || {});
+  if (this.opts.path && this.opts.path[0] === 'schedules') {
+    if (this.opts.path[1] === 'schedule_a') {
+      requestQuery.sort_nulls_last = false;
+    } else if (this.opts.path[1] === 'schedule_b') {
+      delete requestQuery.sort_nulls_last;
+    }
   }
-  return buildUrl(
-    this.opts.path,
-    query
-  );
+  return buildUrl(this.opts.path, requestQuery);
 };
 
 DataTable_FEC.prototype.fetchSuccess = function(resp) {

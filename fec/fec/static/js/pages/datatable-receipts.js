@@ -15,8 +15,6 @@ $(function() {
     path: ['schedules', 'schedule_a'],
     columns: cols_receipts,
     query: { sort_nulls_last: false },
-    // Override only when committee_id and two_year_transaction_period are set.
-    sortNullsLastForCommitteeTwoYearTransactionPeriod: true,
     paginator: SeekPaginator,
     order: [[4, 'desc']],
     useFilters: true,
