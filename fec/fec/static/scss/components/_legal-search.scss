@@ -277,6 +277,7 @@
       min-height: u(1.5rem);
       position: relative;
 
+     // E&J historical timeline dots
       &::before {
         background-color: $primary;
         border-radius: 50%;
@@ -289,6 +290,7 @@
         z-index: 1;
       }
 
+      // E&J vertical line behind the dots
       &:not(:last-child)::after {
         background-color: $gray;
         bottom: u(-2.1rem);

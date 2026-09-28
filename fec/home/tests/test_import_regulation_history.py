@@ -155,15 +155,15 @@ class TestImportRegulationHistory(unittest.TestCase):
             """
             <table>
               <tr><th>Current Regulation</th><th></th><th>Previously Cited at:</th></tr>
-              <tr><td>104.5</td><td>-</td><td>105.4* ; 104.4</td></tr>
+              <tr><td>2.2</td><td>-</td><td>2.3; 2.4; 2.5</td></tr>
             </table>
             """,
             'https://www.fec.gov/legal-resources/conversions/',
         )
 
         self.assertEqual(
-            conversions['104.5'][0]['description'],
-            'Previously cited at § 105.4, then § 104.4',
+            conversions['2.2'][0]['description'],
+            'Previously cited at § 2.3, § 2.4 and § 2.5',
         )
 
     def test_parse_conversion_table_preserves_unavailable_previous_ej(self):

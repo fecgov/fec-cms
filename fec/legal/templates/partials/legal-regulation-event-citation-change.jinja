@@ -35,11 +35,7 @@
   <div class="legal-regulation__previous-citation u-margin--top">
     {% if citation_context_label %}<div class="legal-regulation__citation-context">{{ citation_context_label }}</div>{% endif %}
     <div>Later citation{% if event.redesignated_as|length > 1 %}s{% endif %}:</div>
-    <ul class="list--unstyled">
-      {% for destination in event.redesignated_as %}
-        <li><a href="{{ destination.url }}">§ {{ destination.display_citation }}</a></li>
-      {% endfor %}
-    </ul>
+    {{ regulation_ui.later_links(event.redesignated_as) }}
     {% set conversion_sources = event.redesignated_as|map(attribute='source_url')|reject('none')|unique|list %}
     {% for source_url in conversion_sources %}
       <div><a href="{{ source_url }}" target="_blank" rel="noopener noreferrer">View the FEC conversion table</a></div>

@@ -213,13 +213,17 @@ def parse_conversion_table(html, source_url):
 
 
 def format_previous_citations(previous):
-    """Present multiple former citations as a chronological sequence."""
+    """Present multiple former citations."""
     citations = [
         citation.strip().rstrip('*')
         for citation in previous.split(';')
         if citation.strip()
     ]
-    return 'Previously cited at § ' + ', then § '.join(citations)
+    labels = [f'§ {citation}' for citation in citations]
+    citation_list = labels[0]
+    if len(labels) > 1:
+        citation_list = f"{', '.join(labels[:-1])} and {labels[-1]}"
+    return f'Previously cited at {citation_list}'
 
 
 def merge_history(records, conversions=None):
