@@ -1,44 +1,10 @@
-{% if event.citation_change_summary %}
-  <div class="legal-regulation__previous-citation u-margin--top">
-    {% if citation_context_label %}<div class="legal-regulation__citation-context">{{ citation_context_label }}</div>{% endif %}
-    {% if event.citation_change_summary.links_to_subsections %}
-      {% if event.citation_change_summary.mappings|length > 1 %}Earlier citations vary by subsection. Refer to the current subsection entries for{% else %}Refer to the current subsection entry for{% endif %}
-      {% for mapping in event.citation_change_summary.mappings %}
-        <a href="#{{ mapping.anchor_id }}">§ {{ mapping.current_citation }}</a>{% if not loop.last %}{% if loop.revindex == 2 %} and {% else %}, {% endif %}{% endif %}
-      {% endfor %} below for earlier citation details.
-    {% else %}
-      <ul>
-        {% for mapping in event.citation_change_summary.mappings %}
-          <li class="u-margin--bottom">
-            <div>§ {{ mapping.current_citation }}</div>
-            {% set previous_citations = mapping.previous_citations %}
-            {% include 'partials/legal-regulation-citation-change.jinja' %}
-          </li>
-        {% endfor %}
-      </ul>
-      {% if event.citation_change_summary.source_url %}
-        <p><a href="{{ event.citation_change_summary.source_url }}" target="_blank" rel="noopener noreferrer">View the FEC conversion table</a></p>
-      {% endif %}
-    {% endif %}
-  </div>
-{% elif event.has_previous_citation and event.redesignation %}
-  <div class="legal-regulation__previous-citation u-margin--top">
-    {% if citation_context_label %}<div class="legal-regulation__citation-context">{{ citation_context_label }}</div>{% endif %}
-    {% set previous_citations = event.redesignation.previous_citations %}
-    {% include 'partials/legal-regulation-citation-change.jinja' %}
-    {% if event.redesignation.source_url %}
-      <div><a href="{{ event.redesignation.source_url }}" target="_blank" rel="noopener noreferrer">View the FEC conversion table</a></div>
-    {% endif %}
-  </div>
-{% elif event.redesignated_as %}
-  {# Reverse conversion links point from a former E&J to its later citation. #}
-  <div class="legal-regulation__previous-citation u-margin--top">
-    {% if citation_context_label %}<div class="legal-regulation__citation-context">{{ citation_context_label }}</div>{% endif %}
-    <div>Later citation{% if event.redesignated_as|length > 1 %}s{% endif %}:</div>
-    {{ regulation_ui.later_links(event.redesignated_as) }}
-    {% set conversion_sources = event.redesignated_as|map(attribute='source_url')|reject('none')|unique|list %}
-    {% for source_url in conversion_sources %}
-      <div><a href="{{ source_url }}" target="_blank" rel="noopener noreferrer">View the FEC conversion table</a></div>
-    {% endfor %}
-  </div>
-{% endif %}
+{# Reverse conversion links point from a former citation to its later citation. #}
+<div class="legal-regulation__previous-citation u-margin--top">
+  <div class="legal-regulation__citation-context">{{ citation_context_label }}</div>
+  <div>Later citation{% if event.redesignated_as|length > 1 %}s{% endif %}:</div>
+  {{ regulation_ui.later_links(event.redesignated_as) }}
+  {% set conversion_sources = event.redesignated_as|map(attribute='source_url')|reject('none')|unique|list %}
+  {% for source_url in conversion_sources %}
+    <div><a href="{{ source_url }}" target="_blank" rel="noopener noreferrer">View the FEC conversion table</a></div>
+  {% endfor %}
+</div>

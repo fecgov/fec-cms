@@ -186,9 +186,13 @@
     .legal-regulation__history-record {
       display: grid;
       gap: u(1rem);
-      grid-template-columns: minmax(10rem, 30%) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr);
       margin-bottom: u(2.5rem);
       scroll-margin-top: u(8rem);
+
+      @include media($med) {
+        grid-template-columns: minmax(10rem, 30%) minmax(0, 1fr);
+      }
 
       &:last-child {
         margin-bottom: 0;
@@ -197,30 +201,14 @@
       &:target .legal-regulation__history-citation {
         color: $primary;
       }
-
-      &--citation-history {
-        margin-top: u(-1.5rem);
-
-        &:target .legal-regulation__citation-history-title {
-          color: $primary;
-        }
-      }
     }
 
-    .legal-regulation__history-details--citation-history,
     .legal-regulation__citation-history-box {
       background-color: $neutral;
-      padding: u(0.5rem 1rem);
-    }
-
-    .legal-regulation__history-details--citation-history {
-      grid-column: 2;
-      margin-left: u(2rem);
-    }
-
-    .legal-regulation__citation-history-box {
-      margin-left: u(2rem);
+      border-left: 3px solid $primary;
+      margin-left: 0;
       margin-top: u(1rem);
+      padding: u(0.5rem 1rem);
     }
 
     .legal-regulation__citation-history-title {
@@ -316,24 +304,6 @@
         .legal-regulation__history-documents-label {
           margin-right: u(0.25rem);
         }
-
-        .legal-regulation__previous-citation {
-          margin-left: u(2rem);
-        }
-      }
-
-      &--has-citation {
-        > a {
-          font-weight: bold;
-        }
-
-        .legal-regulation__previous-citation {
-          background-color: $neutral;
-          border-left: 0;
-          margin-bottom: 0;
-          margin-top: u(0.5rem);
-          padding: u(0.5rem 1rem);
-        }
       }
     }
 
@@ -350,6 +320,7 @@
       background-color: $neutral;
       border-left: 3px solid $primary;
       margin-bottom: u(1.5rem);
+      margin-left: 0;
       padding: u(0.5rem 1rem);
     }
   }

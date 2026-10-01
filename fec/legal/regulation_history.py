@@ -278,6 +278,11 @@ def group_historical_regulation_subjects(events):
     return subject_groups
 
 
+def subject_has_citation_marker(subject_group):
+    """The citation index marks a subject, not a particular E&J year."""
+    return any(event.get('has_previous_citation') for event in subject_group['events'])
+
+
 def combine_group_citation_changes(changes):
     """Combine citation-level conversion rows into one display note."""
     previous_citations = []
@@ -442,92 +447,17 @@ def reverse_citation_changes():
 
 
 def build_regulation_history_context(section):
-    """Group E&Js and citation changes under the citations they describe."""
+    """Keep citation changes with citations and E&J documents with subjects."""
     events = format_historical_regulation_events(section)
     ej_groups = group_historical_regulation_events([
         event for event in events if event.get('action') == 'E&J'
     ])
-    redesignations = [
-        event for event in events if event.get('action') == 'Redesignated'
-    ]
     reverse_changes = reverse_citation_changes()
-    for group in ej_groups:
-        # The index asterisk marks an affected E&J; the conversion table
-        # supplies the actual earlier/later citation relationship.
-        group['show_event_citation_changes'] = any(
-            event.get('has_previous_citation') and event.get('redesignation')
-            for event in group['events']
-        )
-        for event in group['events']:
-            if event.get('has_previous_citation'):
-                event['label'] = re.sub(r'^\s*\*\s*', '', event['label'])
-        destinations = reverse_changes.get(group['citation'], [])
-        if destinations:
-            for event in group['events']:
-                if event.get('has_previous_citation') and not event.get('redesignation'):
-                    event['redesignated_as'] = destinations
-
-    section_group = next(
-        (group for group in ej_groups if not group.get('subsection')),
-        None,
-    )
-    top_level_mappings = [
-        {
-            'current_citation': f"{section}{event['subsection']}",
-            'current_subsection': event['subsection'],
-            'previous_citations': event.get('previous_citations', []),
-        }
-        for event in redesignations
-        if event.get('subsection')
-        and (
-            '-' in event['subsection']
-            or len(REGULATION_SUBSECTION_PATTERN.findall(event['subsection'])) == 1
-        )
-    ]
-    referenced_event = next((
-        event for event in section_group.get('events', [])
-        if event.get('has_previous_citation') and not event.get('redesignation')
-    ), None) if section_group else None
-    if referenced_event and top_level_mappings:
-        # The section-level E&J summarizes changes that are detailed on its
-        # subsection records, so avoid repeating those earlier citations.
-        referenced_event['label'] = re.sub(r'^\s*\*\s*', '', referenced_event['label'])
-        referenced_event['citation_change_summary'] = {
-            'mappings': top_level_mappings,
-            'source_url': redesignations[0].get('source_url'),
-        }
-
-        for mapping in top_level_mappings:
-            mapping['anchor_id'] = historical_ej_anchor(
-                section, mapping['current_subsection']
-            )
-        referenced_event['citation_change_summary']['links_to_subsections'] = True
-
-    # When several conversions name one citation, list them together instead
-    # of attaching only the last one to its E&J record.
-    conversion_counts = Counter(event['subsection'] for event in redesignations)
-    for group in ej_groups:
-        if conversion_counts[group['subsection']] > 1:
-            group['redesignation'] = None
-            for event in group['events']:
-                event['redesignation'] = None
-
-    displayed_conversions = {
-        (
-            group['redesignation'].get('current_subsection', ''),
-            group['redesignation'].get('description'),
-        )
-        for group in ej_groups if group.get('redesignation')
-    }
-    # Keep conversion rows visible when no E&J group displays them.
-    unmatched_redesignations = [
-        event for event in redesignations
-        if (event.get('subsection', ''), event.get('label'))
-        not in displayed_conversions
-    ]
-
     groups_by_subsection = {group['subsection']: group for group in ej_groups}
-    for event in unmatched_redesignations:
+    changes_by_subsection = {}
+    for event in events:
+        if event.get('action') != 'Redesignated':
+            continue
         subsection = event.get('subsection', '')
         group = groups_by_subsection.get(subsection)
         if group is None:
@@ -541,26 +471,24 @@ def build_regulation_history_context(section):
             }
             groups_by_subsection[subsection] = group
             ej_groups.append(group)
-        group.setdefault('additional_redesignations', []).append(event)
+        changes_by_subsection.setdefault(subsection, []).append(event)
 
     ej_groups.sort(key=lambda group: regulation_history_sort_key(group))
-
     for group in ej_groups:
+        for event in group['events']:
+            event['label'] = re.sub(r'^\s*\*\s*', '', event['label'])
         if group.get('events'):
             group['subject_groups'] = group_historical_regulation_subjects(
                 group['events']
             )
-
-        citation_changes = []
-        if group.get('redesignation') and not group.get(
-            'show_event_citation_changes'
-        ):
-            citation_changes.append(group['redesignation'])
-        citation_changes.extend(group.get('additional_redesignations', []))
+        citation_changes = changes_by_subsection.get(group['subsection'], [])
         if citation_changes:
             group['citation_note'] = combine_group_citation_changes(
                 citation_changes
             )
+        destinations = reverse_changes.get(group['citation'], [])
+        if destinations:
+            group['citation_events'] = [{'redesignated_as': destinations}]
 
     return {
         'events': events,

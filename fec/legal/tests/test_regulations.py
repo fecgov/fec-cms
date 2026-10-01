@@ -274,7 +274,7 @@ def test_section_renders_before_related_api_requests(ecfr):
         )
     ] == ['1977', '1975']
     previous_citation = soup.select_one(
-        '#historical-ej-100-6-a .legal-regulation__previous-citation'
+        '#historical-ej-100-6-a .legal-regulation__citation-history-box'
     )
     assert previous_citation is not None
     assert 'Earlier citation: § 100.15' in previous_citation.get_text(' ', strip=True)
@@ -287,150 +287,188 @@ def test_section_renders_before_related_api_requests(ecfr):
     rulemaking_api.assert_not_called()
 
 
-def test_100_82_renders_ej_and_conversion_links_separately(ecfr, section_html):
+def test_100_82_renders_citation_notes_before_subjects(ecfr, section_html):
     ecfr.return_value = {'text': section_html.replace('100.6', '100.82')}
-
     response = regulations.regulation_page(RequestFactory().get('/'), '100.82')
     soup = BeautifulSoup(response.content, 'html.parser')
-    parent_event = next(
-        event for event in soup.select(
-            '#historical-ej-100-82 .legal-regulation__history-event'
-        )
-        if 'Earlier citations vary by subsection' in event.get_text(
-            ' ', strip=True
-        )
-    )
-    assert 'Earlier citations vary by subsection. Refer to the current subsection entries for' in parent_event.get_text(
+
+    parent = soup.select_one('#historical-ej-100-82')
+    assert parent.select_one('.legal-regulation__citation-history-box') is None
+    assert parent.select_one('.legal-regulation__history-subject').get_text(
         ' ', strip=True
-    )
-    assert parent_event.select_one(
-        'a[href="#historical-ej-100-82-a-d"]'
-    ).get_text(' ', strip=True) == '§ 100.82(a)-(d)'
-    assert parent_event.select_one(
-        'a[href="#historical-ej-100-82-e"]'
-    ).get_text(' ', strip=True) == '§ 100.82(e)'
-    assert 'below for earlier citation details.' in parent_event.get_text(
-        ' ', strip=True
-    )
-    assert 'Earlier citation:' not in parent_event.get_text(' ', strip=True)
-    assert 'View the full history' not in parent_event.get_text(' ', strip=True)
-    assert 'View the FEC conversion table' not in parent_event.get_text(
-        ' ', strip=True
-    )
-    assert parent_event.select_one(
-        '.legal-regulation__history-subject'
-    ).get_text(' ', strip=True) == 'Bank loans'
+    ) == 'Bank loans'
     assert [
-        link.get_text(' ', strip=True)
-        for link in parent_event.select(
-            '.legal-regulation__history-document-list a'
-        )
-        if link.find_parent(class_='legal-regulation__previous-citation') is None
+        item.get_text(' ', strip=True)
+        for item in parent.select('.legal-regulation__history-document-list a')
     ] == ['2024', '2014', '2002']
-    assert [
-        (
-            item.select_one('.legal-regulation__history-date').get_text(
-                ' ', strip=True
-            ),
-            item.select_one('.legal-regulation__previous-citation') is not None,
-        )
-        for item in parent_event.select('.legal-regulation__history-document')
-    ] == [('2024', False), ('2014', False), ('2002', True)]
-    connected_document = parent_event.select_one(
-        '.legal-regulation__history-document--has-citation'
-    )
-    assert connected_document.select_one(
-        '.legal-regulation__history-date'
-    ).get_text(' ', strip=True) == '2002'
-    assert connected_document.select_one(
-        '.legal-regulation__citation-context'
-    ).get_text(' ', strip=True) == 'Citation note for § 100.82'
 
-    event = soup.select_one('#historical-ej-100-82-a .legal-regulation__history-event')
-    change = soup.select_one('#historical-ej-100-82-a-d')
-
-    assert event.select_one(
-        'a[href="https://sers.fec.gov/fosers/showpdf.htm?docid=44678"]'
-    ).get_text(' ', strip=True) == '2002'
-    assert event.select_one(
-        '.legal-regulation__history-subject'
-    ).get_text(' ', strip=True) == 'General provisions'
-    assert event.select_one(
-        '.legal-regulation__history-document--single'
-    ).get_text(' ', strip=True) == 'E&J document: 2002'
-    assert event.select_one(
-        '.legal-regulation__history-document-list'
-    ) is None
-    assert 'Earlier citation:' not in event.get_text(' ', strip=True)
-    assert 'Earlier citation:' in change.get_text(' ', strip=True)
-    assert change.select_one(
-        '.legal-regulation__history-citation'
-    ) is None
-    assert change.select_one(
-        '.legal-regulation__citation-history-title'
-    ).get_text(' ', strip=True) == 'Citation note for § 100.82(a)–(d)'
-    assert change.select_one(
-        '.legal-regulation__previous-citation'
-    ) is None
-    assert change.select_one(
+    range_record = soup.select_one('#historical-ej-100-82-a-d')
+    assert range_record.select_one('.legal-regulation__history-citation').get_text(
+        ' ', strip=True
+    ) == '100.82(a)-(d)'
+    range_note = range_record.select_one('.legal-regulation__citation-history-box')
+    assert range_note.select_one('.legal-regulation__citation-history-title').get_text(
+        ' ', strip=True
+    ) == 'Citation note for § 100.82(a)–(d)'
+    assert range_note.select_one(
         'a[href="/legal/regulations/100.7/#historical-ej-100-7-b-11"]'
     ).get_text(' ', strip=True) == '§ 100.7(b)(11)'
-    assert len(soup.select(
-        'a[href="/legal/regulations/100.7/#historical-ej-100-7-b-11"]'
-    )) == 1
-    assert change.select_one('a[href*="notice1980-8-030780.pdf"]') is None
-    assert 'View the full history' not in change.get_text(' ', strip=True)
-    assert change.select_one('.js-accordion') is None
-    assert change.select_one(
-        'a[href*="explanations-and-justifications-conversion-tables-appendix-part-100"]'
-    ).get_text(' ', strip=True) == 'View the FEC conversion table'
-    assert '* General provisions' not in event.get_text(' ', strip=True)
 
-    duplicate_year_group = soup.select_one(
-        '#historical-ej-100-82-e-1-ii '
-        '.legal-regulation__history-subject-group'
-    )
-    assert [
-        link.get_text(' ', strip=True)
-        for link in duplicate_year_group.select(
-            '.legal-regulation__history-document-list a'
-        )
-        if link.find_parent(class_='legal-regulation__previous-citation') is None
-    ] == ['2024', '2002 (document 1)', '2002 (document 2)']
+    subsection = soup.select_one('#historical-ej-100-82-a')
+    assert subsection.select_one('.legal-regulation__citation-history-box') is None
+    assert subsection.select_one('.legal-regulation__history-subject').get_text(
+        ' ', strip=True
+    ) == 'General provisions'
+    assert subsection.select_one('.legal-regulation__history-document').get_text(
+        ' ', strip=True
+    ) == 'E&J document: 2002'
 
-    repayment_group = soup.select_one(
-        '#historical-ej-100-82-e .legal-regulation__history-subject-group'
-    )
-    assert [
-        (
-            item.select_one('.legal-regulation__history-date').get_text(
-                ' ', strip=True
-            ),
-            item.select_one('.legal-regulation__previous-citation') is not None,
-        )
-        for item in repayment_group.select(
-            '.legal-regulation__history-document'
-        )
-    ] == [('2024', False), ('2002', True)]
-
-    group_level_history = soup.select_one(
-        '#historical-ej-100-82-e-2-i'
-    )
-    subject_list = group_level_history.select_one(
-        '.legal-regulation__history-subject-list'
-    )
-    citation_history = subject_list.find_next_sibling(
-        class_='legal-regulation__citation-history-box'
-    )
-    assert citation_history.select_one(
-        '.legal-regulation__citation-history-title'
-    ).get_text(' ', strip=True) == 'Citation note for § 100.82(e)(2)(i)'
-    assert citation_history.select_one(
-        '.legal-regulation__previous-citation'
+    repayment = soup.select_one('#historical-ej-100-82-e')
+    details = repayment.select_one('.legal-regulation__history-details')
+    assert 'legal-regulation__citation-history-box' in next(
+        child for child in details.children if child.name
+    )['class']
+    assert details.select_one(
+        '.legal-regulation__history-subject-group .legal-regulation__citation-history-box'
     ) is None
-    assert 'Earlier citation: § 100.7(b)(11)(i)(B)(1)' in (
-        citation_history.get_text(' ', strip=True)
+    assert 'Earlier citation:' in details.select_one(
+        '.legal-regulation__citation-history-box'
+    ).get_text(' ', strip=True)
+    assert soup.select_one('#historical-ej-100-82-e-2-i '
+                           '.legal-regulation__citation-history-box') is not None
+    assert not soup.select(
+        '[id^="historical-ej-100-82"] .legal-regulation__history-document '
+        '.legal-regulation__citation-history-box'
     )
+
+
+def test_100_8_range_note_appears_beside_its_citation(ecfr, section_html):
+    ecfr.return_value = {'text': section_html.replace('100.6', '100.8')}
+    response = regulations.regulation_page(RequestFactory().get('/'), '100.8')
+    soup = BeautifulSoup(response.content, 'html.parser')
+    record = soup.select_one('#historical-ej-100-8-b-4-v-vii')
+    subjects = record.select('.legal-regulation__history-subject-group')
+
+    assert [
+        child.get('class', [None])[0]
+        for child in record.children if child.name
+    ] == [
+        'legal-regulation__history-citation',
+        'legal-regulation__history-details',
+    ]
+    assert not subjects
+    assert record.select_one('.legal-regulation__history-citation').get_text(
+        ' ', strip=True
+    ) == '100.8(b)(4)(v)-(vii)'
+    assert record.select_one('.legal-regulation__citation-history-title').get_text(
+        ' ', strip=True
+    ) == 'Citation note for § 100.8(b)(4)(v)–(vii)'
+    assert record.select_one('.legal-regulation__citation-history-box a') is not None
+    for subsection in ('v', 'vi', 'vii'):
+        subject_record = soup.select_one(f'#historical-ej-100-8-b-4-{subsection}')
+        assert not subject_record.select('.legal-regulation__citation-history-box')
+
+
+def test_100_8_child_ranges_have_their_own_citation_rows(ecfr, section_html):
+    ecfr.return_value = {'text': section_html.replace('100.6', '100.8')}
+    response = regulations.regulation_page(RequestFactory().get('/'), '100.8')
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    for anchor, citation, previous in (
+        ('b-4-iii-a-1-2', '100.8(b)(4)(iii)(A)(1)-(2)',
+         '§ 100.7(b)(5)(iii)(A)(1)-(2)'),
+        ('b-4-iii-b-1-4', '100.8(b)(4)(iii)(B)(1)-(4)',
+         '§ 100.7(b)(5)(iii)(B)(1)-(4)'),
+    ):
+        record = soup.select_one(f'#historical-ej-100-8-{anchor}')
+        assert record.select_one('.legal-regulation__history-citation').get_text(
+            ' ', strip=True
+        ) == citation
+        note = record.select_one('.legal-regulation__citation-history-box')
+        assert previous in note.get_text(' ', strip=True)
+        assert record.select_one('.legal-regulation__history-subject-group') is None
+
+
+def test_100_8_citation_change_precedes_subjects_and_document_years(ecfr, section_html):
+    ecfr.return_value = {'text': section_html.replace('100.6', '100.8')}
+    response = regulations.regulation_page(RequestFactory().get('/'), '100.8')
+    soup = BeautifulSoup(response.content, 'html.parser')
+    record = soup.select_one('#historical-ej-100-8-b-24')
+    details = record.select_one('.legal-regulation__history-details')
+
+    assert record.select_one('.legal-regulation__history-citation').get_text(
+        ' ', strip=True
+    ) == '100.8(b)(24)'
+    children = [child for child in details.children if child.name]
+    assert 'legal-regulation__previous-citation' in children[0]['class']
+    assert 'legal-regulation__history-subject-list' in children[1]['class']
+    note = details.select_one(':scope > .legal-regulation__previous-citation')
+    assert note.select_one('.legal-regulation__citation-context').get_text(
+        ' ', strip=True
+    ) == 'Citation note for § 100.8(b)(24)'
+    assert 'Later citation' in note.get_text(' ', strip=True)
+    assert record.select_one('.legal-regulation__history-subject').get_text(
+        ' ', strip=True
+    ) == 'Brokerage loans and lines of credit'
+    assert record.select_one('.legal-regulation__history-date').get_text(
+        ' ', strip=True
+    ) == '2002'
+    assert note.select_one('.legal-regulation__history-date') is None
+
+
+def test_100_134_child_conversions_have_exact_citation_rows(ecfr, section_html):
+    ecfr.return_value = {'text': section_html.replace('100.6', '100.134')}
+    response = regulations.regulation_page(RequestFactory().get('/'), '100.134')
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    for suffix, earlier in (
+        ('d-1-i', '§ 100.8(b)(4)(iii)(A)(1)'),
+        ('d-1-ii', '§ 100.8(b)(4)(iii)(A)(2)'),
+        ('d-2-i', '§ 100.8(b)(4)(iii)(B)(1)'),
+        ('d-2-ii', '§ 100.8(b)(4)(iii)(B)(2)'),
+        ('d-2-iii', '§ 100.8(b)(4)(iii)(B)(3)'),
+        ('d-2-iv', '§ 100.8(b)(4)(iii)(B)(4)'),
+    ):
+        record = soup.select_one(f'#historical-ej-100-134-{suffix}')
+        note = record.select_one(
+            '.legal-regulation__history-details > .legal-regulation__citation-history-box'
+        )
+        assert earlier in note.get_text(' ', strip=True)
+        assert record.select_one('.legal-regulation__history-citation') is not None
+        assert not record.select(
+            '.legal-regulation__history-subject-group .legal-regulation__citation-history-box'
+        )
+
+    unmarked = soup.select_one('#historical-ej-100-134-d-2-iv')
+    assert unmarked.select_one('.legal-regulation__history-date').get_text(
+        ' ', strip=True
+    ) == '2014'
+
+
+def test_100_152_parent_and_children_have_separate_citation_rows(ecfr, section_html):
+    ecfr.return_value = {'text': section_html.replace('100.6', '100.152')}
+    response = regulations.regulation_page(RequestFactory().get('/'), '100.152')
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    for suffix, earlier in (
+        ('c', '§ 100.8(b)(21)(iii)'),
+        ('c-1', '§ 100.8(b)(21)(iii)(A)'),
+        ('c-2', '§ 100.8(b)(21)(iii)(B)'),
+    ):
+        record = soup.select_one(f'#historical-ej-100-152-{suffix}')
+        assert record.select_one('.legal-regulation__history-citation') is not None
+        note = record.select_one(
+            '.legal-regulation__history-details > .legal-regulation__citation-history-box'
+        )
+        assert earlier in note.get_text(' ', strip=True)
+
+    parent = soup.select_one('#historical-ej-100-152-c')
+    assert parent.select_one('.legal-regulation__history-document').get_text(
+        ' ', strip=True
+    ) == 'E&J document: 2002'
+    assert parent.select_one(
+        '.legal-regulation__history-subject-group .legal-regulation__citation-history-box'
+    ) is None
 
 
 def test_unstarred_citation_change_links_to_earlier_history(ecfr, section_html):
@@ -464,7 +502,7 @@ def test_unavailable_earlier_ej_is_not_linked(ecfr, section_html):
     response = regulations.regulation_page(RequestFactory().get('/'), '2.5')
     soup = BeautifulSoup(response.content, 'html.parser')
     citation = soup.select_one(
-        '#historical-ej-2-5-a .legal-regulation__previous-citation'
+        '#historical-ej-2-5-a .legal-regulation__citation-history-box'
     )
 
     assert 'Earlier citation: § 3.2(b)(2)' in citation.get_text(' ', strip=True)
@@ -497,19 +535,29 @@ def test_earlier_citation_never_guesses_a_pdf(ecfr, section_html):
         assert 'View the full history' not in earlier_citation.get_text(' ', strip=True)
 
 
-def test_conversion_without_ej_appears_under_its_citation(ecfr, section_html):
+def test_100_132_section_and_range_have_separate_citation_notes(ecfr, section_html):
     ecfr.return_value = {'text': section_html.replace('100.6', '100.132')}
     response = regulations.regulation_page(RequestFactory().get('/'), '100.132')
     soup = BeautifulSoup(response.content, 'html.parser')
-    redesignation = soup.select_one('#historical-ej-100-132-a-b')
 
-    assert redesignation is not None
-    assert redesignation.select_one('.legal-regulation__history-event') is None
-    assert redesignation.select_one(
-        'a[href="/legal/regulations/100.8/#historical-ej-100-8-b-2"]'
-    ).get_text(' ', strip=True) == '§ 100.8(b)(2)(i)-(ii)'
-    assert redesignation.select_one('.js-accordion') is None
-    assert soup.find('h2', string='Earlier citations') is None
+    for suffix, earlier in (('', '§ 100.8(b)(2)'), ('-a-b', '§ 100.8(b)(2)(i)-(ii)')):
+        record = soup.select_one(f'#historical-ej-100-132{suffix}')
+        note = record.select_one('.legal-regulation__citation-history-box')
+        assert note is not None
+        assert earlier in note.get_text(' ', strip=True)
+        assert record.select_one('.legal-regulation__history-citation') is not None
+
+    parent = soup.select_one('#historical-ej-100-132')
+    assert parent.select_one('.legal-regulation__history-subject').get_text(
+        ' ', strip=True
+    ) == 'News story, commentary or editorial by media'
+    assert [
+        link.get_text(' ', strip=True)
+        for link in parent.select('.legal-regulation__history-document a')
+    ] == ['2024', '2006', '2002']
+    assert parent.select_one(
+        '.legal-regulation__history-subject-group .legal-regulation__citation-history-box'
+    ) is None
 
 
 def test_multiple_conversions_with_ej_share_one_citation_note(ecfr, section_html):
@@ -541,13 +589,9 @@ def test_multiple_conversions_with_ej_share_one_citation_note(ecfr, section_html
 def test_former_100_7_citation_links_to_100_82_redesignation(ecfr):
     response = regulations.regulation_page(RequestFactory().get('/'), '100.7')
     soup = BeautifulSoup(response.content, 'html.parser')
-    event = soup.select_one(
-        '#historical-ej-100-7-b-11 .legal-regulation__history-event '
-        'a[href="https://www.fec.gov/resources/cms-content/documents/'
-        'notice1980-8-030780.pdf#page=2"]'
-    ).find_parent(
-        class_='legal-regulation__history-event'
-    )
+    record = soup.select_one('#historical-ej-100-7-b-11')
+    event = record.select_one('.legal-regulation__history-event')
+    note = record.select_one('.legal-regulation__history-details > .legal-regulation__previous-citation')
 
     assert '* Loans made in ordinary course of business' not in event.get_text(
         ' ', strip=True
@@ -558,11 +602,12 @@ def test_former_100_7_citation_links_to_100_82_redesignation(ecfr):
     assert event.select_one(
         '.legal-regulation__history-subject'
     ).get_text(' ', strip=True) == 'Loans made in ordinary course of business'
-    assert event.select_one(
+    assert note.select_one(
         'a[href="/legal/regulations/100.82/#historical-ej-100-82-a-d"]'
     ).get_text(' ', strip=True) == '§ 100.82(a)–(d)'
-    assert 'Later citation:' in event.get_text(' ', strip=True)
-    assert event.select_one(
+    assert 'Later citation:' in note.get_text(' ', strip=True)
+    assert event.select_one('.legal-regulation__previous-citation') is None
+    assert note.select_one(
         'a[href*="explanations-and-justifications-conversion-tables-appendix-part-100"]'
     ).get_text(' ', strip=True) == 'View the FEC conversion table'
 
@@ -570,19 +615,17 @@ def test_former_100_7_citation_links_to_100_82_redesignation(ecfr):
 def test_former_citation_does_not_include_child_redesignations(ecfr):
     response = regulations.regulation_page(RequestFactory().get('/'), '100.7')
     soup = BeautifulSoup(response.content, 'html.parser')
-    event = soup.select_one(
-        '#historical-ej-100-7-b .legal-regulation__history-event '
-        'a[href="/legal/regulations/100.71/#historical-ej-100-71-a"]'
-    ).find_parent(
-        class_='legal-regulation__history-event'
+    note = soup.select_one(
+        '#historical-ej-100-7-b .legal-regulation__history-details > '
+        '.legal-regulation__previous-citation'
     )
 
-    assert event.select_one(
+    assert note.select_one(
         'a[href="/legal/regulations/100.71/#historical-ej-100-71-a"]'
     ).get_text(' ', strip=True) == '§ 100.71(a)'
-    assert '§ 100.77' not in event.get_text(' ', strip=True)
-    assert '§ 100.8(b)(5), (6) & (7)' not in event.get_text(' ', strip=True)
-    assert 'Redesignated in part as:' not in event.get_text(' ', strip=True)
+    assert '§ 100.77' not in note.get_text(' ', strip=True)
+    assert '§ 100.8(b)(5), (6) & (7)' not in note.get_text(' ', strip=True)
+    assert 'Redesignated in part as:' not in note.get_text(' ', strip=True)
 
 
 @pytest.mark.parametrize(('status', 'expected'), [(404, 200), (503, 502)])

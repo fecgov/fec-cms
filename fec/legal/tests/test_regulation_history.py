@@ -255,7 +255,7 @@ class TestRegulationHistory(unittest.TestCase):
         change_group = groups_by_subsection['(b) & (c)']
         self.assertEqual(change_group['events'], [])
         self.assertEqual(
-            change_group['additional_redesignations'][0]['previous_citations'][0]['citation'],
+            change_group['citation_note']['previous_citations'][0]['citation'],
             '102.7(d)',
         )
 
@@ -266,25 +266,24 @@ class TestRegulationHistory(unittest.TestCase):
         group = context['event_groups'][0]
         self.assertEqual(group['citation'], ('9428.1', ''))
         self.assertEqual(group['events'], [])
-        redesignation = group['additional_redesignations'][0]
-        self.assertEqual(redesignation['label'], 'Previously cited at § 8.1')
-        self.assertEqual(redesignation['previous_citations'][0]['citation'], '8.1')
+        self.assertEqual(group['citation_note']['previous_citations'][0]['citation'], '8.1')
 
     def test_multiple_group_citation_changes_share_one_note(self):
         context = regulation_history.build_regulation_history_context('2.8')
         group = context['event_groups'][0]
+        note = group['citation_note']
 
         self.assertEqual(
             [
                 citation['citation']
-                for citation in group['citation_note']['previous_citations']
+                for citation in note['previous_citations']
             ],
             ['3.5', '3.6'],
         )
-        self.assertEqual(len(group['citation_note']['source_urls']), 1)
-        self.assertEqual(group['citation_note']['descriptions'], [])
+        self.assertEqual(len(note['source_urls']), 1)
+        self.assertEqual(note['descriptions'], [])
 
-    def test_100_82_explains_section_level_citation_changes(self):
+    def test_100_82_keeps_range_conversion_at_its_citation(self):
         context = regulation_history.build_regulation_history_context('100.82')
         section_group = next(
             group for group in context['event_groups']
@@ -294,50 +293,179 @@ class TestRegulationHistory(unittest.TestCase):
             event for event in section_group['events']
             if event['date'] == '2002'
         )
+        subject_group = section_group['subject_groups'][0]
 
         self.assertTrue(changed_event['has_previous_citation'])
+        self.assertNotIn('citation_events', subject_group)
         self.assertEqual(
-            [mapping['current_citation'] for mapping in changed_event['citation_change_summary']['mappings']],
-            ['100.82(a)-(d)', '100.82(e)'],
+            [event['date'] for event in subject_group['events']],
+            ['2024', '2014', '2002'],
         )
-        self.assertTrue(
-            changed_event['citation_change_summary']['links_to_subsections']
-        )
-        self.assertEqual(
-            [mapping['anchor_id'] for mapping in changed_event['citation_change_summary']['mappings']],
-            ['historical-ej-100-82-a-d', 'historical-ej-100-82-e'],
-        )
-        self.assertEqual(
-            [
-                mapping['previous_citations'][0]['citation']
-                for mapping in changed_event['citation_change_summary']['mappings']
-            ],
-            ['100.7(b)(11)', '100.7(b)(11)(i)'],
-        )
-        self.assertTrue(all(
-            'citation_change_summary' not in event
-            for event in section_group['events']
-            if event['date'] != '2002'
-        ))
-        subsection_group = next(
+        range_group = next(
             group for group in context['event_groups']
             if group['subsection'] == '(a)-(d)'
         )
-        self.assertEqual(subsection_group['events'], [])
-        subsection_change = subsection_group['additional_redesignations'][0]
+        self.assertEqual(range_group['events'], [])
         self.assertEqual(
-            subsection_change['previous_citations'][0]['citation'],
+            range_group['citation_note']['previous_citations'][0]['citation'],
             '100.7(b)(11)',
         )
-        self.assertEqual(
-            subsection_change['previous_citations'][0]['url'],
-            '/legal/regulations/100.7/#historical-ej-100-7-b-11',
-        )
+        for subsection in ('(a)', '(b)', '(c)', '(d)'):
+            subject_group = next(
+                group for group in context['event_groups']
+                if group['subsection'] == subsection
+            )['subject_groups'][0]
+            self.assertNotIn('citation_notes', subject_group)
         self.assertTrue(all(
             not event['label'].startswith('*')
             for group in context['event_groups']
             for event in group['events']
         ))
+        basis_group = next(
+            group for group in context['event_groups']
+            if group['subsection'] == '(e)(2)(i)'
+        )
+        self.assertIn('citation_note', basis_group)
+        self.assertNotIn('citation_notes', basis_group['subject_groups'][0])
+        self.assertEqual(
+            basis_group['citation_note']['previous_citations'][0]['citation'],
+            '100.7(b)(11)(i)(B)(1)',
+        )
+
+    def test_100_132_keeps_section_and_range_conversions_separate(self):
+        groups = regulation_history.build_regulation_history_context('100.132')['event_groups']
+        self.assertEqual([group['subsection'] for group in groups], ['', '(a)-(b)'])
+
+        subject = groups[0]['subject_groups'][0]
+        self.assertEqual(groups[0]['citation_note']['previous_citations'][0]['citation'], '100.8(b)(2)')
+        self.assertEqual(groups[1]['citation_note']['previous_citations'][0]['citation'],
+                         '100.8(b)(2)(i)-(ii)')
+        self.assertEqual(groups[1]['events'], [])
+        self.assertNotIn('citation_events', subject)
+        self.assertEqual([event['document_label'] for event in subject['events']], [
+            '2024', '2006', '2002',
+        ])
+
+    def test_100_8_range_note_stays_at_its_own_citation(self):
+        groups = {
+            group['subsection']: group
+            for group in regulation_history.build_regulation_history_context('100.8')['event_groups']
+        }
+
+        range_group = groups['(b)(4)(v)-(vii)']
+        self.assertEqual(
+            range_group['citation_note']['previous_citations'][0]['citation'],
+            '100.7(b)(5)(v) (vii)',
+        )
+        for subsection, label in (
+            ('(b)(4)(v)', 'Election'),
+            ('(b)(4)(vi)', 'Corporation'),
+            ('(b)(4)(vii)', 'Aggregate costs of communication reported'),
+        ):
+            subjects = groups[subsection]['subject_groups']
+            marked = next(subject for subject in subjects if subject['label'] == label)
+            unmarked = next(subject for subject in subjects if subject['label'] != label)
+            self.assertNotIn('citation_notes', groups[subsection])
+            self.assertNotIn('citation_notes', marked)
+            self.assertNotIn('citation_notes', unmarked)
+
+    def test_100_8_child_ranges_keep_their_own_citations(self):
+        groups = {
+            group['subsection']: group
+            for group in regulation_history.build_regulation_history_context('100.8')['event_groups']
+        }
+        for parent, suffix, previous_prefix in (
+            ('(b)(4)(iii)(A)', '(1)-(2)', '100.7(b)(5)(iii)(A)'),
+            ('(b)(4)(iii)(B)', '(1)-(4)', '100.7(b)(5)(iii)(B)'),
+        ):
+            child = groups[f'{parent}{suffix}']
+            self.assertEqual(child['events'], [])
+            subjects = groups[parent]['subject_groups']
+            self.assertTrue(any(regulation_history.subject_has_citation_marker(s) for s in subjects))
+            self.assertEqual(
+                child['citation_note']['previous_citations'][0]['citation'],
+                f'{previous_prefix}{suffix}',
+            )
+            self.assertTrue(all('citation_events' not in subject for subject in subjects))
+
+    def test_100_134_child_conversions_have_exact_citation_rows(self):
+        groups = {
+            group['subsection']: group
+            for group in regulation_history.build_regulation_history_context('100.134')['event_groups']
+        }
+        for parent, expected_previous in (
+            ('(d)(1)', [
+                '100.8(b)(4)(iii)(A)(1)',
+                '100.8(b)(4)(iii)(A)(2)',
+            ]),
+            ('(d)(2)', [
+                '100.8(b)(4)(iii)(B)(1)',
+                '100.8(b)(4)(iii)(B)(2)',
+                '100.8(b)(4)(iii)(B)(3)',
+                '100.8(b)(4)(iii)(B)(4)',
+            ]),
+        ):
+            self.assertNotIn('citation_note', groups[parent])
+            self.assertTrue(regulation_history.subject_has_citation_marker(
+                groups[parent]['subject_groups'][0]
+            ))
+            suffixes = ('(i)', '(ii)') if parent == '(d)(1)' else ('(i)', '(ii)', '(iii)', '(iv)')
+            for suffix, earlier in zip(suffixes, expected_previous):
+                child = groups[f'{parent}{suffix}']
+                self.assertEqual(
+                    child['citation_note']['previous_citations'][0]['citation'],
+                    earlier,
+                )
+                self.assertTrue(child['citation_note']['source_urls'])
+
+        unmarked = groups['(d)(2)(iv)']
+        self.assertEqual(unmarked['events'][0]['date'], '2014')
+        self.assertIn('citation_note', unmarked)
+        self.assertNotIn('citation_events', unmarked['subject_groups'][0])
+
+    def test_100_152_keeps_parent_and_child_citations_separate(self):
+        groups = {
+            group['subsection']: group
+            for group in regulation_history.build_regulation_history_context('100.152')['event_groups']
+        }
+        self.assertIn('(c)(1)', groups)
+        self.assertIn('(c)(2)', groups)
+
+        subject = groups['(c)']['subject_groups'][0]
+        self.assertTrue(regulation_history.subject_has_citation_marker(subject))
+        self.assertEqual(
+            groups['(c)']['citation_note']['previous_citations'][0]['citation'],
+            '100.8(b)(21)(iii)',
+        )
+        self.assertEqual(
+            [groups[f'(c)({number})']['citation_note']['previous_citations'][0]['citation']
+             for number in (1, 2)],
+            ['100.8(b)(21)(iii)(A)', '100.8(b)(21)(iii)(B)'],
+        )
+        self.assertNotIn('citation_events', subject)
+
+    def test_multiple_unmarked_subjects_do_not_inherit_citation_note(self):
+        group = regulation_history.build_regulation_history_context('109.36')['event_groups'][0]
+
+        self.assertIn('citation_note', group)
+        self.assertEqual(len(group['subject_groups']), 2)
+        self.assertTrue(all(
+            'citation_notes' not in subject
+            for subject in group['subject_groups']
+        ))
+
+    def test_citation_notes_across_index_are_independent_of_subjects(self):
+        for section, history in regulation_history.load_regulation_history_index().items():
+            groups = regulation_history.build_regulation_history_context(section)['event_groups']
+            groups_by_subsection = {group['subsection']: group for group in groups}
+            for conversion in history.get('conversions', []):
+                subsection = conversion.get('current_subsection', '')
+                self.assertIn('citation_note', groups_by_subsection[subsection],
+                              (section, subsection))
+            for group in groups:
+                for subject in group.get('subject_groups', []):
+                    self.assertNotIn('citation_notes', subject)
+                    self.assertNotIn('citation_events', subject)
 
     def test_groups_matching_subjects_and_labels_duplicate_years(self):
         context = regulation_history.build_regulation_history_context('100.82')
@@ -374,15 +502,17 @@ class TestRegulationHistory(unittest.TestCase):
 
     def test_parent_without_subsection_records_links_to_conversion_row(self):
         context = regulation_history.build_regulation_history_context('100.88')
-        parent_event = context['event_groups'][0]['events'][0]
-
-        self.assertTrue(
-            parent_event['citation_change_summary']['links_to_subsections']
+        parent_group = context['event_groups'][0]
+        self.assertNotIn('citation_note', parent_group)
+        conversion_group = next(
+            group for group in context['event_groups']
+            if group['subsection'] == '(a)-(b)'
         )
         self.assertEqual(
-            parent_event['citation_change_summary']['mappings'][0]['anchor_id'],
+            conversion_group['anchor_id'],
             'historical-ej-100-88-a-b',
         )
+        self.assertTrue(conversion_group['citation_note']['previous_citations'])
 
     def test_former_citation_links_to_its_redesignated_destination(self):
         context = regulation_history.build_regulation_history_context('100.7')
@@ -395,23 +525,23 @@ class TestRegulationHistory(unittest.TestCase):
             if event['date'] == '1980' and event['has_previous_citation']
         )
 
-        self.assertFalse(bank_loan_group['show_event_citation_changes'])
         self.assertIsNone(marked_event['redesignation'])
         self.assertEqual(
             marked_event['label'],
             'Loans made in ordinary course of business',
         )
         self.assertNotIn('previous_citation_preview', marked_event)
+        destinations = bank_loan_group['citation_events'][0]['redesignated_as']
         self.assertEqual(
-            marked_event['redesignated_as'][0]['citation'],
+            destinations[0]['citation'],
             '100.82(a)-(d)',
         )
         self.assertEqual(
-            marked_event['redesignated_as'][0]['display_citation'],
+            destinations[0]['display_citation'],
             '100.82(a)–(d)',
         )
         self.assertEqual(
-            marked_event['redesignated_as'][0]['url'],
+            destinations[0]['url'],
             '/legal/regulations/100.82/#historical-ej-100-82-a-d',
         )
 
@@ -421,13 +551,8 @@ class TestRegulationHistory(unittest.TestCase):
             group for group in context['event_groups']
             if group['subsection'] == '(b)'
         )
-        marked_event = next(
-            event for event in exemptions_group['events']
-            if event['date'] == '1980' and event['has_previous_citation']
-        )
-
         self.assertEqual(
-            [item['citation'] for item in marked_event['redesignated_as']],
+            [item['citation'] for item in exemptions_group['citation_events'][0]['redesignated_as']],
             ['100.71(a)'],
         )
 
