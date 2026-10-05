@@ -24,7 +24,7 @@
       {% endif %}
       {% if document.extension is not '' %}
       <i class="icon icon--inline--right icon--inline--left i-document"></i>
-      <span class="t-sans t-normal">({{ document.extension }}){% if document.size %} | ({{ document.size }}){% endif %}</span>
+      <span class="t-sans t-normal"> {{ document.extension }} {% if document.size %} | {{ document.size }} {% endif %}</span>
       {% endif %}
     </h3>
   {% endif %}
