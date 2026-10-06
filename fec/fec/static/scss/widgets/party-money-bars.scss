@@ -6,6 +6,7 @@ $colorTextOnLight: #212121;
 $colorBarDef: #5b616b;
 $colorBarDem: #21adf7;
 $colorBarRep: #da3c18;
+$colorBarExp: #36bdbb;
 $colorBarOtherOnDark: #d6d7d9;
 $colorBorderBottom: #e8e8e8;
 $fontFamilyMonospace: 'fec_currency_mono', 'karla', sans-serif;
@@ -30,6 +31,8 @@ $fontWeightBold: 700;
   .js-parties-holder {
     grid-template-columns: 4em auto 25%;
     display: grid;
+    justify-content: start;
+
 
     .js-meter-row {
       display: contents;
@@ -134,7 +137,7 @@ $fontWeightBold: 700;
         position: absolute;
         border-right: thin solid $colorBarDef;
       }
-      &[data-party='DEM'] {
+      &[data-party='DEM']  {
         &::-webkit-meter-optimum-value {
           // note#1
           background: $colorBarDem;
@@ -164,6 +167,46 @@ $fontWeightBold: 700;
           border-right-color: $colorBarRep;
         }
       }
+      
+      &[data-party='S'], 
+      &[data-party='O'], 
+      &[data-party='OTHER'] { 
+        &::-webkit-meter-optimum-value {
+          // note#1
+          background: $colorBarExp;
+          transition: all 1s;
+        }
+        &:-moz-meter-optimum::-moz-meter-bar {
+          // note#1
+          background: $colorBarExp;
+          transition: all 1s;
+        }
+        &::before {
+          border-right-color: $colorBarExp;
+        }
+      }
+
+
+    /* &#raising-spending-summary {
+      transition: none !important;
+
+      ::-webkit-meter-inner-element {
+      display: block !important;
+      height: 100% !important;
+      box-sizing: border-box !important;
+      }
+
+    ::-webkit-meter-bar {
+      display: block !important;
+      height: 100% !important;
+    }
+
+    ::-webkit-meter-optimum-value {
+      transition: width 0.3s ease !important;
+    }
+
+    } */
+
     }
     // Trying to get the widths to animate when the values change
     meter::-webkit-meter-suboptimum-value,
@@ -177,6 +220,10 @@ $fontWeightBold: 700;
       transition: all 1s;
     }
   }
+
+
+  
+
 
   footer {
     -ms-flex-align: baseline;
@@ -406,3 +453,25 @@ $fontWeightBold: 700;
     }
   }
 }
+
+#raising-spending-summary {
+      transition: none !important;
+
+      ::-webkit-meter-inner-element{
+        display: block !important;
+      }
+
+    ::-webkit-meter-bar {
+       margin-top: 2.7rem !important
+
+    }
+
+    ::-webkit-meter-optimum-value {
+      transition: width 1 ease !important;
+    }
+
+    meter::before {
+      margin-top: .35rem
+    }
+
+    } 

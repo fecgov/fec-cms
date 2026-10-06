@@ -8,13 +8,13 @@ import { compactCurrency } from './helpers.js';
  * Quick lookup for converting api results to sometimes-abbreviated and punctuated versions
  */
 const partyAbbrevs = {
-  DEM: 'Dem.',
-  REP: 'Rep.',
-  OTHER: 'Other'
+  S: 'Support.',
+  O: 'Oppose.',
+  Others: 'Other'
 };
 
 /**
- * The defaults for a new PartyMoneyBars, overridden by opts constructor argument
+ * The defaults for a new IeMoneyBars, overridden by opts constructor argument
  */
 const defaultSettings = {
   animateChanges: true, // TODO: this isn't being read yet
@@ -23,9 +23,9 @@ const defaultSettings = {
   figureClasses: '', // TODO: make this work?
   figureGroupClasses: '', // TODO: make this work?
   initValues: [
-    { min: 0, max: 100, value: 50, party: 'DEM' },
-    { min: 0, max: 100, value: 50, party: 'REP' },
-    { min: 0, max: 100, value: 50, party: 'OTHER' }
+    { min: 0, max: 100, value: 50, party: 'S' },
+    { min: 0, max: 100, value: 50, party: 'O' },
+    { min: 0, max: 100, value: 50, party: 'Others' }
   ]
 };
 
@@ -37,9 +37,9 @@ const defaultSettings = {
  * @property {HTMLElement} metersHolder - The HTMLElement parent where the meters should go.
  * @property {HTMLElement} totalElm - The HTMLElement whose innerText should be used to display the total $.
  * @property {Object} settings - Combination of settings from opts overriding defaultSettings.
- * @returns {PartyMoneyBars} New instance of PartyMoneyBars.
+ * @returns {IeMoneyBars} New instance of IeyMoneyBars.
  */
-export default function PartyMoneyBars(putMetersHereSelector, putTotalHereSelector, opts = {}) {
+export default function IeMoneyBars(putMetersHereSelector, putTotalHereSelector, opts = {}) {
   this.metersHolder = document.querySelector(putMetersHereSelector);
   this.totalElm = putTotalHereSelector.length > 1 ? document.querySelector(putTotalHereSelector) : null;
   this.settings = Object.assign({}, defaultSettings, opts);
@@ -51,7 +51,7 @@ export default function PartyMoneyBars(putMetersHereSelector, putTotalHereSelect
 /**
  * Does all of the setup work that doesn't involve constructor arguments
  */
-PartyMoneyBars.prototype.init = function() {
+IeMoneyBars.prototype.init = function() {
 
   // Build elements
   // Add the parties holder to this.metersHolder
@@ -92,15 +92,14 @@ PartyMoneyBars.prototype.init = function() {
  * @param {number} [newValObj.total] - Grand total, if we're showing that // TODO: make sure it appears and disappears as needed
  * @param {number} newValObj.DEM - Value for Democrats
  * @param {number} newValObj.REP - Value for Republicans
- * @param {number} [newValObj.Other] - Value for Other parties // TODO: will this disappear if not included? Will it ever not be included?
+ * @param {number} [newValObj.Others] - Value for Other parties // TODO: will this disappear if not included? Will it ever not be included?
  */
-PartyMoneyBars.prototype.applyNewData = function(newValObj) {
+IeMoneyBars.prototype.applyNewData = function(newValObj) {
   // If we're doing the total, it's at newValObj.total;
   if (this.totalElm) {
     if (newValObj.total) {
-      this.totalElm.textContent = compactCurrency(newValObj.total);
+      this.totalElm.textContent = compactCurrency(newValObj.total, true);
       this.totalElm.dataset.totalValue = newValObj.total;
-      //this.totalElm.textContent = this.actual_values ? currency(newValObj.total) : compactCurrency(newValObj.total);
     } else {
       // TODO Handle if we have a total element but didn't get a new value for it
     }
@@ -108,9 +107,9 @@ PartyMoneyBars.prototype.applyNewData = function(newValObj) {
 
   // Sort the party values so the highest is on top
   let rankedPartiesAndValues = [
-    { party: 'DEM', value: newValObj.DEM },
-    { party: 'REP', value: newValObj.REP },
-    { party: 'OTHER', value: newValObj.OTHER }
+    { party: 'S', value: newValObj.S },
+    { party: 'O', value: newValObj.O },
+    { party: 'Others', value: newValObj.Others }
   ];
   // sort them based so the largest value is [0] (descending)
   rankedPartiesAndValues.sort((a, b) => {
@@ -129,9 +128,7 @@ PartyMoneyBars.prototype.applyNewData = function(newValObj) {
       if (label.classList.contains('js-party-title')) {
         label.textContent = partyAbbrevs[rankedPartiesAndValues[i].party];
       } else if (label.classList.contains('js-party-value')) {
-        //label.textContent = this.actual_values ? currency(meter.value) :compactCurrency(meter.value);
-        label.textContent = compactCurrency(meter.value);
-
+        label.textContent = compactCurrency(meter.value, true);
       }
     });
   });
