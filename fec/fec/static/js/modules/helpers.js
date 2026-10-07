@@ -175,6 +175,7 @@ export const compactCurrency = (value) => {
     style: 'currency',
     currency: 'USD',
     notation: 'compact',
+    minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits
   }).format(value).toLowerCase();
 };
