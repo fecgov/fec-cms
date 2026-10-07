@@ -92,9 +92,8 @@ ElectionSummary.prototype.startLoadingData = function(electionYear) {
     }
 
     const theURL = `${window.API_LOCATION}/${window.API_VERSION}/candidates/totals/aggregates/?${theQstring}`;
-    //const ieQstring = theQstring.replace('election_year', 'cycle');
-    //const ieUrl = `${window.API_LOCATION}/${window.API_VERSION}/schedules/schedule_e/all_candidates/support_oppose_totals/?${ieQstring}`;
-    const ieUrl = `${window.API_LOCATION}/${window.API_VERSION}/candidates/totals/aggregates/?${theQstring}`;
+    const ieQstring = theQstring.replace('election_year', 'cycle');
+    const ieUrl = `${window.API_LOCATION}/${window.API_VERSION}/schedules/schedule_e/all_candidates/support_oppose_totals/?${ieQstring}`;
     //const ieUrl = window.location.origin + '/static/az_suppose_totals.json';
 
     const allTotals = {};
