@@ -164,6 +164,24 @@ export function dollar(value) {
   }
 }
 
+export const compactCurrency = (value) => {
+  const absValue = Math.abs(value);
+
+  // Choose fraction digits dynamically based on size
+  // Millions get 1 decimal place; everything else (thousands, hundreds) gets 0
+  const fractionDigits = absValue >= 1_000_000 ? 1 : 0;
+
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    notation: 'compact',
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits
+  }).format(value).toLowerCase();
+};
+
+Handlebars.registerHelper('compactCurrency', compactCurrency);
+
 export const numberFormatter = function(number) {
   return numeral(number).format('0,0');
 };

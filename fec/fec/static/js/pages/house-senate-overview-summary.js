@@ -117,12 +117,12 @@ HSOverviewSummary.prototype.handleCycleChange = function (e) {
  */
 HSOverviewSummary.prototype.handleDataLoaded = function(results) {
   const usefulResults = {
-    total_cash_on_hand_end_period: { total: 0, DEM: 0, REP: 0, Other: 0 },
+    total_cash_on_hand_end_period: { total: 0, DEM: 0, REP: 0, OTHER: 0 },
     total_debts_owed_by_committee: { total: 0, DEM: 0, REP: 0, Other: 0 },
-    total_disbursements: { total: 0, DEM: 0, REP: 0, Other: 0 },
+    total_disbursements: { total: 0, DEM: 0, REP: 0, OTHER: 0 },
     total_individual_itemized_contributions: { total: 0, DEM: 0, REP: 0, Other: 0 },
     total_other_political_committee_contributions: { total: 0, DEM: 0, REP: 0, Other: 0 },
-    total_receipts: { total: 0, DEM: 0, REP: 0, Other: 0 },
+    total_receipts: { total: 0, DEM: 0, REP: 0, OTHER: 0 },
     total_transfers_from_other_authorized_committee: { total: 0, DEM: 0, REP: 0, Other: 0 }
   };
 
