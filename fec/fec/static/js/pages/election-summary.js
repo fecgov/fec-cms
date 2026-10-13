@@ -25,11 +25,11 @@ ElectionSummary.prototype.init = function() {
   this.cycleSelector.addEventListener('change', this.handleCycleChange.bind(this));
 
   //TODO, can I combime the two below and use "new PartyMoneyBars" opts constructor for both?
-  const theFigures = document.querySelectorAll('#election-summary figure')
+  const theFigures = document.querySelectorAll('#election-summary figure');
 
   theFigures.forEach((el, index) => {
   // Store the identical arguments in an array
-    const args = [  
+    const args = [
       `#${el.id} .parties-wrapper`,
       `#${el.id} .js-value-large`,
       {
@@ -209,7 +209,7 @@ ElectionSummary.prototype.handleDataLoaded = function(results) {
     total_transfers_from_other_authorized_committee: { total: 0, DEM: 0, REP: 0, Other: 0 },
     total_independent_expenditures: this.total_independent_expenditures //{ total: 0, S: 0, A: 0, O: 0 },
   };
- 
+
   for (const [key, value] of Object.entries(results)) {
     for (const val of Object.values(value)) {
       for (const item in val) {
