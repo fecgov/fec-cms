@@ -142,21 +142,26 @@ ElectionSummary.prototype.startLoadingData = function(electionYear) {
           const amount = currentItem.ie_total;
           const indicator = currentItem.support_oppose_indicator;
 
+          // Sum S + O + Other together for total
           accumulator.total += amount;
-          if (Object.hasOwn(accumulator, indicator)) {
-            accumulator[indicator] += amount;
+
+          if (indicator === 'S' || indicator === 'O') {
+            accumulator[indicator] = amount;
+          } else {
+            accumulator.Other = amount;
           }
+
           return accumulator;
         }, { total: 0, S: 0, O: 0, Other: 0 });
 
-        // Save to instance directly
+        // Save IEs to this (instance) variable to put directly in UsefulResults
         instance.total_independent_expenditures = result;
 
-        // TODO: Implement this functyion to proactively update the UI with just the independent expenditure data once it arrives
+        // TODO: Implement this function to proactively update the UI with just the independent expenditure data once it arrives
         if (typeof instance.handleIndependentExpendituresLoaded === 'function') {
           instance.handleIndependentExpendituresLoaded(result);
         } else {
-          // Fallback: re-trigger main loader until I have a specific sub-render function (handleIndependentExpendituresLoaded)
+          // Fallback: re-trigger main loader. Even if we ever add a specific sub-render function above (handleIndependentExpendituresLoaded)
           instance.handleDataLoaded(allTotals);
         }
       })
