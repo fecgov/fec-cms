@@ -10,34 +10,49 @@
 
 
 {% block filter_form %}
-  <div class="filters__inner">
-    <form id="regulation-keyword-search" action="/data/legal/search/regulations/">
+  {% set selected_method = regulation_search_method|default('ao_number' if ao_number_input|default(ao_number) else 'mur_number' if mur_number_input|default(mur_number) else 'search', true) %}
+  <div class="filters__inner regulation-search-methods" data-regulation-search-methods>
+    <fieldset class="toggles regulation-search-methods__selector" aria-describedby="regulation-search-hint" data-search-method-selector hidden>
+      <legend class="label">Search by</legend>
+      <div class="regulation-search-methods__choices">
+        {% for method, label, form_id in [('search', 'Keyword', 'regulation-keyword-search'), ('ao_number', 'AO cited', 'regulation-ao-search'), ('mur_number', 'MUR cited', 'regulation-mur-search')] %}
+          <label>
+            <input type="radio" name="regulation-search-method" value="{{ method }}" aria-controls="{{ form_id }}"{% if selected_method == method %} checked{% endif %}>
+            <span class="button--alt">{{ label }}</span>
+          </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+    <div class="data-type__message regulation-search-methods__description">
+      <p id="regulation-search-hint">Use one search method at a time.</p>
+    </div>
+    <form id="regulation-keyword-search" data-search-method="search" action="/data/legal/search/regulations/">
       <input type="hidden" name="search_type" value="regulations">
-      {{ legal.keyword_search(result_type, query, error_message=legal_search_error if legal_search_error and 'search' in legal_search_error_fields|default([]) else None) }}
+      {{ legal.keyword_search(result_type, query, name='Regulation keyword', error_message=legal_search_error if legal_search_error and 'search' in legal_search_error_fields|default([]) else None) }}
     </form>
-    <p class="t-bold t-sans">or</p>
-    <form id="regulation-ao-search" action="/data/legal/search/regulations/">
+    <form id="regulation-ao-search" data-search-method="ao_number" action="/data/legal/search/regulations/">
       <input type="hidden" name="search_type" value="regulations">
       {{ legal.citation_number_search(
         'ao-number-input',
         'ao_number',
-        'AO number/AOs cited',
+        'AO number/AO cited',
         ao_number_input|default(ao_number|default('')),
         'Find regulations cited by this advisory opinion',
-        error_message=legal_search_error if legal_search_error and 'ao_number' in legal_search_error_fields|default([]) else None
+        error_message=legal_search_error if legal_search_error and 'ao_number' in legal_search_error_fields|default([]) else None,
+        hint='Example: 2003-38'
       ) }}
     </form>
-    <p class="t-bold t-sans">or</p>
-    <form id="regulation-mur-search" action="/data/legal/search/regulations/">
+    <form id="regulation-mur-search" data-search-method="mur_number" action="/data/legal/search/regulations/">
       <input type="hidden" name="search_type" value="regulations">
       {{ legal.citation_number_search(
         'mur-number-input',
         'mur_number',
-        'MUR number/MURs cited',
+        'MUR number/MUR cited',
         mur_number_input|default(mur_number|default('')),
         'Find regulations cited by this MUR',
         error_message=legal_search_error if legal_search_error and 'mur_number' in legal_search_error_fields|default([]) else None,
-        inputmode='numeric'
+        inputmode='numeric',
+        hint='Example: 4321'
       ) }}
     </form>
   </div>

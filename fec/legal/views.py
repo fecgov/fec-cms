@@ -1539,6 +1539,7 @@ def legal_doc_search_regulations(request):
         'mur_number': mur_number,
         'mur_number_input': mur_number_input,
         'citation_lookup': citation_lookup,
+        'regulation_search_method': search_mode or (active_searches[0] if active_searches else None),
         'is_browse': is_browse,
         'legal_search_error': legal_search_error,
         'legal_search_error_fields': legal_search_error_fields,

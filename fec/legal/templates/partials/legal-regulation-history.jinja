@@ -1,0 +1,106 @@
+{% macro document_link(event, subject) %}
+  {% if event.source_url %}<a href="{{ event.source_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ subject }}, {{ event.document_label }} E&amp;J (PDF)">{% endif %}{{ event.document_label }} E&amp;J (PDF){% if event.source_url %}</a>{% endif %}
+{% endmacro %}
+
+{% macro status_rows(status_groups) %}
+  {% for status in status_groups %}
+    {% for event in status.events %}
+      <li class="legal-history-preview__status">
+        {{ document_link(event, status.label) }} | <span>{{ status.label }}</span>
+      </li>
+    {% endfor %}
+  {% endfor %}
+{% endmacro %}
+
+{% macro conversion_links(urls, skip=[]) %}
+  {% for url in urls|unique if url and url not in skip %}
+    <a class="legal-history-preview__conversion-link" href="{{ url }}" target="_blank" rel="noopener noreferrer"><span>Conversion table</span></a>
+  {% endfor %}
+{% endmacro %}
+
+<h2 class="sidebar__title" id="regulation-history-title">Explanations and citation history</h2>
+<section class="sidebar__content legal-history-preview" aria-labelledby="regulation-history-title" data-regulation-history>
+  <p class="t-note">Explanations and Justifications (E&amp;Js) explain the Commission’s rules. Follow earlier or later citations to trace a provision’s history.</p>
+  {% if section == '100.111' %}
+    <p class="t-note">The entries below link to the same 2002 E&amp;J document.</p>
+  {% endif %}
+  {% if historical_regulation_event_groups %}
+    <div class="legal-history-preview__tools" data-history-tools hidden>
+      <button type="button" class="button--alt" data-history-toggle aria-controls="regulation-history-records" hidden>Expand all E&amp;Js</button>
+    </div>
+    <ul class="list--unstyled legal-history-preview__records" id="regulation-history-records">
+      {% for group in historical_regulation_event_groups %}
+        {% set status_labels = ['Section removed and reserved', 'Removed', 'Deleted'] %}
+        {% set status_groups = group.subject_groups|default([])|selectattr('label', 'in', status_labels)|list %}
+        {% set subjects = group.subject_groups|default([])|rejectattr('label', 'in', status_labels)|list %}
+        {% set single_subject = subjects|length == 1 %}
+        <li class="legal-history-preview__record" id="{{ group.anchor_id }}" tabindex="-1">
+          <h3 class="legal-history-preview__heading">{{ group.section }}{{ group.subsection|replace('-', '–') }}{% if single_subject %} - {{ subjects[0].label }}{% endif %}</h3>
+          {% set later_sources = namespace(urls=[]) %}
+          {% for event in group.citation_events|default([]) %}
+            {% for citation in event.redesignated_as %}
+              {% if citation.source_url %}{% set later_sources.urls = later_sources.urls + [citation.source_url] %}{% endif %}
+            {% endfor %}
+          {% endfor %}
+          {% if group.citation_note %}
+            <div class="legal-history-preview__citation-note t-note">
+              {% if group.citation_note.previous_citations %}
+                <div>Previously {{ regulation_ui.previous_links(group.citation_note.previous_citations) }}{{ conversion_links(group.citation_note.source_urls, later_sources.urls) }}</div>
+                {% if group.citation_note.previous_citations|selectattr('ej_unavailable')|list %}
+                  <div>No E&amp;J is available for the earlier citations shown without links.</div>
+                {% endif %}
+              {% endif %}
+              {% for description in group.citation_note.descriptions %}
+                <div>{{ description }}{% if loop.last and not group.citation_note.previous_citations %}{{ conversion_links(group.citation_note.source_urls, later_sources.urls) }}{% endif %}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% for event in group.citation_events|default([]) %}
+            <div class="legal-history-preview__citation-note t-note">Later citation{% if event.redesignated_as|length > 1 %}s{% endif %}: {{ regulation_ui.later_links(event.redesignated_as) }}{{ conversion_links(event.redesignated_as|map(attribute='source_url')) }}</div>
+          {% endfor %}
+          {% if not single_subject and status_groups %}
+            <ul class="list--unstyled legal-history-preview__documents legal-history-preview__documents--timeline legal-history-preview__citation-status" aria-label="Status for citation {{ group.section }}{{ group.subsection }}">
+              {{ status_rows(status_groups) }}
+            </ul>
+          {% endif %}
+          {% for subject in subjects %}
+            <div class="legal-history-preview__subject">
+              {% if not single_subject %}<h4>{{ subject.label }}</h4>{% endif %}
+              {% set newest = subject.events[0].date %}
+              {% set latest = subject.events|selectattr('date', 'equalto', newest)|list %}
+              {% set earlier = subject.events|rejectattr('date', 'equalto', newest)|list %}
+              {% set all_dated = subject.events|selectattr('date')|list|length == subject.events|length %}
+              {% set collapse = earlier|length > 0 and newest and all_dated %}
+              <ul class="list--unstyled legal-history-preview__documents{% if subject.events|length > 1 or (single_subject and status_groups) %} legal-history-preview__documents--timeline{% endif %}{% if collapse %} legal-history-preview__documents--continues{% endif %}">
+                {% if single_subject %}{{ status_rows(status_groups) }}{% endif %}
+                {% for event in latest if collapse %}
+                  <li>{{ document_link(event, subject.label) }}</li>
+                {% endfor %}
+                {% if not collapse %}
+                  {% for event in subject.events %}
+                    <li>{{ document_link(event, subject.label) }}</li>
+                  {% endfor %}
+                {% endif %}
+              </ul>
+              {% if collapse %}
+                <details class="legal-history-preview__earlier" open>
+                  <summary>{{ earlier|length }} earlier E&amp;J{% if earlier|length != 1 %}s{% endif %} - {{ earlier[-1].date }}{% if earlier[0].date != earlier[-1].date %}–{{ earlier[0].date }}{% endif %}<span class="u-visually-hidden"> for {{ group.section }}{{ group.subsection }}, {{ subject.label }}</span></summary>
+                  <ul class="list--unstyled legal-history-preview__documents legal-history-preview__documents--timeline">
+                    {% for event in earlier %}
+                      <li>{{ document_link(event, subject.label) }}</li>
+                    {% endfor %}
+                  </ul>
+                </details>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </li>
+      {% endfor %}
+    </ul>
+    <div class="legal-history-preview__sources t-note">
+      <p>E&amp;J documents and citation changes come from separate FEC indexes. Some E&amp;Js discuss a provision under a broader parent citation. Earlier E&amp;Js may provide additional context.</p>
+    </div>
+  {% else %}
+    <p>No FEC historical E&amp;J records available for this section.</p>
+  {% endif %}
+</section>

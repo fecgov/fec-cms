@@ -2,7 +2,7 @@
 <div class="filter">
   <label class="label t-inline-block" for="search-input">{{ name }}</label>
   <div class="tooltip__container">
-   <button class="tooltip__trigger"><span class="u-visually-hidden">Learn more</span></button>
+   <button type="button" class="tooltip__trigger"><span class="u-visually-hidden">Learn more</span></button>
    <div class="tooltip tooltip--left tooltip--under">
       <p class="tooltip__content tooltip__content">Refine a keyword search by using + (and), | (or), " " (exact phrase), - (but not), to expand or limit results. Search returns a maximum 6 keyword matches per document.</p>
    </div>
@@ -31,15 +31,16 @@
 </div>
 {% endmacro %}
 
-{% macro citation_number_search(input_id, name, label, value, button_label, error_message=None, inputmode=None) %}
+{% macro citation_number_search(input_id, name, label, value, button_label, error_message=None, inputmode=None, hint=None) %}
 <div class="filter">
   <label class="label" for="{{ input_id }}">{{ label }}</label>
   <div class="combo combo--search--mini no-mar-b">
-    <input id="{{ input_id }}" type="text"{% if inputmode %} inputmode="{{ inputmode }}"{% endif %} name="{{ name }}" class="combo__input" value="{{ value }}">
+    <input id="{{ input_id }}" type="text"{% if inputmode %} inputmode="{{ inputmode }}"{% endif %}{% if hint %} aria-describedby="{{ input_id }}-hint"{% endif %} name="{{ name }}" class="combo__input" value="{{ value }}">
     <button class="combo__button button--go button--standard" type="submit">
       <span class="u-visually-hidden">{{ button_label }}</span>
     </button>
   </div>
+  {% if hint %}<p id="{{ input_id }}-hint" class="t-note t-sans">{{ hint }}</p>{% endif %}
   {% if error_message %}
   <div class="message filter__message message--error" role="alert">{{ error_message }}</div>
   {% endif %}

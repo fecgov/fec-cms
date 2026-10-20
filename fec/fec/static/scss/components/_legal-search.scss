@@ -29,6 +29,82 @@
 // </div>
 //
 
+.regulation-search-methods {
+  [hidden] {
+    display: none;
+  }
+
+  &__selector {
+    margin-bottom: u(1rem);
+  }
+
+  &__choices {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    label {
+      cursor: pointer;
+      float: none;
+      margin: 0;
+      min-width: 0;
+      position: relative;
+    }
+
+    input[type='radio'] {
+      // Keep keyboard focus in the visible control instead of off screen.
+      clip-path: inset(50%);
+      height: 1px;
+      left: 0 !important;
+      overflow: hidden;
+      width: 1px;
+    }
+
+    .button--alt {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      line-height: 1.3;
+      margin: 0 -2px 0 0;
+      min-height: u(3.4rem);
+      padding: u(0.8rem 0.6rem);
+      text-align: center;
+    }
+
+    label:first-child .button--alt {
+      border-radius: 4px 0 0 4px;
+    }
+
+    label:last-child .button--alt {
+      border-radius: 0 4px 4px 0;
+      margin-right: 0;
+    }
+
+    input:checked + .button--alt {
+      margin-right: -2px;
+      position: relative;
+      z-index: 1;
+    }
+
+    label:last-child input:checked + .button--alt {
+      margin-right: 0;
+    }
+
+    input:focus-visible + .button--alt {
+      outline: 2px solid $primary;
+      outline-offset: 2px;
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  &__description {
+    border-bottom: 1px solid $gray-dark;
+    margin-bottom: u(2rem);
+    padding: u(0 0 2rem);
+  }
+}
+
 .legal-search-result__name {
   font-family: $sans-serif;
   font-weight: 600;
@@ -330,6 +406,211 @@
       border: none;
       float: right;
       margin-top: u(0.2rem);
+    }
+  }
+
+  // Scoped to the regulation pages selected for the history proof of concept.
+  .legal-history-preview {
+    [hidden] {
+      display: none;
+    }
+
+    &__tools {
+      border-bottom: 1px solid $gray;
+      margin-bottom: u(2rem);
+      padding-bottom: u(1.5rem);
+
+      [data-history-toggle] {
+        margin-top: u(1rem);
+      }
+    }
+
+    &__record {
+      border-bottom: 1px solid $gray;
+      margin-bottom: u(1.5rem);
+      outline-offset: u(0.75rem);
+      padding-bottom: u(1.5rem);
+      scroll-margin-top: u(8rem);
+    }
+
+    &__heading,
+    &__subject h4 {
+      font-family: $sans-serif;
+      font-size: inherit;
+      font-weight: bold;
+      line-height: 1.4;
+      margin: 0 0 u(0.5rem);
+      overflow-wrap: anywhere;
+    }
+
+    &__subject + .legal-history-preview__subject {
+      margin-top: u(1.25rem);
+    }
+
+    &__records,
+    &__documents {
+      margin: 0;
+    }
+
+    &__documents li + li {
+      margin-top: u(0.5rem);
+    }
+
+    &__documents--timeline {
+      // Center document dots and the larger accordion circle on the same axis.
+      padding-left: u(3rem);
+
+      li {
+        min-height: u(1.5rem);
+        position: relative;
+
+        &::before {
+          background-color: $primary;
+          border-radius: 50%;
+          content: '';
+          height: u(1rem);
+          left: u(-2.5rem);
+          position: absolute;
+          top: u(0.35rem);
+          width: u(1rem);
+          z-index: 1;
+        }
+
+        &::after {
+          background-color: $gray;
+          bottom: u(-0.85rem);
+          content: '';
+          left: u(-2.1rem);
+          position: absolute;
+          top: u(0.85rem);
+          width: u(0.2rem);
+        }
+
+        &:not(:last-child) {
+          padding-bottom: u(1.25rem);
+        }
+
+        &:last-child::after {
+          display: none;
+        }
+      }
+
+      li + li {
+        margin-top: 0;
+      }
+
+      &.legal-history-preview__documents--continues > li:last-child::after {
+        // Cross the gap to the center of the accordion circle, even when closed.
+        bottom: u(-2.75rem);
+        display: block;
+      }
+    }
+
+    &__earlier {
+      margin-top: u(0.75rem);
+
+      summary {
+        // Use the same icons and left-aligned treatment as MUR "more matches".
+        color: $base;
+        cursor: pointer;
+        display: block;
+        font-family: $sans-serif;
+        font-size: u(1.4rem);
+        font-weight: bold;
+        letter-spacing: -0.3px;
+        list-style: none;
+        padding: u(1rem 0 1rem 3rem);
+        position: relative;
+
+        &::before {
+          background-color: $inverse;
+          background-size: u(2rem);
+          border-radius: 50%;
+          content: '';
+          height: u(2rem);
+          left: 0;
+          position: absolute;
+          top: u(1rem);
+          width: u(2rem);
+          z-index: 1;
+
+          @include u-icon-bg($plus-circle, $primary);
+        }
+
+        &::-webkit-details-marker {
+          display: none;
+        }
+
+        &:focus-visible {
+          outline: 2px solid $primary;
+          outline-offset: 2px;
+        }
+      }
+
+      &[open] > summary {
+        border-bottom: 1px solid $base;
+        margin-bottom: u(1.5rem);
+
+        &::before {
+          @include u-icon-bg($minus-circle, $primary);
+        }
+
+        &::after {
+          // Follow the summary's actual height, including wrapped labels.
+          background-color: $gray;
+          bottom: u(-2.35rem);
+          content: '';
+          left: u(0.9rem);
+          position: absolute;
+          top: u(2rem);
+          width: u(0.2rem);
+        }
+      }
+    }
+
+    &__citation-note,
+    &__citation-status {
+      margin-bottom: u(0.75rem);
+    }
+
+    &__conversion-link {
+      border-bottom: 0;
+      display: inline-block;
+      font-family: $sans-serif;
+      font-style: normal;
+      margin-left: u(0.75rem);
+      white-space: nowrap;
+
+      span {
+        border-bottom: 1px dotted $primary;
+      }
+
+      &:hover span,
+      &:active span {
+        border-bottom-color: $primary-contrast;
+      }
+
+      &::after {
+        background-position: center;
+        background-size: contain;
+        content: '';
+        display: inline-block;
+        height: u(1rem);
+        margin-left: u(0.5rem);
+        width: u(0.8rem);
+
+        @include u-icon-bg($arrow-right, $base);
+      }
+    }
+
+    @media print {
+      &__tools {
+        display: none;
+      }
+
+      &__record {
+        break-inside: avoid;
+      }
     }
   }
 
