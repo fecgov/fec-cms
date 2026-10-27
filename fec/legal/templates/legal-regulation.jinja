@@ -93,7 +93,7 @@
         <section class="content__section">
           {% if regulation %}
             <div class="rich-text">
-              <h3>{{ regulation.heading|safe }}</h3>
+              <h3 class="legal-regulation__text-heading" id="regulation-{{ section }}" tabindex="-1"><span class="legal-regulation__text">{{ regulation.heading|safe }}</span></h3>
               {% for block in regulation.body %}
                 {{ block|safe }}
               {% endfor %}

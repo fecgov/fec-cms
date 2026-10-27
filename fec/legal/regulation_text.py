@@ -216,6 +216,7 @@ def format_ecfr_html_section(section_html, section):
     statutory_citations = extract_statutory_citations([heading, *content_elements])
     # Preserve eCFR paragraph IDs and indentation so anchors remain usable locally.
     body = []
+    paragraph_ids = []
     previous_paragraph_level = 0
     for paragraph in container.find_all('p'):
         if is_ecfr_section_source_note(paragraph):
@@ -261,7 +262,13 @@ def format_ecfr_html_section(section_html, section):
                 f' id="{html.escape(paragraph_id, quote=True)}"'
                 if paragraph_id else ''
             )
-            body.append(f'<p{paragraph_class}{id_attribute}>{paragraph_html}</p>')
+            if paragraph_id:
+                paragraph_ids.append(paragraph_id)
+                id_attribute += ' tabindex="-1"'
+            body.append(
+                f'<p{paragraph_class}{id_attribute}>'
+                f'<span class="legal-regulation__text">{paragraph_html}</span></p>'
+            )
 
     if not body:
         return None
@@ -271,6 +278,7 @@ def format_ecfr_html_section(section_html, section):
         'heading': ecfr_html_inner_html(heading),
         'heading_text': heading.get_text(' ', strip=True),
         'body': body,
+        'paragraph_ids': paragraph_ids,
         'issue_date': issue_date,
         'ecfr_url': f"https://www.ecfr.gov/current/title-11/section-{section}",
         'statutory_citations': statutory_citations,

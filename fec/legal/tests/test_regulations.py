@@ -275,6 +275,34 @@ def test_section_renders_before_related_api_requests(ecfr):
     rulemaking_api.assert_not_called()
 
 
+def test_history_citations_jump_to_existing_regulation_text(ecfr):
+    response = regulations.regulation_page(RequestFactory().get('/'), '100.6')
+    soup = BeautifulSoup(response.content, 'html.parser')
+    parent = soup.select_one('#historical-ej-100-6 .legal-history-preview__heading a')
+    paragraph = soup.select_one('#historical-ej-100-6-a .legal-history-preview__heading a')
+    assert parent['href'] == '#regulation-100.6'
+    assert paragraph['href'] == '#p-100.6(a)'
+    assert paragraph.get_text(strip=True) == '100.6(a)'
+    for link in (parent, paragraph):
+        target = soup.find(id=link['href'][1:])
+        assert target is not None
+        assert target['tabindex'] == '-1'
+
+
+def test_history_does_not_link_missing_or_reserved_text(ecfr):
+    # The fixture has (a) and (c), but no (b), even though (b) has historical E&Js.
+    response = regulations.regulation_page(RequestFactory().get('/'), '100.6')
+    soup = BeautifulSoup(response.content, 'html.parser')
+    heading = soup.select_one('#historical-ej-100-6-b .legal-history-preview__heading')
+    assert heading is not None
+    assert heading.find('a') is None
+    ecfr.return_value = {'error': True, 'status_code': 404}
+    response = regulations.regulation_page(RequestFactory().get('/'), '100.7')
+    soup = BeautifulSoup(response.content, 'html.parser')
+    assert soup.select('.legal-history-preview__heading')
+    assert not soup.select('.legal-history-preview__heading a')
+
+
 @pytest.mark.parametrize(('section', 'suffix', 'earlier'), [
     ('100.82', '-a-d', '§ 100.7(b)(11)'),
     ('100.8', '-b-4-v-vii', '§ 100.7(b)(5)(v) (vii)'),

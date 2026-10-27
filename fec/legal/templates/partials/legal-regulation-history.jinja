@@ -35,7 +35,17 @@
         {% set subjects = group.subject_groups|default([])|rejectattr('label', 'in', status_labels)|list %}
         {% set single_subject = subjects|length == 1 %}
         <li class="legal-history-preview__record" id="{{ group.anchor_id }}" tabindex="-1">
-          <h3 class="legal-history-preview__heading">{{ group.section }}{{ group.subsection|replace('-', '–') }}{% if single_subject %} - {{ subjects[0].label }}{% endif %}</h3>
+          {% set text_anchor = 'p-' ~ group.section ~ group.subsection %}
+          <h3 class="legal-history-preview__heading">
+            {%- if regulation and not group.subsection -%}
+              <a href="#regulation-{{ section }}">{{ group.section }}</a>
+            {%- elif regulation and text_anchor in regulation.paragraph_ids -%}
+              <a href="#{{ text_anchor }}">{{ group.section }}{{ group.subsection }}</a>
+            {%- else -%}
+              {{ group.section }}{{ group.subsection|replace('-', '–') }}
+            {%- endif -%}
+            {% if single_subject %} - {{ subjects[0].label }}{% endif %}
+          </h3>
           {% set later_sources = namespace(urls=[]) %}
           {% for event in group.citation_events|default([]) %}
             {% for citation in event.redesignated_as %}

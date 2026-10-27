@@ -614,6 +614,15 @@
     }
   }
 
+  .legal-regulation__text-heading,
+  .legal-regulation__paragraph {
+    scroll-margin-top: u(2rem);
+
+    &:target > .legal-regulation__text {
+      @include t-highlight;
+    }
+  }
+
   .legal-regulation__paragraph {
     &--level-2 {
       padding-left: u(3rem);
