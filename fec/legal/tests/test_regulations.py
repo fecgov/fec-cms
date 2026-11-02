@@ -466,6 +466,16 @@ def test_history_preserves_every_document_and_citation_anchor(ecfr, section_html
             event['source_url'] for subject in group.get('subject_groups', [])
             for event in subject['events'] if event.get('source_url')
         )
+        if any(subject['label'] == 'Section removed and reserved' for subject in group.get('subject_groups', [])):
+            visible_documents = [
+                link for link in record.select('.legal-history-preview__documents a')
+                if not link.find_parent('details')
+            ]
+            assert visible_documents
+            assert all('Section removed and reserved' in link.parent.get_text() for link in visible_documents)
+            for subject in record.select('.legal-history-preview__subject'):
+                assert not subject.select(':scope > ul > li:not(.legal-history-preview__status)')
+                assert subject.select_one('details') is not None
         # Citation context is always visible, never inside a collapsed document list.
         assert record.select_one('details .legal-history-preview__citation-note') is None
         source_urls = set(group.get('citation_note', {}).get('source_urls', []))
@@ -492,18 +502,21 @@ def test_history_preserves_every_document_and_citation_anchor(ecfr, section_html
         contribution = next(subject for subject in preview.select(
             '#historical-ej-100-7 .legal-history-preview__subject'
         ) if subject.select_one('h4').get_text(strip=True) == 'Contribution')
-        # Both 1996 records remain visible; the index doesn't establish their order.
-        latest = contribution.select(':scope > .legal-history-preview__documents a')
+        # Both 1996 records remain available inside the subject's accordion.
+        latest = [link for link in contribution.select('details a') if '1996' in link.get_text()]
         assert len(latest) == 2
-        assert all('1996' in link.get_text() for link in latest)
         assert contribution.select_one('details') is not None
         # The unenhanced page keeps all records open for readers without JavaScript.
         assert all(detail.has_attr('open') for detail in preview.select('details'))
 
 
 @pytest.mark.parametrize(('section', 'anchor', 'subject_label', 'visible_years', 'collapsed_years'), [
-    ('100.7', 'historical-ej-100-7', 'Expenditure', ['1977'], ['1975']),
-    ('100.7', 'historical-ej-100-7-b-11-i', None, ['1992', '1992'], []),
+    ('100.6', 'historical-ej-100-6', 'Election', ['1977'], ['1975']),
+    ('100.7', 'historical-ej-100-7', 'Expenditure', [], ['1977', '1975']),
+    ('100.7', 'historical-ej-100-7-b-11-i', None, [], ['1992', '1992']),
+    ('100.7', 'historical-ej-100-7-a-1-i-a', None, [], ['1980']),
+    ('100.7', 'historical-ej-100-7-b-22', None, [], ['2002']),
+    ('100.23', 'historical-ej-100-23', None, [], ['2001']),
     ('100.111', 'historical-ej-100-111', None, ['2002'], []),
 ])
 def test_history_collapses_older_years_even_with_two_documents(
@@ -524,28 +537,36 @@ def test_history_collapses_older_years_even_with_two_documents(
     assert bool(subject.find('details')) == bool(collapsed_years)
 
 
-@pytest.mark.parametrize(('section', 'anchor', 'statuses'), [
-    ('100.7', 'historical-ej-100-7-a-1', [('Section removed and reserved', '2002')]),
-    ('100.7', 'historical-ej-100-7-b-19', [('Removed', '2002'), ('Section removed and reserved', '1992')]),
-    ('100.19', 'historical-ej-100-19-g', [('Deleted', '2009')]),
+@pytest.mark.parametrize(('section', 'anchor', 'statuses', 'collapsed_statuses'), [
+    ('100.7', 'historical-ej-100-7-a-1', [('Section removed and reserved', '2002')], []),
+    ('100.7', 'historical-ej-100-7-b-19', [('Section removed and reserved', '1992')], [('Removed', '2002')]),
+    ('100.19', 'historical-ej-100-19-g', [('Deleted', '2009')], []),
 ])
-def test_history_removal_status_stays_with_single_subject(ecfr, section_html, section, anchor, statuses):
+def test_history_removal_status_stays_with_single_subject(
+    ecfr, section_html, section, anchor, statuses, collapsed_statuses
+):
     ecfr.return_value = {'text': section_html.replace('100.6', section)}
     response = regulations.regulation_page(RequestFactory().get('/'), section)
     record = BeautifulSoup(response.content, 'html.parser').find(id=anchor)
     subject = record.select_one('.legal-history-preview__subject')
     assert len(record.select('.legal-history-preview__subject')) == 1
-    notes = subject.select('.legal-history-preview__status')
+    notes = subject.select(':scope > ul > .legal-history-preview__status')
     assert len(notes) == len(statuses)
     for note, (label, year) in zip(notes, statuses):
         assert note.get_text(' ', strip=True) == f'{year} E&J (PDF) | {label}'
         assert note.find('a')['href'].startswith('https://')
         assert note.name == 'li'
         assert 'legal-history-preview__documents--timeline' in note.parent['class']
-    assert subject.select_one('details .legal-history-preview__status') is None
+    assert [note.get_text(' ', strip=True) for note in subject.select('details .legal-history-preview__status')] == [
+        f'{year} E&J (PDF) | {label}' for label, year in collapsed_statuses
+    ]
     timeline = subject.select_one('.legal-history-preview__documents--timeline')
     assert timeline.find(recursive=False) == notes[0]
-    assert notes[-1].find_next_sibling('li') is not None
+    if statuses[0][0] == 'Section removed and reserved':
+        assert notes[-1].find_next_sibling('li') is None
+        assert subject.select_one('details') is not None
+    else:
+        assert notes[-1].find_next_sibling('li') is not None
 
 
 @pytest.mark.parametrize('anchor', ['historical-ej-100-7', 'historical-ej-100-7-b-18'])
@@ -556,6 +577,9 @@ def test_history_removal_status_does_not_guess_between_multiple_subjects(ecfr, a
     status = record.select_one(':scope > .legal-history-preview__citation-status .legal-history-preview__status')
     assert status.get_text(' ', strip=True) == '2002 E&J (PDF) | Section removed and reserved'
     assert not record.select('.legal-history-preview__subject .legal-history-preview__status')
+    for subject in record.select('.legal-history-preview__subject'):
+        assert not subject.select(':scope > ul')
+        assert len(subject.select('details')) == 1
 
 
 @pytest.mark.parametrize(('status', 'expected'), [(404, 200), (503, 502)])

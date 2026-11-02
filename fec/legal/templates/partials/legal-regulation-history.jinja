@@ -32,6 +32,9 @@
       {% for group in historical_regulation_event_groups %}
         {% set status_labels = ['Section removed and reserved', 'Removed', 'Deleted'] %}
         {% set status_groups = group.subject_groups|default([])|selectattr('label', 'in', status_labels)|list %}
+        {% set reserved_groups = status_groups|selectattr('label', 'equalto', 'Section removed and reserved')|list %}
+        {% set visible_status_groups = reserved_groups or status_groups %}
+        {% set other_status_groups = status_groups|rejectattr('label', 'equalto', 'Section removed and reserved')|list if reserved_groups else [] %}
         {% set subjects = group.subject_groups|default([])|rejectattr('label', 'in', status_labels)|list %}
         {% set single_subject = subjects|length == 1 %}
         <li class="legal-history-preview__record" id="{{ group.anchor_id }}" tabindex="-1">
@@ -70,8 +73,17 @@
           {% endfor %}
           {% if not single_subject and status_groups %}
             <ul class="list--unstyled legal-history-preview__documents legal-history-preview__documents--timeline legal-history-preview__citation-status" aria-label="Status for citation {{ group.section }}{{ group.subsection }}">
-              {{ status_rows(status_groups) }}
+              {{ status_rows(visible_status_groups) }}
             </ul>
+            {% if other_status_groups %}
+              {% set other_status_events = other_status_groups|map(attribute='events')|sum(start=[]) %}
+              <details class="legal-history-preview__earlier" open>
+                <summary>{{ other_status_events|length }} E&amp;J{% if other_status_events|length != 1 %}s{% endif %}<span class="u-visually-hidden"> for {{ group.section }}{{ group.subsection }}</span></summary>
+                <ul class="list--unstyled legal-history-preview__documents legal-history-preview__documents--timeline">
+                  {{ status_rows(other_status_groups) }}
+                </ul>
+              </details>
+            {% endif %}
           {% endif %}
           {% for subject in subjects %}
             <div class="legal-history-preview__subject">
@@ -81,23 +93,34 @@
               {% set earlier = subject.events|rejectattr('date', 'equalto', newest)|list %}
               {% set all_dated = subject.events|selectattr('date')|list|length == subject.events|length %}
               {% set collapse = earlier|length > 0 and newest and all_dated %}
-              <ul class="list--unstyled legal-history-preview__documents{% if subject.events|length > 1 or (single_subject and status_groups) %} legal-history-preview__documents--timeline{% endif %}{% if collapse %} legal-history-preview__documents--continues{% endif %}">
-                {% if single_subject %}{{ status_rows(status_groups) }}{% endif %}
-                {% for event in latest if collapse %}
-                  <li>{{ document_link(event, subject.label) }}</li>
-                {% endfor %}
-                {% if not collapse %}
-                  {% for event in subject.events %}
+              {% if reserved_groups %}
+                {% set latest = [] %}
+                {% set earlier = (subject.events + (other_status_groups|map(attribute='events')|sum(start=[]) if single_subject else []))|sort(attribute='date', reverse=true) %}
+                {% set collapse = earlier|length > 0 %}
+              {% endif %}
+              {% if latest or (single_subject and visible_status_groups) or not collapse %}
+                <ul class="list--unstyled legal-history-preview__documents{% if subject.events|length > 1 or (single_subject and status_groups) %} legal-history-preview__documents--timeline{% endif %}{% if collapse %} legal-history-preview__documents--continues{% endif %}">
+                  {% if single_subject %}{{ status_rows(visible_status_groups) }}{% endif %}
+                  {% for event in latest if collapse %}
                     <li>{{ document_link(event, subject.label) }}</li>
                   {% endfor %}
-                {% endif %}
-              </ul>
+                  {% if not collapse %}
+                    {% for event in subject.events %}
+                      <li>{{ document_link(event, subject.label) }}</li>
+                    {% endfor %}
+                  {% endif %}
+                </ul>
+              {% endif %}
               {% if collapse %}
                 <details class="legal-history-preview__earlier" open>
-                  <summary>{{ earlier|length }} earlier E&amp;J{% if earlier|length != 1 %}s{% endif %} - {{ earlier[-1].date }}{% if earlier[0].date != earlier[-1].date %}–{{ earlier[0].date }}{% endif %}<span class="u-visually-hidden"> for {{ group.section }}{{ group.subsection }}, {{ subject.label }}</span></summary>
+                  <summary>{{ earlier|length }} {% if not reserved_groups %}earlier {% endif %}E&amp;J{% if earlier|length != 1 %}s{% endif %}{% if earlier|selectattr('date')|list|length == earlier|length %} - {{ earlier[-1].date }}{% if earlier[0].date != earlier[-1].date %}–{{ earlier[0].date }}{% endif %}{% endif %}<span class="u-visually-hidden"> for {{ group.section }}{{ group.subsection }}, {{ subject.label }}</span></summary>
                   <ul class="list--unstyled legal-history-preview__documents legal-history-preview__documents--timeline">
                     {% for event in earlier %}
-                      <li>{{ document_link(event, subject.label) }}</li>
+                      {% if event.label in status_labels %}
+                        {{ status_rows([{'label': event.label, 'events': [event]}]) }}
+                      {% else %}
+                        <li>{{ document_link(event, subject.label) }}</li>
+                      {% endif %}
                     {% endfor %}
                   </ul>
                 </details>
