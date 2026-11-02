@@ -256,7 +256,7 @@ def test_section_renders_before_related_api_requests(ecfr):
     soup = BeautifulSoup(response.content, 'html.parser')
     assert soup.select_one('[data-regulation-history]') is not None
     assert len(soup.select('[data-regulation-related-url] > a[href]')) == 3
-    assert 'Regulation text history' in soup.get_text(' ', strip=True)
+    assert 'eCFR timeline of changes' in soup.get_text(' ', strip=True)
     parent_history = soup.select_one('#historical-ej-100-6')
     election_history = next(
         item for item in parent_history.select('.legal-history-preview__subject')

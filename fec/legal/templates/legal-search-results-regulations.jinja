@@ -15,7 +15,7 @@
     <fieldset class="toggles regulation-search-methods__selector" aria-describedby="regulation-search-hint" data-search-method-selector hidden>
       <legend class="label">Search by</legend>
       <div class="regulation-search-methods__choices">
-        {% for method, label, form_id in [('search', 'Keyword', 'regulation-keyword-search'), ('ao_number', 'AO cited', 'regulation-ao-search'), ('mur_number', 'MUR cited', 'regulation-mur-search')] %}
+        {% for method, label, form_id in [('search', 'Keyword', 'regulation-keyword-search'), ('ao_number', 'AO', 'regulation-ao-search'), ('mur_number', 'MUR', 'regulation-mur-search')] %}
           <label>
             <input type="radio" name="regulation-search-method" value="{{ method }}" aria-controls="{{ form_id }}"{% if selected_method == method %} checked{% endif %}>
             <span class="button--alt">{{ label }}</span>

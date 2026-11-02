@@ -17,9 +17,9 @@
   {% elif historical_only %}
     <div class="message message--info" role="status">
       {% if reserved_label %}
-        <p>This section is reserved in the current eCFR and has no regulatory text. Historical and related legal records are shown below and under Explanations and citation history.</p>
+        <p>This section is reserved in the current eCFR and has no regulatory text. Historical and related legal records are shown below and under FEC historical E&amp;J records and citation changes.</p>
       {% else %}
-        <p>This section does not have current eCFR text. Historical and related legal records are shown below and under Explanations and citation history.</p>
+        <p>This section does not have current eCFR text. Historical and related legal records are shown below and under FEC historical E&amp;J records and citation changes.</p>
       {% endif %}
     </div>
   {% endif %}
@@ -43,7 +43,7 @@
 {% block results_sidebar %}
   <div class="sidebar-container legal-regulation__sidebar-container">
     <aside class="sidebar sidebar--neutral legal-regulation__sidebar">
-      <h2 class="sidebar__title">Regulation text history</h2>
+      <h2 class="sidebar__title">eCFR timeline of changes</h2>
       <div class="sidebar__content">
         {% if timeline_api_error %}
           <p>{{ timeline_api_error }}</p>
