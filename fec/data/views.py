@@ -799,6 +799,7 @@ def load_reports_and_totals(committee_id, cycle, cycle_out_of_range, fallback_cy
 
 def load_committee_history(committee_id, cycle=None):
     filters = {"per_page": 1}
+    
     if not cycle:
         # if no cycle parameter passed, use current fec cycle to call
         # (1)endpoint: committee/{committee_id}/history/ --under tag:committee
@@ -806,24 +807,23 @@ def load_committee_history(committee_id, cycle=None):
         committee = api_caller.load_first_row_data(path, **filters)
         if committee is None:
             raise Http404()
-        cycle = committee.get("last_cycle_has_financial")
-        if not cycle:
-            # when committees only file F1. fallback_cycle = null
-            # set cycle = last_cycle_has_activity
-            cycle = committee.get("last_cycle_has_activity")
-
+        
+        # Establish the cycle to use in next api call:
+        # last_cycle_has_fincancial or last_cycle_has_activity or latest cycle in cycle
+        cycle_out_of_range, fallback_cycle, cycles = load_cycle_data(committee, cycle)
+        cycle = fallback_cycle
     # To get correct committee history, use related cycle value to call
     # (2)endpoint: committee/{committee_id}/history/{cycle}/ --under tag:committee
     path = "/committee/" + committee_id + "/history/" + str(cycle)
     committee = api_caller.load_first_row_data(path, **filters)
     if committee is None:
-        # If committee has no data for cycle but committee_id exists, call /history/ endpoint without /cycle/
+        # If committee_id exists but has no activity for cycle, call /history/ endpoint without /cycle/
         path = "/committee/" + committee_id + "/history/"
         committee = api_caller.load_first_row_data(path, **filters)
-        # Raise 404 instead of server error for urls with non-existent comm-id and cycle query
-        # (data/committee/C00123456/?cycle=2026)
-        if committee is None:
-            raise Http404()
+    # Raise 404 instead of server error for urls with non-existent comm-id and cycle query
+    #(data/committee/C00000000/?cycle=2026)
+    if committee is None:
+        raise Http404()
 
     # (3)call endpoint: committee/{committee_id}/candidates/history/{cycle}
     # --under tag: candidate, get all candidates associated with that committee
@@ -831,9 +831,10 @@ def load_committee_history(committee_id, cycle=None):
     all_candidates = api_caller.load_endpoint_results(path, election_full=False)
 
     # clean cycles_has_activity, remove 'None' value in cycles_has_activity
-    committee["cycles_has_activity"] = list(
-        filter(None, committee.get("cycles_has_activity"))
-    )
+    if committee["cycles_has_activity"]:
+        committee["cycles_has_activity"] = list(
+            filter(None, committee.get("cycles_has_activity"))
+        )
 
     return committee, all_candidates, cycle
 
@@ -843,13 +844,13 @@ def load_cycle_data(committee, cycle):
     # set cycle = fallback_cycle to call endpoint
     # to get reports and totals
 
-    fallback_cycle = committee.get("last_cycle_has_financial")
-    if not fallback_cycle:
-        # when committees only file F1, fallback_cycle = null
-        # set fallback_cycle = last_cycle_has_activity
-        fallback_cycle = committee.get("last_cycle_has_activity")
+    fallback_cycle = (
+        committee.get("last_cycle_has_financial") 
+        or committee.get("last_cycle_has_activity")
+        or committee.get("cycles")[-1]
+    )
 
-    cycles = committee.get("cycles_has_activity")
+    cycles = committee.get("cycles_has_activity") or committee.get("cycles")
 
     cycle_out_of_range = cycle not in cycles
 
