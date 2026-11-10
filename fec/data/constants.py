@@ -1,20 +1,45 @@
 from collections import OrderedDict
+from datetime import date, datetime
 import operator
+from zoneinfo import ZoneInfo
 
 from data import utils
 
-# Updating END_YEAR, DEFAULT_ELECTION_YEAR, or DISTRICT_MAP_CUTOFF
-# affects transaction tables and raising/spending visualizations.
-# Also update related visualization logic in:
-#   - fec/data/views.py: def raising, office; def spending, office
-#   - home/templatetags/top_entities.py: def raising_spending, office
-#   - homes/templates/home/home_page.html: officeSelector.value; yearSelector.value
 START_YEAR = 1977
-END_YEAR = 2026  # Change at the beginning of the year
-DEFAULT_TIME_PERIOD = 2026  # Change after the April quarterly report (4/15/27)
-DEFAULT_ELECTION_YEAR = 2026  # Change after election day (11/3/26)
-DEFAULT_PRESIDENTIAL_YEAR = 2028  # Change after April quarterly after mid-terms (4/15/29)
 DISTRICT_MAP_CUTOFF = 2012  # The earliest year we show district maps for on election pages
+
+
+def get_default_years():
+    """Calculate default reporting and election years using today's Eastern date."""
+    today = datetime.now(ZoneInfo('America/New_York')).date()
+    year = today.year
+    is_election_year = year % 2 == 0
+
+    # Keep the previous reporting period until April 16 of an odd year.
+    time_period = year if is_election_year else year - 1
+    if not is_election_year and today >= date(year, 4, 16):
+        time_period += 2
+
+    # Switch to the next election on November 9 of an even year.
+    election_year = year if is_election_year else year + 1
+    if is_election_year and today >= date(year, 11, 9):
+        election_year += 2
+
+    # Advance on April 16 of presidential election year + 1.
+    presidential_election_year = year - (year % 4)
+    presidential_rollover_date = date(presidential_election_year + 1, 4, 16)
+
+    presidential_year = presidential_election_year
+    if today >= presidential_rollover_date:
+        presidential_year += 4
+
+    return {
+        'END_YEAR': time_period,
+        'DEFAULT_TIME_PERIOD': time_period,
+        'DEFAULT_ELECTION_YEAR': election_year,
+        'DEFAULT_PRESIDENTIAL_YEAR': presidential_year,
+    }
+
 
 states = OrderedDict([
     ('AL', 'Alabama'),

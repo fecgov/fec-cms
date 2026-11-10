@@ -52,7 +52,7 @@ def aggregate_totals(request):
     office = request.GET.get("office", "S")
 
     election_year = int(
-        request.GET.get("election_year", constants.DEFAULT_ELECTION_YEAR)
+        request.GET.get("election_year", constants.get_default_years()['DEFAULT_ELECTION_YEAR'])
     )
 
     max_election_year = utils.current_cycle() + 4
@@ -120,7 +120,7 @@ def search(request):
 def browse_data(request):
     monthly_coverage_date = utils.get_presidential_coverage_date("M")
     quarterly_coverage_date = utils.get_presidential_coverage_date("Q")
-    default_presidential_year = constants.DEFAULT_PRESIDENTIAL_YEAR
+    default_presidential_year = constants.get_default_years()['DEFAULT_PRESIDENTIAL_YEAR']
     return render(
         request,
         "browse-data.jinja",
@@ -689,7 +689,7 @@ def get_default_committee_tab(committee_type):
 
 
 def should_show_raw_filings(active_tab, committee_id, cycle, min_receipt_date):
-    if active_tab != "filings" or cycle < constants.DEFAULT_TIME_PERIOD:
+    if active_tab != "filings" or cycle < constants.get_default_years()['DEFAULT_TIME_PERIOD']:
         return False
 
     path = "/efile/filings/"
@@ -799,6 +799,7 @@ def load_reports_and_totals(committee_id, cycle, cycle_out_of_range, fallback_cy
 
 def load_committee_history(committee_id, cycle=None):
     filters = {"per_page": 1}
+    
     if not cycle:
         # if no cycle parameter passed, use current fec cycle to call
         # (1)endpoint: committee/{committee_id}/history/ --under tag:committee
@@ -806,24 +807,23 @@ def load_committee_history(committee_id, cycle=None):
         committee = api_caller.load_first_row_data(path, **filters)
         if committee is None:
             raise Http404()
-        cycle = committee.get("last_cycle_has_financial")
-        if not cycle:
-            # when committees only file F1. fallback_cycle = null
-            # set cycle = last_cycle_has_activity
-            cycle = committee.get("last_cycle_has_activity")
-
+        
+        # Establish the cycle to use in next api call:
+        # last_cycle_has_fincancial or last_cycle_has_activity or latest cycle in cycle
+        cycle_out_of_range, fallback_cycle, cycles = load_cycle_data(committee, cycle)
+        cycle = fallback_cycle
     # To get correct committee history, use related cycle value to call
     # (2)endpoint: committee/{committee_id}/history/{cycle}/ --under tag:committee
     path = "/committee/" + committee_id + "/history/" + str(cycle)
     committee = api_caller.load_first_row_data(path, **filters)
     if committee is None:
-        # If committee has no data for cycle but committee_id exists, call /history/ endpoint without /cycle/
+        # If committee_id exists but has no activity for cycle, call /history/ endpoint without /cycle/
         path = "/committee/" + committee_id + "/history/"
         committee = api_caller.load_first_row_data(path, **filters)
-        # Raise 404 instead of server error for urls with non-existent comm-id and cycle query
-        # (data/committee/C00123456/?cycle=2026)
-        if committee is None:
-            raise Http404()
+    # Raise 404 instead of server error for urls with non-existent comm-id and cycle query
+    #(data/committee/C00000000/?cycle=2026)
+    if committee is None:
+        raise Http404()
 
     # (3)call endpoint: committee/{committee_id}/candidates/history/{cycle}
     # --under tag: candidate, get all candidates associated with that committee
@@ -831,9 +831,10 @@ def load_committee_history(committee_id, cycle=None):
     all_candidates = api_caller.load_endpoint_results(path, election_full=False)
 
     # clean cycles_has_activity, remove 'None' value in cycles_has_activity
-    committee["cycles_has_activity"] = list(
-        filter(None, committee.get("cycles_has_activity"))
-    )
+    if committee["cycles_has_activity"]:
+        committee["cycles_has_activity"] = list(
+            filter(None, committee.get("cycles_has_activity"))
+        )
 
     return committee, all_candidates, cycle
 
@@ -843,13 +844,13 @@ def load_cycle_data(committee, cycle):
     # set cycle = fallback_cycle to call endpoint
     # to get reports and totals
 
-    fallback_cycle = committee.get("last_cycle_has_financial")
-    if not fallback_cycle:
-        # when committees only file F1, fallback_cycle = null
-        # set fallback_cycle = last_cycle_has_activity
-        fallback_cycle = committee.get("last_cycle_has_activity")
+    fallback_cycle = (
+        committee.get("last_cycle_has_financial") 
+        or committee.get("last_cycle_has_activity")
+        or committee.get("cycles")[-1]
+    )
 
-    cycles = committee.get("cycles_has_activity")
+    cycles = committee.get("cycles_has_activity") or committee.get("cycles")
 
     cycle_out_of_range = cycle not in cycles
 
@@ -858,7 +859,7 @@ def load_cycle_data(committee, cycle):
 
 def elections_lookup(request):
 
-    cycle = constants.DEFAULT_ELECTION_YEAR
+    cycle = constants.get_default_years()['DEFAULT_ELECTION_YEAR']
     cycles = utils.get_cycles(cycle + 4)
 
     return render(
@@ -982,17 +983,17 @@ def house_senate_overview(request, office, cycle=None):
      It might be wanted for the upcoming features on the page that have only one select for year,
      so one could load page with all features set to a certain election year. Example: /data/elections/senate/2018/
      But probably  want exclude the across-time feature from using this argument for its cycle,
-     because we always want that to be current election year or (constants.DEFAULT_ELECTION_YEAR)
+     because we always want that to use the default election year.
 
      """
 
+    default_election_year = constants.get_default_years()['DEFAULT_ELECTION_YEAR']
     if cycle is not None:
         cycle = int(cycle)
     else:
-        cycle = constants.DEFAULT_ELECTION_YEAR
+        cycle = default_election_year
 
     # cycle = request.GET.get("cycle", None)
-    default_election_year = constants.DEFAULT_ELECTION_YEAR
     beginning_default_election_year = default_election_year - 1
 
     max_cycle = utils.current_cycle() + 4
@@ -1042,7 +1043,7 @@ def raising(request):
     office = request.GET.get("office", "S")  # The default for features like Who is raising the most
 
     election_year = int(
-        request.GET.get("election_year", constants.DEFAULT_ELECTION_YEAR)
+        request.GET.get("election_year", constants.get_default_years()['DEFAULT_ELECTION_YEAR'])
     )
 
     max_election_year = utils.current_cycle() + 4
@@ -1066,7 +1067,7 @@ def spending(request):
     office = request.GET.get("office", "S")  # The default for features like Who is spending the most
 
     election_year = int(
-        request.GET.get("election_year", constants.DEFAULT_ELECTION_YEAR)
+        request.GET.get("election_year", constants.get_default_years()['DEFAULT_ELECTION_YEAR'])
     )
 
     max_election_year = utils.current_cycle() + 4
@@ -1089,7 +1090,7 @@ def spending(request):
 def pres_finance_map(request):
 
     election_year = int(
-        request.GET.get("election_year", constants.DEFAULT_PRESIDENTIAL_YEAR)
+        request.GET.get("election_year", constants.get_default_years()['DEFAULT_PRESIDENTIAL_YEAR'])
     )
 
     return render(

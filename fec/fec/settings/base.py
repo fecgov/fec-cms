@@ -202,6 +202,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.request',
                 'fec.context.api_key',
+                'fec.context.default_years',
             ]
         }
     },

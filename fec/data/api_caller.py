@@ -455,8 +455,11 @@ def result_or_404(data):
 
 
 def load_top_candidates(
-    sort, office=None, election_year=constants.DEFAULT_ELECTION_YEAR, per_page=5
+    sort, office=None, election_year=None, per_page=5
 ):
+    if election_year is None:
+        election_year = constants.get_default_years()['DEFAULT_ELECTION_YEAR']
+
     response = _call_api(
         "candidates",
         "totals",
