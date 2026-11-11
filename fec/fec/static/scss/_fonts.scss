@@ -66,6 +66,8 @@
   font-weight: bold;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0030-0039, U+002E, U+002C, U+0024;
+ 
 }
 
 @font-face {
@@ -96,4 +98,5 @@
   font-weight: normal;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0030-0039, U+002E, U+002C, U+0024;
 }
