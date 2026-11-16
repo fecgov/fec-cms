@@ -66,6 +66,12 @@
 {% endblock %}
 
 {% block scripts %}
+{# Temporarily emable these features for testing #}
+{% set FEATURES = dict(
+      FEATURES,
+      house_senate_overview_summary=True,
+      house_senate_overview_totals=True
+  ) %}
 <script>
   window.context = {{ context_vars | to_json | safe }};
 </script>
