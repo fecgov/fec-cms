@@ -82,18 +82,16 @@
   <div class="row legal-regulation__layout">
     <div class="main__content">
       <header class="legal-regulation__section-heading">
-        {% if section_nav.part %}
-          <h2 class="legal-regulation__part t-bold">Part {{ section_nav.part.no }} &mdash; {{ section_nav.part.description }}</h2>
-        {% endif %}
+        {% include 'partials/legal-regulation-breadcrumbs.jinja' %}
         {% if not regulation and reserved_label %}
-          <h3>{{ reserved_label }}</h3>
+          <h2>{{ reserved_label }}</h2>
         {% endif %}
       </header>
       {% if regulation or reserved_label %}
         <section class="content__section">
           {% if regulation %}
             <div class="rich-text">
-              <h3 class="legal-regulation__text-heading" id="regulation-{{ section }}" tabindex="-1"><span class="legal-regulation__text">{{ regulation.heading|safe }}</span></h3>
+              <h2 class="legal-regulation__text-heading" id="regulation-{{ section }}" tabindex="-1"><span class="legal-regulation__text">{{ regulation.heading|safe }}</span></h2>
               {% for block in regulation.body %}
                 {{ block|safe }}
               {% endfor %}

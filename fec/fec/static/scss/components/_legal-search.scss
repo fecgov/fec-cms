@@ -206,6 +206,40 @@
   margin-top: u(0.2rem);
 }
 
+.breadcrumbs.breadcrumbs--regulation {
+  display: block;
+  float: none;
+  color: $base;
+  font-size: u(1.6rem);
+  font-weight: bold;
+  line-height: 1.5;
+  list-style: none;
+  margin: 0 0 u(2rem);
+  padding: 0;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+
+  .breadcrumbs__item {
+    display: inline;
+    float: none;
+    max-width: none;
+    padding: 0;
+    overflow: visible;
+    white-space: normal;
+  }
+
+  .breadcrumbs__link,
+  .breadcrumbs__item--current {
+    color: $base;
+  }
+
+  .breadcrumbs__separator {
+    // Override the global [aria-hidden='true'] rule for decorative separators.
+    display: inline !important;
+    padding: u(0 0.5rem);
+  }
+}
+
 #main[data-section] #results-regulations {
   @include media($med) {
     align-items: stretch;
@@ -341,7 +375,7 @@
       min-height: u(1.5rem);
       position: relative;
 
-     // E&J historical timeline dots
+      // E&J historical timeline dots
       &::before {
         background-color: $primary;
         border-radius: 50%;

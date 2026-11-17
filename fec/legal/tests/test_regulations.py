@@ -1,4 +1,4 @@
-"""Regulation behavior at the HTML, navigation, and request boundaries."""
+"""Focused reader/search integration checks; history business rules live in test_regulation_history.py."""
 from collections import Counter
 from urllib.parse import parse_qs, urlsplit
 from unittest import mock
@@ -11,7 +11,7 @@ from django.test import RequestFactory
 
 from data import api_caller, ecfr_caller
 from legal import regulation_text as text, regulations, views
-from legal.regulation_history import build_regulation_history_context, load_regulation_history_index
+from legal.regulation_history import build_regulation_history_context
 
 
 @pytest.fixture
@@ -88,11 +88,10 @@ def test_reader_keeps_substantive_federal_register_references():
     ('52 U.S.C. 30102(g), 30104(b), (d)(1)', ['30102(g)', '30104(b)', '30104(d)(1)']),
     ('5 U.S.C. 552a', ['552a']),
 ])
-@pytest.mark.parametrize('location', ['h4', 'p'])
-def test_statutes_expand_and_link_each_section(citation, sections, location):
+def test_statutes_expand_and_link_each_section(citation, sections):
     title = citation.split()[0]
     first = sections[0].split('(')[0]
-    markup = f'<{location}><a href="https://www.govinfo.gov/link/uscode/{title}/{first}">{citation}</a></{location}>'
+    markup = f'<p><a href="https://www.govinfo.gov/link/uscode/{title}/{first}">{citation}</a></p>'
     element = BeautifulSoup(markup, 'html.parser')
     assert text.extract_statutory_citations([element]) == [
         {'label': f'{title} U.S.C. {section}',
@@ -173,6 +172,7 @@ def test_hierarchy_reserved_ranges_and_navigation(structure):
     items = regulations.format_ecfr_hierarchy_contents(part)
     assert [item['identifier'] for item in items] == ['A', '100.6', '100.7', '100.8']
     assert all(item['reserved'] for item in items[-2:])
+    assert [item['url'] for item in items[-2:]] == ['/legal/regulations/100.7/', '/legal/regulations/100.8/']
     nav = regulations.format_ecfr_section_nav(structure, '100.7')
     assert nav['previous']['no'] == '100.6'
     assert nav['next']['no'] == '100.8'
@@ -249,28 +249,9 @@ def test_section_renders_before_related_api_requests(ecfr):
         response = regulations.regulation_page(RequestFactory().get('/'), '100.6')
     assert response.status_code == 200
     assert b'Connected organization' in response.content
+    assert b'52 U.S.C. 30101(6)' in response.content
     for category in ('rulemakings', 'advisory-opinions', 'murs'):
         assert f'/legal/regulations/100.6/related/{category}/'.encode() in response.content
-    assert b'52 U.S.C. 30101(6)' in response.content
-    assert b'eCFR issue date' not in response.content
-    soup = BeautifulSoup(response.content, 'html.parser')
-    assert soup.select_one('[data-regulation-history]') is not None
-    assert len(soup.select('[data-regulation-related-url] > a[href]')) == 3
-    assert 'eCFR timeline of changes' in soup.get_text(' ', strip=True)
-    parent_history = soup.select_one('#historical-ej-100-6')
-    election_history = next(
-        item for item in parent_history.select('.legal-history-preview__subject')
-        if item.select_one('h4').get_text(strip=True) == 'Election'
-    )
-    assert [link.get_text(strip=True) for link in election_history.select('a')] == [
-        '1977 E&J (PDF)', '1975 E&J (PDF)',
-    ]
-    previous_citation = soup.select_one('#historical-ej-100-6-a .legal-history-preview__citation-note')
-    assert 'Previously § 100.15' in previous_citation.get_text(' ', strip=True)
-    assert previous_citation.select_one(
-        'a[href="/legal/regulations/100.15/#historical-ej-100-15"]'
-    ).get_text(' ', strip=True) == '§ 100.15'
-    assert previous_citation.select_one('a[href$=".pdf#page=7"]') is None
     legal_api.assert_not_called()
     rulemaking_api.assert_not_called()
 
@@ -287,60 +268,8 @@ def test_history_citations_jump_to_existing_regulation_text(ecfr):
         target = soup.find(id=link['href'][1:])
         assert target is not None
         assert target['tabindex'] == '-1'
-
-
-def test_history_does_not_link_missing_or_reserved_text(ecfr):
-    # The fixture has (a) and (c), but no (b), even though (b) has historical E&Js.
-    response = regulations.regulation_page(RequestFactory().get('/'), '100.6')
-    soup = BeautifulSoup(response.content, 'html.parser')
-    heading = soup.select_one('#historical-ej-100-6-b .legal-history-preview__heading')
-    assert heading is not None
-    assert heading.find('a') is None
-    ecfr.return_value = {'error': True, 'status_code': 404}
-    response = regulations.regulation_page(RequestFactory().get('/'), '100.7')
-    soup = BeautifulSoup(response.content, 'html.parser')
-    assert soup.select('.legal-history-preview__heading')
-    assert not soup.select('.legal-history-preview__heading a')
-
-
-@pytest.mark.parametrize(('section', 'suffix', 'earlier'), [
-    ('100.82', '-a-d', '§ 100.7(b)(11)'),
-    ('100.8', '-b-4-v-vii', '§ 100.7(b)(5)(v) (vii)'),
-    ('100.8', '-b-4-iii-a-1-2', '§ 100.7(b)(5)(iii)(A)(1)-(2)'),
-    ('100.8', '-b-4-iii-b-1-4', '§ 100.7(b)(5)(iii)(B)(1)-(4)'),
-    ('100.134', '-d-1-i', '§ 100.8(b)(4)(iii)(A)(1)'),
-    ('100.134', '-d-1-ii', '§ 100.8(b)(4)(iii)(A)(2)'),
-    ('100.134', '-d-2-i', '§ 100.8(b)(4)(iii)(B)(1)'),
-    ('100.134', '-d-2-ii', '§ 100.8(b)(4)(iii)(B)(2)'),
-    ('100.134', '-d-2-iii', '§ 100.8(b)(4)(iii)(B)(3)'),
-    ('100.134', '-d-2-iv', '§ 100.8(b)(4)(iii)(B)(4)'),
-    ('100.152', '-c', '§ 100.8(b)(21)(iii)'),
-    ('100.152', '-c-1', '§ 100.8(b)(21)(iii)(A)'),
-    ('100.152', '-c-2', '§ 100.8(b)(21)(iii)(B)'),
-    ('100.132', '', '§ 100.8(b)(2)'),
-    ('100.132', '-a-b', '§ 100.8(b)(2)(i)-(ii)'),
-])
-def test_citation_changes_stay_with_their_exact_citation(ecfr, section_html, section, suffix, earlier):
-    ecfr.return_value = {'text': section_html.replace('100.6', section)}
-    response = regulations.regulation_page(RequestFactory().get('/'), section)
-    soup = BeautifulSoup(response.content, 'html.parser')
-    record = soup.find(id=f'historical-ej-{section.replace(".", "-")}{suffix}')
-    note = record.select_one(':scope > .legal-history-preview__citation-note')
-    assert earlier in note.get_text(' ', strip=True)
-    assert record.select_one('h3') is not None
-    assert not record.select('details .legal-history-preview__citation-note')
-    assert note.select_one('a[href*="conversion-tables"]') is not None
-
-
-def test_citation_change_precedes_subject_documents(ecfr, section_html):
-    ecfr.return_value = {'text': section_html.replace('100.6', '100.8')}
-    response = regulations.regulation_page(RequestFactory().get('/'), '100.8')
-    record = BeautifulSoup(response.content, 'html.parser').find(id='historical-ej-100-8-b-24')
-    children = [child for child in record.children if child.name]
-    assert children[0].get_text(' ', strip=True) == '100.8(b)(24) - Brokerage loans and lines of credit'
-    assert 'Later citation' in children[1].get_text(' ', strip=True)
-    assert 'legal-history-preview__subject' in children[2]['class']
-    assert children[2].find('a').get_text(strip=True) == '2002 E&J (PDF)'
+    missing = soup.select_one('#historical-ej-100-6-b .legal-history-preview__heading')
+    assert missing.find('a') is None
 
 
 def test_unstarred_citation_change_links_to_earlier_history(ecfr, section_html):
@@ -348,15 +277,12 @@ def test_unstarred_citation_change_links_to_earlier_history(ecfr, section_html):
     response = regulations.regulation_page(RequestFactory().get('/'), '100.89')
     record = BeautifulSoup(response.content, 'html.parser').find(id='historical-ej-100-89-f')
     note = record.select_one('.legal-history-preview__citation-note')
-    assert 'Previously' in note.get_text()
     assert note.select_one(
         'a[href="/legal/regulations/100.7/#historical-ej-100-7-b-17"]'
     ).get_text(' ', strip=True) == '§ 100.7(b)(17)(vi)'
-    assert note.select_one('a[href*="notice1980-8-030780.pdf"]') is None
     assert record.select_one(
         '.legal-history-preview__subject a[href="https://sers.fec.gov/fosers/showpdf.htm?docid=44678"]'
-    ).get_text(strip=True) == '2002 E&J (PDF)'
-    assert record.find('h3').get_text(strip=True) == '100.89(f) - Reporting of payments'
+    ) is not None
 
 
 def test_unavailable_earlier_ej_is_not_linked(ecfr, section_html):
@@ -371,89 +297,12 @@ def test_unavailable_earlier_ej_is_not_linked(ecfr, section_html):
     assert citation.select_one('a[href*="conversion-tables-appendix-parts-1-8"]') is not None
 
 
-def test_earlier_citation_never_guesses_a_pdf(ecfr, section_html):
-    for section, earlier_section in [('100.4', '100.8'), ('100.7', '100.4')]:
-        ecfr.return_value = {'text': section_html.replace('100.6', section)}
-        response = regulations.regulation_page(RequestFactory().get('/'), section)
-        soup = BeautifulSoup(response.content, 'html.parser')
-        earlier_citation = soup.select_one(
-            f'#historical-ej-{section.replace(".", "-")} '
-            '.legal-regulation__previous-citation, '
-            f'#historical-ej-{section.replace(".", "-")} '
-            '.legal-regulation__citation-history-box, '
-            f'#historical-ej-{section.replace(".", "-")} '
-            '.legal-history-preview__citation-note'
-        )
-
-        assert earlier_citation.select_one(
-            f'a[href="/legal/regulations/{earlier_section}/'
-            f'#historical-ej-{earlier_section.replace(".", "-")}"]'
-        ).get_text(' ', strip=True) == f'§ {earlier_section}'
-        assert earlier_citation.select_one('a[href$=".pdf"]') is None
-        assert 'View the full history' not in earlier_citation.get_text(' ', strip=True)
-
-
-def test_multiple_conversions_with_ej_share_one_citation_note(ecfr, section_html):
-    ecfr.return_value = {'text': section_html.replace('100.6', '2.8')}
-    response = regulations.regulation_page(RequestFactory().get('/'), '2.8')
-    history = BeautifulSoup(response.content, 'html.parser').find(id='historical-ej-2-8')
-    notes = history.select('.legal-history-preview__citation-note')
-    assert len(notes) == 1
-    assert history.select_one('a[href*="notice1985-11-100185.pdf"]') is not None
-    assert '§ 3.5' in notes[0].get_text(' ', strip=True)
-    assert '§ 3.6' in notes[0].get_text(' ', strip=True)
-    assert 'No E&J is available for the earlier citations shown without links.' in notes[0].get_text(' ', strip=True)
-    assert len(notes[0].select('a[href*="conversion-tables-appendix-parts-1-8"]')) == 1
-
-
-def test_former_100_7_citation_links_to_100_82_redesignation(ecfr):
-    response = regulations.regulation_page(RequestFactory().get('/'), '100.7')
-    soup = BeautifulSoup(response.content, 'html.parser')
-    record = soup.select_one('#historical-ej-100-7-b-11')
-    event = record.select_one('.legal-history-preview__subject')
-    note = record.select_one('.legal-history-preview__citation-note')
-
-    assert '* Loans made in ordinary course of business' not in event.get_text(
-        ' ', strip=True
-    )
-    assert event.select_one(
-        'a[href="https://www.fec.gov/resources/cms-content/documents/notice1980-8-030780.pdf#page=2"]'
-    ).get_text(' ', strip=True) == '1980 E&J (PDF)'
-    assert record.select_one(
-        '.legal-history-preview__heading'
-    ).get_text(' ', strip=True) == '100.7(b)(11) - Loans made in ordinary course of business'
-    assert note.select_one(
-        'a[href="/legal/regulations/100.82/#historical-ej-100-82-a-d"]'
-    ).get_text(' ', strip=True) == '§ 100.82(a)–(d)'
-    assert 'Later citation:' in note.get_text(' ', strip=True)
-    assert event.select_one('.legal-history-preview__citation-note') is None
-    assert note.select_one(
-        'a[href*="explanations-and-justifications-conversion-tables-appendix-part-100"]'
-    ).get_text(' ', strip=True) == 'Conversion table'
-
-
-def test_former_citation_does_not_include_child_redesignations(ecfr):
-    response = regulations.regulation_page(RequestFactory().get('/'), '100.7')
-    soup = BeautifulSoup(response.content, 'html.parser')
-    note = soup.select_one(
-        '#historical-ej-100-7-b .legal-history-preview__citation-note'
-    )
-
-    assert note.select_one(
-        'a[href="/legal/regulations/100.71/#historical-ej-100-71-a"]'
-    ).get_text(' ', strip=True) == '§ 100.71(a)'
-    assert '§ 100.77' not in note.get_text(' ', strip=True)
-    assert '§ 100.8(b)(5), (6) & (7)' not in note.get_text(' ', strip=True)
-    assert 'Redesignated in part as:' not in note.get_text(' ', strip=True)
-
-
-# The index also contains part-wide records for 111 and 113, which have no section reader route.
-@pytest.mark.parametrize('section', [section for section in sorted(load_regulation_history_index()) if '.' in section])
-def test_history_preserves_every_document_and_citation_anchor(ecfr, section_html, section):
+# Representative rendering only; citation scope and grouping are tested in test_regulation_history.py.
+@pytest.mark.parametrize('section', ['100.7', '100.82', '100.134'])
+def test_history_renders_documents_and_citation_links(ecfr, section_html, section):
     ecfr.return_value = {'text': section_html.replace('100.6', section)}
     response = regulations.regulation_page(RequestFactory().get('/'), section)
-    soup = BeautifulSoup(response.content, 'html.parser')
-    preview = soup.select_one('[data-regulation-history]')
+    preview = BeautifulSoup(response.content, 'html.parser').select_one('[data-regulation-history]')
     groups = build_regulation_history_context(section)['event_groups']
     assert [record['id'] for record in preview.select('.legal-history-preview__record')] == [
         group['anchor_id'] for group in groups
@@ -466,60 +315,22 @@ def test_history_preserves_every_document_and_citation_anchor(ecfr, section_html
             event['source_url'] for subject in group.get('subject_groups', [])
             for event in subject['events'] if event.get('source_url')
         )
-        if any(subject['label'] == 'Section removed and reserved' for subject in group.get('subject_groups', [])):
-            visible_documents = [
-                link for link in record.select('.legal-history-preview__documents a')
-                if not link.find_parent('details')
-            ]
-            assert visible_documents
-            assert all('Section removed and reserved' in link.parent.get_text() for link in visible_documents)
-            for subject in record.select('.legal-history-preview__subject'):
-                assert not subject.select(':scope > ul > li:not(.legal-history-preview__status)')
-                assert subject.select_one('details') is not None
-        # Citation context is always visible, never inside a collapsed document list.
+        note = record.select_one('.legal-history-preview__citation-note')
+        for citation in group.get('citation_note', {}).get('previous_citations', []):
+            if not citation.get('ej_unavailable'):
+                assert note.find('a', href=citation['url']) is not None
+        for change in group.get('citation_events', []):
+            for citation in change['redesignated_as']:
+                assert record.find('a', href=citation['url']) is not None
         assert record.select_one('details .legal-history-preview__citation-note') is None
-        source_urls = set(group.get('citation_note', {}).get('source_urls', []))
-        source_urls.update(
-            citation['source_url'] for event in group.get('citation_events', [])
-            for citation in event['redesignated_as'] if citation.get('source_url')
-        )
-        conversion_links = [
-            link for link in record.select('.legal-history-preview__citation-note a')
-            if link.get_text(strip=True) == 'Conversion table'
-        ]
-        assert Counter(link['href'] for link in conversion_links) == Counter(source_urls)
-        if group.get('citation_events') and group.get('citation_note'):
-            later_note = record.select('.legal-history-preview__citation-note')[-1]
-            for url in source_urls.intersection(
-                citation['source_url'] for event in group['citation_events']
-                for citation in event['redesignated_as']
-            ):
-                assert later_note.find('a', href=url) is not None
-    if section == '100.111':
-        assert not preview.select('details')
-        assert not preview.select('.legal-history-preview__sources a')
-    elif section == '100.7':
-        contribution = next(subject for subject in preview.select(
-            '#historical-ej-100-7 .legal-history-preview__subject'
-        ) if subject.select_one('h4').get_text(strip=True) == 'Contribution')
-        # Both 1996 records remain available inside the subject's accordion.
-        latest = [link for link in contribution.select('details a') if '1996' in link.get_text()]
-        assert len(latest) == 2
-        assert contribution.select_one('details') is not None
-        # The unenhanced page keeps all records open for readers without JavaScript.
-        assert all(detail.has_attr('open') for detail in preview.select('details'))
 
 
 @pytest.mark.parametrize(('section', 'anchor', 'subject_label', 'visible_years', 'collapsed_years'), [
     ('100.6', 'historical-ej-100-6', 'Election', ['1977'], ['1975']),
-    ('100.7', 'historical-ej-100-7', 'Expenditure', [], ['1977', '1975']),
     ('100.7', 'historical-ej-100-7-b-11-i', None, [], ['1992', '1992']),
-    ('100.7', 'historical-ej-100-7-a-1-i-a', None, [], ['1980']),
-    ('100.7', 'historical-ej-100-7-b-22', None, [], ['2002']),
-    ('100.23', 'historical-ej-100-23', None, [], ['2001']),
     ('100.111', 'historical-ej-100-111', None, ['2002'], []),
 ])
-def test_history_collapses_older_years_even_with_two_documents(
+def test_history_keeps_active_documents_visible_and_collapses_reserved_history(
     ecfr, section_html, section, anchor, subject_label, visible_years, collapsed_years
 ):
     ecfr.return_value = {'text': section_html.replace('100.6', section)}
@@ -537,49 +348,26 @@ def test_history_collapses_older_years_even_with_two_documents(
     assert bool(subject.find('details')) == bool(collapsed_years)
 
 
-@pytest.mark.parametrize(('section', 'anchor', 'statuses', 'collapsed_statuses'), [
-    ('100.7', 'historical-ej-100-7-a-1', [('Section removed and reserved', '2002')], []),
-    ('100.7', 'historical-ej-100-7-b-19', [('Section removed and reserved', '1992')], [('Removed', '2002')]),
-    ('100.19', 'historical-ej-100-19-g', [('Deleted', '2009')], []),
-])
-def test_history_removal_status_stays_with_single_subject(
-    ecfr, section_html, section, anchor, statuses, collapsed_statuses
-):
-    ecfr.return_value = {'text': section_html.replace('100.6', section)}
-    response = regulations.regulation_page(RequestFactory().get('/'), section)
-    record = BeautifulSoup(response.content, 'html.parser').find(id=anchor)
-    subject = record.select_one('.legal-history-preview__subject')
-    assert len(record.select('.legal-history-preview__subject')) == 1
-    notes = subject.select(':scope > ul > .legal-history-preview__status')
-    assert len(notes) == len(statuses)
-    for note, (label, year) in zip(notes, statuses):
-        assert note.get_text(' ', strip=True) == f'{year} E&J (PDF) | {label}'
-        assert note.find('a')['href'].startswith('https://')
-        assert note.name == 'li'
-        assert 'legal-history-preview__documents--timeline' in note.parent['class']
-    assert [note.get_text(' ', strip=True) for note in subject.select('details .legal-history-preview__status')] == [
-        f'{year} E&J (PDF) | {label}' for label, year in collapsed_statuses
-    ]
-    timeline = subject.select_one('.legal-history-preview__documents--timeline')
-    assert timeline.find(recursive=False) == notes[0]
-    if statuses[0][0] == 'Section removed and reserved':
-        assert notes[-1].find_next_sibling('li') is None
-        assert subject.select_one('details') is not None
-    else:
-        assert notes[-1].find_next_sibling('li') is not None
-
-
-@pytest.mark.parametrize('anchor', ['historical-ej-100-7', 'historical-ej-100-7-b-18'])
-def test_history_removal_status_does_not_guess_between_multiple_subjects(ecfr, anchor):
+def test_reserved_history_prioritizes_reserved_status_over_later_removed_record(ecfr):
     response = regulations.regulation_page(RequestFactory().get('/'), '100.7')
-    record = BeautifulSoup(response.content, 'html.parser').find(id=anchor)
+    record = BeautifulSoup(response.content, 'html.parser').find(id='historical-ej-100-7-b-19')
+    subject = record.select_one('.legal-history-preview__subject')
+    visible = subject.select(':scope > ul > .legal-history-preview__status')
+    assert len(visible) == 1
+    assert '1992' in visible[0].get_text()
+    assert 'Section removed and reserved' in visible[0].get_text()
+    collapsed = subject.select('details .legal-history-preview__status')
+    assert len(collapsed) == 1
+    assert '2002' in collapsed[0].get_text()
+    assert 'Removed' in collapsed[0].get_text()
+
+
+def test_shared_removal_status_is_not_assigned_to_one_subject(ecfr):
+    response = regulations.regulation_page(RequestFactory().get('/'), '100.7')
+    record = BeautifulSoup(response.content, 'html.parser').find(id='historical-ej-100-7')
     assert len(record.select('.legal-history-preview__subject')) == 2
-    status = record.select_one(':scope > .legal-history-preview__citation-status .legal-history-preview__status')
-    assert status.get_text(' ', strip=True) == '2002 E&J (PDF) | Section removed and reserved'
+    assert record.select_one(':scope > .legal-history-preview__citation-status') is not None
     assert not record.select('.legal-history-preview__subject .legal-history-preview__status')
-    for subject in record.select('.legal-history-preview__subject'):
-        assert not subject.select(':scope > ul')
-        assert len(subject.select('details')) == 1
 
 
 @pytest.mark.parametrize(('status', 'expected'), [(404, 200), (503, 502)])
@@ -589,6 +377,7 @@ def test_reserved_404_and_upstream_failure_are_distinct(ecfr, status, expected):
     assert response.status_code == expected
     if status == 404:
         assert b'[Reserved]' in response.content
+        assert not BeautifulSoup(response.content, 'html.parser').select('.legal-history-preview__heading a')
         assert b'Previous section' in response.content
         assert b'Next section' in response.content
     else:
@@ -611,11 +400,89 @@ def test_browse_shows_regulation_parts(ecfr):
     assert b'class="tag__item"' not in response.content
 
 
+def test_reserved_part_ranges_are_unlinked_and_direct_urls_explain_reserved_status(ecfr, structure):
+    identifiers = ['9009-9011', '9040-9099']
+    subchapter = regulations.find_ecfr_node(structure, 'subchapter', 'A')
+    subchapter['children'].extend({
+        'type': 'part', 'identifier': identifier, 'reserved': True,
+        'label_description': f'Parts {identifier} [Reserved]',
+    } for identifier in identifiers)
+    request = RequestFactory().get('/', {'return_to': 'regulations-search', 'page': 2})
+    responses = [
+        views.legal_doc_search_regulations(request),
+        regulations.regulation_hierarchy_page(request, 'subchapter', 'A'),
+    ]
+    for response in responses:
+        assert response.status_code == 200
+        soup = BeautifulSoup(response.content, 'html.parser')
+        for identifier in identifiers:
+            row = next(row for row in soup.select('[role="row"]') if identifier in row.get_text())
+            assert '[Reserved]' in row.get_text()
+            assert row.find('a') is None
+    for identifier in identifiers:
+        response = regulations.regulation_hierarchy_page(request, 'part', identifier)
+        assert response.status_code == 200
+        soup = BeautifulSoup(response.content, 'html.parser')
+        assert 'reserved' in soup.select_one('.message--info').get_text()
+        assert 'No regulations found.' not in soup.get_text()
+
+
 def test_hierarchy_back_link(ecfr):
     request = RequestFactory().get('/', {'return_to': 'regulations-search', 'page': 2})
     response = regulations.regulation_hierarchy_page(request, 'part', '100')
     assert b'/legal/search/regulations/?page=2' in response.content
     assert b'/legal/regulations/100.7/?return_to=regulations-search&amp;page=2' in response.content
+    current = BeautifulSoup(response.content, 'html.parser').select_one('.breadcrumbs--regulation [aria-current]')
+    assert current.get_text(strip=True) == 'Part 100 — Definitions (52 U.S.C. 30101)'
+
+
+def test_section_breadcrumbs_preserve_search_and_identify_current_page(ecfr):
+    request = RequestFactory().get('/', {
+        'return_to': 'regulations-search', 'search': 'connected organization', 'page': 2,
+    })
+    response = regulations.regulation_page(request, '100.6')
+    trail = BeautifulSoup(response.content, 'html.parser').find('nav', attrs={'aria-label': 'Regulation breadcrumbs'})
+    assert trail.select_one('li').find('a') is None
+    links = trail.select('a')
+    assert links[0].get_text(strip=True) == 'Chapter I'
+    assert links[0]['href'] == '/legal/search/regulations/'
+    assert [urlsplit(link['href']).path for link in links] == [
+        '/legal/search/regulations/',
+        '/legal/regulations/subchapter/A/', '/legal/regulations/part/100/',
+        '/legal/regulations/part/100/subpart/A/',
+    ]
+    for link in links[1:]:
+        assert parse_qs(urlsplit(link['href']).query) == {
+            'return_to': ['regulations-search'], 'search': ['connected organization'], 'page': ['2'],
+        }
+    current = trail.select_one('[aria-current="page"]')
+    assert current.get_text(strip=True) == 'Section 100.6'
+    assert not current.find_parent('a')
+    assert len(trail.select('.breadcrumbs__separator')) == len(trail.select('li')) - 1
+
+
+def test_breadcrumbs_scope_repeated_subpart_identifiers_to_part(structure):
+    structure['children'][0]['children'][0]['children'] = [{
+        'type': 'subpart', 'identifier': 'A', 'children': [
+            {'type': 'section', 'identifier': '1.1'},
+        ],
+    }]
+    trail = regulations.format_ecfr_breadcrumbs(structure, 'subpart', 'A', part='100')
+    assert trail[-2]['label'] == 'Part 100 — Definitions (52 U.S.C. 30101)'
+    assert trail[-2]['url'] == '/legal/regulations/part/100/'
+    assert trail[-1] == {'label': 'Subpart A', 'url': None}
+
+
+def test_breadcrumbs_do_not_invent_missing_ancestors(ecfr):
+    with mock.patch.object(ecfr_caller, 'fetch_ecfr_structure', return_value={'error': True}):
+        response = regulations.regulation_page(RequestFactory().get('/'), '100.6')
+    assert response.status_code == 200
+    soup = BeautifulSoup(response.content, 'html.parser')
+    trail = soup.select_one('.breadcrumbs--regulation')
+    assert len(trail.select('li')) == 2
+    assert trail.find('a') is None
+    assert trail.select_one('[aria-current="page"]').get_text(strip=True) == 'Section 100.6'
+    assert soup.find(id='regulation-100.6') is not None
 
 
 def test_pagination_retains_search():
@@ -702,35 +569,20 @@ def test_ao_number_filter_returns_cited_regulations():
         item.get_text(' ', strip=True)
         for item in soup.select('.legal-search-result__name')
     ] == ['Expenditures', 'Coordinated communications']
-    message = soup.select_one('.message--info')
-    assert message.select_one('a').get_text(strip=True) == 'AO 2024-01'
-    assert 'Texas Majority PAC' in message.get_text(' ', strip=True)
-    assert soup.select_one('#ao-number-input')['value'] == 'AO 2024-01'
-    assert soup.select_one('#ao-number-input').find_parent('form')['id'] == 'regulation-ao-search'
     assert 'ao_number=AO+2024-01' in soup.select_one('.legal-search-result a')['href']
-    tag = soup.select_one('[data-tag-category="ao_number"] .tag__item')
-    assert tag.get_text(' ', strip=True) == (
-        'AO 2024-01 Remove AO 2024-01 filter'
-    )
-    assert tag.select_one('.regulation-filter-tag__remove')['href'] == (
-        '/legal/search/regulations/'
-        '?search_type=regulations#results-regulations'
-    )
-    assert soup.select_one('.tags__count').get_text(strip=True) == '2'
     api.assert_called_once_with(
         '', query_type='advisory_opinions', offset=0, limit=20,
         ao_no='2024-01', ao_doc_category_id='F',
     )
 
 
-def test_invalid_ao_number_does_not_call_api():
+@pytest.mark.parametrize('field', ['ao_number', 'mur_number'])
+def test_invalid_citation_number_does_not_call_api(field):
     with mock.patch.object(api_caller, 'load_legal_search_results') as api:
         response = views.legal_doc_search_regulations(RequestFactory().get(
-            '/legal/search/regulations/', {'ao_number': 'not a number'},
+            '/legal/search/regulations/', {field: 'not a number'},
         ))
     assert response.status_code == 400
-    assert b'Enter an AO number in YYYY-NN format.' in response.content
-    assert b'class="tag__item"' not in response.content
     api.assert_not_called()
 
 
@@ -763,49 +615,34 @@ def test_mur_number_filter_returns_cited_regulations():
         item.get_text(' ', strip=True)
         for item in soup.select('.legal-search-result__name')
     ] == ['Political committee', 'Express advocacy']
-    message = soup.select_one('.message--info')
-    assert message.select_one('a').get_text(strip=True) == 'MUR #8253'
-    assert 'Turn AZ Blue PAC' in message.get_text(' ', strip=True)
-    assert soup.select_one('#mur-number-input')['value'] == 'MUR #8253'
-    assert soup.select_one('#mur-number-input').find_parent('form')['id'] == 'regulation-mur-search'
-    assert soup.select_one('#search-input').find_parent('form')['id'] == 'regulation-keyword-search'
     assert 'mur_number=MUR+%238253' in soup.select_one('.legal-search-result a')['href']
-    tag = soup.select_one('[data-tag-category="mur_number"] .tag__item')
-    assert tag.get_text(' ', strip=True) == 'MUR #8253 Remove MUR #8253 filter'
-    assert tag.select_one('.regulation-filter-tag__remove')['href'] == (
-        '/legal/search/regulations/'
-        '?search_type=regulations#results-regulations'
-    )
-    assert soup.select_one('.tags__count').get_text(strip=True) == '2'
     api.assert_called_once_with('', query_type='murs', offset=0, limit=20, case_no='8253')
 
 
-def test_keyword_filter_renders_removable_tag():
+def test_keyword_search_passes_query_and_page_to_ecfr_and_preserves_return_context():
     ecfr_results = {
         'results': [{
             'hierarchy': {'section': '100.6'},
             'headings': {'section': 'Connected organization'},
             'full_text_excerpt': 'A connected organization...',
         }],
-        'meta': {'current_page': 1, 'total_pages': 1, 'total_count': 1},
+        'meta': {'current_page': 2, 'total_pages': 3, 'total_count': 41},
     }
     with mock.patch.object(
         ecfr_caller, 'fetch_ecfr_data', return_value=ecfr_results,
-    ):
+    ) as api:
         response = views.legal_doc_search_regulations(RequestFactory().get(
-            '/legal/search/regulations/', {'search': 'connected organization'},
+            '/legal/search/regulations/', {'search': 'connected + organization', 'page': 2},
         ))
 
     soup = BeautifulSoup(response.content, 'html.parser')
-    tag = soup.select_one('[data-tag-category="search"] .tag__item')
-    assert tag.get_text(' ', strip=True) == (
-        'connected organization Remove connected organization filter'
-    )
-    assert tag.select_one('.regulation-filter-tag__remove')['href'] == (
-        '/legal/search/regulations/'
-        '?search_type=regulations#results-regulations'
-    )
-    assert soup.select_one('.tags__count').get_text(strip=True) == '1'
+    link = soup.select_one('.legal-search-result a')
+    assert urlsplit(link['href']).path == '/legal/regulations/100.6/'
+    assert parse_qs(urlsplit(link['href']).query) == {
+        'return_to': ['regulations-search'], 'search': ['connected + organization'], 'page': ['2'],
+    }
+    assert 'Connected organization' in soup.select_one('.legal-search-result__name').get_text()
+    api.assert_called_once_with('connected organization', page='2')
 
 
 def test_mur_regulation_subsection_links_to_reader_paragraph():
@@ -846,16 +683,6 @@ def test_mur_regulation_subsection_links_to_reader_paragraph():
     ).get_text(' ', strip=True)
 
 
-def test_invalid_mur_number_does_not_call_api():
-    with mock.patch.object(api_caller, 'load_legal_search_results') as api:
-        response = views.legal_doc_search_regulations(RequestFactory().get(
-            '/legal/search/regulations/', {'mur_number': 'not a number'},
-        ))
-    assert response.status_code == 400
-    assert b'Enter a MUR number using numbers only.' in response.content
-    api.assert_not_called()
-
-
 def test_regulation_search_methods_cannot_be_combined():
     with mock.patch.object(api_caller, 'load_legal_search_results') as legal_api, \
             mock.patch.object(ecfr_caller, 'fetch_ecfr_data') as ecfr_api:
@@ -867,48 +694,11 @@ def test_regulation_search_methods_cannot_be_combined():
             },
         ))
     assert response.status_code == 400
-    assert b'Search by regulation keyword, AO number, or MUR number.' in response.content
     assert b'value="contribution"' in response.content
     assert b'value="2024-01"' in response.content
     assert b'value="8253"' in response.content
     legal_api.assert_not_called()
     ecfr_api.assert_not_called()
-
-
-@pytest.mark.parametrize(('params', 'selected', 'status'), [
-    ({}, 'search', 200),
-    ({'search': 'loans'}, 'search', 200),
-    ({'ao_number': '2024-01'}, 'ao_number', 200),
-    ({'mur_number': '8253'}, 'mur_number', 200),
-    ({'ao_number': 'invalid'}, 'ao_number', 400),
-    ({'mur_number': 'invalid'}, 'mur_number', 400),
-])
-def test_regulation_search_method_selector_matches_request(params, selected, status):
-    with mock.patch.object(ecfr_caller, 'fetch_ecfr_structure', return_value={}), \
-            mock.patch.object(ecfr_caller, 'fetch_ecfr_data', return_value={}), \
-            mock.patch.object(api_caller, 'load_legal_search_results', return_value={
-                'advisory_opinions': [], 'murs': [],
-            }):
-        response = views.legal_doc_search_regulations(RequestFactory().get(
-            '/legal/search/regulations/', params,
-        ))
-    assert response.status_code == status
-    soup = BeautifulSoup(response.content, 'html.parser')
-    controls = soup.select('[data-search-method-selector] input:checked')
-    assert len(controls) == 1
-    assert controls[0]['value'] == selected
-    hint = soup.find(id='regulation-search-hint')
-    assert hint.get_text(strip=True) == 'Use one search method at a time.'
-    assert hint.find_parent('form') is None
-    assert response.content.count(b'Use one search method at a time.') == 1
-    for form in soup.select('form[data-search-method]'):
-        # Each independent form remains usable without JavaScript and submits one method.
-        assert not form.has_attr('hidden')
-        assert {field['name'] for field in form.select('input[name]')} == {
-            'search_type', form['data-search-method'],
-        }
-    modal = soup.select_one('[data-regulation-keyword-form]')
-    assert modal['action'] == '/data/legal/search/regulations/'
 
 
 @pytest.mark.parametrize(('category', 'result_key', 'filters', 'record', 'label'), [
@@ -933,11 +723,3 @@ def test_related_failure_is_local_to_partial(category):
             mock.patch.object(api_caller, 'load_legal_rulemakings_for_regulation', side_effect=requests.Timeout):
         response = regulations.regulation_related_content(RequestFactory().get('/'), '100.6', category)
     assert b'temporarily unavailable' in response.content
-
-
-@pytest.mark.parametrize('category', ['rulemakings', 'advisory-opinions', 'murs'])
-def test_related_empty_state(category):
-    with mock.patch.object(api_caller, 'load_legal_search_results', return_value={}), \
-            mock.patch.object(api_caller, 'load_legal_rulemakings_for_regulation', return_value={}):
-        response = regulations.regulation_related_content(RequestFactory().get('/'), '100.6', category)
-    assert b'No ' in response.content

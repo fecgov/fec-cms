@@ -82,7 +82,7 @@ def regulation_return_context(request, from_search=False):
 
 
 def append_return_context(url, context):
-    if not context:
+    if not url or not context:
         return url
     parsed = urlsplit(url)
     query = '&'.join(filter(None, (parsed.query, urlencode(context))))
@@ -309,7 +309,7 @@ def format_ecfr_regulation_parts(structure):
                 'description': ecfr_description(node),
                 'section_range': node.get('descendant_range'),
                 'reserved': node.get('reserved', False),
-                'url': ecfr_hierarchy_url(node_type, identifier, part=part),
+                'url': None if node.get('reserved') else ecfr_hierarchy_url(node_type, identifier, part=part),
                 'level': level,
             })
 
@@ -330,6 +330,60 @@ def find_ecfr_hierarchy_node(structure, node_type, identifier, part=None):
     return find_ecfr_node(root, node_type, identifier) if root else None
 
 
+def format_ecfr_breadcrumbs(structure, node_type, identifier, return_context=None, part=None):
+    """Build the current page's trail from the FEC chapter's actual ancestry."""
+    browse_url = reverse('legal-search-regulations')
+    breadcrumbs = [{'label': 'Title 11', 'url': None}]
+    chapter = find_ecfr_node(structure, 'chapter', 'I')
+
+    def find_path(node, current_part=None):
+        if node.get('type') == 'part':
+            current_part = node.get('identifier')
+        identifiers = (
+            ecfr_section_identifiers(node.get('identifier', ''))
+            if node_type == 'section' else [node.get('identifier')]
+        )
+        if (node.get('type') == node_type and identifier in identifiers
+                and (not part or part == current_part)):
+            return [node]
+        for child in node.get('children', []):
+            path = find_path(child, current_part)
+            if path:
+                return [node] + path
+        return []
+
+    path = find_path(chapter) if chapter else []
+    current_part = None
+    for node in path:
+        ancestor_type = node.get('type')
+        ancestor_id = node.get('identifier')
+        if ancestor_type == 'section':
+            continue
+        if ancestor_type == 'part':
+            current_part = ancestor_id
+        if ancestor_type not in ('chapter', 'subchapter', 'part', 'subpart'):
+            continue
+        label = f'{ancestor_type.title()} {ancestor_id}'
+        # Keep the full Part heading and the current page's title.
+        if (ancestor_type == 'part' or node is path[-1]) and node.get('label_description'):
+            label += f" — {node['label_description']}"
+        url = (
+            browse_url if ancestor_type == 'chapter'
+            else append_return_context(
+                ecfr_hierarchy_url(ancestor_type, ancestor_id, part=current_part),
+                return_context,
+            )
+        )
+        breadcrumbs.append({'label': label, 'url': url})
+
+    if path and node_type != 'section':
+        breadcrumbs[-1]['url'] = None
+    else:
+        label = f'{node_type.title()} {identifier}'
+        breadcrumbs.append({'label': label, 'url': None})
+    return breadcrumbs
+
+
 def format_ecfr_hierarchy_contents(node):
     """Return nested headings and sections for a part or subchapter page."""
     contents = []
@@ -343,7 +397,8 @@ def format_ecfr_hierarchy_contents(node):
                     'type': child_type,
                     'identifier': child.get('identifier'),
                     'description': ecfr_description(child),
-                    'url': ecfr_hierarchy_url(
+                    'reserved': child.get('reserved', False),
+                    'url': None if child.get('reserved') else ecfr_hierarchy_url(
                         child_type,
                         child.get('identifier'),
                         part=child_part,
@@ -453,6 +508,7 @@ def regulation_hierarchy_page(request, hierarchy_type, identifier, part=None):
             'type': hierarchy_type,
             'identifier': identifier,
             'description': ecfr_description(node),
+            'reserved': node.get('reserved', False),
             'contents': format_ecfr_hierarchy_contents(node),
         }
         for item in hierarchy['contents']:
@@ -470,6 +526,9 @@ def regulation_hierarchy_page(request, hierarchy_type, identifier, part=None):
         'mur_number': request.GET.get('mur_number', ''),
         'is_browse': False,
         'back_url': regulation_return_url(request),
+        'regulation_breadcrumbs': format_ecfr_breadcrumbs(
+            structure, hierarchy_type, identifier, regulation_return_context(request), part=part,
+        ),
     }, status=502 if error else 200)
 
 
@@ -566,6 +625,7 @@ def regulation_page(request, section):
     regulation_history = build_regulation_history_context(section)
     reserved_label = None
     section_nav = {}
+    structure_response = {}
     section_not_found = section_response.get('status_code') == 404
     if not regulation and (not section_response.get('error') or section_not_found):
         structure_response = ecfr_caller.fetch_ecfr_structure()
@@ -634,6 +694,9 @@ def regulation_page(request, section):
         'reserved_label': reserved_label,
         'regulations_api_error': regulations_api_error,
         'section_nav': section_nav,
+        'regulation_breadcrumbs': format_ecfr_breadcrumbs(
+            structure_response, 'section', section, return_context,
+        ),
         'back_url': back_url,
         'timeline': timeline,
         'timeline_api_error': timeline_api_error,

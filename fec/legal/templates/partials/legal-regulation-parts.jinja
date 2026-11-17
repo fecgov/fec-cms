@@ -19,14 +19,23 @@
         <h3 class="t-sans">{{ part.identifier }}</h3>
       </div>
       <div class="simple-table__cell" role="cell">
-        <h3 class="t-sans"><a class="legal-search-result__name" title="{{ part.citation }}" href="{{ part.url }}">{{ part.description }}</a></h3>
+        <h3 class="t-sans">
+          {% if part.url %}
+            <a class="legal-search-result__name" title="{{ part.citation }}" href="{{ part.url }}">{{ part.description }}</a>
+          {% else %}
+            <span class="legal-search-result__name">{{ part.description }}</span>
+          {% endif %}
+          {% if part.reserved %} <span class="t-note">[Reserved]</span>{% endif %}
+        </h3>
       </div>
       <div class="simple-table__cell" role="cell">
         <p>{% if part.section_range %}{{ part.section_range }}{% else %}&mdash;{% endif %}</p>
       </div>
       <div class="simple-table__cell legal-regulation-browser__action" role="cell">
+        {% if part.url %}
         <a class="legal-regulation-browser__link icon i-arrow-right-circle" title="Open {{ part.citation }}" aria-label="Open {{ part.citation }}" href="{{ part.url }}">
         </a>
+        {% endif %}
       </div>
     </div>
     {% endif %}

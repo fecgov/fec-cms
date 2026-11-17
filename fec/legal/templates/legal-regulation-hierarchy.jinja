@@ -21,8 +21,14 @@
     <div class="data-container__datatable">
       <div class="legal-regulation-hierarchy">
         <header class="legal-regulation__section-heading">
-          <h2>{{ hierarchy_title }} {{ hierarchy.identifier }}{% if hierarchy.description %} &mdash; {{ hierarchy.description }}{% endif %}</h2>
+          {% include 'partials/legal-regulation-breadcrumbs.jinja' %}
+          <h2>{{ hierarchy_title }} {{ hierarchy.identifier }}{% if hierarchy.description and not hierarchy.reserved %} &mdash; {{ hierarchy.description }}{% endif %}{% if hierarchy.reserved %} <span class="t-note">[Reserved]</span>{% endif %}</h2>
         </header>
+        {% if hierarchy.reserved %}
+          <div class="message message--info" role="status">
+            <p>This {{ hierarchy.type }}{% if '-' in hierarchy.identifier %} range{% endif %} is reserved and contains no current regulations.</p>
+          </div>
+        {% else %}
         <div class="simple-table simple-table--responsive simple-table--display" role="table" aria-label="Regulation contents">
           <div class="simple-table__header" role="row">
             <div class="simple-table__header-cell cell--15" role="columnheader">Citation</div>
@@ -41,8 +47,10 @@
                 </div>
               {% else %}
                 <div class="simple-table__row legal-search-result" role="row">
-                  <div class="simple-table__cell" role="cell"><a href="{{ item.url }}"><strong>{{ item.type|title }} {{ item.identifier }}</strong></a></div>
-                  <div class="simple-table__cell" role="cell"><div class="legal-search-result__name">{{ item.description }}</div></div>
+                  <div class="simple-table__cell" role="cell">
+                    {% if item.url %}<a href="{{ item.url }}"><strong>{{ item.type|title }} {{ item.identifier }}</strong></a>{% else %}<strong>{{ item.type|title }} {{ item.identifier }}</strong>{% endif %}
+                  </div>
+                  <div class="simple-table__cell" role="cell"><div class="legal-search-result__name">{{ item.description }}{% if item.reserved %} <span class="t-note">[Reserved]</span>{% endif %}</div></div>
                 </div>
               {% endif %}
             {% else %}
@@ -50,6 +58,7 @@
             {% endfor %}
           </div>
         </div>
+        {% endif %}
       </div>
     </div>
   {% endif %}
