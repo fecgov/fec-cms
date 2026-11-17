@@ -11,7 +11,7 @@
 {% block filters %}
 <div class="filters__inner">
   {{ typeahead.field('q', 'Candidate name or ID', '', dataset='candidates', allow_text=True) }}
-  {{ years.years('election_year', 'Election year', end_year=constants.END_YEAR + 4) }}
+  {{ years.years('election_year', 'Election year', end_year=default_years.END_YEAR + 4) }}
   {{ office.checkbox() }}
   {{ parties.checkbox() }}
   {{ states.field('state', list_type='states_territories') }}

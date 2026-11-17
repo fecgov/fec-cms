@@ -88,10 +88,11 @@ def communication_costs(request):
 # handle null disbursement dates in a future implementation
 def disbursements(request):
     if len(request.GET) == 0:
+        time_period = constants.get_default_years()['DEFAULT_TIME_PERIOD']
         return redirect('/data/disbursements/?two_year_transaction_period='
-                        + str(constants.DEFAULT_ELECTION_YEAR)
-                        + '&min_date=' + '01/01/' + str(constants.DEFAULT_ELECTION_YEAR - 1)
-                        + '&max_date=' + '12/31/' + str(constants.DEFAULT_ELECTION_YEAR))
+                        + str(time_period)
+                        + '&min_date=' + '01/01/' + str(time_period - 1)
+                        + '&max_date=' + '12/31/' + str(time_period))
 
     return render(request, 'datatable.jinja', {
         'parent': 'data',
@@ -106,10 +107,11 @@ def disbursements(request):
 
 def allocated_federal_nonfederal_disbursements(request):
     if len(request.GET) == 0:
+        time_period = constants.get_default_years()['DEFAULT_TIME_PERIOD']
         return redirect('/data/allocated-federal-nonfederal-disbursements/?cycle='
-                        + str(constants.DEFAULT_ELECTION_YEAR)
-                        + '&min_date=' + '01/01/' + str(constants.DEFAULT_ELECTION_YEAR - 1)
-                        + '&max_date=' + '12/31/' + str(constants.DEFAULT_ELECTION_YEAR))
+                        + str(time_period)
+                        + '&min_date=' + '01/01/' + str(time_period - 1)
+                        + '&max_date=' + '12/31/' + str(time_period))
 
     return render(request, 'datatable.jinja', {
         'parent': 'data',
@@ -165,10 +167,11 @@ def independent_expenditures(request):
 # handle null disbursement dates in a future implementation
 def individual_contributions(request):
     if len(request.GET) == 0:
+        time_period = constants.get_default_years()['DEFAULT_TIME_PERIOD']
         return redirect('/data/receipts/individual-contributions/?two_year_transaction_period='
-                        + str(constants.DEFAULT_ELECTION_YEAR)
-                        + '&min_date=' + '01/01/' + str(constants.DEFAULT_ELECTION_YEAR - 1)
-                        + '&max_date=' + '12/31/' + str(constants.DEFAULT_ELECTION_YEAR))
+                        + str(time_period)
+                        + '&min_date=' + '01/01/' + str(time_period - 1)
+                        + '&max_date=' + '12/31/' + str(time_period))
 
     return render(request, 'datatable.jinja', {
         'parent': 'data',
@@ -251,10 +254,11 @@ def party_coordinated_expenditures(request):
 # handle null disbursement dates in a future implementation
 def receipts(request):
     if len(request.GET) == 0:
+        time_period = constants.get_default_years()['DEFAULT_TIME_PERIOD']
         return redirect('/data/receipts/?two_year_transaction_period='
-                        + str(constants.DEFAULT_ELECTION_YEAR)
-                        + '&min_date=' + '01/01/' + str(constants.DEFAULT_ELECTION_YEAR - 1)
-                        + '&max_date=' + '12/31/' + str(constants.DEFAULT_ELECTION_YEAR))
+                        + str(time_period)
+                        + '&min_date=' + '01/01/' + str(time_period - 1)
+                        + '&max_date=' + '12/31/' + str(time_period))
 
     return render(request, 'datatable.jinja', {
         'parent': 'data',

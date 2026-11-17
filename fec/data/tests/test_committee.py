@@ -583,7 +583,7 @@ class TestCommittee(TestCase):
         load_endpoint_results_mock,
         load_committee_statement_of_organization_mock,
     ):
-        cycle = views.constants.DEFAULT_TIME_PERIOD
+        cycle = views.constants.get_default_years()['DEFAULT_TIME_PERIOD']
 
         test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
         test_committee["cycles_has_activity"] = [cycle]
@@ -648,7 +648,7 @@ class TestCommittee(TestCase):
         load_endpoint_results_mock,
         load_committee_statement_of_organization_mock,
     ):
-        cycle = views.constants.DEFAULT_TIME_PERIOD
+        cycle = views.constants.get_default_years()['DEFAULT_TIME_PERIOD']
 
         test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
         test_committee["cycles_has_activity"] = [cycle]
@@ -710,7 +710,7 @@ class TestCommittee(TestCase):
         load_endpoint_results_mock,
         load_committee_statement_of_organization_mock,
     ):
-        cycle = views.constants.DEFAULT_TIME_PERIOD
+        cycle = views.constants.get_default_years()['DEFAULT_TIME_PERIOD']
 
         test_committee = copy.deepcopy(self.STOCK_COMMITTEE)
         test_committee["cycles_has_activity"] = [cycle]

@@ -13,7 +13,7 @@ def raising_spending(request):
     # If changing this, look at line 130 in /fec/home/templates/home/home_page.html
     # TODO: make this more elegant
 
-    election_year = int(request.GET.get('election_year', constants.DEFAULT_ELECTION_YEAR))
+    election_year = int(request.GET.get('election_year', constants.get_default_years()['DEFAULT_ELECTION_YEAR']))
 
     max_election_year = utils.current_cycle() + 4
     election_years = utils.get_cycles(max_election_year)

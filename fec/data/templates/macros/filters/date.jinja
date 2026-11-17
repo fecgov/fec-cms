@@ -22,7 +22,7 @@
 
 {% macro partition_field(name, label, show_tooltip=True) %}
 <div class="filter">
-  <div class="js-filter js-filter-control" data-filter="select" data-validate="true" data-modifies-filter="{{ name }}" data-modifies-property="data-transaction-year" data-required-default="{{ constants.DEFAULT_TIME_PERIOD }}">
+  <div class="js-filter js-filter-control" data-filter="select" data-validate="true" data-modifies-filter="{{ name }}" data-modifies-property="data-transaction-year" data-required-default="{{ default_years.DEFAULT_TIME_PERIOD }}">
     <label class="label t-inline-block" for="two-year-transaction-period">Transaction time period</label>
     {% if show_tooltip %}
       <div class="tooltip__container">
@@ -34,7 +34,7 @@
     {% endif %}
     <select id="two-year-transaction-period" name="two_year_transaction_period">
         <option value="">Select a value</option>
-      {% for year in range(constants.END_YEAR, constants.START_YEAR, -2) %}
+      {% for year in range(default_years.END_YEAR, constants.START_YEAR, -2) %}
         <option value="{{year}}">{{ year | fmt_year_range }}</option>
       {% endfor %}
     </select>
@@ -57,9 +57,9 @@
     <div class="date-range__grid js-date-grid">
       <div class="date-range__row">
         <div class="date-range__year">
-        {{ constants.DEFAULT_TIME_PERIOD|int - 1 }}
+        {{ default_years.DEFAULT_TIME_PERIOD|int - 1 }}
         </div>
-        <ul data-year="{{ constants.DEFAULT_TIME_PERIOD|int - 1 }}" class="date-range__months">
+        <ul data-year="{{ default_years.DEFAULT_TIME_PERIOD|int - 1 }}" class="date-range__months">
           <li data-month="01"><div>Jan</div></li>
           <li data-month="02"><div>Feb</div></li>
           <li data-month="03"><div>Mar</div></li>
@@ -76,9 +76,9 @@
       </div>
       <div class="date-range__row">
         <div class="date-range__year">
-          {{ constants.DEFAULT_TIME_PERIOD }}
+          {{ default_years.DEFAULT_TIME_PERIOD }}
         </div>
-        <ul data-year="{{ constants.DEFAULT_TIME_PERIOD }}" class="date-range__months">
+        <ul data-year="{{ default_years.DEFAULT_TIME_PERIOD }}" class="date-range__months">
           <li data-month="01"><div>Jan</div></li>
           <li data-month="02"><div>Feb</div></li>
           <li data-month="03"><div>Mar</div></li>

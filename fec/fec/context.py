@@ -1,5 +1,12 @@
 from django.conf import settings
 
+from data import constants
+
+
+def default_years(request):
+    """Provide the current reporting and election years for each render."""
+    return {'default_years': constants.get_default_years()}
+
 
 def features(request):
     return {'features': settings.FEATURES}

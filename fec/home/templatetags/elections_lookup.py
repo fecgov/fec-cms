@@ -10,7 +10,7 @@ register = template.Library()
 @register.inclusion_tag('partials/elections-lookup.html')
 def elections_lookup(request):
 
-    cycle = constants.DEFAULT_ELECTION_YEAR
+    cycle = constants.get_default_years()['DEFAULT_ELECTION_YEAR']
     cycles = utils.get_cycles(cycle + 4)
     FEATURES = settings.FEATURES
     states = constants.states

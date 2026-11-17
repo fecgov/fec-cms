@@ -276,11 +276,11 @@ TagList.prototype.removeAllTags = function(e, opts, emit) {
       '/data/' +
       url +
       '?data_type=processed&two_year_transaction_period=' +
-      window.DEFAULT_ELECTION_YEAR +
+      window.DEFAULT_TIME_PERIOD +
       '&min_date=01%2F01%2F' +
-      (Number(window.DEFAULT_ELECTION_YEAR) - 1) +
+      (Number(window.DEFAULT_TIME_PERIOD) - 1) +
       '&max_date=12%2F31%2F' +
-      window.DEFAULT_ELECTION_YEAR;
+      window.DEFAULT_TIME_PERIOD;
 
     window.location.href = resetLink;
   } else {
