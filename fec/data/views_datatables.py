@@ -299,19 +299,19 @@ def reports(request, form_type):
 
 def rulemaking(request):
     rm_year_opts = {year: year for year in range(datetime.datetime.now().year, 1988, -1)}
-    query = request.GET.get('q', '')
+    keyword_query = request.GET.get('q', '')
     legal_search_error = None
     legal_search_error_fields = []
 
-    if len(query) > settings.LEGAL_SEARCH_MAX_QUERY_LENGTH:
-        query = ''
+    if len(keyword_query) > settings.LEGAL_SEARCH_MAX_QUERY_LENGTH:
+        keyword_query = ''
         legal_search_error = get_legal_search_query_length_error()
         legal_search_error_fields = ['q']
 
     return render(request, 'datatable.jinja', {
         'has_keyword_modal': True,
         'parent': 'data',
-        'query': query,
+        'keyword_query': keyword_query,
         'result_type': 'rulemakings',
         'slug': 'rulemakings',
         'title': 'Rulemakings',
