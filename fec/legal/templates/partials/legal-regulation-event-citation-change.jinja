@@ -1,0 +1,10 @@
+{# Reverse conversion links point from a former citation to its later citation. #}
+<div class="legal-regulation__previous-citation u-margin--top">
+  <div class="legal-regulation__citation-context">{{ citation_context_label }}</div>
+  <div>Later citation{% if event.redesignated_as|length > 1 %}s{% endif %}:</div>
+  {{ regulation_ui.later_links(event.redesignated_as) }}
+  {% set conversion_sources = event.redesignated_as|map(attribute='source_url')|reject('none')|unique|list %}
+  {% for source_url in conversion_sources %}
+    <div><a href="{{ source_url }}" target="_blank" rel="noopener noreferrer">View the FEC conversion table</a></div>
+  {% endfor %}
+</div>

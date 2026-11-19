@@ -7,7 +7,8 @@
       <div class="row u-padding--top">
         <form
           class="modal__form"
-          action=""
+          action="{% if result_type == 'regulations' %}/data/legal/search/regulations/{% endif %}"
+          {% if result_type == 'regulations' %}data-regulation-keyword-form{% endif %}
           data-max-query-length="{{ LEGAL_SEARCH_MAX_QUERY_LENGTH }}"
           data-query-length-error="Search terms must be {{ LEGAL_SEARCH_MAX_QUERY_LENGTH }} characters or fewer. Please shorten your search and try again."
         >

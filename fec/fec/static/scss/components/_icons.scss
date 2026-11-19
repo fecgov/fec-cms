@@ -59,6 +59,10 @@
   &.i-play {
     @include u-icon-bg($play-button, $base);
   }
+
+  &.i-arrow-right-circle {
+    @include u-icon-bg($arrow-right-circle, $primary);
+  }
 }
 
 .icon--small {

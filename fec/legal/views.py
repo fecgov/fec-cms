@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponseGone, HttpResponseRedirect
+from django.urls import reverse
 
 import datetime
 import re
@@ -15,6 +16,7 @@ import logging
 from data import api_caller
 from data import ecfr_caller
 from data import constants
+from legal import regulations
 from django.http import JsonResponse  # rulemaking comments
 from fec import settings  # rulemaking comments
 
@@ -761,30 +763,9 @@ def rulemaking_add_comments(request, rm_no, doc_id):
     })
 
 
-# Transform boolean queries for eCFR API
-# Query string:
-# ((coordinated | communications) | (in-kind AND contributions) |
-# ("independent expenditure")) AND (-authorization)
-# eCFR query string transformation:
-# (coordinated | communications) | (in-kind contributions) |
-# ("independent expenditure") -authorization
-
-def transform_ecfr_query_string(query_string):
-
-    # Define the replacements for eCFR query string
-    replacements = [
-        (r' \+', ''),  # Replace space+ with empty string
-    ]
-
-    # Apply replacements sequentially
-    for pattern, replacement in replacements:
-        query_string = re.sub(pattern, replacement, query_string)
-    return query_string
-
-
 def legal_search(request):
     original_query = request.GET.get('search', '')
-    updated_ecfr_query_string = transform_ecfr_query_string(original_query)
+    updated_ecfr_query_string = regulations.transform_ecfr_query_string(original_query)
     result_type = request.GET.get('search_type', 'all')
     results = {}
     legal_search_error, legal_search_error_fields = validate_legal_search_query(original_query)
@@ -810,27 +791,16 @@ def legal_search(request):
         # Only search regulations if result_type is all or regulations
         if result_type == 'all' or result_type == 'regulations':
             ecfr_results = ecfr_caller.fetch_ecfr_data(updated_ecfr_query_string, limit=3, page=1)
-            if 'results' in ecfr_results:
-                regulations = [{
-                    'doc_id': None,
-                    'document_highlights': {},
-                    'highlights': [obj['headings']['part'],
-                                   obj['full_text_excerpt']],
-                    'name': obj['headings']['section'],
-                    'no': obj['hierarchy']['section'],
-                    'type': None,
-                    'url': (
-                        'https://www.ecfr.gov/current/title-11/'
-                        f"chapter-{obj['hierarchy']['chapter']}/"
-                        f"section-{obj['hierarchy']['section']}"
-                    )
-                } for obj in ecfr_results['results']]
-
-                results['regulations'] = regulations
-                results['total_regulations'] = ecfr_results.get('meta', {}).get(
-                    'total_count', 0)
-                results['regulations_returned'] = ('3' if results['total_regulations'] > 3
-                                                   else results['total_regulations'])
+            ecfr_results = ecfr_results or {}
+            results['regulations'] = regulations.format_ecfr_regulation_results(
+                ecfr_results,
+                include_part_highlight=True,
+            )
+            results['total_regulations'] = ecfr_results.get('meta', {}).get('total_count', 0)
+            results['regulations_returned'] = ('3' if results['total_regulations'] > 3
+                                               else results['total_regulations'])
+            if ecfr_results.get('error'):
+                results['regulations_error'] = ecfr_results.get('error_message')
 
         if result_type == 'all' or result_type == 'rulemakings':
             filters = {}
@@ -1374,34 +1344,184 @@ def legal_doc_search_af(request):
 def legal_doc_search_regulations(request):
     results = {}
     query = request.GET.get('search', '')
+    ao_number_input = request.GET.get('ao_number', '')
+    mur_number_input = request.GET.get('mur_number', '')
+    ao_number = regulations.normalize_ao_number(ao_number_input)
+    mur_number = regulations.normalize_mur_number(mur_number_input)
+    regulations_api_error = None
+    citation_lookup = None
+    # Keyword, AO, and MUR searches are separate modes.
+    search_inputs = {
+        'search': query,
+        'ao_number': ao_number_input,
+        'mur_number': mur_number_input,
+    }
+    active_searches = [name for name, value in search_inputs.items() if value]
+    has_conflicting_filters = len(active_searches) > 1
+    search_mode = active_searches[0] if len(active_searches) == 1 else None
+    is_browse = not active_searches
     legal_search_error, legal_search_error_fields = validate_legal_search_query(query)
+    if has_conflicting_filters:
+        legal_search_error = 'Search by regulation keyword, AO number, or MUR number.'
+        legal_search_error_fields = active_searches
+    elif search_mode == 'ao_number' and not ao_number:
+        legal_search_error = 'Enter an AO number in YYYY-NN format.'
+        legal_search_error_fields = ['ao_number']
+    elif search_mode == 'mur_number' and not mur_number:
+        legal_search_error = 'Enter a MUR number using numbers only.'
+        legal_search_error_fields = ['mur_number']
     if legal_search_error:
         results = {'regulations': [], 'total_all': 0}
         current_page = 1
         total_pages = 0
         total_count = 0
+    elif search_mode in ('ao_number', 'mur_number'):
+        if search_mode == 'ao_number':
+            result_key = 'advisory_opinions'
+            document_number = ao_number
+            number_field = 'ao_no'
+            formatter = regulations.format_ao_regulation_results
+            api_filters = {'ao_no': ao_number, 'ao_doc_category_id': 'F'}
+            citation_lookup = {
+                'label': f'AO {ao_number}',
+                'url': f'/data/legal/advisory-opinions/{ao_number}/',
+            }
+            unavailable_message = 'AO citations are temporarily unavailable. Please try again.'
+        else:
+            result_key = 'murs'
+            document_number = mur_number
+            number_field = 'no'
+            formatter = regulations.format_mur_regulation_results
+            api_filters = {'case_no': mur_number}
+            citation_lookup = {
+                'label': f'MUR #{mur_number}',
+                'url': f'/data/legal/matter-under-review/{mur_number}/',
+            }
+            unavailable_message = 'MUR citations are temporarily unavailable. Please try again.'
+
+        citation_lookup['document'] = None
+        legal_results = api_caller.load_legal_search_results(
+            '', query_type=result_key, offset=0, limit=20, **api_filters,
+        )
+        if result_key not in legal_results:
+            regulations_api_error = unavailable_message
+            regulation_results = []
+        else:
+            # Keep exact matches if the upstream number search is broader.
+            matching_documents = [
+                document for document in legal_results[result_key]
+                if str(document.get(number_field)) == document_number
+            ]
+            citation_lookup['document'] = (
+                matching_documents[0] if matching_documents else None
+            )
+            descriptions = {}
+            if matching_documents:
+                structure = ecfr_caller.fetch_ecfr_structure()
+                if not structure.get('error'):
+                    descriptions = regulations.ecfr_section_descriptions(
+                        structure
+                    )
+            regulation_results = formatter(matching_documents, descriptions)
+
+        return_context = regulations.regulation_return_context(request, from_search=True)
+        for regulation in regulation_results:
+            regulation['url'] = regulations.append_return_context(
+                regulation['url'], return_context,
+            )
+        results['regulations'] = regulation_results
+        results['total_all'] = len(regulation_results)
+        current_page = 1
+        total_pages = 1 if regulation_results else 0
+        total_count = len(regulation_results)
+    elif is_browse:
+        structure = ecfr_caller.fetch_ecfr_structure()
+        regulation_parts = regulations.format_ecfr_regulation_parts(structure)
+        return_context = regulations.regulation_return_context(request, from_search=True)
+        for part in regulation_parts:
+            part['url'] = regulations.append_return_context(
+                part['url'],
+                return_context,
+            )
+        current_page = 1
+        total_pages = 1 if regulation_parts else 0
+        total_count = len(regulation_parts)
+        if structure.get('error'):
+            regulations_api_error = structure.get('error_message')
+        results['regulation_parts'] = regulation_parts
+        results['regulation_chapter'] = regulations.find_ecfr_node(structure, 'chapter', 'I')
+        results['total_all'] = total_count
     else:
         page = request.GET.get('page', 1)
-        updated_ecfr_query_string = transform_ecfr_query_string(query)
+        updated_ecfr_query_string = regulations.transform_ecfr_query_string(query)
         ecfr_results = ecfr_caller.fetch_ecfr_data(updated_ecfr_query_string,
                                                    page=page)
+        ecfr_results = ecfr_results or {}
+        meta = ecfr_results.get('meta', {})
 
-        regulations = [{
-                    'highlights': [obj['full_text_excerpt']],
-                    'name': obj['headings']['section'],
-                    'no': obj['hierarchy']['section'],
-                    'type': None,
-                    'url':  (
-                        'https://www.ecfr.gov/current/title-11/'
-                        f"chapter-{obj['hierarchy']['chapter']}/"
-                        f"section-{obj['hierarchy']['section']}"
-                    )
-                    } for obj in ecfr_results['results']]
-        current_page = ecfr_results['meta']['current_page']
-        total_pages = ecfr_results['meta']['total_pages']
-        total_count = ecfr_results['meta']['total_count']
-        results['regulations'] = regulations
+        regulation_results = regulations.format_ecfr_regulation_results(ecfr_results)
+        current_page = meta.get('current_page', 1)
+        total_pages = meta.get('total_pages', 0)
+        total_count = meta.get('total_count', 0)
+        if ecfr_results.get('error'):
+            regulations_api_error = ecfr_results.get('error_message')
+        results['regulations'] = regulation_results
+        return_context = regulations.regulation_return_context(request, from_search=True)
+        for regulation in regulation_results:
+            regulation['url'] = regulations.append_return_context(
+                regulation['url'],
+                return_context,
+            )
         results['total_all'] = total_count
+
+    try:
+        current_page = int(current_page)
+    except (TypeError, ValueError):
+        current_page = 1
+    try:
+        total_pages = int(total_pages)
+    except (TypeError, ValueError):
+        total_pages = 0
+    try:
+        total_count = int(total_count)
+    except (TypeError, ValueError):
+        total_count = 0
+    pagination = {
+        'start': ((current_page - 1) * 20) + 1 if total_count else 0,
+        'end': min(current_page * 20, total_count),
+        'pages': list(range(
+            max(1, current_page - 2),
+            min(total_pages, current_page + 2) + 1,
+        )),
+        'previous_url': (
+            regulations.regulation_search_page_url(request, current_page - 1)
+            if current_page > 1 else None
+        ),
+        'next_url': (
+            regulations.regulation_search_page_url(request, current_page + 1)
+            if current_page < total_pages else None
+        ),
+    }
+    pagination['page_urls'] = {
+        page: regulations.regulation_search_page_url(request, page)
+        for page in pagination['pages']
+    }
+
+    filter_tags = []
+    if not legal_search_error and search_mode:
+        labels = {
+            'search': query,
+            'ao_number': f'AO {ao_number}',
+            'mur_number': f'MUR #{mur_number}',
+        }
+        filter_tags.append({
+            'category': search_mode,
+            'label': labels[search_mode],
+            'remove_url': (
+                f"{reverse('legal-search-regulations')}"
+                '?search_type=regulations#results-regulations'
+            ),
+        })
 
     return render(request, 'legal-search-results-regulations.jinja', {
         'parent': 'legal',
@@ -1411,10 +1531,22 @@ def legal_doc_search_regulations(request):
         'total_count': total_count,
         'limit': 20,
         'result_type': 'regulations',
-        'query': '' if legal_search_error else query,
+        'query': query if has_conflicting_filters else (
+            '' if legal_search_error or search_mode != 'search' else query
+        ),
+        'ao_number': ao_number,
+        'ao_number_input': ao_number_input,
+        'mur_number': mur_number,
+        'mur_number_input': mur_number_input,
+        'citation_lookup': citation_lookup,
+        'regulation_search_method': search_mode or (active_searches[0] if active_searches else None),
+        'is_browse': is_browse,
         'legal_search_error': legal_search_error,
         'legal_search_error_fields': legal_search_error_fields,
+        'regulations_api_error': regulations_api_error,
+        'filter_tags': filter_tags,
         'social_image_identifier': 'legal',
+        'pagination': pagination,
     }, status=400 if legal_search_error else 200)
 
 

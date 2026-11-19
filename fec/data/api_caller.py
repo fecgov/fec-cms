@@ -371,6 +371,25 @@ def load_legal_rulemaking(rm_no):
     return response["rulemakings"][0] if response["rulemakings"] else {}
 
 
+def build_rulemaking_citation_query(section):
+    """Match the Title 11 citation styles used in rulemaking documents."""
+    return (
+        f'("11 CFR {section}" | '
+        f'"11 C.F.R. {section}" | '
+        f'"11 C.F.R. \u00a7 {section}")'
+    )
+
+
+def load_legal_rulemakings_for_regulation(section, limit=20):
+    """Find rulemakings whose indexed documents cite a Title 11 section."""
+    return _call_legal_api(
+        "/rulemaking/search/",
+        q=build_rulemaking_citation_query(section),
+        hits_returned=limit,
+        from_hit=0,
+    )
+
+
 def collate_dispositions(dispositions):
     """Collate dispositions - group them by disposition, penalty"""
     collated_dispositions = OrderedDict()

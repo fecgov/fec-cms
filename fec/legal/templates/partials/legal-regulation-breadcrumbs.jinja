@@ -1,0 +1,14 @@
+<nav aria-label="Regulation breadcrumbs">
+  <ol class="breadcrumbs breadcrumbs--regulation" role="list">
+    {% for item in regulation_breadcrumbs %}
+      <li class="breadcrumbs__item{% if loop.last %} breadcrumbs__item--current{% endif %}">
+        {% if not loop.first %}<span class="breadcrumbs__separator" aria-hidden="true">&gt;</span>{% endif %}
+        {% if item.url %}
+          <a class="breadcrumbs__link" href="{{ item.url }}">{{ item.label }}</a>
+        {% else %}
+          <span{% if loop.last %} aria-current="page"{% endif %}>{{ item.label }}</span>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ol>
+</nav>

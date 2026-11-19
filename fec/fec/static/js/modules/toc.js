@@ -21,8 +21,8 @@ export default function TOC(selector) {
   this.$menu.on('click', 'a', this.scrollTo.bind(this));
   $(window).on('resize', this.updateWatchers.bind(this));
 
-  // Handle inbound URL with hash
-  if (window.location.hash) {
+  // Only handle anchors owned by this menu; other widgets manage their own scrolling.
+  if (window.location.hash && this.sections.toArray().includes(window.location.hash)) {
     var self = this;
     /**
     Call updateWatchers and scrollTo in 0-second setTimeout to

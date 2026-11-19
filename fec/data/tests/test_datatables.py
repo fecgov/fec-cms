@@ -125,6 +125,17 @@ class TestRulemakingSearchQueryLimit:
     def setup_method(self):
         self.factory = RequestFactory()
 
+    def test_rulemaking_search_accepts_q(self):
+        request = self.factory.get(
+            '/legal/search/rulemakings/',
+            {'q': 'MUR 8310'}
+        )
+
+        response = views_datatables.rulemaking(request)
+
+        assert response.status_code == 200
+        assert b'value="MUR 8310"' in response.content
+
     @mock.patch.object(views_datatables.settings, 'LEGAL_SEARCH_MAX_QUERY_LENGTH', 10)
     def test_rulemaking_search_rejects_q_over_character_limit(self):
         request = self.factory.get(

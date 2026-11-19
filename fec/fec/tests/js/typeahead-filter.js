@@ -43,6 +43,22 @@ describe('FilterTypeahead', function() {
     expect(typeahead.length).to.equal(1);
   });
 
+  it('replaces selections only for single-select filters', function() {
+    for (const singleSelect of [false, true]) {
+      this.FilterTypeahead.singleSelect = singleSelect;
+      this.FilterTypeahead.$selected.empty();
+      this.FilterTypeahead.handleSelected({}, { id: '1', name: 'First' });
+      this.FilterTypeahead.handleSelected({}, { id: '2', name: 'Second' });
+      expect(this.FilterTypeahead.$selected.find('input').length).to.equal(singleSelect ? 1 : 2);
+    }
+  });
+
+  it('escapes citation suggestion text from the API', function() {
+    const suggestion = datasets.aoRegulatoryCitations.templates.suggestion({ name: '<img src=x onerror=alert(1)>' });
+    expect(suggestion).to.contain('&lt;img');
+    expect(suggestion).not.to.contain('<img');
+  });
+
   it('should set firstItem', function() {
     this.FilterTypeahead.setFirstItem({}, { id: 'smith' });
     expect(this.FilterTypeahead.firstItem.id).to.equal('smith');

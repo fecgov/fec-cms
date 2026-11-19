@@ -37,8 +37,13 @@ TypeaheadFilter.constructor = TypeaheadFilter;
  */
 TypeaheadFilter.prototype.fromQuery = function(query) {
   const values = query[this.name] ? ensureArray(query[this.name]) : [];
-  this.typeaheadFilter.getFilters(values);
-  this.typeaheadFilter.$elm.find('input[type="checkbox"]').val(values);
+  // A manually constructed URL may contain the filter more than once. Match
+  // the UI by keeping only its final value when this control is single-select.
+  const selectedValues = this.typeaheadFilter.singleSelect
+    ? values.slice(-1)
+    : values;
+  this.typeaheadFilter.getFilters(selectedValues);
+  this.typeaheadFilter.$elm.find('input[type="checkbox"]').val(selectedValues);
   return this;
 };
 

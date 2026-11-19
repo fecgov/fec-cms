@@ -6,7 +6,10 @@
   <div class="simple-table__row-group">
   {% for section in regulations %}
     <div class="simple-table__row legal-search-result">
-      <div class="simple-table__cell"><a title="§ {{ section.no }}" href="{{ section.url }}">§ {{ section.no }}</a></div>
+      {% set citation_label = section.citation|default('§ ' ~ section.no) %}
+      <div class="simple-table__cell">
+        <a title="{{ citation_label }}" href="{{ section.url }}">{{ citation_label }}</a>
+      </div>
       <div class="simple-table__cell">
         <div class="legal-search-result__name">{{ section.name|safe }}</div>
         <div class="t-serif legal-search-result__hit">

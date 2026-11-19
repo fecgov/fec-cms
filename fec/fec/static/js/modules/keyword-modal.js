@@ -57,6 +57,15 @@ KeywordModal.prototype.handleSubmit = function(e) {
   const searchQuery = this.generateQueryString();
   if (!this.validateQueryLength(searchQuery)) return;
 
+  if (this.$form.is('[data-regulation-keyword-form]')) {
+    const form = document.getElementById('regulation-keyword-search');
+    form.elements.search.value = searchQuery;
+    this.dialog.hide();
+    this.fireEvent('Keyword modal query: ' + searchQuery);
+    form.requestSubmit();
+    return;
+  }
+
   let query = URI(window.location.search)
     .removeSearch('search')
     .addSearch('search', searchQuery);

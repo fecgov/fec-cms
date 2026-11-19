@@ -1,0 +1,11 @@
+{% if error_message %}
+  <div>{{ error_message }}</div>
+{% elif murs %}
+  {% for mur in murs %}
+    <div><a href="/data/legal/matter-under-review/{{ mur.no }}/">MUR #{{ mur.no }}</a></div>
+    {% if mur.name %}<div><i>{{ mur.name }}</i></div>{% elif mur.mur_name %}<div><i>{{ mur.mur_name }}</i></div>{% endif %}
+    {% if not loop.last %}<br>{% endif %}
+  {% endfor %}
+{% else %}
+  <div>No MURs found for this regulatory citation.</div>
+{% endif %}

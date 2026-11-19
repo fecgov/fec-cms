@@ -1,0 +1,5 @@
+<div>Earlier citation{% if previous_citations|length > 1 %}s{% endif %}:</div>
+{{ regulation_ui.previous_links(previous_citations) }}
+{% if previous_citations|selectattr('ej_unavailable')|list %}
+  <div>No E&amp;J is available for {% if previous_citations|length > 1 %}these earlier citations{% else %}this earlier citation{% endif %}.</div>
+{% endif %}

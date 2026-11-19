@@ -1,6 +1,6 @@
 {% extends "layouts/legal-doc-search-results.jinja" %}
 {% import 'macros/legal.jinja' as legal %}
-{% set document_type_display_name = 'Regulations' %}
+{% set document_type_display_name = 'Title 11 regulations' %}
 
 {% block header %}
 <header class="page-header slab slab--primary">
@@ -8,13 +8,83 @@
 </header>
 {% endblock %}
 
-{% block filters %}
-    <div class="filters__inner">
-      {{ legal.keyword_search(result_type, query, error_message=legal_search_error if legal_search_error and 'search' in legal_search_error_fields|default([]) else None) }}
+
+{% block filter_form %}
+  {% set selected_method = regulation_search_method|default('ao_number' if ao_number_input|default(ao_number) else 'mur_number' if mur_number_input|default(mur_number) else 'search', true) %}
+  <div class="filters__inner regulation-search-methods" data-regulation-search-methods>
+    <fieldset class="toggles regulation-search-methods__selector" aria-describedby="regulation-search-hint" data-search-method-selector hidden>
+      <legend class="label">Search by</legend>
+      <div class="regulation-search-methods__choices">
+        {% for method, label, form_id in [('search', 'Keyword', 'regulation-keyword-search'), ('ao_number', 'AO', 'regulation-ao-search'), ('mur_number', 'MUR', 'regulation-mur-search')] %}
+          <label>
+            <input type="radio" name="regulation-search-method" value="{{ method }}" aria-controls="{{ form_id }}"{% if selected_method == method %} checked{% endif %}>
+            <span class="button--alt">{{ label }}</span>
+          </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+    <div class="data-type__message regulation-search-methods__description">
+      <p id="regulation-search-hint">Use one search method at a time.</p>
     </div>
+    <form id="regulation-keyword-search" data-search-method="search" action="/data/legal/search/regulations/">
+      <input type="hidden" name="search_type" value="regulations">
+      {{ legal.keyword_search(result_type, query, name='Regulation keyword', error_message=legal_search_error if legal_search_error and 'search' in legal_search_error_fields|default([]) else None) }}
+    </form>
+    <form id="regulation-ao-search" data-search-method="ao_number" action="/data/legal/search/regulations/">
+      <input type="hidden" name="search_type" value="regulations">
+      {{ legal.citation_number_search(
+        'ao-number-input',
+        'ao_number',
+        'AO number/AO cited',
+        ao_number_input|default(ao_number|default('')),
+        'Find regulations cited by this advisory opinion',
+        error_message=legal_search_error if legal_search_error and 'ao_number' in legal_search_error_fields|default([]) else None,
+        hint='Example: 2003-38'
+      ) }}
+    </form>
+    <form id="regulation-mur-search" data-search-method="mur_number" action="/data/legal/search/regulations/">
+      <input type="hidden" name="search_type" value="regulations">
+      {{ legal.citation_number_search(
+        'mur-number-input',
+        'mur_number',
+        'MUR number/MUR cited',
+        mur_number_input|default(mur_number|default('')),
+        'Find regulations cited by this MUR',
+        error_message=legal_search_error if legal_search_error and 'mur_number' in legal_search_error_fields|default([]) else None,
+        inputmode='numeric',
+        hint='Example: 4321'
+      ) }}
+    </form>
+  </div>
+{% endblock %}
+
+{% block message %}
+{% if regulations_api_error %}
+  <div class="message message--error" role="alert">
+    <p>{{ regulations_api_error }}</p>
+  </div>
+{% endif %}
+{% include 'partials/legal-filter-tags.jinja' %}
+{% if citation_lookup and citation_lookup.document %}
+  <div class="message message--info">
+    <p>Showing regulations cited by <a href="{{ citation_lookup.url }}">{{ citation_lookup.label }}</a>{% if citation_lookup.document.name %}, {{ citation_lookup.document.name }}{% endif %}.</p>
+  </div>
+{% endif %}
 {% endblock %}
 
 {% block results %}
+{% if is_browse %}
+{% with regulation_parts = results.regulation_parts %}
+<div class="data-container__datatable">
+  {% if results.regulation_chapter %}
+  <div class="legal-regulation-browser__heading">
+    <h2>Chapter I &mdash; {{ results.regulation_chapter.label_description }}</h2>
+  </div>
+  {% endif %}
+  {% include 'partials/legal-regulation-parts.jinja' %}
+</div>
+{% endwith %}
+{% else %}
 {% with regulations = results.regulations %}
 <div class="data-container__datatable">
   {% include 'partials/legal-search-results-regulation.jinja' %}
@@ -24,4 +94,5 @@
 {% with results=results %}
 {% include 'partials/legal-regulations-pagination.jinja' %}
 {% endwith %}
+{% endif %}
 {% endblock %}

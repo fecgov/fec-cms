@@ -1,0 +1,705 @@
+"""Title 11 navigation, section views, and deferred legal citations."""
+
+import html
+import logging
+import re
+from concurrent.futures import ThreadPoolExecutor
+from urllib.parse import urlencode, urlsplit, urlunsplit
+
+import requests
+from django.http import Http404
+from django.shortcuts import render
+from django.urls import reverse
+
+from data import api_caller, ecfr_caller
+from legal.regulation_history import build_regulation_history_context
+from legal.regulation_text import format_ecfr_html_section, format_ecfr_timeline
+
+logger = logging.getLogger(__name__)
+ECFR_REGULATION_SECTION_PATTERN = re.compile(r'^\d+\.\d+[A-Za-z0-9-]*$')
+REGULATION_CITATION_PATTERN = re.compile(
+    r'(?P<section>\d+\.\d+[A-Za-z0-9-]*)'
+    r'(?P<subsection>(?:\([A-Za-z0-9]+\))*)'
+    r'(?P<range>\s*-\s*(?:\([A-Za-z0-9]+\))+)?'
+)
+REGULATION_SEARCH_RETURN_NAME = 'regulations-search'
+REGULATION_SEARCH_PARAMS = ('search', 'ao_number', 'mur_number', 'page')
+
+
+def transform_ecfr_query_string(query_string):
+    """Remove the legal search's space-plus operator from eCFR queries."""
+    return re.sub(r' \+', '', query_string)
+
+
+def format_ecfr_regulation_results(ecfr_results, include_part_highlight=False):
+    regulations = []
+    for obj in ecfr_results.get('results', []):
+        hierarchy = obj.get('hierarchy', {})
+        headings = obj.get('headings', {})
+        section = hierarchy.get('section')
+
+        highlights = [obj.get('full_text_excerpt')]
+        if include_part_highlight:
+            highlights.insert(0, headings.get('part'))
+
+        regulations.append({
+            'doc_id': None,
+            'document_highlights': {},
+            'highlights': highlights,
+            'name': headings.get('section'),
+            'no': section,
+            'type': None,
+            'url': f"/legal/regulations/{section}/" if section else '/legal/search/regulations/',
+        })
+
+    return regulations
+
+
+def ecfr_section_url(section, subsection=''):
+    url = f"/legal/regulations/{section}/"
+    if subsection:
+        url = f'{url}#p-{section}{subsection}'
+    return url
+
+
+def regulation_return_context(request, from_search=False):
+    """Return the allowlisted context needed to get back to regulation search."""
+    if not from_search and request.GET.get('return_to') != REGULATION_SEARCH_RETURN_NAME:
+        return {}
+
+    context = {'return_to': REGULATION_SEARCH_RETURN_NAME}
+    if request.GET.get('ao_number'):
+        names = ('ao_number', 'page')
+    elif request.GET.get('mur_number'):
+        names = ('mur_number', 'page')
+    else:
+        names = REGULATION_SEARCH_PARAMS
+    for name in names:
+        value = request.GET.get(name)
+        if value:
+            context[name] = value
+    return context
+
+
+def append_return_context(url, context):
+    if not url or not context:
+        return url
+    parsed = urlsplit(url)
+    query = '&'.join(filter(None, (parsed.query, urlencode(context))))
+    return urlunsplit((parsed.scheme, parsed.netloc, parsed.path, query, parsed.fragment))
+
+
+def regulation_return_url(request):
+    url = reverse('legal-search-regulations')
+    context = regulation_return_context(request)
+    if not context:
+        return url
+
+    search_params = {
+        name: context[name]
+        for name in REGULATION_SEARCH_PARAMS
+        if name in context
+    }
+    if search_params:
+        url = f'{url}?{urlencode(search_params)}'
+    return f'{url}#results-regulations'
+
+
+def regulation_search_page_url(request, page):
+    params = {
+        name: request.GET.get(name)
+        for name in REGULATION_SEARCH_PARAMS
+        if name != 'page' and request.GET.get(name)
+    }
+    params['page'] = page
+    return '/legal/search/regulations/?{}#results-regulations'.format(
+        urlencode(params)
+    )
+
+
+def normalize_mur_number(value):
+    """Accept a bare number or a label such as ``MUR #8253``."""
+    match = re.fullmatch(r'\s*(?:MUR\s*#?\s*)?(\d+)\s*', value or '', re.IGNORECASE)
+    return match.group(1) if match else ''
+
+
+def normalize_ao_number(value):
+    """Accept a bare AO number or a label such as ``AO 2024-01``."""
+    match = re.fullmatch(r'\s*(?:AO\s*#?\s*)?(\d{4}-\d+)\s*', value or '', re.IGNORECASE)
+    return match.group(1) if match else ''
+
+
+def ecfr_section_descriptions(structure):
+    """Return current Title 11 section headings keyed by section number."""
+    descriptions = {}
+
+    def collect(node):
+        if node.get('type') == 'section':
+            description = ecfr_description(node)
+            for section in ecfr_section_identifiers(node.get('identifier') or ''):
+                descriptions[section] = description
+        for child in node.get('children', []):
+            collect(child)
+
+    collect(structure or {})
+    return descriptions
+
+
+def _parse_regulation_citation(value):
+    match = REGULATION_CITATION_PATTERN.search(str(value or ''))
+    if not match:
+        return None
+    section = match.group('section')
+    subsection = match.group('subsection') or ''
+    citation = ''.join(match.group(0).split())
+    return section, subsection, citation
+
+
+def _add_citation_result(results, seen, section, subsection, citation, descriptions):
+    if citation in seen:
+        return
+    seen.add(citation)
+    label = f'11 CFR §{citation}'
+    results.append({
+        'citation': label,
+        'doc_id': None,
+        'document_highlights': {},
+        'highlights': [],
+        'name': html.escape(descriptions.get(section) or label),
+        'no': section,
+        'type': None,
+        'url': ecfr_section_url(section, subsection),
+    })
+
+
+def format_ao_regulation_results(advisory_opinions, descriptions=None):
+    """Return unique Title 11 citations found in advisory opinions."""
+    descriptions = descriptions or {}
+    results = []
+    seen = set()
+    for advisory_opinion in advisory_opinions:
+        for citation in advisory_opinion.get('regulatory_citations') or []:
+            if str(citation.get('title') or '11') != '11':
+                continue
+            part = citation.get('part')
+            cited_section = citation.get('section')
+            if part is None or cited_section is None:
+                continue
+            citation_text = f'{part}.{cited_section}'
+            parsed = _parse_regulation_citation(citation_text)
+            if not parsed:
+                continue
+            section, subsection, citation = parsed
+            _add_citation_result(
+                results, seen, section, subsection, citation, descriptions,
+            )
+    return results
+
+
+def format_mur_regulation_results(murs, descriptions=None):
+    """Return unique Title 11 citations found in one or more MUR records."""
+    descriptions = descriptions or {}
+    citations = []
+    for mur in murs:
+        # Current and archived MURs store citations in different locations.
+        for disposition in mur.get('dispositions') or []:
+            citations.extend(disposition.get('citations') or [])
+        archived = mur.get('citations') or {}
+        citations.extend(archived.get('regulations') or [])
+
+    results = []
+    seen = set()
+    for citation in citations:
+        if citation.get('type') not in (None, 'regulation'):
+            continue
+        if str(citation.get('title') or '11') != '11':
+            continue
+        parsed = _parse_regulation_citation(citation.get('text'))
+        if not parsed:
+            continue
+        section, subsection, citation_text = parsed
+        _add_citation_result(
+            results, seen, section, subsection, citation_text, descriptions,
+        )
+    return results
+
+
+def ecfr_hierarchy_url(node_type, identifier, part=None):
+    if node_type == 'subchapter':
+        return f"/legal/regulations/subchapter/{identifier}/"
+    if node_type == 'part':
+        return f"/legal/regulations/part/{identifier}/"
+    if node_type == 'subpart' and part:
+        return f"/legal/regulations/part/{part}/subpart/{identifier}/"
+    return '/legal/search/regulations/'
+
+
+def ecfr_description(node):
+    description = node.get('label_description') or ''
+    description = re.sub(r'\s*\(52\s+U\.S\.C\..*\)\s*$', '', description)
+    return re.sub(r'\s*\[Reserved\]\s*$', '', description, flags=re.IGNORECASE).strip()
+
+
+def find_ecfr_node(node, node_type, identifier=None):
+    if node.get('type') == node_type and (identifier is None or node.get('identifier') == identifier):
+        return node
+
+    for child in node.get('children', []):
+        result = find_ecfr_node(child, node_type, identifier)
+        if result:
+            return result
+
+    return None
+
+
+def find_reserved_ecfr_section(structure, section):
+    """Return the eCFR reserved label containing a section, if present."""
+    chapter = find_ecfr_node(structure, 'chapter', 'I')
+    if not chapter:
+        return None
+
+    def walk(node):
+        if node.get('type') == 'section' and node.get('reserved'):
+            identifier = node.get('identifier', '')
+            if section in ecfr_section_identifiers(identifier):
+                return node.get('label_description') or identifier
+
+        for child in node.get('children', []):
+            result = walk(child)
+            if result:
+                return result
+        return None
+
+    return walk(chapter)
+
+
+def format_ecfr_regulation_parts(structure):
+    """Return the browsable Title 11 hierarchy for the regulations table."""
+    # Title 11 contains one FEC chapter; ignore other agencies if added later.
+    chapter = find_ecfr_node(structure, 'chapter', 'I')
+    if not chapter:
+        return []
+
+    rows = []
+
+    def hierarchy_sort_key(node):
+        value = node.get('descendant_range') or node.get('identifier') or ''
+        match = re.search(r'(\d+)(?:\.(\d+))?', value)
+        if not match:
+            for child in node.get('children', []):
+                child_key = hierarchy_sort_key(child)
+                if child_key[0] != float('inf'):
+                    return child_key
+        if not match:
+            return (float('inf'), float('inf'))
+        return (int(match.group(1)), int(match.group(2) or -1))
+
+    def collect(node, part=None, level=0):
+        node_type = node.get('type')
+        identifier = node.get('identifier') or ''
+        if node_type == 'part':
+            part = identifier
+
+        if node_type in ('subchapter', 'part', 'subpart'):
+            rows.append({
+                'type': node_type,
+                'part': part,
+                'identifier': identifier,
+                'citation': f"{node_type.title()} {identifier}",
+                'description': ecfr_description(node),
+                'section_range': node.get('descendant_range'),
+                'reserved': node.get('reserved', False),
+                'url': None if node.get('reserved') else ecfr_hierarchy_url(node_type, identifier, part=part),
+                'level': level,
+            })
+
+        for child in sorted(node.get('children', []), key=hierarchy_sort_key):
+            collect(child, part=part, level=level + 1)
+
+    collect(chapter, level=-1)
+    return rows
+
+
+def find_ecfr_hierarchy_node(structure, node_type, identifier, part=None):
+    """Find a part, subpart, or subchapter in the Title 11 structure."""
+    chapter = find_ecfr_node(structure, 'chapter', 'I')
+    if not chapter:
+        return None
+
+    root = find_ecfr_node(chapter, 'part', part) if part else chapter
+    return find_ecfr_node(root, node_type, identifier) if root else None
+
+
+def format_ecfr_breadcrumbs(structure, node_type, identifier, return_context=None, part=None):
+    """Build the current page's trail from the FEC chapter's actual ancestry."""
+    browse_url = reverse('legal-search-regulations')
+    breadcrumbs = [{'label': 'Title 11', 'url': None}]
+    chapter = find_ecfr_node(structure, 'chapter', 'I')
+
+    def find_path(node, current_part=None):
+        if node.get('type') == 'part':
+            current_part = node.get('identifier')
+        identifiers = (
+            ecfr_section_identifiers(node.get('identifier', ''))
+            if node_type == 'section' else [node.get('identifier')]
+        )
+        if (node.get('type') == node_type and identifier in identifiers
+                and (not part or part == current_part)):
+            return [node]
+        for child in node.get('children', []):
+            path = find_path(child, current_part)
+            if path:
+                return [node] + path
+        return []
+
+    path = find_path(chapter) if chapter else []
+    current_part = None
+    for node in path:
+        ancestor_type = node.get('type')
+        ancestor_id = node.get('identifier')
+        if ancestor_type == 'section':
+            continue
+        if ancestor_type == 'part':
+            current_part = ancestor_id
+        if ancestor_type not in ('chapter', 'subchapter', 'part', 'subpart'):
+            continue
+        label = f'{ancestor_type.title()} {ancestor_id}'
+        # Keep the full Part heading and the current page's title.
+        if (ancestor_type == 'part' or node is path[-1]) and node.get('label_description'):
+            label += f" — {node['label_description']}"
+        url = (
+            browse_url if ancestor_type == 'chapter'
+            else append_return_context(
+                ecfr_hierarchy_url(ancestor_type, ancestor_id, part=current_part),
+                return_context,
+            )
+        )
+        breadcrumbs.append({'label': label, 'url': url})
+
+    if path and node_type != 'section':
+        breadcrumbs[-1]['url'] = None
+    else:
+        label = f'{node_type.title()} {identifier}'
+        breadcrumbs.append({'label': label, 'url': None})
+    return breadcrumbs
+
+
+def format_ecfr_hierarchy_contents(node):
+    """Return nested headings and sections for a part or subchapter page."""
+    contents = []
+
+    def collect(current, part=None):
+        for child in current.get('children', []):
+            child_type = child.get('type')
+            if child_type in ('part', 'subpart'):
+                child_part = child.get('identifier') if child_type == 'part' else part
+                contents.append({
+                    'type': child_type,
+                    'identifier': child.get('identifier'),
+                    'description': ecfr_description(child),
+                    'reserved': child.get('reserved', False),
+                    'url': None if child.get('reserved') else ecfr_hierarchy_url(
+                        child_type,
+                        child.get('identifier'),
+                        part=child_part,
+                    ),
+                })
+                collect(child, part=child_part)
+            elif child_type == 'section':
+                identifier = child.get('identifier') or ''
+                for section in ecfr_section_identifiers(identifier):
+                    contents.append({
+                        'type': 'section',
+                        'identifier': section,
+                        'description': ecfr_description(child),
+                        'reserved': child.get('reserved', False),
+                        'url': ecfr_section_url(section),
+                    })
+            else:
+                collect(child, part=part)
+
+    collect(node, part=node.get('identifier') if node.get('type') == 'part' else None)
+    return contents
+
+
+def ecfr_section_identifiers(identifier):
+    """Expand an eCFR reserved range into individual section citations."""
+    match = re.fullmatch(r'(\d+\.)(\d+)-(\d+\.)(\d+)', identifier)
+    if not match or match.group(1) != match.group(3):
+        return [identifier]
+    return [
+        f"{match.group(1)}{number}"
+        for number in range(int(match.group(2)), int(match.group(4)) + 1)
+    ]
+
+
+def format_ecfr_section_nav(structure, current_section):
+    # The structure tree is already in CFR order, so preserve traversal order.
+    chapter = find_ecfr_node(structure, 'chapter', 'I')
+    if not chapter:
+        return {}
+
+    sections = []
+
+    def collect_sections(node, part=None):
+        if node.get('type') == 'part':
+            part = {
+                'no': node.get('identifier'),
+                'description': ecfr_description(node),
+            }
+        if node.get('type') == 'section':
+            for section_number in ecfr_section_identifiers(node.get('identifier', '')):
+                sections.append({
+                    'no': section_number,
+                    'description': (
+                        '[Reserved]'
+                        if node.get('reserved')
+                        else node.get('label_description')
+                    ),
+                    'url': ecfr_section_url(section_number),
+                    'part': part,
+                })
+            return
+
+        for child in node.get('children', []):
+            collect_sections(child, part)
+
+    collect_sections(chapter)
+
+    section_numbers = [section.get('no') for section in sections]
+    try:
+        current_index = section_numbers.index(current_section)
+    except ValueError:
+        return {}
+
+    return {
+        'previous': sections[current_index - 1] if current_index > 0 else None,
+        'next': sections[current_index + 1] if current_index < len(sections) - 1 else None,
+        'part': sections[current_index].get('part'),
+    }
+
+
+def format_fec_regulation_history(rulemakings_response, citation_query=None):
+    """List each cited rulemaking once, newest rulemaking number first."""
+    rulemakings = {}
+    for item in rulemakings_response.get('rulemakings', []):
+        number = item.get('rm_no') or ''
+        if not re.fullmatch(r'\d{4}-\d+', number):
+            continue
+        url = f'/legal/rulemakings/{number}/'
+        if citation_query:
+            url = '/legal/search/rulemakings/?' + urlencode({'q': citation_query, 'rm_no': number})
+        rulemakings.setdefault(number, {
+            'rm_no': number, 'rm_name': item.get('rm_name'), 'url': url,
+        })
+    numbers = sorted(rulemakings, key=lambda number: tuple(map(int, number.split('-'))), reverse=True)
+    return {'explanations': [rulemakings[number] for number in numbers]}
+
+
+def regulation_hierarchy_page(request, hierarchy_type, identifier, part=None):
+    structure = ecfr_caller.fetch_ecfr_structure()
+    error = structure.get('error')
+    hierarchy = None
+    if not error:
+        node = find_ecfr_hierarchy_node(structure, hierarchy_type, identifier, part=part)
+        if not node:
+            raise Http404
+        hierarchy = {
+            'type': hierarchy_type,
+            'identifier': identifier,
+            'description': ecfr_description(node),
+            'reserved': node.get('reserved', False),
+            'contents': format_ecfr_hierarchy_contents(node),
+        }
+        for item in hierarchy['contents']:
+            item['url'] = append_return_context(
+                item['url'],
+                regulation_return_context(request),
+            )
+    return render(request, 'legal-regulation-hierarchy.jinja', {
+        'hierarchy': hierarchy,
+        'hierarchy_error': structure.get('error_message') if error else None,
+        'results': {'total_all': int(bool(hierarchy))},
+        'result_type': 'regulations',
+        'query': '',
+        'ao_number': request.GET.get('ao_number', ''),
+        'mur_number': request.GET.get('mur_number', ''),
+        'is_browse': False,
+        'back_url': regulation_return_url(request),
+        'regulation_breadcrumbs': format_ecfr_breadcrumbs(
+            structure, hierarchy_type, identifier, regulation_return_context(request), part=part,
+        ),
+    }, status=502 if error else 200)
+
+
+def regulation_related_content(request, section, related_type):
+    """Render one FEC API-backed section after the regulation page loads."""
+    if not ECFR_REGULATION_SECTION_PATTERN.match(section):
+        raise Http404
+
+    context = {'section': section}
+    try:
+        if related_type == 'rulemakings':
+            response = api_caller.load_legal_rulemakings_for_regulation(section)
+            context['fec_history'] = format_fec_regulation_history(
+                response or {},
+                api_caller.build_rulemaking_citation_query(section),
+            )
+        elif related_type == 'advisory-opinions':
+            response = api_caller.load_legal_search_results(
+                '',
+                query_type='advisory_opinions',
+                offset=0,
+                sort='-issue_date',
+                doc_type='advisory_opinions',
+                ao_doc_category_id='F',
+                ao_citation_require_all='false',
+                ao_regulatory_citation=f'11 CFR §{section}',
+            )
+            context['advisory_opinions'] = response.get(
+                'advisory_opinions', []
+            )
+        elif related_type == 'murs':
+            response = api_caller.load_legal_search_results(
+                '',
+                query_type='murs',
+                offset=0,
+                sort='-issue_date',
+                doc_type='murs',
+                case_regulatory_citation=f'11 CFR §{section}',
+            )
+            context['murs'] = response.get('murs', [])
+        else:
+            raise Http404
+    except requests.RequestException:
+        logger.exception(
+            "Unable to retrieve %s for regulation %s",
+            related_type,
+            section,
+        )
+        context['error_message'] = (
+            'This information is temporarily unavailable. Please try again.'
+        )
+
+    return render(
+        request,
+        f'partials/legal-regulation-{related_type}.jinja',
+        context,
+    )
+
+
+def fetch_ecfr_section_context(section, issue_date=None):
+    """Fetch independent navigation and timeline data concurrently."""
+    request_date = issue_date or 'current'
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        structure_future = executor.submit(
+            ecfr_caller.fetch_ecfr_structure,
+            date=request_date,
+        )
+        versions_future = executor.submit(
+            ecfr_caller.fetch_ecfr_versions,
+            section,
+            date=issue_date,
+        )
+        ancestry_future = executor.submit(
+            ecfr_caller.fetch_ecfr_ancestry,
+            section,
+            date=issue_date,
+        )
+        return (
+            structure_future.result(),
+            versions_future.result(),
+            ancestry_future.result(),
+        )
+
+
+def regulation_page(request, section):
+    if not ECFR_REGULATION_SECTION_PATTERN.match(section):
+        raise Http404
+
+    section_response = ecfr_caller.fetch_ecfr_section_html(section)
+    regulation = format_ecfr_html_section(
+        section_response.get('text', ''),
+        section=section,
+    )
+    regulation_history = build_regulation_history_context(section)
+    reserved_label = None
+    section_nav = {}
+    structure_response = {}
+    section_not_found = section_response.get('status_code') == 404
+    if not regulation and (not section_response.get('error') or section_not_found):
+        structure_response = ecfr_caller.fetch_ecfr_structure()
+        reserved_label = find_reserved_ecfr_section(structure_response, section)
+        if reserved_label:
+            section_nav = format_ecfr_section_nav(structure_response, section)
+    # A confirmed 404 may still have useful historical records. A timeout or
+    # other eCFR failure cannot establish that the current regulation is gone.
+    historical_only = not regulation and bool(
+        reserved_label
+        or (section_not_found and regulation_history['events'])
+    )
+    regulations_api_error = (
+        section_response.get('error_message')
+        if section_response.get('error') and not historical_only
+        else None
+    )
+    timeline = []
+    timeline_api_error = None
+    if regulation:
+        (
+            structure_response,
+            versions_response,
+            ancestry_response,
+        ) = fetch_ecfr_section_context(
+            section,
+            issue_date=regulation.get('issue_date'),
+        )
+
+        section_nav = format_ecfr_section_nav(structure_response, section)
+        timeline = format_ecfr_timeline(versions_response, ancestry_response, section)
+        if versions_response.get('error') or ancestry_response.get('error'):
+            timeline_api_error = ecfr_caller.ECFR_VERSIONS_ERROR_MESSAGE
+    if not regulation and not regulations_api_error and not historical_only:
+        raise Http404
+
+    return_context = regulation_return_context(request)
+    back_url = regulation_return_url(request)
+    if section_nav:
+        for direction in ('previous', 'next'):
+            if section_nav.get(direction):
+                section_nav[direction]['url'] = append_return_context(
+                    section_nav[direction]['url'],
+                    return_context,
+                )
+
+    return render(request, 'legal-regulation.jinja', {
+        'results': {
+            'regulations': [regulation] if regulation else [],
+            'total_all': 1 if regulation or historical_only else 0,
+        },
+        'current_page': 1,
+        'total_pages': 1,
+        'total_count': 1 if regulation else 0,
+        'limit': 20,
+        'result_type': 'regulations',
+        'query': '',
+        'ao_number': request.GET.get('ao_number', ''),
+        'mur_number': request.GET.get('mur_number', ''),
+        'is_browse': False,
+        'legal_search_error': None,
+        'legal_search_error_fields': [],
+        'section': section,
+        'regulation': regulation,
+        'historical_only': historical_only,
+        'reserved_label': reserved_label,
+        'regulations_api_error': regulations_api_error,
+        'section_nav': section_nav,
+        'regulation_breadcrumbs': format_ecfr_breadcrumbs(
+            structure_response, 'section', section, return_context,
+        ),
+        'back_url': back_url,
+        'timeline': timeline,
+        'timeline_api_error': timeline_api_error,
+        'historical_regulation_event_groups': regulation_history['event_groups'],
+        'social_image_identifier': 'legal',
+    }, status=502 if regulations_api_error else 200)

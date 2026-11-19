@@ -29,6 +29,82 @@
 // </div>
 //
 
+.regulation-search-methods {
+  [hidden] {
+    display: none;
+  }
+
+  &__selector {
+    margin-bottom: u(1rem);
+  }
+
+  &__choices {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    label {
+      cursor: pointer;
+      float: none;
+      margin: 0;
+      min-width: 0;
+      position: relative;
+    }
+
+    input[type='radio'] {
+      // Keep keyboard focus in the visible control instead of off screen.
+      clip-path: inset(50%);
+      height: 1px;
+      left: 0 !important;
+      overflow: hidden;
+      width: 1px;
+    }
+
+    .button--alt {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      line-height: 1.3;
+      margin: 0 -2px 0 0;
+      min-height: u(3.4rem);
+      padding: u(0.8rem 0.6rem);
+      text-align: center;
+    }
+
+    label:first-child .button--alt {
+      border-radius: 4px 0 0 4px;
+    }
+
+    label:last-child .button--alt {
+      border-radius: 0 4px 4px 0;
+      margin-right: 0;
+    }
+
+    input:checked + .button--alt {
+      margin-right: -2px;
+      position: relative;
+      z-index: 1;
+    }
+
+    label:last-child input:checked + .button--alt {
+      margin-right: 0;
+    }
+
+    input:focus-visible + .button--alt {
+      outline: 2px solid $primary;
+      outline-offset: 2px;
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  &__description {
+    border-bottom: 1px solid $gray-dark;
+    margin-bottom: u(2rem);
+    padding: u(0 0 2rem);
+  }
+}
+
 .legal-search-result__name {
   font-family: $sans-serif;
   font-weight: 600;
@@ -40,6 +116,585 @@
     strong {
       @include t-highlight;
     }
+  }
+}
+
+.legal-regulation-browser__heading,
+.legal-regulation__section-heading {
+  padding: u(2rem 1.5rem 1rem);
+
+  h2 {
+    margin: 0;
+  }
+
+  @include media($med) {
+    display: block;
+  }
+}
+
+@include media($med) {
+  #results-regulations .legal-regulation-browser__table {
+    display: grid;
+    grid-template-columns: 10% minmax(0, 1fr) 15% 10%;
+
+    // Let the existing responsive table be in one shared grid.
+    > .simple-table__header,
+    > .simple-table__row-group {
+      display: contents;
+    }
+
+    .simple-table__header-cell,
+    .simple-table__cell {
+      display: block;
+    }
+
+    .simple-table__header-cell {
+      border-bottom: 1px solid $primary;
+    }
+
+    .simple-table__row {
+      display: contents;
+    }
+
+    .simple-table__row .simple-table__cell {
+      border-bottom: 1px solid $neutral;
+    }
+
+    .legal-regulation-browser__heading {
+      grid-column: 1 / -1;
+      width: 100%;
+    }
+  }
+}
+
+#results-regulations
+  .legal-regulation-hierarchy
+  .simple-table__row.legal-search-result {
+  .simple-table__cell {
+    padding: u(3rem);
+  }
+}
+
+#results-regulations .legal-regulation-browser__row {
+  .simple-table__cell {
+    padding: u(3rem);
+    border-left: none;
+  }
+
+  &--level-2 .simple-table__cell:nth-child(-n + 2) {
+    padding-left: u(6rem);
+  }
+
+  &--level-3 .simple-table__cell:nth-child(-n + 2) {
+    padding-left: u(9rem);
+  }
+}
+
+.legal-regulation-browser__action {
+  text-align: center;
+}
+
+.legal-regulation-browser__link {
+  display: inline-block;
+  vertical-align: middle;
+  border: none;
+}
+
+.legal-regulation-browser__back-link {
+  border: none;
+  float: right;
+  margin-top: u(0.2rem);
+}
+
+.breadcrumbs.breadcrumbs--regulation {
+  display: block;
+  float: none;
+  color: $base;
+  font-size: u(1.6rem);
+  font-weight: bold;
+  line-height: 1.5;
+  list-style: none;
+  margin: 0 0 u(2rem);
+  padding: 0;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+
+  .breadcrumbs__item {
+    display: inline;
+    float: none;
+    max-width: none;
+    padding: 0;
+    overflow: visible;
+    white-space: normal;
+  }
+
+  .breadcrumbs__link,
+  .breadcrumbs__item--current {
+    color: $base;
+  }
+
+  .breadcrumbs__separator {
+    // Override the global [aria-hidden='true'] rule for decorative separators.
+    display: inline !important;
+    padding: u(0 0.5rem);
+  }
+}
+
+#main[data-section] #results-regulations {
+  @include media($med) {
+    align-items: stretch;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .legal-regulation__main-column {
+    @include media($med) {
+      grid-column: 1;
+      width: 100%;
+    }
+  }
+
+  .legal-regulation__layout {
+    .main__content {
+      padding: u(3rem 3rem 0 3rem);
+
+      @include media($med) {
+        float: none;
+        margin-right: 0;
+        width: 100%;
+      }
+    }
+  }
+
+  .legal-regulation__sidebar-container {
+    @include media($med) {
+      float: none;
+      grid-column: 2;
+      margin-left: 0;
+      margin-right: 0;
+      width: 100%;
+    }
+
+    .sidebar--neutral {
+      border-top: 0;
+      border-left: 1px solid $gray;
+      height: 100%;
+
+      .sidebar__title {
+        padding: 1.9rem 2rem;
+      }
+    }
+
+    .sidebar__content {
+      background-color: $inverse;
+    }
+
+    .legal-regulation__history-list {
+      margin-bottom: 0;
+    }
+
+    .legal-regulation__history-record {
+      display: grid;
+      gap: u(1rem);
+      grid-template-columns: minmax(0, 1fr);
+      margin-bottom: u(2.5rem);
+      scroll-margin-top: u(8rem);
+
+      @include media($med) {
+        grid-template-columns: minmax(10rem, 30%) minmax(0, 1fr);
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &:target .legal-regulation__history-citation {
+        color: $primary;
+      }
+    }
+
+    .legal-regulation__citation-history-box {
+      background-color: $neutral;
+      border-left: 3px solid $primary;
+      margin-left: 0;
+      margin-top: u(1rem);
+      padding: u(0.5rem 1rem);
+    }
+
+    .legal-regulation__citation-history-title {
+      font-family: $sans-serif;
+      font-size: inherit;
+      line-height: inherit;
+      margin: 0 0 u(0.75rem);
+    }
+
+    .legal-regulation__history-citation {
+      align-self: start;
+      font-weight: bold;
+    }
+
+    .legal-regulation__history-event {
+      margin-bottom: u(1.5rem);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .legal-regulation__history-subject {
+      font-family: $serif;
+      font-style: italic;
+    }
+
+    .legal-regulation__history-subject-list {
+      margin-left: 0;
+    }
+
+    .legal-regulation__history-subject-group {
+      .legal-regulation__history-subject {
+        font-size: inherit;
+        line-height: inherit;
+        margin: 0 0 u(0.5rem);
+      }
+    }
+
+    .legal-regulation__history-documents {
+      margin-top: u(0.5rem);
+    }
+
+    .legal-regulation__history-documents-label {
+      font-weight: bold;
+    }
+
+    .legal-regulation__history-document-list {
+      margin-top: u(0.5rem);
+    }
+
+    .legal-regulation__history-document {
+      margin-bottom: u(1.25rem);
+      min-height: u(1.5rem);
+      position: relative;
+
+      // E&J historical timeline dots
+      &::before {
+        background-color: $primary;
+        border-radius: 50%;
+        content: '';
+        height: u(1rem);
+        left: u(-2rem);
+        position: absolute;
+        top: u(0.35rem);
+        width: u(1rem);
+        z-index: 1;
+      }
+
+      // E&J vertical line behind the dots
+      &:not(:last-child)::after {
+        background-color: $gray;
+        bottom: u(-2.1rem);
+        content: '';
+        left: u(-1.6rem);
+        position: absolute;
+        top: u(0.85rem);
+        width: u(0.2rem);
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &--single {
+        margin-bottom: 0;
+        min-height: 0;
+
+        &::before {
+          content: none;
+        }
+
+        .legal-regulation__history-documents-label {
+          margin-right: u(0.25rem);
+        }
+      }
+    }
+
+    .legal-regulation__citation-context {
+      font-weight: bold;
+      margin-bottom: u(0.25rem);
+    }
+
+    .legal-regulation__history-date {
+      white-space: nowrap;
+    }
+
+    .legal-regulation__previous-citation {
+      background-color: $neutral;
+      border-left: 3px solid $primary;
+      margin-bottom: u(1.5rem);
+      margin-left: 0;
+      padding: u(0.5rem 1rem);
+    }
+  }
+
+  .legal-regulation__back-link {
+    @include media($med) {
+      border: none;
+      float: right;
+      margin-top: u(0.2rem);
+    }
+  }
+
+  // Scoped to the regulation pages selected for the history proof of concept.
+  .legal-history-preview {
+    [hidden] {
+      display: none;
+    }
+
+    &__tools {
+      border-bottom: 1px solid $gray;
+      margin-bottom: u(2rem);
+      padding-bottom: u(1.5rem);
+
+      [data-history-toggle] {
+        margin-top: u(1rem);
+      }
+    }
+
+    &__record {
+      border-bottom: 1px solid $gray;
+      margin-bottom: u(1.5rem);
+      outline-offset: u(0.75rem);
+      padding-bottom: u(1.5rem);
+      scroll-margin-top: u(8rem);
+    }
+
+    &__heading,
+    &__subject h4 {
+      font-family: $sans-serif;
+      font-size: inherit;
+      font-weight: bold;
+      line-height: 1.4;
+      margin: 0 0 u(0.5rem);
+      overflow-wrap: anywhere;
+    }
+
+    &__subject + .legal-history-preview__subject {
+      margin-top: u(1.25rem);
+    }
+
+    &__records,
+    &__documents {
+      margin: 0;
+    }
+
+    &__documents li + li {
+      margin-top: u(0.5rem);
+    }
+
+    &__documents--timeline {
+      // Center document dots and the larger accordion circle on the same axis.
+      padding-left: u(3rem);
+
+      li {
+        min-height: u(1.5rem);
+        position: relative;
+
+        &::before {
+          background-color: $primary;
+          border-radius: 50%;
+          content: '';
+          height: u(1rem);
+          left: u(-2.5rem);
+          position: absolute;
+          top: u(0.35rem);
+          width: u(1rem);
+          z-index: 1;
+        }
+
+        &::after {
+          background-color: $gray;
+          bottom: u(-0.85rem);
+          content: '';
+          left: u(-2.1rem);
+          position: absolute;
+          top: u(0.85rem);
+          width: u(0.2rem);
+        }
+
+        &:not(:last-child) {
+          padding-bottom: u(1.25rem);
+        }
+
+        &:last-child::after {
+          display: none;
+        }
+      }
+
+      li + li {
+        margin-top: 0;
+      }
+
+      &.legal-history-preview__documents--continues > li:last-child::after {
+        // Cross the gap to the center of the accordion circle, even when closed.
+        bottom: u(-2.75rem);
+        display: block;
+      }
+    }
+
+    &__earlier {
+      margin-top: u(0.75rem);
+
+      summary {
+        // Use the same icons and left-aligned treatment as MUR "more matches".
+        color: $base;
+        cursor: pointer;
+        display: block;
+        font-family: $sans-serif;
+        font-size: u(1.4rem);
+        font-weight: bold;
+        letter-spacing: -0.3px;
+        list-style: none;
+        padding: u(1rem 0 1rem 3rem);
+        position: relative;
+
+        &::before {
+          background-color: $inverse;
+          background-size: u(2rem);
+          border-radius: 50%;
+          content: '';
+          height: u(2rem);
+          left: 0;
+          position: absolute;
+          top: u(1rem);
+          width: u(2rem);
+          z-index: 1;
+
+          @include u-icon-bg($plus-circle, $primary);
+        }
+
+        &::-webkit-details-marker {
+          display: none;
+        }
+
+        &:focus-visible {
+          outline: 2px solid $primary;
+          outline-offset: 2px;
+        }
+      }
+
+      &[open] > summary {
+        border-bottom: 1px solid $base;
+        margin-bottom: u(1.5rem);
+
+        &::before {
+          @include u-icon-bg($minus-circle, $primary);
+        }
+
+        &::after {
+          // Follow the summary's actual height, including wrapped labels.
+          background-color: $gray;
+          bottom: u(-2.35rem);
+          content: '';
+          left: u(0.9rem);
+          position: absolute;
+          top: u(2rem);
+          width: u(0.2rem);
+        }
+      }
+    }
+
+    &__citation-note,
+    &__citation-status {
+      margin-bottom: u(0.75rem);
+    }
+
+    &__conversion-link {
+      border-bottom: 0;
+      display: inline-block;
+      font-family: $sans-serif;
+      font-style: normal;
+      margin-left: u(0.75rem);
+      white-space: nowrap;
+
+      span {
+        border-bottom: 1px dotted $primary;
+      }
+
+      &:hover span,
+      &:active span {
+        border-bottom-color: $primary-contrast;
+      }
+
+      &::after {
+        background-position: center;
+        background-size: contain;
+        content: '';
+        display: inline-block;
+        height: u(1rem);
+        margin-left: u(0.5rem);
+        width: u(0.8rem);
+
+        @include u-icon-bg($arrow-right, $base);
+      }
+    }
+
+    @media print {
+      &__tools {
+        display: none;
+      }
+
+      &__record {
+        break-inside: avoid;
+      }
+    }
+  }
+
+  .legal-regulation__text-heading,
+  .legal-regulation__paragraph {
+    scroll-margin-top: u(2rem);
+
+    &:target > .legal-regulation__text {
+      @include t-highlight;
+    }
+  }
+
+  .legal-regulation__paragraph {
+    &--level-2 {
+      padding-left: u(3rem);
+    }
+
+    &--level-3 {
+      padding-left: u(6rem);
+    }
+
+    &--level-4 {
+      padding-left: u(9rem);
+    }
+
+    &--level-5 {
+      padding-left: u(12rem);
+    }
+
+    &--level-6 {
+      padding-left: u(15rem);
+    }
+  }
+
+  .legal-regulation__previous-section-link {
+    border: none;
+    text-align: left;
+  }
+
+  .legal-regulation__previous-section-link + h3 {
+    margin-left: 3.5rem;
+  }
+
+  .legal-regulation__next-section-link {
+    border: none;
+    text-align: right;
+  }
+
+  .legal-regulation__next-section-link + h3 {
+    margin-right: 2.6rem;
   }
 }
 
@@ -129,9 +784,9 @@
 }
 
 .embedded-pdf {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 
   /* class name borrowed from datatables pages structure */
   .data-container__widgets {
@@ -196,13 +851,13 @@
   }
   .embedded-pdf-list {
     padding: u(2rem);
-    
+
     @include media($lg) {
       border-right: 1px solid $primary;
       min-height: 90vh;
       width: 33.3%;
     }
-    
+
     h2 {
       font-family: $serif;
       font-size: 2.4rem;
@@ -220,7 +875,9 @@
 
       th {
         /* TODO: the .sort* rules are copied from _datatables.scss; would like to… @extend? @use? */
-        &.sorting, &.sorting_asc, &.sorting_desc {
+        &.sorting,
+        &.sorting_asc,
+        &.sorting_desc {
           background-position: calc(100% - 1rem) 50%;
           background-repeat: no-repeat;
           cursor: pointer;
@@ -241,13 +898,14 @@
           @include u-icon-bg($arrow-down-border, $primary);
         }
       }
-      th, td {
+      th,
+      td {
         line-height: 1.2em;
-        padding: .75rem 1rem;
+        padding: 0.75rem 1rem;
         width: auto;
 
         &:first-child:not(:only-child) {
-          border-right: solid thin lightgrey
+          border-right: solid thin lightgrey;
         }
       }
 
@@ -259,8 +917,8 @@
         /* */
 
         tr {
-          border-left: .5rem solid transparent;
-          transition: border-color .5s;
+          border-left: 0.5rem solid transparent;
+          transition: border-color 0.5s;
         }
       }
 
@@ -270,7 +928,7 @@
         }
         &.dt-hasChild {
           border-color: $federal-blue;
-          transition: border-color .25s;
+          transition: border-color 0.25s;
         }
 
         &.level-1 > :first-child {
@@ -292,8 +950,9 @@
       td {
         vertical-align: top;
 
-        a + ul { /* For ULs directly after links */
-          margin-top: .5rem;
+        a + ul {
+          /* For ULs directly after links */
+          margin-top: 0.5rem;
         }
       }
 
@@ -308,7 +967,7 @@
         }
         &:not(:only-child) {
           /* A little more space when it's a list of more than one */
-          margin-bottom: .5rem;
+          margin-bottom: 0.5rem;
         }
       }
     }
