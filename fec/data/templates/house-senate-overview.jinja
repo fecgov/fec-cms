@@ -12,14 +12,6 @@
 {% endblock %}
 
 {% block body %}
-
-{# Temporarily emable these features for testing #}
-{% set FEATURES = dict(
-    FEATURES,
-    house_senate_overview_summary=True,
-    house_senate_overview_totals=True,
-) %}
-
   {{ header.header(title, crumb) }}
   <div class="u-padding--left u-padding--right">
     <header class="container main">
@@ -66,12 +58,6 @@
 {% endblock %}
 
 {% block scripts %}
-{# Temporarily emable these features for testing #}
-{% set FEATURES = dict(
-      FEATURES,
-      house_senate_overview_summary=True,
-      house_senate_overview_totals=True
-  ) %}
 <script>
   window.context = {{ context_vars | to_json | safe }};
 </script>
