@@ -6,6 +6,7 @@
     url('/static/fonts/fec-currencymono-regular.woff2') format('woff2'),
     url('/static/fonts/fec-currencymono-regular.woff') format('woff'),
     url('/static/fonts/fec-currencymono-regular.ttf') format('truetype');
+  unicode-range: U+0030-0039, U+002E, U+002C, U+0024;
 }
 
 #contributions-over-time {

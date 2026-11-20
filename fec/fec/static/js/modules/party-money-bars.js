@@ -2,7 +2,7 @@
  * Handles the creation and animation for the animated three-row money comparison bars
  */
 
-import { currency } from './helpers.js';
+import { compactCurrency } from './helpers.js';
 
 /**
  * Quick lookup for converting api results to sometimes-abbreviated and punctuated versions
@@ -98,7 +98,9 @@ PartyMoneyBars.prototype.applyNewData = function(newValObj) {
   // If we're doing the total, it's at newValObj.total;
   if (this.totalElm) {
     if (newValObj.total) {
-      this.totalElm.textContent = currency(newValObj.total, true);
+      this.totalElm.textContent = compactCurrency(newValObj.total);
+      this.totalElm.dataset.totalValue = newValObj.total;
+      //this.totalElm.textContent = this.actual_values ? currency(newValObj.total) : compactCurrency(newValObj.total);
     } else {
       // TODO Handle if we have a total element but didn't get a new value for it
     }
@@ -127,7 +129,8 @@ PartyMoneyBars.prototype.applyNewData = function(newValObj) {
       if (label.classList.contains('js-party-title')) {
         label.textContent = partyAbbrevs[rankedPartiesAndValues[i].party];
       } else if (label.classList.contains('js-party-value')) {
-        label.textContent = currency(meter.value, true);
+        label.textContent = compactCurrency(meter.value);
+
       }
     });
   });
