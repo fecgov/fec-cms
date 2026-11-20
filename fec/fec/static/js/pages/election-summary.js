@@ -74,11 +74,15 @@ ElectionSummary.prototype.startLoadingData = function(electionYear) {
       sort_null_only: false,
       sort_nulls_last: false,
       page: 1,
-      per_page: 10
     };
 
-    url_params.state = url_params.office == 'P' ? 'US' : window.context.election.state;
-    url_params.district = url_params.office == 'P' ? '00' : window.context.election.district;
+    if (url_params.office !== 'P') {
+       url_params.state = window.context.election.state;
+       url_params.district = window.context.election.district;
+    }
+    else {
+       url_params.per_page = 100
+    }
 
     let theQstring = '';
     for (let n in url_params) {
@@ -146,9 +150,9 @@ ElectionSummary.prototype.startLoadingData = function(electionYear) {
           accumulator.total += amount;
 
           if (indicator === 'S' || indicator === 'O') {
-            accumulator[indicator] = amount;
+            accumulator[indicator] += amount;
           } else {
-            accumulator.Other = amount;
+            accumulator.Other += amount;
           }
 
           return accumulator;
