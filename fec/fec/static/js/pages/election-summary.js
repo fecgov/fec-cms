@@ -73,7 +73,7 @@ ElectionSummary.prototype.startLoadingData = function(electionYear) {
       sort_hide_null: false,
       sort_null_only: false,
       sort_nulls_last: false,
-      page: 1,
+      page: 1
     };
 
     if (url_params.office !== 'P') {
@@ -81,7 +81,7 @@ ElectionSummary.prototype.startLoadingData = function(electionYear) {
        url_params.district = window.context.election.district;
     }
     else {
-       url_params.per_page = 100
+       url_params.per_page = 100;
     }
 
     let theQstring = '';
